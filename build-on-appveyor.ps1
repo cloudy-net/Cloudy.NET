@@ -2,8 +2,10 @@ $ErrorActionPreference = "Stop";
 
 echo $version
 
-dotnet sln remove Website.*
-Remove-Item Website.* -r
+dotnet sln remove Website.AspNet
+Remove-Item Website.AspNet
+dotnet sln remove Website.AspNetCore
+Remove-Item Website.AspNetCore
 
 $command = "dotnet build /p:Version=$version"
 Write-Host $command -ForegroundColor Yellow
