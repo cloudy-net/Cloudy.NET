@@ -2,6 +2,7 @@ $ErrorActionPreference = "Stop";
 
 echo $version
 
+dotnet sln remove Website.*
 Remove-Item Website.* -r
 
 $command = "dotnet build /p:Version=$version"
