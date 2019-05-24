@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Poetry;
-using Poetry.AspNetCore.DependencyInjectionSupport;
 using Cloudy.CMS;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.ContentControllerSupport;
