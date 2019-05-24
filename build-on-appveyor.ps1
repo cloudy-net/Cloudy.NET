@@ -2,6 +2,8 @@ $ErrorActionPreference = "Stop";
 
 echo $version
 
+Remove-Item Website.* -r
+
 $command = "dotnet build /p:Version=$version"
 Write-Host $command -ForegroundColor Yellow
 Invoke-Expression $command
