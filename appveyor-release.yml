@@ -1,0 +1,24 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+branches:
+  only:
+  - /v\d+\.\d+/
+skip_non_tags: true
+init:
+- ps: >-
+    $version = "$($env:APPVEYOR_REPO_TAG_NAME.TrimStart("v"))"
+
+    Update-AppveyorBuild -Version $version
+    
+    echo $version
+build_script:
+  - ps: ./build-on-appveyor.ps1
+artifacts:
+- path: '*.nupkg'
+  name: NuGet
+deploy:
+- provider: NuGet
+  api_key:
+    secure: Zr8GiZKYb4H9HPGpTEt9saXt2+ogdih3nkVeb+OwSNawINeUVf8e19avVjDFDD9G
+nuget:
+  project_feed: true

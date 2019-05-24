@@ -1,0 +1,14 @@
+﻿.vs
+*.log
+*.mdf
+*.ldf
+bin
+bower_components
+imagecache
+node_modules
+packages
+obj
+*.vssscc
+*.vspscc
+*.user
+Logs
