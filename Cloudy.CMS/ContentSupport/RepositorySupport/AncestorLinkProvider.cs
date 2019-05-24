@@ -36,7 +36,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
                 ))
                 .FirstOrDefault();
 
-                if (parent == null || parent.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"] as string == "root")
+                if (parent == null || parent.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"] == null)
                 {
                     break;
                 }

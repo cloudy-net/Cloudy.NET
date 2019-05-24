@@ -21,7 +21,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         public IEnumerable<Option> GetAll()
         {
             var documents = DocumentRepository.Documents.FindSync(Builders<Document>.Filter.Exists(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"]), new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(d => d.GlobalFacet.Interfaces["INameable"].Properties["Name"]) });
-            return documents.ToList().Select(d => new Option(d.GlobalFacet.Interfaces["INameable"].Properties["Name"] as string ?? d.Id, d.Id));
+
+            var result = new List<Option>();
+
+            result.Add(new Option("(root)", null));
+
+            result.AddRange(documents.ToList().Select(d => new Option(d.GlobalFacet.Interfaces["INameable"].Properties["Name"] as string ?? d.Id, d.Id)));
+
+            return result.AsReadOnly();
         }
     }
 }

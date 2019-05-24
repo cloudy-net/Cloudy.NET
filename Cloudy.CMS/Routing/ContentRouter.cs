@@ -26,7 +26,7 @@ namespace Cloudy.CMS.Routing
 
         public IContent GetContentBySegment(string segment, IContent parent, string language)
         {
-            var parentId = parent?.Id ?? "root";
+            var parentId = parent?.Id ?? null;
             
             return GetChildByUrlSegment<IContent>(parentId, segment, language);
         }
