@@ -47,6 +47,11 @@ namespace Cloudy.CMS.AspNet.Routing
 
             var result = new RouteData(this, new MvcRouteHandler());
 
+            if (result == null)
+            {
+                return null;
+            }
+
             result.Values["controller"] = match.ControllerName;
             result.Values["action"] = match.ControllerAction;
 

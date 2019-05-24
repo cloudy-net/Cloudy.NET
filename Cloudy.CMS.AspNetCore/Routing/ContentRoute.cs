@@ -57,6 +57,11 @@ namespace Cloudy.CMS.Routing
 
             var match = ContentControllerFinder.FindController(contentType);
 
+            if(match == null)
+            {
+                return;
+            }
+
             context.RouteData.Values["controller"] = match.ControllerName;
             context.RouteData.Values["action"] = match.ControllerAction;
             context.RouteData.Values["contentFromContentRoute"] = content;
