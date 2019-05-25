@@ -9,6 +9,7 @@ namespace Cloudy.CMS.DocumentSupport
 {
     public class DocumentRepository : IDocumentRepository
     {
+        public static Func<MongoClient> ClientCreator { get; internal set; } = () => new MongoClient();
         public IMongoCollection<Document> Documents { get; }
 
         static DocumentRepository() {
@@ -19,7 +20,7 @@ namespace Cloudy.CMS.DocumentSupport
 
         public DocumentRepository()
         {
-            var client = new MongoClient();
+            var client = ClientCreator.Invoke();
 
             var db = client.GetDatabase("content");
 
