@@ -34,7 +34,7 @@ class ListContentTypesBlade extends Blade {
             new DataTable()
                 .setBackend('Cloudy.CMS.ContentTypeList')
                 .addColumn(c => c.setHeader(() => 'Name').setContent(item => item.Name))
-                .addColumn(c => c.setActionColumn().setContent(item => new Button('Open').onClick(() => app.openBlade(new ListContentBlade(app, item), this))))
+                .addColumn(c => c.setActionColumn().setContent(item => new Button('List').onClick(() => app.openBlade(new ListContentBlade(app, item), this))))
         );
     }
 }
