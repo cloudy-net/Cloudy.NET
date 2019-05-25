@@ -25,7 +25,7 @@
     <PackageReference Include="FastMember" Version="1.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Poetry.AspNetCore" Version="1.20.0" />
-    <PackageReference Include="Poetry.UI.AspNetCore" Version="2.75.1" />
+    <PackageReference Include="Poetry.UI.AspNetCore" Version="2.76.0" />
   </ItemGroup>
 
   <ItemGroup>
