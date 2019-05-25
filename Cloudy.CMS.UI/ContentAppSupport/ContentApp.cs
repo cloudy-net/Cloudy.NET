@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
-    [App("ContentApp", "ContentAppSupport/Scripts/content-app.js")]
+    [App("Cloudy.CMS.Content", "ContentAppSupport/Scripts/content-app.js")]
     public class ContentApp
     {
     }

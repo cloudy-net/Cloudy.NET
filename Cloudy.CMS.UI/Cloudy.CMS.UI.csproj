@@ -18,11 +18,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ChangesAppSupport\Scripts\changes-app.js" />
     <None Remove="ContentAppSupport\Scripts\content-app.js" />
+    <None Remove="SitesAppSupport\Scripts\sites-app.js" />
+    <None Remove="TreeAppSupport\Scripts\tree-app.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="ChangesAppSupport\Scripts\changes-app.js" />
     <EmbeddedResource Include="ContentAppSupport\Scripts\content-app.js" />
+    <EmbeddedResource Include="SitesAppSupport\Scripts\sites-app.js" />
+    <EmbeddedResource Include="TreeAppSupport\Scripts\tree-app.js" />
   </ItemGroup>
 
   <ItemGroup>
