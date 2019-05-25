@@ -35,12 +35,6 @@ namespace Website.AspNet
             });
 
             RouteTable.Routes.AddContentRoute();
-
-            RouteTable.Routes.MapRoute(
-                name: "Default",
-                url: "",
-                defaults: new { controller = "Home", action = "Index" }
-            );
         }
     }
 }

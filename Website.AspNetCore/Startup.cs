@@ -48,7 +48,6 @@ namespace Website.AspNetCore
             app.UsePoetry();
             app.UsePoetryUI();
             app.UseMvc(routeBuilder => routeBuilder
-                .MapRoute("default", "{controller=Home}/{action=Index}/{id?}")
                 .AddContentRoute()
             );
         }
