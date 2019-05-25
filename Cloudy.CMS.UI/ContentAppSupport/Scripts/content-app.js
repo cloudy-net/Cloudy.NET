@@ -10,7 +10,7 @@ import notificationManager from '../../../Poetry.UI.NotificationSupport/Scripts/
 
 
 
-/* ADMIN APP */
+/* APP */
 
 class ContentApp extends App {
     open() {
