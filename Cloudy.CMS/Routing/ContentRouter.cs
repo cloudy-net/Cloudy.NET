@@ -59,6 +59,11 @@ namespace Cloudy.CMS.Routing
         {
             IContent page = null;
 
+            if (!segments.Any())
+            {
+                return GetContentBySegment(null, null, language);
+            }
+
             while (segments.Any())
             {
                 page = GetContentBySegment(segments.First(), page, language);
