@@ -31,9 +31,9 @@
 
   <ItemGroup>
     <PackageReference Include="FastMember" Version="1.4.1" />
-    <PackageReference Include="Poetry.UI" Version="2.76.0" />
-    <PackageReference Include="Poetry.UI.DataTableSupport" Version="2.76.0" />
-    <PackageReference Include="Poetry.UI.FormSupport" Version="2.76.0" />
+    <PackageReference Include="Poetry.UI" Version="2.79.0" />
+    <PackageReference Include="Poetry.UI.DataTableSupport" Version="2.79.0" />
+    <PackageReference Include="Poetry.UI.FormSupport" Version="2.79.0" />
   </ItemGroup>
 
   <ItemGroup>
