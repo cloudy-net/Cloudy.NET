@@ -46,11 +46,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
                 return null;
             }
 
-            if (document.LanguageFacets[language].Interfaces["Properties"] == null)
-            {
-                return null;
-            }
-
             var contentType = ContentTypeRepository.Get(document.GlobalFacet.Interfaces["IContent"].Properties["ContentTypeId"] as string);
 
             return (T)ContentDeserializer.Deserialize(document, contentType, language);
