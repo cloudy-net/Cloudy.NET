@@ -28,6 +28,7 @@ namespace Cloudy.CMS
             container.RegisterSingleton<IContentGetter, ContentGetter>();
             container.RegisterSingleton<IContentDeleter, ContentDeleter>();
             container.RegisterSingleton<IContentCreator, ContentCreator>();
+            container.RegisterSingleton<IContentInserter, ContentInserter>();
             container.RegisterSingleton<IContentUpdater, ContentUpdater>();
             container.RegisterSingleton<IChildLinkProvider, ChildLinkProvider>();
             container.RegisterSingleton<IAncestorLinkProvider, AncestorLinkProvider>();
