@@ -36,7 +36,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             }
             if (language == null)
             {
-                throw new ArgumentNullException(nameof(language));
+                language = DocumentLanguageConstants.Global;
             }
 
             var document = (await DocumentRepository.Documents.FindAsync(Builders<Document>.Filter.Eq(d => d.Id, id))).FirstOrDefault();
