@@ -52,7 +52,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
         Row CreateRow(ContentTypeDescriptor contentType)
         {
-            var name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Id;
+            var name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Type.Name;
             string pluralName;
 
             if (name.Contains(':') && !contentType.Id.Contains(':'))
