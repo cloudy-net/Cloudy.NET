@@ -44,7 +44,7 @@ namespace Cloudy.CMS.ContentTypeSupport.SingletonSupport
                         throw new SingletonWithIdIsOfWrongType(id, contentType, content.GetType(), content.ContentTypeId);
                     }
 
-                    return;
+                    continue;
                 }
 
                 content = (IContent)Activator.CreateInstance(contentType.Type);
