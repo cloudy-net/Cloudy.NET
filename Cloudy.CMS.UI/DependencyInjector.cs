@@ -14,6 +14,7 @@ namespace Cloudy.CMS.UI
             container.RegisterSingleton<Poetry.UI.PortalSupport.ITitleProvider, TitleProvider>();
             container.RegisterSingleton<Poetry.UI.PortalSupport.IFaviconProvider, FaviconProvider>();
             container.RegisterSingleton<IPluralizer, Pluralizer>();
+            container.RegisterSingleton<IHumanizer, Humanizer>();
         }
     }
 }
