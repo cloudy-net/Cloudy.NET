@@ -58,7 +58,7 @@ class ListContentBlade extends Blade {
             dataTable.addColumn(c => c.setHeader(() => 'Id').setContent(item => item.Id));  
         }
 
-        dataTable.addColumn(c => c.setActionColumn().setContent(item => new Button('Edit').onClick(() => app.openBlade(new EditContentBlade(app, contentType, item), this))))
+        dataTable.addColumn(c => c.setActionColumn().setContent(item => new Button('Edit').onClick(() => app.openBlade(new EditContentBlade(app, contentType, item).onClose(message => { if (message == 'saved') { dataTable.update(); } }), this))))
 
         this.setToolbar(
             new Button('New').onClick(() => app.openBlade(new EditContentBlade(app, contentType).onClose(message => { if (message == 'saved') { dataTable.update(); } }), this))
