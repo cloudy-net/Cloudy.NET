@@ -32,7 +32,7 @@ namespace Website.AspNetCore
             {
                 c.AddUI();
                 c.AddCMS();
-                c.AddComponent<CloudyCMSUIComponent>();
+                c.AddCMSUI();
                 c.AddComponent<WebsiteComponent>();
             });
             services.AddMvc();
