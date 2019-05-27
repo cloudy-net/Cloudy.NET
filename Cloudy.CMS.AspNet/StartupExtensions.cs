@@ -39,6 +39,12 @@ namespace Cloudy.CMS.AspNet
             poetryConfigurator.InjectSingleton<IContentControllerMatchCreator, ContentControllerMatchCreator>();
         }
 
+        public static void AddCMS(this PoetryConfigurator poetryConfigurator, Action<CMSConfigurator> configuratorFunction)
+        {
+            poetryConfigurator.AddCMS();
+            configuratorFunction(new CMSConfigurator());
+        }
+
         public static void AddContentRoute(this RouteCollection routes)
         {
             var resolver = PoetryConfigurator.Container.CreateResolver();
