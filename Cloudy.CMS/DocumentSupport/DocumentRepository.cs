@@ -18,11 +18,11 @@ namespace Cloudy.CMS.DocumentSupport
             BsonClassMap.RegisterClassMap<DocumentInterface>(cm => { cm.AutoMap(); new ImmutableTypeClassMapConvention().Apply(cm); });
         }
 
-        public DocumentRepository()
+        public DocumentRepository(IDatabaseNameProvider databaseNameProvider)
         {
             var client = ClientCreator.Invoke();
 
-            var db = client.GetDatabase("content");
+            var db = client.GetDatabase(databaseNameProvider.DatabaseName);
 
             Documents = db.GetCollection<Document>("content");
         }

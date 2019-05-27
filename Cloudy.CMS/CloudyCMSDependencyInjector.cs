@@ -19,6 +19,7 @@ namespace Cloudy.CMS
         public void InjectDependencies(IContainer container)
         {
             container.RegisterSingleton<IIdGenerator, IdGenerator>();
+            container.RegisterSingleton<IDatabaseNameProvider, DatabaseNameProvider>();
             container.RegisterSingleton<IContentTypeCreator, ContentTypeCreator>();
             container.RegisterSingleton<IContentTypeProvider, ContentTypeProvider>();
             container.RegisterSingleton<IContentSerializer, ContentSerializer>();
