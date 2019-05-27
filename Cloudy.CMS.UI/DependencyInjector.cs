@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.UI.PortalSupport;
+﻿using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.PortalSupport;
 using Poetry.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Cloudy.CMS.UI
         {
             container.RegisterSingleton<Poetry.UI.PortalSupport.ITitleProvider, TitleProvider>();
             container.RegisterSingleton<Poetry.UI.PortalSupport.IFaviconProvider, FaviconProvider>();
+            container.RegisterSingleton<IPluralizer, Pluralizer>();
         }
     }
 }

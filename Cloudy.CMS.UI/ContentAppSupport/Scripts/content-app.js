@@ -33,7 +33,7 @@ class ListContentTypesBlade extends Blade {
         this.setContent(
             new DataTable()
                 .setBackend('Cloudy.CMS.ContentTypeList')
-                .addColumn(c => c.setHeader(() => 'Name').setContent(item => item.Name))
+                .addColumn(c => c.setHeader(() => 'Name').setContent(item => item.PluralName))
                 .addColumn(c => c.setActionColumn().setContent(item => new Button('List').onClick(() => app.openBlade(new ListContentBlade(app, item), this))))
         );
     }
@@ -47,7 +47,7 @@ class ListContentBlade extends Blade {
     constructor(app, contentType) {
         super();
 
-        this.setTitle(contentType.Name);
+        this.setTitle(contentType.PluralName);
 
         var dataTable = new DataTable()
             .setBackend(`Cloudy.CMS.ContentList[type=${contentType.Id}]`);

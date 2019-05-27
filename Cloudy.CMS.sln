@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.CMS.AspNet", "Cloudy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.AspNet", "Website.AspNet\Website.AspNet.csproj", "{6AA7CD2A-6268-42B5-BC19-3B02BE14CA3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{058E1ED7-8528-4FB0-8044-84CDCB344518}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{6AA7CD2A-6268-42B5-BC19-3B02BE14CA3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AA7CD2A-6268-42B5-BC19-3B02BE14CA3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AA7CD2A-6268-42B5-BC19-3B02BE14CA3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{058E1ED7-8528-4FB0-8044-84CDCB344518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{058E1ED7-8528-4FB0-8044-84CDCB344518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{058E1ED7-8528-4FB0-8044-84CDCB344518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{058E1ED7-8528-4FB0-8044-84CDCB344518}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
