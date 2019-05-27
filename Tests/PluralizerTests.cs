@@ -9,7 +9,7 @@ namespace Tests
     public class PluralizerTests
     {
         [Theory]
-        [InlineData("abf322af-4a6b-4afd-be29-65187b97dfbd", "abf322af-4a6b-4afd-be29-65187b97dfbd")]
+        [InlineData("abf322af", "abf322af")]
         [InlineData("article", "articles")]
         public void Pluralize(string input, string expected)
         {
