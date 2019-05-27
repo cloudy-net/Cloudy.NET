@@ -9,13 +9,13 @@ using System.Text;
 
 namespace Cloudy.CMS.ContentTypeSupport.SingletonSupport
 {
-    public class SingletonCreator : IInitializer
+    public class SingletonInserter : IInitializer
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContentGetter ContentGetter { get; }
         IContentInserter ContentInserter { get; }
 
-        public SingletonCreator(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter)
+        public SingletonInserter(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentGetter = contentGetter;
