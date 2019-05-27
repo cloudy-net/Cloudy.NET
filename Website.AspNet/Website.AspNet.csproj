@@ -284,8 +284,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\PageController.cs" />
-    <Compile Include="Features\ArticlePageSupport\ArticlePage.cs" />
-    <Compile Include="Features\NewsSupport\NewsItem.cs" />
+    <Compile Include="Models\ArticlePage.cs" />
+    <Compile Include="Models\NewsItem.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

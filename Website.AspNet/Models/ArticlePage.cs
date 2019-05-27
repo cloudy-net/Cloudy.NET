@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Website.AspNetCore.Features.ArticlePageSupport
+namespace Website.AspNet.Models
 {
     [ContentType("article-page")]
     public class ArticlePage : Page

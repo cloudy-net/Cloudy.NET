@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Website.AspNetCore.Features.NewsSupport
+namespace Website.AspNetCore.Models
 {
     [ContentType("NewsItem")]
     public class NewsItem : IContent, INameable

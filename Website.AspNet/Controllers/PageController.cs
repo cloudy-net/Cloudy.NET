@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Website.AspNet.Features.ArticlePageSupport;
+using Website.AspNet.Models;
 
 namespace Website.AspNet.Controllers
 {
