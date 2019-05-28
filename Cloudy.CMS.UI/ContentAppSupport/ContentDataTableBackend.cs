@@ -14,7 +14,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 {
     public class ContentDataTableBackend<T> : IBackend where T : class
     {
-        int PageSize { get; } = 4;
+        int PageSize { get; } = 20;
 
         IDocumentRepository DocumentRepository { get; }
         IContentTypeProvider ContentTypeRepository { get; }
