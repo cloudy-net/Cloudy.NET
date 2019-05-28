@@ -18,7 +18,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
         IDocumentRepository DocumentRepository { get; }
         IContentTypeProvider ContentTypeRepository { get; }
-        string Container { get; } = "content";
         IContentDeserializer ContentDeserializer { get; }
 
         public ContentDataTableBackend(IDocumentRepository documentRepository, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
