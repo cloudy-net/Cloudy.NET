@@ -30,7 +30,7 @@ namespace Cloudy.CMS.SingletonSupport
             foreach(var singleton in SingletonProvider.GetAll())
             {
                 var content = ContentGetter.Get<IContent>(singleton.Id, null);
-                var contentType = ContentTypeProvider.Get(content.ContentTypeId);
+                var contentType = ContentTypeProvider.Get(singleton.ContentTypeId);
 
                 if (content != null)
                 {
