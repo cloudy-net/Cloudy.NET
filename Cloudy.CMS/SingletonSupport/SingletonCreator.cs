@@ -30,7 +30,7 @@ namespace Cloudy.CMS.SingletonSupport
 
                 var id = singletonAttribute.Id;
 
-                result.Add(new SingletonDescriptor(id, contentType.Type));
+                result.Add(new SingletonDescriptor(id, contentType.Id, contentType.Type));
             }
 
             return result.AsReadOnly();

@@ -7,21 +7,30 @@ using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Cloudy.CMS.SingletonSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
     [Api("ContentApp")]
     public class ContentAppApi
     {
+        IContentGetter ContentGetter { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         IContentCreator ContentCreator { get; }
         IContentUpdater ContentUpdater { get; }
 
-        public ContentAppApi(IContentTypeProvider contentTypeRepository, IContentCreator contentCreator, IContentUpdater contentUpdater)
+        public ContentAppApi(IContentGetter contentGetter, IContentTypeProvider contentTypeRepository, IContentCreator contentCreator, IContentUpdater contentUpdater)
         {
+            ContentGetter = contentGetter;
             ContentTypeRepository = contentTypeRepository;
             ContentCreator = contentCreator;
             ContentUpdater = contentUpdater;
+        }
+
+        [Endpoint("GetSingleton")]
+        public IContent Get(string id)
+        {
+            return ContentGetter.Get<IContent>(id, null);
         }
 
         [Endpoint("Save")]

@@ -9,6 +9,7 @@ using System.Text;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using Cloudy.CMS.SingletonSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
@@ -18,13 +19,15 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         int PageSize { get; } = 15;
 
         IContentTypeProvider ContentTypeRepository { get; }
+        ISingletonProvider SingletonProvider { get; }
         IPluralizer Pluralizer { get; }
         IHumanizer Humanizer { get; }
         TypeAccessor TypeAccessor { get; } = TypeAccessor.Create(typeof(Row));
 
-        public ContentTypesDataTableBackend(IContentTypeProvider contentTypeRepository, IPluralizer pluralizer, IHumanizer humanizer)
+        public ContentTypesDataTableBackend(IContentTypeProvider contentTypeRepository, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer)
         {
             ContentTypeRepository = contentTypeRepository;
+            SingletonProvider = singletonProvider;
             Pluralizer = pluralizer;
             Humanizer = humanizer;
         }
@@ -68,12 +71,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport
                 pluralName = Pluralizer.Pluralize(name);
             }
 
+            var singleton = SingletonProvider.Get(contentType.Id);
+
             return new Row
             {
                 Id = contentType.Id,
                 Name = name,
                 PluralName = pluralName,
                 IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
+                IsSingleton = singleton != null,
+                SingletonId = singleton?.Id,
                 Count = -1,
             };
         }
@@ -84,6 +91,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public string Name { get; set; }
             public string PluralName { get; set; }
             public bool IsNameable { get; set; }
+            public bool IsSingleton { get; set; }
+            public string SingletonId { get; set; }
             public int Count { get; set; }
         }
     }

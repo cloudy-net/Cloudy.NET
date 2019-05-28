@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Cloudy.CMS.SingletonSupport
         {
             var singleton = SingletonProvider.Get<T>();
 
-            if(singleton == null)
+            if (singleton == null)
             {
                 return null;
             }

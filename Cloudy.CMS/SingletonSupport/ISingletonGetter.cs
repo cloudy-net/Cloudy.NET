@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cloudy.CMS.ContentSupport;
+using System;
 
 namespace Cloudy.CMS.SingletonSupport
 {

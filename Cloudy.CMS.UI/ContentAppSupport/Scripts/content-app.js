@@ -33,8 +33,27 @@ class ListContentTypesBlade extends Blade {
         this.setContent(
             new DataTable()
                 .setBackend('Cloudy.CMS.ContentTypeList')
-                .addColumn(c => c.setHeader(() => 'Name').setContent(item => item.PluralName))
-                .addColumn(c => c.setActionColumn().setContent(item => new Button('List').onClick(() => app.openBlade(new ListContentBlade(app, item), this))))
+                .addColumn(c => c.setHeader(() => 'Name').setContent(item => item.IsSingleton ? item.Name : item.PluralName))
+                .addColumn(c => c.setActionColumn().setContent(item => {
+                    if (item.IsSingleton) {
+                        var button = new Button('Edit')
+                            .onClick(() => {
+                                button.element.setAttribute('disabled', true);
+                                fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${item.SingletonId}`, {
+                                    credentials: 'include',
+                                    method: 'Get',
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        button.element.removeAttribute('disabled');
+                                        app.openBlade(new EditContentBlade(app, item, data), this);
+                                    });
+                            });
+                        return button;
+                    } else {
+                        return new Button('List').onClick(() => app.openBlade(new ListContentBlade(app, item), this))
+                    }
+                }))
         );
     }
 }
