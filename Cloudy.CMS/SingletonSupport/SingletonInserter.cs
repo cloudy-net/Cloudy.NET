@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Cloudy.CMS.ContentTypeSupport;
 using Poetry.ComponentSupport;
 using Poetry.InitializerSupport;
 using System;
@@ -7,16 +8,18 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.ContentTypeSupport.SingletonSupport
+namespace Cloudy.CMS.SingletonSupport
 {
     public class SingletonInserter : IInitializer
     {
+        ISingletonProvider SingletonProvider { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IContentGetter ContentGetter { get; }
         IContentInserter ContentInserter { get; }
 
-        public SingletonInserter(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter)
+        public SingletonInserter(ISingletonProvider singletonProvider, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter)
         {
+            SingletonProvider = singletonProvider;
             ContentTypeProvider = contentTypeProvider;
             ContentGetter = contentGetter;
             ContentInserter = contentInserter;
@@ -24,24 +27,16 @@ namespace Cloudy.CMS.ContentTypeSupport.SingletonSupport
 
         public void Initialize()
         {
-            foreach(var contentType in ContentTypeProvider.GetAll())
+            foreach(var singleton in SingletonProvider.GetAll())
             {
-                var singletonAttribute = contentType.Type.GetCustomAttribute<SingletonAttribute>();
-
-                if(singletonAttribute == null)
-                {
-                    continue;
-                }
-
-                var id = singletonAttribute.Id;
-
-                var content = ContentGetter.Get<IContent>(id, null);
+                var content = ContentGetter.Get<IContent>(singleton.Id, null);
+                var contentType = ContentTypeProvider.Get(content.ContentTypeId);
 
                 if (content != null)
                 {
                     if(content.ContentTypeId != contentType.Id)
                     {
-                        throw new SingletonWithIdIsOfWrongType(id, contentType, content.GetType(), content.ContentTypeId);
+                        throw new SingletonWithIdIsOfWrongType(singleton.Id, contentType, content.GetType(), content.ContentTypeId);
                     }
 
                     continue;
@@ -49,7 +44,7 @@ namespace Cloudy.CMS.ContentTypeSupport.SingletonSupport
 
                 content = (IContent)Activator.CreateInstance(contentType.Type);
 
-                content.Id = id;
+                content.Id = singleton.Id;
 
                 ContentInserter.Insert(content);
             }

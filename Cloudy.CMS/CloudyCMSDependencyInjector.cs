@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cloudy.CMS.ContentControllerSupport;
 using Cloudy.CMS.Routing;
+using Cloudy.CMS.SingletonSupport;
 
 namespace Cloudy.CMS
 {
@@ -42,6 +43,9 @@ namespace Cloudy.CMS
 
             container.RegisterSingleton<IContentControllerFinder, ContentControllerFinder>();
             container.RegisterSingleton<IContentRouter, ContentRouter>();
+            container.RegisterSingleton<ISingletonCreator, SingletonCreator>();
+            container.RegisterSingleton<ISingletonGetter, SingletonGetter>();
+            container.RegisterSingleton<ISingletonProvider, SingletonProvider>();
         }
     }
 }

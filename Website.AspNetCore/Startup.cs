@@ -13,6 +13,8 @@ using Cloudy.CMS.UI;
 using Poetry.UI.AspNetCore;
 using Cloudy.CMS.Mvc;
 using Serilog;
+using Website.AspNetCore.Models;
+using Cloudy.CMS.SingletonSupport;
 
 namespace Website.AspNetCore
 {
@@ -31,7 +33,7 @@ namespace Website.AspNetCore
             services.AddPoetry(c =>
             {
                 c.AddUI();
-                c.AddCMS();
+                c.AddCMS(cms => cms.SetDatabase("cms-web-test"));
                 c.AddCMSUI();
                 c.AddComponent<WebsiteComponent>();
             });
@@ -50,6 +52,8 @@ namespace Website.AspNetCore
             app.UseMvc(routeBuilder => routeBuilder
                 .AddContentRoute()
             );
+
+            app.Run(async context => await context.Response.WriteAsync(app.ApplicationServices.GetService<ISingletonGetter>().Get<StartPage>(null).MySetting));
         }
     }
 }

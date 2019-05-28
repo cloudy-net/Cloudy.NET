@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Cloudy.CMS.ContentTypeSupport;
+using System;
 using System.Runtime.Serialization;
 
-namespace Cloudy.CMS.ContentTypeSupport.SingletonSupport
+namespace Cloudy.CMS.SingletonSupport
 {
     [Serializable]
     public class SingletonWithIdIsOfWrongType : Exception
