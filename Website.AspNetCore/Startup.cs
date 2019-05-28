@@ -52,8 +52,6 @@ namespace Website.AspNetCore
             app.UseMvc(routeBuilder => routeBuilder
                 .AddContentRoute()
             );
-
-            app.Run(async context => await context.Response.WriteAsync(app.ApplicationServices.GetService<ISingletonGetter>().Get<StartPage>(null).MySetting));
         }
     }
 }
