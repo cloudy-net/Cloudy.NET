@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport
 {
-    [CoreInterface("INavigatable")]
-    public interface INavigatable
+    [CoreInterface("IRoutable")]
+    public interface IRoutable
     {
         [LanguageSpecific]
         string UrlSegment { get; set; }

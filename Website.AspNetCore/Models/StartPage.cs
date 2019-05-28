@@ -10,7 +10,7 @@ namespace Website.AspNetCore.Models
 {
     [Singleton("start-page")]
     [ContentType("start-page")]
-    public class StartPage : IContent, INavigatable
+    public class StartPage : IContent, IRoutable
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }

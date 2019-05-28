@@ -21,7 +21,7 @@ namespace Cloudy.CMS.Mvc.Routing
 
         public string Generate(IContent content)
         {
-            var navigatable = content as INavigatable;
+            var navigatable = content as IRoutable;
 
             if (navigatable == null)
             {
@@ -39,12 +39,12 @@ namespace Cloudy.CMS.Mvc.Routing
 
             var allContent = AncestorsRepository.GetAncestorLinks(content.Id).Select(id => ContentGetter.Get<IContent>(id, language));
 
-            if (allContent.Any(c => !(c is INavigatable)))
+            if (allContent.Any(c => !(c is IRoutable)))
             {
                 return null;
             }
 
-            var segments = allContent.Cast<INavigatable>().Select(c => c.UrlSegment).ToList();
+            var segments = allContent.Cast<IRoutable>().Select(c => c.UrlSegment).ToList();
 
             segments.Add(navigatable.UrlSegment);
 

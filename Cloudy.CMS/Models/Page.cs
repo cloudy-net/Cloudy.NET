@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.Models
 {
-    public abstract class Page : IContent, ILanguageSpecific, INavigatable, INameable, IHierarchical
+    public abstract class Page : IContent, ILanguageSpecific, IRoutable, INameable, IHierarchical
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }
