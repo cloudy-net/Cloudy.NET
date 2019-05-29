@@ -34,7 +34,7 @@ namespace Website.AspNetCore
             {
                 c.AddUI();
                 c.AddCMS(cms => cms.SetDatabase("cms-web-test"));
-                c.AddCMSUI();
+                c.AddCMSUI(ui => ui.DontNagOnLocalhost());
                 c.AddComponent<WebsiteComponent>();
             });
             services.AddMvc();
