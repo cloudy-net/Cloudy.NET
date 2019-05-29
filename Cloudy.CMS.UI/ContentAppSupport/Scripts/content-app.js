@@ -1,9 +1,9 @@
 ﻿import App from '../../../Poetry.UI/Scripts/app.js';
 import Blade from '../../../Poetry.UI/Scripts/blade.js';
 import FormBuilder from '../../../Poetry.UI.FormSupport/Scripts/form-builder.js';
-import translationRepository from '../../../Poetry.UI/Scripts/translation-repository.js';
 import Button from '../../../Poetry.UI/Scripts/button.js';
 import DataTable from '../../../Poetry.UI.DataTableSupport/Scripts/data-table.js';
+import Backend from '../../../Poetry.UI.DataTableSupport/Scripts/backend.js';
 import CopyAsTabSeparated from '../../../Poetry.UI.DataTableSupport/Scripts/copy-as-tab-separated.js';
 import ContextMenu from '../../../Poetry.UI.ContextMenuSupport/Scripts/context-menu.js';
 import notificationManager from '../../../Poetry.UI.NotificationSupport/Scripts/notification-manager.js';
@@ -34,26 +34,19 @@ class ListContentTypesBlade extends Blade {
             new DataTable()
                 .setBackend('Cloudy.CMS.ContentTypeList')
                 .addColumn(c => c.setHeader(() => 'Name').setContent(item => item.IsSingleton ? item.Name : item.PluralName))
-                .addColumn(c => c.setActionColumn().setContent(item => {
-                    if (item.IsSingleton) {
-                        var button = new Button('Edit')
-                            .onClick(() => {
-                                button.element.setAttribute('disabled', true);
-                                fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${item.SingletonId}`, {
-                                    credentials: 'include',
-                                    method: 'Get',
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        button.element.removeAttribute('disabled');
-                                        app.openBlade(new EditContentBlade(app, item, data), this);
-                                    });
-                            });
-                        return button;
-                    } else {
-                        return new Button('List').onClick(() => app.openBlade(new ListContentBlade(app, item), this))
-                    }
-                }))
+                .addColumn(c => c.setActionColumn().setContent(item =>
+                    item.IsSingleton ?
+                        new Button('Edit').onClick(() =>
+                            app.openBlade(new EditContentBlade(app, item, {
+                                itemPromise:
+                                    fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${item.SingletonId}`, {
+                                        credentials: 'include',
+                                        method: 'Get',
+                                    })
+                                        .then(response => response.json())
+                            }), this)) :
+                        new Button('List').onClick(() => app.openBlade(new ListContentBlade(app, item), this))
+                ))
         );
     }
 }
@@ -89,44 +82,107 @@ class ListContentBlade extends Blade {
 
 
 
-/* EDIT */
+/* EDIT CONTENT */
 
 class EditContentBlade extends Blade {
-    constructor(app, contentType, item) {
+    constructor(app, contentType, options) {
         super();
 
-        if (item) {
-            if (contentType.IsNameable && item.Name) {
-                this.setTitle(`Edit ${item.Name}`);
-            } else {
-                this.setTitle(`Edit ${contentType.Name}`);
-            }
-        } else {
-            this.setTitle(`New ${contentType.Name}`);
-            item = {};
-        }
+        this.setTitle();
+        this.setContent();
 
-        var save = () =>
-            fetch('Cloudy.CMS.UI/ContentApp/Save', {
-                credentials: 'include',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Id: item.Id,
-                    ContentTypeId: contentType.Id,
-                    item: item
-                })
-            });
+        var saveButton = new Button('Save').setDisabled();
+        var cancelButton = new Button('Cancel').onClick(() => app.closeBlade(this)).setDisabled();
+
+        this.setToolbar(saveButton, cancelButton);
+
+        var init = item => {
+            if (item) {
+                if (contentType.IsNameable && item.Name) {
+                    this.setTitle(`Edit ${item.Name}`);
+                } else {
+                    this.setTitle(`Edit ${contentType.Name}`);
+                }
+            } else {
+                this.setTitle(`New ${contentType.Name}`);
+            }
+
+            var save = () =>
+                fetch('Cloudy.CMS.UI/ContentApp/Save', {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Id: item.Id,
+                        ContentTypeId: contentType.Id,
+                        item: item
+                    })
+                });
+
+            saveButton.onClick(() => save().then(() => app.closeBlade(this, 'saved'))).setDisabled(false);
+            cancelButton.setDisabled(false);
+
+            var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
+
+            var backend = new class extends Backend {
+                load(query) {
+                    return formBuilder.fieldModels.then(fieldModels => {
+                        var items = new Set(fieldModels.map(fieldModel => fieldModel.descriptor.Group));
+
+                        return {
+                            Items: items,
+                            PageCount: 1,
+                            PageSize: items.size,
+                            TotalMatching: items.size,
+                        };
+                    });
+                }
+            };
+
+            this.setContent(
+                new DataTable()
+                    .setBackend(backend)
+                    .addColumn(c => c.setHeader(() => 'Properties').setContent(item => item || 'Content'))
+                    .addColumn(c => c.setActionColumn().setContent(group =>
+                        new Button('Edit').onClick(() => app.openBlade(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content').onClose((message, values) => { if (message == 'saved') { console.log(values); } }), this))
+                    ))
+            );
+        };
+
+        if (options.itemPromise) {
+            options.itemPromise.then(item => init(item));
+        } else if (options.item) {
+            init(options.item);
+        } else {
+            init({});
+        }
+    }
+}
+
+
+
+/* EDIT PROPERTY GROUP */
+
+class EditPropertyGroupBlade extends Blade {
+    constructor(app, formPromise, title) {
+        super();
+
+        this.setTitle(title);
 
         this.setContent();
 
+        var saveButton = new Button('Save');
+
         this.setToolbar(
-            new Button('Save').onClick(() => save().then(() => app.closeBlade(this, 'saved'))),
+            saveButton,
             new Button('Cancel').onClick(() => app.closeBlade(this)),
         );
 
-        new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app).build(item).then(form => this.setContent(form.element));
+        formPromise.then(form => {
+            this.setContent(form);
+            saveButton.onClick(() => app.closeBlade(this, 'saved', form.getValues()));
+        });
     }
 }

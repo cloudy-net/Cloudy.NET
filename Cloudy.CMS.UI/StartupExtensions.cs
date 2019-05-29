@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Cloudy.CMS.UI.NaggingSupport;
 
 namespace Cloudy.CMS.UI
 {
@@ -26,6 +27,13 @@ namespace Cloudy.CMS.UI
         public static void AddCMSUI(this PoetryConfigurator poetryConfigurator)
         {
             poetryConfigurator.AddComponent<CloudyCMSUIComponent>();
+        }
+
+        public static void AddCMSUI(this PoetryConfigurator poetryConfigurator, Action<CMSUIConfigurator> cmsUIConfigurator)
+        {
+            poetryConfigurator.AddCMSUI();
+
+            cmsUIConfigurator(new CMSUIConfigurator());
         }
     }
 }

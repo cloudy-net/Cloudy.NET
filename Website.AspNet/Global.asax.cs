@@ -30,7 +30,7 @@ namespace Website.AspNet
                 c.AddLogging(l => l.AddSerilog());
                 c.AddUI();
                 c.AddCMS();
-                c.AddCMSUI();
+                c.AddCMSUI(ui => ui.DontNagOnLocalhost());
                 c.AddComponent<WebsiteComponent>();
             });
 

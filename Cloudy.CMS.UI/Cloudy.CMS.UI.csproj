@@ -19,6 +19,7 @@
     <None Remove="ChangesAppSupport\Scripts\changes-app.js" />
     <None Remove="ContentAppSupport\Scripts\content-app.js" />
     <None Remove="SitesAppSupport\Scripts\sites-app.js" />
+    <None Remove="startup.js" />
     <None Remove="TreeAppSupport\Scripts\tree-app.js" />
   </ItemGroup>
 
@@ -26,14 +27,15 @@
     <EmbeddedResource Include="ChangesAppSupport\Scripts\changes-app.js" />
     <EmbeddedResource Include="ContentAppSupport\Scripts\content-app.js" />
     <EmbeddedResource Include="SitesAppSupport\Scripts\sites-app.js" />
+    <EmbeddedResource Include="NaggingSupport\nagging.js" />
     <EmbeddedResource Include="TreeAppSupport\Scripts\tree-app.js" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FastMember" Version="1.4.1" />
-    <PackageReference Include="Poetry.UI" Version="2.82.0" />
-    <PackageReference Include="Poetry.UI.DataTableSupport" Version="2.82.0" />
-    <PackageReference Include="Poetry.UI.FormSupport" Version="2.82.0" />
+    <PackageReference Include="Poetry.UI" Version="2.87.3" />
+    <PackageReference Include="Poetry.UI.DataTableSupport" Version="2.87.3" />
+    <PackageReference Include="Poetry.UI.FormSupport" Version="2.87.3" />
   </ItemGroup>
 
   <ItemGroup>

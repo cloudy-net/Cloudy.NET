@@ -31,7 +31,7 @@ namespace Cloudy.CMS.Mvc
     {
         static PoetryConfigurator PoetryConfigurator { get; set; }
 
-        public static void AddCMS(this PoetryConfigurator poetryConfigurator)
+        public static void AddCMS(this PoetryConfigurator poetryConfigurator, Action<CMSConfigurator> configuratorFunction)
         {
             PoetryConfigurator = poetryConfigurator;
 
@@ -40,11 +40,7 @@ namespace Cloudy.CMS.Mvc
             poetryConfigurator.InjectSingleton<IUrlGenerator, UrlGenerator>();
             poetryConfigurator.InjectSingleton<IControllerProvider, ControllerProvider>();
             poetryConfigurator.InjectSingleton<IContentControllerMatchCreator, ContentControllerMatchCreator>();
-        }
 
-        public static void AddCMS(this PoetryConfigurator poetryConfigurator, Action<CMSConfigurator> configuratorFunction)
-        {
-            poetryConfigurator.AddCMS();
             configuratorFunction(new CMSConfigurator());
         }
 
