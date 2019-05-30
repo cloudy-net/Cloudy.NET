@@ -31,7 +31,7 @@ namespace Cloudy.CMS.Routing
 
             while (segments.Any())
             {
-                page = ContentSegmentRouter.RouteContentSegment(segments.First(), page?.Id, language);
+                page = ContentSegmentRouter.RouteContentSegment(page?.Id, segments.First(), language);
 
                 if (page == null)
                 {
