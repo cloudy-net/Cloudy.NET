@@ -150,26 +150,26 @@
     <Reference Include="Poetry.AspNet, Version=1.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Poetry.AspNet.1.20.0\lib\net461\Poetry.AspNet.dll</HintPath>
     </Reference>
-    <Reference Include="Poetry.UI, Version=2.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Poetry.UI.2.87.3\lib\netstandard2.0\Poetry.UI.dll</HintPath>
+    <Reference Include="Poetry.UI, Version=2.88.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Poetry.UI.2.88.1\lib\netstandard2.0\Poetry.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Poetry.UI.AspNet, Version=2.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Poetry.UI.AspNet.2.87.3\lib\net461\Poetry.UI.AspNet.dll</HintPath>
+    <Reference Include="Poetry.UI.AspNet, Version=2.88.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Poetry.UI.AspNet.2.88.1\lib\net461\Poetry.UI.AspNet.dll</HintPath>
     </Reference>
-    <Reference Include="Poetry.UI.ContextMenuSupport, Version=2.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Poetry.UI.ContextMenuSupport.2.87.3\lib\netstandard2.0\Poetry.UI.ContextMenuSupport.dll</HintPath>
+    <Reference Include="Poetry.UI.ContextMenuSupport, Version=2.88.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Poetry.UI.ContextMenuSupport.2.88.1\lib\netstandard2.0\Poetry.UI.ContextMenuSupport.dll</HintPath>
     </Reference>
-    <Reference Include="Poetry.UI.ControlMessageSupport, Version=2.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Poetry.UI.ControlMessageSupport.2.87.3\lib\netstandard2.0\Poetry.UI.ControlMessageSupport.dll</HintPath>
+    <Reference Include="Poetry.UI.ControlMessageSupport, Version=2.88.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Poetry.UI.ControlMessageSupport.2.88.1\lib\netstandard2.0\Poetry.UI.ControlMessageSupport.dll</HintPath>
     </Reference>
-    <Reference Include="Poetry.UI.DataTableSupport, Version=2.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Poetry.UI.DataTableSupport.2.87.3\lib\netstandard2.0\Poetry.UI.DataTableSupport.dll</HintPath>
+    <Reference Include="Poetry.UI.DataTableSupport, Version=2.88.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Poetry.UI.DataTableSupport.2.88.1\lib\netstandard2.0\Poetry.UI.DataTableSupport.dll</HintPath>
     </Reference>
-    <Reference Include="Poetry.UI.FormSupport, Version=2.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Poetry.UI.FormSupport.2.87.3\lib\netstandard2.0\Poetry.UI.FormSupport.dll</HintPath>
+    <Reference Include="Poetry.UI.FormSupport, Version=2.88.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Poetry.UI.FormSupport.2.88.1\lib\netstandard2.0\Poetry.UI.FormSupport.dll</HintPath>
     </Reference>
-    <Reference Include="Poetry.UI.NotificationSupport, Version=2.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Poetry.UI.NotificationSupport.2.87.3\lib\netstandard2.0\Poetry.UI.NotificationSupport.dll</HintPath>
+    <Reference Include="Poetry.UI.NotificationSupport, Version=2.88.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Poetry.UI.NotificationSupport.2.88.1\lib\netstandard2.0\Poetry.UI.NotificationSupport.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.8.0\lib\net46\Serilog.dll</HintPath>
