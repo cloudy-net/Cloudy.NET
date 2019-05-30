@@ -46,7 +46,7 @@ namespace Cloudy.CMS.Routing
                 segments = segments.Skip(2);
             }
 
-            content = ContentRouter.RouteContent(segments, "sv");
+            content = ContentRouter.RouteContent(segments, null);
 
             if (content == null)
             {

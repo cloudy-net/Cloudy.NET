@@ -34,7 +34,7 @@ namespace Cloudy.CMS.AspNet.Routing
             IContent content;
             ContentTypeDescriptor contentType;
 
-            content = ContentRouter.RouteContent(segments, "sv");
+            content = ContentRouter.RouteContent(segments, null);
 
             if (content == null)
             {
