@@ -27,7 +27,12 @@ namespace Cloudy.CMS.Routing
             var document = DocumentRepository.Documents.Find(
                 Builders<Document>.Filter.And(
                     Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"], parentId),
-                    Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["INavigatable"].Properties["UrlSegment"], segment)
+                    segment != null ?
+                    Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IRoutable"].Properties["UrlSegment"], segment) :
+                    Builders<Document>.Filter.And(
+                        Builders<Document>.Filter.Exists(d => d.GlobalFacet.Interfaces["IRoutable"].Properties["UrlSegment"]),
+                        Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IRoutable"].Properties["UrlSegment"], segment)
+                    )
                 )
             ).FirstOrDefault();
 
