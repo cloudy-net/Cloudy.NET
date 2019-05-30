@@ -11,10 +11,10 @@ namespace Website.AspNetCore.Controllers
 {
     public class PageController : Controller
     {
-        [ContentRoute(typeof(StartPage))]
-        public ActionResult Index([FromContentRoute]StartPage startPage)
+        [ContentRoute(typeof(ArticlePage))]
+        public ActionResult Blog([FromContentRoute]ArticlePage articlePage)
         {
-            return Content(startPage.Id);
+            return View("Article", articlePage);
         }
     }
 }
