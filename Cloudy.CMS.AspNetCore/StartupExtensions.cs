@@ -37,7 +37,7 @@ namespace Cloudy.CMS.Mvc
 
             poetryConfigurator.AddComponent<CloudyCMSComponent>();
             poetryConfigurator.InjectSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
-            poetryConfigurator.InjectSingleton<IUrlGenerator, UrlGenerator>();
+            poetryConfigurator.InjectSingleton<IUrlProvider, UrlProvider>();
             poetryConfigurator.InjectSingleton<IControllerProvider, ControllerProvider>();
             poetryConfigurator.InjectSingleton<IContentControllerMatchCreator, ContentControllerMatchCreator>();
 

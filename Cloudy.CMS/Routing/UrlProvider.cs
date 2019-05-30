@@ -8,12 +8,12 @@ using Cloudy.CMS.ContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.Mvc.Routing
 {
-    public class UrlGenerator : IUrlGenerator
+    public class UrlProvider : IUrlProvider
     {
         IContentGetter ContentGetter { get; }
         IAncestorLinkProvider AncestorsRepository { get; }
 
-        public UrlGenerator(IAncestorLinkProvider ancestorsRepository, IContentGetter contentGetter)
+        public UrlProvider(IAncestorLinkProvider ancestorsRepository, IContentGetter contentGetter)
         {
             AncestorsRepository = ancestorsRepository;
             ContentGetter = contentGetter;

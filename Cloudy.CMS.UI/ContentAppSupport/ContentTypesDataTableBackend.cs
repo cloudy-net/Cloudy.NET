@@ -79,6 +79,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
                 Name = name,
                 PluralName = pluralName,
                 IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
+                IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
                 SingletonId = singleton?.Id,
                 Count = -1,
@@ -91,6 +92,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public string Name { get; set; }
             public string PluralName { get; set; }
             public bool IsNameable { get; set; }
+            public bool IsRoutable { get; set; }
             public bool IsSingleton { get; set; }
             public string SingletonId { get; set; }
             public int Count { get; set; }

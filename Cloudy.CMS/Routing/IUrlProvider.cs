@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.Mvc.Routing
 {
-    public interface IUrlGenerator
+    public interface IUrlProvider
     {
         string Generate(IContent content);
     }

@@ -45,7 +45,7 @@ class ListContentTypesBlade extends Blade {
                                     })
                                         .then(response => response.json())
                             }), this)) :
-                        new Button('List').onClick(() => app.openBlade(new ListContentBlade(app, item), this))
+                        new Button('Edit').onClick(() => app.openBlade(new ListContentBlade(app, item), this))
                 ))
         );
     }
@@ -89,12 +89,20 @@ class EditContentBlade extends Blade {
         super();
 
         this.setTitle();
+        if (contentType.IsRoutable) {
+            var view = document.createElement('a');
+            view.classList.add('poetry-ui-button');
+            view.setAttribute('disabled', true);
+            view.setAttribute('target', '_blank');
+            view.innerText = 'View';
+            this.setToolbar(view);
+        }
         this.setContent();
 
         var saveButton = new Button('Save').setDisabled();
         var cancelButton = new Button('Cancel').onClick(() => app.closeBlade(this)).setDisabled();
 
-        this.setToolbar(saveButton, cancelButton);
+        this.setFooter(saveButton, cancelButton);
 
         var init = item => {
             if (item) {
@@ -102,6 +110,21 @@ class EditContentBlade extends Blade {
                     this.setTitle(`Edit ${item.Name}`);
                 } else {
                     this.setTitle(`Edit ${contentType.Name}`);
+                }
+
+                if (contentType.IsRoutable) {
+                    fetch('Cloudy.CMS.UI/ContentApp/GetUrl?id=' + encodeURIComponent(item.Id), {
+                        credentials: 'include',
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.text())
+                        .then(url => {
+                            view.href = `${location.origin}/${url}`;
+                            view.removeAttribute('disabled');
+                        });
                 }
             } else {
                 this.setTitle(`New ${contentType.Name}`);

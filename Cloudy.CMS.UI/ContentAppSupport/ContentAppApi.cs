@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Cloudy.CMS.SingletonSupport;
+using Cloudy.CMS.Mvc.Routing;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
@@ -18,13 +19,15 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         IContentTypeProvider ContentTypeRepository { get; }
         IContentCreator ContentCreator { get; }
         IContentUpdater ContentUpdater { get; }
+        IUrlProvider UrlProvider { get; }
 
-        public ContentAppApi(IContentGetter contentGetter, IContentTypeProvider contentTypeRepository, IContentCreator contentCreator, IContentUpdater contentUpdater)
+        public ContentAppApi(IContentGetter contentGetter, IContentTypeProvider contentTypeRepository, IContentCreator contentCreator, IContentUpdater contentUpdater, IUrlProvider urlProvider)
         {
             ContentGetter = contentGetter;
             ContentTypeRepository = contentTypeRepository;
             ContentCreator = contentCreator;
             ContentUpdater = contentUpdater;
+            UrlProvider = urlProvider;
         }
 
         [Endpoint("GetSingleton")]
@@ -61,6 +64,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public string Id { get; set; }
             public string ContentTypeId { get; set; }
             public JObject Item { get; set; }
+        }
+
+        [Endpoint("GetUrl")]
+        public string GetUrl(string id)
+        {
+            var content = ContentGetter.Get<IContent>(id, null);
+
+            return UrlProvider.Generate(content);
         }
     }
 }
