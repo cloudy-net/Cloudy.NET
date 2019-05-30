@@ -37,14 +37,15 @@ class ListContentTypesBlade extends Blade {
                 .addColumn(c => c.setActionColumn().setContent(item =>
                     item.IsSingleton ?
                         new Button('Edit').onClick(() =>
-                            app.openBlade(new EditContentBlade(app, item, {
-                                itemPromise:
-                                    fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${item.SingletonId}`, {
-                                        credentials: 'include',
-                                        method: 'Get',
-                                    })
-                                        .then(response => response.json())
-                            }), this)) :
+                            app.openBlade(new EditContentBlade(
+                                app,
+                                item, 
+                                fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${item.SingletonId}`, {
+                                    credentials: 'include',
+                                    method: 'Get',
+                                })
+                                    .then(response => response.json())), this)
+                        ) :
                         new Button('Edit').onClick(() => app.openBlade(new ListContentBlade(app, item), this))
                 ))
         );
@@ -85,7 +86,7 @@ class ListContentBlade extends Blade {
 /* EDIT CONTENT */
 
 class EditContentBlade extends Blade {
-    constructor(app, contentType, options) {
+    constructor(app, contentType, item) {
         super();
 
         this.setTitle();
@@ -169,15 +170,15 @@ class EditContentBlade extends Blade {
                     .setBackend(backend)
                     .addColumn(c => c.setHeader(() => 'Properties').setContent(item => item || 'Content'))
                     .addColumn(c => c.setActionColumn().setContent(group =>
-                        new Button('Edit').onClick(() => app.openBlade(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content').onClose((message, values) => { if (message == 'saved') { console.log(values); } }), this))
+                        new Button('Edit').onClick(() => app.openBlade(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content'), this))
                     ))
             );
         };
 
-        if (options.itemPromise) {
-            options.itemPromise.then(item => init(item));
-        } else if (options.item) {
-            init(options.item);
+        if (item instanceof Promise) {
+            item.then(item => init(item));
+        } else if (item) {
+            init(item);
         } else {
             init({});
         }
@@ -196,16 +197,10 @@ class EditPropertyGroupBlade extends Blade {
 
         this.setContent();
 
-        var saveButton = new Button('Save');
-
         this.setToolbar(
-            saveButton,
-            new Button('Cancel').onClick(() => app.closeBlade(this)),
+            new Button('Close').onClick(() => app.closeBlade(this)),
         );
 
-        formPromise.then(form => {
-            this.setContent(form);
-            saveButton.onClick(() => app.closeBlade(this, 'saved', form.getValues()));
-        });
+        formPromise.then(form => this.setContent(form));
     }
 }
