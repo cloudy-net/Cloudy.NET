@@ -13,46 +13,11 @@ namespace Cloudy.CMS.Routing
 {
     public class ContentRouter : IContentRouter
     {
-        IDocumentRepository DocumentRepository { get; }
-        IContentTypeProvider ContentTypeRepository { get; }
-        IContentDeserializer ContentDeserializer { get; }
+        IContentSegmentRouter ContentSegmentRouter { get; }
 
-        public ContentRouter(IDocumentRepository documentRepository, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
+        public ContentRouter(IContentSegmentRouter contentSegmentRouter)
         {
-            DocumentRepository = documentRepository;
-            ContentTypeRepository = contentTypeRepository;
-            ContentDeserializer = contentDeserializer;
-        }
-
-        public IContent GetContentBySegment(string segment, IContent parent, string language)
-        {
-            var parentId = parent?.Id ?? null;
-            
-            return GetChildByUrlSegment<IContent>(parentId, segment, language);
-        }
-
-        T GetChildByUrlSegment<T>(string parentId, string segment, string language) where T : class
-        {
-            return GetChildByUrlSegmentAsync<T>(parentId, segment, language).WaitAndUnwrapException();
-        }
-
-        async Task<T> GetChildByUrlSegmentAsync<T>(string parentId, string segment, string language) where T : class
-        {
-            var document = (await DocumentRepository.Documents.FindAsync(
-                Builders<Document>.Filter.And(
-                    Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"], parentId),
-                    Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["INavigatable"].Properties["UrlSegment"], segment)
-                )
-            ).ConfigureAwait(false)).FirstOrDefault();
-
-            if (document == null)
-            {
-                return null;
-            }
-
-            var contentType = ContentTypeRepository.Get(document.GlobalFacet.Interfaces["IContent"].Properties["ContentTypeId"] as string);
-
-            return (T)ContentDeserializer.Deserialize(document, contentType, language);
+            ContentSegmentRouter = contentSegmentRouter;
         }
 
         public IContent RouteContent(IEnumerable<string> segments, string language)
@@ -61,12 +26,12 @@ namespace Cloudy.CMS.Routing
 
             if (!segments.Any())
             {
-                return GetContentBySegment(null, null, language);
+                return ContentSegmentRouter.RouteContentSegment(null, null, language);
             }
 
             while (segments.Any())
             {
-                page = GetContentBySegment(segments.First(), page, language);
+                page = ContentSegmentRouter.RouteContentSegment(segments.First(), page?.Id, language);
 
                 if (page == null)
                 {
