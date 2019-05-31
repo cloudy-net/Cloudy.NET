@@ -12,7 +12,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
     {
         IContainerProvider ContainerProvider { get; }
         IContentTypeProvider ContentTypeRepository { get; }
-        string Container { get; } = "content";
         IContentDeserializer ContentDeserializer { get; }
 
         public ContentGetter(IContainerProvider containerProvider, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)

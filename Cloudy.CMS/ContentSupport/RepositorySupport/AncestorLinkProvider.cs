@@ -12,7 +12,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
     public class AncestorLinkProvider : IAncestorLinkProvider
     {
         IContainerProvider ContainerProvider { get; }
-        string Container { get; } = "content";
 
         public AncestorLinkProvider(IContainerProvider containerProvider)
         {

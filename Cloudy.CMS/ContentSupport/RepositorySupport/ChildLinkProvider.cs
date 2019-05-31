@@ -12,7 +12,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
     public class ChildLinkProvider : IChildLinkProvider
     {
         IContainerProvider ContainerProvider { get; }
-        string Container { get; } = "content";
 
         public ChildLinkProvider(IContainerProvider containerProvider)
         {

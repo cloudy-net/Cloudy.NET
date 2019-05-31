@@ -13,7 +13,6 @@ namespace Cloudy.CMS.Core.ContentSupport.RepositorySupport
     public class ContentDeleter : IContentDeleter
     {
         IContainerProvider ContainerProvider { get; }
-        string Container { get; } = "content";
 
         public ContentDeleter(IContainerProvider containerProvider)
         {
