@@ -12,11 +12,8 @@ namespace Cloudy.CMS.ContentTypeSupport
     public class ContentTypeDescriptor
     {
         public string Id { get; }
-        [JsonIgnore]
         public Type Type { get; }
-        [JsonIgnore]
         public IEnumerable<PropertyDefinitionDescriptor> PropertyDefinitions { get; }
-        [JsonIgnore]
         public IEnumerable<CoreInterfaceDescriptor> CoreInterfaces { get; set; }
 
         public ContentTypeDescriptor(string id, Type type, IEnumerable<PropertyDefinitionDescriptor> propertyDefinitions, IEnumerable<CoreInterfaceDescriptor> coreInterfaces)
