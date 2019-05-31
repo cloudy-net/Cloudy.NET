@@ -7,58 +7,27 @@ using Newtonsoft.Json.Linq;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DocumentSupport;
 using MongoDB.Driver;
+using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentUpdater : IContentUpdater
     {
-        IContainerProvider ContainerProvider { get; }
-        IContentTypeProvider ContentTypeRepository { get; }
-        IContentSerializer ContentSerializer { get; }
+        IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
 
-        public ContentUpdater(IContainerProvider containerProvider, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
+        public ContentUpdater(IContainerSpecificContentUpdater containerSpecificContentUpdater)
         {
-            ContainerProvider = containerProvider;
-            ContentTypeRepository = contentTypeRepository;
-            ContentSerializer = contentSerializer;
+            ContainerSpecificContentUpdater = containerSpecificContentUpdater;
         }
 
         public void Update(IContent content)
         {
-            if (content.Id == null)
-            {
-                throw new InvalidOperationException($"This content cannot be updated as it doesn't seem to exist (Id is null). Did you mean to use IContentCreator?");
-            }
-
-            var contentType = ContentTypeRepository.Get(content.ContentTypeId);
-
-            if (contentType == null)
-            {
-                throw new InvalidOperationException($"This content has no content type (or rather its base class has no [ContentType] attribute)");
-            }
-
-            var document = ContentSerializer.Serialize(content, contentType);
-
-            ContainerProvider.Get(ContainerConstants.Content).UpdateOne(Builders<Document>.Filter.Eq(d => d.Id, content.Id), Builders<Document>.Update.Set(d => d.GlobalFacet, document.GlobalFacet));
+            ContainerSpecificContentUpdater.Update(content, ContainerConstants.Content);
         }
 
         public async Task UpdateAsync(IContent content)
         {
-            if (content.Id == null)
-            {
-                throw new InvalidOperationException($"This content cannot be updated as it doesn't seem to exist (Id is null). Did you mean to use IContentCreator?");
-            }
-
-            var contentType = ContentTypeRepository.Get(content.ContentTypeId);
-
-            if (contentType == null)
-            {
-                throw new InvalidOperationException($"This content has no content type (or rather its base class has no [ContentType] attribute)");
-            }
-
-            var document = ContentSerializer.Serialize(content, contentType);
-
-            await ContainerProvider.Get(ContainerConstants.Content).UpdateOneAsync(Builders<Document>.Filter.Eq(d => d.Id, content.Id), Builders<Document>.Update.Set(d => d.GlobalFacet, document.GlobalFacet));
+            await ContainerSpecificContentUpdater.UpdateAsync(content, ContainerConstants.Content);
         }
     }
 }

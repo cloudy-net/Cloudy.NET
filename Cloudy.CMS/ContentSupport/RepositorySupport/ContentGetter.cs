@@ -5,49 +5,27 @@ using Newtonsoft.Json.Linq;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DocumentSupport;
 using MongoDB.Driver;
+using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentGetter : IContentGetter
     {
-        IContainerProvider ContainerProvider { get; }
-        IContentTypeProvider ContentTypeRepository { get; }
-        IContentDeserializer ContentDeserializer { get; }
+        IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
 
-        public ContentGetter(IContainerProvider containerProvider, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
+        public ContentGetter(IContainerSpecificContentGetter containerSpecificContentGetter)
         {
-            ContainerProvider = containerProvider;
-            ContentTypeRepository = contentTypeRepository;
-            ContentDeserializer = contentDeserializer;
+            ContainerSpecificContentGetter = containerSpecificContentGetter;
         }
-
 
         public T Get<T>(string id, string language) where T : class
         {
-            return GetAsync<T>(id, language).WaitAndUnwrapException();
+            return ContainerSpecificContentGetter.Get<T>(id, language, ContainerConstants.Content);
         }
 
         public async Task<T> GetAsync<T>(string id, string language) where T : class
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-            if (language == null)
-            {
-                language = DocumentLanguageConstants.Global;
-            }
-
-            var document = (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(Builders<Document>.Filter.Eq(d => d.Id, id))).FirstOrDefault();
-
-            if (document == null)
-            {
-                return null;
-            }
-
-            var contentType = ContentTypeRepository.Get(document.GlobalFacet.Interfaces["IContent"].Properties["ContentTypeId"] as string);
-
-            return (T)ContentDeserializer.Deserialize(document, contentType, language);
+            return await ContainerSpecificContentGetter.GetAsync<T>(id, language, ContainerConstants.Content);
         }
     }
 }

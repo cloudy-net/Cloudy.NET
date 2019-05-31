@@ -12,6 +12,7 @@ using System.Text;
 using Cloudy.CMS.ContentControllerSupport;
 using Cloudy.CMS.Routing;
 using Cloudy.CMS.SingletonSupport;
+using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS
 {
@@ -34,7 +35,11 @@ namespace Cloudy.CMS
             container.RegisterSingleton<IChildLinkProvider, ChildLinkProvider>();
             container.RegisterSingleton<IAncestorLinkProvider, AncestorLinkProvider>();
 
-            
+            container.RegisterSingleton<IContainerSpecificContentGetter, ContainerSpecificContentGetter>();
+            container.RegisterSingleton<IContainerSpecificContentDeleter, ContainerSpecificContentDeleter>();
+            container.RegisterSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
+            container.RegisterSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
+
             container.RegisterSingleton<IPropertyDefinitionCreator, PropertyDefinitionCreator>();
             container.RegisterSingleton<ICoreInterfaceCreator, CoreInterfaceCreator>();
             container.RegisterSingleton<IPropertyMappingCreator, PropertyMappingCreator>();

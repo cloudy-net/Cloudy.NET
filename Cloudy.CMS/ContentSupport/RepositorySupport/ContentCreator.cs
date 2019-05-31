@@ -3,48 +3,31 @@ using System;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DocumentSupport;
-using MongoDB.Bson.IO;
+using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentCreator : IContentCreator
     {
+        IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
         IContainerProvider ContainerProvider { get; }
         IIdGenerator IdGenerator { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         IContentSerializer ContentSerializer { get; }
 
-        public ContentCreator(IContainerProvider containerProvider, IIdGenerator idGenerator, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
+        public ContentCreator(IContainerSpecificContentCreator containerSpecificContentCreator)
         {
-            ContainerProvider = containerProvider;
-            IdGenerator = idGenerator;
-            ContentTypeRepository = contentTypeRepository;
-            ContentSerializer = contentSerializer;
+            ContainerSpecificContentCreator = containerSpecificContentCreator;
         }
 
         public void Create(IContent content)
         {
-            CreateAsync(content).WaitAndUnwrapException();
+            ContainerSpecificContentCreator.Create(content, ContainerConstants.Content);
         }
 
         public async Task CreateAsync(IContent content)
         {
-            if (content.Id != null)
-            {
-                throw new InvalidOperationException($"This content seems to already exist as it has a non-null Id ({content.Id}). Did you mean to use IContentUpdater?");
-            }
-
-            var contentType = ContentTypeRepository.Get(content.GetType());
-
-            if (contentType == null)
-            {
-                throw new InvalidOperationException($"This content has no content type (or rather its Type ({content.GetType()}) has no [ContentType] attribute)");
-            }
-
-            content.Id = IdGenerator.Generate();
-            content.ContentTypeId = contentType.Id;
-
-            await ContainerProvider.Get(ContainerConstants.Content).InsertOneAsync(ContentSerializer.Serialize(content, contentType));
+            await ContainerSpecificContentCreator.CreateAsync(content, ContainerConstants.Content);
         }
     }
 }

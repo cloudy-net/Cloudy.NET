@@ -46,6 +46,8 @@ namespace Cloudy.CMS.ContentTypeSupport
                     continue;
                 }
 
+                var container = type.GetTypeInfo().GetCustomAttribute<ContainerAttribute>()?.Id ?? ContainerConstants.Content;
+
                 var propertyDefinitions = new List<PropertyDefinitionDescriptor>();
 
                 foreach (var property in type.GetProperties())
@@ -87,7 +89,7 @@ namespace Cloudy.CMS.ContentTypeSupport
                     coreInterfaces.Add(allCoreInterfaces[interfaceType.FullName]);
                 }
 
-                yield return new ContentTypeDescriptor(contentTypeAttribute.Id, type, propertyDefinitions, coreInterfaces);
+                yield return new ContentTypeDescriptor(contentTypeAttribute.Id, type, container, propertyDefinitions, coreInterfaces);
             }
         }
     }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Cloudy.CMS.ContentTypeSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {

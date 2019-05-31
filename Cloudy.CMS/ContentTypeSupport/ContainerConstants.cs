@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.ContentTypeSupport
 {
     public static class ContainerConstants
     {

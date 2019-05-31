@@ -7,31 +7,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.Core.ContentSupport.RepositorySupport
 {
     public class ContentDeleter : IContentDeleter
     {
-        IContainerProvider ContainerProvider { get; }
+        IContainerSpecificContentDeleter ContainerSpecificContentDeleter { get; }
 
-        public ContentDeleter(IContainerProvider containerProvider)
+        public ContentDeleter(IContainerSpecificContentDeleter containerSpecificContentDeleter)
         {
-            ContainerProvider = containerProvider;
+            ContainerSpecificContentDeleter = containerSpecificContentDeleter;
         }
 
         public void Delete(IContent content)
         {
-            DeleteAsync(content).WaitAndUnwrapException();
+            ContainerSpecificContentDeleter.Delete(content, ContainerConstants.Content);
         }
 
         public async Task DeleteAsync(IContent content)
         {
-            if (content.Id == null)
-            {
-                throw new InvalidOperationException($"This content cannot be deleted as it doesn't seem to exist (Id is null)");
-            }
-
-            await ContainerProvider.Get(ContainerConstants.Content).FindOneAndDeleteAsync(Builders<Document>.Filter.Eq(d => d.Id, content.Id));
+            await ContainerSpecificContentDeleter.DeleteAsync(content, ContainerConstants.Content);
         }
     }
 }
