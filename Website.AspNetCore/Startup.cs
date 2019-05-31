@@ -33,7 +33,7 @@ namespace Website.AspNetCore
             services.AddPoetry(c =>
             {
                 c.AddUI();
-                c.AddCMS(cms => cms.SetDatabase("cms-web-test"));
+                c.AddCMS(cms => cms.SetDatabaseConnectionString("mongodb://localhost:27017/cms-web-test"));
                 c.AddCMSUI(ui => ui.DontNagOnLocalhost());
                 c.AddComponent<WebsiteComponent>();
             });

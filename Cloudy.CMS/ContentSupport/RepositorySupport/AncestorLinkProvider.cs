@@ -11,12 +11,12 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class AncestorLinkProvider : IAncestorLinkProvider
     {
-        IDocumentRepository DocumentRepository { get; }
+        IContainerProvider ContainerProvider { get; }
         string Container { get; } = "content";
 
-        public AncestorLinkProvider(IDocumentRepository documentRepository)
+        public AncestorLinkProvider(IContainerProvider containerProvider)
         {
-            DocumentRepository = documentRepository;
+            ContainerProvider = containerProvider;
         }
 
         public IEnumerable<string> GetAncestorLinks(string id)
@@ -30,7 +30,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             while (true)
             {
-                var parent = (await DocumentRepository.Documents.FindAsync(
+                var parent = (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(
                     Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IContent"].Properties["Id"], id),
                     new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"]) }
                 ))

@@ -11,20 +11,20 @@ namespace Cloudy.CMS.Routing
 {
     public class ContentSegmentRouter : IContentSegmentRouter
     {
-        IDocumentRepository DocumentRepository { get; }
+        IContainerProvider ContainerProvider { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         IContentDeserializer ContentDeserializer { get; }
 
-        public ContentSegmentRouter(IDocumentRepository documentRepository, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
+        public ContentSegmentRouter(IContainerProvider containerProvider, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
         {
-            DocumentRepository = documentRepository;
+            ContainerProvider = containerProvider;
             ContentTypeRepository = contentTypeRepository;
             ContentDeserializer = contentDeserializer;
         }
 
         public IContent RouteContentSegment(string parentId, string segment, string language)
         {
-            var document = DocumentRepository.Documents.Find(
+            var document = ContainerProvider.Get(ContainerConstants.Content).Find(
                 Builders<Document>.Filter.And(
                     Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"], parentId),
                     segment != null ?

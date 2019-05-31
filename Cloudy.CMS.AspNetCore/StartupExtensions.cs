@@ -41,7 +41,7 @@ namespace Cloudy.CMS.Mvc
             poetryConfigurator.InjectSingleton<IControllerProvider, ControllerProvider>();
             poetryConfigurator.InjectSingleton<IContentControllerMatchCreator, ContentControllerMatchCreator>();
 
-            configuratorFunction(new CMSConfigurator());
+            configuratorFunction(new CMSConfigurator(poetryConfigurator));
         }
 
         public static void AddContentRoute(this IRouteBuilder routes)

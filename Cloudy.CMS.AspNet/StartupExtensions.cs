@@ -42,7 +42,7 @@ namespace Cloudy.CMS.AspNet
         public static void AddCMS(this PoetryConfigurator poetryConfigurator, Action<CMSConfigurator> configuratorFunction)
         {
             poetryConfigurator.AddCMS();
-            configuratorFunction(new CMSConfigurator());
+            configuratorFunction(new CMSConfigurator(poetryConfigurator));
         }
 
         public static void AddContentRoute(this RouteCollection routes)

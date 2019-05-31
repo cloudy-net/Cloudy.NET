@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.LicenseSupport;
+using Poetry;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,16 @@ namespace Cloudy.CMS
 {
     public class CMSConfigurator
     {
-        public void SetDatabase(string databaseName)
+        PoetryConfigurator PoetryConfigurator { get; }
+
+        public CMSConfigurator(PoetryConfigurator poetryConfigurator)
         {
-            DatabaseNameProvider.DatabaseName = databaseName;
+            PoetryConfigurator = poetryConfigurator;
+        }
+
+        public void SetDatabaseConnectionString(string connectionString)
+        {
+            PoetryConfigurator.InjectSingleton<IDatabaseProvider>(new DatabaseProvider(connectionString));
         }
 
         public void SetLicense(string license, string domain)

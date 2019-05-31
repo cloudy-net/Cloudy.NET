@@ -12,14 +12,14 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentUpdater : IContentUpdater
     {
-        IDocumentRepository DocumentRepository { get; }
+        IContainerProvider ContainerProvider { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         string Container { get; } = "content";
         IContentSerializer ContentSerializer { get; }
 
-        public ContentUpdater(IDocumentRepository documentRepository, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
+        public ContentUpdater(IContainerProvider containerProvider, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
         {
-            DocumentRepository = documentRepository;
+            ContainerProvider = containerProvider;
             ContentTypeRepository = contentTypeRepository;
             ContentSerializer = contentSerializer;
         }
@@ -40,7 +40,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             var document = ContentSerializer.Serialize(content, contentType);
 
-            DocumentRepository.Documents.UpdateOne(Builders<Document>.Filter.Eq(d => d.Id, content.Id), Builders<Document>.Update.Set(d => d.GlobalFacet, document.GlobalFacet));
+            ContainerProvider.Get(ContainerConstants.Content).UpdateOne(Builders<Document>.Filter.Eq(d => d.Id, content.Id), Builders<Document>.Update.Set(d => d.GlobalFacet, document.GlobalFacet));
         }
 
         public async Task UpdateAsync(IContent content)
@@ -59,7 +59,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             var document = ContentSerializer.Serialize(content, contentType);
 
-            await DocumentRepository.Documents.UpdateOneAsync(Builders<Document>.Filter.Eq(d => d.Id, content.Id), Builders<Document>.Update.Set(d => d.GlobalFacet, document.GlobalFacet));
+            await ContainerProvider.Get(ContainerConstants.Content).UpdateOneAsync(Builders<Document>.Filter.Eq(d => d.Id, content.Id), Builders<Document>.Update.Set(d => d.GlobalFacet, document.GlobalFacet));
         }
     }
 }

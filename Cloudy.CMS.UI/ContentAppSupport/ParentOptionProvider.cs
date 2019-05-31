@@ -11,16 +11,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     [OptionProvider("parent")]
     public class ParentOptionProvider : IOptionProvider
     {
-        IDocumentRepository DocumentRepository { get; }
+        IContainerProvider ContainerProvider { get; }
 
-        public ParentOptionProvider(IDocumentRepository documentRepository)
+        public ParentOptionProvider(IContainerProvider containerProvider)
         {
-            DocumentRepository = documentRepository;
+            ContainerProvider = containerProvider;
         }
 
         public IEnumerable<Option> GetAll()
         {
-            var documents = DocumentRepository.Documents.FindSync(Builders<Document>.Filter.Exists(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"]), new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(d => d.GlobalFacet.Interfaces["INameable"].Properties["Name"]) });
+            var documents = ContainerProvider.Get(ContainerConstants.Content).FindSync(Builders<Document>.Filter.Exists(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"]), new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(d => d.GlobalFacet.Interfaces["INameable"].Properties["Name"]) });
 
             var result = new List<Option>();
 

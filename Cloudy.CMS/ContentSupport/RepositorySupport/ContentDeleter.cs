@@ -12,12 +12,12 @@ namespace Cloudy.CMS.Core.ContentSupport.RepositorySupport
 {
     public class ContentDeleter : IContentDeleter
     {
-        IDocumentRepository DocumentRepository { get; }
+        IContainerProvider ContainerProvider { get; }
         string Container { get; } = "content";
 
-        public ContentDeleter(IDocumentRepository documentRepository)
+        public ContentDeleter(IContainerProvider containerProvider)
         {
-            DocumentRepository = documentRepository;
+            ContainerProvider = containerProvider;
         }
 
         public void Delete(IContent content)
@@ -32,7 +32,7 @@ namespace Cloudy.CMS.Core.ContentSupport.RepositorySupport
                 throw new InvalidOperationException($"This content cannot be deleted as it doesn't seem to exist (Id is null)");
             }
 
-            await DocumentRepository.Documents.FindOneAndDeleteAsync(Builders<Document>.Filter.Eq(d => d.Id, content.Id));
+            await ContainerProvider.Get(ContainerConstants.Content).FindOneAndDeleteAsync(Builders<Document>.Filter.Eq(d => d.Id, content.Id));
         }
     }
 }

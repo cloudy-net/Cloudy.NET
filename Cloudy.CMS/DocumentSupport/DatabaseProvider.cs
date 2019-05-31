@@ -7,24 +7,26 @@ using MongoDB.Driver;
 
 namespace Cloudy.CMS.DocumentSupport
 {
-    public class DocumentRepository : IDocumentRepository
+    public class DatabaseProvider : IDatabaseProvider
     {
-        public static Func<MongoClient> ClientCreator { get; internal set; } = () => new MongoClient();
-        public IMongoCollection<Document> Documents { get; }
-
-        static DocumentRepository() {
+        static DatabaseProvider()
+        {
             BsonClassMap.RegisterClassMap<Document>(cm => { cm.AutoMap(); new ImmutableTypeClassMapConvention().Apply(cm); });
             BsonClassMap.RegisterClassMap<DocumentFacet>(cm => { cm.AutoMap(); new ImmutableTypeClassMapConvention().Apply(cm); });
             BsonClassMap.RegisterClassMap<DocumentInterface>(cm => { cm.AutoMap(); new ImmutableTypeClassMapConvention().Apply(cm); });
         }
 
-        public DocumentRepository(IDatabaseNameProvider databaseNameProvider)
+        IMongoClient MongoClient { get; }
+
+        public DatabaseProvider(string connectionString)
         {
-            var client = ClientCreator.Invoke();
+            var url = new MongoUrl(connectionString);
 
-            var db = client.GetDatabase(databaseNameProvider.DatabaseName);
+            MongoClient = new MongoClient(url);
 
-            Documents = db.GetCollection<Document>("content");
+            Database = MongoClient.GetDatabase(url.DatabaseName);
         }
+
+        public IMongoDatabase Database { get; }
     }
 }

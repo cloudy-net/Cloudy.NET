@@ -11,12 +11,12 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ChildLinkProvider : IChildLinkProvider
     {
-        IDocumentRepository DocumentRepository { get; }
+        IContainerProvider ContainerProvider { get; }
         string Container { get; } = "content";
 
-        public ChildLinkProvider(IDocumentRepository documentRepository)
+        public ChildLinkProvider(IContainerProvider containerProvider)
         {
-            DocumentRepository = documentRepository;
+            ContainerProvider = containerProvider;
         }
 
         public IEnumerable<string> GetChildLinks(string id)
@@ -26,7 +26,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
         public async Task<IEnumerable<string>> GetChildLinksAsync(string id)
         {
-            return (await DocumentRepository.Documents.FindAsync(Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"], id)))
+            return (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"], id)))
             .ToList()
             .Select(d => d.Id)
             .ToList()

@@ -10,14 +10,14 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentGetter : IContentGetter
     {
-        IDocumentRepository DocumentRepository { get; }
+        IContainerProvider ContainerProvider { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         string Container { get; } = "content";
         IContentDeserializer ContentDeserializer { get; }
 
-        public ContentGetter(IDocumentRepository documentRepository, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
+        public ContentGetter(IContainerProvider containerProvider, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
         {
-            DocumentRepository = documentRepository;
+            ContainerProvider = containerProvider;
             ContentTypeRepository = contentTypeRepository;
             ContentDeserializer = contentDeserializer;
         }
@@ -39,7 +39,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
                 language = DocumentLanguageConstants.Global;
             }
 
-            var document = (await DocumentRepository.Documents.FindAsync(Builders<Document>.Filter.Eq(d => d.Id, id))).FirstOrDefault();
+            var document = (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(Builders<Document>.Filter.Eq(d => d.Id, id))).FirstOrDefault();
 
             if (document == null)
             {
