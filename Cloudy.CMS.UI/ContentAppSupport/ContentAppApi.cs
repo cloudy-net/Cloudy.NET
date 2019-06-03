@@ -9,31 +9,38 @@ using System.Collections.Generic;
 using System.Text;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.Mvc.Routing;
+using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
     [Api("ContentApp")]
     public class ContentAppApi
     {
-        IContentGetter ContentGetter { get; }
         IContentTypeProvider ContentTypeRepository { get; }
-        IContentCreator ContentCreator { get; }
-        IContentUpdater ContentUpdater { get; }
+        IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
+        IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
+        IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
         IUrlProvider UrlProvider { get; }
+        ISingletonProvider SingletonProvider { get; }
 
-        public ContentAppApi(IContentGetter contentGetter, IContentTypeProvider contentTypeRepository, IContentCreator contentCreator, IContentUpdater contentUpdater, IUrlProvider urlProvider)
+        public ContentAppApi(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider)
         {
-            ContentGetter = contentGetter;
             ContentTypeRepository = contentTypeRepository;
-            ContentCreator = contentCreator;
-            ContentUpdater = contentUpdater;
+            ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContainerSpecificContentCreator = containerSpecificContentCreator;
+            ContainerSpecificContentUpdater = containerSpecificContentUpdater;
             UrlProvider = urlProvider;
+            SingletonProvider = singletonProvider;
         }
 
         [Endpoint("GetSingleton")]
         public IContent Get(string id)
         {
-            return ContentGetter.Get<IContent>(id, null);
+            var contentType = ContentTypeRepository.Get(id);
+
+            var singleton = SingletonProvider.Get(id);
+
+            return ContainerSpecificContentGetter.Get<IContent>(singleton.Id, null, contentType.Container);
         }
 
         [Endpoint("Save")]
@@ -47,13 +54,13 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
             if (item.Id != null)
             {
-                ContentUpdater.Update(item);
+                ContainerSpecificContentUpdater.Update(item, contentType.Container);
 
                 return "Updated";
             }
             else
             {
-                ContentCreator.Create(item);
+                ContainerSpecificContentCreator.Create(item, contentType.Container);
 
                 return "Saved";
             }
@@ -67,9 +74,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         }
 
         [Endpoint("GetUrl")]
-        public string GetUrl(string id)
+        public string GetUrl(string id, string contentTypeId)
         {
-            var content = ContentGetter.Get<IContent>(id, null);
+            var contentType = ContentTypeRepository.Get(contentTypeId);
+
+            var content = ContainerSpecificContentGetter.Get<IContent>(id, null, contentType.Container);
 
             return UrlProvider.Generate(content);
         }

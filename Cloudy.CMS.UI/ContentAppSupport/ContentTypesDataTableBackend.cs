@@ -81,7 +81,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport
                 IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
                 IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
-                SingletonId = singleton?.Id,
                 Count = -1,
             };
         }
