@@ -40,14 +40,14 @@ class EditContentBlade extends Blade {
                 }
 
                 if (contentType.IsRoutable) {
-                    fetch('Cloudy.CMS.UI/ContentApp/GetUrl?id=' + encodeURIComponent(item.Id), {
+                    fetch(`Cloudy.CMS.UI/ContentApp/GetUrl?id=${encodeURIComponent(item.Id)}&contentTypeId=${encodeURIComponent(item.ContentTypeId)}`, {
                         credentials: 'include',
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     })
-                        .then(response => response.text())
+                        .then(response => response.json())
                         .then(url => {
                             view.href = `${location.origin}/${url}`;
                             view.removeAttribute('disabled');
