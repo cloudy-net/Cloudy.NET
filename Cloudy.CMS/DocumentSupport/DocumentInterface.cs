@@ -9,10 +9,13 @@ namespace Cloudy.CMS.DocumentSupport
         public string Id { get; set; }
         public IDictionary<string, object> Properties { get; set; }
 
-        public DocumentInterface(string id, IDictionary<string, object> properties)
+        public static DocumentInterface CreateFrom(string id, IDictionary<string, object> properties)
         {
-            Id = id;
-            Properties = new ReadOnlyDictionary<string, object>(properties);
+            return new DocumentInterface
+            {
+                Id = id,
+                Properties = new ReadOnlyDictionary<string, object>(properties),
+            };
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
         public async Task<IEnumerable<string>> GetChildLinksAsync(string id)
         {
-            return (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"], id)))
+            return (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId"), id)))
             .ToList()
             .Select(d => d.Id)
             .ToList()

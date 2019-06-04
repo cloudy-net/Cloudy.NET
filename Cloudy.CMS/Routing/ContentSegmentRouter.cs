@@ -26,12 +26,12 @@ namespace Cloudy.CMS.Routing
         {
             var document = ContainerProvider.Get(ContainerConstants.Content).Find(
                 Builders<Document>.Filter.And(
-                    Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"], parentId),
+                    Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId"), parentId),
                     segment != null ?
-                    Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IRoutable"].Properties["UrlSegment"], segment) :
+                    Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IRoutable.Properties.UrlSegment"), segment) :
                     Builders<Document>.Filter.And(
-                        Builders<Document>.Filter.Exists(d => d.GlobalFacet.Interfaces["IRoutable"].Properties["UrlSegment"]),
-                        Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IRoutable"].Properties["UrlSegment"], segment)
+                        Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IRoutable.Properties.UrlSegment")),
+                        Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IRoutable.Properties.UrlSegment"), segment)
                     )
                 )
             ).FirstOrDefault();

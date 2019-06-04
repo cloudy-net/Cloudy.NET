@@ -31,7 +31,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         {
             var contentType = ContentTypeRepository.Get(typeof(T));
 
-            var documents = ContainerProvider.Get(contentType.Container).FindSync(Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IContent"].Properties["ContentTypeId"], contentType.Id)).ToList();
+            var documents = ContainerProvider.Get(contentType.Container).FindSync(Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Properties.ContentTypeId"), contentType.Id)).ToList();
 
             var items = new List<T>();
 

@@ -1,4 +1,4 @@
-﻿
+﻿@model Website.AspNetCore.Models.ArticlePage
 @{
     Layout = null;
 }
@@ -11,5 +11,7 @@
     <title>Article</title>
 </head>
 <body>
+    <h1>@Model.Name</h1>
+    <p>@Model.Text</p>
 </body>
 </html>

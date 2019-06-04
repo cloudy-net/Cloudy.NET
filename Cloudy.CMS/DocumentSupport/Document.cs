@@ -13,11 +13,14 @@ namespace Cloudy.CMS.DocumentSupport
         public DocumentFacet GlobalFacet { get; set; }
         public IDictionary<string, DocumentFacet> LanguageFacets { get; set; }
 
-        public Document(string id, DocumentFacet globalFacet, IDictionary<string, DocumentFacet> languageFacets)
+        public static Document CreateFrom(string id, DocumentFacet globalFacet, IDictionary<string, DocumentFacet> languageFacets)
         {
-            Id = id;
-            GlobalFacet = globalFacet;
-            LanguageFacets = new ReadOnlyDictionary<string, DocumentFacet>(languageFacets);
+            return new Document
+            {
+                Id = id,
+                GlobalFacet = globalFacet,
+                LanguageFacets = new ReadOnlyDictionary<string, DocumentFacet>(languageFacets),
+            };
         }
     }
 }

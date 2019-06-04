@@ -16,12 +16,12 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 
             foreach (var coreInterface in contentType.CoreInterfaces)
             {
-                globalInterfaces.Add(new DocumentInterface(coreInterface.Id, GetProperties(content, coreInterface.PropertyDefinitions)));
+                globalInterfaces.Add(DocumentInterface.CreateFrom(coreInterface.Id, GetProperties(content, coreInterface.PropertyDefinitions)));
             }
 
-            var global = new DocumentFacet(DocumentLanguageConstants.Global, globalInterfaces, GetProperties(content, contentType.PropertyDefinitions));
+            var global = DocumentFacet.CreateFrom(DocumentLanguageConstants.Global, globalInterfaces, GetProperties(content, contentType.PropertyDefinitions));
 
-            return new Document(content.Id, global, Enumerable.Empty<DocumentFacet>().ToDictionary(f => f.Language, f => f));
+            return Document.CreateFrom(content.Id, global, Enumerable.Empty<DocumentFacet>().ToDictionary(f => f.Language, f => f));
         }
 
         IDictionary<string, object> GetProperties(IContent content, IEnumerable<PropertyDefinitionDescriptor> definitions)

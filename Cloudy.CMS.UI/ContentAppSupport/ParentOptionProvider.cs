@@ -21,7 +21,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
         public IEnumerable<Option> GetAll()
         {
-            var documents = ContainerProvider.Get(ContainerConstants.Content).FindSync(Builders<Document>.Filter.Exists(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"]), new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(d => d.GlobalFacet.Interfaces["INameable"].Properties["Name"]) });
+            var documents = ContainerProvider.Get(ContainerConstants.Content).FindSync(Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId")), new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(d => d.GlobalFacet.Interfaces["INameable"].Properties["Name"]) });
 
             var result = new List<Option>();
 

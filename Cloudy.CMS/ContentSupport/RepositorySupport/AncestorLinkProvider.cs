@@ -30,8 +30,8 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             while (true)
             {
                 var parent = (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(
-                    Builders<Document>.Filter.Eq(d => d.GlobalFacet.Interfaces["IContent"].Properties["Id"], id),
-                    new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(d => d.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"]) }
+                    Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Id"), id),
+                    new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId")) }
                 ))
                 .FirstOrDefault();
 
