@@ -20,14 +20,14 @@ namespace Cloudy.CMS.Core.ContentSupport.RepositorySupport
             ContainerSpecificContentDeleter = containerSpecificContentDeleter;
         }
 
-        public void Delete(IContent content)
+        public void Delete(string id)
         {
-            ContainerSpecificContentDeleter.Delete(content, ContainerConstants.Content);
+            ContainerSpecificContentDeleter.Delete(id, ContainerConstants.Content);
         }
 
-        public async Task DeleteAsync(IContent content)
+        public async Task DeleteAsync(string id)
         {
-            await ContainerSpecificContentDeleter.DeleteAsync(content, ContainerConstants.Content);
+            await ContainerSpecificContentDeleter.DeleteAsync(id, ContainerConstants.Content);
         }
     }
 }

@@ -19,19 +19,14 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
             ContainerProvider = containerProvider;
         }
 
-        public void Delete(IContent content, string container)
+        public void Delete(string id, string container)
         {
-            DeleteAsync(content, container).WaitAndUnwrapException();
+            DeleteAsync(id, container).WaitAndUnwrapException();
         }
 
-        public async Task DeleteAsync(IContent content, string container)
+        public async Task DeleteAsync(string id, string container)
         {
-            if (content.Id == null)
-            {
-                throw new InvalidOperationException($"This content cannot be deleted as it doesn't seem to exist (Id is null)");
-            }
-
-            await ContainerProvider.Get(container).FindOneAndDeleteAsync(Builders<Document>.Filter.Eq(d => d.Id, content.Id));
+            await ContainerProvider.Get(container).FindOneAndDeleteAsync(Builders<Document>.Filter.Eq(d => d.Id, id));
         }
     }
 }

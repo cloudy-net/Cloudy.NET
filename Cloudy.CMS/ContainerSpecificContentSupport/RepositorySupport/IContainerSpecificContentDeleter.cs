@@ -8,7 +8,7 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 {
     public interface IContainerSpecificContentDeleter
     {
-        void Delete(IContent content, string container);
-        Task DeleteAsync(IContent content, string container);
+        void Delete(string id, string container);
+        Task DeleteAsync(string id, string container);
     }
 }
