@@ -57,7 +57,7 @@ namespace Website.AspNetCore.Models
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
-            await ContainerSpecificContentDeleter.DeleteAsync(user, Container);
+            await ContainerSpecificContentDeleter.DeleteAsync(user.Id, Container);
 
             return IdentityResult.Success;
         }
