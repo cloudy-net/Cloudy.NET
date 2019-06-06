@@ -33,6 +33,11 @@ namespace Cloudy.CMS.ContentSupport.Serialization
             {
                 if (values.TryGetValue(definition.Name, out var value))
                 {
+                    if (value is long && definition.Type == typeof(int))
+                    {
+                        value = (int)value;
+                    }
+
                     definition.Setter(content, value);
                 }
             }
