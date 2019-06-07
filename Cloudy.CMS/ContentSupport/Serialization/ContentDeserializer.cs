@@ -35,7 +35,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
                 {
                     if (value is long && definition.Type == typeof(int))
                     {
-                        value = (int)value;
+                        value = (int)(long)value;
                     }
 
                     definition.Setter(content, value);
