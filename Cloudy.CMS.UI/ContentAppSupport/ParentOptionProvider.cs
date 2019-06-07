@@ -30,7 +30,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
             result.Add(new Option("(root)", null));
 
-            result.AddRange(documents.ToList().Select(d => new Option(d.GlobalFacet.Interfaces["INameable"].Properties["Name"] as string ?? d.Id, d.Id)));
+            result.AddRange(documents.ToList().Select(d => new Option(d.GlobalFacet.Interfaces.ContainsKey("INameable") && d.GlobalFacet.Interfaces["INameable"].Properties.ContainsKey("Name") && d.GlobalFacet.Interfaces["INameable"].Properties["Name"] is string ? (string)d.GlobalFacet.Interfaces["INameable"].Properties["Name"] : d.Id, d.Id)));
 
             return result.AsReadOnly();
         }
