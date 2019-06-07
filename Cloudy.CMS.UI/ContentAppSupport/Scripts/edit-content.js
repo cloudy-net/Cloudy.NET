@@ -79,7 +79,19 @@ class EditContentBlade extends Blade {
             var backend = new class extends Backend {
                 load(query) {
                     return formBuilder.fieldModels.then(fieldModels => {
-                        var items = new Set(fieldModels.map(fieldModel => fieldModel.descriptor.Group));
+                        var items = [...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.Group))];
+
+                        items.sort((a, b) => {
+                            if (a == null) {
+                                return -1;
+                            }
+
+                            if (b == null) {
+                                return 1;
+                            }
+
+                            return a.localeCompare(b, 'en', { sensitivity: 'base' });
+                        });
 
                         return {
                             Items: items,
@@ -94,7 +106,7 @@ class EditContentBlade extends Blade {
             this.setContent(
                 new DataTable()
                     .setBackend(backend)
-                    .addColumn(c => c.setHeader(() => 'Properties').setContent(item => item || 'Content'))
+                    .addColumn(c => c.setHeader(() => 'Properties').setContent(item => item || 'General'))
                     .addColumn(c => c.setActionColumn().setContent(group =>
                         new Button('Edit').onClick(() => app.openBlade(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content'), this))
                     ))
