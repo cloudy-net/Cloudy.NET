@@ -7,6 +7,6 @@ namespace Cloudy.CMS.BlobSupport
 {
     public interface IBlobReader
     {
-        void Read(string id, Action<Stream> readAction);
+        void Read(string container, string id, Action<Stream> readAction);
     }
 }

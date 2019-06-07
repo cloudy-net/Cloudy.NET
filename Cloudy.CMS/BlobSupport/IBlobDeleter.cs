@@ -6,6 +6,6 @@ namespace Cloudy.CMS.BlobSupport
 {
     public interface IBlobDeleter
     {
-        void Delete(string id);
+        void Delete(string container, string id);
     }
 }
