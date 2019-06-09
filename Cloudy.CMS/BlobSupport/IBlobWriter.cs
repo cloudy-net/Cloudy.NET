@@ -7,6 +7,6 @@ namespace Cloudy.CMS.BlobSupport
 {
     public interface IBlobWriter
     {
-        Stream Write(string container, string id);
+        void Write(string container, string id, Stream stream);
     }
 }
