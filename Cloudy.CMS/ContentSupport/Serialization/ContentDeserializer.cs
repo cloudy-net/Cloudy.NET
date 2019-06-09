@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Cloudy.CMS.ContentSupport.Serialization
 {
@@ -36,6 +37,10 @@ namespace Cloudy.CMS.ContentSupport.Serialization
                     if (value is long && definition.Type == typeof(int))
                     {
                         value = (int)(long)value;
+                    }
+                    if(value is JArray)
+                    {
+                        value = ((JArray)value).ToObject(definition.Type);
                     }
 
                     definition.Setter(content, value);
