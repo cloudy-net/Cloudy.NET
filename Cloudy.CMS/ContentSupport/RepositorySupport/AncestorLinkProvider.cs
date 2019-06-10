@@ -29,20 +29,30 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             while (true)
             {
-                var parent = (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(
-                    Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Id"), id),
+                var document = (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(
+                    Builders<Document>.Filter.And(
+                        Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Properties.Id"), id),
+                        Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId"))
+                    ),
                     new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId")) }
                 ))
                 .FirstOrDefault();
 
-                if (parent == null || parent.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"] == null)
+                if (document == null)
                 {
                     break;
                 }
 
-                result.Add(parent.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"] as string);
+                var parentId = document.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"] as string;
 
-                id = parent.GlobalFacet.Interfaces["IHierarchical"].Properties["ParentId"] as string;
+                if(parentId == null)
+                {
+                    break;
+                }
+
+                result.Add(parentId);
+
+                id = parentId;
             }
 
             return result;
