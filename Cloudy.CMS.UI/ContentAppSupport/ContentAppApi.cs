@@ -80,7 +80,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
             var content = ContainerSpecificContentGetter.Get<IContent>(id, null, contentType.Container);
 
-            return UrlProvider.Generate(content);
+            return UrlProvider.Get(content);
         }
     }
 }
