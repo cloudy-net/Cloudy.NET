@@ -32,12 +32,17 @@ namespace Cloudy.CMS.Mvc.Routing
 
             if (hierarchical == null)
             {
+                if(routable.UrlSegment == null)
+                {
+                    return "/";
+                }
+
                 return routable.UrlSegment;
             }
 
             var languageSpecific = content as ILanguageSpecific;
 
-            var allContent = AncestorsRepository.GetAncestorLinks(content.Id).Select(id => ContentGetter.Get<IContent>(id, languageSpecific?.Language));
+            var allContent = AncestorsRepository.GetAncestorLinks(content.Id).Reverse().Select(id => ContentGetter.Get<IContent>(id, languageSpecific?.Language));
 
             if (allContent.Any(c => !(c is IRoutable)))
             {
@@ -46,9 +51,19 @@ namespace Cloudy.CMS.Mvc.Routing
 
             var segments = allContent.Cast<IRoutable>().Select(c => c.UrlSegment).ToList();
 
+            if(segments.Any() && segments.First() == null)
+            {
+                segments = segments.Skip(1).ToList();
+            }
+
+            if (segments.Contains(null))
+            {
+                return null;
+            }
+            
             segments.Add(routable.UrlSegment);
 
-            return string.Join("/", segments);
+            return "/" + string.Join("/", segments);
         }
     }
 }
