@@ -11,8 +11,8 @@ namespace Website.AspNetCore.Controllers
 {
     public class PageController : Controller
     {
-        [ContentRoute(typeof(ArticlePage))]
-        public ActionResult Blog([FromContentRoute]ArticlePage articlePage)
+        [ContentRoute(typeof(Page))]
+        public ActionResult Blog([FromContentRoute] Page articlePage)
         {
             return View("Article", articlePage);
         }
