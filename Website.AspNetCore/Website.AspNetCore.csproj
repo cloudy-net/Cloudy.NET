@@ -9,8 +9,8 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="Poetry.UI" Version="2.92.0" />
-    <PackageReference Include="Poetry.UI.AspNetCore" Version="2.92.0" />
+    <PackageReference Include="Poetry.UI" Version="2.95.2" />
+    <PackageReference Include="Poetry.UI.AspNetCore" Version="2.95.2" />
     <PackageReference Include="Serilog" Version="2.8.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />

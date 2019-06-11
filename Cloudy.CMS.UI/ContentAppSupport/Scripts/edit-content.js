@@ -3,6 +3,7 @@ import Blade from '../../../Poetry.UI/Scripts/blade.js';
 import FormBuilder from '../../../Poetry.UI.FormSupport/Scripts/form-builder.js';
 import Button from '../../../Poetry.UI/Scripts/button.js';
 import DataTable from '../../../Poetry.UI.DataTableSupport/Scripts/data-table.js';
+import DataTableButton from '../../../Poetry.UI.DataTableSupport/Scripts/data-table-button.js';
 import Backend from '../../../Poetry.UI.DataTableSupport/Scripts/backend.js';
 import CopyAsTabSeparated from '../../../Poetry.UI.DataTableSupport/Scripts/copy-as-tab-separated.js';
 import ContextMenu from '../../../Poetry.UI.ContextMenuSupport/Scripts/context-menu.js';
@@ -76,40 +77,23 @@ class EditContentBlade extends Blade {
 
             var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
 
-            var backend = new class extends Backend {
-                load(query) {
-                    return formBuilder.fieldModels.then(fieldModels => {
-                        var items = [...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.Group))];
+            formBuilder.fieldModels.then(fieldModels =>
+                this.setContent(
+                    new DataTable()
+                        .setBackend([...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.Group))].sort())
+                        .addColumn(c =>
+                            c.setHeader(() => 'Properties').setButton(group => {
+                                var button = new DataTableButton(group || 'General');
 
-                        items.sort((a, b) => {
-                            if (a == null) {
-                                return -1;
-                            }
+                                button.onClick(() => {
+                                    button.setActive();
+                                    app.openBlade(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content').onClose(() => button.setActive(false)), this)
+                                });
 
-                            if (b == null) {
-                                return 1;
-                            }
-
-                            return a.localeCompare(b, 'en', { sensitivity: 'base' });
-                        });
-
-                        return {
-                            Items: items,
-                            PageCount: 1,
-                            PageSize: items.size,
-                            TotalMatching: items.size,
-                        };
-                    });
-                }
-            };
-
-            this.setContent(
-                new DataTable()
-                    .setBackend(backend)
-                    .addColumn(c => c.setHeader(() => 'Properties').setContent(item => item || 'General'))
-                    .addColumn(c => c.setActionColumn().setContent(group =>
-                        new Button('Edit').onClick(() => app.openBlade(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content'), this))
-                    ))
+                                return button;
+                            })
+                        )
+                )
             );
         };
 
