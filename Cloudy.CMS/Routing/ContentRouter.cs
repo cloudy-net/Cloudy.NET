@@ -13,35 +13,28 @@ namespace Cloudy.CMS.Routing
 {
     public class ContentRouter : IContentRouter
     {
-        IContentSegmentRouter ContentSegmentRouter { get; }
+        IRootContentRouter RootContentRouter { get; }
+        IRoutableRootContentProvider RoutableRootContentProvider { get; }
 
-        public ContentRouter(IContentSegmentRouter contentSegmentRouter)
+        public ContentRouter(IRootContentRouter rootContentRouter, IRoutableRootContentProvider routableRootContentProvider)
         {
-            ContentSegmentRouter = contentSegmentRouter;
+            RootContentRouter = rootContentRouter;
+            RoutableRootContentProvider = routableRootContentProvider;
         }
 
         public IContent RouteContent(IEnumerable<string> segments, string language)
         {
-            IContent page = null;
-
-            if (!segments.Any())
+            foreach(var root in RoutableRootContentProvider.GetAll())
             {
-                return ContentSegmentRouter.RouteContentSegment(null, null, language);
-            }
+                var result = RootContentRouter.Route(root, segments, language);
 
-            while (segments.Any())
-            {
-                page = ContentSegmentRouter.RouteContentSegment(page?.Id, segments.First(), language);
-
-                if (page == null)
+                if(result != null)
                 {
-                    return null;
+                    return result;
                 }
-
-                segments = segments.Skip(1);
             }
 
-            return page;
+            return null;
         }
     }
 }
