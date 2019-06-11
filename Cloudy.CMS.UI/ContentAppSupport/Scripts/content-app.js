@@ -36,27 +36,33 @@ class ListContentTypesBlade extends Blade {
         this.setContent(
             new DataTable()
                 .setBackend('Cloudy.CMS.ContentTypeList')
-                .addColumn(c => c.setHeader(element => 'Name').setButton(item => {
-                    var name = item.IsSingleton ? item.Name : item.PluralName;
+                .addColumn(c => c.setHeader(element => 'Name').setButton(contentType => {
+                    var name = contentType.IsSingleton ? contentType.Name : contentType.PluralName;
                     var button = new DataTableButton(name).onClick(() => button.setActive());
 
-                    if (item.IsSingleton) {
-                        button.onClick(() =>
-                            app.openBlade(
-                                new EditContentBlade(
-                                    app,
-                                    item,
-                                    fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${item.Id}`, {
-                                        credentials: 'include',
-                                        method: 'Get',
-                                    }).then(response => response.json())
-                                ).onClose(() => button.setActive(false)),
-                                this
+                    if (contentType.IsSingleton) {
+                        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
+                        var item = fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${contentType.Id}`, {
+                            credentials: 'include',
+                            method: 'Get',
+                        })
+                            .then(response => response.json());
+
+                        Promise.all([formBuilder.fieldModels, item]).then(results =>
+                            button.onClick(() =>
+                                app.openBlade(
+                                    new EditContentBlade(
+                                        app,
+                                        contentType,
+                                        formBuilder,
+                                    ).onClose(() => button.setActive(false)),
+                                    this
+                                )
                             )
                         );
                     } else {
                         button.onClick(() =>
-                            app.openBlade(new ListContentBlade(app, item).onClose(() => button.setActive(false)), this)
+                            app.openBlade(new ListContentBlade(app, contentType).onClose(() => button.setActive(false)), this)
                         );
                     }
 

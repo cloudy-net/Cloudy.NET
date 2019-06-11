@@ -20,16 +20,20 @@ class ListContentBlade extends Blade {
 
         this.setTitle(contentType.PluralName);
 
+        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
+
         var dataTable = new DataTable().setBackend(`Cloudy.CMS.ContentList[type=${contentType.Id}]`);
 
         dataTable.addColumn(c =>
             c.setHeader(element => contentType.IsNameable ? 'Name' : 'Id').setButton(item => {
                 var button = new DataTableButton(contentType.IsNameable ? item.Name : item.Id);
 
-                button.onClick(() => {
-                    button.setActive()
-                    app.openBlade(new EditContentBlade(app, contentType, item).onClose(message => { if (message == 'saved') { dataTable.update(); } }).onClose(() => button.setActive(false)), this);
-                });
+                formBuilder.fieldModels.then(fieldModels =>
+                    button.onClick(() => {
+                        button.setActive();
+                        app.openBlade(new EditContentBlade(app, contentType, formBuilder, item).onClose(message => { if (message == 'saved') { dataTable.update(); } }).onClose(() => button.setActive(false)), this);
+                    })
+                );
 
                 return button;
             })

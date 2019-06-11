@@ -14,7 +14,7 @@ import notificationManager from '../../../Poetry.UI.NotificationSupport/Scripts/
 /* EDIT CONTENT */
 
 class EditContentBlade extends Blade {
-    constructor(app, contentType, item) {
+    constructor(app, contentType, formBuilder, item) {
         super();
 
         this.setTitle();
@@ -80,8 +80,6 @@ class EditContentBlade extends Blade {
             saveButton.onClick(() => save()).setDisabled(false);
             cancelButton.setDisabled(false);
 
-            var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
-
             formBuilder.fieldModels.then(fieldModels =>
                 this.setContent(
                     new DataTable()
@@ -102,9 +100,7 @@ class EditContentBlade extends Blade {
             );
         };
 
-        if (item instanceof Promise) {
-            item.then(item => init(item));
-        } else if (item) {
+        if (item) {
             init(item);
         } else {
             init({});
