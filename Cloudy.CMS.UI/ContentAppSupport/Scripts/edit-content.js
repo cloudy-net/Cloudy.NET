@@ -33,7 +33,7 @@ class EditContentBlade extends Blade {
         this.setFooter(saveButton, cancelButton);
 
         var init = item => {
-            if (item) {
+            if (item.Id) {
                 if (contentType.IsNameable && item.Name) {
                     this.setTitle(`Edit ${item.Name}`);
                 } else {
@@ -48,9 +48,14 @@ class EditContentBlade extends Blade {
                             'Content-Type': 'application/json'
                         }
                     })
-                        .then(response => response.json())
+                        .then(response => response.text())
                         .then(url => {
-                            view.href = `${location.origin}/${url}`;
+                            if (!url) {
+                                return;
+                            }
+
+                            url = url.substr(1, url.length - 2);
+                            view.href = `${location.origin}${url}`;
                             view.removeAttribute('disabled');
                         });
                 }
@@ -72,7 +77,7 @@ class EditContentBlade extends Blade {
                     })
                 });
 
-            saveButton.onClick(() => save().then(() => app.closeBlade(this, 'saved'))).setDisabled(false);
+            saveButton.onClick(() => save()).setDisabled(false);
             cancelButton.setDisabled(false);
 
             var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
