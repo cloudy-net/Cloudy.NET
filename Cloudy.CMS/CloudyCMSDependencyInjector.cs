@@ -49,6 +49,8 @@ namespace Cloudy.CMS
 
             container.RegisterSingleton<IContentControllerFinder, ContentControllerFinder>();
             container.RegisterSingleton<IContentRouter, ContentRouter>();
+            container.RegisterSingleton<IRootContentRouter, RootContentRouter>();
+            container.RegisterSingleton<IRoutableRootContentProvider, RoutableRootContentProvider>();
             container.RegisterSingleton<IContentSegmentRouter, ContentSegmentRouter>();
             container.RegisterSingleton<ISingletonCreator, SingletonCreator>();
             container.RegisterSingleton<ISingletonGetter, SingletonGetter>();
