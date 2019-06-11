@@ -12,9 +12,15 @@ namespace Website.AspNetCore.Controllers
     public class PageController : Controller
     {
         [ContentRoute(typeof(Page))]
-        public ActionResult Blog([FromContentRoute] Page articlePage)
+        public ActionResult Blog([FromContentRoute] Page page)
         {
-            return View("Article", articlePage);
+            return View("Page", page);
+        }
+
+        [ContentRoute(typeof(StartPage))]
+        public ActionResult Start([FromContentRoute] StartPage page)
+        {
+            return View("Start", page);
         }
     }
 }
