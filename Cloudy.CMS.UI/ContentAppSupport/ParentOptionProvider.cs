@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.ContentSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
@@ -13,16 +14,20 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     public class ParentOptionProvider : IOptionProvider
     {
         IContainerProvider ContainerProvider { get; }
+        IContentTypeProvider ContentTypeProvider { get; }
 
-        public ParentOptionProvider(IContainerProvider containerProvider)
+        public ParentOptionProvider(IContainerProvider containerProvider, IContentTypeProvider contentTypeProvider)
         {
             ContainerProvider = containerProvider;
+            ContentTypeProvider = contentTypeProvider;
         }
 
         public IEnumerable<Option> GetAll()
         {
+            var contentTypes = ContentTypeProvider.GetAll().Where(t => typeof(IHierarchical).IsAssignableFrom(t.Type));
+
             var documents = ContainerProvider.Get(ContainerConstants.Content).FindSync(
-                Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId")),
+                Builders<Document>.Filter.In(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Properties.ContentTypeId"), contentTypes.Select(t => t.Id)),
                 new FindOptions<Document, Document>
                 {
                     Projection =
