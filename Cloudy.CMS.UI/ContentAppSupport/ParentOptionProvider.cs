@@ -23,14 +23,31 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         {
             var documents = ContainerProvider.Get(ContainerConstants.Content).FindSync(
                 Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId")),
-                new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.INameable.Properties.Name")) }
-            );
+                new FindOptions<Document, Document>
+                {
+                    Projection =
+                        Builders<Document>.Projection
+                        .Include(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.INameable.Properties.Name"))
+                        .Include(new StringFieldDefinition<Document, string>("Id"))
+                }
+            )
+                .ToList();
 
             var result = new List<Option>();
 
             result.Add(new Option("(root)", null));
 
-            result.AddRange(documents.ToList().Select(d => new Option(d.GlobalFacet.Interfaces.ContainsKey("INameable") && d.GlobalFacet.Interfaces["INameable"].Properties.ContainsKey("Name") && d.GlobalFacet.Interfaces["INameable"].Properties["Name"] is string ? (string)d.GlobalFacet.Interfaces["INameable"].Properties["Name"] : d.Id, d.Id)));
+            foreach(var document in documents)
+            {
+                var name = document.GlobalFacet.Interfaces.ContainsKey("INameable") &&
+                    document.GlobalFacet.Interfaces["INameable"].Properties.ContainsKey("Name") &&
+                    document.GlobalFacet.Interfaces["INameable"].Properties["Name"] is string ?
+                    (string)document.GlobalFacet.Interfaces["INameable"].Properties["Name"] :
+                    document.Id;
+                var option = new Option(name, document.Id);
+
+                result.Add(option);
+            }
 
             return result.AsReadOnly();
         }
