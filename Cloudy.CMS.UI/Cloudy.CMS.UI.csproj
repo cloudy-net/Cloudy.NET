@@ -13,42 +13,21 @@
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ChangesAppSupport\Scripts\changes-app.js" />
-    <None Remove="ContentAppSupport\Scripts\content-app.js" />
-    <None Remove="ContentAppSupport\Scripts\edit-content.js" />
-    <None Remove="ContentAppSupport\Scripts\list-content.js" />
-    <None Remove="SitesAppSupport\Scripts\sites-app.js" />
-    <None Remove="startup.js" />
-    <None Remove="TreeAppSupport\Scripts\tree-app.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="ChangesAppSupport\Scripts\changes-app.js" />
-    <EmbeddedResource Include="ContentAppSupport\Scripts\content-app.js" />
-    <EmbeddedResource Include="ContentAppSupport\Scripts\edit-content.js" />
-    <EmbeddedResource Include="ContentAppSupport\Scripts\list-content.js" />
-    <EmbeddedResource Include="SitesAppSupport\Scripts\sites-app.js" />
-    <EmbeddedResource Include="NaggingSupport\nagging.js" />
-    <EmbeddedResource Include="TreeAppSupport\Scripts\tree-app.js" />
+    <EmbeddedResource Include="**\*.js" />
+    <EmbeddedResource Include="**\*.css" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FastMember" Version="1.4.1" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataTableSupport\" />
-    <Folder Include="FormSupport\" />
-    <Folder Include="ContextMenuSupport\" />
-    <Folder Include="ControlMessageSupport\" />
-    <Folder Include="NotificationSupport\" />
   </ItemGroup>
 
 </Project>

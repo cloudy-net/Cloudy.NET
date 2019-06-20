@@ -1,6 +1,5 @@
 ﻿using Poetry.ComponentSupport;
 using Poetry.ComposableSupport;
-using Poetry.EmbeddedResourceSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;

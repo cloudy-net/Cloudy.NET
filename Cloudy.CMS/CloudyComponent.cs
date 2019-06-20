@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Cloudy.CMS
 {
-    [Component("Cloudy.CMS")]
-    public class CloudyCMSComponent
+    [Component("Cloudy")]
+    public class CloudyComponent
     {
     }
 }

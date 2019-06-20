@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 using Poetry.AspNetCore;
 using Cloudy.CMS.UI;
 using Poetry.UI.AspNetCore;
-using Cloudy.CMS.Mvc;
+using Cloudy.CMS;
 using Serilog;
 using Website.AspNetCore.Models;
 using Cloudy.CMS.SingletonSupport;
@@ -35,52 +35,22 @@ namespace Website.AspNetCore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.RollingFile("~/Logs/log-{Date}.txt")
-                .CreateLogger();
-
-            services.AddIdentityCore<User>().AddUserStore<UserRepository>();
-            services
-                .AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    options.ClientId = Configuration.GetSection("Authentication").GetSection("Google")["ClientId"];
-                    options.ClientSecret = Configuration.GetSection("Authentication").GetSection("Google")["ClientSecret"];
-                    options.CallbackPath = "/signin-google";
-                    options.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
-                    options.ClaimActions.Clear();
-                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
-                    options.ClaimActions.MapJsonKey("urn:google:profile", "link");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                });
-            services.AddAuthorization(options =>
-            {
-                //options.AddPolicy("admins", policy => policy.RequireAuthenticatedUser());
-            });
-            services.AddLogging(l => l.AddSerilog());
-            
-            services.AddCloudy();
+            services.AddCloudy(cloudy => cloudy
+                .WithDatabaseConnectionString("mongodb://localhost:27017/cms-web-test")
+                .AddCloudyAdmin()
+            );
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseStaticFiles();
 
-            app.UseAuthentication();
-            app.UseCloudy();
-            app.UseMvc(routeBuilder => routeBuilder
-                .AddContentRoute()
-            );
+            app.UseCloudyAdmin(cloudy => cloudy.WithBasePath("/Admin"));
+            app.UseMvc(routeBuilder => routeBuilder.AddContentRoute());
         }
     }
 }

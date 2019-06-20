@@ -40,7 +40,7 @@ namespace Cloudy.CMS.UI
     [Style("NotificationSupport/Styles/notification-manager.css")]
     [Script("NotificationSupport/Scripts/notification-manager.js")]
     [Script("NotificationSupport/Scripts/notification.js")]
-    public class CloudyCMSUIComponent
+    public class CloudyAdminComponent
     {
     }
 }

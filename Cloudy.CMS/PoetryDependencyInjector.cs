@@ -7,10 +7,10 @@ using Poetry.ComponentSupport.MissingComponentDependencyCheckerSupport;
 using Poetry.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
 using Poetry.ComposableSupport;
 using Poetry.DependencyInjectionSupport;
-using Poetry.EmbeddedResourceSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Poetry.AspNetCore.DependencyInjectionSupport;
 
 namespace Poetry
 {
@@ -29,11 +29,9 @@ namespace Poetry
             container.RegisterSingleton<IMultipleComponentsInSingleAssemblyChecker, MultipleComponentsInSingleAssemblyChecker>();
             container.RegisterSingleton<IInitializerProvider, InitializerProvider>();
             container.RegisterSingleton<IInitializerCreator, InitializerCreator>();
+            container.RegisterSingleton<IInstantiator, Instantiator>();
             container.RegisterSingleton<IDependencyInjectorCreator, DependencyInjectorCreator>();
             container.RegisterSingleton<IDependencyInjectorProvider, DependencyInjectorProvider>();
-            container.RegisterSingleton<IEmbeddedResourcePathMatcher, EmbeddedResourcePathMatcher>();
-            container.RegisterSingleton<IEmbeddedResourceCreator, EmbeddedResourceCreator>();
-            container.RegisterSingleton<IEmbeddedResourceProvider, EmbeddedResourceProvider>();
         }
     }
 }

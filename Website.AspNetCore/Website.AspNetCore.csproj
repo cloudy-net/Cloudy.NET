@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cloudy.CMS.UI\Cloudy.CMS.UI.csproj" />
+    <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
   </ItemGroup>
 
 </Project>

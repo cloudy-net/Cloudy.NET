@@ -24,58 +24,45 @@ using Cloudy.CMS.AspNetCore.ContentControllerSupport;
 using Poetry.AspNetCore;
 using Poetry.UI.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Poetry.InitializerSupport;
+using Microsoft.Extensions.FileProviders;
+using Poetry.UI.AspNetCore.AuthorizationSupport;
+using Poetry.UI.AspNetCore.PortalSupport;
+using Poetry.UI.AspNetCore.ApiSupport;
 
 namespace Cloudy.CMS.UI
 {
     public static class StartupExtensions
     {
-        static PoetryConfigurator PoetryConfigurator { get; set; }
-
-        public static void AddCMS(this PoetryConfigurator poetryConfigurator, Action<CMSConfigurator> configuratorFunction)
+        public static CloudyConfigurator AddCloudyAdmin(this CloudyConfigurator configurator)
         {
-            PoetryConfigurator = poetryConfigurator;
+            configurator.AddComponent<CloudyAdminComponent>();
 
-            poetryConfigurator.AddComponent<CloudyCMSComponent>();
-            poetryConfigurator.InjectSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
-            poetryConfigurator.InjectSingleton<IUrlProvider, UrlProvider>();
-            poetryConfigurator.InjectSingleton<IControllerProvider, ControllerProvider>();
-            poetryConfigurator.InjectSingleton<IContentControllerMatchCreator, ContentControllerMatchCreator>();
-
-            configuratorFunction(new CMSConfigurator(poetryConfigurator));
+            return configurator;
         }
 
         public static void AddContentRoute(this IRouteBuilder routes)
         {
-            var resolver = PoetryConfigurator.Container.CreateResolver();
-            routes.Routes.Add(new ContentRoute(routes.DefaultHandler, resolver.Resolve<IContentRouter>(), resolver.Resolve<IContentTypeProvider>(), resolver.Resolve<IContentControllerFinder>()));
+            routes.Routes.Add(new ContentRoute(routes.DefaultHandler, routes.ApplicationBuilder.ApplicationServices.GetRequiredService<IContentRouter>(), routes.ApplicationBuilder.ApplicationServices.GetRequiredService<IContentTypeProvider>(), routes.ApplicationBuilder.ApplicationServices.GetRequiredService<IContentControllerFinder>()));
         }
 
-        public static void AddCMSUI(this PoetryConfigurator poetryConfigurator)
+        public static void UseCloudyAdmin(this IApplicationBuilder app, Action<CloudyAdminConfigurator> configure)
         {
-            poetryConfigurator.AddComponent<CloudyCMSUIComponent>();
-        }
+            var options = new CloudyAdminOptions();
 
-        public static void AddCMSUI(this PoetryConfigurator poetryConfigurator, Action<CMSUIConfigurator> cmsUIConfigurator)
-        {
-            poetryConfigurator.AddCMSUI();
+            configure(new CloudyAdminConfigurator(options));
 
-            cmsUIConfigurator(new CMSUIConfigurator());
-        }
+            app.UseMiddleware<MainPageMiddleware>();
+            app.UseMiddleware<ApiMiddleware>();
 
-        public static void AddCloudy(this IServiceCollection services)
-        {
-            services.AddPoetry(c =>
+            app.Map(new PathString(options.BasePath), branch =>
             {
-                c.AddUI(/*ui => ui.SetAuthorizationPolicy(new UIAuthorizeOptions { Policy = "admins" })*/);
-                c.AddCMS(cms => cms.SetDatabaseConnectionString("mongodb://localhost:27017/cms-web-test"));
-                c.AddCMSUI(ui => ui.DontNagOnLocalhost());
+                branch.UseStaticFiles(new StaticFileOptions
+                {
+                    FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly()),
+                });
             });
-        }
-
-        public static void UseCloudy(this IApplicationBuilder app)
-        {
-            app.UsePoetry();
-            app.UsePoetryUI();
         }
     }
 }
