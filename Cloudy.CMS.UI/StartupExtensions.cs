@@ -19,6 +19,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Cloudy.CMS.UI.NaggingSupport;
+using Microsoft.AspNetCore.Routing;
+using Cloudy.CMS.AspNetCore.ContentControllerSupport;
 
 namespace Cloudy.CMS.UI
 {
