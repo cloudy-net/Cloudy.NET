@@ -24,6 +24,27 @@ namespace Cloudy.CMS.UI
 {
     public static class StartupExtensions
     {
+        static PoetryConfigurator PoetryConfigurator { get; set; }
+
+        public static void AddCMS(this PoetryConfigurator poetryConfigurator, Action<CMSConfigurator> configuratorFunction)
+        {
+            PoetryConfigurator = poetryConfigurator;
+
+            poetryConfigurator.AddComponent<CloudyCMSComponent>();
+            poetryConfigurator.InjectSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
+            poetryConfigurator.InjectSingleton<IUrlProvider, UrlProvider>();
+            poetryConfigurator.InjectSingleton<IControllerProvider, ControllerProvider>();
+            poetryConfigurator.InjectSingleton<IContentControllerMatchCreator, ContentControllerMatchCreator>();
+
+            configuratorFunction(new CMSConfigurator(poetryConfigurator));
+        }
+
+        public static void AddContentRoute(this IRouteBuilder routes)
+        {
+            var resolver = PoetryConfigurator.Container.CreateResolver();
+            routes.Routes.Add(new ContentRoute(routes.DefaultHandler, resolver.Resolve<IContentRouter>(), resolver.Resolve<IContentTypeProvider>(), resolver.Resolve<IContentControllerFinder>()));
+        }
+
         public static void AddCMSUI(this PoetryConfigurator poetryConfigurator)
         {
             poetryConfigurator.AddComponent<CloudyCMSUIComponent>();

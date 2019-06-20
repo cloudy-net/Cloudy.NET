@@ -1,12 +1,11 @@
-﻿using Poetry.UI.PortalSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.UI.PortalSupport
+namespace Poetry.UI.PortalSupport
 {
     public class FaviconProvider : IFaviconProvider
     {
-        public string Favicon => "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHiSURBVDhPY1CIqgEixehaOFKKqVOOqUMWQVbDgCakFFMrFVohEVKOJg5hA0m4DTVAU5VjasWCSq3zul1KJwK1yUVUq8TWQRRAVEM1ANXJRlSJBZVxe+c3Ldr67cfP33/+bDxyAahHOKAEYjYcMShF14oGlWomNoY1zSmYuhqo9P///3///gWSvav2eFZMUYyqAdoDt4pBJLA0vHnO/edvgCogSiEAohMIciatYHDOBNovH1kNcpJ1bvfHL9+AEkAVf0Aq/8HBr99/gOTJa/dq5m3KmrAcqEE6rJJh2saDQNW/fv2GKAICIBdOQhgQsPfcdYWoaobNxy4BDf4NNgxoPkQOohQIQFb+BVr1G4iA4mWz1jE0TVsMZP38+RMsh+QgGICI//z1C2jurM2HGBTdoq9eOAcyFWQ0dgBz17+AnFoGscASbWu3TWtXfvn4/se3r9+/fv7x7cuPr19AJJjx7csnoOCLJw/z8wsEnOIYlGIbJAJLuDWtVQzMDM1tdU2t9cwgyAaIdM2sgSL6ZtbSWsa8ViFKcU0M8pFVitF1yomtkqEV4gFF4kEl4oHFIBKMgGaJg1CxTGStckILMGQZFCAxH1kFjHJgOsWFgPGtEFkNVAxNrWBUAxTFjoBSEDXRtQBwxLW93Nh+2AAAAABJRU5ErkJggg==";
+        public string Favicon => "data:;base64,iVBORw0KGgo=";
     }
 }

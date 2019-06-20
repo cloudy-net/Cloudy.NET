@@ -1,0 +1,86 @@
+﻿@import '../../Poetry.UI/Styles/variables.scss';
+
+
+
+/* CONTROL MESSAGE */
+
+.poetry-ui-has-control-message {
+    box-shadow: 0 0 0 0.25rem rgba($bright-blue, 0.25);
+}
+
+poetry-ui-control-message {
+    margin-top: 10px;
+    margin-left: -10px;
+    position: absolute;
+    top: 100%;
+    display: block;
+    border: solid 2px $light-gray;
+    background: white;
+    box-shadow: 0 0 0 2px white;
+
+    &.poetry-ui-control-message-right {
+        margin-left: 0;
+        margin-right: -10px;
+        left: auto;
+        right: 0;
+    }
+}
+
+poetry-ui-control-message-arrow-outer {
+    position: absolute;
+    bottom: 100%;
+    left: 3px;
+    overflow: hidden;
+    display: block;
+    width: 30px;
+    height: 10px;
+
+    .poetry-ui-control-message-right & {
+        left: auto;
+        right: 3px;
+    }
+}
+
+poetry-ui-control-message-arrow-1 {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-bottom: -10px;
+    margin-left: -15px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 10px solid $light-gray;
+}
+
+poetry-ui-control-message-arrow-2 {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    margin-bottom: -10px;
+    margin-left: -15px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 10px solid white;
+}
+
+poetry-ui-control-message-text {
+    display: block;
+    padding: 5px;
+    font-size: $small-font;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover {
+        background: $almost-white;
+    }
+
+    & + & {
+        border-top: #eee;
+    }
+}

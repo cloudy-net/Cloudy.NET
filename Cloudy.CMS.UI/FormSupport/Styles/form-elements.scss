@@ -1,0 +1,184 @@
+﻿@import '../../Poetry.UI/Styles/variables.scss';
+
+
+
+/* FORM */
+
+.poetry-ui-form {
+    margin-bottom: 20px;
+}
+
+
+
+/* HEADING */
+
+.poetry-ui-form-heading-outer {
+    display: flex;
+    
+    .poetry-ui-form-heading {
+        flex: 1 1 auto;
+    }
+}
+
+.poetry-ui-form-heading {
+    margin: 0 2px 10px;
+    padding: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    text-transform: uppercase;
+
+    &:empty:before {
+        content: '\00a0'; // &nbsp;
+    }
+}
+
+
+
+/* FIELD */
+
+.poetry-ui-form-field {
+    margin: 0;
+    padding: 0;
+    border: none;
+
+    & + & {
+        margin-top: 20px;
+    }
+}
+
+fieldset.poetry-ui-form-field {
+    min-inline-size: unset;
+}
+
+
+
+/* LABEL */
+
+.poetry-ui-form-field-label {
+    margin: 0 2px 5px;
+    display: block;
+    padding: 0;
+    font-size: $small-font;
+    text-transform: uppercase;
+}
+
+
+
+/* INPUT */
+
+.poetry-ui-form-input {
+    display: block;
+    width: 100%;
+    height: 32px;
+    padding: 5px;
+    border: solid 1px $light-gray;
+    box-sizing: border-box;
+    background: white;
+    transition: background-color 0.2s;
+    font-size: 80%;
+
+    .poetry-ui-form-field.poetry-ui-simple:hover &,
+    &:hover {
+        background: $almost-white;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: rgba($bright-blue, 0.5);
+        box-shadow: 0 0 0 0.25rem rgba($bright-blue, 0.25);
+    }
+}
+
+textarea.poetry-ui-form-input {
+    height: auto;
+    word-break: break-all;
+}
+
+
+
+/* SORTABLE FIELD */
+
+poetry-ui-sortable {
+    display: block;
+}
+
+poetry-ui-sortable-items {
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+poetry-ui-sortable-item {
+    display: block;
+}
+
+poetry-ui-sortable.poetry-ui-sortable-field poetry-ui-sortable-item {
+    display: flex;
+
+    & + poetry-ui-sortable-item {
+        margin-top: 0.5rem;
+    }
+
+    poetry-ui-sortable-item-field {
+        flex: 1;
+    }
+
+    poetry-ui-sortable-item-action {
+        flex: 0;
+        order: 1;
+        padding-top: 5px;
+    }
+}
+
+poetry-ui-sortable-item-field {
+    display: block;
+    padding-left: 0.5rem;
+    border-left: solid 2px $almost-white;
+    transition: border-left-color 0.2s;
+
+    &:hover {
+        border-left-color: $light-gray;
+    }
+}
+
+poetry-ui-sortable.poetry-ui-sortable-form poetry-ui-sortable-item {
+    & + poetry-ui-sortable-item {
+        margin-top: 1rem;
+    }
+
+    poetry-ui-sortable-item-action {
+        display: block;
+        text-align: right;
+    }
+}
+
+poetry-ui-sortable-item-form {
+    display: block;
+}
+
+poetry-ui-sortable-buttons {
+    display: block;
+    font-size: $small-font;
+    text-align: right;
+}
+
+
+
+/* EMBEDDED FORM */
+
+.poetry-ui-embedded-form-label {
+    display: flex;
+    
+    .poetry-ui-form-field-label {
+        flex: 1 1 auto;
+    }
+}
+
+.poetry-ui-embedded-form {
+    padding: 0.5rem;
+    border: solid 2px $almost-white;
+    transition: border-color 0.2s;
+
+    &:hover {
+        border-color: $light-gray;
+    }
+}
