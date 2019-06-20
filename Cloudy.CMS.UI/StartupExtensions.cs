@@ -21,6 +21,9 @@ using System.Threading.Tasks;
 using Cloudy.CMS.UI.NaggingSupport;
 using Microsoft.AspNetCore.Routing;
 using Cloudy.CMS.AspNetCore.ContentControllerSupport;
+using Poetry.AspNetCore;
+using Poetry.UI.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 
 namespace Cloudy.CMS.UI
 {
@@ -57,6 +60,22 @@ namespace Cloudy.CMS.UI
             poetryConfigurator.AddCMSUI();
 
             cmsUIConfigurator(new CMSUIConfigurator());
+        }
+
+        public static void AddCloudy(this IServiceCollection services)
+        {
+            services.AddPoetry(c =>
+            {
+                c.AddUI(/*ui => ui.SetAuthorizationPolicy(new UIAuthorizeOptions { Policy = "admins" })*/);
+                c.AddCMS(cms => cms.SetDatabaseConnectionString("mongodb://localhost:27017/cms-web-test"));
+                c.AddCMSUI(ui => ui.DontNagOnLocalhost());
+            });
+        }
+
+        public static void UseCloudy(this IApplicationBuilder app)
+        {
+            app.UsePoetry();
+            app.UsePoetryUI();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Poetry.ComposableSupport
                 .GetAll()
                 .Select(c => c.Assembly)
                 .SelectMany(a => a.Types)
-                .Where(t => t.IsClass && !t.IsAbstract && typeof(T).IsAssignableFrom(t))
+                .Where(t => t.IsClass && !t.IsAbstract && !t.IsInterface && typeof(T).IsAssignableFrom(t))
                 .Select(t => (T)Instantiator.Instantiate(t))
                 .ToList()
                 .AsReadOnly();

@@ -30,6 +30,11 @@ namespace Poetry.DependencyInjectionSupport
                         continue;
                     }
 
+                    if(type.IsAbstract || type.IsInterface)
+                    {
+                        continue;
+                    }
+
                     result.Add((IDependencyInjector)Instantiator.Instantiate(type));
                 }
             }

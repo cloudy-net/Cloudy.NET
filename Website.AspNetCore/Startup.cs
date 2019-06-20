@@ -62,13 +62,8 @@ namespace Website.AspNetCore
                 //options.AddPolicy("admins", policy => policy.RequireAuthenticatedUser());
             });
             services.AddLogging(l => l.AddSerilog());
-            services.AddPoetry(c =>
-            {
-                c.AddUI(/*ui => ui.SetAuthorizationPolicy(new UIAuthorizeOptions { Policy = "admins" })*/);
-                c.AddCMS(cms => cms.SetDatabaseConnectionString("mongodb://localhost:27017/cms-web-test"));
-                c.AddCMSUI(ui => ui.DontNagOnLocalhost());
-                c.AddComponent<WebsiteComponent>();
-            });
+            
+            services.AddCloudy();
             services.AddMvc();
         }
 
@@ -79,9 +74,10 @@ namespace Website.AspNetCore
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
+
             app.UseAuthentication();
-            app.UsePoetry();
-            app.UsePoetryUI();
+            app.UseCloudy();
             app.UseMvc(routeBuilder => routeBuilder
                 .AddContentRoute()
             );

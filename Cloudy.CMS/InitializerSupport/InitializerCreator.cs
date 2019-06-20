@@ -31,6 +31,11 @@ namespace Poetry.InitializerSupport
                         continue;
                     }
 
+                    if (type.IsAbstract || type.IsInterface)
+                    {
+                        continue;
+                    }
+
                     result.Add((IInitializer)Instantiator.Instantiate(type));
                 }
             }

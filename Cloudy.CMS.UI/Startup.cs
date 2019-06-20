@@ -12,11 +12,6 @@ using System.Reflection;
 using System.Text;
 using Poetry.UI.AspNetCore.ApiSupport;
 using Poetry.UI.AspNetCore.PortalSupport;
-using Poetry.UI.ControlMessageSupport;
-using Poetry.UI.FormSupport;
-using Poetry.UI.NotificationSupport;
-using Poetry.UI.DataTableSupport;
-using Poetry.UI.ContextMenuSupport;
 using Poetry.UI.AspNetCore.AuthorizationSupport;
 
 namespace Poetry.UI.AspNetCore
@@ -46,13 +41,6 @@ namespace Poetry.UI.AspNetCore
             HasInitialized = true;
 
             var configurator = new PoetryUIConfigurator(poetryConfigurator);
-
-            poetryConfigurator.AddComponent<PoetryUIComponent>();
-            poetryConfigurator.AddComponent<ContextMenuSupportComponent>();
-            poetryConfigurator.AddComponent<ControlMessageSupportComponent>();
-            poetryConfigurator.AddComponent<DataTableSupportComponent>();
-            poetryConfigurator.AddComponent<FormSupportComponent>();
-            poetryConfigurator.AddComponent<NotificationSupportComponent>();
 
             poetryConfigurator.InjectSingleton<IUIAuthorizationPolicyProvider, UIAuthorizationPolicyProvider>();
 
