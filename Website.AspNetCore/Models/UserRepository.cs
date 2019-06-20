@@ -12,17 +12,7 @@ using System.Threading.Tasks;
 namespace Website.AspNetCore.Models
 {
     public class UserRepository :
-        IUserStore<User>,
-        IUserLoginStore<User>,
-        IUserClaimStore<User>,
-        IUserPasswordStore<User>,
-        IUserSecurityStampStore<User>,
-        IUserTwoFactorStore<User>,
-        IUserEmailStore<User>,
-        IUserLockoutStore<User>,
-        IUserPhoneNumberStore<User>,
-        IUserAuthenticatorKeyStore<User>,
-        IUserTwoFactorRecoveryCodeStore<User>
+        IUserStore<User>
     {
         IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
