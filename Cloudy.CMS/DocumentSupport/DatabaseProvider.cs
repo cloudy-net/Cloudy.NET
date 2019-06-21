@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -10,19 +11,13 @@ namespace Cloudy.CMS.DocumentSupport
 {
     public class DatabaseProvider : IDatabaseProvider
     {
-        static DatabaseProvider()
-        {
-            BsonSerializer.RegisterSerializer(typeof(Document), new JsonSerializerAdapter<Document>());
-            //BsonClassMap.RegisterClassMap<Document>(cm => { cm.AutoMap(); new ImmutableTypeClassMapConvention().Apply(cm); });
-            //BsonClassMap.RegisterClassMap<DocumentFacet>(cm => { cm.AutoMap(); new ImmutableTypeClassMapConvention().Apply(cm); });
-            //BsonClassMap.RegisterClassMap<DocumentInterface>(cm => { cm.AutoMap(); new ImmutableTypeClassMapConvention().Apply(cm); });
-        }
-
         IMongoClient MongoClient { get; }
 
-        public DatabaseProvider(string connectionString)
+        public DatabaseProvider(IDatabaseConnectionStringNameProvider databaseConnectionStringNameProvider, IConfiguration configuration)
         {
-            var url = new MongoUrl(connectionString);
+            BsonSerializer.RegisterSerializer(typeof(Document), new JsonSerializerAdapter<Document>());
+
+            var url = new MongoUrl(configuration.GetConnectionString(databaseConnectionStringNameProvider.DatabaseConnectionStringName));
 
             MongoClient = new MongoClient(url);
 

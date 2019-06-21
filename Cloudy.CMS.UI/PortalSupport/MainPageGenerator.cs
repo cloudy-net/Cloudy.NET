@@ -15,18 +15,16 @@ namespace Poetry.UI.PortalSupport
     {
         IComponentProvider ComponentProvider { get; }
         IComponentDependencySorter ComponentDependencySorter { get; }
-        IBasePathProvider BasePathProvider { get; }
         IScriptProvider ScriptProvider { get; }
         IStyleProvider StyleProvider { get; }
         IAppProvider AppProvider { get; }
         IFaviconProvider FaviconProvider { get; }
         ITitleProvider TitleProvider { get; }
 
-        public MainPageGenerator(IComponentProvider componentProvider, IComponentDependencySorter componentDependencySorter, IBasePathProvider basePathProvider, IScriptProvider scriptProvider, IStyleProvider styleProvider, IAppProvider appProvider, IFaviconProvider faviconProvider, ITitleProvider titleProvider)
+        public MainPageGenerator(IComponentProvider componentProvider, IComponentDependencySorter componentDependencySorter, IScriptProvider scriptProvider, IStyleProvider styleProvider, IAppProvider appProvider, IFaviconProvider faviconProvider, ITitleProvider titleProvider)
         {
             ComponentProvider = componentProvider;
             ComponentDependencySorter = componentDependencySorter;
-            BasePathProvider = basePathProvider;
             ScriptProvider = scriptProvider;
             StyleProvider = styleProvider;
             AppProvider = appProvider;
@@ -43,7 +41,7 @@ namespace Poetry.UI.PortalSupport
                 output.WriteLine($"  <head>");
                 output.WriteLine($"    <meta charset=\"utf-8\">");
                 output.WriteLine($"    <title>{TitleProvider.Title}</title>");
-                output.WriteLine($"    <base href=\"/{BasePathProvider.BasePath}/\">");
+                output.WriteLine($"    <base href=\"/BasePathProvider.BasePath/\">");
                 output.WriteLine($"    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
                 output.WriteLine($"    <link rel=\"icon\" href=\"{FaviconProvider.Favicon}\">");
 

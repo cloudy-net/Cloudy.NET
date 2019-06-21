@@ -9,12 +9,10 @@ namespace Poetry.UI.FormSupport.ControlSupport
     public class ControlCreator : IControlCreator
     {
         IComponentProvider ComponentProvider { get; }
-        IBasePathProvider BasePathProvider { get; }
 
-        public ControlCreator(IComponentProvider componentProvider, IBasePathProvider basePathProvider)
+        public ControlCreator(IComponentProvider componentProvider)
         {
             ComponentProvider = componentProvider;
-            BasePathProvider = basePathProvider;
         }
 
         public IEnumerable<ControlDescriptor> Create()
@@ -37,7 +35,7 @@ namespace Poetry.UI.FormSupport.ControlSupport
                         throw new AbsoluteControlModulePathException(type, attribute.ModulePath);
                     }
 
-                    var path = $"/{BasePathProvider.BasePath}/{component.Id}/{attribute.ModulePath}";
+                    var path = $"/{component.Id}/{attribute.ModulePath}";
 
                     result.Add(new ControlDescriptor(attribute.Id, path));
                 }

@@ -1,4 +1,6 @@
-﻿namespace Cloudy.CMS
+﻿using System;
+
+namespace Cloudy.CMS
 {
     public class CloudyConfigurator
     {
@@ -9,9 +11,14 @@
             Options = options;
         }
 
-        public CloudyConfigurator WithDatabaseConnectionString(string databaseConnectionString)
+        public CloudyConfigurator WithDatabaseConnectionStringName(string name)
         {
-            Options.DatabaseConnectionString = databaseConnectionString;
+            if (name.Contains(":") || name.Contains("/"))
+            {
+                throw new ArgumentException("Connection strings have to be referenced by name from your appsettings.json. No direct URLs here. You'll thank me later!");
+            }
+
+            Options.DatabaseConnectionString = name;
 
             return this;
         }

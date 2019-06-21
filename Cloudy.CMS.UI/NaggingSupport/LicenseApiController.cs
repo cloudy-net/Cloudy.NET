@@ -1,16 +1,17 @@
-﻿using Poetry.UI.ApiSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Cloudy.CMS;
 using Cloudy.CMS.LicenseSupport;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cloudy.CMS.UI.NaggingSupport
 {
-    [Api("license")]
-    public class LicenseApi
+    [Area("Cloudy.CMS")]
+    [Route("license")]
+    public class LicenseApiController
     {
-        [Endpoint("status")]
+        [Route("status")]
         public LicenseStatusResponse Status()
         {
             return new LicenseStatusResponse

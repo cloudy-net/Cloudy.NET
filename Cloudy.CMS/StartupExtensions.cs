@@ -34,7 +34,7 @@ namespace Cloudy.CMS
 
             if (options.DatabaseConnectionString != null)
             {
-                container.RegisterSingleton<IDatabaseProvider>(new DatabaseProvider(options.DatabaseConnectionString));
+                container.RegisterSingleton<IDatabaseConnectionStringNameProvider>(new DatabaseConnectionStringNameProvider(options.DatabaseConnectionString));
             }
 
             foreach (var initializer in services.BuildServiceProvider().GetRequiredService<IInitializerProvider>().GetAll())

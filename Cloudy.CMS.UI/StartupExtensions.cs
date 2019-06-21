@@ -29,7 +29,8 @@ using Poetry.InitializerSupport;
 using Microsoft.Extensions.FileProviders;
 using Poetry.UI.AspNetCore.AuthorizationSupport;
 using Poetry.UI.AspNetCore.PortalSupport;
-using Poetry.UI.AspNetCore.ApiSupport;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI
 {
@@ -53,16 +54,38 @@ namespace Cloudy.CMS.UI
 
             configure(new CloudyAdminConfigurator(options));
 
-            app.UseMiddleware<MainPageMiddleware>();
-            app.UseMiddleware<ApiMiddleware>();
+            var authorizationService = app.ApplicationServices.GetRequiredService<IAuthorizationService>();
 
-            app.Map(new PathString(options.BasePath), branch =>
+            app.Map(new PathString("/Admin2"), branch =>
             {
+                branch.Use(async (context, next) =>
+                {
+                    if (context.User.Identity.IsAuthenticated)
+                    {
+                        await next();
+                        return;
+                    }
+
+                    await context.ChallengeAsync(new AuthenticationProperties()
+                    {
+                        // https://github.com/aspnet/Security/issues/1730
+                        // Return here after authenticating
+                        RedirectUri = context.Request.PathBase + context.Request.Path + context.Request.QueryString
+                    });
+                });
                 branch.UseStaticFiles(new StaticFileOptions
                 {
                     FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly()),
                 });
             });
+
+            //app.Map(new PathString(options.BasePath), branch =>
+            //{
+            //    branch.UseStaticFiles(new StaticFileOptions
+            //    {
+            //        FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly()),
+            //    });
+            //});
         }
     }
 }

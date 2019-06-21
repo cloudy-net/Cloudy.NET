@@ -1,4 +1,4 @@
-﻿    using Poetry.UI.ApiSupport;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,17 +7,18 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.ControlSupport
 {
-    [Api("Control")]
-    public class ControlApi
+    [Area("Cloudy.CMS")]
+    [Route("Control")]
+    public class ControlApiController
     {
         IControlProvider ControlProvider { get; }
 
-        public ControlApi(IControlProvider controlProvider)
+        public ControlApiController(IControlProvider controlProvider)
         {
             ControlProvider = controlProvider;
         }
 
-        [Endpoint("ModulePaths")]
+        [Route("ModulePaths")]
         public IDictionary<string, string> GetModulePaths()
         {
             return new ReadOnlyDictionary<string, string>(ControlProvider.GetAll().ToDictionary(t => t.Id, t => t.ModulePath));

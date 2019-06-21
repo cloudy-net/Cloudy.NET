@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Poetry.UI.ApiSupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
@@ -10,11 +9,13 @@ using System.Text;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.Mvc.Routing;
 using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
-    [Api("ContentApp")]
-    public class ContentAppApi
+    [Area("Cloudy.CMS")]
+    [Route("ContentApp")]
+    public class ContentAppApiController
     {
         IContentTypeProvider ContentTypeRepository { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
@@ -23,7 +24,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         IUrlProvider UrlProvider { get; }
         ISingletonProvider SingletonProvider { get; }
 
-        public ContentAppApi(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider)
+        public ContentAppApiController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider)
         {
             ContentTypeRepository = contentTypeRepository;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
@@ -33,7 +34,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             SingletonProvider = singletonProvider;
         }
 
-        [Endpoint("GetSingleton")]
+        [Route("GetSingleton")]
         public IContent Get(string id)
         {
             var contentType = ContentTypeRepository.Get(id);
@@ -43,8 +44,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             return ContainerSpecificContentGetter.Get<IContent>(singleton.Id, null, contentType.Container);
         }
 
-        [Endpoint("Save")]
-        public string Save([FromRequestBody] SaveData data)
+        [Route("Save")]
+        public string Save([FromBody] SaveData data)
         {
             var contentType = ContentTypeRepository.Get(data.ContentTypeId);
 
@@ -73,7 +74,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public JObject Item { get; set; }
         }
 
-        [Endpoint("GetUrl")]
+        [Route("GetUrl")]
         public string GetUrl(string id, string contentTypeId)
         {
             var contentType = ContentTypeRepository.Get(contentTypeId);

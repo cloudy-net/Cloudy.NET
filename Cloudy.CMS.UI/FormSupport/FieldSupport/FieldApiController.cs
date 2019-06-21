@@ -1,4 +1,4 @@
-﻿using Poetry.UI.ApiSupport;
+﻿using Microsoft.AspNetCore.Mvc;
 using Poetry.UI.FormSupport.ControlSupport;
 using Poetry.UI.FormSupport.ControlSupport.MatchingSupport;
 using System;
@@ -8,21 +8,22 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.FieldSupport
 {
-    [Api("Field")]
-    public class FieldApi
+    [Area("Cloudy.CMS")]
+    [Route("Field")]
+    public class FieldApiController
     {
         IFormProvider FormProvider { get; }
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
 
-        public FieldApi(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher)
+        public FieldApiController(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher)
         {
             FormProvider = formProvider;
             FieldProvider = fieldProvider;
             ControlMatcher = controlMatcher;
         }
 
-        [Endpoint("GetAllForForm")]
+        [Route("GetAllForForm")]
         public IEnumerable<FieldResponse> GetAllForForm(string id)
         {
             var result = new List<FieldResponse>();

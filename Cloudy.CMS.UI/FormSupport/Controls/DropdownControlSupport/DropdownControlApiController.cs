@@ -1,5 +1,5 @@
-﻿using Poetry.ComposableSupport;
-using Poetry.UI.ApiSupport;
+﻿using Microsoft.AspNetCore.Mvc;
+using Poetry.ComposableSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +8,18 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.Controls.DropdownControlSupport
 {
-    [Api("DropdownControl")]
-    public class DropdownControlApi
+    [Area("Cloudy.CMS")]
+    [Route("DropdownControl")]
+    public class DropdownControlApiController
     {
         IDictionary<string, IOptionProvider> OptionProviders { get; }
 
-        public DropdownControlApi(IComposableProvider composableProvider)
+        public DropdownControlApiController(IComposableProvider composableProvider)
         {
             OptionProviders = composableProvider.GetAll<IOptionProvider>().ToDictionary(p => p.GetType().GetCustomAttribute<OptionProviderAttribute>().Id, p => p);
         }
 
-        [Endpoint("GetOptions")]
+        [Route("GetOptions")]
         public IEnumerable<Option> GetOptions(string provider)
         {
             return OptionProviders[provider].GetAll();

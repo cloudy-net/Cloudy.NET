@@ -1,4 +1,4 @@
-﻿using Poetry.UI.ApiSupport;
+﻿using Microsoft.AspNetCore.Mvc;
 using Poetry.UI.AppSupport;
 using System;
 using System.Collections.Generic;
@@ -7,17 +7,18 @@ using System.Text;
 
 namespace Poetry.UI.Apis
 {
-    [Api("App")]
-    public class AppApi
+    [Area("Cloudy.CMS")]
+    [Route("App")]
+    public class AppApiController
     {
         IAppProvider AppProvider { get; }
 
-        public AppApi(IAppProvider appProvider)
+        public AppApiController(IAppProvider appProvider)
         {
             AppProvider = appProvider;
         }
 
-        [Endpoint("GetAll")]
+        [Route("GetAll")]
         public IEnumerable<object> GetNames()
         {
             return AppProvider.GetAll().Select(app =>

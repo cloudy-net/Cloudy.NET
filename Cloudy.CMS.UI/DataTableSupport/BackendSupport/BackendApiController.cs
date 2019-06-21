@@ -1,21 +1,22 @@
-﻿using Poetry.UI.ApiSupport;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Poetry.UI.DataTableSupport.BackendSupport
 {
-    [Api("Backend")]
-    public class BackendApi
+    [Area("Cloudy.CMS")]
+    [Route("Backend")]
+    public class BackendApiController
     {
         IBackendProvider BackendProvider { get; }
 
-        public BackendApi(IBackendProvider backendProvider)
+        public BackendApiController(IBackendProvider backendProvider)
         {
             BackendProvider = backendProvider;
         }
 
-        [Endpoint("GetAll")]
+        [Route("GetAll")]
         public Result GetAll(string provider, int page, string sortBy, string sortDirection)
         {
             var direction = sortDirection == "ascending" ? (SortDirection?)SortDirection.Ascending : sortDirection == "descending" ? (SortDirection?)SortDirection.Descending : null;

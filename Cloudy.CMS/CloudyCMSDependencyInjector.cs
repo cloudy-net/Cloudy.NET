@@ -26,7 +26,8 @@ namespace Cloudy.CMS
             container.RegisterSingleton<IContentSerializer, ContentSerializer>();
             container.RegisterSingleton<IContentDeserializer, ContentDeserializer>();
             container.RegisterSingleton<IContainerProvider, ContainerProvider>();
-            container.RegisterSingleton<IDatabaseProvider, NoDatabaseProvider>();
+            container.RegisterSingleton<IDatabaseProvider, DatabaseProvider>();
+            container.RegisterSingleton<IDatabaseConnectionStringNameProvider, NoDatabaseConnectionStringNameProvider>();
 
             container.RegisterSingleton<IContentGetter, ContentGetter>();
             container.RegisterSingleton<IContentDeleter, ContentDeleter>();

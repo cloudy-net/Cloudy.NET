@@ -35,8 +35,12 @@ namespace Website.AspNetCore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("test", policy => policy.RequireAssertion(c => true));
+            });
             services.AddCloudy(cloudy => cloudy
-                .WithDatabaseConnectionString("mongodb://localhost:27017/cms-web-test")
+                .WithDatabaseConnectionStringName("mongo")
                 .AddCloudyAdmin()
             );
             services.AddMvc();

@@ -3,8 +3,6 @@ using Cloudy.CMS.ContentControllerSupport;
 using Cloudy.CMS.Mvc.Routing;
 using Cloudy.CMS.Reflection;
 using Poetry.DependencyInjectionSupport;
-using Poetry.UI.ApiSupport;
-using Poetry.UI.ApiSupport.RoutingSupport;
 using Poetry.UI.AppSupport;
 using Poetry.UI.AspNetCore.AuthorizationSupport;
 using Poetry.UI.PortalSupport;
@@ -20,10 +18,6 @@ namespace Poetry.UI
     {
         public void InjectDependencies(IContainer container)
         {
-            container.RegisterSingleton<IApiRouter, ApiRouter>();
-            container.RegisterSingleton<IApiCreator, ApiCreator>();
-            container.RegisterSingleton<IApiProvider, ApiProvider>();
-            container.RegisterSingleton<IEndpointCreator, EndpointCreator>();
             container.RegisterSingleton<IFaviconProvider, FaviconProvider>();
             container.RegisterSingleton<ITitleProvider, TitleProvider>();
             container.RegisterSingleton<IAppCreator, AppCreator>();
