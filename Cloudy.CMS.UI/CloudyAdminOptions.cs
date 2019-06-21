@@ -1,8 +1,13 @@
-﻿namespace Cloudy.CMS.UI
+﻿
+using Poetry.UI.AspNetCore;
+
+namespace Cloudy.CMS.UI
 {
     public class CloudyAdminOptions
     {
-        public string BasePath { get; set; }
+        public string BasePath { get; set; } = "/Admin";
+        public AuthorizeOptions AuthorizeOptions { get; set; }
+        public bool AllowUnauthenticatedUsers { get; set; }
         public bool DontNagOnLocalhost { get; set; }
     }
 }

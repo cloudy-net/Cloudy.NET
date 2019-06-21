@@ -13,10 +13,13 @@ namespace Cloudy.CMS.DocumentSupport
     {
         IMongoClient MongoClient { get; }
 
-        public DatabaseProvider(IDatabaseConnectionStringNameProvider databaseConnectionStringNameProvider, IConfiguration configuration)
+        static DatabaseProvider()
         {
             BsonSerializer.RegisterSerializer(typeof(Document), new JsonSerializerAdapter<Document>());
+        }
 
+        public DatabaseProvider(IDatabaseConnectionStringNameProvider databaseConnectionStringNameProvider, IConfiguration configuration)
+        {
             var url = new MongoUrl(configuration.GetConnectionString(databaseConnectionStringNameProvider.DatabaseConnectionStringName));
 
             MongoClient = new MongoClient(url);

@@ -27,8 +27,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Poetry.InitializerSupport;
 using Microsoft.Extensions.FileProviders;
-using Poetry.UI.AspNetCore.AuthorizationSupport;
-using Poetry.UI.AspNetCore.PortalSupport;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
@@ -36,7 +34,7 @@ namespace Cloudy.CMS.UI
 {
     public static class StartupExtensions
     {
-        public static CloudyConfigurator AddCloudyAdmin(this CloudyConfigurator configurator)
+        public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator)
         {
             configurator.AddComponent<CloudyAdminComponent>();
 
@@ -56,36 +54,44 @@ namespace Cloudy.CMS.UI
 
             var authorizationService = app.ApplicationServices.GetRequiredService<IAuthorizationService>();
 
-            app.Map(new PathString("/Admin2"), branch =>
+            if(options.AllowUnauthenticatedUsers && options.AuthorizeOptions != null)
+            {
+                throw new ArgumentException($"You have called both {nameof(CloudyAdminConfigurator.Authorize)}() and {nameof(CloudyAdminConfigurator.Unprotect)}(), they are mutually exclusive. You probably want to remove the latter");
+            }
+
+            var policy = 
+                options.AllowUnauthenticatedUsers ?
+                new AuthorizationPolicyBuilder().RequireAssertion(context => true).Build() :
+                options.AuthorizeOptions != null ?
+                AuthorizationPolicy.CombineAsync(app.ApplicationServices.GetRequiredService<IAuthorizationPolicyProvider>(), new List<IAuthorizeData> { options.AuthorizeOptions }).Result :
+                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+            app.Map(new PathString(options.BasePath), branch =>
             {
                 branch.Use(async (context, next) =>
                 {
-                    if (context.User.Identity.IsAuthenticated)
+                    if ((await authorizationService.AuthorizeAsync(context.User, policy)).Succeeded)
                     {
                         await next();
                         return;
                     }
 
-                    await context.ChallengeAsync(new AuthenticationProperties()
+                    if (context.User.Identity.IsAuthenticated)
                     {
-                        // https://github.com/aspnet/Security/issues/1730
-                        // Return here after authenticating
-                        RedirectUri = context.Request.PathBase + context.Request.Path + context.Request.QueryString
+                        await context.ForbidAsync();
+                        return;
+                    }
+
+                    await context.ChallengeAsync(new AuthenticationProperties() {
+                        RedirectUri = context.Request.PathBase + context.Request.Path + context.Request.QueryString,
                     });
                 });
                 branch.UseStaticFiles(new StaticFileOptions
                 {
                     FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly()),
                 });
+                branch.UseMvc(routes => routes.MapAreaRoute("Cloudy.CMS.Admin.MainPage", "Cloudy.CMS.Admin", string.Empty, new { controller = "MainPage", action = "Index" }));
             });
-
-            //app.Map(new PathString(options.BasePath), branch =>
-            //{
-            //    branch.UseStaticFiles(new StaticFileOptions
-            //    {
-            //        FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly()),
-            //    });
-            //});
         }
     }
 }

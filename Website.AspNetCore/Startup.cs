@@ -16,11 +16,6 @@ using Serilog;
 using Website.AspNetCore.Models;
 using Cloudy.CMS.SingletonSupport;
 using Microsoft.Extensions.Configuration;
-using Poetry.UI.AspNetCore.AuthorizationSupport;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 
 namespace Website.AspNetCore
 {
@@ -41,7 +36,7 @@ namespace Website.AspNetCore
             });
             services.AddCloudy(cloudy => cloudy
                 .WithDatabaseConnectionStringName("mongo")
-                .AddCloudyAdmin()
+                .AddAdmin()
             );
             services.AddMvc();
         }
@@ -53,8 +48,8 @@ namespace Website.AspNetCore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCloudyAdmin(cloudy => cloudy.WithBasePath("/Admin"));
-            app.UseMvc(routeBuilder => routeBuilder.AddContentRoute());
+            app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
+            app.UseMvc(routes => routes.AddContentRoute());
         }
     }
 }

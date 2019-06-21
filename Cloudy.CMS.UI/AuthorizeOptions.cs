@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.AspNetCore.AuthorizationSupport
+namespace Poetry.UI.AspNetCore
 {
-    public class UIAuthorizeOptions : IAuthorizeData
+    public class AuthorizeOptions : IAuthorizeData
     {
         /// <summary>
         /// Gets or sets the policy name that determines access to the resource.

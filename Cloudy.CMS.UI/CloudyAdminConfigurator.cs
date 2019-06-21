@@ -1,4 +1,6 @@
-﻿namespace Cloudy.CMS.UI
+﻿using Poetry.UI.AspNetCore;
+
+namespace Cloudy.CMS.UI
 {
     public class CloudyAdminConfigurator
     {
@@ -12,6 +14,20 @@
         public CloudyAdminConfigurator WithBasePath(string adminBasePath)
         {
             Options.BasePath = adminBasePath;
+
+            return this;
+        }
+
+        public CloudyAdminConfigurator Authorize(AuthorizeOptions authorizeOptions)
+        {
+            Options.AuthorizeOptions = authorizeOptions;
+
+            return this;
+        }
+
+        public CloudyAdminConfigurator Unprotect()
+        {
+            Options.AllowUnauthenticatedUsers = true;
 
             return this;
         }
