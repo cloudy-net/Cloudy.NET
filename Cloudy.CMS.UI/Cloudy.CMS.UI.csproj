@@ -33,8 +33,4 @@
     <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AuthorizationSupport\" />
-  </ItemGroup>
-
 </Project>

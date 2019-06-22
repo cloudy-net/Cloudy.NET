@@ -32,7 +32,7 @@ namespace Website.AspNetCore
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("test", policy => policy.RequireAssertion(c => true));
+                options.AddPolicy("test", policy => policy.RequireAssertion(c => false));
             });
             services.AddCloudy(cloudy => cloudy
                 .WithDatabaseConnectionStringName("mongo")

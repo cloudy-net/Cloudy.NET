@@ -29,11 +29,15 @@ using Poetry.InitializerSupport;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Poetry.ComponentSupport;
+using Cloudy.CMS.UI.AuthorizationSupport;
 
 namespace Cloudy.CMS.UI
 {
     public static class StartupExtensions
     {
+        static string DefaultManifestName { get; } = "Microsoft.Extensions.FileProviders.Embedded.Manifest.xml";
+
         public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator)
         {
             configurator.AddComponent<CloudyAdminComponent>();
@@ -66,30 +70,28 @@ namespace Cloudy.CMS.UI
                 AuthorizationPolicy.CombineAsync(app.ApplicationServices.GetRequiredService<IAuthorizationPolicyProvider>(), new List<IAuthorizeData> { options.AuthorizeOptions }).Result :
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 
-            app.Map(new PathString(options.BasePath), branch =>
+            var path = new PathString(options.BasePath);
+
+            foreach (var component in app.ApplicationServices.GetRequiredService<IComponentProvider>().GetAll())
             {
-                branch.Use(async (context, next) =>
+                if (!component.Assembly.Assembly.GetManifestResourceNames().Contains(DefaultManifestName))
                 {
-                    if ((await authorizationService.AuthorizeAsync(context.User, policy)).Succeeded)
-                    {
-                        await next();
-                        return;
-                    }
+                    continue;
+                }
 
-                    if (context.User.Identity.IsAuthenticated)
+                app.Map(path.Add($"/{component.Id}"), branch =>
+                {
+                    branch.UseMiddleware<AuthorizeMiddleware>(policy);
+                    branch.UseStaticFiles(new StaticFileOptions
                     {
-                        await context.ForbidAsync();
-                        return;
-                    }
-
-                    await context.ChallengeAsync(new AuthenticationProperties() {
-                        RedirectUri = context.Request.PathBase + context.Request.Path + context.Request.QueryString,
+                        FileProvider = new ManifestEmbeddedFileProvider(component.Assembly.Assembly),
                     });
                 });
-                branch.UseStaticFiles(new StaticFileOptions
-                {
-                    FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly()),
-                });
+            }
+
+            app.Map(path, branch =>
+            {
+                branch.UseMiddleware<AuthorizeMiddleware>(policy);
                 branch.UseMvc(routes => routes.MapAreaRoute("Cloudy.CMS.Admin.MainPage", "Cloudy.CMS.Admin", string.Empty, new { controller = "MainPage", action = "Index" }));
             });
         }

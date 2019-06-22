@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI
 {
-    [Component("Cloudy.CMS.UI")]
+    [Component("Cloudy.CMS.Admin")]
     [Script("NaggingSupport/nagging.js")]
     [Script("Scripts/portal.js")]
     [Script("Scripts/nav.js")]
