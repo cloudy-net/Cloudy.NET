@@ -72,27 +72,28 @@ namespace Cloudy.CMS.UI
 
             var path = new PathString(options.BasePath);
 
-            foreach (var component in app.ApplicationServices.GetRequiredService<IComponentProvider>().GetAll())
+
+            app.Map(path, adminBranch =>
             {
-                if (!component.Assembly.Assembly.GetManifestResourceNames().Contains(DefaultManifestName))
+                adminBranch.UseMiddleware<AuthorizeMiddleware>(policy);
+
+                foreach (var component in app.ApplicationServices.GetRequiredService<IComponentProvider>().GetAll())
                 {
-                    continue;
+                    if (!component.Assembly.Assembly.GetManifestResourceNames().Contains(DefaultManifestName))
+                    {
+                        continue;
+                    }
+
+                    adminBranch.Map(new PathString($"/{component.Id}"), componentBranch =>
+                    {
+                        componentBranch.UseStaticFiles(new StaticFileOptions
+                        {
+                            FileProvider = new ManifestEmbeddedFileProvider(component.Assembly.Assembly),
+                        });
+                    });
                 }
 
-                app.Map(path.Add($"/{component.Id}"), branch =>
-                {
-                    branch.UseMiddleware<AuthorizeMiddleware>(policy);
-                    branch.UseStaticFiles(new StaticFileOptions
-                    {
-                        FileProvider = new ManifestEmbeddedFileProvider(component.Assembly.Assembly),
-                    });
-                });
-            }
-
-            app.Map(path, branch =>
-            {
-                branch.UseMiddleware<AuthorizeMiddleware>(policy);
-                branch.UseMvc(routes => routes.MapAreaRoute("Cloudy.CMS.Admin.MainPage", "Cloudy.CMS.Admin", string.Empty, new { controller = "MainPage", action = "Index" }));
+                adminBranch.UseMvc(routes => routes.MapAreaRoute("Cloudy.CMS.Admin.MainPage", "Cloudy.CMS.Admin", string.Empty, new { controller = "MainPage", action = "Index" }));
             });
         }
     }
