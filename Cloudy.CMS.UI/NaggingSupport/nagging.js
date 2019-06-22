@@ -1,7 +1,7 @@
-﻿import Button from '../../Poetry.UI/Scripts/button.js';
-import NotificationManager from '../../Poetry.UI.NotificationSupport/Scripts/notification-manager.js';
+﻿import Button from '../Scripts/button.js';
+import NotificationManager from '../NotificationSupport/Scripts/notification-manager.js';
 
-fetch(`Cloudy.CMS.UI/License/Status`, {
+fetch(`License/Status`, {
     credentials: 'include',
     method: 'Get',
 })

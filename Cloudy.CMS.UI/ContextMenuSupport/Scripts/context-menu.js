@@ -1,4 +1,4 @@
-﻿import RemoveElementListener from '../../Poetry.UI/Scripts/remove-element-listener.js';
+﻿import RemoveElementListener from '../../Scripts/remove-element-listener.js';
 
 
 

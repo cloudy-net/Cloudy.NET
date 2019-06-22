@@ -1,5 +1,5 @@
-﻿import Button from '../../Poetry.UI/Scripts/button.js';
-import ContextMenu from '../../Poetry.UI.ContextMenuSupport/Scripts/context-menu.js';
+﻿import Button from '../../Scripts/button.js';
+import ContextMenu from '../../ContextMenuSupport/Scripts/context-menu.js';
 
 class SortableField {
     constructor(fieldModel, target, createItem) {

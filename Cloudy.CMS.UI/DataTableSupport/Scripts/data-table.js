@@ -1,4 +1,4 @@
-﻿import Button from '../../Poetry.UI/Scripts/button.js';
+﻿import Button from '../../Scripts/button.js';
 import Backend from './backend.js';
 
 

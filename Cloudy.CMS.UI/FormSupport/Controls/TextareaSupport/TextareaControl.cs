@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.Controls
 {
-    [Control("textarea", "Controls/TextareaSupport/Scripts/textarea.js")]
+    [Control("textarea", "FormSupport/Controls/TextareaSupport/Scripts/textarea.js")]
     [MapControlToUIHint("textarea")]
     public class TextareaControl
     {

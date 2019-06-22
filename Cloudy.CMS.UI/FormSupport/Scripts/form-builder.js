@@ -5,7 +5,7 @@ import FieldDescriptorProvider from './field-descriptor-provider.js';
 import FieldControlProvider from './field-control-provider.js';
 import Sortable from './sortable.js';
 import SortableItem from './sortable-item.js';
-import ContextMenu from '../../Poetry.UI.ContextMenuSupport/Scripts/context-menu.js';
+import ContextMenu from '../../ContextMenuSupport/Scripts/context-menu.js';
 
 
 

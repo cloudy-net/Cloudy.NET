@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.Controls.DropdownControlSupport
 {
-    [Control("dropdown", "Controls/DropdownControlSupport/Scripts/dropdown-control.js")]
+    [Control("dropdown", "FormSupport/Controls/DropdownControlSupport/Scripts/dropdown-control.js")]
     [MapControlToUIHint("dropdown(provider)")]
     public class DropdownControl
     {

@@ -1,11 +1,11 @@
 ﻿import Sortable from '../../../Scripts/sortable.js';
 import SortableItem from '../../../Scripts/sortable-item.js';
 import FormBuilder from '../../../Scripts/form-builder.js';
-import DataTable from '../../../../Poetry.UI.DataTableSupport/Scripts/data-table.js';
-import Backend from '../../../../Poetry.UI.DataTableSupport/Scripts/backend.js';
-import Blade from '../../../../Poetry.UI/Scripts/blade.js';
-import Button from '../../../../Poetry.UI/Scripts/button.js';
-import ContextMenu from '../../../../Poetry.UI.ContextMenuSupport/Scripts/context-menu.js';
+import DataTable from '../../../../DataTableSupport/Scripts/data-table.js';
+import Backend from '../../../../DataTableSupport/Scripts/backend.js';
+import Blade from '../../../../Scripts/blade.js';
+import Button from '../../../../Scripts/button.js';
+import ContextMenu from '../../../../ContextMenuSupport/Scripts/context-menu.js';
 
 class SortableTableControl extends Sortable {
     constructor(fieldModel, target, app) {

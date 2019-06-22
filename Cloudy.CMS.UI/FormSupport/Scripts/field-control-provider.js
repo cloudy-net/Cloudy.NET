@@ -1,6 +1,6 @@
 ﻿class FieldControlProvider {
     constructor() {
-        this.modulePathsPromise = fetch('Poetry.UI.FormSupport/Control/ModulePaths', {
+        this.modulePathsPromise = fetch('Control/ModulePaths', {
             credentials: 'include'
         })
             .then(response => {

@@ -40,7 +40,7 @@ class Nav {
         this.element.classList.add('poetry-ui-hidden');
         portal.element.append(this.element);
 
-        this.appDescriptorsPromise = fetch('Poetry.UI/App/GetAll', { credentials: 'include' }).then(response => response.json());
+        this.appDescriptorsPromise = fetch('App/GetAll', { credentials: 'include' }).then(response => response.json());
         this.appDescriptorsPromise.then(appDescriptors => appDescriptors.forEach(appDescriptor => {
             var item = document.createElement('poetry-ui-portal-nav-item');
 

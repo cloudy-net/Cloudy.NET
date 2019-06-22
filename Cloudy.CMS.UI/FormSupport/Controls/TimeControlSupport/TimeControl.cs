@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Poetry.UI.FormSupport.Controls.TimeSupport
 {
-    [Control("time", "Controls/TimeControlSupport/Scripts/time.js")]
+    [Control("time", "FormSupport/Controls/TimeControlSupport/Scripts/time.js")]
     [MapControlToUIHint("time")]
     public class TimeControl
     {
