@@ -5,7 +5,7 @@
 
 class FormFieldDescriptorProvider {
     getFor(formId) {
-        return fetch(`Poetry.UI.FormSupport/Field/GetAllForForm?id=${formId}`, {
+        return fetch(`Field/GetAllForForm?id=${formId}`, {
             credentials: 'include'
         })
             .then(response => {

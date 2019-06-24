@@ -42,7 +42,7 @@ class ListContentTypesBlade extends Blade {
 
                     if (contentType.isSingleton) {
                         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-                        var item = fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${contentType.id}`, {
+                        var item = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, {
                             credentials: 'include',
                             method: 'Get',
                         })

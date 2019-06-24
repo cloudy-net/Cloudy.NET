@@ -18,15 +18,15 @@ class ListContentBlade extends Blade {
     constructor(app, contentType) {
         super();
 
-        this.setTitle(contentType.PluralName);
+        this.setTitle(contentType.pluralName);
 
-        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
+        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
 
-        var dataTable = new DataTable().setBackend(`Cloudy.CMS.ContentList[type=${contentType.Id}]`);
+        var dataTable = new DataTable().setBackend(`Cloudy.CMS.ContentList[type=${contentType.id}]`);
 
         dataTable.addColumn(c =>
-            c.setHeader(element => contentType.IsNameable ? 'Name' : 'Id').setButton(item => {
-                var button = new DataTableButton(contentType.IsNameable ? item.Name : item.Id);
+            c.setHeader(element => contentType.isNameable ? 'name' : 'id').setButton(item => {
+                var button = new DataTableButton(contentType.isNameable ? item.name : item.id);
 
                 formBuilder.fieldModels.then(fieldModels =>
                     button.onClick(() => {

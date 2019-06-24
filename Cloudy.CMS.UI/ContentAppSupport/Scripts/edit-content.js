@@ -34,14 +34,14 @@ class EditContentBlade extends Blade {
 
         var init = item => {
             if (item.Id) {
-                if (contentType.IsNameable && item.Name) {
-                    this.setTitle(`Edit ${item.Name}`);
+                if (contentType.isNameable && item.name) {
+                    this.setTitle(`Edit ${item.name}`);
                 } else {
-                    this.setTitle(`Edit ${contentType.Name}`);
+                    this.setTitle(`Edit ${contentType.name}`);
                 }
 
-                if (contentType.IsRoutable) {
-                    fetch(`Cloudy.CMS.UI/ContentApp/GetUrl?id=${encodeURIComponent(item.Id)}&contentTypeId=${encodeURIComponent(item.ContentTypeId)}`, {
+                if (contentType.isRoutable) {
+                    fetch(`ContentApp/GetUrl?id=${encodeURIComponent(item.id)}&contentTypeId=${encodeURIComponent(item.contentTypeId)}`, {
                         credentials: 'include',
                         method: 'GET',
                         headers: {
@@ -60,7 +60,7 @@ class EditContentBlade extends Blade {
                         });
                 }
             } else {
-                this.setTitle(`New ${contentType.Name}`);
+                this.setTitle(`New ${contentType.name}`);
             }
 
             var save = () =>
@@ -71,8 +71,8 @@ class EditContentBlade extends Blade {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        Id: item.Id,
-                        ContentTypeId: contentType.Id,
+                        Id: item.id,
+                        ContentTypeId: contentType.id,
                         item: item
                     })
                 });
@@ -83,7 +83,7 @@ class EditContentBlade extends Blade {
             formBuilder.fieldModels.then(fieldModels =>
                 this.setContent(
                     new DataTable()
-                        .setBackend([...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.Group))].sort())
+                        .setBackend([...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.group))].sort())
                         .addColumn(c =>
                             c.setHeader(() => 'Properties').setButton(group => {
                                 var button = new DataTableButton(group || 'General');

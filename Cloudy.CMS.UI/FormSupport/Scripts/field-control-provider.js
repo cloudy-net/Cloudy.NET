@@ -18,13 +18,13 @@
         return this
             .modulePathsPromise
             .then(modulePaths => {
-                var modulePath = modulePaths[field.Control.Id];
+                var modulePath = modulePaths[field.control.id];
 
-                if (!this.typeModulesPromises[field.Control.Id]) {
-                    this.typeModulesPromises[field.Control.Id] = import(modulePath);
+                if (!this.typeModulesPromises[field.control.id]) {
+                    this.typeModulesPromises[field.control.id] = import(modulePath);
                 }
 
-                return this.typeModulesPromises[field.Control.Id];
+                return this.typeModulesPromises[field.control.id];
             })
             .then(module => module.default);
     }

@@ -12,7 +12,7 @@ class DropdownControl extends FieldControl {
 
         this.onSet(v => value = select.value = v || null);
 
-        fetch(`Poetry.UI.FormSupport/DropdownControl/GetOptions?provider=${fieldModel.descriptor.Control.Parameters['provider']}`, {
+        fetch(`DropdownControl/GetOptions?provider=${fieldModel.descriptor.control.parameters['provider']}`, {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -23,8 +23,8 @@ class DropdownControl extends FieldControl {
                 items.forEach(item => {
                     var option = document.createElement('option');
 
-                    option.value = item.Value;
-                    option.innerText = item.Text;
+                    option.value = item.value;
+                    option.innerText = item.text;
 
                     select.append(option);
                 });
