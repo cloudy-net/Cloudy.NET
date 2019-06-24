@@ -17,27 +17,27 @@
     getObject(fields, target) {
         var result = {};
 
-        fields.forEach(field => result[field.model.descriptor.Id] = this.getField(field, target));
+        fields.forEach(field => result[field.model.descriptor.id] = this.getField(field, target));
 
         return result;
     }
 
     getField(field, target) {
-        if (field.model.descriptor.IsSortable) {
-            return this.getSortableField(field, target[field.model.descriptor.Id]);
+        if (field.model.descriptor.isSortable) {
+            return this.getSortableField(field, target[field.model.descriptor.id]);
         }
 
-        if (field.model.descriptor.EmbeddedFormId) {
-            return this.getObject(field.data.form.fields, target[field.model.descriptor.Id]);
+        if (field.model.descriptor.embeddedFormId) {
+            return this.getObject(field.data.form.fields, target[field.model.descriptor.id]);
         }
 
-        return target[field.model.descriptor.Id];
+        return target[field.model.descriptor.id];
     }
 
     getSortableField(field, target) {
         var result = [];
 
-        if (field.model.descriptor.EmbeddedFormId) {
+        if (field.model.descriptor.embeddedFormId) {
             target.forEach((_, i) => result[i] = this.getObject(field.data.sortable.items[0].data.form.fields, target[i]));
 
             return result;
@@ -58,25 +58,25 @@
 
     updateFields(fields, target, value) {
         fields.forEach(field => {
-            if (field.model.descriptor.IsSortable) {
-                this.updateSortable(field, target[field.model.descriptor.Id], value[field.model.descriptor.Id]);
+            if (field.model.descriptor.isSortable) {
+                this.updateSortable(field, target[field.model.descriptor.id], value[field.model.descriptor.id]);
 
                 return;
             }
 
-            if (field.model.descriptor.EmbeddedFormId) {
-                this.updateFields(field.data.form.fields, target[field.model.descriptor.Id], value[field.model.descriptor.Id]);
+            if (field.model.descriptor.embeddedFormId) {
+                this.updateFields(field.data.form.fields, target[field.model.descriptor.id], value[field.model.descriptor.id]);
 
                 return;
             }
 
-            target[field.model.descriptor.Id] = value[field.model.descriptor.Id];
-            field.data.control.triggerSet(value[field.model.descriptor.Id]);
+            target[field.model.descriptor.id] = value[field.model.descriptor.id];
+            field.data.control.triggerSet(value[field.model.descriptor.id]);
         });
     }
 
     updateSortable(field, target, value) {
-        if (field.model.descriptor.EmbeddedFormId) {
+        if (field.model.descriptor.embeddedFormId) {
             while (value.length > target.length) {
                 target.push({});
                 field.data.sortable.addItem(field.data.sortable.createItem());
