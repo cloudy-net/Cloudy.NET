@@ -7,6 +7,6 @@ namespace Poetry.UI.StyleSupport
 {
     public interface IStyleProvider
     {
-        IEnumerable<StyleDescriptor> GetAllFor(ComponentDescriptor componentDescriptor);
+        IEnumerable<StyleDescriptor> GetAll();
     }
 }

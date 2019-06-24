@@ -7,6 +7,6 @@ namespace Poetry.UI.ScriptSupport
 {
     public interface IScriptProvider
     {
-        IEnumerable<ScriptDescriptor> GetAllFor(ComponentDescriptor component);
+        IEnumerable<ScriptDescriptor> GetAll();
     }
 }

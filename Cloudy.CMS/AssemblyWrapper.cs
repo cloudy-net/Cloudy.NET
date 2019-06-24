@@ -22,5 +22,30 @@ namespace Poetry
         {
             Types = types.ToList().AsReadOnly();
         }
+
+        public override bool Equals(object obj)
+        {
+            if(Assembly == null)
+            {
+                if(obj == null)
+                {
+                    return false;
+                }
+
+                return obj.Equals(this);
+            }
+
+            return Assembly.Equals((obj as AssemblyWrapper)?.Assembly);
+        }
+
+        public override int GetHashCode()
+        {
+            if(Assembly == null)
+            {
+                return 0;
+            }
+
+            return Assembly.GetHashCode();
+        }
     }
 }

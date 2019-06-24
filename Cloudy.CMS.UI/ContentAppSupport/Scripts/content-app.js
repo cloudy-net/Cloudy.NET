@@ -37,12 +37,12 @@ class ListContentTypesBlade extends Blade {
             new DataTable()
                 .setBackend('Cloudy.CMS.ContentTypeList')
                 .addColumn(c => c.setHeader(element => 'Name').setButton(contentType => {
-                    var name = contentType.IsSingleton ? contentType.Name : contentType.PluralName;
+                    var name = contentType.isSingleton ? contentType.name : contentType.pluralName;
                     var button = new DataTableButton(name).onClick(() => button.setActive());
 
-                    if (contentType.IsSingleton) {
-                        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.Id}]`, app);
-                        var item = fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${contentType.Id}`, {
+                    if (contentType.isSingleton) {
+                        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
+                        var item = fetch(`Cloudy.CMS.UI/ContentApp/GetSingleton?id=${contentType.id}`, {
                             credentials: 'include',
                             method: 'Get',
                         })

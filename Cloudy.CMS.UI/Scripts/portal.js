@@ -23,14 +23,14 @@ class Portal {
 
         this.nav.openApp(appDescriptor);
 
-        history.pushState(null, null, `#${appDescriptor.Id}`);
+        history.pushState(null, null, `#${appDescriptor.id}`);
 
-        if (this.apps[appDescriptor.Id]) {
+        if (this.apps[appDescriptor.id]) {
             this.element.appendChild(app.element);
             return;
         }
 
-        import(`../../${appDescriptor.ModulePath}`)
+        import(`../../${appDescriptor.modulePath}`)
             .then(module => {
                 var app = new module.default();
 

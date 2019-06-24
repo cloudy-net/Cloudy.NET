@@ -37,7 +37,7 @@ namespace Poetry.UI.AppSupport
                     {
                         if (scriptAttribute.Path.StartsWith("/"))
                         {
-                            throw new AbsoluteScriptPathException(component.Type, scriptAttribute.Path);
+                            throw new AbsoluteScriptPathException(type, scriptAttribute.Path);
                         }
 
                         result.Add(new ScriptDescriptor(component.Id, scriptAttribute.Path));

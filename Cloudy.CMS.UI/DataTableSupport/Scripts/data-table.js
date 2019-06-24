@@ -145,7 +145,7 @@ class DataTable {
 
                 [...this.tableBody.children].forEach(c => this.tableBody.removeChild(c));
                 
-                response.Items.forEach(item => {
+                response.items.forEach(item => {
                     var row = document.createElement('tr');
                     this.tableBody.appendChild(row);
 
@@ -168,7 +168,7 @@ class DataTable {
                     });
                 });
 
-                if (response.PageCount > 1) {
+                if (response.pageCount > 1) {
                     this.paging.style.display = '';
                 } else {
                     this.paging.style.display = 'none';
@@ -176,7 +176,7 @@ class DataTable {
 
                 [...this.paging.children].forEach(c => this.paging.removeChild(c));
 
-                var pages = Array(response.PageCount).fill().map((a, i) => i + 1);
+                var pages = Array(response.pageCount).fill().map((a, i) => i + 1);
                 var pagination = [];
 
                 var startIndex = 0;
@@ -238,7 +238,7 @@ class DataTable {
 
                 new Button('')
                     .onClick(() => {
-                        if (this.page == response.PageCount) {
+                        if (this.page == response.pageCount) {
                             return;
                         }
 
@@ -246,7 +246,7 @@ class DataTable {
                         this.update();
                     })
                     .addClass('poetry-ui-data-table-paging-next')
-                    .setDisabled(this.page == response.PageCount)
+                    .setDisabled(this.page == response.pageCount)
                     .appendTo(this.paging);
             });
     }

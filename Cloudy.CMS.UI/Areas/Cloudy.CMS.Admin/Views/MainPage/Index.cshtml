@@ -1,15 +1,14 @@
 ﻿@using Poetry.UI.PortalSupport
 @using Poetry.ComponentSupport
-@using Poetry.ComponentSupport.DependencySupport
 @using Poetry.UI.ScriptSupport
 @using Poetry.UI.StyleSupport
 
 @inject ITitleProvider TitleProvider
 @inject IFaviconProvider FaviconProvider
-@inject IComponentDependencySorter ComponentDependencySorter
 @inject IComponentProvider ComponentProvider
 @inject IScriptProvider ScriptProvider
 @inject IStyleProvider StyleProvider
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,16 +21,13 @@
 
     <link rel="icon" href="@FaviconProvider.Favicon">
 
-    @foreach (var component in ComponentDependencySorter.Sort(ComponentProvider.GetAll()))
+    @foreach (var script in ScriptProvider.GetAll())
     {
-        foreach (var script in ScriptProvider.GetAllFor(component))
-        {
-            <script type="module" src="@component.Id/@script.Path" crossorigin="use-credentials"></script>
-        }
-        foreach (var style in StyleProvider.GetAllFor(component))
-        {
-            <link rel="stylesheet" type="text/css" href="@component.Id/@style.Path" />
-        }
+        <script type="module" src="@script.ComponentId/@script.Path" crossorigin="use-credentials"></script>
+    }
+    @foreach (var style in StyleProvider.GetAll())
+    {
+        <link rel="stylesheet" type="text/css" href="@style.ComponentId/@style.Path" />
     }
 </head>
 <body>

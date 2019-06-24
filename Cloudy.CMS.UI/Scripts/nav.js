@@ -45,8 +45,8 @@ class Nav {
             var item = document.createElement('poetry-ui-portal-nav-item');
 
             item.tabIndex = 0;
-            item.innerText = appDescriptor.Name;
-            item.setAttribute('poetry-ui-app-id', appDescriptor.Id);
+            item.innerText = appDescriptor.name;
+            item.setAttribute('poetry-ui-app-id', appDescriptor.id);
             item.addEventListener('click', () => portal.openApp(appDescriptor));
             item.addEventListener("keyup", event => {
                 if (event.keyCode != 13) {
@@ -78,7 +78,7 @@ class Nav {
             var appId = match[0];
 
             this.appDescriptorsPromise.then(appDescriptors => {
-                var appDescriptor = appDescriptors.find(a => a.Id == appId);
+                var appDescriptor = appDescriptors.find(a => a.id == appId);
 
                 if (!appDescriptor) {
                     throw `App not found: ${appId}`;
@@ -92,7 +92,7 @@ class Nav {
     openApp(appDescriptor) {
         this.appDescriptorsPromise.then(() => {
             [...this.element.querySelectorAll('poetry-ui-portal-nav-item')].forEach(c => c.classList.remove('poetry-ui-active'));
-            this.element.querySelector(`[poetry-ui-app-id="${appDescriptor.Id}"]`).classList.add('poetry-ui-active');
+            this.element.querySelector(`[poetry-ui-app-id="${appDescriptor.id}"]`).classList.add('poetry-ui-active');
         });
     }
 }

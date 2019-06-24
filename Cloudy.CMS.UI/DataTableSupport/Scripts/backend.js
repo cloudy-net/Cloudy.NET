@@ -41,16 +41,16 @@ class Backend {
             }
 
             return Promise.resolve({
-                Items: [...data],
-                PageCount: 1,
-                PageSize: data.length,
-                TotalMatching: data.length,
+                items: [...data],
+                pageCount: 1,
+                pageSize: data.length,
+                totalMatching: data.length,
             });
         }
 
         var sort = query.sortBy ? `&sortby=${query.sortBy}&sortdirection=${query.sortDirection}` : '';
 
-        return fetch(`Poetry.UI.DataTableSupport/Backend/GetAll?provider=${this.name}&page=${query.page}${sort}`, { credentials: 'include' })
+        return fetch(`Backend/GetAll?provider=${this.name}&page=${query.page}${sort}`, { credentials: 'include' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`DataTable backend returned ${response.status} (${response.statusText})`);

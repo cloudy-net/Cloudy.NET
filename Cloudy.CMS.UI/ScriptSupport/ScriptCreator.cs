@@ -9,27 +9,29 @@ namespace Poetry.UI.ScriptSupport
 {
     public class ScriptCreator : IScriptCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IComponentTypeProvider ComponentTypeProvider { get; }
 
-        public ScriptCreator(IComponentProvider componentProvider)
+        public ScriptCreator(IComponentTypeProvider componentTypeProvider)
         {
-            ComponentProvider = componentProvider;
+            ComponentTypeProvider = componentTypeProvider;
         }
 
         public IEnumerable<ScriptDescriptor> Create()
         {
             var result = new List<ScriptDescriptor>();
 
-            foreach (var component in ComponentProvider.GetAll())
+            foreach (var type in ComponentTypeProvider.GetAll())
             {
-                foreach (var attribute in component.Type.GetCustomAttributes<ScriptAttribute>())
+                var componentAttribute = type.GetCustomAttribute<ComponentAttribute>();
+
+                foreach (var scriptAttribute in type.GetCustomAttributes<ScriptAttribute>())
                 {
-                    if (attribute.Path.StartsWith("/"))
+                    if (scriptAttribute.Path.StartsWith("/"))
                     {
-                        throw new AbsoluteScriptPathException(component.Type, attribute.Path);
+                        throw new AbsoluteScriptPathException(type, scriptAttribute.Path);
                     }
 
-                    result.Add(new ScriptDescriptor(component.Id, attribute.Path));
+                    result.Add(new ScriptDescriptor(componentAttribute.Id, scriptAttribute.Path));
                 }
             }
 

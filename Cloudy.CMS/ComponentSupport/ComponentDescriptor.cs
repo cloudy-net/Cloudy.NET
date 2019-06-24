@@ -11,16 +11,12 @@ namespace Poetry.ComponentSupport
     public class ComponentDescriptor
     {
         public string Id { get; }
-        public Type Type { get; }
         public AssemblyWrapper Assembly { get; }
-        public IEnumerable<string> Dependencies { get; }
 
-        public ComponentDescriptor(string id, Type type, AssemblyWrapper assembly, IEnumerable<string> dependencies)
+        public ComponentDescriptor(string id, AssemblyWrapper assembly)
         {
             Id = id;
-            Type = type;
             Assembly = assembly;
-            Dependencies = dependencies.ToList().AsReadOnly();
         }
     }
 }

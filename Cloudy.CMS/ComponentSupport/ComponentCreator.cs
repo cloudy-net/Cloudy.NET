@@ -5,10 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Poetry.ComponentSupport.MissingComponentAttributeCheckerSupport;
-using Poetry.ComponentSupport.MissingComponentDependencyCheckerSupport;
 using Poetry.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
 using Poetry.ComponentSupport.DuplicateComponentIdCheckerSupport;
-using Poetry.ComponentSupport.DependencySupport;
+using Cloudy.CMS.ComponentSupport;
 
 namespace Poetry.ComponentSupport
 {
@@ -16,21 +15,19 @@ namespace Poetry.ComponentSupport
     {
         ILogger<ComponentCreator> Logger { get; }
         IComponentTypeProvider ComponentTypeProvider { get; }
+        IComponentAssemblyProvider ComponentAssemblyProvider { get; }
         IMissingComponentAttributeChecker MissingComponentAttributeChecker { get; }
-        IMissingComponentDependencyChecker MissingComponentDependencyChecker { get; }
         IMultipleComponentsInSingleAssemblyChecker MultipleComponentsInSingleAssemblyChecker { get; }
         IDuplicateComponentIdChecker DuplicateComponentIdChecker { get; }
-        IComponentDependencyCreator ComponentDependencyCreator { get; }
 
-        public ComponentCreator(ILogger<ComponentCreator> logger, IComponentTypeProvider componentTypeProvider, IMissingComponentAttributeChecker missingComponentAttributeChecker, IMissingComponentDependencyChecker missingComponentDependencyChecker, IMultipleComponentsInSingleAssemblyChecker multipleComponentsInSingleAssemblyChecker, IDuplicateComponentIdChecker duplicateComponentIdChecker, IComponentDependencyCreator componentDependencyCreator)
+        public ComponentCreator(ILogger<ComponentCreator> logger, IComponentTypeProvider componentTypeProvider, IComponentAssemblyProvider componentAssemblyProvider, IMissingComponentAttributeChecker missingComponentAttributeChecker, IMultipleComponentsInSingleAssemblyChecker multipleComponentsInSingleAssemblyChecker, IDuplicateComponentIdChecker duplicateComponentIdChecker)
         {
             Logger = logger;
             ComponentTypeProvider = componentTypeProvider;
+            ComponentAssemblyProvider = componentAssemblyProvider;
             MissingComponentAttributeChecker = missingComponentAttributeChecker;
-            MissingComponentDependencyChecker = missingComponentDependencyChecker;
             MultipleComponentsInSingleAssemblyChecker = multipleComponentsInSingleAssemblyChecker;
             DuplicateComponentIdChecker = duplicateComponentIdChecker;
-            ComponentDependencyCreator = componentDependencyCreator;
         }
 
         public IEnumerable<ComponentDescriptor> Create()
@@ -38,7 +35,6 @@ namespace Poetry.ComponentSupport
             var types = ComponentTypeProvider.GetAll();
 
             MissingComponentAttributeChecker.Check(types);
-            MissingComponentDependencyChecker.Check(types);
             MultipleComponentsInSingleAssemblyChecker.Check(types);
             DuplicateComponentIdChecker.Check(types);
 
@@ -48,7 +44,16 @@ namespace Poetry.ComponentSupport
             {
                 var componentId = type.GetCustomAttribute<ComponentAttribute>().Id;
 
-                result.Add(new ComponentDescriptor(componentId, type, new AssemblyWrapper(type.Assembly), ComponentDependencyCreator.Create(type)));
+                result.Add(new ComponentDescriptor(componentId, new AssemblyWrapper(type.Assembly)));
+            }
+
+            foreach(var assembly in ComponentAssemblyProvider.GetAll())
+            {
+                if(result.Any(c => c.Assembly.Equals(assembly))) {
+                    continue;
+                }
+
+                result.Add(new ComponentDescriptor(assembly.FullName, new AssemblyWrapper(assembly)));
             }
 
             if (Logger.IsEnabled(LogLevel.Information))

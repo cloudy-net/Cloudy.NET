@@ -8,18 +8,30 @@ namespace Poetry.UI.StyleSupport
 {
     public class StyleCreator : IStyleCreator
     {
-        public IEnumerable<StyleDescriptor> Create(ComponentDescriptor component)
+        IComponentTypeProvider ComponentTypeProvider { get; }
+
+        public StyleCreator(IComponentTypeProvider componentTypeProvider)
+        {
+            ComponentTypeProvider = componentTypeProvider;
+        }
+
+        public IEnumerable<StyleDescriptor> Create()
         {
             var result = new List<StyleDescriptor>();
 
-            foreach(var attribute in component.Type.GetCustomAttributes<StyleAttribute>())
+            foreach (var type in ComponentTypeProvider.GetAll())
             {
-                if (attribute.Path.StartsWith("/"))
+                var componentAttribute = type.GetCustomAttribute<ComponentAttribute>();
+
+                foreach (var scriptAttribute in type.GetCustomAttributes<StyleAttribute>())
                 {
-                    throw new AbsoluteStylePathException(component.Type, attribute.Path);
+                    if (scriptAttribute.Path.StartsWith("/"))
+                    {
+                        throw new AbsoluteStylePathException(type, scriptAttribute.Path);
+                    }
+
+                    result.Add(new StyleDescriptor(componentAttribute.Id, scriptAttribute.Path));
                 }
-                
-                result.Add(new StyleDescriptor(attribute.Path));
             }
 
             return result.AsReadOnly();

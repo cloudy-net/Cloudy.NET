@@ -8,16 +8,16 @@ namespace Poetry.UI.StyleSupport
 {
     public class StyleProvider : IStyleProvider
     {
-        IDictionary<string, IEnumerable<StyleDescriptor>> Styles { get; }
+        IEnumerable<StyleDescriptor> Styles { get; }
 
-        public StyleProvider(IComponentProvider componentProvider, IStyleCreator styleCreator)
+        public StyleProvider(IStyleCreator styleCreator)
         {
-            Styles = componentProvider.GetAll().ToDictionary(c => c.Id, c => (IEnumerable<StyleDescriptor>)styleCreator.Create(c).ToList().AsReadOnly());
+            Styles = styleCreator.Create().ToList().AsReadOnly();
         }
 
-        public IEnumerable<StyleDescriptor> GetAllFor(ComponentDescriptor component)
+        public IEnumerable<StyleDescriptor> GetAll()
         {
-            return Styles[component.Id];
+            return Styles;
         }
     }
 }
