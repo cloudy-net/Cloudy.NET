@@ -72,9 +72,52 @@ class ListContentTypesBlade extends Blade {
 
 
 
+/* LIST CONTENT BLADE */
+
+class ListContentBlade extends Blade {
+    constructor(app, contentType) {
+        super();
+
+        this.setTitle(contentType.pluralName);
+
+        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
+
+        var dataTable = new DataTable().setBackend(`Cloudy.CMS.ContentList[type=${contentType.id}]`);
+
+        dataTable.addColumn(c =>
+            c.setHeader(element => contentType.isNameable ? 'name' : 'id').setButton(item => {
+                var button = new DataTableButton(contentType.isNameable ? item.name : item.id);
+
+                formBuilder.fieldModels.then(fieldModels =>
+                    button.onClick(() => {
+                        button.setActive();
+                        app.openBlade(new EditContentBlade(app, contentType, formBuilder, item).onSave(() => dataTable.update()).onClose(() => button.setActive(false)), this);
+                    })
+                );
+
+                return button;
+            })
+        );
+
+        this.setToolbar(
+            new Button('New').onClick(() =>
+                formBuilder.fieldModels.then(fieldModels =>
+                    app.openBlade(new EditContentBlade(app, contentType, formBuilder).onClose(message => { if (message == 'saved') { dataTable.update(); } }), this)
+                )
+            )
+        );
+
+        this.setContent(dataTable);
+    }
+}
+
+
+
 /* EDIT CONTENT */
 
 class EditContentBlade extends Blade {
+    onSaveCallbacks = [];
+
     constructor(app, contentType, formBuilder, item) {
         super();
 
@@ -125,18 +168,19 @@ class EditContentBlade extends Blade {
             }
 
             var save = () =>
-                fetch('Cloudy.CMS.UI/ContentApp/Save', {
+                fetch('ContentApp/Save', {
                     credentials: 'include',
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        Id: item.id,
-                        ContentTypeId: contentType.id,
+                        id: item.id,
+                        contentTypeId: contentType.id,
                         item: item
                     })
-                });
+                })
+                .then(() => this.onSaveCallbacks.forEach(callback => callback(item)));
 
             saveButton.onClick(() => save()).setDisabled(false);
             cancelButton.setDisabled(false);
@@ -167,6 +211,12 @@ class EditContentBlade extends Blade {
             init({});
         }
     }
+
+    onSave(callback) {
+        this.onSaveCallbacks.push(callback);
+
+        return this;
+    }
 }
 
 
@@ -184,46 +234,5 @@ class EditPropertyGroupBlade extends Blade {
         );
 
         formPromise.then(form => this.setContent(form));
-    }
-}
-
-
-
-/* LIST CONTENT BLADE */
-
-class ListContentBlade extends Blade {
-    constructor(app, contentType) {
-        super();
-
-        this.setTitle(contentType.pluralName);
-
-        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-
-        var dataTable = new DataTable().setBackend(`Cloudy.CMS.ContentList[type=${contentType.id}]`);
-
-        dataTable.addColumn(c =>
-            c.setHeader(element => contentType.isNameable ? 'name' : 'id').setButton(item => {
-                var button = new DataTableButton(contentType.isNameable ? item.name : item.id);
-
-                formBuilder.fieldModels.then(fieldModels =>
-                    button.onClick(() => {
-                        button.setActive();
-                        app.openBlade(new EditContentBlade(app, contentType, formBuilder, item).onClose(message => { if (message == 'saved') { dataTable.update(); } }).onClose(() => button.setActive(false)), this);
-                    })
-                );
-
-                return button;
-            })
-        );
-
-        this.setToolbar(
-            new Button('New').onClick(() =>
-                formBuilder.fieldModels.then(fieldModels =>
-                    app.openBlade(new EditContentBlade(app, contentType, formBuilder).onClose(message => { if (message == 'saved') { dataTable.update(); } }), this)
-                )
-            )
-        );
-
-        this.setContent(dataTable);
     }
 }
