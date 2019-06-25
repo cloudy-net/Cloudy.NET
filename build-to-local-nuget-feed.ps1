@@ -18,7 +18,7 @@ if(!($tag -match "^\d+\.\d+(\.\d+)?$")){
     throw "Version tag must contain two (like v1.0) or three numerical segments (like v1.0.0), was `"v" + $tag + "`"";
 }
 
-if($tag -match "\d+\.\d+"){
+if($tag -match "^\d+\.\d+$"){
     $tag = "$tag.0";
 }
 
