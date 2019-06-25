@@ -24,7 +24,7 @@ if($tag -match "^\d+\.\d+$"){
 
 $build_version = 1;
 
-foreach($project_file in Get-ChildItem -File -Filter *.csproj -Recurse -Depth 2 -Exclude Website.*,Tests.*) {
+foreach($project_file in Get-ChildItem -File -Filter *.csproj -Recurse -Depth 2 -Exclude Website.*,Tests.*,Cloudy.CMS.MongoDB.Integrations.JsonDotNet) {
     $package_id = [System.IO.Path]::GetFileNameWithoutExtension($project_file.Name);
 
     $latest_package_name = Get-ChildItem -Path $nuget_path -File | Where-Object { $_.Name -match "^$package_id\.$tag\.\d+\.nupkg$" } | Sort-Object -Property @{Expression={$_.Name.Substring($package_id.Length).Split(".")[4] -as [int]}} -Descending;
