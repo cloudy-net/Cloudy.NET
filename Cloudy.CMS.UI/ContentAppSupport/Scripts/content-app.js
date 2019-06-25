@@ -102,7 +102,7 @@ class ListContentBlade extends Blade {
         this.setToolbar(
             new Button('New').onClick(() =>
                 formBuilder.fieldModels.then(fieldModels =>
-                    app.openBlade(new EditContentBlade(app, contentType, formBuilder).onClose(message => { if (message == 'saved') { dataTable.update(); } }), this)
+                    app.openBlade(new EditContentBlade(app, contentType, formBuilder).onSave(() => dataTable.update()), this)
                 )
             )
         );
