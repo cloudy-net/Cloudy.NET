@@ -61,8 +61,41 @@ class Blade {
         items.forEach(item => this.footer.append(item.element || item));
     }
 
+    open() {
+        return new Promise(done => {
+            this.element.classList.add('poetry-ui-hidden');
+            this.element.getBoundingClientRect(); // force reflow
+
+            this.element.classList.remove('poetry-ui-hidden');
+            this.element.style.zIndex = -1;
+
+            var callback = () => {
+                this.element.style.zIndex = '';
+                this.element.removeEventListener('transitionend', callback);
+                done();
+            }
+
+            this.element.addEventListener('transitionend', callback);
+        });
+    }
+
     close(...parameters) {
-        this.element.dispatchEvent(new CustomEvent('poetry-ui-close-blade', { bubbles: true, detail: { blade: this, parameters: parameters } }));
+        return new Promise(done => {
+            this.element.classList.add('poetry-ui-hidden');
+
+            if (!this.element.style.zIndex) {
+                this.element.style.zIndex = -1;
+            }
+
+            var callback = () => {
+                this.triggerOnClose(...parameters);
+                this.element.removeEventListener('transitionend', callback);
+                this.element.style.zIndex = '';
+                done();
+            }
+
+            this.element.addEventListener('transitionend', callback);
+        });
     }
 
     onClose(callback) {

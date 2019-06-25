@@ -13,6 +13,6 @@ import notificationManager from '../../NotificationSupport/Scripts/notification-
 
 class ContentApp extends App {
     open() {
-        //this.openBlade(new ListContentTypesBlade(this));
+        //this.open(new ListContentTypesBlade(this));
     }
 };

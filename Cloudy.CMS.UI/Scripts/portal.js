@@ -25,19 +25,17 @@ class Portal {
 
         history.pushState(null, null, `#${appDescriptor.id}`);
 
+        var open = app => {
+            this.element.insertBefore(app.element, this.element.firstChild);
+            app.openStartBlade();
+        }
+
         if (this.apps[appDescriptor.id]) {
-            this.element.appendChild(app.element);
+            open(this.apps[appDescriptor.id]);
             return;
         }
 
-        import(`../../${appDescriptor.modulePath}`)
-            .then(module => {
-                var app = new module.default();
-
-                this.element.insertBefore(app.element, this.element.firstChild);
-
-                app.open();
-            });
+        import(`../../${appDescriptor.modulePath}`).then(module => open(new module.default()));
     }
 }
 

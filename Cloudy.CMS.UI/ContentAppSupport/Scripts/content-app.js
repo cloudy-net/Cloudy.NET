@@ -14,8 +14,9 @@ import notificationManager from '../../NotificationSupport/Scripts/notification-
 /* APP */
 
 class ContentApp extends App {
-    open() {
-        this.openBlade(new ListContentTypesBlade(this));
+    constructor() {
+        super();
+        this.open(new ListContentTypesBlade(this));
     }
 };
 
@@ -48,7 +49,7 @@ class ListContentTypesBlade extends Blade {
 
                         Promise.all([formBuilder.fieldModels, item]).then(results =>
                             button.onClick(() =>
-                                app.openBlade(
+                                app.openAfter(
                                     new EditContentBlade(
                                         app,
                                         contentType,
@@ -60,7 +61,7 @@ class ListContentTypesBlade extends Blade {
                         );
                     } else {
                         button.onClick(() =>
-                            app.openBlade(new ListContentBlade(app, contentType).onClose(() => button.setActive(false)), this)
+                            app.openAfter(new ListContentBlade(app, contentType).onClose(() => button.setActive(false)), this)
                         );
                     }
 
@@ -91,7 +92,7 @@ class ListContentBlade extends Blade {
                 formBuilder.fieldModels.then(fieldModels =>
                     button.onClick(() => {
                         button.setActive();
-                        app.openBlade(new EditContentBlade(app, contentType, formBuilder, item).onSave(() => dataTable.update()).onClose(() => button.setActive(false)), this);
+                        app.openAfter(new EditContentBlade(app, contentType, formBuilder, item).onSave(() => dataTable.update()).onClose(() => button.setActive(false)), this);
                     })
                 );
 
@@ -102,7 +103,7 @@ class ListContentBlade extends Blade {
         this.setToolbar(
             new Button('New').onClick(() =>
                 formBuilder.fieldModels.then(fieldModels =>
-                    app.openBlade(new EditContentBlade(app, contentType, formBuilder).onSave(() => dataTable.update()), this)
+                    app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => dataTable.update()), this)
                 )
             )
         );
@@ -132,7 +133,7 @@ class EditContentBlade extends Blade {
         }
 
         var saveButton = new Button('Save').setDisabled();
-        var cancelButton = new Button('Cancel').onClick(() => app.closeBlade(this)).setDisabled();
+        var cancelButton = new Button('Cancel').onClick(() => app.close(this)).setDisabled();
 
         this.setFooter(saveButton, cancelButton);
 
@@ -195,7 +196,7 @@ class EditContentBlade extends Blade {
 
                                 button.onClick(() => {
                                     button.setActive();
-                                    app.openBlade(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content').onClose(() => button.setActive(false)), this)
+                                    app.openAfter(new EditPropertyGroupBlade(app, formBuilder.build(item, { group: group }), group || 'Content').onClose(() => button.setActive(false)), this)
                                 });
 
                                 return button;
@@ -230,7 +231,7 @@ class EditPropertyGroupBlade extends Blade {
         this.setTitle(title);
 
         this.setFooter(
-            new Button('Close').onClick(() => app.closeBlade(this)),
+            new Button('Close').onClick(() => app.close(this)),
         );
 
         formPromise.then(form => this.setContent(form));

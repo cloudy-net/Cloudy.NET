@@ -7,135 +7,82 @@ class App {
     constructor() {
         this.blades = [];
         this.element = document.createElement('poetry-ui-app');
-        this.element.addEventListener('poetry-ui-close-blade', event => this.closeBlade.apply(this, [event.detail.blade, ...event.detail.parameters]));
+        this.element.addEventListener('poetry-ui-close-blade', event => this.close.apply(this, [event.detail.blade, ...event.detail.parameters]));
     }
 
-    open() {
-
-    }
-
-    openBlade(blade, parentBlade) {
-        if (parentBlade instanceof HTMLElement) {
-            parentBlade = this.blades.find(b => b.element.contains(parentBlade));
+    open(blade) {
+        if (!this.element.parentElement) {
+            this.startBlade = blade;
+            return;
         }
 
-        if (parentBlade && this.blades.indexOf(parentBlade) == -1) {
-            throw 'Blade not found';
-        }
+        this.element.appendChild(blade.element);
+        this.blades.push(blade);
 
-        var done;
-        var promise = new Promise(resolve => done = resolve);
-
-        var open = () => {
-            this.element.appendChild(blade.element);
-
-            blade.element.classList.add('poetry-ui-hidden');
-            blade.element.getBoundingClientRect(); // force reflow
-
-            if (parentBlade) {
-                parentBlade.element.scrollIntoView({
-                    behavior: 'smooth',
-                    inline: 'start',
-                });
-            }
-
-            blade.element.classList.remove('poetry-ui-hidden');
-            blade.element.style.zIndex = -1;
-
-            blade.element.addEventListener('transitionend', callback);
-
-            function callback() {
-                blade.element.style.zIndex = '';
-
-                blade.element.removeEventListener('transitionend', callback);
-
-                done();
-            }
-
-            this.blades.push(blade);
-
-            done();
-        }
-
-        var bladesAfterParentBlade = parentBlade ? this.blades.slice(this.blades.indexOf(parentBlade) + 1) : [];
-
-        if (bladesAfterParentBlade.length) {
-            bladesAfterParentBlade.forEach(blade => {
-                blade.triggerOnClose();
-                blade.element.remove();
-
-                this.blades.splice(this.blades.indexOf(blade), 1);
-            });
-
-            this.element.appendChild(blade.element);
-            this.blades.push(blade);
-
-            done();
-        } else {
-            open();
-        }
-
-        return promise;
-    }
-
-    closeBlade(arg, ...parameters) {
-        if (!arg) {
-            throw 'No blade specified';
-        }
-
-        var index = this.blades.indexOf(arg);
-
-        if (index == -1) {
-            index = this.blades.findIndex(b => b.element == arg);
-        }
-
-        if (index == -1) {
-            throw 'Blade not found';
-        }
-
-        var scrollToBlade = this.blades[index - 2] || this.blades[index - 1];
-
-        if (scrollToBlade) {
-            scrollToBlade.element.scrollIntoView({
+        if (this.blades.length > 2) {
+            this.blades[this.blades.length - 2].element.scrollIntoView({
                 behavior: 'smooth',
                 inline: 'start',
             });
         }
 
-        var done;
-        var promise = new Promise(resolve => done = resolve);
+        return blade.open();
+    }
 
-        var blades = this.blades.slice(index);
-
-        blades.forEach((blade, i) => blade.element.style.zIndex = -(1 + i));
-
-        blades
-            .reverse()
-            .forEach((blade, i) => {
-                setTimeout(() => {
-                    blade.element.classList.add('poetry-ui-hidden');
-
-                    blade.element.addEventListener('transitionend', () => {
-                        if (i == blades.length - 1) {
-                            blade.triggerOnClose(...parameters);
-                            done();
-                        } else {
-                            blade.triggerOnClose();
-                        }
-
-                        blade.element.remove();
-                    });
-
-                }, i * 200);
-
-                this.blades.splice(this.blades.indexOf(blade), 1);
-            });
-
-        if (index == 0) {
-            promise.then(() => this.element.remove());
+    openStartBlade() {
+        if (!this.startBlade) {
+            return;
         }
 
-        return promise;
+        this.open(this.startBlade);
+    }
+
+    openAfter(blade, parentBlade) {
+        return this.closeAfter(parentBlade).then(() => this.open(blade));
+    }
+
+    close(blade) {
+        var index = this.blades.indexOf(blade);
+
+        if (index > 1) {
+            this.blades[index - 2].element.scrollIntoView({
+                behavior: 'smooth',
+                inline: 'start',
+            });
+        }
+
+        return this.closeAfter(blade).then(() => blade.close().then(() => {
+            blade.element.remove();
+            this.blades.splice(this.blades.indexOf(blade), 1);
+        }));
+    }
+
+    closeAfter(blade) {
+        var index = this.blades.indexOf(blade);
+
+        if (index == this.blades.length - 1) {
+            return Promise.resolve();
+        }
+
+        var blades = this.blades.slice(index + 1);
+
+        blades.forEach((b, i) => b.element.style.zIndex = -(1 + i));
+
+        var promises = blades
+            .reverse()
+            .map((b, i) => new Promise(done => {
+                setTimeout(() => blade.close().then(() => {
+                    blade.element.remove();
+                    this.blades.splice(this.blades.indexOf(blade), 1);
+                    done();
+                }), i * 200);
+            }));
+
+        return Promise.all(promises);
+    }
+
+    getBladeByElement(element) {
+        return this.blades.find(b => b.element == element);
     }
 }
 

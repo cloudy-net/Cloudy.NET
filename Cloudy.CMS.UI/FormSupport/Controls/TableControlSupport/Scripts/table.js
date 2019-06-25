@@ -65,11 +65,11 @@ class SortableTableControl extends Sortable {
                 .setShrink()
                 .setContent(item =>
                     new ContextMenu()
-                        .addItem(menuItem => menuItem.setText('Edit').onClick(() => app.openBlade(new EditRow(formBuilder, item).onClose(message => { if (message == 'saved') { dataTable.update(); } }), dataTable.element)))
+                        .addItem(menuItem => menuItem.setText('Edit').onClick(() => app.open(new EditRow(formBuilder, item).onClose(message => { if (message == 'saved') { dataTable.update(); } }), dataTable.element)))
                         .addItem(menuItem => menuItem.setText('Remove').onClick(() => { target.splice(target.indexOf(item), 1); dataTable.update(); }))
                 )
             )
-            .setFooter(new Button('Add').onClick(() => app.openBlade(new NewRow(formBuilder).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } }), dataTable.element)));
+            .setFooter(new Button('Add').onClick(() => app.open(new NewRow(formBuilder).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } }), dataTable.element)));
 
         dataTable.paging.remove();
 
