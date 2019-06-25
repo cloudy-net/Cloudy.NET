@@ -96,7 +96,7 @@ class FormBuilder {
 
         var heading = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
         heading.classList.add('poetry-ui-form-field-label');
-        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.id;
+        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
         element.appendChild(heading);
 
         if (fieldModel.descriptor.isSortable) {
@@ -108,11 +108,11 @@ class FormBuilder {
 
     buildSingularField(fieldModel, target, element) {
         if (fieldModel.descriptor.embeddedFormId) {
-            if (!target[fieldModel.descriptor.id]) {
-                target[fieldModel.descriptor.id] = {};
+            if (!target[fieldModel.descriptor.camelCaseId]) {
+                target[fieldModel.descriptor.camelCaseId] = {};
             }
 
-            var form = this.buildEmbeddedForm(fieldModel, target[fieldModel.descriptor.id]);
+            var form = this.buildEmbeddedForm(fieldModel, target[fieldModel.descriptor.camelCaseId]);
 
             element.appendChild(form.element);
 
@@ -125,9 +125,9 @@ class FormBuilder {
     buildSimpleField(fieldModel, target, element) {
         element.classList.add('poetry-ui-simple');
 
-        var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.id], this.app);
+        var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app);
 
-        control.onChange(value => target[fieldModel.descriptor.id] = value);
+        control.onChange(value => target[fieldModel.descriptor.camelCaseId] = value);
 
         element.appendChild(control.element);
 
@@ -135,20 +135,20 @@ class FormBuilder {
     }
 
     buildSortableField(fieldModel, target, element) {
-        if (!target[fieldModel.descriptor.id]) {
-            target[fieldModel.descriptor.id] = [];
+        if (!target[fieldModel.descriptor.camelCaseId]) {
+            target[fieldModel.descriptor.camelCaseId] = [];
         }
 
         var sortable;
 
         if (fieldModel.descriptor.embeddedFormId) {
             if (fieldModel.descriptor.control) {
-                sortable = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.id], this.app);
+                sortable = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app);
             } else {
-                sortable = this.buildSortableEmbeddedForm(fieldModel, target[fieldModel.descriptor.id]);
+                sortable = this.buildSortableEmbeddedForm(fieldModel, target[fieldModel.descriptor.camelCaseId]);
             }
         } else {
-            sortable = this.buildSortableSimpleField(fieldModel, target[fieldModel.descriptor.id]);
+            sortable = this.buildSortableSimpleField(fieldModel, target[fieldModel.descriptor.camelCaseId]);
         }
 
         element.appendChild(sortable.element);

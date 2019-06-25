@@ -17,21 +17,21 @@
     getObject(fields, target) {
         var result = {};
 
-        fields.forEach(field => result[field.model.descriptor.id] = this.getField(field, target));
+        fields.forEach(field => result[field.model.descriptor.camelCaseId] = this.getField(field, target));
 
         return result;
     }
 
     getField(field, target) {
         if (field.model.descriptor.isSortable) {
-            return this.getSortableField(field, target[field.model.descriptor.id]);
+            return this.getSortableField(field, target[field.model.descriptor.camelCaseId]);
         }
 
         if (field.model.descriptor.embeddedFormId) {
-            return this.getObject(field.data.form.fields, target[field.model.descriptor.id]);
+            return this.getObject(field.data.form.fields, target[field.model.descriptor.camelCaseId]);
         }
 
-        return target[field.model.descriptor.id];
+        return target[field.model.descriptor.camelCaseId];
     }
 
     getSortableField(field, target) {
@@ -59,19 +59,19 @@
     updateFields(fields, target, value) {
         fields.forEach(field => {
             if (field.model.descriptor.isSortable) {
-                this.updateSortable(field, target[field.model.descriptor.id], value[field.model.descriptor.id]);
+                this.updateSortable(field, target[field.model.descriptor.camelCaseId], value[field.model.descriptor.camelCaseId]);
 
                 return;
             }
 
             if (field.model.descriptor.embeddedFormId) {
-                this.updateFields(field.data.form.fields, target[field.model.descriptor.id], value[field.model.descriptor.id]);
+                this.updateFields(field.data.form.fields, target[field.model.descriptor.camelCaseId], value[field.model.descriptor.camelCaseId]);
 
                 return;
             }
 
-            target[field.model.descriptor.id] = value[field.model.descriptor.id];
-            field.data.control.triggerSet(value[field.model.descriptor.id]);
+            target[field.model.descriptor.camelCaseId] = value[field.model.descriptor.camelCaseId];
+            field.data.control.triggerSet(value[field.model.descriptor.camelCaseId]);
         });
     }
 
