@@ -1,4 +1,4 @@
-﻿@import '../../Poetry.UI/Styles/variables.scss';
+﻿@import '../../Styles/variables.scss';
 
 
 
@@ -6,30 +6,6 @@
 
 .poetry-ui-form {
     margin-bottom: 20px;
-}
-
-
-
-/* HEADING */
-
-.poetry-ui-form-heading-outer {
-    display: flex;
-    
-    .poetry-ui-form-heading {
-        flex: 1 1 auto;
-    }
-}
-
-.poetry-ui-form-heading {
-    margin: 0 2px 10px;
-    padding: 0;
-    font-size: inherit;
-    font-weight: inherit;
-    text-transform: uppercase;
-
-    &:empty:before {
-        content: '\00a0'; // &nbsp;
-    }
 }
 
 
@@ -55,7 +31,7 @@ fieldset.poetry-ui-form-field {
 /* LABEL */
 
 .poetry-ui-form-field-label {
-    margin: 0 2px 5px;
+    margin: 0 2px 4px;
     display: block;
     padding: 0;
     font-size: $small-font;

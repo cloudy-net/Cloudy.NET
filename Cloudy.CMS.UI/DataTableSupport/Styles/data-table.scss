@@ -1,4 +1,4 @@
-﻿@import '../../Poetry.UI/Styles/variables.scss';
+﻿@import '../../Styles/variables.scss';
 
 
 
@@ -18,6 +18,14 @@ poetry-ui-data-table {
         padding-right: 0;
         border-bottom: solid 1px $light-gray;
         font-size: $small-font;
+    }
+
+    thead tr:first-child {
+        td, th {
+            &:first-child {
+                padding-top: 0;
+            }
+        }
     }
 
     th {

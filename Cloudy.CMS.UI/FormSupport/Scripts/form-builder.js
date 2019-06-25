@@ -63,19 +63,6 @@ class FormBuilder {
 
             form.element.classList.add('poetry-ui-form');
 
-            var headingContainer = document.createElement('div');
-            headingContainer.classList.add('poetry-ui-form-heading-outer');
-            form.element.insertBefore(headingContainer, form.element.firstChild);
-
-            var heading = document.createElement('h2');
-            heading.classList.add('poetry-ui-form-heading');
-            headingContainer.appendChild(heading);
-
-            new ContextMenu()
-                .addItem(item => item.setText('Copy').onClick(() => form.copy()))
-                .addItem(item => item.setText('Paste').onClick(() => form.paste()))
-                .appendTo(headingContainer);
-
             return form;
         });
     }
