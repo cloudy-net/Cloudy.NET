@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 using Poetry.UI.FormSupport.ControlSupport;
 using Poetry.UI.FormSupport.ControlSupport.MatchingSupport;
 using System;
@@ -15,6 +16,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
         IFormProvider FormProvider { get; }
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
+        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
 
         public FieldApiController(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher)
         {
@@ -46,6 +48,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
                 result.Add(new FieldResponse
                 {
                     Id = field.Id,
+                    CamelCaseId = CamelCaseNamingStrategy.GetPropertyName(field.Id, false),
                     Control = control,
                     EmbeddedFormId = embeddedFormId?.Id,
                     IsSortable = field.IsSortable,
@@ -59,6 +62,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
         public class FieldResponse
         {
             public string Id { get; set; }
+            public string CamelCaseId { get; set; }
             public ControlReference Control { get; set; }
             public string EmbeddedFormId { get; set; }
             public bool IsSortable { get; set; }
