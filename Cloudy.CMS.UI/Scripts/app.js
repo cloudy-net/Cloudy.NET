@@ -71,9 +71,9 @@ class App {
         var promises = blades
             .reverse()
             .map((b, i) => new Promise(done => {
-                setTimeout(() => blade.close().then(() => {
-                    blade.element.remove();
-                    this.blades.splice(this.blades.indexOf(blade), 1);
+                setTimeout(() => b.close().then(() => {
+                    b.element.remove();
+                    this.blades.splice(this.blades.indexOf(b), 1);
                     done();
                 }), i * 200);
             }));
