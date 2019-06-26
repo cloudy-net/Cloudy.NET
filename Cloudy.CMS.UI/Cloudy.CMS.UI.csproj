@@ -17,8 +17,93 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="**\*.js" />
-    <EmbeddedResource Include="**\*.css" />
+    <None Remove="ChangesAppSupport\Scripts\changes-app.js" />
+    <None Remove="ContentAppSupport\Scripts\content-app.js" />
+    <None Remove="ContextMenuSupport\Scripts\context-menu.js" />
+    <None Remove="ContextMenuSupport\Styles\context-menu.css" />
+    <None Remove="ControlMessageSupport\Scripts\control-message.js" />
+    <None Remove="ControlMessageSupport\Styles\control-message.css" />
+    <None Remove="DataTableSupport\Scripts\backend.js" />
+    <None Remove="DataTableSupport\Scripts\copy-as-tab-separated.js" />
+    <None Remove="DataTableSupport\Scripts\data-table-button.js" />
+    <None Remove="DataTableSupport\Scripts\data-table.js" />
+    <None Remove="DataTableSupport\Styles\data-table.css" />
+    <None Remove="FormSupport\Controls\CheckboxSupport\Scripts\checkbox.js" />
+    <None Remove="FormSupport\Controls\DropdownControlSupport\Scripts\dropdown-control.js" />
+    <None Remove="FormSupport\Controls\TableControlSupport\Scripts\table.js" />
+    <None Remove="FormSupport\Controls\TextareaSupport\Scripts\textarea.js" />
+    <None Remove="FormSupport\Controls\TextControlSupport\Scripts\text-control.js" />
+    <None Remove="FormSupport\Controls\TimeControlSupport\Scripts\time.js" />
+    <None Remove="FormSupport\Scripts\field-control-provider.js" />
+    <None Remove="FormSupport\Scripts\field-control.js" />
+    <None Remove="FormSupport\Scripts\field-descriptor-provider.js" />
+    <None Remove="FormSupport\Scripts\field-model.js" />
+    <None Remove="FormSupport\Scripts\field.js" />
+    <None Remove="FormSupport\Scripts\form-builder.js" />
+    <None Remove="FormSupport\Scripts\form.js" />
+    <None Remove="FormSupport\Scripts\sortable-item.js" />
+    <None Remove="FormSupport\Scripts\sortable.js" />
+    <None Remove="FormSupport\Styles\form-elements.css" />
+    <None Remove="NaggingSupport\nagging.js" />
+    <None Remove="NotificationSupport\Scripts\notification-manager.js" />
+    <None Remove="NotificationSupport\Scripts\notification.js" />
+    <None Remove="NotificationSupport\Styles\notification-manager.css" />
+    <None Remove="Scripts\app.js" />
+    <None Remove="Scripts\blade.js" />
+    <None Remove="Scripts\button.js" />
+    <None Remove="Scripts\close-button.js" />
+    <None Remove="Scripts\link-button.js" />
+    <None Remove="Scripts\nav.js" />
+    <None Remove="Scripts\portal.js" />
+    <None Remove="Scripts\remove-element-listener.js" />
+    <None Remove="SitesAppSupport\Scripts\sites-app.js" />
+    <None Remove="Styles\portal.css" />
+    <None Remove="TreeAppSupport\Scripts\tree-app.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ChangesAppSupport\Scripts\changes-app.js" />
+    <EmbeddedResource Include="ContentAppSupport\Scripts\content-app.js" />
+    <EmbeddedResource Include="ContextMenuSupport\Scripts\context-menu.js" />
+    <EmbeddedResource Include="ContextMenuSupport\Styles\context-menu.css" />
+    <EmbeddedResource Include="ControlMessageSupport\Scripts\control-message.js" />
+    <EmbeddedResource Include="ControlMessageSupport\Styles\control-message.css" />
+    <EmbeddedResource Include="DataTableSupport\Scripts\backend.js" />
+    <EmbeddedResource Include="DataTableSupport\Scripts\copy-as-tab-separated.js" />
+    <EmbeddedResource Include="DataTableSupport\Scripts\data-table-button.js" />
+    <EmbeddedResource Include="DataTableSupport\Scripts\data-table.js" />
+    <EmbeddedResource Include="DataTableSupport\Styles\data-table.css" />
+    <EmbeddedResource Include="FormSupport\Controls\CheckboxSupport\Scripts\checkbox.js" />
+    <EmbeddedResource Include="FormSupport\Controls\DropdownControlSupport\Scripts\dropdown-control.js" />
+    <EmbeddedResource Include="FormSupport\Controls\TableControlSupport\Scripts\table.js" />
+    <EmbeddedResource Include="FormSupport\Controls\TextareaSupport\Scripts\textarea.js" />
+    <EmbeddedResource Include="FormSupport\Controls\TextControlSupport\Scripts\text-control.js" />
+    <EmbeddedResource Include="FormSupport\Controls\TimeControlSupport\Scripts\time.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\field-control-provider.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\field-control.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\field-descriptor-provider.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\field-model.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\field.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\form-builder.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\form.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\sortable-item.js" />
+    <EmbeddedResource Include="FormSupport\Scripts\sortable.js" />
+    <EmbeddedResource Include="FormSupport\Styles\form-elements.css" />
+    <EmbeddedResource Include="NaggingSupport\nagging.js" />
+    <EmbeddedResource Include="NotificationSupport\Scripts\notification-manager.js" />
+    <EmbeddedResource Include="NotificationSupport\Scripts\notification.js" />
+    <EmbeddedResource Include="NotificationSupport\Styles\notification-manager.css" />
+    <EmbeddedResource Include="Scripts\app.js" />
+    <EmbeddedResource Include="Scripts\blade.js" />
+    <EmbeddedResource Include="Scripts\button.js" />
+    <EmbeddedResource Include="Scripts\close-button.js" />
+    <EmbeddedResource Include="Scripts\link-button.js" />
+    <EmbeddedResource Include="Scripts\nav.js" />
+    <EmbeddedResource Include="Scripts\portal.js" />
+    <EmbeddedResource Include="Scripts\remove-element-listener.js" />
+    <EmbeddedResource Include="SitesAppSupport\Scripts\sites-app.js" />
+    <EmbeddedResource Include="Styles\portal.css" />
+    <EmbeddedResource Include="TreeAppSupport\Scripts\tree-app.js" />
   </ItemGroup>
 
   <ItemGroup>
