@@ -202,9 +202,45 @@ class EditContentBlade extends Blade {
                     .then(() => this.onSaveCallbacks.forEach(callback => callback(content)))
             );
         var cancelButton = new Button('Cancel').onClick(() => app.close(this));
+        var paste = text => {
+            const value = JSON.parse(text);
+
+            for (let [propertyKey, propertyValue] of Object.entries(content)) {
+                if (propertyKey == 'id') {
+                    continue;
+                }
+
+                if (propertyKey == 'contentTypeId') {
+                    continue;
+                }
+
+                if (propertyKey == 'language') {
+                    continue;
+                }
+
+                if (!(propertyKey in value)) {
+                    delete content[propertyKey];
+                }
+            }
+            for (let [propertyKey, propertyValue] of Object.entries(value)) {
+                if (propertyKey == 'id') {
+                    continue;
+                }
+
+                if (propertyKey == 'contentTypeId') {
+                    continue;
+                }
+
+                if (propertyKey == 'language') {
+                    continue;
+                }
+
+                content[propertyKey] = propertyValue;
+            }
+        };
         var moreButton = new ContextMenu()
             .addItem(item => item.setText('Copy').onClick(() => navigator.clipboard.writeText(JSON.stringify(content, null, '  '))))
-            .addItem(item => item.setText('Paste').onClick(() => { app.closeAfter(this); navigator.clipboard.readText().then(text => content = JSON.parse(text)); }));
+            .addItem(item => item.setText('Paste').onClick(() => { app.closeAfter(this); navigator.clipboard.readText().then(paste); }));
 
         this.setFooter(saveButton, cancelButton, moreButton);
     }
