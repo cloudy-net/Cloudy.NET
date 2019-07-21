@@ -12,17 +12,36 @@
 html {
     transition: font-size 0.2s;
     background: $matte-blue;
+    font-size: 14px;
 }
 
-@media(max-width: (320px - 1)) {
+@media(min-width: $screen-xs) {
     html {
-        font-size: 14px;
+        font-size: 16px;
     }
 }
 
-@media(max-width: (240px - 1)) {
+@media(min-width: $screen-sm) {
     html {
-        font-size: 12px;
+        font-size: 18px;
+    }
+}
+
+@media(min-width: $screen-md) {
+    html {
+        font-size: 20px;
+    }
+}
+
+@media(min-width: $screen-lg) {
+    html {
+        font-size: 22px;
+    }
+}
+
+@media(min-width: $screen-hg) {
+    html {
+        font-size: 24px;
     }
 }
 
