@@ -89,6 +89,7 @@ namespace Cloudy.CMS.UI
                         componentBranch.UseStaticFiles(new StaticFileOptions
                         {
                             FileProvider = new ManifestEmbeddedFileProvider(component.Assembly.Assembly),
+                            OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
                         });
                     });
                 }
