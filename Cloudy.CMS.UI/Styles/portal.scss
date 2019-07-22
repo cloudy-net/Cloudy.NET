@@ -27,21 +27,9 @@ html {
     }
 }
 
-@media(min-width: $screen-md) {
+@media(min-width: $screen-mx) {
     html {
         font-size: 20px;
-    }
-}
-
-@media(min-width: $screen-lg) {
-    html {
-        font-size: 22px;
-    }
-}
-
-@media(min-width: $screen-hg) {
-    html {
-        font-size: 24px;
     }
 }
 
