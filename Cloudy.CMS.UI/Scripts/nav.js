@@ -2,8 +2,10 @@
 class Nav {
     constructor(portal) {
         this.portal = portal;
+        this.element = document.createElement('poetry-ui-portal-nav');
+        document.body.append(this.element);
         this.toggle = document.createElement('poetry-ui-portal-nav-toggle');
-        portal.element.appendChild(this.toggle);
+        this.element.appendChild(this.toggle);
 
         this.toggle.tabIndex = 0;
         var hideToggle = () => {
@@ -12,12 +14,12 @@ class Nav {
             }
 
             this.toggle.classList.remove('poetry-ui-active');
-            this.element.classList.add('poetry-ui-hidden');
+            this.menu.classList.add('poetry-ui-hidden');
         };
         this.toggle.addEventListener('click', () => {
             if (!this.toggle.classList.contains('poetry-ui-active')) {
                 this.toggle.classList.add('poetry-ui-active');
-                this.element.classList.remove('poetry-ui-hidden');
+                this.menu.classList.remove('poetry-ui-hidden');
             } else {
                 hideToggle();
             }
@@ -36,13 +38,13 @@ class Nav {
             }
         });
 
-        this.element = document.createElement('poetry-ui-portal-nav');
-        this.element.classList.add('poetry-ui-hidden');
-        portal.element.append(this.element);
+        this.menu = document.createElement('poetry-ui-portal-nav-menu');
+        this.menu.classList.add('poetry-ui-hidden');
+        this.element.appendChild(this.menu);
 
         this.appDescriptorsPromise = fetch('App/GetAll', { credentials: 'include' }).then(response => response.json());
         this.appDescriptorsPromise.then(appDescriptors => appDescriptors.forEach(appDescriptor => {
-            var item = document.createElement('poetry-ui-portal-nav-item');
+            var item = document.createElement('poetry-ui-portal-nav-menu-item');
 
             item.tabIndex = 0;
             item.innerText = appDescriptor.name;
@@ -57,7 +59,7 @@ class Nav {
                 item.click();
             });
 
-            this.element.appendChild(item);
+            this.menu.appendChild(item);
         }));
 
         if (document.readyState != 'loading') {
@@ -91,8 +93,8 @@ class Nav {
 
     openApp(appDescriptor) {
         this.appDescriptorsPromise.then(() => {
-            [...this.element.querySelectorAll('poetry-ui-portal-nav-item')].forEach(c => c.classList.remove('poetry-ui-active'));
-            this.element.querySelector(`[poetry-ui-app-id="${appDescriptor.id}"]`).classList.add('poetry-ui-active');
+            [...this.menu.querySelectorAll('poetry-ui-portal-nav-item')].forEach(c => c.classList.remove('poetry-ui-active'));
+            this.menu.querySelector(`[poetry-ui-app-id="${appDescriptor.id}"]`).classList.add('poetry-ui-active');
         });
     }
 }

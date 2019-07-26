@@ -26,7 +26,7 @@ class Portal {
         history.pushState(null, null, `#${appDescriptor.id}`);
 
         var open = app => {
-            this.element.insertBefore(app.element, this.element.firstChild);
+            this.element.appendChild(app.element);
             app.openStartBlade();
         }
 
