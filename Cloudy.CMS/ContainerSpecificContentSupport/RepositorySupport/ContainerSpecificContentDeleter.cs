@@ -12,11 +12,11 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 {
     public class ContainerSpecificContentDeleter : IContainerSpecificContentDeleter
     {
-        IContainerProvider ContainerProvider { get; }
+        IDocumentDeleter DocumentDeleter { get; }
 
-        public ContainerSpecificContentDeleter(IContainerProvider containerProvider)
+        public ContainerSpecificContentDeleter(IDocumentDeleter documentDeleter)
         {
-            ContainerProvider = containerProvider;
+            DocumentDeleter = documentDeleter;
         }
 
         public void Delete(string id, string container)
@@ -26,7 +26,7 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 
         public async Task DeleteAsync(string id, string container)
         {
-            await ContainerProvider.Get(container).FindOneAndDeleteAsync(Builders<Document>.Filter.Eq(d => d.Id, id));
+            await DocumentDeleter.DeleteAsync(container, id);
         }
     }
 }

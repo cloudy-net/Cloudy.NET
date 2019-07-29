@@ -7,7 +7,7 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using MongoDB.Integrations.JsonDotNet;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public class DatabaseProvider : IDatabaseProvider
     {

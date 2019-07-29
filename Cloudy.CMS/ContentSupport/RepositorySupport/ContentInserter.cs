@@ -10,15 +10,13 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentInserter : IContentInserter
     {
-        IContainerProvider ContainerProvider { get; }
-        IIdGenerator IdGenerator { get; }
+        IDocumentCreator DocumentCreator { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         IContentSerializer ContentSerializer { get; }
 
-        public ContentInserter(IContainerProvider containerProvider, IIdGenerator idGenerator, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
+        public ContentInserter(IDocumentCreator documentCreator, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
         {
-            ContainerProvider = containerProvider;
-            IdGenerator = idGenerator;
+            DocumentCreator = documentCreator;
             ContentTypeRepository = contentTypeRepository;
             ContentSerializer = contentSerializer;
         }
@@ -44,7 +42,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             content.ContentTypeId = contentType.Id;
 
-            await ContainerProvider.Get(ContainerConstants.Content).InsertOneAsync(ContentSerializer.Serialize(content, contentType));
+            await DocumentCreator.Create(ContainerConstants.Content, ContentSerializer.Serialize(content, contentType));
         }
     }
 }

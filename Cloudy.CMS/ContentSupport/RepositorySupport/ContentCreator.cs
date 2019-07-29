@@ -10,10 +10,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
     public class ContentCreator : IContentCreator
     {
         IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
-        IContainerProvider ContainerProvider { get; }
-        IIdGenerator IdGenerator { get; }
-        IContentTypeProvider ContentTypeRepository { get; }
-        IContentSerializer ContentSerializer { get; }
 
         public ContentCreator(IContainerSpecificContentCreator containerSpecificContentCreator)
         {

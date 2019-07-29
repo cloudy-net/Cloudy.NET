@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public class ContainerProvider : IContainerProvider
     {

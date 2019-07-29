@@ -9,14 +9,14 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 {
     public class ContainerSpecificContentCreator : IContainerSpecificContentCreator
     {
-        IContainerProvider ContainerProvider { get; }
+        IDocumentCreator DocumentCreator { get; }
         IIdGenerator IdGenerator { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         IContentSerializer ContentSerializer { get; }
 
-        public ContainerSpecificContentCreator(IContainerProvider containerProvider, IIdGenerator idGenerator, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
+        public ContainerSpecificContentCreator(IDocumentCreator documentCreator, IIdGenerator idGenerator, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
         {
-            ContainerProvider = containerProvider;
+            DocumentCreator = documentCreator;
             IdGenerator = idGenerator;
             ContentTypeRepository = contentTypeRepository;
             ContentSerializer = contentSerializer;
@@ -44,7 +44,7 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
             content.Id = IdGenerator.Generate();
             content.ContentTypeId = contentType.Id;
 
-            await ContainerProvider.Get(container).InsertOneAsync(ContentSerializer.Serialize(content, contentType));
+            await DocumentCreator.Create(container, ContentSerializer.Serialize(content, contentType));
         }
     }
 }

@@ -16,13 +16,13 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     {
         int PageSize { get; } = 20;
 
-        IContainerProvider ContainerProvider { get; }
+        IDocumentFinder DocumentFinder { get; }
         IContentTypeProvider ContentTypeRepository { get; }
         IContentDeserializer ContentDeserializer { get; }
 
-        public ContentDataTableBackend(IContainerProvider containerProvider, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
+        public ContentDataTableBackend(IDocumentFinder documentFinder, IContentTypeProvider contentTypeRepository, IContentDeserializer contentDeserializer)
         {
-            ContainerProvider = containerProvider;
+            DocumentFinder = documentFinder;
             ContentTypeRepository = contentTypeRepository;
             ContentDeserializer = contentDeserializer;
         }
@@ -31,7 +31,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         {
             var contentType = ContentTypeRepository.Get(typeof(T));
 
-            var documents = ContainerProvider.Get(contentType.Container).FindSync(Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Properties.ContentTypeId"), contentType.Id)).ToList();
+            var documents = DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.ContentTypeId, contentType.Id).GetResultAsync().Result.ToList();
 
             var items = new List<T>();
 

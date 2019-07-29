@@ -11,13 +11,13 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ChildrenGetter : IChildrenGetter
     {
-        IContainerProvider ContainerProvider { get; }
+        IDocumentFinder DocumentFinder { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IContentDeserializer ContentDeserializer { get; }
 
-        public ChildrenGetter(IContainerProvider containerProvider, IContentTypeProvider contentTypeProvider, IContentDeserializer contentDeserializer)
+        public ChildrenGetter(IDocumentFinder documentFinder, IContentTypeProvider contentTypeProvider, IContentDeserializer contentDeserializer)
         {
-            ContainerProvider = containerProvider;
+            DocumentFinder = documentFinder;
             ContentTypeProvider = contentTypeProvider;
             ContentDeserializer = contentDeserializer;
         }
@@ -26,15 +26,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
         {
             var contentTypes = ContentTypeProvider.GetAll().Where(t => typeof(T).IsAssignableFrom(t.Type));
 
-            var documents = ContainerProvider
-                .Get(ContainerConstants.Content)
-                .Find(
-                    Builders<Document>.Filter.And(
-                        Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId"), id),
-                        Builders<Document>.Filter.In(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Properties.ContentTypeId"), contentTypes.Select(t => t.Id))
-                    )
-                )
-                .ToList();
+            var documents = DocumentFinder.Find(ContainerConstants.Content).WhereEquals<IHierarchical, string>(x => x.ParentId, id).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypes.Select(t => t.Id)).GetResultAsync().Result.ToList();
 
             var result = new List<T>();
 

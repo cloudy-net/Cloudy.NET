@@ -11,11 +11,11 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ChildLinkProvider : IChildLinkProvider
     {
-        IContainerProvider ContainerProvider { get; }
+        IDocumentFinder DocumentFinder { get; }
 
-        public ChildLinkProvider(IContainerProvider containerProvider)
+        public ChildLinkProvider(IDocumentFinder documentFinder)
         {
-            ContainerProvider = containerProvider;
+            DocumentFinder = documentFinder;
         }
 
         public IEnumerable<string> GetChildLinks(string id)
@@ -25,11 +25,9 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
         public async Task<IEnumerable<string>> GetChildLinksAsync(string id)
         {
-            return (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId"), id)))
-            .ToList()
-            .Select(d => d.Id)
-            .ToList()
-            .AsReadOnly();
+            var documents = await DocumentFinder.Find(ContainerConstants.Content).WhereEquals<IHierarchical, string>(x => x.ParentId, id).GetResultAsync();
+
+            return documents.Select(d => d.Id).ToList().AsReadOnly();
         }
     }
 }

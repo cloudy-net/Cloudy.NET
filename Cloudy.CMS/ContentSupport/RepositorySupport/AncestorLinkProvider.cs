@@ -11,11 +11,11 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class AncestorLinkProvider : IAncestorLinkProvider
     {
-        IContainerProvider ContainerProvider { get; }
+        IDocumentFinder DocumentFinder { get; }
 
-        public AncestorLinkProvider(IContainerProvider containerProvider)
+        public AncestorLinkProvider(IDocumentFinder documentFinder)
         {
-            ContainerProvider = containerProvider;
+            DocumentFinder = documentFinder;
         }
 
         public IEnumerable<string> GetAncestorLinks(string id)
@@ -29,14 +29,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             while (true)
             {
-                var document = (await ContainerProvider.Get(ContainerConstants.Content).FindAsync(
-                    Builders<Document>.Filter.And(
-                        Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Properties.Id"), id),
-                        Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId"))
-                    ),
-                    new FindOptions<Document, Document> { Projection = Builders<Document>.Projection.Include(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IHierarchical.Properties.ParentId")) }
-                ))
-                .FirstOrDefault();
+                var document = (await DocumentFinder.Find(ContainerConstants.Content).WhereEquals<IContent, string>(x => x.Id, id).WhereExists<IHierarchical, string>(x => x.ParentId).Select<IHierarchical, string>(x => x.ParentId).GetResultAsync()).FirstOrDefault();
 
                 if (document == null)
                 {

@@ -13,6 +13,7 @@ using Cloudy.CMS.ContentControllerSupport;
 using Cloudy.CMS.Routing;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+using Cloudy.CMS.DocumentSupport.MongoSupport;
 
 namespace Cloudy.CMS
 {

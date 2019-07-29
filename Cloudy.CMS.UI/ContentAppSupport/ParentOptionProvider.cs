@@ -13,12 +13,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     [OptionProvider("parent")]
     public class ParentOptionProvider : IOptionProvider
     {
-        IContainerProvider ContainerProvider { get; }
+        IDocumentFinder DocumentFinder { get; }
         IContentTypeProvider ContentTypeProvider { get; }
 
-        public ParentOptionProvider(IContainerProvider containerProvider, IContentTypeProvider contentTypeProvider)
+        public ParentOptionProvider(IDocumentFinder documentFinder, IContentTypeProvider contentTypeProvider)
         {
-            ContainerProvider = containerProvider;
+            DocumentFinder = documentFinder;
             ContentTypeProvider = contentTypeProvider;
         }
 
@@ -26,17 +26,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         {
             var contentTypes = ContentTypeProvider.GetAll().Where(t => typeof(IHierarchical).IsAssignableFrom(t.Type));
 
-            var documents = ContainerProvider.Get(ContainerConstants.Content).FindSync(
-                Builders<Document>.Filter.In(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.IContent.Properties.ContentTypeId"), contentTypes.Select(t => t.Id)),
-                new FindOptions<Document, Document>
-                {
-                    Projection =
-                        Builders<Document>.Projection
-                        .Include(new StringFieldDefinition<Document, string>("GlobalFacet.Interfaces.INameable.Properties.Name"))
-                        .Include(new StringFieldDefinition<Document, string>("Id"))
-                }
-            )
-                .ToList();
+            var documents = DocumentFinder.Find(ContainerConstants.Content).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypes.Select(t => t.Id)).Select<IContent, string>(x => x.Id).Select<INameable, string>(x => x.Name).GetResultAsync().Result;
 
             var result = new List<Option>();
 
