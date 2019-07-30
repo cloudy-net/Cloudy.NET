@@ -1,23 +1,28 @@
-﻿using System;
+﻿using Cloudy.CMS.DocumentSupport.MongoSupport;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Cloudy.CMS
 {
     public class CloudyConfigurator
     {
+        public IServiceCollection Services { get; }
         CloudyOptions Options { get; }
 
-        public CloudyConfigurator(CloudyOptions options)
+        public CloudyConfigurator(IServiceCollection services, CloudyOptions options)
         {
+            Services = services;
             Options = options;
         }
 
-        public CloudyConfigurator WithDatabaseConnectionStringName(string name)
+        public CloudyConfigurator WithMongoDatabaseConnectionStringNamed(string name)
         {
             if (name.Contains(":") || name.Contains("/"))
             {
                 throw new ArgumentException("Connection strings have to be referenced by name from your appsettings.json. No direct URLs here. You'll thank me later!");
             }
 
+            this.AddMongo();
             Options.DatabaseConnectionString = name;
 
             return this;

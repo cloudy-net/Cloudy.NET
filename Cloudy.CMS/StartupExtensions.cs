@@ -22,7 +22,7 @@ namespace Cloudy.CMS
             options.Components.Add(typeof(CloudyComponent));
             options.ComponentAssemblies.Add(Assembly.GetCallingAssembly());
 
-            configure(new CloudyConfigurator(options));
+            configure(new CloudyConfigurator(services, options));
 
             var container = new Container(services);
 
