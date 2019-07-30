@@ -3,7 +3,7 @@ using System.Linq;
 using MongoDB.Bson.Serialization;
 using MongoDB.Integrations.JsonDotNet;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public class SerializerRegistry : IBsonSerializerRegistry
     {

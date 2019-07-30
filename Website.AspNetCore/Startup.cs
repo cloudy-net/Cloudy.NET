@@ -35,7 +35,8 @@ namespace Website.AspNetCore
                 options.AddPolicy("test", policy => policy.RequireAssertion(c => false));
             });
             services.AddCloudy(cloudy => cloudy
-                .WithMongoDatabaseConnectionStringNamed("mongo")
+                //.WithMongoDatabaseConnectionStringNamed("mongo")
+                .WithFileBasedDocuments()
                 .AddAdmin()
             );
             services.AddMvc();

@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.DocumentSupport
+﻿namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public interface IDatabaseConnectionStringNameProvider
     {

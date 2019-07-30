@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.DocumentSupport.MongoSupport;
+﻿using Cloudy.CMS.DocumentSupport.FileSupport;
+using Cloudy.CMS.DocumentSupport.MongoSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -13,6 +14,13 @@ namespace Cloudy.CMS
         {
             Services = services;
             Options = options;
+        }
+
+        public CloudyConfigurator WithFileBasedDocuments()
+        {
+            this.AddFileBased();
+
+            return this;
         }
 
         public CloudyConfigurator WithMongoDatabaseConnectionStringNamed(string name)

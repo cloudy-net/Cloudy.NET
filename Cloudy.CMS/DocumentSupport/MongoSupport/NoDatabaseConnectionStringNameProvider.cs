@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MongoDB.Driver;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public class NoDatabaseConnectionStringNameProvider : IDatabaseConnectionStringNameProvider
     {

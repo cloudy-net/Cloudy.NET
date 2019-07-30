@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public class NoDatabaseConnectionStringNameSpecifiedException : Exception
     {
