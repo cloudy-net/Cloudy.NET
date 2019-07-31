@@ -1,0 +1,31 @@
+{
+  "Id": "start-page",
+  "GlobalFacet": {
+    "Language": "*",
+    "Interfaces": {
+      "IContent": {
+        "Id": "IContent",
+        "Properties": {
+          "Id": "start-page",
+          "ContentTypeId": "start-page"
+        }
+      },
+      "IHierarchical": {
+        "Id": "IHierarchical",
+        "Properties": {
+          "ParentId": null
+        }
+      },
+      "IRoutable": {
+        "Id": "IRoutable",
+        "Properties": {
+          "UrlSegment": null
+        }
+      }
+    },
+    "Properties": {
+      "MySetting": null
+    }
+  },
+  "LanguageFacets": {}
+}

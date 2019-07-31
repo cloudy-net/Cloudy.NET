@@ -1,0 +1,19 @@
+{
+  "Id": "site-settings",
+  "GlobalFacet": {
+    "Language": "*",
+    "Interfaces": {
+      "IContent": {
+        "Id": "IContent",
+        "Properties": {
+          "Id": "site-settings",
+          "ContentTypeId": "site-settings"
+        }
+      }
+    },
+    "Properties": {
+      "SiteTitle": null
+    }
+  },
+  "LanguageFacets": {}
+}

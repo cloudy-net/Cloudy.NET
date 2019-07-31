@@ -8,31 +8,32 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 {
     public class DocumentFinderQueryBuilder : IDocumentFinderQueryBuilder
     {
+        IFilePathProvider FilePathProvider { get; }
         IFileHandler FileHandler { get; }
         IDocumentDeserializer DocumentDeserializer { get; }
-        IPropertyPathProvider PropertyPathProvider { get; }
-        IDocumentPropertyProvider DocumentPropertyProvider { get; }
+        IDocumentPropertyPathProvider DocumentPropertyPathProvider { get; }
+        IDocumentPropertyFinder DocumentPropertyFinder { get; }
 
-        public DocumentFinderQueryBuilder(IFileHandler fileHandler, IPropertyPathProvider propertyPathProvider, IDocumentDeserializer documentDeserializer, IDocumentPropertyProvider documentPropertyProvider)
+        public DocumentFinderQueryBuilder(IFilePathProvider filePathProvider, IFileHandler fileHandler, IDocumentPropertyPathProvider documentPropertyPathProvider, IDocumentDeserializer documentDeserializer, IDocumentPropertyFinder documentPropertyFinder)
         {
+            FilePathProvider = filePathProvider;
             FileHandler = fileHandler;
             DocumentDeserializer = documentDeserializer;
-            PropertyPathProvider = propertyPathProvider;
-            DocumentPropertyProvider = documentPropertyProvider;
+            DocumentPropertyPathProvider = documentPropertyPathProvider;
+            DocumentPropertyFinder = documentPropertyFinder;
         }
 
         public string Container { get; set; }
 
         List<Func<Document, bool>> Criteria { get; } = new List<Func<Document, bool>>();
-        List<Func<>>
 
         public IDocumentFinderQueryBuilder WhereEquals<T1, T2>(Expression<Func<T1, T2>> property, T2 value) where T1 : class
         {
-            var path = PropertyPathProvider.GetFor(property);
+            var path = DocumentPropertyPathProvider.GetFor(property);
 
             Criteria.Add(d =>
             {
-                var a = DocumentPropertyProvider.GetFor(d, path);
+                var a = DocumentPropertyFinder.GetFor(d, path);
                 
                 if(a == null && value == null)
                 {
@@ -54,20 +55,20 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 
         public IDocumentFinderQueryBuilder WhereExists<T1, T2>(Expression<Func<T1, T2>> property) where T1 : class
         {
-            var path = PropertyPathProvider.GetFor(property);
+            var path = DocumentPropertyPathProvider.GetFor(property);
 
-            Criteria.Add(d => DocumentPropertyProvider.Exists(d, path));
+            Criteria.Add(d => DocumentPropertyFinder.Exists(d, path));
 
             return this;
         }
 
         public IDocumentFinderQueryBuilder WhereIn<T1, T2>(Expression<Func<T1, T2>> property, IEnumerable<T2> values) where T1 : class
         {
-            var path = PropertyPathProvider.GetFor(property);
+            var path = DocumentPropertyPathProvider.GetFor(property);
 
             Criteria.Add(d =>
             {
-                var a = DocumentPropertyProvider.GetFor(d, path);
+                var a = DocumentPropertyFinder.GetFor(d, path);
 
                 if (a == null)
                 {
@@ -94,7 +95,7 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
         {
             var result = new List<Document>();
 
-            foreach(var document in FileHandler.List(Container).Select(c => DocumentDeserializer.Deserialize(c)))
+            foreach(var document in FileHandler.List(FilePathProvider.GetPathFor(Container)).Select(c => DocumentDeserializer.Deserialize(c)))
             {
                 if(Criteria.All(c => c(document)))
                 {

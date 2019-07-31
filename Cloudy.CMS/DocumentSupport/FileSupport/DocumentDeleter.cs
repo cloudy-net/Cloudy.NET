@@ -19,10 +19,10 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 
             if (!FileHandler.Exists(path))
             {
-                throw new DocumentDoesNotExistException(container, id);
+                return Task.CompletedTask;
             }
 
-            FileHandler.Delete(id);
+            FileHandler.Delete(path);
 
             return Task.CompletedTask;
         }

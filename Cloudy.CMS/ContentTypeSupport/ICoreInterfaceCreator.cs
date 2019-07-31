@@ -7,6 +7,6 @@ namespace Cloudy.CMS.ContentTypeSupport
 {
     public interface ICoreInterfaceCreator
     {
-        CoreInterfaceDescriptor Create(Type type);
+        IEnumerable<CoreInterfaceDescriptor> Create();
     }
 }

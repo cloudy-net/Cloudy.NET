@@ -10,12 +10,12 @@ namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public class DocumentFinderQueryBuilder : IDocumentFinderQueryBuilder
     {
-        IPropertyPathProvider PropertyPathProvider { get; }
+        IDocumentPropertyPathProvider DocumentPropertyPathProvider { get; }
         IContainerProvider ContainerProvider { get; }
 
-        public DocumentFinderQueryBuilder(IPropertyPathProvider propertyPathProvider, IContainerProvider containerProvider)
+        public DocumentFinderQueryBuilder(IDocumentPropertyPathProvider documentPropertyPathProvider, IContainerProvider containerProvider)
         {
-            PropertyPathProvider = propertyPathProvider;
+            DocumentPropertyPathProvider = documentPropertyPathProvider;
             ContainerProvider = containerProvider;
         }
 
@@ -27,11 +27,11 @@ namespace Cloudy.CMS.DocumentSupport.MongoSupport
         {
             if(Projection == null)
             {
-                Projection = Builders<Document>.Projection.Include(new StringFieldDefinition<Document, T2>(PropertyPathProvider.GetFor(property)));
+                Projection = Builders<Document>.Projection.Include(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property)));
             }
             else
             {
-                Projection = Projection.Include(new StringFieldDefinition<Document, T2>(PropertyPathProvider.GetFor(property)));
+                Projection = Projection.Include(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property)));
             }
 
             return this;
@@ -43,15 +43,15 @@ namespace Cloudy.CMS.DocumentSupport.MongoSupport
             {
                 Filters.Add(
                     Builders<Document>.Filter.And(
-                        Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, T2>(PropertyPathProvider.GetFor(property))),
-                        Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, T2>(PropertyPathProvider.GetFor(property)), value)
+                        Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property))),
+                        Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property)), value)
                     )
                 );
             }
             else
             {
                 Filters.Add(
-                    Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, T2>(PropertyPathProvider.GetFor(property)), value)
+                    Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property)), value)
                 );
             }
 
@@ -60,14 +60,14 @@ namespace Cloudy.CMS.DocumentSupport.MongoSupport
 
         public IDocumentFinderQueryBuilder WhereIn<T1, T2>(Expression<Func<T1, T2>> property, IEnumerable<T2> values) where T1 : class
         {
-            Filters.Add(Builders<Document>.Filter.In(new StringFieldDefinition<Document, T2>(PropertyPathProvider.GetFor(property)), values));
+            Filters.Add(Builders<Document>.Filter.In(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property)), values));
 
             return this;
         }
 
         public IDocumentFinderQueryBuilder WhereExists<T1, T2>(Expression<Func<T1, T2>> property) where T1 : class
         {
-            Filters.Add(Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, T2>(PropertyPathProvider.GetFor(property))));
+            Filters.Add(Builders<Document>.Filter.Exists(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property))));
 
             return this;
         }

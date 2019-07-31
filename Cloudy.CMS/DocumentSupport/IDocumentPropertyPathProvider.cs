@@ -2,7 +2,7 @@
 
 namespace Cloudy.CMS.DocumentSupport
 {
-    public interface IPropertyPathProvider
+    public interface IDocumentPropertyPathProvider
     {
         string GetFor(Expression expression);
     }

@@ -13,7 +13,7 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 
         public IDocumentFinderQueryBuilder Find(string container)
         {
-            var builder = (DocumentFinderQueryBuilder)ServiceProvider.GetService(typeof(DocumentFinderQueryBuilder));
+            var builder = (DocumentFinderQueryBuilder)ServiceProvider.GetService(typeof(IDocumentFinderQueryBuilder));
             
             builder.Container = container;
 

@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.DocumentSupport;
+using Cloudy.CMS.DocumentSupport.MongoSupport;
 using Microsoft.Extensions.DependencyInjection;
 using Poetry;
 using Poetry.AspNetCore.DependencyInjectionSupport;

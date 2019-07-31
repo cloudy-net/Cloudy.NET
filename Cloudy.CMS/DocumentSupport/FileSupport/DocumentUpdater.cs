@@ -24,7 +24,7 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
                 throw new DocumentDoesNotExistException(container, id);
             }
 
-            FileHandler.Update(id, DocumentSerializer.Serialize(document));
+            FileHandler.Update(path, DocumentSerializer.Serialize(document));
 
             return Task.CompletedTask;
         }

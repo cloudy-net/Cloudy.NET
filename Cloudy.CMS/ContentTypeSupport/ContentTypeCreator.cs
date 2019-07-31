@@ -16,14 +16,14 @@ namespace Cloudy.CMS.ContentTypeSupport
     public class ContentTypeCreator : IContentTypeCreator
     {
         IPropertyDefinitionCreator PropertyDefinitionCreator { get; }
-        ICoreInterfaceCreator CoreInterfaceCreator { get; }
+        ICoreInterfaceProvider CoreInterfaceProvider { get; }
         IPropertyMappingProvider PropertyMappingRepository { get; }
         IComponentProvider ComponentProvider { get; }
 
-        public ContentTypeCreator(IPropertyDefinitionCreator propertyDefinitionCreator, ICoreInterfaceCreator coreInterfaceCreator, IPropertyMappingProvider propertyMappingRepository, IComponentProvider componentProvider)
+        public ContentTypeCreator(IPropertyDefinitionCreator propertyDefinitionCreator, ICoreInterfaceProvider coreInterfaceProvider, IPropertyMappingProvider propertyMappingRepository, IComponentProvider componentProvider)
         {
             PropertyDefinitionCreator = propertyDefinitionCreator;
-            CoreInterfaceCreator = coreInterfaceCreator;
+            CoreInterfaceProvider = coreInterfaceProvider;
             PropertyMappingRepository = propertyMappingRepository;
             ComponentProvider = componentProvider;
         }
@@ -34,8 +34,6 @@ namespace Cloudy.CMS.ContentTypeSupport
                     .GetAll()
                     .SelectMany(a => a.Assembly.Types)
                     .Where(a => typeof(IContent).IsAssignableFrom(a));
-
-            var allCoreInterfaces = new Dictionary<string, CoreInterfaceDescriptor>();
 
             foreach (var type in types)
             {
@@ -72,22 +70,9 @@ namespace Cloudy.CMS.ContentTypeSupport
                     propertyDefinitions.Add(PropertyDefinitionCreator.Create(property));
                 }
 
-                var coreInterfaces = new List<CoreInterfaceDescriptor>();
-
-                foreach(var interfaceType in type.GetInterfaces())
-                {
-                    if(interfaceType.GetCustomAttribute<CoreInterfaceAttribute>() == null)
-                    {
-                        continue;
-                    }
-
-                    if (!allCoreInterfaces.ContainsKey(interfaceType.FullName))
-                    {
-                        allCoreInterfaces[interfaceType.FullName] = CoreInterfaceCreator.Create(interfaceType);
-                    }
-
-                    coreInterfaces.Add(allCoreInterfaces[interfaceType.FullName]);
-                }
+                var coreInterfaces = type.GetInterfaces()
+                    .Select(i => CoreInterfaceProvider.GetFor(i))
+                    .Where(i => i != null);
 
                 yield return new ContentTypeDescriptor(contentTypeAttribute.Id, type, container, propertyDefinitions, coreInterfaces);
             }

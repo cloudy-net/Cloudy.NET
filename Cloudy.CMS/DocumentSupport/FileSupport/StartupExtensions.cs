@@ -11,6 +11,10 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
         {
             configurator.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions("json"));
             configurator.Services.AddSingleton<IFilePathProvider, FilePathProvider>();
+            configurator.Services.AddSingleton<IFileHandler, FileHandler>();
+            configurator.Services.AddSingleton<IDocumentSerializer, DocumentSerializer>();
+            configurator.Services.AddSingleton<IDocumentDeserializer, DocumentDeserializer>();
+            configurator.Services.AddTransient<IDocumentPropertyFinder, DocumentPropertyFinder>();
             configurator.Services.AddSingleton<IDocumentCreator, DocumentCreator>();
             configurator.Services.AddSingleton<IDocumentDeleter, DocumentDeleter>();
             configurator.Services.AddSingleton<IDocumentFinder, DocumentFinder>();

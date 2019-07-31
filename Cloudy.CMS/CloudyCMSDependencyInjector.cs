@@ -22,11 +22,17 @@ namespace Cloudy.CMS
         public void InjectDependencies(IContainer container)
         {
             container.RegisterSingleton<IIdGenerator, IdGenerator>();
+            container.RegisterSingleton<IPropertyDefinitionCreator, PropertyDefinitionCreator>();
+            container.RegisterSingleton<ICoreInterfaceCreator, CoreInterfaceCreator>();
+            container.RegisterSingleton<ICoreInterfaceProvider, CoreInterfaceProvider>();
+            container.RegisterSingleton<IPropertyMappingCreator, PropertyMappingCreator>();
+            container.RegisterSingleton<IPropertyMappingProvider, PropertyMappingProvider>();
+
             container.RegisterSingleton<IContentTypeCreator, ContentTypeCreator>();
             container.RegisterSingleton<IContentTypeProvider, ContentTypeProvider>();
             container.RegisterSingleton<IContentSerializer, ContentSerializer>();
             container.RegisterSingleton<IContentDeserializer, ContentDeserializer>();
-            container.RegisterSingleton<IPropertyPathProvider, PropertyPathProvider>();
+            container.RegisterSingleton<IDocumentPropertyPathProvider, DocumentPropertyPathProvider>();
 
             container.RegisterSingleton<IContentGetter, ContentGetter>();
             container.RegisterSingleton<IContentDeleter, ContentDeleter>();
@@ -41,11 +47,6 @@ namespace Cloudy.CMS
             container.RegisterSingleton<IContainerSpecificContentDeleter, ContainerSpecificContentDeleter>();
             container.RegisterSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
             container.RegisterSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
-
-            container.RegisterSingleton<IPropertyDefinitionCreator, PropertyDefinitionCreator>();
-            container.RegisterSingleton<ICoreInterfaceCreator, CoreInterfaceCreator>();
-            container.RegisterSingleton<IPropertyMappingCreator, PropertyMappingCreator>();
-            container.RegisterSingleton<IPropertyMappingProvider, PropertyMappingProvider>();
 
             container.RegisterSingleton<IContentControllerFinder, ContentControllerFinder>();
             container.RegisterSingleton<IContentRouter, ContentRouter>();

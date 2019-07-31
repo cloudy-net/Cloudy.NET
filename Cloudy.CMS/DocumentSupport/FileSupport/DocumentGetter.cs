@@ -21,10 +21,10 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 
             if (!FileHandler.Exists(path))
             {
-                throw new DocumentDoesNotExistException(container, id);
+                return Task.FromResult<Document>(null);
             }
 
-            string contents = FileHandler.Get(id);
+            string contents = FileHandler.Get(path);
 
             return Task.FromResult(DocumentDeserializer.Deserialize(contents));
         }

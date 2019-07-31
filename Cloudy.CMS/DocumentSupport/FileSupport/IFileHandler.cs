@@ -6,9 +6,9 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
     {
         bool Exists(string path);
         void Create(string path, string contents);
-        void Delete(string id);
-        string Get(string id);
-        void Update(string id, string contents);
-        IEnumerable<string> List(string container);
+        void Delete(string path);
+        string Get(string path);
+        void Update(string path, string contents);
+        IEnumerable<string> List(string path);
     }
 }

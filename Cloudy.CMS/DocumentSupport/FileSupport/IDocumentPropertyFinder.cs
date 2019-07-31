@@ -1,6 +1,6 @@
 ﻿namespace Cloudy.CMS.DocumentSupport.FileSupport
 {
-    public interface IDocumentPropertyProvider
+    public interface IDocumentPropertyFinder
     {
         object GetFor(Document document, string path);
         bool Exists(Document document, string path);
