@@ -35,7 +35,7 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
             {
                 var a = DocumentPropertyFinder.GetFor(d, path);
                 
-                if(a == null && value == null)
+                if(a == null)
                 {
                     if (value == null)
                     {

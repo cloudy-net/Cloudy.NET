@@ -1,5 +1,7 @@
 ﻿using Cloudy.CMS.DocumentSupport.FileSupport;
 using Cloudy.CMS.DocumentSupport.MongoSupport;
+using Cloudy.CMS.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -19,6 +21,16 @@ namespace Cloudy.CMS
         public CloudyConfigurator WithFileBasedDocuments()
         {
             this.AddFileBased();
+
+            return this;
+        }
+
+        public CloudyConfigurator AddContentRoute()
+        {
+            Services.Configure<RouteOptions>(options =>
+            {
+                options.ConstraintMap.Add("contentroute", typeof(ContentRouteConstraint));
+            });
 
             return this;
         }

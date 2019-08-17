@@ -16,6 +16,7 @@ using Serilog;
 using Website.AspNetCore.Models;
 using Cloudy.CMS.SingletonSupport;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Routing;
 
 namespace Website.AspNetCore
 {
@@ -37,6 +38,7 @@ namespace Website.AspNetCore
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .WithFileBasedDocuments()
+                .AddContentRoute()
                 .AddAdmin()
             );
             services.AddMvc();
@@ -50,7 +52,9 @@ namespace Website.AspNetCore
             }
 
             app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
-            app.UseMvc(routes => routes.AddContentRoute());
+            app.UseMvc(routes =>
+                routes.MapRoute(null, "{*route:contentroute}", new { controller = "Page", action = "Index" })
+            );
         }
     }
 }

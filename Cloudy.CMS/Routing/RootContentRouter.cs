@@ -17,12 +17,26 @@ namespace Cloudy.CMS.Routing
 
         public IContent Route(IContent root, IEnumerable<string> segments, string language)
         {
-            IContent content = root;
-
-            if (((IRoutable)content).UrlSegment != null && ((IRoutable)content).UrlSegment.Equals(segments.First()))
+            if (segments.Any())
             {
-                segments = segments.Skip(1);
+                if (((IRoutable)root).UrlSegment != null && ((IRoutable)root).UrlSegment.Equals(segments.First()))
+                {
+                    segments = segments.Skip(1);
+                }
             }
+            else
+            {
+                if (((IRoutable)root).UrlSegment == null)
+                {
+                    return root;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            IContent content = root;
 
             while (segments.Any())
             {

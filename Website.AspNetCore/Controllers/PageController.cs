@@ -6,11 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Website.AspNetCore.Models;
+using Cloudy.CMS.ContentSupport;
 
 namespace Website.AspNetCore.Controllers
 {
     public class PageController : Controller
     {
+        public ActionResult Index([FromContentRoute] IContent page)
+        {
+            return Content(page.Id);
+        }
+
         [ContentRoute(typeof(Page))]
         public ActionResult Blog([FromContentRoute] Page page)
         {
