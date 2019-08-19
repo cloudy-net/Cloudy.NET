@@ -66,7 +66,12 @@ namespace Cloudy.CMS.UI
                 throw new ArgumentException($"You have called both {nameof(CloudyAdminConfigurator.Authorize)}() and {nameof(CloudyAdminConfigurator.Unprotect)}(), they are mutually exclusive. You probably want to remove the latter");
             }
 
-            var authorizationService = app.ApplicationServices.GetRequiredService<IAuthorizationService>();
+            var authorizationService = app.ApplicationServices.GetService<IAuthorizationService>();
+
+            if(authorizationService == null)
+            {
+                throw new Exception($"Could not find {nameof(IAuthorizationService)} in DI container. Call services.AddAuthentication() in ConfigureServices");
+            }
 
             var policy = 
                 options.AllowUnauthenticatedUsers ?
