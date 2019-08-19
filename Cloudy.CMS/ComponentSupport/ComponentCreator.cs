@@ -53,7 +53,7 @@ namespace Poetry.ComponentSupport
                     continue;
                 }
 
-                result.Add(new ComponentDescriptor(assembly.FullName, new AssemblyWrapper(assembly)));
+                result.Add(new ComponentDescriptor(assembly.GetName().Name, new AssemblyWrapper(assembly)));
             }
 
             if (Logger.IsEnabled(LogLevel.Information))
