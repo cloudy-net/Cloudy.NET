@@ -21,39 +21,39 @@ class SortableTableControl extends Sortable {
 
         this.fieldModel = fieldModel;
 
-        var pageSize = target.length;
+        var pageSize = target.length || 10;
 
         var backend = new class extends Backend {
             load(query) {
                 return Promise.resolve({
-                    Items: target.slice((query.page - 1) * pageSize, query.page * pageSize),
-                    PageCount: Math.ceil(target.length / pageSize),
-                    PageSize: pageSize,
-                    TotalMatching: target.length,
+                    items: target.slice((query.page - 1) * pageSize, query.page * pageSize),
+                    pageCount: Math.ceil(target.length / pageSize),
+                    pageSize: pageSize,
+                    totalMatching: target.length,
                 });
             }
         };
 
-        var formBuilder = new FormBuilder(fieldModel.descriptor.EmbeddedFormId, app);
+        var formBuilder = new FormBuilder(fieldModel.descriptor.embeddedFormId, app);
 
         var dataTable = new DataTable()
             .setBackend(backend);
 
-        if (fieldModel.descriptor.Control.Parameters.columns) {
-            for (const [name, column] of Object.entries(fieldModel.descriptor.Control.Parameters.columns)) {
+        if (fieldModel.descriptor.control.parameters.columns) {
+            for (const [name, column] of Object.entries(fieldModel.descriptor.control.parameters.columns)) {
                 dataTable.addColumn(c => c
                     .setHeader(() => name)
                     .setContent(item => {
-                        if (column.Type != 'Expression') {
-                            return column.Value;
+                        if (column.type != 'Expression') {
+                            return column.value;
                         }
 
-                        return column.Value.Segments.map(segment => {
-                            if (segment.Type == 'Interpolated') {
-                                return item[segment.Value];
+                        return column.value.segments.map(segment => {
+                            if (segment.type == 'Interpolated') {
+                                return item[segment.value];
                             }
 
-                            return segment.Value;
+                            return segment.value;
                         }).join('');
                     })
                 )
@@ -65,11 +65,11 @@ class SortableTableControl extends Sortable {
                 .setShrink()
                 .setContent(item =>
                     new ContextMenu()
-                        .addItem(menuItem => menuItem.setText('Edit').onClick(() => app.open(new EditRow(formBuilder, item).onClose(message => { if (message == 'saved') { dataTable.update(); } }), dataTable.element)))
+                        .addItem(menuItem => menuItem.setText('Edit').onClick(() => app.open(new EditRow(formBuilder, item, app).onClose(message => { if (message == 'saved') { dataTable.update(); } }), dataTable.element)))
                         .addItem(menuItem => menuItem.setText('Remove').onClick(() => { target.splice(target.indexOf(item), 1); dataTable.update(); }))
                 )
             )
-            .setFooter(new Button('Add').onClick(() => app.open(new NewRow(formBuilder).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } }), dataTable.element)));
+            .setFooter(new Button('Add').onClick(() => app.open(new EditRow(formBuilder, null, app).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } }), dataTable.element)));
 
         dataTable.paging.remove();
 
@@ -84,32 +84,18 @@ export default SortableTableControl;
 /* EDIT ROW */
 
 class EditRow extends Blade {
-    constructor(formBuilder, item) {
+    constructor(formBuilder, item, app) {
         super();
 
-        this.setTitle('Edit');
+        if (item) {
+            this.setTitle('Edit');
+        } else {
+            this.setTitle('Add');
+        }
 
         formBuilder.build(item).then(form => {
             this.setContent(form);
-            this.setFooter(new Button('Ok').onClick(() => this.close('saved', form.getValues())), new Button('Cancel').onClick(() => this.close()));
-        });
-
-    }
-}
-
-
-
-/* NEW ROW */
-
-class NewRow extends Blade {
-    constructor(formBuilder) {
-        super();
-
-        this.setTitle('Add');
-
-        formBuilder.build().then(form => {
-            this.setContent(form);
-            this.setFooter(new Button('Ok').onClick(() => this.close('saved', form.getValues())), new Button('Cancel').onClick(() => this.close()));
+            this.setFooter(new Button('Ok').onClick(() => app.close(this, 'saved', form.getValues())), new Button('Cancel').onClick(() => this.close()));
         });
 
     }
