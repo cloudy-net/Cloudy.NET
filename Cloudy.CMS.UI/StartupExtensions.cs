@@ -56,12 +56,17 @@ namespace Cloudy.CMS.UI
 
             configure(new CloudyAdminConfigurator(options));
 
-            var authorizationService = app.ApplicationServices.GetRequiredService<IAuthorizationService>();
+            if (!options.AllowUnauthenticatedUsers && options.AuthorizeOptions == null)
+            {
+                throw new ArgumentException($"You have called neither {nameof(CloudyAdminConfigurator.Authorize)}() or {nameof(CloudyAdminConfigurator.Unprotect)}(). You probably want to use the first one");
+            }
 
-            if(options.AllowUnauthenticatedUsers && options.AuthorizeOptions != null)
+            if (options.AllowUnauthenticatedUsers && options.AuthorizeOptions != null)
             {
                 throw new ArgumentException($"You have called both {nameof(CloudyAdminConfigurator.Authorize)}() and {nameof(CloudyAdminConfigurator.Unprotect)}(), they are mutually exclusive. You probably want to remove the latter");
             }
+
+            var authorizationService = app.ApplicationServices.GetRequiredService<IAuthorizationService>();
 
             var policy = 
                 options.AllowUnauthenticatedUsers ?
