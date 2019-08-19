@@ -41,7 +41,7 @@ class App {
         return this.closeAfter(parentBlade).then(() => this.open(blade));
     }
 
-    close(blade) {
+    close(blade, ...parameters) {
         var index = this.blades.indexOf(blade);
 
         if (index > 1) {
@@ -51,7 +51,7 @@ class App {
             });
         }
 
-        return this.closeAfter(blade).then(() => blade.close().then(() => {
+        return this.closeAfter(blade).then(() => blade.close(...parameters).then(() => {
             blade.element.remove();
             this.blades.splice(this.blades.indexOf(blade), 1);
         }));
