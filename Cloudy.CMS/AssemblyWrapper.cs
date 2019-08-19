@@ -35,7 +35,7 @@ namespace Poetry
                 return obj.Equals(this);
             }
 
-            return Assembly.Equals((obj as AssemblyWrapper)?.Assembly);
+            return Assembly.Equals((obj as AssemblyWrapper)?.Assembly ?? obj);
         }
 
         public override int GetHashCode()
