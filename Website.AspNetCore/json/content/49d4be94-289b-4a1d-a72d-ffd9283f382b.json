@@ -13,7 +13,7 @@
       "IRoutable": {
         "Id": "IRoutable",
         "Properties": {
-          "UrlSegment": null
+          "UrlSegment": "lorem"
         }
       },
       "IHierarchical": {

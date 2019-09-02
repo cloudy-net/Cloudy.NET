@@ -2,7 +2,6 @@
 using Poetry;
 using Cloudy.CMS;
 using Cloudy.CMS.DocumentSupport;
-using Cloudy.CMS.ContentControllerSupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.Serialization;
@@ -20,7 +19,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Cloudy.CMS.UI.NaggingSupport;
 using Microsoft.AspNetCore.Routing;
-using Cloudy.CMS.AspNetCore.ContentControllerSupport;
 using Poetry.AspNetCore;
 using Poetry.UI.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -43,11 +41,6 @@ namespace Cloudy.CMS.UI
             configurator.AddComponent<CloudyAdminComponent>();
 
             return configurator;
-        }
-
-        public static void AddContentRoute(this IRouteBuilder routes)
-        {
-            routes.Routes.Add(new ContentRoute(routes.DefaultHandler, routes.ApplicationBuilder.ApplicationServices.GetRequiredService<IContentRouter>(), routes.ApplicationBuilder.ApplicationServices.GetRequiredService<IContentTypeProvider>(), routes.ApplicationBuilder.ApplicationServices.GetRequiredService<IContentControllerFinder>()));
         }
 
         public static void UseCloudyAdmin(this IApplicationBuilder app, Action<CloudyAdminConfigurator> configure)

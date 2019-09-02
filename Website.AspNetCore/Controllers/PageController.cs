@@ -17,13 +17,11 @@ namespace Website.AspNetCore.Controllers
             return Content(page.Id);
         }
 
-        [ContentRoute(typeof(Page))]
         public ActionResult Blog([FromContentRoute] Page page)
         {
             return View("Page", page);
         }
 
-        [ContentRoute(typeof(StartPage))]
         public ActionResult Start([FromContentRoute] StartPage page)
         {
             return View("Start", page);

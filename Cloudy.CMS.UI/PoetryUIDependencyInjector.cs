@@ -1,6 +1,4 @@
-﻿using Cloudy.CMS.AspNetCore.ContentControllerSupport;
-using Cloudy.CMS.ContentControllerSupport;
-using Cloudy.CMS.Mvc.Routing;
+﻿using Cloudy.CMS.Mvc.Routing;
 using Cloudy.CMS.Reflection;
 using Poetry.DependencyInjectionSupport;
 using Poetry.UI.AppSupport;
@@ -28,8 +26,6 @@ namespace Poetry.UI
             container.RegisterSingleton<IAppProvider, AppProvider>();
             container.RegisterSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
             container.RegisterSingleton<IUrlProvider, UrlProvider>();
-            container.RegisterSingleton<IControllerProvider, ControllerProvider>();
-            container.RegisterSingleton<IContentControllerMatchCreator, ContentControllerMatchCreator>();
         }
     }
 }

@@ -9,7 +9,6 @@ using Cloudy.CMS.Core.ContentSupport.RepositorySupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Cloudy.CMS.ContentControllerSupport;
 using Cloudy.CMS.Routing;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
@@ -48,8 +47,7 @@ namespace Cloudy.CMS
             container.RegisterSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
             container.RegisterSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
 
-            container.RegisterSingleton<IContentControllerFinder, ContentControllerFinder>();
-            container.RegisterSingleton<IContentRouter, ContentRouter>();
+            container.RegisterSingleton<IContentRouter, ContentRouter>();;
             container.RegisterSingleton<IRootContentRouter, RootContentRouter>();
             container.RegisterSingleton<IRoutableRootContentProvider, RoutableRootContentProvider>();
             container.RegisterSingleton<IContentSegmentRouter, ContentSegmentRouter>();

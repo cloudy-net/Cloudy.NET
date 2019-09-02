@@ -53,9 +53,10 @@ namespace Website.AspNetCore
             }
 
             app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
-            app.UseMvc(routes =>
-                routes.MapRoute(null, "{*route:contentroute}", new { controller = "Page", action = "Index" })
-            );
+            app.UseMvc(r =>
+            {
+                r.MapContentRoute(null, "{*route:contentroute}", new { controller = "Page" });
+            });
         }
     }
 }
