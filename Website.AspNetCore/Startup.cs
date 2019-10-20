@@ -42,7 +42,7 @@ namespace Website.AspNetCore
                 .AddContentRoute()
                 .AddAdmin()
             );
-            services.AddMvc();
+            services.AddMvc(o => o.EnableEndpointRouting = false);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
