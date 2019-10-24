@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.Controls.TableControlSupport
 {
-    [Control("table", "FormSupport/Controls/TableControlSupport/Scripts/table.js")]
+    [Control("table", "FormSupport/Controls/table.js")]
     [MapControlToUIHint("table(columns)")]
     public class TableControl
     {

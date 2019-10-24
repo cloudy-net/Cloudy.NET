@@ -57,6 +57,7 @@ namespace Website.AspNetCore
             {
                 r.MapContentRoute(null, "{*route:contentroute}", new { controller = "Page" });
             });
+            app.UseStaticFiles();
         }
     }
 }
