@@ -35,9 +35,7 @@ namespace Poetry.UI.FormSupport.ControlSupport
                         throw new AbsoluteControlModulePathException(type, attribute.ModulePath);
                     }
 
-                    var path = $"/{component.Id}/{attribute.ModulePath}";
-
-                    result.Add(new ControlDescriptor(attribute.Id, path));
+                    result.Add(new ControlDescriptor(attribute.Id, attribute.ModulePath));
                 }
             }
 

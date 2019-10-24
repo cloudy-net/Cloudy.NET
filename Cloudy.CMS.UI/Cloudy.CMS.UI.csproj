@@ -47,6 +47,8 @@
     <None Include="wwwroot\FormSupport\field-model.js" />
     <None Include="wwwroot\FormSupport\field.js" />
     <None Include="wwwroot\FormSupport\form-builder.js" />
+    <None Include="wwwroot\FormSupport\form-elements.css" />
+    <None Include="wwwroot\FormSupport\form-elements.scss" />
     <None Include="wwwroot\FormSupport\form.js" />
     <None Include="wwwroot\FormSupport\sortable-item.js" />
     <None Include="wwwroot\FormSupport\sortable.js" />

@@ -23,7 +23,7 @@ namespace Poetry.UI.FormSupport.ControlSupport
         public IDictionary<string, string> GetModulePaths()
         {
             var basePath = HttpContext.Request.PathBase;
-            return new ReadOnlyDictionary<string, string>(ControlProvider.GetAll().ToDictionary(t => t.Id, t => basePath.Add(t.ModulePath).ToString()));
+            return new ReadOnlyDictionary<string, string>(ControlProvider.GetAll().ToDictionary(t => t.Id, t => t.ModulePath));
         }
     }
 }

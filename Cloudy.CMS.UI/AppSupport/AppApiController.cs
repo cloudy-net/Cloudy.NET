@@ -27,7 +27,7 @@ namespace Poetry.UI.Apis
                 {
                     Id = app.Id,
                     Name = app.Name,
-                    ModulePath = $"./{app.ComponentId}/{app.ModulePath}",
+                    ModulePath = $"_content/{app.ComponentId}/{app.ModulePath}",
                 };
             });
         }

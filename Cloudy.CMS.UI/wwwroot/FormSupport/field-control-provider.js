@@ -21,7 +21,7 @@
                 var modulePath = modulePaths[field.control.id];
 
                 if (!this.typeModulesPromises[field.control.id]) {
-                    this.typeModulesPromises[field.control.id] = import(modulePath);
+                    this.typeModulesPromises[field.control.id] = import(`../${modulePath}`);
                 }
 
                 return this.typeModulesPromises[field.control.id];
