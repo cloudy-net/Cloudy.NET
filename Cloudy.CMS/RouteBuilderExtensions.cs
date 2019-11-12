@@ -9,23 +9,23 @@ namespace Cloudy.CMS
 {
     public static class RouteBuilderExtensions
     {
-        public static IRouteBuilder MapContentRoute(this IRouteBuilder routeBuilder, string name, string template)
+        public static IEndpointRouteBuilder MapContentRoute(this IEndpointRouteBuilder routeBuilder, string name, string template)
         {
             MapContentRoute(routeBuilder, name, template, defaults: null);
             return routeBuilder;
         }
 
-        public static IRouteBuilder MapContentRoute(this IRouteBuilder routeBuilder, string name, string template, object defaults)
+        public static IEndpointRouteBuilder MapContentRoute(this IEndpointRouteBuilder routeBuilder, string name, string template, object defaults)
         {
             return MapContentRoute(routeBuilder, name, template, defaults, constraints: null);
         }
 
-        public static IRouteBuilder MapContentRoute(this IRouteBuilder routeBuilder, string name, string template, object defaults, object constraints)
+        public static IEndpointRouteBuilder MapContentRoute(this IEndpointRouteBuilder routeBuilder, string name, string template, object defaults, object constraints)
         {
             return MapContentRoute(routeBuilder, name, template, defaults, constraints, dataTokens: null);
         }
 
-        public static IRouteBuilder MapContentRoute(this IRouteBuilder routeBuilder, string name, string template, object defaults, object constraints, object dataTokens)
+        public static IEndpointRouteBuilder MapContentRoute(this IEndpointRouteBuilder routeBuilder, string name, string template, object defaults, object constraints, object dataTokens)
         {
             routeBuilder.Routes.Add(new ContentRoute(
                 routeBuilder.DefaultHandler,

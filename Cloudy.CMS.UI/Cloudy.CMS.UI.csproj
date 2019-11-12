@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -13,56 +13,10 @@
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <None Include="wwwroot\app.js" />
-    <None Include="wwwroot\blade.js" />
-    <None Include="wwwroot\button.js" />
-    <None Include="wwwroot\close-button.js" />
-    <None Include="wwwroot\ContentAppSupport\content-app.js" />
-    <None Include="wwwroot\ContextMenuSupport\context-menu.js" />
-    <None Include="wwwroot\ContextMenuSupport\context-menu.css" />
-    <None Include="wwwroot\ContextMenuSupport\context-menu.scss" />
-    <None Include="wwwroot\ControlMessageSupport\control-message.css" />
-    <None Include="wwwroot\ControlMessageSupport\control-message.js" />
-    <None Include="wwwroot\ControlMessageSupport\control-message.scss" />
-    <None Include="wwwroot\DataTableSupport\backend.js" />
-    <None Include="wwwroot\DataTableSupport\copy-as-tab-separated.js" />
-    <None Include="wwwroot\DataTableSupport\data-table-button.js" />
-    <None Include="wwwroot\DataTableSupport\data-table.css" />
-    <None Include="wwwroot\DataTableSupport\data-table.js" />
-    <None Include="wwwroot\DataTableSupport\data-table.scss" />
-    <None Include="wwwroot\FormSupport\Controls\checkbox.js" />
-    <None Include="wwwroot\FormSupport\Controls\dropdown-control.js" />
-    <None Include="wwwroot\FormSupport\Controls\table.js" />
-    <None Include="wwwroot\FormSupport\Controls\text-control.js" />
-    <None Include="wwwroot\FormSupport\Controls\textarea.js" />
-    <None Include="wwwroot\FormSupport\Controls\time.js" />
-    <None Include="wwwroot\FormSupport\field-control-provider.js" />
-    <None Include="wwwroot\FormSupport\field-control.js" />
-    <None Include="wwwroot\FormSupport\field-descriptor-provider.js" />
-    <None Include="wwwroot\FormSupport\field-model.js" />
-    <None Include="wwwroot\FormSupport\field.js" />
-    <None Include="wwwroot\FormSupport\form-builder.js" />
-    <None Include="wwwroot\FormSupport\form-elements.css" />
-    <None Include="wwwroot\FormSupport\form-elements.scss" />
-    <None Include="wwwroot\FormSupport\form.js" />
-    <None Include="wwwroot\FormSupport\sortable-item.js" />
-    <None Include="wwwroot\FormSupport\sortable.js" />
-    <None Include="wwwroot\link-button.js" />
-    <None Include="wwwroot\nav.js" />
-    <None Include="wwwroot\NotificationSupport\notification-manager.css" />
-    <None Include="wwwroot\NotificationSupport\notification-manager.js" />
-    <None Include="wwwroot\NotificationSupport\notification-manager.scss" />
-    <None Include="wwwroot\NotificationSupport\notification.js" />
-    <None Include="wwwroot\portal.js" />
-    <None Include="wwwroot\remove-element-listener.js" />
-    <None Include="wwwroot\portal.css" />
-    <None Include="wwwroot\portal.scss" />
-    <None Include="wwwroot\variables.scss" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05">
       <PrivateAssets>all</PrivateAssets>

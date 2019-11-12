@@ -22,13 +22,6 @@ namespace Website.AspNetCore
 {
     public class Startup
     {
-        IConfiguration Configuration { get; }
-
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthorization(options =>
@@ -42,7 +35,6 @@ namespace Website.AspNetCore
                 .AddContentRoute()
                 .AddAdmin()
             );
-            services.AddMvc(o => o.EnableEndpointRouting = false);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -53,11 +45,10 @@ namespace Website.AspNetCore
             }
 
             app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
-            app.UseMvc(r =>
+            app.UseEndpoints(r =>
             {
                 r.MapContentRoute(null, "{*route:contentroute}", new { controller = "Page" });
             });
-            app.UseStaticFiles();
         }
     }
 }
