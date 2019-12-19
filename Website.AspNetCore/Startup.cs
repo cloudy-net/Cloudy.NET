@@ -37,16 +37,10 @@ namespace Website.AspNetCore
             );
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
-            app.UseEndpoints(r =>
-            {
+            app.UseRouter(r => {
                 r.MapContentRoute(null, "{*route:contentroute}", new { controller = "Page" });
             });
         }
