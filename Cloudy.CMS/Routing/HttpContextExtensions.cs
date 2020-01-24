@@ -1,0 +1,26 @@
+﻿using Cloudy.CMS.ContentSupport;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Cloudy.CMS.Routing
+{
+    public static class HttpContextExtensions
+    {
+        public static IContent GetContentFromContentRoute(this HttpContext instance)
+        {
+            if (!instance.Request.RouteValues.ContainsKey("contentFromContentRoute"))
+            {
+                return null;
+            }
+
+            return instance.Request.RouteValues["contentFromContentRoute"] as IContent;
+        }
+
+        public static T GetContentFromContentRoute<T>(this HttpContext instance) where T : class
+        {
+            return GetContentFromContentRoute(instance) as T;
+        }
+    }
+}

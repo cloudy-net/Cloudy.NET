@@ -97,7 +97,9 @@ namespace Cloudy.CMS.UI
                     });
                 }
 
-                adminBranch.UseMvc(routes => routes.MapAreaRoute("Cloudy.CMS.UI", "Cloudy.CMS.UI", string.Empty, new { controller = "MainPage", action = "Index" }));
+                adminBranch.UseEndpoints(b => {
+                    b.MapAreaControllerRoute("Cloudy.CMS.UI", "Cloudy.CMS.UI", string.Empty, new { controller = "MainPage", action = "Index" });
+                });
             });
         }
     }

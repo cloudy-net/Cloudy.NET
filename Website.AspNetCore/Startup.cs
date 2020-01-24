@@ -17,6 +17,9 @@ using Website.AspNetCore.Models;
 using Cloudy.CMS.SingletonSupport;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Matching;
+using Cloudy.CMS.Routing;
+using Microsoft.Extensions.Hosting;
 
 namespace Website.AspNetCore
 {
@@ -28,21 +31,31 @@ namespace Website.AspNetCore
             {
                 options.AddPolicy("test", policy => policy.RequireAssertion(c => false));
             });
+            services.AddControllersWithViews();
+            //services.AddRouting(options => options.ConstraintMap.Add("content", typeof(ContentRouteConstraint)));
             services.AddCloudy(cloudy => cloudy
-                .AddComponent<WebsiteComponent>()
-                //.WithMongoDatabaseConnectionStringNamed("mongo")
+            //    .AddComponent<WebsiteComponent>()
+            //    //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .WithFileBasedDocuments()
                 .AddContentRoute()
-                .AddAdmin()
+            //    .AddAdmin()
             );
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
-            app.UseRouter(r => {
-                r.MapContentRoute(null, "{*route:contentroute}", new { controller = "Page" });
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseRouting();
+            //app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
+            app.UseEndpoints(endpoints => {
+                endpoints.MapGet("/test/{value:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
+                endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
             });
+            //app.UseEndpoints(b => b.MapControllerRoute(.MapContentRoute(null, "{*route:contentroute}", new { controller = "Page" }));
         }
     }
 }
