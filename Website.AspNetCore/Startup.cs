@@ -48,7 +48,7 @@ namespace Website.AspNetCore
             app.UseRouting();
             //app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
             app.UseEndpoints(endpoints => {
-                endpoints.MapGet("/test/{value:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
+                endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
             });
         }
