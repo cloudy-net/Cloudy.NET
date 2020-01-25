@@ -77,7 +77,6 @@ namespace Cloudy.CMS.UI
 
             app.Map(path, adminBranch =>
             {
-                adminBranch.UseRouting();
                 adminBranch.UseMiddleware<AuthorizeMiddleware>(policy);
 
                 foreach (var component in app.ApplicationServices.GetRequiredService<IComponentProvider>().GetAll())
@@ -97,8 +96,9 @@ namespace Cloudy.CMS.UI
                     });
                 }
 
+                adminBranch.UseRouting();
                 adminBranch.UseEndpoints(b => {
-                    b.MapAreaControllerRoute("Cloudy.CMS.UI", "Cloudy.CMS.UI", string.Empty, new { controller = "MainPage", action = "Index" });
+                    b.MapAreaControllerRoute(null, "Cloudy.CMS.UI", string.Empty, new { controller = "MainPage", action = "Index" });
                 });
             });
         }
