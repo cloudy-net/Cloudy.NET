@@ -75,9 +75,9 @@ namespace Cloudy.CMS.UI
 
             var path = new PathString(options.BasePath);
 
-
             app.Map(path, adminBranch =>
             {
+                adminBranch.UseRouting();
                 adminBranch.UseMiddleware<AuthorizeMiddleware>(policy);
 
                 foreach (var component in app.ApplicationServices.GetRequiredService<IComponentProvider>().GetAll())

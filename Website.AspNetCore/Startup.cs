@@ -30,11 +30,11 @@ namespace Website.AspNetCore
             services.AddAuthorization();
             services.AddControllersWithViews();
             services.AddCloudy(cloudy => cloudy
-              //.AddComponent<WebsiteComponent>()
-              //.WithMongoDatabaseConnectionStringNamed("mongo")
+                //.AddComponent<WebsiteComponent>()
+                //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .WithFileBasedDocuments()
                 .AddContentRoute()
-              //.AddAdmin()
+                .AddAdmin()
             );
         }
 
@@ -45,8 +45,8 @@ namespace Website.AspNetCore
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
             app.UseRouting();
-            //app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
             app.UseEndpoints(endpoints => {
                 endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
