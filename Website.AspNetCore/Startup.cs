@@ -27,18 +27,14 @@ namespace Website.AspNetCore
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("test", policy => policy.RequireAssertion(c => false));
-            });
+            services.AddAuthorization();
             services.AddControllersWithViews();
-            //services.AddRouting(options => options.ConstraintMap.Add("content", typeof(ContentRouteConstraint)));
             services.AddCloudy(cloudy => cloudy
-            //    .AddComponent<WebsiteComponent>()
-            //    //.WithMongoDatabaseConnectionStringNamed("mongo")
+              //.AddComponent<WebsiteComponent>()
+              //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .WithFileBasedDocuments()
                 .AddContentRoute()
-            //    .AddAdmin()
+              //.AddAdmin()
             );
         }
 
@@ -55,7 +51,6 @@ namespace Website.AspNetCore
                 endpoints.MapGet("/test/{value:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
             });
-            //app.UseEndpoints(b => b.MapControllerRoute(.MapContentRoute(null, "{*route:contentroute}", new { controller = "Page" }));
         }
     }
 }
