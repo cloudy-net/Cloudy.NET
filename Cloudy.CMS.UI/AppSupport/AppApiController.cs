@@ -21,15 +21,7 @@ namespace Poetry.UI.Apis
         [Route("GetAll")]
         public IEnumerable<object> GetNames()
         {
-            return AppProvider.GetAll().Select(app =>
-            {
-                return new
-                {
-                    Id = app.Id,
-                    Name = app.Name,
-                    ModulePath = $"_content/{app.ComponentId}/{app.ModulePath}",
-                };
-            });
+            return AppProvider.GetAll().ToList();
         }
     }
 }

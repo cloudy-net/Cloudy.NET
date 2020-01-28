@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Poetry.ComponentSupport;
+using Poetry.UI.StyleSupport;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,12 +14,14 @@ namespace Cloudy.CMS.UI.PortalSupport
         ITitleProvider TitleProvider { get; }
         IFaviconProvider FaviconProvider { get; }
         IStaticFilesBasePathProvider StaticFilesBasePathProvider { get; }
+        IStyleProvider StyleProvider { get; }
 
-        public PortalPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStaticFilesBasePathProvider staticFilesBasePathProvider)
+        public PortalPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStaticFilesBasePathProvider staticFilesBasePathProvider, IStyleProvider styleProvider)
         {
             TitleProvider = titleProvider;
             FaviconProvider = faviconProvider;
             StaticFilesBasePathProvider = staticFilesBasePathProvider;
+            StyleProvider = styleProvider;
         }
 
         public async Task RenderPageAsync(HttpContext context)
@@ -32,7 +36,10 @@ namespace Cloudy.CMS.UI.PortalSupport
             await context.Response.WriteAsync($"\n");
             await context.Response.WriteAsync($"    <link rel=\"icon\" href=\"{FaviconProvider.Favicon}\">\n");
             await context.Response.WriteAsync($"\n");
-            await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "portal.css").Replace('\\', '/')}\" />\n");
+            foreach(var style in StyleProvider.GetAll())
+            {
+                await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, style.Path).Replace('\\', '/')}\" />\n");
+            }
             await context.Response.WriteAsync($"</head>\n");
             await context.Response.WriteAsync($"<body>\n");
             await context.Response.WriteAsync($"    <script type=\"module\">\n");
