@@ -1,6 +1,6 @@
 ﻿using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.PortalSupport;
 using Poetry.DependencyInjectionSupport;
-using Poetry.UI.PortalSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,8 +11,10 @@ namespace Cloudy.CMS.UI
     {
         public void InjectDependencies(IContainer container)
         {
-            container.RegisterSingleton<Poetry.UI.PortalSupport.ITitleProvider, TitleProvider>();
-            container.RegisterSingleton<Poetry.UI.PortalSupport.IFaviconProvider, FaviconProvider>();
+            container.RegisterSingleton<ITitleProvider, TitleProvider>();
+            container.RegisterSingleton<IFaviconProvider, FaviconProvider>();
+            container.RegisterSingleton<IPortalPageRenderer, PortalPageRenderer>();
+            container.RegisterSingleton<IStaticFilesBasePathProvider, StaticFilesBasePathProvider>();
             container.RegisterSingleton<IPluralizer, Pluralizer>();
             container.RegisterSingleton<IHumanizer, Humanizer>();
         }

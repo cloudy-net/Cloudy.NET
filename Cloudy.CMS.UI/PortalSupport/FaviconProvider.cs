@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.PortalSupport
+namespace Cloudy.CMS.UI.PortalSupport
 {
     public class FaviconProvider : IFaviconProvider
     {
-        public string Favicon => "data:;base64,iVBORw0KGgo=";
+        public string Favicon { get; set; } = "data:;base64,iVBORw0KGgo=";
     }
 }

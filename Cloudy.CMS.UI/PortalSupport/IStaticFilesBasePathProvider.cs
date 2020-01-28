@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.PortalSupport
 {
-    public class TitleProvider : ITitleProvider
+    public interface IStaticFilesBasePathProvider
     {
-        public string Title { get; set; } = "Cloudy CMS";
+        string StaticFilesBasePath { get; }
     }
 }

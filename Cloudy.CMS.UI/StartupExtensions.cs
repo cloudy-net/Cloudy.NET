@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Poetry.ComponentSupport;
 using Cloudy.CMS.UI.AuthorizationSupport;
+using Cloudy.CMS.UI.PortalSupport;
 
 namespace Cloudy.CMS.UI
 {
@@ -75,30 +76,25 @@ namespace Cloudy.CMS.UI
 
             var path = new PathString(options.BasePath);
 
+            ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.BasePath;
+
             app.Map(path, adminBranch =>
             {
                 adminBranch.UseMiddleware<AuthorizeMiddleware>(policy);
 
-                foreach (var component in app.ApplicationServices.GetRequiredService<IComponentProvider>().GetAll())
+                if (options.StaticFilesFileProvider != null)
                 {
-                    if (!component.Assembly.Assembly.GetManifestResourceNames().Contains(DefaultManifestName))
+                    adminBranch.UseStaticFiles(new StaticFileOptions
                     {
-                        continue;
-                    }
-
-                    adminBranch.Map(new PathString($"/{component.Id}"), componentBranch =>
-                    {
-                        componentBranch.UseStaticFiles(new StaticFileOptions
-                        {
-                            FileProvider = new ManifestEmbeddedFileProvider(component.Assembly.Assembly),
-                            OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
-                        });
+                        FileProvider = options.StaticFilesFileProvider,
+                        OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
                     });
                 }
 
                 adminBranch.UseRouting();
-                adminBranch.UseEndpoints(b => {
-                    b.MapAreaControllerRoute(null, "Cloudy.CMS.UI", string.Empty, new { controller = "MainPage", action = "Index" });
+                adminBranch.UseEndpoints(endpoints => {
+                    endpoints.MapGet("/", async context => await context.RequestServices.GetRequiredService<IPortalPageRenderer>().RenderPageAsync(context));
+                    endpoints.MapAreaControllerRoute(null, "Cloudy.CMS", "{controller}/{action}");
                 });
             });
         }

@@ -1,4 +1,5 @@
-﻿using Poetry.UI.AspNetCore;
+﻿using Microsoft.Extensions.FileProviders;
+using Poetry.UI.AspNetCore;
 
 namespace Cloudy.CMS.UI
 {
@@ -35,6 +36,13 @@ namespace Cloudy.CMS.UI
         public CloudyAdminConfigurator DontNagOnLocalhost()
         {
             Options.DontNagOnLocalhost = true;
+
+            return this;
+        }
+
+        public CloudyAdminConfigurator WithStaticFilesFrom(IFileProvider fileProvider)
+        {
+            Options.StaticFilesFileProvider = fileProvider;
 
             return this;
         }

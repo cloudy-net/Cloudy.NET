@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.FileProviders;
 using Poetry.UI.AspNetCore;
 
 namespace Cloudy.CMS.UI
@@ -9,5 +10,6 @@ namespace Cloudy.CMS.UI
         public AuthorizeOptions AuthorizeOptions { get; set; }
         public bool AllowUnauthenticatedUsers { get; set; }
         public bool DontNagOnLocalhost { get; set; }
+        public IFileProvider StaticFilesFileProvider { get; set; }
     }
 }

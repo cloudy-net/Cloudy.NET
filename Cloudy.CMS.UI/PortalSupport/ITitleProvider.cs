@@ -1,4 +1,4 @@
-﻿namespace Poetry.UI.PortalSupport
+﻿namespace Cloudy.CMS.UI.PortalSupport
 {
     public interface ITitleProvider
     {

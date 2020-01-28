@@ -13,8 +13,12 @@
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="node_modules\**" />
+    <None Remove="node_modules\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -24,12 +28,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*.html" />
-    <EmbeddedResource Include="wwwroot\**\*.js" />
-    <EmbeddedResource Include="wwwroot\**\*.css" />
   </ItemGroup>
 
 </Project>
