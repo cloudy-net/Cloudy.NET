@@ -32,39 +32,49 @@ class ListContentTypesBlade extends Blade {
         this.setContent(
             new DataTable()
                 .setBackend('Cloudy.CMS.ContentTypeList')
-                .addColumn(c => c.setHeader(element => 'Name').setButton(contentType => {
-                    var name = contentType.isSingleton ? contentType.name : contentType.pluralName;
-                    var button = new DataTableButton(name).onClick(() => button.setActive());
+                .addColumn(c => c
+                    .setHeader(element => 'Name')
+                    .setButton(contentType => {
+                        var name = contentType.isSingleton ? contentType.name : contentType.pluralName;
+                        var button = new DataTableButton(name).onClick(() => button.setActive());
 
-                    if (contentType.isSingleton) {
-                        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-                        var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, {
-                            credentials: 'include',
-                            method: 'Get',
-                        })
-                            .then(response => response.json());
+                        if (contentType.isSingleton) {
+                            button.element.append(' ');
+                            var singletonLabel = document.createElement('em');
+                            singletonLabel.innerText = '(singleton)';
+                            singletonLabel.style.fontStyle = 'normal';
+                            singletonLabel.style.opacity = '0.5';
+                            button.element.append(singletonLabel);
 
-                        Promise.all([formBuilder.fieldModels, content]).then(results =>
-                            button.onClick(() =>
-                                app.openAfter(
-                                    new EditContentBlade(
-                                        app,
-                                        contentType,
-                                        formBuilder,
-                                        results[1],
-                                    ).onClose(() => button.setActive(false)),
-                                    this
+                            var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
+                            var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, {
+                                credentials: 'include',
+                                method: 'Get',
+                            })
+                                .then(response => response.json());
+
+                            Promise.all([formBuilder.fieldModels, content]).then(results =>
+                                button.onClick(() =>
+                                    app.openAfter(
+                                        new EditContentBlade(
+                                            app,
+                                            contentType,
+                                            formBuilder,
+                                            results[1],
+                                        ).onClose(() => button.setActive(false)),
+                                        this
+                                    )
                                 )
-                            )
-                        );
-                    } else {
-                        button.onClick(() =>
-                            app.openAfter(new ListContentBlade(app, contentType).onClose(() => button.setActive(false)), this)
-                        );
-                    }
+                            );
+                        } else {
+                            button.onClick(() =>
+                                app.openAfter(new ListContentBlade(app, contentType).onClose(() => button.setActive(false)), this)
+                            );
+                        }
 
-                    return button;
-                }))
+                        return button;
+                    })
+                )
         );
     }
 }
