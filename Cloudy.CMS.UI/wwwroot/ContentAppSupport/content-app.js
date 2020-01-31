@@ -173,10 +173,22 @@ class EditContentBlade extends Blade {
             this.setTitle(`New ${contentType.name}`);
         }
 
-        formBuilder.fieldModels.then(fieldModels =>
+        formBuilder.fieldModels.then(fieldModels => {
+            var groups = [...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.group))].sort();
+            
+            if (groups.length == 1) {
+                formBuilder.build(content, { group: groups[0] }).then(form => this.setContent(form));
+
+                return;
+            }
+
+            this.setMenu(menu =>
+                groups.forEach(group => menu.addItem(i => i.setText(group)))
+            );
+
             this.setContent(
                 new DataTable()
-                    .setBackend([...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.group))].sort())
+                    .setBackend(groups)
                     .addColumn(c =>
                         c.setHeader(() => 'Properties').setButton(group => {
                             var button = new DataTableButton(group || 'General');
@@ -190,7 +202,7 @@ class EditContentBlade extends Blade {
                         })
                     )
             )
-        );
+        });
 
         var saveButton = new Button('Save')
             .onClick(() =>

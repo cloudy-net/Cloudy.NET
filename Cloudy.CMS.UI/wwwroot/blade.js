@@ -1,4 +1,5 @@
 ﻿import BladeCloseButton from './close-button.js';
+import Menu from './menu.js';
 
 
 
@@ -44,6 +45,12 @@ class Blade {
         this.titleText.innerText = text;
     }
 
+    setMenu(menuBuilder) {
+        this.menu = new Menu();
+        menuBuilder(this.menu);
+        this.title.prepend(this.menu.element);
+    }
+
     setToolbar(...items) {
         this.toolbar.style.display = '';
         [...this.toolbar.children].forEach(c => this.toolbar.removeChild(c));
@@ -62,40 +69,11 @@ class Blade {
     }
 
     open() {
-        return new Promise(done => {
-            this.element.classList.add('poetry-ui-hidden');
-            this.element.getBoundingClientRect(); // force reflow
-
-            this.element.classList.remove('poetry-ui-hidden');
-            this.element.style.zIndex = -1;
-
-            var callback = () => {
-                this.element.style.zIndex = '';
-                this.element.removeEventListener('transitionend', callback);
-                done();
-            }
-
-            this.element.addEventListener('transitionend', callback);
-        });
+        return new Promise(done => done());
     }
 
     close(...parameters) {
-        return new Promise(done => {
-            this.element.classList.add('poetry-ui-hidden');
-
-            if (!this.element.style.zIndex) {
-                this.element.style.zIndex = -1;
-            }
-
-            var callback = () => {
-                this.triggerOnClose(...parameters);
-                this.element.removeEventListener('transitionend', callback);
-                this.element.style.zIndex = '';
-                done();
-            }
-
-            this.element.addEventListener('transitionend', callback);
-        });
+        return new Promise(done => done());
     }
 
     onClose(callback) {

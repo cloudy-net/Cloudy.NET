@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "wwwroot/ContextMenuSupport/context-menu.css",
+    "inputFile": "wwwroot/ContextMenuSupport/context-menu.scss"
+  },
+  {
+    "outputFile": "wwwroot/portal.css",
+    "inputFile": "wwwroot/portal.scss"
+  },
+  {
+    "outputFile": "wwwroot/menu.css",
+    "inputFile": "wwwroot/menu.scss"
+  }
+]

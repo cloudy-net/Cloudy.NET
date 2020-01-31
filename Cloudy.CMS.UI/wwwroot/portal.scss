@@ -283,6 +283,10 @@ poetry-ui-blade-title-text {
     display: block;
     padding: 1rem;
     font-size: $large-font;
+
+    .poetry-ui-menu-outer + & {
+        padding-left: 0;
+    }
 }
 
 poetry-ui-blade-title-close {
