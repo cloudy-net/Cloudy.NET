@@ -5,6 +5,7 @@ import Button from '../button.js';
 import DataTable from '../DataTableSupport/data-table.js';
 import DataTableButton from '../DataTableSupport/data-table-button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
+import List from '../ListSupport/list.js';
 
 
 
@@ -29,53 +30,37 @@ class ListContentTypesBlade extends Blade {
 
         this.setTitle('Content types');
 
-        this.setContent(
-            new DataTable()
-                .setBackend('Cloudy.CMS.ContentTypeList')
-                .addColumn(c => c
-                    .setHeader(element => 'Name')
-                    .setButton(contentType => {
-                        var name = contentType.isSingleton ? contentType.name : contentType.pluralName;
-                        var button = new DataTableButton(name).onClick(() => button.setActive());
+        fetch('ContentApp/GetContentTypes', { credentials: 'include' })
+            .then(response => response.json())
+            .then(contentTypes => {
+                var list = new List();
+                contentTypes.forEach(contentType => list.addItem(item => {
+                    item.setText(contentType.name);
 
-                        if (contentType.isSingleton) {
-                            button.element.append(' ');
-                            var singletonLabel = document.createElement('em');
-                            singletonLabel.innerText = '(singleton)';
-                            singletonLabel.style.fontStyle = 'normal';
-                            singletonLabel.style.opacity = '0.5';
-                            button.element.append(singletonLabel);
+                    if (contentType.isSingleton) {
+                        item.setSubText('Singleton');
+                        
+                        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
+                        var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
 
-                            var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-                            var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, {
-                                credentials: 'include',
-                                method: 'Get',
+                        Promise.all([formBuilder.fieldModels, content]).then(results =>
+                            item.onClick(() => {
+                                item.setActive();
+                                app.openAfter(
+                                    new EditContentBlade(app, contentType, formBuilder, results[1])
+                                        .onClose(() => item.setActive(false)),
+                                    this);
                             })
-                                .then(response => response.json());
-
-                            Promise.all([formBuilder.fieldModels, content]).then(results =>
-                                button.onClick(() =>
-                                    app.openAfter(
-                                        new EditContentBlade(
-                                            app,
-                                            contentType,
-                                            formBuilder,
-                                            results[1],
-                                        ).onClose(() => button.setActive(false)),
-                                        this
-                                    )
-                                )
-                            );
-                        } else {
-                            button.onClick(() =>
-                                app.openAfter(new ListContentBlade(app, contentType).onClose(() => button.setActive(false)), this)
-                            );
-                        }
-
-                        return button;
-                    })
-                )
-        );
+                        );
+                    } else {
+                        item.onClick(() => {
+                            item.setActive();
+                            app.openAfter(new ListContentBlade(app, contentType).onClose(() => item.setActive(false)), this);
+                        });
+                    }
+                }));
+                this.setContent(list);
+            });
     }
 }
 
@@ -91,32 +76,23 @@ class ListContentBlade extends Blade {
 
         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
 
-        var dataTable = new DataTable().setBackend(`Cloudy.CMS.ContentList[type=${contentType.id}]`);
+        fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
+            .then(response => response.json())
+            .then(response => {
+                var list = new List();
+                response.forEach(content => list.addItem(item => {
+                    item.setText(contentType.isNameable ? content.name : content.id);
 
-        dataTable.addColumn(c =>
-            c.setHeader(element => contentType.isNameable ? 'name' : 'id').setButton(item => {
-                var button = new DataTableButton(contentType.isNameable ? item.name : item.id);
-
-                formBuilder.fieldModels.then(fieldModels =>
-                    button.onClick(() => {
-                        button.setActive();
-                        app.openAfter(new EditContentBlade(app, contentType, formBuilder, item).onSave(() => dataTable.update()).onClose(() => button.setActive(false)), this);
-                    })
-                );
-
-                return button;
-            })
-        );
+                    formBuilder.fieldModels.then(fieldModels => item.onClick(() => app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => dataTable.update()), this)));
+                }));
+                this.setContent(list);
+            });
 
         this.setToolbar(
             new Button('New').onClick(() =>
-                formBuilder.fieldModels.then(fieldModels =>
-                    app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => dataTable.update()), this)
-                )
+                formBuilder.fieldModels.then(fieldModels => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => dataTable.update()), this))
             )
         );
-
-        this.setContent(dataTable);
     }
 }
 
@@ -182,9 +158,9 @@ class EditContentBlade extends Blade {
                 return;
             }
 
-            this.setMenu(menu =>
-                groups.forEach(group => menu.addItem(i => i.setText(group)))
-            );
+            //this.setMenu(menu =>
+            //    groups.forEach(group => menu.addItem(i => i.setText(group)))
+            //);
 
             this.setContent(
                 new DataTable()

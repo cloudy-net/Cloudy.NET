@@ -5,7 +5,7 @@ namespace Cloudy.CMS.UI
 {
     [Component("Cloudy.CMS.UI")]
     [Style("portal.css")]
-    [Style("menu.css")]
+    [Style("ListSupport/list.css")]
     [Style("ContextMenuSupport/context-menu.css")]
     [Style("ControlMessageSupport/control-message.css")]
     [Style("DataTableSupport/data-table.css")]

@@ -1,5 +1,4 @@
 ﻿import BladeCloseButton from './close-button.js';
-import Menu from './menu.js';
 
 
 
@@ -43,12 +42,6 @@ class Blade {
 
     setTitle(text) {
         this.titleText.innerText = text;
-    }
-
-    setMenu(menuBuilder) {
-        this.menu = new Menu();
-        menuBuilder(this.menu);
-        this.title.prepend(this.menu.element);
     }
 
     setToolbar(...items) {

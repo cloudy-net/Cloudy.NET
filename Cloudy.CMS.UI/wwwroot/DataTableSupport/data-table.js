@@ -152,10 +152,6 @@ class DataTable {
                     this.columns.forEach(column => {
                         var element = document.createElement('td');
 
-                        if (column.button) {
-                            element.classList.add('poetry-ui-data-table-no-padding');
-                        }
-
                         if (column.contentGenerator) {
                             var result = column.contentGenerator(item, this);
 
@@ -292,13 +288,6 @@ class Column {
     }
 
     setContent(contentGenerator) {
-        this.contentGenerator = contentGenerator;
-
-        return this;
-    }
-
-    setButton(contentGenerator) {
-        this.button = true;
         this.contentGenerator = contentGenerator;
 
         return this;

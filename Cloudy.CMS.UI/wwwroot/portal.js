@@ -18,6 +18,10 @@ class Portal {
         }
     }
 
+    setTitle(value) {
+        this.nav.setTitle(value);
+    }
+
     openApp(appDescriptor) {
         [...this.element.querySelectorAll('poetry-ui-app')].forEach(a => this.element.removeChild(a));
 

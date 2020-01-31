@@ -97,6 +97,12 @@ class Nav {
             this.menu.querySelector(`[poetry-ui-app-id="${appDescriptor.id}"]`).classList.add('poetry-ui-active');
         });
     }
+
+    setTitle(value) {
+        var title = document.createElement('poetry-ui-portal-nav-title');
+        title.innerText = value;
+        this.element.append(title);
+    }
 }
 
 export default Nav;

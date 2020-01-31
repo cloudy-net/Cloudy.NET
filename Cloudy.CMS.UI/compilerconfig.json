@@ -8,7 +8,11 @@
     "inputFile": "wwwroot/portal.scss"
   },
   {
-    "outputFile": "wwwroot/menu.css",
-    "inputFile": "wwwroot/menu.scss"
+    "outputFile": "wwwroot/ListSupport/list.css",
+    "inputFile": "wwwroot/ListSupport/list.scss"
+  },
+  {
+    "outputFile": "wwwroot/FormSupport/form-elements.css",
+    "inputFile": "wwwroot/FormSupport/form-elements.scss"
   }
 ]

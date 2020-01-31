@@ -30,6 +30,7 @@ namespace Cloudy.CMS.UI.PortalSupport
             await context.Response.WriteAsync($"<html>\n");
             await context.Response.WriteAsync($"<head>\n");
             await context.Response.WriteAsync($"    <meta charset=\"utf-8\">\n");
+            await context.Response.WriteAsync($"    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap\"/>\n");
             await context.Response.WriteAsync($"    <title>{TitleProvider.Title}</title>\n");
             await context.Response.WriteAsync($"\n");
             await context.Response.WriteAsync($"    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
@@ -44,7 +45,7 @@ namespace Cloudy.CMS.UI.PortalSupport
             await context.Response.WriteAsync($"<body>\n");
             await context.Response.WriteAsync($"    <script type=\"module\">\n");
             await context.Response.WriteAsync($"        import Portal from '{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "portal.js").Replace('\\', '/')}';\n");
-            await context.Response.WriteAsync($"        new Portal();\n");
+            await context.Response.WriteAsync($"        new Portal().setTitle('Cloudy CMS');\n");
             await context.Response.WriteAsync($"    </script>\n");
             await context.Response.WriteAsync($"</body>\n");
             await context.Response.WriteAsync($"</html>\n");
