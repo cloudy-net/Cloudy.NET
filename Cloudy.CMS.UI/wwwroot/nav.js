@@ -53,13 +53,16 @@ class Nav {
         this.element.appendChild(this.menuFade);
 
         this.appDescriptorsPromise = fetch('App/GetAll', { credentials: 'include' }).then(response => response.json());
-        this.appDescriptorsPromise.then(appDescriptors => appDescriptors.forEach(appDescriptor => {
-            this.menuList.addItem(item => {
-                item.setText(appDescriptor.name);
-                item.element.setAttribute('poetry-ui-app-id', appDescriptor.id);
-                item.onClick(() => portal.openApp(appDescriptor));
+        this.appDescriptorsPromise.then(appDescriptors => {
+            this.menuList.addSubHeader('Apps');
+            appDescriptors.forEach(appDescriptor => {
+                this.menuList.addItem(item => {
+                    item.setText(appDescriptor.name);
+                    item.element.setAttribute('poetry-ui-app-id', appDescriptor.id);
+                    item.onClick(() => portal.openApp(appDescriptor));
+                });
             });
-        }));
+        });
 
         if (document.readyState != 'loading') {
             this.openStartApp();
