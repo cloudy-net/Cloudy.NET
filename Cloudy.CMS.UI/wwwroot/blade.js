@@ -70,11 +70,11 @@ class Blade {
     }
 
     open() {
-        return new Promise(done => done());
+        return Promise.resolve();
     }
 
     close(...parameters) {
-        return new Promise(done => done());
+        return Promise.resolve().then(() => this.triggerOnClose(...parameters));
     }
 
     onClose(callback) {
