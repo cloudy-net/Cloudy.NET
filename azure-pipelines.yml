@@ -1,0 +1,11 @@
+trigger:
+- refs/tags/v*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+  displayName: 'Run a multi-line script'
