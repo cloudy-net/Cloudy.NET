@@ -181,7 +181,7 @@ class EditContentBlade extends Blade {
         var saveButton = new Button('Save')
             .setPrimary()
             .onClick(() =>
-                fetch('ContentApp/Save', {
+                fetch('ContentApp/SaveContent', {
                     credentials: 'include',
                     method: 'POST',
                     headers: {
@@ -190,7 +190,7 @@ class EditContentBlade extends Blade {
                     body: JSON.stringify({
                         id: content.id,
                         contentTypeId: contentType.id,
-                        item: content
+                        content: JSON.stringify(content)
                     })
                 })
                     .then(() => this.onSaveCallbacks.forEach(callback => callback(content)))
