@@ -8,19 +8,18 @@ steps:
 
 - script: |
     VERSION_TAG=`git describe --tags`
-    echo "First step: $VERSION_TAG"
     VERSION_TAG=${VERSION_TAG:1}
-    echo "Second step: $VERSION_TAG"
     echo "##vso[task.setvariable variable=VERSION_TAG]$VERSION_TAG"
-    echo Add other tasks to build, test, and deploy your project.
-  displayName: 'Run a multi-line script'
+  displayName: Parse version from tag v*
   
 - task: UseDotNet@2
+  displayName: Install .NET
   inputs:
     packageType: 'sdk'
     version: '3.1.x'
 
 - task: DotNetCoreCLI@2
+  displayName: Restore
   inputs:
     command: 'restore'
     projects: |
@@ -29,6 +28,7 @@ steps:
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
     command: 'build'
     projects: |
@@ -36,6 +36,7 @@ steps:
       Cloudy.CMS.UI/Cloudy.CMS.UI.csproj
 
 - task: DotNetCoreCLI@2
+  displayName: Pack
   inputs:
     command: 'pack'
     packagesToPack: 'Cloudy.CMS/Cloudy.CMS.csproj;Cloudy.CMS.UI/Cloudy.CMS.UI.csproj'
