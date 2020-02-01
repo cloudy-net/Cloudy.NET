@@ -16,6 +16,21 @@ steps:
     echo "##vso[task.setvariable variable=VERSION_TAG]$VERSION_TAG"
     echo Add other tasks to build, test, and deploy your project.
   displayName: 'Run a multi-line script'
+  
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: |
+      Cloudy.CMS/Cloudy.CMS.csproj
+      Cloudy.CMS.UI/Cloudy.CMS.UI.csproj
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: |
+      Cloudy.CMS/Cloudy.CMS.csproj
+      Cloudy.CMS.UI/Cloudy.CMS.UI.csproj
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -23,4 +38,5 @@ steps:
     packagesToPack: 'Cloudy.CMS/Cloudy.CMS.csproj;Cloudy.CMS.UI/Cloudy.CMS.UI.csproj'
     nobuild: true
     includesymbols: true
-    versioningScheme: 'off'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'VERSION_TAG'
