@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Cloudy.CMS.UI.ContentAppSupport;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using Poetry.UI.FormSupport.ControlSupport;
 using Poetry.UI.FormSupport.ControlSupport.MatchingSupport;
@@ -17,12 +18,14 @@ namespace Poetry.UI.FormSupport.FieldSupport
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
+        IHumanizer Humanizer { get; }
 
-        public FieldApiController(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher)
+        public FieldApiController(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer)
         {
             FormProvider = formProvider;
             FieldProvider = fieldProvider;
             ControlMatcher = controlMatcher;
+            Humanizer = humanizer;
         }
 
         [Route("GetAllForForm")]
@@ -48,6 +51,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
                 result.Add(new FieldResponse
                 {
                     Id = field.Id,
+                    Label = field.Label ?? Humanizer.Humanize(field.Id),
                     CamelCaseId = CamelCaseNamingStrategy.GetPropertyName(field.Id, false),
                     Control = control,
                     EmbeddedFormId = embeddedFormId?.Id,
@@ -62,6 +66,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
         public class FieldResponse
         {
             public string Id { get; set; }
+            public string Label { get; set; }
             public string CamelCaseId { get; set; }
             public ControlReference Control { get; set; }
             public string EmbeddedFormId { get; set; }

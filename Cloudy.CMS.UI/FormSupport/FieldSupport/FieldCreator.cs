@@ -30,6 +30,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
 
             var autoGenerate = displayAttribute?.GetAutoGenerateField() ?? true;
             var group = displayAttribute?.GetGroupName();
+            var label = displayAttribute?.GetName();
             
             var type = property.PropertyType;
             var isSortable = false;
@@ -46,7 +47,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
                 .ToList()
                 .AsReadOnly();
 
-            return new FieldDescriptor(property.Name, type, uiHints, isSortable, autoGenerate, group);
+            return new FieldDescriptor(property.Name, type, uiHints, label, isSortable, autoGenerate, group);
         }
     }
 }

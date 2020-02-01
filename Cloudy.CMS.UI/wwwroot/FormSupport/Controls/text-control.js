@@ -13,6 +13,22 @@ class TextControl extends FieldControl {
         input.addEventListener('keyup', () => this.triggerChange(input.value || null));
 
         this.onSet(value => input.value = value || null);
+
+        if (value == null) {
+            this.setEnlargeLabel(true);
+        }
+
+        input.addEventListener('focus', () => {
+            if (input.value == '') {
+                this.setEnlargeLabel(false);
+            }
+        });
+
+        input.addEventListener('blur', () => {
+            if (input.value == '') {
+                this.setEnlargeLabel(true);
+            }
+        });
     }
 }
 

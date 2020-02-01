@@ -115,6 +115,18 @@ class FormBuilder {
 
         control.onChange(value => target[fieldModel.descriptor.camelCaseId] = value);
 
+        if (control.enlargeLabel) {
+            element.classList.add('enlarge-label');
+        }
+
+        control.onSetEnlargeLabel(value => {
+            if (value) {
+                element.classList.add('enlarge-label');
+            } else {
+                element.classList.remove('enlarge-label');
+            }
+        });
+
         element.appendChild(control.element);
 
         return new Field(fieldModel, element, { control });

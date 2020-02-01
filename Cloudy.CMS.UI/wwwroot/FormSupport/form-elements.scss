@@ -31,11 +31,26 @@ fieldset.poetry-ui-form-field {
 /* LABEL */
 
 .poetry-ui-form-field-label {
-    margin: 0 0 0.25rem;
     display: block;
     padding: 0;
-    font-size: $small-font;
-    text-transform: uppercase;
+    transition: color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+    transform: translate(0, 1.5px) scale(0.75);
+    transform-origin: top left;
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+
+    .poetry-ui-form-field:focus-within & {
+        color: #1976d2;
+    }
+
+    .poetry-ui-form-field.enlarge-label & {
+        transform: translate(0, 24px) scale(1);
+        cursor: text;
+    }
 }
 
 
@@ -43,25 +58,27 @@ fieldset.poetry-ui-form-field {
 /* INPUT */
 
 .poetry-ui-form-input {
+    box-sizing: content-box;
+    margin: 0;
     display: block;
     width: 100%;
-    height: 2rem;
-    padding: 0.25rem;
-    border: solid 1px $light-gray;
-    box-sizing: border-box;
-    background: white;
-    transition: background-color 0.2s;
-    font-size: 80%;
+    height: 1.1875em;
+    padding: 6px 0 7px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    font: inherit;
+    color: currentColor;
 
     .poetry-ui-form-field.poetry-ui-simple:hover &,
     &:hover {
-        background: $almost-white;
+        border-bottom-color: black;
     }
 
-    &:focus {
+    &:focus,
+    .poetry-ui-form-field.poetry-ui-simple:hover &:focus {
         outline: none;
-        border-color: rgba($bright-blue, 0.5);
-        box-shadow: 0 0 0 0.25rem rgba($bright-blue, 0.25);
+        border-bottom-color: #1976d2;
     }
 }
 

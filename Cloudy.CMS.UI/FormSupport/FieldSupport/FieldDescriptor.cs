@@ -16,15 +16,17 @@ namespace Poetry.UI.FormSupport.FieldSupport
         public string Id { get; }
         public Type Type { get; }
         public IEnumerable<UIHint> UIHints { get; }
+        public string Label { get; }
         public bool IsSortable { get; }
         public bool AutoGenerate { get; }
         public string Group { get; }
 
-        public FieldDescriptor(string id, Type type, IEnumerable<UIHint> uiHints, bool isSortable, bool autoGenerate, string group)
+        public FieldDescriptor(string id, Type type, IEnumerable<UIHint> uiHints, string label, bool isSortable, bool autoGenerate, string group)
         {
             Id = id;
             Type = type;
             UIHints = uiHints.ToList().AsReadOnly();
+            Label = label;
             IsSortable = isSortable;
             AutoGenerate = autoGenerate;
             Group = group;
