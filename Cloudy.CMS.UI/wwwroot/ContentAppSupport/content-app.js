@@ -161,7 +161,15 @@ class EditContentBlade extends Blade {
 
             var tabSystem = new TabSystem();
 
-            groups.forEach(group => tabSystem.addTab(group || 'General', () => {
+            if (groups.indexOf(null) != -1) {
+                tabSystem.addTab('General', () => {
+                    var element = document.createElement('div');
+                    formBuilder.build(content, { group: null }).then(form => form.appendTo(element));
+                    return element;
+                });
+            }
+
+            groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, () => {
                 var element = document.createElement('div');
                 formBuilder.build(content, { group: group }).then(form => form.appendTo(element));
                 return element;
