@@ -4,6 +4,13 @@ poetry-ui-list {
   display: block;
   padding: 8px 0; }
 
+poetry-ui-list-sub-header {
+  display: block;
+  padding: 10px 16px 2px;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 0.875rem;
+  font-weight: 500; }
+
 poetry-ui-list-item {
   display: block;
   padding: 12px 16px;

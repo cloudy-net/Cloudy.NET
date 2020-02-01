@@ -18,6 +18,14 @@ class List {
         return this;
     }
 
+    addSubHeader(text) {
+        var header = document.createElement('poetry-ui-list-sub-header');
+        header.innerText = text;
+        this.element.append(header);
+
+        return this;
+    }
+
     appendTo(element) {
         element.appendChild(this.element);
 

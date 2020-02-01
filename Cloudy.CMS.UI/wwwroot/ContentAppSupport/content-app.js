@@ -29,18 +29,30 @@ class ListContentTypesBlade extends Blade {
     constructor(app) {
         super();
 
-        this.setTitle('Content types');
+        this.setTitle('What to edit');
 
         fetch('ContentApp/GetContentTypes', { credentials: 'include' })
             .then(response => response.json())
             .then(contentTypes => {
                 var list = new List();
-                contentTypes.forEach(contentType => list.addItem(item => {
+
+                list.addSubHeader('Content types');
+                contentTypes.filter(t => !t.isSingleton).forEach(contentType => list.addItem(item => {
                     item.setText(contentType.name);
 
-                    if (contentType.isSingleton) {
-                        item.setSubText('Singleton');
-                        
+                    item.onClick(() => {
+                        item.setActive();
+                        app.openAfter(new ListContentBlade(app, contentType).onClose(() => item.setActive(false)), this);
+                    });
+                }));
+
+                var singletons = contentTypes.filter(t => t.isSingleton);
+
+                if (singletons.length) {
+                    list.addSubHeader('Singletons');
+                    singletons.forEach(contentType => list.addItem(item => {
+                        item.setText(contentType.name);
+
                         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
                         var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
 
@@ -53,13 +65,9 @@ class ListContentTypesBlade extends Blade {
                                     this);
                             })
                         );
-                    } else {
-                        item.onClick(() => {
-                            item.setActive();
-                            app.openAfter(new ListContentBlade(app, contentType).onClose(() => item.setActive(false)), this);
-                        });
-                    }
-                }));
+                    }));
+                }
+
                 this.setContent(list);
             });
     }
