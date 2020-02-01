@@ -60,4 +60,4 @@ steps:
     repository: 'cloudy-cms-ui-static-files'
     command: 'buildAndPush'
     Dockerfile: 'Cloudy.CMS.UI/wwwroot/Dockerfile'
-    tags: '$VERSION_TAG'
+    tags: '$(VERSION_TAG)'
