@@ -10,7 +10,9 @@ steps:
 
 - script: |
     VERSION_TAG=`git describe --tags`
+    echo "First step: $VERSION_TAG"
     VERSION_TAG=${VERSION_TAG:1}
+    echo "Second step: $VERSION_TAG"
     echo "##vso[task.setvariable variable=VERSION_TAG]$VERSION_TAG"
     echo Add other tasks to build, test, and deploy your project.
   displayName: 'Run a multi-line script'
