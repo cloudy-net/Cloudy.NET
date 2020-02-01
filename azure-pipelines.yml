@@ -6,8 +6,6 @@ pool:
 
 steps:
 
-
-
 - script: |
     VERSION_TAG=`git describe --tags`
     echo "First step: $VERSION_TAG"
@@ -17,6 +15,11 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
   displayName: 'Run a multi-line script'
   
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
