@@ -86,24 +86,27 @@ class ListContentBlade extends Blade {
 
         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
 
-        fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
-            .then(response => response.json())
-            .then(response => {
-                var list = new List();
-                response.forEach(content => list.addItem(item => {
-                    item.setText(contentType.isNameable ? content.name : content.id);
+        var reload = () =>
+            fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
+                .then(response => response.json())
+                .then(response => {
+                    var list = new List();
+                    response.forEach(content => list.addItem(item => {
+                        item.setText(contentType.isNameable ? content.name : content.id);
 
-                    formBuilder.fieldModels.then(fieldModels => item.onClick(() => {
-                        item.setActive();
-                        app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => dataTable.update()).onClose(() => item.setActive(false)), this);
+                        formBuilder.fieldModels.then(fieldModels => item.onClick(() => {
+                            item.setActive();
+                            app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
+                        }));
                     }));
-                }));
-                this.setContent(list);
-            });
+                    this.setContent(list);
+                });
+
+        reload();
 
         this.setToolbar(
             new Button('New').setInherit().onClick(() =>
-                formBuilder.fieldModels.then(fieldModels => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => dataTable.update()), this))
+                formBuilder.fieldModels.then(fieldModels => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => reload()), this))
             )
         );
     }
