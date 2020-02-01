@@ -269,7 +269,6 @@ poetry-ui-blade-title {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 poetry-ui-blade-title-text {
@@ -317,8 +316,8 @@ poetry-ui-blade-toolbar {
     flex: 0 0 auto;
     display: flex;
     flex-wrap: nowrap;
-    padding: ($padding-base / 2) $padding-base;
-    border-bottom: solid 1px $light-gray;
+    padding: 8px 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
     background: white;
 
     > * {
@@ -331,8 +330,6 @@ poetry-ui-blade-toolbar {
 
     poetry-ui-blade-content + & {
         flex-grow: 1;
-        border-top: solid 1px $light-gray;
-        border-bottom: none;
         align-items: baseline;
     }
 }
@@ -346,6 +343,7 @@ poetry-ui-blade-content {
     overflow: auto;
     position: relative;
     display: block;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
     background: white;
 }
 
@@ -358,7 +356,7 @@ poetry-ui-blade-footer {
     display: flex;
     flex-wrap: nowrap;
     padding: ($padding-base / 2) $padding-base;
-    border-bottom: solid 1px $light-gray;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
     background: white;
 
     > * {

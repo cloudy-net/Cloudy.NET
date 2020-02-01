@@ -196,8 +196,7 @@ poetry-ui-blade {
 poetry-ui-blade-title {
   flex: 0 0 auto;
   display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  align-items: center; }
 
 poetry-ui-blade-title-text {
   flex-grow: 1;
@@ -233,8 +232,8 @@ poetry-ui-blade-toolbar {
   flex: 0 0 auto;
   display: flex;
   flex-wrap: nowrap;
-  padding: 0.5rem 1rem;
-  border-bottom: solid 1px #ccc;
+  padding: 8px 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   background: white; }
   poetry-ui-blade-toolbar > * {
     margin-left: 0.5rem; }
@@ -242,8 +241,6 @@ poetry-ui-blade-toolbar {
       margin-left: 0; }
   poetry-ui-blade-content + poetry-ui-blade-toolbar {
     flex-grow: 1;
-    border-top: solid 1px #ccc;
-    border-bottom: none;
     align-items: baseline; }
 
 /* CONTENT */
@@ -252,6 +249,7 @@ poetry-ui-blade-content {
   overflow: auto;
   position: relative;
   display: block;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   background: white; }
 
 /* FOOTER */
@@ -260,7 +258,7 @@ poetry-ui-blade-footer {
   display: flex;
   flex-wrap: nowrap;
   padding: 0.5rem 1rem;
-  border-bottom: solid 1px #ccc;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   background: white; }
   poetry-ui-blade-footer > * {
     margin-left: 0.5rem; }

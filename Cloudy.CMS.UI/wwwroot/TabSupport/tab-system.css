@@ -1,7 +1,8 @@
 ﻿/* VARIABLES */
 /* TAB SYSTEM */
 poetry-ui-tab-system {
-  display: block; }
+  display: block;
+  padding: 8px 0; }
 
 poetry-ui-tab {
   display: inline-block;
