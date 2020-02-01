@@ -272,14 +272,6 @@ poetry-ui-blade-footer {
     border-bottom: none;
     align-items: baseline; }
 
-/* CUSTOM CONTENT */
-poetry-ui-blade-custom-content {
-  position: relative;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  background: white; }
-
 /* LOADING STATE */
 .poetry-ui-not-loading {
   transition: opacity 0.2s, filter 0.2s; }
