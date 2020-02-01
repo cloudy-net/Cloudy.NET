@@ -73,10 +73,12 @@ steps:
     echo "##vso[task.setvariable variable=CONTAINER_NAME]$CONTAINER_NAME"
   displayName: Parse version from tag v*
 
-- task: AzureFileCopy@3
+- task: AzureCLI@2
   inputs:
-    SourcePath: 'Cloudy.CMS.UI/wwwroot'
     azureSubscription: 'Bjorn Goransson Invest AB(d958417c-19ff-464e-9a51-c750674828c4)'
-    Destination: 'AzureBlob'
-    storage: 'cloudycmsui'
-    ContainerName: '$(CONTAINER_NAME)'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az storage container create -n $(CONTAINER_NAME)
+      az storage blob upload-batch -d $(CONTAINER_NAME) --account-name "cloudycmsui" -s "Cloudy.CMS.UI/wwwroot" --pattern *.js
+      az storage blob upload-batch -d $(CONTAINER_NAME) --account-name "cloudycmsui" -s "Cloudy.CMS.UI/wwwroot" --pattern *.css
