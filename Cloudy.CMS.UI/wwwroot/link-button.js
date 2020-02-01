@@ -22,6 +22,26 @@ class LinkButton {
         return this;
     }
 
+    setPrimary(value = true) {
+        if (value) {
+            this.element.classList.add('primary');
+        } else {
+            this.element.classList.remove('primary');
+        }
+
+        return this;
+    }
+
+    setInherit(value = true) {
+        if (value) {
+            this.element.classList.add('inherit');
+        } else {
+            this.element.classList.remove('inherit');
+        }
+
+        return this;
+    }
+
     appendTo(element) {
         element.appendChild(this.element);
 

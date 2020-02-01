@@ -2,6 +2,7 @@
 import Blade from '../blade.js';
 import FormBuilder from '../FormSupport/form-builder.js';
 import Button from '../button.js';
+import LinkButton from '../link-button.js';
 import DataTable from '../DataTableSupport/data-table.js';
 import DataTableButton from '../DataTableSupport/data-table-button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
@@ -115,15 +116,6 @@ class EditContentBlade extends Blade {
     constructor(app, contentType, formBuilder, content) {
         super();
 
-        if (contentType.isRoutable) {
-            var view = document.createElement('a');
-            view.classList.add('poetry-ui-button');
-            view.setAttribute('disabled', true);
-            view.setAttribute('target', '_blank');
-            view.innerText = 'View';
-            this.setHeader(view);
-        }
-
         if (!content) {
             content = {};
         }
@@ -150,8 +142,8 @@ class EditContentBlade extends Blade {
                         }
 
                         url = url.substr(1, url.length - 2);
-                        view.href = `${location.origin}${url}`;
-                        view.removeAttribute('disabled');
+
+                        this.setToolbar(new LinkButton('View', `${location.origin}${url}`, '_blank').setInherit());
                     });
             }
         } else {
