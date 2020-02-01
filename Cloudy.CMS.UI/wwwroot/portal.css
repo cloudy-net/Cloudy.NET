@@ -316,7 +316,7 @@ poetry-ui-button,
   poetry-ui-button:focus,
   .poetry-ui-button:focus {
     outline: none;
-    background-color: #c5c5c5; }
+    background-color: #b5b5b5; }
   poetry-ui-button[disabled],
   .poetry-ui-button[disabled] {
     filter: grayscale(100%);
@@ -327,3 +327,13 @@ poetry-ui-button,
     poetry-ui-button[disabled]:hover,
     .poetry-ui-button[disabled]:hover {
       background-color: rgba(0, 0, 0, 0.12); }
+  poetry-ui-button.primary,
+  .poetry-ui-button.primary {
+    color: #fff;
+    background-color: #1976d2; }
+    poetry-ui-button.primary:hover,
+    .poetry-ui-button.primary:hover {
+      background-color: #115293; }
+    poetry-ui-button.primary:focus,
+    .poetry-ui-button.primary:focus {
+      background-color: #378fe7; }

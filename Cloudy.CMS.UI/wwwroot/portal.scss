@@ -434,7 +434,7 @@ poetry-ui-button,
 
     &:focus {
         outline: none;
-        background-color: #c5c5c5;
+        background-color: #b5b5b5;
     }
 
     &[disabled] {
@@ -446,6 +446,19 @@ poetry-ui-button,
 
         &:hover {
             background-color: rgba(0, 0, 0, 0.12);
+        }
+    }
+
+    &.primary {
+        color: #fff;
+        background-color: #1976d2;
+
+        &:hover {
+            background-color: rgb(17, 82, 147);
+        }
+
+        &:focus {
+            background-color: lighten(#1976d2, 10%);
         }
     }
 }

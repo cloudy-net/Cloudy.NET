@@ -179,6 +179,7 @@ class EditContentBlade extends Blade {
         });
 
         var saveButton = new Button('Save')
+            .setPrimary()
             .onClick(() =>
                 fetch('ContentApp/Save', {
                     credentials: 'include',

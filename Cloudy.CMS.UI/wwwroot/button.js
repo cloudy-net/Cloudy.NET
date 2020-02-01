@@ -57,6 +57,16 @@ class Button {
         return this;
     }
 
+    setPrimary(value = true) {
+        if (value) {
+            this.element.classList.add('primary');
+        } else {
+            this.element.classList.remove('primary');
+        }
+
+        return this;
+    }
+
     appendTo(element) {
         element.appendChild(this.element);
 
