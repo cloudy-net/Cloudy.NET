@@ -51,6 +51,45 @@ td, th {
   background: #0058ad;
   color: white; }
 
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  background-color: #fff; }
+
+::-webkit-scrollbar-corner {
+  background-color: #fff; }
+
+::-webkit-scrollbar-track {
+  transition: 150ms cubic-bezier(0.4, 0, 0.2, 1); }
+
+::-webkit-scrollbar-track:vertical:hover {
+  background-color: rgba(0, 0, 0, 0.035);
+  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.14), inset -1px -1px 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-track:horizontal:hover {
+  background-color: rgba(0, 0, 0, 0.035);
+  -webkit-box-shadow: inset -1px 1px 0 rgba(0, 0, 0, 0.14), inset 1px -1px 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-track:vertical:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.14), inset -1px -1px 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-track:horizontal:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: inset -1px 1px 0 rgba(0, 0, 0, 0.14), inset 1px -1px 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+  transition: 150ms cubic-bezier(0.4, 0, 0.2, 1); }
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25); }
+
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35); }
+
 /* PORTAL */
 poetry-ui-portal {
   position: absolute;
