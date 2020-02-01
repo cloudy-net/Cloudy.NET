@@ -347,7 +347,7 @@ poetry-ui-blade-header {
 /* CONTENT */
 
 poetry-ui-blade-content {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     overflow: auto;
     position: relative;
     display: block;
@@ -363,12 +363,13 @@ poetry-ui-blade-footer {
     flex: 0 0 auto;
     display: flex;
     flex-wrap: nowrap;
-    padding: ($padding-base / 2) $padding-base;
+    align-items: center;
+    padding: 8px 16px;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     background: white;
 
     > * {
-        margin-left: ($padding-base / 2);
+        margin-left: 16px;
 
         &:first-child {
             margin-left: 0;
@@ -376,10 +377,8 @@ poetry-ui-blade-footer {
     }
 
     poetry-ui-blade-content + & {
-        flex-grow: 1;
         border-top: solid 1px $light-gray;
         border-bottom: none;
-        align-items: baseline;
     }
 }
 

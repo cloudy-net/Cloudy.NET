@@ -250,7 +250,7 @@ poetry-ui-blade-header {
 
 /* CONTENT */
 poetry-ui-blade-content {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   overflow: auto;
   position: relative;
   display: block;
@@ -262,18 +262,17 @@ poetry-ui-blade-footer {
   flex: 0 0 auto;
   display: flex;
   flex-wrap: nowrap;
-  padding: 0.5rem 1rem;
+  align-items: center;
+  padding: 8px 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   background: white; }
   poetry-ui-blade-footer > * {
-    margin-left: 0.5rem; }
+    margin-left: 16px; }
     poetry-ui-blade-footer > *:first-child {
       margin-left: 0; }
   poetry-ui-blade-content + poetry-ui-blade-footer {
-    flex-grow: 1;
     border-top: solid 1px #ccc;
-    border-bottom: none;
-    align-items: baseline; }
+    border-bottom: none; }
 
 /* LOADING STATE */
 .poetry-ui-not-loading {
