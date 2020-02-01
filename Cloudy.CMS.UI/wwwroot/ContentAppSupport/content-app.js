@@ -115,7 +115,7 @@ class EditContentBlade extends Blade {
     constructor(app, contentType, formBuilder, content) {
         super();
 
-        if (contentType.IsRoutable) {
+        if (contentType.isRoutable) {
             var view = document.createElement('a');
             view.classList.add('poetry-ui-button');
             view.setAttribute('disabled', true);
@@ -128,7 +128,7 @@ class EditContentBlade extends Blade {
             content = {};
         }
 
-        if (content.Id) {
+        if (content.id) {
             if (contentType.isNameable && content.name) {
                 this.setTitle(`Edit ${content.name}`);
             } else {
