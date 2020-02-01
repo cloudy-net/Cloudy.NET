@@ -6,9 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BAA63170-C230-4622-B22E-DD3CF2763EF1}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		appveyor-release.yml = appveyor-release.yml
-		build-on-appveyor.ps1 = build-on-appveyor.ps1
-		build-to-local-nuget-feed.ps1 = build-to-local-nuget-feed.ps1
+		azure-pipelines.yml = azure-pipelines.yml
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
