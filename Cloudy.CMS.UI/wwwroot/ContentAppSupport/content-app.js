@@ -37,9 +37,9 @@ class ListContentTypesBlade extends Blade {
             .then(contentTypes => {
                 var list = new List();
 
-                list.addSubHeader('Content types');
+                list.addSubHeader('General');
                 contentTypes.filter(t => !t.isSingleton).forEach(contentType => list.addItem(item => {
-                    item.setText(contentType.name);
+                    item.setText(contentType.pluralName);
 
                     item.onClick(() => {
                         item.setActive();
@@ -93,7 +93,10 @@ class ListContentBlade extends Blade {
                 response.forEach(content => list.addItem(item => {
                     item.setText(contentType.isNameable ? content.name : content.id);
 
-                    formBuilder.fieldModels.then(fieldModels => item.onClick(() => app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => dataTable.update()), this)));
+                    formBuilder.fieldModels.then(fieldModels => item.onClick(() => {
+                        item.setActive();
+                        app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => dataTable.update()).onClose(() => item.setActive(false)), this);
+                    }));
                 }));
                 this.setContent(list);
             });
