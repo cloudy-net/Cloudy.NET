@@ -404,40 +404,45 @@ poetry-ui-blade-custom-content {
 
 poetry-ui-button,
 .poetry-ui-button {
+    margin: 8px;
     display: inline-block;
-    padding: 0.5em 0.75em;
+    min-width: 64px;
+    padding: 6px 16px;
     border: none;
-    background: $light-gray;
-    color: white;
-    font-size: 0.8rem;
-    color: black;
-    line-height: 1;
+    border-radius: 4px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    background-color: #e0e0e0;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
+    line-height: 1.75;
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: filter 0.2s;
+    user-select: none;
 
     &:hover {
-        background: $gray;
+        box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+        background-color: #d5d5d5;
     }
 
     &:focus {
         outline: none;
-        box-shadow: 0 0 0 0.25rem rgba($bright-blue, 0.25);
-    }
-
-    &.poetry-ui-active {
-        background: darken($bright-blue, 15%);
+        background-color: #c5c5c5;
     }
 
     &[disabled] {
         filter: grayscale(100%);
         cursor: default;
-
-        &:focus {
-            box-shadow: none;
-        }
+        color: rgba(0, 0, 0, 0.26);
+        box-shadow: none;
+        background-color: rgba(0, 0, 0, 0.12);
 
         &:hover {
-            background: $bright-blue;
+            background-color: rgba(0, 0, 0, 0.12);
         }
     }
 }
