@@ -18,9 +18,7 @@ using Cloudy.CMS.ContentSupport.Serialization;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
-    [ApiController]
     [Area("Cloudy.CMS")]
-    [Route("ContentApp")]
     public class ContentAppController
     {
         IContentTypeProvider ContentTypeRepository { get; }
@@ -48,7 +46,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             ContentDeserializer = contentDeserializer;
         }
 
-        [Route(nameof(GetContentTypes))]
         public IEnumerable<ContentTypeResponseItem> GetContentTypes()
         {
             var result = new List<ContentTypeResponseItem>();
@@ -100,7 +97,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public int Count { get; set; }
         }
 
-        [Route(nameof(GetContentList))]
         public IEnumerable<object> GetContentList(string contentTypeId)
         {
             var contentType = ContentTypeRepository.Get(contentTypeId);
@@ -125,7 +121,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             return result.AsReadOnly();
         }
 
-        [Route(nameof(GetSingleton))]
         public IContent GetSingleton(string id)
         {
             var contentType = ContentTypeRepository.Get(id);
@@ -135,7 +130,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             return ContainerSpecificContentGetter.Get<IContent>(singleton.Id, null, contentType.Container);
         }
 
-        [Route(nameof(SaveContent))]
         public string SaveContent([FromBody] SaveContentRequestBody data)
         {
             var contentType = ContentTypeRepository.Get(data.ContentTypeId);
@@ -163,7 +157,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public string Content { get; set; }
         }
         
-        [Route(nameof(GetUrl))]
         public string GetUrl(string id, string contentTypeId)
         {
             var contentType = ContentTypeRepository.Get(contentTypeId);
