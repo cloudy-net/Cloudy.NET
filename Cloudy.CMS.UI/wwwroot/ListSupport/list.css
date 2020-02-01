@@ -6,10 +6,11 @@ poetry-ui-list {
 
 poetry-ui-list-sub-header {
   display: block;
-  padding: 10px 16px 4px;
-  color: rgba(0, 0, 0, 0.54);
+  padding: 15px 16px 15px;
+  color: rgba(0, 0, 0, 0.4);
   font-size: 0.875rem;
-  font-weight: 500; }
+  font-weight: 500;
+  line-height: 18px; }
 
 poetry-ui-list-item {
   display: block;
