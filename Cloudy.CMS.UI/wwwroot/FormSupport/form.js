@@ -98,6 +98,12 @@
             field.data.sortable.items[i].data.control.triggerSet(value[i]);
         });
     }
+
+    appendTo(element) {
+        element.appendChild(this.element);
+
+        return this;
+    }
 }
 
 export default Form;

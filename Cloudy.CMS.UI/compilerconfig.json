@@ -14,5 +14,9 @@
   {
     "outputFile": "wwwroot/FormSupport/form-elements.css",
     "inputFile": "wwwroot/FormSupport/form-elements.scss"
+  },
+  {
+    "outputFile": "wwwroot/TabSupport/tab-system.css",
+    "inputFile": "wwwroot/TabSupport/tab-system.scss"
   }
 ]

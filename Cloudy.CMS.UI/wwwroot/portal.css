@@ -148,16 +148,21 @@ poetry-ui-portal-nav-menu-item:focus {
 poetry-ui-app {
   position: absolute;
   top: 56px;
+  right: 0;
   left: 0;
   bottom: 0;
-  display: flex; }
+  display: flex;
+  width: 100vw;
+  box-sizing: border-box;
+  overflow-x: auto; }
 
 @media (min-width: 768px) {
   poetry-ui-app {
-    top: 72px;
-    right: 8px;
-    bottom: 8px;
-    left: 8px; } }
+    top: 64px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px; } }
 
 /* BLADE */
 poetry-ui-blade {

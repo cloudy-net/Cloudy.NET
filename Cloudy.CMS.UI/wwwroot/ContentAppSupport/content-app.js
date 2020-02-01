@@ -6,6 +6,7 @@ import DataTable from '../DataTableSupport/data-table.js';
 import DataTableButton from '../DataTableSupport/data-table-button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
+import TabSystem from '../TabSupport/tab-system.js';
 
 
 
@@ -158,26 +159,15 @@ class EditContentBlade extends Blade {
                 return;
             }
 
-            //this.setMenu(menu =>
-            //    groups.forEach(group => menu.addItem(i => i.setText(group)))
-            //);
+            var tabSystem = new TabSystem();
 
-            this.setContent(
-                new DataTable()
-                    .setBackend(groups)
-                    .addColumn(c =>
-                        c.setHeader(() => 'Properties').setButton(group => {
-                            var button = new DataTableButton(group || 'General');
+            groups.forEach(group => tabSystem.addTab(group || 'General', () => {
+                var element = document.createElement('div');
+                formBuilder.build(content, { group: group }).then(form => form.appendTo(element));
+                return element;
+            }));
 
-                            button.onClick(() => {
-                                button.setActive();
-                                app.openAfter(new EditPropertyGroupBlade(app, formBuilder.build(content, { group: group }), group || 'Content').onClose(() => button.setActive(false)), this)
-                            });
-
-                            return button;
-                        })
-                    )
-            )
+            this.setContent(tabSystem);
         });
 
         var saveButton = new Button('Save')
@@ -244,23 +234,5 @@ class EditContentBlade extends Blade {
         this.onSaveCallbacks.push(callback);
 
         return this;
-    }
-}
-
-
-
-/* EDIT PROPERTY GROUP */
-
-class EditPropertyGroupBlade extends Blade {
-    constructor(app, formPromise, title) {
-        super();
-
-        this.setTitle(title);
-
-        this.setFooter(
-            new Button('Close').onClick(() => app.close(this)),
-        );
-
-        formPromise.then(form => this.setContent(form));
     }
 }
