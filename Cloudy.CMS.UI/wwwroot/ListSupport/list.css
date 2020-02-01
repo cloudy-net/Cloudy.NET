@@ -6,7 +6,7 @@ poetry-ui-list {
 
 poetry-ui-list-sub-header {
   display: block;
-  padding: 10px 16px 2px;
+  padding: 10px 16px 4px;
   color: rgba(0, 0, 0, 0.54);
   font-size: 0.875rem;
   font-weight: 500; }
