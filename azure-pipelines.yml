@@ -64,9 +64,9 @@ steps:
 
 - script: |
     CONTAINER_NAME=`git describe --tags`
-    CONTAINER_NAME=${VERSION_TAG:1}
+    CONTAINER_NAME=${CONTAINER_NAME:1}
     echo "step 1: $CONTAINER_NAME"
-    CONTAINER_NAME=$("$CONTAINER_NAME" | tr . -)
+    CONTAINER_NAME=$(echo "$CONTAINER_NAME" | tr . -)
     echo "step 2: $CONTAINER_NAME"
     CONTAINER_NAME="v-$CONTAINER_NAME"
     echo "step 3: $CONTAINER_NAME"
