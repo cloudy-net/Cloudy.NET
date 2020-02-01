@@ -66,15 +66,19 @@ class ListItem {
     }
 
     setText(value) {
-        this.text = document.createElement('poetry-ui-list-item-text');
+        if (!this.text) {
+            this.text = document.createElement('poetry-ui-list-item-text');
+            this.element.append(this.text);
+        }
         this.text.innerText = value;
-        this.element.append(this.text);
     }
 
     setSubText(value) {
-        this.subText = document.createElement('poetry-ui-list-item-sub-text');
+        if (!this.subText) {
+            this.subText = document.createElement('poetry-ui-list-item-sub-text');
+            this.element.append(this.subText);
+        }
         this.subText.innerText = value;
-        this.element.append(this.subText);
     }
 
     setActive(value = true) {
