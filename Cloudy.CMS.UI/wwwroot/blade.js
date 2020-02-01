@@ -21,11 +21,13 @@ class Blade {
         this.element.append(this.title);
         this.titleText = document.createElement('poetry-ui-blade-title-text');
         this.title.append(this.titleText);
+        this.toolbar = document.createElement('poetry-ui-blade-toolbar');
+        this.title.append(this.toolbar);
         this.title.append(new BladeCloseButton().element);
 
-        this.toolbar = document.createElement('poetry-ui-blade-toolbar');
-        this.toolbar.style.display = 'none';
-        this.element.append(this.toolbar);
+        this.header = document.createElement('poetry-ui-blade-header');
+        this.header.style.display = 'none';
+        this.element.append(this.header);
 
         this.content = document.createElement('poetry-ui-blade-content');
         this.element.append(this.content);
@@ -48,6 +50,12 @@ class Blade {
         this.toolbar.style.display = '';
         [...this.toolbar.children].forEach(c => this.toolbar.removeChild(c));
         items.forEach(item => this.toolbar.append(item.element || item));
+    }
+
+    setHeader(...items) {
+        this.header.style.display = '';
+        [...this.header.children].forEach(c => this.header.removeChild(c));
+        items.forEach(item => this.header.append(item.element || item));
     }
 
     setContent(...items) {

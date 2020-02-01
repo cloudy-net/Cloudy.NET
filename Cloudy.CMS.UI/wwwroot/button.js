@@ -67,6 +67,16 @@ class Button {
         return this;
     }
 
+    setInherit(value = true) {
+        if (value) {
+            this.element.classList.add('inherit');
+        } else {
+            this.element.classList.remove('inherit');
+        }
+
+        return this;
+    }
+
     appendTo(element) {
         element.appendChild(this.element);
 

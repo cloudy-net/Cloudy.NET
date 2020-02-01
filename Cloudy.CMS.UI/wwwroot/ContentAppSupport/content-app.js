@@ -90,7 +90,7 @@ class ListContentBlade extends Blade {
             });
 
         this.setToolbar(
-            new Button('New').onClick(() =>
+            new Button('New').setInherit().onClick(() =>
                 formBuilder.fieldModels.then(fieldModels => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => dataTable.update()), this))
             )
         );
@@ -113,7 +113,7 @@ class EditContentBlade extends Blade {
             view.setAttribute('disabled', true);
             view.setAttribute('target', '_blank');
             view.innerText = 'View';
-            this.setToolbar(view);
+            this.setHeader(view);
         }
 
         if (!content) {

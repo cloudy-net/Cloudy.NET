@@ -282,6 +282,11 @@ poetry-ui-blade-title-text {
     letter-spacing: 0.0075em;
 }
 
+poetry-ui-blade-title-text {
+    display: block;
+    padding: 16px;
+}
+
 poetry-ui-blade-title-close {
     margin-left: auto;
     margin-right: 8px;
@@ -310,9 +315,9 @@ poetry-ui-blade-title-close {
 
 
 
-/* TOOLBAR */
+/* HEADER */
 
-poetry-ui-blade-toolbar {
+poetry-ui-blade-header {
     flex: 0 0 auto;
     display: flex;
     flex-wrap: nowrap;
@@ -445,6 +450,19 @@ poetry-ui-button,
 
         &:focus {
             background-color: lighten(#1976d2, 10%);
+        }
+    }
+
+    &.inherit {
+        color: inherit;
+        background-color: transparent;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        &:focus {
+            background-color: rgba(0, 0, 0, 0.1);
         }
     }
 }

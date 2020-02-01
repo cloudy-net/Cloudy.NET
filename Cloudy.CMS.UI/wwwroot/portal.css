@@ -208,6 +208,10 @@ poetry-ui-blade-title-text {
   line-height: 1.6;
   letter-spacing: 0.0075em; }
 
+poetry-ui-blade-title-text {
+  display: block;
+  padding: 16px; }
+
 poetry-ui-blade-title-close {
   margin-left: auto;
   margin-right: 8px;
@@ -227,19 +231,19 @@ poetry-ui-blade-title-close {
   poetry-ui-blade-title-close:focus {
     outline: none; }
 
-/* TOOLBAR */
-poetry-ui-blade-toolbar {
+/* HEADER */
+poetry-ui-blade-header {
   flex: 0 0 auto;
   display: flex;
   flex-wrap: nowrap;
   padding: 8px 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   background: white; }
-  poetry-ui-blade-toolbar > * {
+  poetry-ui-blade-header > * {
     margin-left: 0.5rem; }
-    poetry-ui-blade-toolbar > *:first-child {
+    poetry-ui-blade-header > *:first-child {
       margin-left: 0; }
-  poetry-ui-blade-content + poetry-ui-blade-toolbar {
+  poetry-ui-blade-content + poetry-ui-blade-header {
     flex-grow: 1;
     align-items: baseline; }
 
@@ -327,3 +331,13 @@ poetry-ui-button,
     poetry-ui-button.primary:focus,
     .poetry-ui-button.primary:focus {
       background-color: #378fe7; }
+  poetry-ui-button.inherit,
+  .poetry-ui-button.inherit {
+    color: inherit;
+    background-color: transparent; }
+    poetry-ui-button.inherit:hover,
+    .poetry-ui-button.inherit:hover {
+      background-color: rgba(0, 0, 0, 0.04); }
+    poetry-ui-button.inherit:focus,
+    .poetry-ui-button.inherit:focus {
+      background-color: rgba(0, 0, 0, 0.1); }
