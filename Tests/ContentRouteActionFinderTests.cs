@@ -24,10 +24,11 @@ namespace Tests
         {
             var action = new ControllerActionDescriptor { ControllerName = "lorem", MethodInfo = typeof(MyController).GetMethod(nameof(MyController.ActionWithTypeAParameter)) };
 
+            var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { action }.AsReadOnly(), 0));
 
-            var result = new ContentRouteActionFinder(actions).Find("ipsum", new MyContentA());
+            var result = new ContentRouteActionFinder(serviceProvider).Find("ipsum", new MyContentA());
 
             Assert.Null(result);
         }
@@ -37,10 +38,11 @@ namespace Tests
         {
             var action = new ControllerActionDescriptor { ControllerName = "lorem", MethodInfo = typeof(MyController).GetMethod(nameof(MyController.ActionWithNonAnnotatedTypeAParameter)) };
 
+            var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { action }.AsReadOnly(), 0));
 
-            var result = new ContentRouteActionFinder(actions).Find("ipsum", new MyContentA());
+            var result = new ContentRouteActionFinder(serviceProvider).Find("ipsum", new MyContentA());
 
             Assert.Null(result);
         }
@@ -51,10 +53,11 @@ namespace Tests
             var actionA = new ControllerActionDescriptor { ControllerName = "lorem", MethodInfo = typeof(MyController).GetMethod(nameof(MyController.ActionWithTypeAParameter)) };
             var actionB = new ControllerActionDescriptor { ControllerName = "lorem", MethodInfo = typeof(MyController).GetMethod(nameof(MyController.ActionWithTypeBParameter)) };
 
+            var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { actionA, actionB }.AsReadOnly(), 0));
 
-            var result = new ContentRouteActionFinder(actions).Find("lorem", new MyContentA());
+            var result = new ContentRouteActionFinder(serviceProvider).Find("lorem", new MyContentA());
 
             Assert.Same(actionA, result);
         }
@@ -64,10 +67,11 @@ namespace Tests
         {
             var action = new ControllerActionDescriptor { ControllerName = "lorem", MethodInfo = typeof(MyController).GetMethod(nameof(MyController.ActionWithIContentParameter)) };
 
+            var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { action }.AsReadOnly(), 0));
 
-            var result = new ContentRouteActionFinder(actions).Find("lorem", new MyContentA());
+            var result = new ContentRouteActionFinder(serviceProvider).Find("lorem", new MyContentA());
 
             Assert.Same(action, result);
         }
@@ -78,10 +82,11 @@ namespace Tests
             var actionA = new ControllerActionDescriptor { ControllerName = "lorem", MethodInfo = typeof(MyController).GetMethod(nameof(MyController.ActionWithIContentParameter)) };
             var actionB = new ControllerActionDescriptor { ControllerName = "lorem", MethodInfo = typeof(MyController).GetMethod(nameof(MyController.ActionWithTypeAParameter)) };
 
+            var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { actionA, actionB }.AsReadOnly(), 0));
 
-            var result = new ContentRouteActionFinder(actions).Find("lorem", new MyContentADescendant());
+            var result = new ContentRouteActionFinder(serviceProvider).Find("lorem", new MyContentADescendant());
 
             Assert.Same(actionB, result);
         }

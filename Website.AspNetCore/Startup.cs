@@ -47,7 +47,7 @@ namespace Website.AspNetCore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
+            app.UseCloudyAdmin(cloudy => cloudy.WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "../Cloudy.CMS.UI/wwwroot"))).Unprotect());
             app.UseRouting();
             app.UseEndpoints(endpoints => {
                 endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
