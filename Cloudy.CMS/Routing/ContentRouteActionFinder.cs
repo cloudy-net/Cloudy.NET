@@ -7,20 +7,33 @@ using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudy.CMS.Routing
 {
     public class ContentRouteActionFinder : IContentRouteActionFinder
     {
-        IActionDescriptorCollectionProvider ActionDescriptorCollectionProvider { get; }
+        IServiceProvider ServiceProvider { get; }
+        IActionDescriptorCollectionProvider ActionDescriptorCollectionProvider { get; set; }
 
-        public ContentRouteActionFinder(IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
+
+        public ContentRouteActionFinder(IServiceProvider serviceProvider)
         {
-            ActionDescriptorCollectionProvider = actionDescriptorCollectionProvider;
+            ServiceProvider = serviceProvider;
         }
 
         public ControllerActionDescriptor Find(string controller, IContent content)
         {
+            if(ActionDescriptorCollectionProvider == null)
+            {
+                ActionDescriptorCollectionProvider = (IActionDescriptorCollectionProvider)ServiceProvider.GetService(typeof(IActionDescriptorCollectionProvider));
+
+                if(ActionDescriptorCollectionProvider == null)
+                {
+                    throw new Exception($"Controller services not added. Please use something like services.{nameof(MvcServiceCollectionExtensions.AddControllers)}(), services.{nameof(MvcServiceCollectionExtensions.AddControllersWithViews)}() or services.{nameof(MvcServiceCollectionExtensions.AddMvc)}()");
+                }
+            }
+
             var matchingActions = new List<ControllerActionDescriptor>();
             var actionParameterTypes = new Dictionary<ControllerActionDescriptor, Type>();
             var type = content.GetType();
