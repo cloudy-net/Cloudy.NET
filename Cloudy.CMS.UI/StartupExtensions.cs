@@ -63,7 +63,7 @@ namespace Cloudy.CMS
 
             if(authorizationService == null)
             {
-                throw new Exception($"Could not find {nameof(IAuthorizationService)} in DI container. Call services.AddAuthentication() in ConfigureServices");
+                throw new Exception($"Could not find {nameof(IAuthorizationService)} in DI container. Call services.{nameof(AuthenticationServiceCollectionExtensions.AddAuthentication)}() in ConfigureServices");
             }
 
             var policy = 
