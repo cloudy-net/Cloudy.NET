@@ -36,8 +36,6 @@ namespace Cloudy.CMS
 {
     public static class StartupExtensions
     {
-        static string DefaultManifestName { get; } = "Microsoft.Extensions.FileProviders.Embedded.Manifest.xml";
-
         public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator)
         {
             configurator.AddComponent<CloudyAdminComponent>();
