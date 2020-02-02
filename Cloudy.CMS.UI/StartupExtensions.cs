@@ -77,7 +77,7 @@ namespace Cloudy.CMS.UI
             var path = new PathString(options.BasePath);
 
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = $"https://cloudycmsui.blob.core.windows.net/v-{version.Major}-{version.Minor}-{version.Revision}";
+            ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = $"https://cloudycmsui.blob.core.windows.net/v-{version.Major}-{version.Minor}-{version.Build}";
 
             app.Map(path, adminBranch =>
             {
