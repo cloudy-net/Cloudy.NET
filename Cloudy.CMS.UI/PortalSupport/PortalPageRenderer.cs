@@ -45,6 +45,7 @@ namespace Cloudy.CMS.UI.PortalSupport
             await context.Response.WriteAsync($"<body>\n");
             await context.Response.WriteAsync($"    <script type=\"module\">\n");
             await context.Response.WriteAsync($"        import Portal from '{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "portal.js").Replace('\\', '/')}';\n");
+            await context.Response.WriteAsync($"        window.staticFilesBasePath = '{StaticFilesBasePathProvider.StaticFilesBasePath}'\n");
             await context.Response.WriteAsync($"        new Portal().setTitle('Cloudy CMS');\n");
             await context.Response.WriteAsync($"    </script>\n");
             await context.Response.WriteAsync($"</body>\n");
