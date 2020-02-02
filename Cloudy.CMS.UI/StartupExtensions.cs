@@ -31,6 +31,8 @@ using Poetry.ComponentSupport;
 using Cloudy.CMS.UI.AuthorizationSupport;
 using Cloudy.CMS.UI.PortalSupport;
 using Cloudy.CMS.UI;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Net.Http.Headers;
 
 namespace Cloudy.CMS
 {
@@ -100,10 +102,31 @@ namespace Cloudy.CMS
 
                 adminBranch.UseRouting();
                 adminBranch.UseEndpoints(endpoints => {
-                    endpoints.MapGet("/", async context => await context.RequestServices.GetRequiredService<IPortalPageRenderer>().RenderPageAsync(context));
+                    endpoints.MapGet("/", async context => {
+                        if (!PathEndsInSlash(context.Request.Path))
+                        {
+                            RedirectToPathWithSlash(context);
+                            return;
+                        }
+
+                        await context.RequestServices.GetRequiredService<IPortalPageRenderer>().RenderPageAsync(context); 
+                    });
                     endpoints.MapAreaControllerRoute(null, "Cloudy.CMS", "{controller}/{action}");
                 });
             });
+
+            bool PathEndsInSlash(PathString path)
+            {
+                return path.Value.EndsWith("/", StringComparison.Ordinal);
+            }
+
+            void RedirectToPathWithSlash(HttpContext context)
+            {
+                context.Response.StatusCode = StatusCodes.Status301MovedPermanently;
+                var request = context.Request;
+                var redirect = UriHelper.BuildAbsolute(request.Scheme, request.Host, request.PathBase, request.Path + "/", request.QueryString);
+                context.Response.Headers[HeaderNames.Location] = redirect;
+            }
         }
     }
 }
