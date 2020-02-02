@@ -76,7 +76,8 @@ namespace Cloudy.CMS.UI
 
             var path = new PathString(options.BasePath);
 
-            ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.BasePath;
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = $"https://cloudycmsui.blob.core.windows.net/v-{version.Major}-{version.Minor}-{version.Revision}";
 
             app.Map(path, adminBranch =>
             {
@@ -89,6 +90,11 @@ namespace Cloudy.CMS.UI
                         FileProvider = options.StaticFilesFileProvider,
                         OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
                     });
+                }
+
+                if (options.StaticFilesBaseUri != null)
+                {
+                    ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.StaticFilesBaseUri;
                 }
 
                 adminBranch.UseRouting();

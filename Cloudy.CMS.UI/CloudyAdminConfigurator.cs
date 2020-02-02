@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using Poetry.UI.AspNetCore;
+using System;
 
 namespace Cloudy.CMS.UI
 {
@@ -14,7 +15,7 @@ namespace Cloudy.CMS.UI
 
         public CloudyAdminConfigurator WithBasePath(string adminBasePath)
         {
-            Options.BasePath = adminBasePath;
+            Options.BasePath = adminBasePath.TrimEnd('/');
 
             return this;
         }
@@ -43,6 +44,13 @@ namespace Cloudy.CMS.UI
         public CloudyAdminConfigurator WithStaticFilesFrom(IFileProvider fileProvider)
         {
             Options.StaticFilesFileProvider = fileProvider;
+
+            return this;
+        }
+
+        public CloudyAdminConfigurator WithStaticFilesFrom(string baseUri)
+        {
+            Options.StaticFilesBaseUri = baseUri.TrimEnd();
 
             return this;
         }
