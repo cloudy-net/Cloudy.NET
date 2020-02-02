@@ -30,8 +30,9 @@ using Microsoft.AspNetCore.Authorization;
 using Poetry.ComponentSupport;
 using Cloudy.CMS.UI.AuthorizationSupport;
 using Cloudy.CMS.UI.PortalSupport;
+using Cloudy.CMS.UI;
 
-namespace Cloudy.CMS.UI
+namespace Cloudy.CMS
 {
     public static class StartupExtensions
     {
