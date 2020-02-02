@@ -80,6 +80,6 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az storage container create -n $(CONTAINER_NAME) --account-name cloudycmsui
+      az storage container create -n $(CONTAINER_NAME) --account-name cloudycmsui --public-access blob
       az storage blob upload-batch -d $(CONTAINER_NAME) --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js
       az storage blob upload-batch -d $(CONTAINER_NAME) --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.css
