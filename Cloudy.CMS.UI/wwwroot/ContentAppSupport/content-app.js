@@ -136,7 +136,10 @@ class ListContentBlade extends Blade {
     constructor(app, contentType, contentTypeCount) {
         super();
 
+        var createNew = () => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => update()), this);
+
         this.setTitle(contentType.pluralName);
+        this.setToolbar(new Button('New').setInherit().onClick(createNew));
 
         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
         var formFieldsPromise = formBuilder.fieldModels;
@@ -145,55 +148,57 @@ class ListContentBlade extends Blade {
             var contentListPromise = fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
 
             Promise.all([contentListPromise, formFieldsPromise]).then(([response, formFields]) => {
-                if (contentTypeCount == 1 && formFields.length == 0 && response.length == 0) {
-                var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_suburbs_8b83.svg" alt="Illustration of a row of houses.">`;
-                    var header1 = `<h2 class="poetry-ui-help-heading">No ${contentType.pluralName[0].toLowerCase()}${contentType.pluralName.substr(1)}, no properties … yet</h2>`;
-                var text1 = '<p>Your content type is a bit empty. Let\'s add some properties!</p>';
-                var text2 = '<p>Try implementing INameable:</p>';
-                var code = '<pre class="poetry-ui-help-code">public class MyClass : …, INameable\n' +
-                    '{\n' +
-                    '    …\n' +
-                    '    public string Name { get; set; }\n' +
-                    '}</pre>';
-                var header2 = `<h2 class="poetry-ui-help-heading">More topics</h2>`;
+                if (response.length == 0) {
+                    if (contentTypeCount == 1 && formFields.length == 0) {
+                        var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_suburbs_8b83.svg" alt="Illustration of a row of houses.">`;
+                        var header1 = `<h2 class="poetry-ui-help-heading">No ${contentType.pluralName[0].toLowerCase()}${contentType.pluralName.substr(1)}, no properties … yet</h2>`;
+                        var text1 = '<p>Your content type looks a bit empty. Let\'s add some properties!</p>';
+                        var text2 = '<p>Try implementing INameable:</p>';
+                        var code = '<pre class="poetry-ui-help-code">public class MyClass : …, INameable\n' +
+                            '{\n' +
+                            '    …\n' +
+                            '    public string Name { get; set; }\n' +
+                            '}</pre>';
 
-                var helpList = new List();
-                helpList.addItem(item => item.setText('I want to make my content translateable'));
-                helpList.addItem(item => item.setText('I want to support sub pages'));
-                helpList.addItem(item => item.setText('I want to use a text area'));
-                helpList.addItem(item => item.setText('I want to upload images'));
-                helpList.addItem(item => item.setText('I want to create links to other content'));
-                helpList.addItem(item => item.setText('I want to have lists of custom objects'));
-                helpList.addItem(item => item.setText('I want to reuse several properties between content types'));
+                        var helpContainer = document.createElement('poetry-ui-help-container');
+                        helpContainer.innerHTML = image + header1 + text1 + text2 + code;
+                        this.setContent(helpContainer);
 
-                var helpContainer = document.createElement('poetry-ui-help-container');
-                helpContainer.innerHTML = image + header1 + text1 + text2 + code;// + header2;
-                //helpContainer.append(helpList.element);
-                this.setContent(helpContainer);
+                        return;
+                    } else {
+                        var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_remotely_2j6y.svg" alt="Illustration of a row of houses.">`;
+                        var header1 = `<h2 class="poetry-ui-help-heading">There's nothing here</h2>`;
+                        var text1 = `<p>You haven’t created any ${contentType.pluralName[0].toLowerCase()}${contentType.pluralName.substr(1)} yet. Let’s do it!</p>`;
 
-                return;
-            }
+                        var button = new Button(`Get to work`).setPrimary().onClick(createNew);
+                        var buttonContainer = document.createElement('div');
+                        buttonContainer.style.textAlign = 'center';
+                        buttonContainer.append(button.element);
 
-            var list = new List();
-            response.forEach(content => list.addItem(item => {
-                item.setText(contentType.isNameable ? content.name : content.id);
+                        var helpContainer = document.createElement('poetry-ui-help-container');
+                        helpContainer.innerHTML = image + header1 + text1;
 
-                item.onClick(() => {
-                    item.setActive();
-                    app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
-                });
-            }));
-            this.setContent(list);
-        });
+                        helpContainer.append(buttonContainer);
+                        this.setContent(helpContainer);
+
+                        return;
+                    }
+                }
+
+                var list = new List();
+                response.forEach(content => list.addItem(item => {
+                    item.setText(contentType.isNameable ? content.name : content.id);
+
+                    item.onClick(() => {
+                        item.setActive();
+                        app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
+                    });
+                }));
+                this.setContent(list);
+            });
         };
 
         update();
-
-        this.setToolbar(
-            new Button('New').setInherit().onClick(() =>
-                formBuilder.fieldModels.then(fieldModels => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => update()), this))
-            )
-        );
     }
 }
 
@@ -242,6 +247,31 @@ class EditContentBlade extends Blade {
         }
 
         formBuilder.fieldModels.then(fieldModels => {
+            if (fieldModels.length == 0) {
+
+                var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_order_a_car_3tww.svg" alt="Illustration of a house with cars surrounding it, bearing checkmarks.">`;
+                var header1 = `<h2 class="poetry-ui-help-heading">No properties</h2>`;
+                var text1 = '<p>You should probably define some kind of properties here.</p>';
+                var text2 = '<p>Some helpful topics:</p>';
+
+                var helpList = new List();
+                helpList.addItem(item => item.setText('I want to make my content translateable'));
+                helpList.addItem(item => item.setText('I want to make my content navigatable with a browser'));
+                helpList.addItem(item => item.setText('I want to support sub pages'));
+                helpList.addItem(item => item.setText('I want to use a text area'));
+                helpList.addItem(item => item.setText('I want to upload images'));
+                helpList.addItem(item => item.setText('I want to create links to other content'));
+                helpList.addItem(item => item.setText('I want to have lists of custom objects'));
+                helpList.addItem(item => item.setText('I want to reuse several properties between content types'));
+
+                var helpContainer = document.createElement('poetry-ui-help-container');
+                helpContainer.innerHTML = image + header1 + text1 + text2;
+                helpContainer.append(helpList.element);
+                this.setContent(helpContainer);
+
+                return;
+            }
+
             var groups = [...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.group))].sort();
             
             if (groups.length == 1) {
