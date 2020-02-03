@@ -26,13 +26,20 @@ export default ContentApp;
 
 /* LIST CONTENT TYPES BLADE */
 
+var guid = uuidv4();
+
+function uuidv4() { // https://stackoverflow.com/a/2117523
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 class ListContentTypesBlade extends Blade {
     constructor(app) {
         super();
 
         this.setTitle('What to edit');
-
-        var guid = uuidv4();
 
         var update = () =>
             fetch('ContentApp/GetContentTypes', { credentials: 'include' })
@@ -79,7 +86,7 @@ class ListContentTypesBlade extends Blade {
 
                             item.onClick(() => {
                                 item.setActive();
-                                app.openAfter(new ListContentBlade(app, contentType).onClose(() => item.setActive(false)), this);
+                                app.openAfter(new ListContentBlade(app, contentType, contentTypes.length).onClose(() => item.setActive(false)), this);
                             });
 
                             if (contentTypes.length == 1) {
@@ -121,46 +128,70 @@ class ListContentTypesBlade extends Blade {
     }
 }
 
-function uuidv4() { // https://stackoverflow.com/a/2117523
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
 
 
 /* LIST CONTENT BLADE */
 
 class ListContentBlade extends Blade {
-    constructor(app, contentType) {
+    constructor(app, contentType, contentTypeCount) {
         super();
 
         this.setTitle(contentType.pluralName);
 
         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
+        var formFieldsPromise = formBuilder.fieldModels;
 
-        var reload = () =>
-            fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
-                .then(response => response.json())
-                .then(response => {
-                    var list = new List();
-                    response.forEach(content => list.addItem(item => {
-                        item.setText(contentType.isNameable ? content.name : content.id);
+        var update = () => {
+            var contentListPromise = fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
 
-                        formBuilder.fieldModels.then(fieldModels => item.onClick(() => {
-                            item.setActive();
-                            app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
-                        }));
-                    }));
-                    this.setContent(list);
+            Promise.all([contentListPromise, formFieldsPromise]).then(([response, formFields]) => {
+                if (contentTypeCount == 1 && formFields.length == 0 && response.length == 0) {
+                var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_suburbs_8b83.svg" alt="Illustration of a row of houses.">`;
+                    var header1 = `<h2 class="poetry-ui-help-heading">No ${contentType.pluralName[0].toLowerCase()}${contentType.pluralName.substr(1)}, no properties … yet</h2>`;
+                var text1 = '<p>Your content type is a bit empty. Let\'s add some properties!</p>';
+                var text2 = '<p>Try implementing INameable:</p>';
+                var code = '<pre class="poetry-ui-help-code">public class MyClass : …, INameable\n' +
+                    '{\n' +
+                    '    …\n' +
+                    '    public string Name { get; set; }\n' +
+                    '}</pre>';
+                var header2 = `<h2 class="poetry-ui-help-heading">More topics</h2>`;
+
+                var helpList = new List();
+                helpList.addItem(item => item.setText('I want to make my content translateable'));
+                helpList.addItem(item => item.setText('I want to support sub pages'));
+                helpList.addItem(item => item.setText('I want to use a text area'));
+                helpList.addItem(item => item.setText('I want to upload images'));
+                helpList.addItem(item => item.setText('I want to create links to other content'));
+                helpList.addItem(item => item.setText('I want to have lists of custom objects'));
+                helpList.addItem(item => item.setText('I want to reuse several properties between content types'));
+
+                var helpContainer = document.createElement('poetry-ui-help-container');
+                helpContainer.innerHTML = image + header1 + text1 + text2 + code;// + header2;
+                //helpContainer.append(helpList.element);
+                this.setContent(helpContainer);
+
+                return;
+            }
+
+            var list = new List();
+            response.forEach(content => list.addItem(item => {
+                item.setText(contentType.isNameable ? content.name : content.id);
+
+                item.onClick(() => {
+                    item.setActive();
+                    app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
                 });
+            }));
+            this.setContent(list);
+        });
+        };
 
-        reload();
+        update();
 
         this.setToolbar(
             new Button('New').setInherit().onClick(() =>
-                formBuilder.fieldModels.then(fieldModels => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => reload()), this))
+                formBuilder.fieldModels.then(fieldModels => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => update()), this))
             )
         );
     }
