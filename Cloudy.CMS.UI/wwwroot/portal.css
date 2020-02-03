@@ -48,7 +48,7 @@ td, th {
   vertical-align: top; }
 
 ::selection {
-  background: #0058ad;
+  background: #1976d2;
   color: white; }
 
 /* PORTAL */
@@ -167,10 +167,11 @@ poetry-ui-app {
 
 /* BLADE */
 poetry-ui-blade {
-  flex: 1 0 auto;
+  flex: 0 0 100%;
   flex-direction: column;
   position: relative;
   display: none;
+  min-width: 0;
   border-radius: 4px;
   background: white;
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12); }
@@ -340,3 +341,30 @@ poetry-ui-button,
     poetry-ui-button.inherit:focus,
     .poetry-ui-button.inherit:focus {
       background-color: rgba(0, 0, 0, 0.1); }
+
+/* HELP */
+poetry-ui-help-container {
+  display: block;
+  padding: 16px; }
+
+.poetry-ui-help-illustration {
+  margin: 0 auto 16px;
+  display: block;
+  width: 15rem;
+  max-width: 100%; }
+
+.poetry-ui-help-heading {
+  font-size: 1.25rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em; }
+
+.poetry-ui-help-code {
+  margin: 0 0 16px;
+  padding: 12px 18px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #272c34;
+  overflow: auto;
+  color: white; }

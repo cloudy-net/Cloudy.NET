@@ -32,46 +32,100 @@ class ListContentTypesBlade extends Blade {
 
         this.setTitle('What to edit');
 
-        fetch('ContentApp/GetContentTypes', { credentials: 'include' })
-            .then(response => response.json())
-            .then(contentTypes => {
-                var list = new List();
+        var guid = uuidv4();
 
-                list.addSubHeader('General');
-                contentTypes.filter(t => !t.isSingleton).forEach(contentType => list.addItem(item => {
-                    item.setText(contentType.pluralName);
+        var update = () =>
+            fetch('ContentApp/GetContentTypes', { credentials: 'include' })
+                .then(response => response.json())
+                .catch(e => console.log(e))
+                .then(contentTypes => {
+                    if (!contentTypes.length) {
+                        var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
+                        var header = '<h2 class="poetry-ui-help-heading">Welcome to your new home!</h2>';
+                        var text = '<p>It\'s time to create your first content type:</p>';
+                        var code = `<pre class="poetry-ui-help-code">[ContentType("${guid}")]\n` +
+                            'public class Page : IContent\n' +
+                            '{\n' +
+                            '    public string Id { get; set; }\n' +
+                            '    public string ContentTypeId { get; set; }\n' +
+                            '}</pre>';
+                        var textAfterCode = '<p>Save it, build it, and come back here!</p>';
 
-                    item.onClick(() => {
-                        item.setActive();
-                        app.openAfter(new ListContentBlade(app, contentType).onClose(() => item.setActive(false)), this);
-                    });
-                }));
+                        var helpContainer = document.createElement('poetry-ui-help-container');
+                        helpContainer.innerHTML = image + header + text + code + textAfterCode;
 
-                var singletons = contentTypes.filter(t => t.isSingleton);
+                        var reloadButton = new Button('Done').setPrimary().onClick(() => {
+                            helpContainer.style.transition = '0.2s';
+                            helpContainer.style.opacity = '0.3';
 
-                if (singletons.length) {
-                    list.addSubHeader('Singletons');
-                    singletons.forEach(contentType => list.addItem(item => {
-                        item.setText(contentType.name);
+                            setTimeout(() => update(), 300);
+                        });
+                        var reloadButtonContainer = document.createElement('div');
+                        reloadButtonContainer.style.textAlign = 'center';
+                        reloadButtonContainer.append(reloadButton.element);
 
-                        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-                        var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
+                        helpContainer.append(reloadButtonContainer);
+                        this.setContent(helpContainer);
 
-                        Promise.all([formBuilder.fieldModels, content]).then(results =>
+                        return;
+                    }
+
+                    var list = new List();
+
+                    if (contentTypes.filter(t => !t.isSingleton).length) {
+                        list.addSubHeader('General');
+                        contentTypes.filter(t => !t.isSingleton).forEach(contentType => list.addItem(item => {
+                            item.setText(contentType.pluralName);
+
                             item.onClick(() => {
                                 item.setActive();
-                                app.openAfter(
-                                    new EditContentBlade(app, contentType, formBuilder, results[1])
-                                        .onClose(() => item.setActive(false)),
-                                    this);
-                            })
-                        );
-                    }));
-                }
+                                app.openAfter(new ListContentBlade(app, contentType).onClose(() => item.setActive(false)), this);
+                            });
 
-                this.setContent(list);
-            });
+                            if (contentTypes.length == 1) {
+                                item.element.click();
+                            }
+                        }));
+                    }
+
+                    var singletons = contentTypes.filter(t => t.isSingleton);
+
+                    if (singletons.length) {
+                        list.addSubHeader('Singletons');
+                        singletons.forEach(contentType => list.addItem(item => {
+                            item.setText(contentType.name);
+
+                            var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
+                            var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
+
+                            Promise.all([formBuilder.fieldModels, content]).then(results => {
+                                item.onClick(() => {
+                                    item.setActive();
+                                    app.openAfter(
+                                        new EditContentBlade(app, contentType, formBuilder, results[1])
+                                            .onClose(() => item.setActive(false)),
+                                        this);
+                                });
+
+                                if (contentTypes.length == 1) {
+                                    item.element.click();
+                                }
+                            });
+                        }));
+                    }
+
+                    this.setContent(list);
+                });
+
+        update();
     }
+}
+
+function uuidv4() { // https://stackoverflow.com/a/2117523
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
 

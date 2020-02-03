@@ -1,19 +1,16 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.SingletonSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Website.AspNetCore.Models
+namespace Website.AspNetCore
 {
-    [Singleton("site-settings")]
-    [ContentType("site-settings")]
-    public class SiteSettings : IContent
+    [ContentType("d37579d1-5418-4ead-a437-a331d66b5d18")]
+    public class Page : IContent
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }
-        public string SiteTitle { get; set; }
     }
 }

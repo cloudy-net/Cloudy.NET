@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Website.AspNetCore.Models;
 using Cloudy.CMS.ContentSupport;
 
 namespace Website.AspNetCore.Controllers
@@ -15,16 +14,6 @@ namespace Website.AspNetCore.Controllers
         public ActionResult Index([FromContentRoute] IContent page)
         {
             return Content(page.Id);
-        }
-
-        public ActionResult Blog([FromContentRoute] Page page)
-        {
-            return View("Page", page);
-        }
-
-        public ActionResult Start([FromContentRoute] StartPage page)
-        {
-            return View("Start", page);
         }
     }
 }
