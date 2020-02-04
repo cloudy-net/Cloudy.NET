@@ -1,4 +1,7 @@
-﻿namespace Poetry.UI.FormSupport.UIHintSupport
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Poetry.UI.FormSupport.UIHintSupport
 {
     public enum ExpressionSegmentType
     {

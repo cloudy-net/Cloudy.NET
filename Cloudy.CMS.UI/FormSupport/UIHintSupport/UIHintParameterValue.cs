@@ -1,17 +1,15 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace Poetry.UI.FormSupport.UIHintSupport
 {
     [DebuggerDisplay("{Type}")]
     public class UIHintParameterValue
     {
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public UIHintParameterType Type { get; }
         public object Value { get; }
-
         public UIHintParameterValue(string value)
         {
             Type = UIHintParameterType.String;

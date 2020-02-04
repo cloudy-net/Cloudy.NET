@@ -95,7 +95,9 @@ namespace Poetry.UI.FormSupport.UIHintSupport.ParserSupport
             }
             else
             {
-                return new UIHintParameterValue(parser.ReadUntil(',', ')', '}'));
+                var segments = new List<ExpressionSegment>();
+                segments.Add(new ExpressionSegment(ExpressionSegmentType.Interpolated, parser.ReadUntil(',', ')', '}')));
+                return new UIHintParameterValue(new Expression(segments));
             }
         }
 

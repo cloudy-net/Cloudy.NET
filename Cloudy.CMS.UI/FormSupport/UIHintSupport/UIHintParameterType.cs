@@ -1,4 +1,5 @@
-﻿namespace Poetry.UI.FormSupport.UIHintSupport
+﻿
+namespace Poetry.UI.FormSupport.UIHintSupport
 {
     public enum UIHintParameterType
     {

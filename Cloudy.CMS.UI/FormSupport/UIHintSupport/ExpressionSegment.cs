@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace Poetry.UI.FormSupport.UIHintSupport
 {
     [DebuggerDisplay("{Value} ({Type})")]
     public class ExpressionSegment
     {
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public ExpressionSegmentType Type { get; }
         public string Value { get; }
 
