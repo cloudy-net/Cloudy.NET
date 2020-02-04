@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.DocumentSupport.FileSupport;
+using Cloudy.CMS.DocumentSupport.InMemorySupport;
 using Cloudy.CMS.DocumentSupport.MongoSupport;
 using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
@@ -21,16 +22,15 @@ namespace Cloudy.CMS
         public CloudyConfigurator WithFileBasedDocuments()
         {
             this.AddFileBased();
+            Options.HasDocumentProvider = true;
 
             return this;
         }
 
-        public CloudyConfigurator AddContentRoute()
+        public CloudyConfigurator WithFileBasedDocuments(string jsonPath)
         {
-            Services.Configure<RouteOptions>(options =>
-            {
-                options.ConstraintMap.Add("contentroute", typeof(ContentRouteConstraint));
-            });
+            this.AddFileBased(jsonPath);
+            Options.HasDocumentProvider = true;
 
             return this;
         }
@@ -44,6 +44,25 @@ namespace Cloudy.CMS
 
             this.AddMongo();
             Options.DatabaseConnectionString = name;
+            Options.HasDocumentProvider = true;
+
+            return this;
+        }
+
+        public CloudyConfigurator WithInMemoryDatabase()
+        {
+            this.AddInMemory();
+            Options.HasDocumentProvider = true;
+
+            return this;
+        }
+
+        public CloudyConfigurator AddContentRoute()
+        {
+            Services.Configure<RouteOptions>(options =>
+            {
+                options.ConstraintMap.Add("contentroute", typeof(ContentRouteConstraint));
+            });
 
             return this;
         }

@@ -7,9 +7,9 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 {
     public static class StartupExtensions
     {
-        public static CloudyConfigurator AddFileBased(this CloudyConfigurator configurator)
+        public static CloudyConfigurator AddFileBased(this CloudyConfigurator configurator, string path = "json")
         {
-            configurator.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions("json"));
+            configurator.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions(path));
             configurator.Services.AddSingleton<IFilePathProvider, FilePathProvider>();
             configurator.Services.AddSingleton<IFileHandler, FileHandler>();
             configurator.Services.AddSingleton<IDocumentSerializer, DocumentSerializer>();

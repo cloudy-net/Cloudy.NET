@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.DocumentSupport.FileSupport
+﻿namespace Cloudy.CMS.DocumentSupport
 {
     public interface IDocumentPropertyFinder
     {

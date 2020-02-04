@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Cloudy.CMS.DocumentSupport.FileSupport
+namespace Cloudy.CMS.DocumentSupport
 {
     public class DocumentPropertyFinder : IDocumentPropertyFinder
     {
@@ -52,8 +52,6 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
             {
                 return false;
             }
-
-            var property = coreInterface.Properties[propertyId];
 
             return true;
         }

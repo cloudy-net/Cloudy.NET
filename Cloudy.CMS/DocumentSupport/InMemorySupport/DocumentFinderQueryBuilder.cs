@@ -4,21 +4,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.DocumentSupport.FileSupport
+namespace Cloudy.CMS.DocumentSupport.InMemorySupport
 {
     public class DocumentFinderQueryBuilder : IDocumentFinderQueryBuilder
     {
-        IFilePathProvider FilePathProvider { get; }
-        IFileHandler FileHandler { get; }
-        IDocumentDeserializer DocumentDeserializer { get; }
         IDocumentPropertyPathProvider DocumentPropertyPathProvider { get; }
         IDocumentPropertyFinder DocumentPropertyFinder { get; }
 
-        public DocumentFinderQueryBuilder(IFilePathProvider filePathProvider, IFileHandler fileHandler, IDocumentPropertyPathProvider documentPropertyPathProvider, IDocumentDeserializer documentDeserializer, IDocumentPropertyFinder documentPropertyFinder)
+        public DocumentFinderQueryBuilder(IDocumentPropertyPathProvider documentPropertyPathProvider, IDocumentPropertyFinder documentPropertyFinder)
         {
-            FilePathProvider = filePathProvider;
-            FileHandler = fileHandler;
-            DocumentDeserializer = documentDeserializer;
             DocumentPropertyPathProvider = documentPropertyPathProvider;
             DocumentPropertyFinder = documentPropertyFinder;
         }
@@ -93,9 +87,14 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 
         public Task<IEnumerable<Document>> GetResultAsync()
         {
+            if (!DocumentRepository.Documents.ContainsKey(Container))
+            {
+                return Task.FromResult(Enumerable.Empty<Document>());
+            }
+
             var result = new List<Document>();
 
-            foreach(var document in FileHandler.List(FilePathProvider.GetPathFor(Container)).Select(c => DocumentDeserializer.Deserialize(c)))
+            foreach(var document in DocumentRepository.Documents[Container].Values)
             {
                 if(Criteria.All(c => c(document)))
                 {
@@ -103,7 +102,7 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
                 }
             }
 
-            return Task.FromResult((IEnumerable<Document>)result.AsReadOnly());
+            return Task.FromResult((IEnumerable<Document>)result);
         }
     }
 }
