@@ -58,22 +58,32 @@ class SortableTableControl extends Sortable {
                     })
                 )
             }
+        } else {
+            for (const columnFieldModel of fieldModel.fields) {
+                dataTable.addColumn(c => c
+                    .setHeader(() => columnFieldModel.descriptor.label)
+                    .setContent(item => item[columnFieldModel.descriptor.camelCaseId])
+                )
+            }
         }
 
         dataTable
             .addColumn(c => c
                 .setShrink()
+                .setButtonColumn()
                 .setContent(item =>
                     new ContextMenu()
                         .addItem(menuItem => menuItem.setText('Edit').onClick(() => app.open(new EditRow(formBuilder, item, app).onClose(message => { if (message == 'saved') { dataTable.update(); } }), dataTable.element)))
                         .addItem(menuItem => menuItem.setText('Remove').onClick(() => { target.splice(target.indexOf(item), 1); dataTable.update(); }))
                 )
-            )
-            .setFooter(new Button('Add').onClick(() => app.open(new EditRow(formBuilder, null, app).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } }), dataTable.element)));
+        )
+            .setFooter(new Button('Add').setInherit().onClick(() => app.open(new EditRow(formBuilder, null, app).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } }), dataTable.element)));
 
         dataTable.paging.remove();
 
-        this.element = dataTable.element;
+        var container = document.createElement('poetry-ui-form-table');
+        container.append(dataTable.element);
+        this.element = container;
     }
 }
 
@@ -95,7 +105,7 @@ class EditRow extends Blade {
 
         formBuilder.build(item).then(form => {
             this.setContent(form);
-            this.setFooter(new Button('Ok').onClick(() => app.close(this, 'saved', form.getValues())), new Button('Cancel').onClick(() => this.close()));
+            this.setFooter(new Button('Ok').setPrimary().onClick(() => app.close(this, 'saved', form.getValues())), new Button('Cancel').onClick(() => app.close(this)));
         });
 
     }

@@ -71,6 +71,8 @@ class ListItem {
             this.element.append(this.text);
         }
         this.text.innerText = value;
+
+        return this;
     }
 
     setSubText(value) {
@@ -79,6 +81,8 @@ class ListItem {
             this.element.append(this.subText);
         }
         this.subText.innerText = value;
+
+        return this;
     }
 
     setActive(value = true) {
@@ -87,6 +91,8 @@ class ListItem {
         } else {
             this.element.classList.remove('poetry-ui-active');
         }
+
+        return this;
     }
 
     appendTo(element) {

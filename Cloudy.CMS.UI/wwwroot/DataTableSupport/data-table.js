@@ -84,8 +84,6 @@ class DataTable {
                             if (result) {
                                 element.append(result.element || result);
                             }
-                        } else {
-                            element.classList.add('poetry-ui-data-table-no-padding');
                         }
 
                         if (column.sorting) {
@@ -151,6 +149,10 @@ class DataTable {
 
                     this.columns.forEach(column => {
                         var element = document.createElement('td');
+
+                        if (column.buttonColumn) {
+                            element.classList.add('poetry-ui-data-table-button-column');
+                        }
 
                         if (column.contentGenerator) {
                             var result = column.contentGenerator(item, this);
@@ -277,6 +279,12 @@ class DataTable {
 class Column {
     setShrink() {
         this.shrink = true;
+
+        return this;
+    }
+
+    setButtonColumn(value = true) {
+        this.buttonColumn = value;
 
         return this;
     }

@@ -114,3 +114,16 @@ poetry-ui-sortable-buttons {
   transition: border-color 0.2s; }
   .poetry-ui-embedded-form:hover {
     border-color: #ccc; }
+
+/* FORM TABLE */
+poetry-ui-form-table poetry-ui-data-table-header {
+  padding-left: 16px;
+  padding-right: 16px; }
+
+poetry-ui-form-table > poetry-ui-data-table {
+  margin-left: -16px;
+  margin-right: -16px; }
+
+poetry-ui-form-table poetry-ui-data-table-footer {
+  padding-left: 16px;
+  padding-right: 16px; }

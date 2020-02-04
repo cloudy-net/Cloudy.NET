@@ -18,5 +18,9 @@
   {
     "outputFile": "wwwroot/TabSupport/tab-system.css",
     "inputFile": "wwwroot/TabSupport/tab-system.scss"
+  },
+  {
+    "outputFile": "wwwroot/DataTableSupport/data-table.css",
+    "inputFile": "wwwroot/DataTableSupport/data-table.scss"
   }
 ]

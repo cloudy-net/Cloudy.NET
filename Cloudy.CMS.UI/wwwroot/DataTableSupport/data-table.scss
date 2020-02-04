@@ -1,4 +1,4 @@
-﻿@import '../../Styles/variables.scss';
+﻿@import '../variables.scss';
 
 
 
@@ -10,34 +10,31 @@ poetry-ui-data-table {
 
 .poetry-ui-data-table {
     width: 100%;
-    margin-bottom: 1rem;
+    margin: 16px 0;
 
     th,
     td {
-        padding: 0.25rem 0;
-        border-bottom: solid 1px $light-gray;
-        font-size: $small-font;
-    }
+        padding: 16px;
+        border-bottom: solid 1px rgba(224, 224, 224, 1);
+        font-size: 0.875rem;
 
-    thead tr:first-child {
-        td, th {
-            &:first-child {
-                padding-top: 0;
+        &.poetry-ui-data-table-button-column {
+            padding: 2px;
+            vertical-align: middle;
+
+            .poetry-ui-context-menu-outer {
+                display: block;
             }
         }
     }
 
     th {
-        text-transform: uppercase;
+        font-weight: 500;
     }
 
     tr:hover td {
         background: $almost-white;
     }
-}
-
-.poetry-ui-data-table .poetry-ui-data-table-no-padding {
-    padding: 0 !important;
 }
 
 poetry-ui-data-table-button,

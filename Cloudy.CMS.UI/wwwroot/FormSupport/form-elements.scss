@@ -175,3 +175,24 @@ poetry-ui-sortable-buttons {
         border-color: $light-gray;
     }
 }
+
+
+
+/* FORM TABLE */
+
+poetry-ui-form-table {
+    poetry-ui-data-table-header {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    > poetry-ui-data-table {
+        margin-left: -16px;
+        margin-right: -16px;
+    }
+
+    poetry-ui-data-table-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
