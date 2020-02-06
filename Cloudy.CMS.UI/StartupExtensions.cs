@@ -61,27 +61,24 @@ namespace Cloudy.CMS
                 throw new ArgumentException($"You have called both {nameof(CloudyAdminConfigurator.Authorize)}() and {nameof(CloudyAdminConfigurator.Unprotect)}(), they are mutually exclusive. You probably want to remove the latter");
             }
 
-            var authorizationService = app.ApplicationServices.GetService<IAuthorizationService>();
-
-            if(authorizationService == null)
-            {
-                throw new Exception($"Could not find {nameof(IAuthorizationService)} in DI container. Call services.{nameof(PolicyServiceCollectionExtensions.AddAuthorization)}() in ConfigureServices");
-            }
-
-            var policy = 
-                options.AllowUnauthenticatedUsers ?
-                new AuthorizationPolicyBuilder().RequireAssertion(context => true).Build() :
-                options.AuthorizeOptions != null ?
-                AuthorizationPolicy.CombineAsync(app.ApplicationServices.GetRequiredService<IAuthorizationPolicyProvider>(), new List<IAuthorizeData> { options.AuthorizeOptions }).Result :
-                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-
-            var path = new PathString(options.BasePath);
-
             var version = Assembly.GetExecutingAssembly().GetName().Version;
 
-            app.Map(path, adminBranch =>
+            app.Map(new PathString(options.BasePath), adminBranch =>
             {
-                adminBranch.UseMiddleware<AuthorizeMiddleware>(policy);
+                if (options.AuthorizeOptions != null)
+                {
+                    if (app.ApplicationServices.GetService<IAuthorizationService>() == null)
+                    {
+                        throw new Exception($"Could not find {nameof(IAuthorizationService)} in DI container. Call services.{nameof(PolicyServiceCollectionExtensions.AddAuthorization)}() in ConfigureServices");
+                    }
+
+                    var policy =
+                        options.AuthorizeOptions != null ?
+                        AuthorizationPolicy.CombineAsync(app.ApplicationServices.GetRequiredService<IAuthorizationPolicyProvider>(), new List<IAuthorizeData> { options.AuthorizeOptions }).Result :
+                        new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    
+                    adminBranch.UseMiddleware<AuthorizeMiddleware>(policy);
+                }
 
                 if (options.StaticFilesFileProvider != null)
                 {
