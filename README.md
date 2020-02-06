@@ -8,22 +8,20 @@ Install Cloudy.CMS and Cloudy.CMS.UI from NuGet.
 
 In Startup.cs, under ConfigureServices, do:
 
-    services.AddAuthorization();
-    services.AddControllersWithViews();
-    services.AddCloudy(cloudy => cloudy
-        //
-        .WithFileBasedDocuments()
-        .AddContentRoute()
-        .AddAdmin()
-    );
+    services.AddControllers();
+    services.AddCloudy(cloudy => cloudy.AddAdmin());
 
 And in the Configure method, do:
 
-    app.UseCloudyAdmin(cloudy => cloudy.Unprotect());
+    app.UseCloudyAdmin(cloudy => cloudy.Unprotect()); // NOTE: Admin UI will be publicly available!
 
 Then visit `/Admin` for the royal tour.
 
 To route INavigatable content (will work on /pages/MyUrlSegment etc), do:
+
+    services.AddCloudy(cloudy => cloudy.AddContentRoute() // ...
+
+And do:
 
     app.UseRouting();
     app.UseEndpoints(endpoints => {
