@@ -34,13 +34,6 @@ namespace Cloudy.CMS.UI
             return this;
         }
 
-        public CloudyAdminConfigurator DontNagOnLocalhost()
-        {
-            Options.DontNagOnLocalhost = true;
-
-            return this;
-        }
-
         public CloudyAdminConfigurator WithStaticFilesFrom(IFileProvider fileProvider)
         {
             Options.StaticFilesFileProvider = fileProvider;
