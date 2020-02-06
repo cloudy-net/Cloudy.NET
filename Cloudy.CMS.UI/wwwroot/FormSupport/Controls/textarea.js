@@ -1,13 +1,21 @@
 ﻿import FieldControl from '../field-control.js';
 
 class TextareaControl extends FieldControl {
+    static customLabel = true;
     constructor(fieldModel, value, app) {
+        var container = document.createElement('div');
+        super(container);
+
+        var label = document.createElement('div');
+        label.classList.add('poetry-ui-form-field-label');
+        label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        container.appendChild(label);
+
         var input = document.createElement('textarea');
         input.classList.add('poetry-ui-form-input');
         input.rows = 8;
         input.value = value || null;
-
-        super(input);
+        container.append(input);
 
         input.addEventListener('change', () => this.triggerChange(input.value || null));
         input.addEventListener('keyup', () => this.triggerChange(input.value || null));
@@ -15,18 +23,18 @@ class TextareaControl extends FieldControl {
         this.onSet(value => input.value = value || null);
 
         if (value == null) {
-            this.setEnlargeLabel(true);
+            label.classList.add('poetry-ui-enlarge-label');
         }
 
         input.addEventListener('focus', () => {
             if (input.value == '') {
-                this.setEnlargeLabel(false);
+                label.classList.remove('poetry-ui-enlarge-label');
             }
         });
 
         input.addEventListener('blur', () => {
             if (input.value == '') {
-                this.setEnlargeLabel(true);
+                label.classList.add('poetry-ui-enlarge-label');
             }
         });
     }

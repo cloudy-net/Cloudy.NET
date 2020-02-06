@@ -1,10 +1,11 @@
 ﻿class FieldControl {
+    static customLabel = false;
+
     constructor(element) {
         this.element = element;
         this.callbacks = {
             set: [],
             change: [],
-            enlargeLabel: [],
         };
     }
 
@@ -30,19 +31,6 @@
 
     appendTo(element) {
         element.appendChild(this.element);
-
-        return this;
-    }
-
-    enlargeLabel = false;
-
-    setEnlargeLabel(value = true) {
-        this.enlargeLabel = value;
-        this.callbacks.enlargeLabel.forEach(callback => callback(value));
-    }
-
-    onSetEnlargeLabel(callback) {
-        this.callbacks.enlargeLabel.push(callback);
 
         return this;
     }

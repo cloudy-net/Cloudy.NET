@@ -29,7 +29,7 @@ fieldset.poetry-ui-form-field {
   letter-spacing: 0.00938em; }
   .poetry-ui-form-field:focus-within .poetry-ui-form-field-label {
     color: #1976d2; }
-  .poetry-ui-form-field.enlarge-label .poetry-ui-form-field-label {
+  .poetry-ui-form-field-label.poetry-ui-enlarge-label {
     transform: translate(0, 24px) scale(1);
     cursor: text; }
 
@@ -56,6 +56,38 @@ fieldset.poetry-ui-form-field {
 textarea.poetry-ui-form-input {
   height: auto;
   word-break: break-all; }
+
+/* GRAPHICAL CHECKBOX */
+poetry-ui-checkbox-container {
+  display: flex; }
+
+.poetry-ui-checkbox {
+  position: absolute;
+  left: -999em; }
+
+.poetry-ui-graphical-checkbox {
+  flex-grow: 0;
+  display: block;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 5v14H5V5h14m0-2H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h14a2 2 0 002-2V5a2 2 0 00-2-2z' fill-opacity='.54'/%3E%3C/svg%3E");
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  cursor: pointer;
+  /*input:focus + & {
+        background-color: rgba(0, 0, 0, 0.1);
+    }*/ }
+  input:checked + .poetry-ui-graphical-checkbox {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 3H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-9 14l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L19 8l-9 9z' fill='%231976d2'/%3E%3C/svg%3E"); }
+  .poetry-ui-graphical-checkbox:hover {
+    background-color: rgba(0, 0, 0, 0.04); }
+
+poetry-ui-checkbox-label {
+  flex-grow: 1;
+  padding: 9px 0; }
 
 /* SORTABLE FIELD */
 poetry-ui-sortable {

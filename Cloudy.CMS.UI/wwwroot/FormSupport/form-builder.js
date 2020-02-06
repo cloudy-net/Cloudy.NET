@@ -80,10 +80,12 @@ class FormBuilder {
         var element = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'label');
         element.classList.add('poetry-ui-form-field');
 
-        var heading = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
-        heading.classList.add('poetry-ui-form-field-label');
-        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
-        element.appendChild(heading);
+        if (!(fieldModel.controlType && fieldModel.controlType.customLabel)) {
+            var heading = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
+            heading.classList.add('poetry-ui-form-field-label');
+            heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+            element.appendChild(heading);
+        }
 
         if (fieldModel.descriptor.isSortable) {
             return this.buildSortableField(fieldModel, target, element);
@@ -114,18 +116,6 @@ class FormBuilder {
         var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app);
 
         control.onChange(value => target[fieldModel.descriptor.camelCaseId] = value);
-
-        if (control.enlargeLabel) {
-            element.classList.add('enlarge-label');
-        }
-
-        control.onSetEnlargeLabel(value => {
-            if (value) {
-                element.classList.add('enlarge-label');
-            } else {
-                element.classList.remove('enlarge-label');
-            }
-        });
 
         element.appendChild(control.element);
 
