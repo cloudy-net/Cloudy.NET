@@ -1,4 +1,4 @@
-![Animation showing basic interactions with the Cloudy CMS admin UI.](/screencast.gif?raw=true)
+![Screenshot of the Cloudy CMS admin UI.](/screenshot.png?raw=true)
 
 # Installation
 
