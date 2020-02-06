@@ -12,6 +12,7 @@ namespace Cloudy.CMS.DocumentSupport.InMemorySupport
             instance.Services.AddSingleton<IDocumentGetter, DocumentRepository>();
             instance.Services.AddSingleton<IDocumentCreator, DocumentRepository>();
             instance.Services.AddSingleton<IDocumentUpdater, DocumentRepository>();
+            instance.Services.AddSingleton<IDocumentDeleter, DocumentRepository>();
             instance.Services.AddSingleton<IDocumentFinder, DocumentRepository>();
             instance.Services.AddSingleton<IDocumentFinder, DocumentRepository>();
             instance.Services.AddSingleton<IDocumentFinderQueryBuilder, DocumentFinderQueryBuilder>();

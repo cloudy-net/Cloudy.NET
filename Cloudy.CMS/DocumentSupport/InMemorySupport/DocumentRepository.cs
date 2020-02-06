@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.DocumentSupport.InMemorySupport
 {
-    public class DocumentRepository : IDocumentGetter, IDocumentCreator, IDocumentUpdater, IDocumentFinder
+    public class DocumentRepository : IDocumentGetter, IDocumentCreator, IDocumentUpdater, IDocumentFinder, IDocumentDeleter
     {
         public static IDictionary<string, IDictionary<string, Document>> Documents { get; } = new Dictionary<string, IDictionary<string, Document>>();
 
@@ -60,6 +60,18 @@ namespace Cloudy.CMS.DocumentSupport.InMemorySupport
             }
 
             Documents[container][id] = document;
+
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteAsync(string container, string id)
+        {
+            if (!Documents.ContainsKey(container))
+            {
+                return Task.CompletedTask;
+            }
+
+            Documents[container].Remove(id);
 
             return Task.CompletedTask;
         }
