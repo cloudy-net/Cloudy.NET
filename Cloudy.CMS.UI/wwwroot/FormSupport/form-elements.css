@@ -62,8 +62,7 @@ poetry-ui-checkbox-container {
   display: flex; }
 
 .poetry-ui-checkbox {
-  position: absolute;
-  left: -999em; }
+  display: none; }
 
 .poetry-ui-graphical-checkbox {
   flex-grow: 0;

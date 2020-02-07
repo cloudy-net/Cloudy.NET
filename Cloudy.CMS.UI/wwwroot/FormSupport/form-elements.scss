@@ -96,8 +96,7 @@ poetry-ui-checkbox-container {
 }
 
 .poetry-ui-checkbox {
-    position: absolute;
-    left: -999em;
+    display: none;
 }
 
 .poetry-ui-graphical-checkbox {
