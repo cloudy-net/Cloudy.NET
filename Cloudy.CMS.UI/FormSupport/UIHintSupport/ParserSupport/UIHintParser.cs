@@ -80,7 +80,7 @@ namespace Poetry.UI.FormSupport.UIHintSupport.ParserSupport
 
             if (parser.Is('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-'))
             {
-                return new UIHintParameterValue(int.Parse(parser.ReadUntil(',', ')')));
+                return new UIHintParameterValue(int.Parse(parser.ReadUntil(',', ')', '}')));
             }
 
             if (parser.Is('\''))
