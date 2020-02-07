@@ -16,12 +16,10 @@ fieldset.poetry-ui-form-field {
 
 /* LABEL */
 .poetry-ui-form-field-label {
+  margin-bottom: 8px;
   display: block;
   padding: 0;
-  transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-  transform: translate(0, 1.5px) scale(0.75);
-  transform-origin: top left;
-  color: rgba(0, 0, 0, 0.54);
+  transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
   font-size: 1rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
@@ -29,9 +27,15 @@ fieldset.poetry-ui-form-field {
   letter-spacing: 0.00938em; }
   .poetry-ui-form-field:focus-within .poetry-ui-form-field-label {
     color: #1976d2; }
-  .poetry-ui-form-field-label.poetry-ui-enlarge-label {
-    transform: translate(0, 24px) scale(1);
-    cursor: text; }
+  .poetry-ui-form-field-label.poetry-ui-enlargeable-label {
+    margin-bottom: 0;
+    transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    transform: translate(0, 1.5px) scale(0.75);
+    transform-origin: top left;
+    color: rgba(0, 0, 0, 0.54); }
+    .poetry-ui-form-field-label.poetry-ui-enlargeable-label.poetry-ui-enlarge-label {
+      transform: translate(0, 24px) scale(1);
+      cursor: text; }
 
 /* INPUT */
 .poetry-ui-form-input {
@@ -141,11 +145,10 @@ poetry-ui-sortable-buttons {
     flex: 1 1 auto; }
 
 .poetry-ui-embedded-form {
-  padding: 0.5rem;
-  border: solid 2px #f1f1f1;
-  transition: border-color 0.2s; }
-  .poetry-ui-embedded-form:hover {
-    border-color: #ccc; }
+  padding: 16px;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12); }
 
 /* FORM TABLE */
 poetry-ui-form-table poetry-ui-data-table-header {

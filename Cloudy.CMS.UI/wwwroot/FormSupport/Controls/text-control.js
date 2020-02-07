@@ -8,6 +8,7 @@ class TextControl extends FieldControl {
 
         var label = document.createElement('div');
         label.classList.add('poetry-ui-form-field-label');
+        label.classList.add('poetry-ui-enlargeable-label');
         label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
         container.appendChild(label);
 
