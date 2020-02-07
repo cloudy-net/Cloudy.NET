@@ -28,11 +28,10 @@ namespace Website.AspNetCore
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthorization();
-            services.AddControllersWithViews();
+            services.AddControllers();
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
-                .WithFileBasedDocuments()
+                //.WithFileBasedDocuments()
                 .AddContentRoute()
                 .AddAdmin()
             );
