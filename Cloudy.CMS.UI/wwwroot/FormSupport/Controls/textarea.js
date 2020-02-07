@@ -13,7 +13,7 @@ class TextareaControl extends FieldControl {
 
         var input = document.createElement('textarea');
         input.classList.add('poetry-ui-form-input');
-        input.rows = 8;
+        input.rows = fieldModel.descriptor.control.parameters.options && fieldModel.descriptor.control.parameters.options.rows ? fieldModel.descriptor.control.parameters.options.rows.value : 8;
         input.value = value || null;
         container.append(input);
 
