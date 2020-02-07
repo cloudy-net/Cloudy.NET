@@ -6,12 +6,6 @@ class TextControl extends FieldControl {
         var container = document.createElement('div');
         super(container);
 
-        var label = document.createElement('div');
-        label.classList.add('poetry-ui-form-field-label');
-        label.classList.add('poetry-ui-enlargeable-label');
-        label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
-        container.appendChild(label);
-
         var input = document.createElement('input');
         input.classList.add('poetry-ui-form-input');
         input.type = 'text';
@@ -23,6 +17,16 @@ class TextControl extends FieldControl {
         input.addEventListener('keyup', () => this.triggerChange(input.value || null));
 
         this.onSet(value => input.value = value || null);
+
+        if (fieldModel.descriptor.isSortable) {
+            return;
+        }
+
+        var label = document.createElement('div');
+        label.classList.add('poetry-ui-form-field-label');
+        label.classList.add('poetry-ui-enlargeable-label');
+        label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        container.prepend(label);
 
         if (value == null) {
             label.classList.add('poetry-ui-enlarge-label');

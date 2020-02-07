@@ -103,36 +103,19 @@ poetry-ui-sortable-items {
   display: block; }
 
 poetry-ui-sortable-item {
-  display: block; }
-
-poetry-ui-sortable.poetry-ui-sortable-field poetry-ui-sortable-item {
   display: flex; }
-  poetry-ui-sortable.poetry-ui-sortable-field poetry-ui-sortable-item + poetry-ui-sortable-item {
-    margin-top: 0.5rem; }
-  poetry-ui-sortable.poetry-ui-sortable-field poetry-ui-sortable-item poetry-ui-sortable-item-field {
-    flex: 1; }
-  poetry-ui-sortable.poetry-ui-sortable-field poetry-ui-sortable-item poetry-ui-sortable-item-action {
-    flex: 0;
-    order: 1;
-    padding-top: 0.25rem; }
 
 poetry-ui-sortable-item-field {
-  display: block;
-  padding-left: 0.5rem;
-  border-left: solid 2px #f1f1f1;
-  transition: border-left-color 0.2s; }
-  poetry-ui-sortable-item-field:hover {
-    border-left-color: #ccc; }
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
 
-poetry-ui-sortable.poetry-ui-sortable-form poetry-ui-sortable-item + poetry-ui-sortable-item {
-  margin-top: 1rem; }
-
-poetry-ui-sortable.poetry-ui-sortable-form poetry-ui-sortable-item poetry-ui-sortable-item-action {
-  display: block;
-  text-align: right; }
+poetry-ui-sortable-item-action {
+  flex-grow: 0; }
 
 poetry-ui-sortable-item-form {
-  display: block; }
+  flex: 1; }
 
 poetry-ui-sortable-buttons {
   display: block;

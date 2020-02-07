@@ -50,10 +50,10 @@ class SortableField {
         var field = document.createElement('poetry-ui-sortable-item');
         this.fields.appendChild(field);
 
+        field.appendChild(item.element);
+
         var fieldAction = document.createElement('poetry-ui-sortable-item-action');
         field.appendChild(fieldAction);
-
-        field.appendChild(item.element);
 
         new ContextMenu()
             .addItem(item => {
