@@ -115,7 +115,8 @@ poetry-ui-sortable-item-action {
   flex-grow: 0; }
 
 poetry-ui-sortable-item-form {
-  flex: 1; }
+  flex: 1;
+  padding-left: 2px; }
 
 poetry-ui-sortable-buttons {
   display: block;
@@ -135,8 +136,9 @@ poetry-ui-sortable-item-form {
   background-color: rgba(0, 0, 0, 0.04); }
 
 poetry-ui-sortable-item-form {
+  margin-bottom: 8px;
   display: flex;
-  margin-bottom: 8px; }
+  padding-right: 2px; }
 
 poetry-ui-sortable-item-form .poetry-ui-embedded-form {
   flex: 1;

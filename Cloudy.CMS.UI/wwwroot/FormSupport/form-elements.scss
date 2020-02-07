@@ -168,6 +168,7 @@ poetry-ui-sortable-item-action {
 
 poetry-ui-sortable-item-form {
     flex: 1;
+    padding-left: 2px;
 }
 
 poetry-ui-sortable-buttons {
@@ -196,8 +197,9 @@ poetry-ui-sortable-item-form {
 }
 
 poetry-ui-sortable-item-form {
-    display: flex;
     margin-bottom: 8px;
+    display: flex;
+    padding-right: 2px;
 }
 
 poetry-ui-sortable-item-form .poetry-ui-embedded-form {
