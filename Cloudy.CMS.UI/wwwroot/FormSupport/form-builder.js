@@ -157,7 +157,7 @@ class FormBuilder {
 
                 container.appendChild(form.element);
 
-                return new SortableItem(container, { form });
+                return new SortableItem(container, { form, actionContainer: container });
             };
 
         var sortable = new Sortable(fieldModel, target, createItem);

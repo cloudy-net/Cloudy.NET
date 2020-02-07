@@ -53,7 +53,7 @@ class SortableField {
         field.appendChild(item.element);
 
         var fieldAction = document.createElement('poetry-ui-sortable-item-action');
-        field.appendChild(fieldAction);
+        (item.data.actionContainer || field).appendChild(fieldAction);
 
         new ContextMenu()
             .addItem(item => {
