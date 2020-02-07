@@ -35,6 +35,7 @@ class SortableField {
         this.element.appendChild(buttonContainer);
 
         new Button('Add')
+            .setInherit()
             .onClick(() => {
                 var item = this.createItem(this.target.length);
                 this.addItem(item);
