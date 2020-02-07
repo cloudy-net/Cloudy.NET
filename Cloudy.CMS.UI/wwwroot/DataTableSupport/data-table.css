@@ -15,9 +15,6 @@ poetry-ui-data-table {
     .poetry-ui-data-table td.poetry-ui-data-table-button-column {
       padding: 2px;
       vertical-align: middle; }
-      .poetry-ui-data-table th.poetry-ui-data-table-button-column .poetry-ui-context-menu-outer,
-      .poetry-ui-data-table td.poetry-ui-data-table-button-column .poetry-ui-context-menu-outer {
-        display: block; }
   .poetry-ui-data-table th {
     font-weight: 500; }
   .poetry-ui-data-table tr:hover td {

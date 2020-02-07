@@ -1,8 +1,7 @@
 ﻿/* VARIABLES */
 /* BUTTON */
 .poetry-ui-context-menu-outer {
-  position: relative;
-  display: inline-block; }
+  position: relative; }
 
 poetry-ui-context-menu-button {
   display: block;
