@@ -9,7 +9,7 @@
   padding: 0;
   border: none; }
   .poetry-ui-form-field + .poetry-ui-form-field {
-    margin-top: 1rem; }
+    margin-top: 16px; }
 
 fieldset.poetry-ui-form-field {
   min-inline-size: unset; }
@@ -47,6 +47,7 @@ fieldset.poetry-ui-form-field {
   padding: 6px 0 7px;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  background: transparent;
   transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   font: inherit;
   color: currentColor; }
@@ -148,7 +149,9 @@ poetry-ui-sortable-buttons {
   padding: 16px;
   border-radius: 4px;
   background: white;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12); }
+  background-color: rgba(0, 0, 0, 0.02); }
+  .poetry-ui-embedded-form:hover {
+    background-color: rgba(0, 0, 0, 0.04); }
 
 /* FORM TABLE */
 poetry-ui-form-table poetry-ui-data-table-header {
