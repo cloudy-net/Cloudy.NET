@@ -47,8 +47,14 @@ namespace Cloudy.CMS
         public static void UseCloudyAdmin(this IApplicationBuilder app, Action<CloudyAdminConfigurator> configure)
         {
             var options = new CloudyAdminOptions();
+            var configurator = new CloudyAdminConfigurator(options);
 
-            configure(new CloudyAdminConfigurator(options));
+            configure(configurator);
+
+            if (options.StaticFilesBaseUri == null && options.StaticFilesFileProvider == null)
+            {
+                configurator.WithStaticFilesFromVersion(Assembly.GetExecutingAssembly().GetName().Version);
+            }
 
             if (!options.AllowUnauthenticatedUsers && options.AuthorizeOptions == null)
             {
@@ -59,8 +65,6 @@ namespace Cloudy.CMS
             {
                 throw new ArgumentException($"You have called both {nameof(CloudyAdminConfigurator.Authorize)}() and {nameof(CloudyAdminConfigurator.Unprotect)}(), they are mutually exclusive. You probably want to remove the latter");
             }
-
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
 
             app.Map(new PathString(options.BasePath), adminBranch =>
             {
@@ -87,13 +91,9 @@ namespace Cloudy.CMS
                         OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
                     });
                 }
-                else if (options.StaticFilesBaseUri != null)
-                {
-                    ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.StaticFilesBaseUri;
-                }
                 else
                 {
-                    ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = $"https://cloudycmsui.blob.core.windows.net/v-{version.Major}-{version.Minor}-{version.Build}";
+                    ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.StaticFilesBaseUri;
                 }
 
                 adminBranch.UseRouting();
