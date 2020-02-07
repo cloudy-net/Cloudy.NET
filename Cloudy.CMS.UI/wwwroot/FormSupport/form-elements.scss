@@ -53,6 +53,10 @@ fieldset.poetry-ui-form-field {
             cursor: text;
         }
     }
+
+    &.poetry-ui-focus {
+        color: $bright-blue;
+    }
 }
 
 

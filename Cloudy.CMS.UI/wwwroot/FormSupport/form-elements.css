@@ -34,6 +34,8 @@ fieldset.poetry-ui-form-field {
     .poetry-ui-form-field-label.poetry-ui-enlargeable-label.poetry-ui-enlarge-label {
       transform: translate(0, 24px) scale(1);
       cursor: text; }
+  .poetry-ui-form-field-label.poetry-ui-focus {
+    color: #1976d2; }
 
 /* INPUT */
 .poetry-ui-form-input {

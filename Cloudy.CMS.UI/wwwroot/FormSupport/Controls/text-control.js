@@ -33,12 +33,16 @@ class TextControl extends FieldControl {
         }
 
         input.addEventListener('focus', () => {
+            label.classList.add('poetry-ui-focus');
+
             if (input.value == '') {
                 label.classList.remove('poetry-ui-enlarge-label');
             }
         });
 
         input.addEventListener('blur', () => {
+            label.classList.remove('poetry-ui-focus');
+
             if (input.value == '') {
                 label.classList.add('poetry-ui-enlarge-label');
             }
