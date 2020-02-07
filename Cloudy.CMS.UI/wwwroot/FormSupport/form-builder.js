@@ -80,7 +80,7 @@ class FormBuilder {
         var element = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'label');
         element.classList.add('poetry-ui-form-field');
 
-        if (!(fieldModel.controlType && fieldModel.controlType.customLabel)) {
+        if (!(fieldModel.controlType && fieldModel.controlType.customLabel) || (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId)) {
             var heading = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
             heading.classList.add('poetry-ui-form-field-label');
             heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
