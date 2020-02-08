@@ -15,6 +15,10 @@ namespace Cloudy.CMS
 {
     public static class StartupExtensions
     {
+        public static void AddCloudy(this IServiceCollection services)
+        {
+            AddCloudy(services, cloudy => { });
+        }
         public static void AddCloudy(this IServiceCollection services, Action<CloudyConfigurator> configure)
         {
             var options = new CloudyOptions();
