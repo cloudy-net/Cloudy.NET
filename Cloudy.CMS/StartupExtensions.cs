@@ -17,7 +17,8 @@ namespace Cloudy.CMS
     {
         public static void AddCloudy(this IServiceCollection services)
         {
-            AddCloudy(services, cloudy => cloudy.AddComponentAssembly(Assembly.GetCallingAssembly()));
+            var assembly = Assembly.GetCallingAssembly();
+            AddCloudy(services, cloudy => cloudy.AddComponentAssembly(assembly));
         }
         public static void AddCloudy(this IServiceCollection services, Action<CloudyConfigurator> configure)
         {
