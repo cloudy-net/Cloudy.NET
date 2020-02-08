@@ -5,6 +5,7 @@ using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Reflection;
 
 namespace Cloudy.CMS
 {
@@ -70,6 +71,13 @@ namespace Cloudy.CMS
         public CloudyConfigurator AddComponent<T>() where T : class
         {
             Options.Components.Add(typeof(T));
+
+            return this;
+        }
+
+        public CloudyConfigurator AddComponentAssembly(Assembly assembly)
+        {
+            Options.ComponentAssemblies.Add(assembly);
 
             return this;
         }

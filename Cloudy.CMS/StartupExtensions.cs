@@ -17,18 +17,21 @@ namespace Cloudy.CMS
     {
         public static void AddCloudy(this IServiceCollection services)
         {
-            AddCloudy(services, cloudy => { });
+            AddCloudy(services, cloudy => cloudy.AddComponentAssembly(Assembly.GetCallingAssembly()));
         }
         public static void AddCloudy(this IServiceCollection services, Action<CloudyConfigurator> configure)
         {
             var options = new CloudyOptions();
-
-            options.Components.Add(typeof(CloudyComponent));
-            options.ComponentAssemblies.Add(Assembly.GetCallingAssembly());
-
             var configurator = new CloudyConfigurator(services, options);
 
             configure(configurator);
+
+            configurator.AddComponent<CloudyComponent>();
+
+            if (Assembly.GetCallingAssembly() != Assembly.GetExecutingAssembly())
+            {
+                configurator.AddComponentAssembly(Assembly.GetCallingAssembly());
+            }
 
             if (!options.HasDocumentProvider)
             {
