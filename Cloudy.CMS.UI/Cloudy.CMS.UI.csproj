@@ -7,11 +7,12 @@
     <Version>1.0.0</Version>
     <Authors>Björn Ali Göransson</Authors>
     <Company />
-    <Description>Cloudy CMS UI</Description>
+    <Description>Cloudy CMS UI package</Description>
     <Copyright>2018 Björn Ali Göransson</Copyright>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <WebPage>https://cloudy-cms.net/</WebPage>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 

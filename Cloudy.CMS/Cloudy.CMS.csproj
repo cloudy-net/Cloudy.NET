@@ -7,10 +7,11 @@
     <Version>1.0.0</Version>
     <Authors>Björn Ali Göransson</Authors>
     <Company />
-    <Description>Cloudy CMS for libraries</Description>
+    <Description>Cloudy CMS with InMemory, File-based or MongoDB Support</Description>
     <Copyright>2018 Björn Ali Göransson</Copyright>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
+    <WebPage>https://cloudy-cms.net/</WebPage>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
