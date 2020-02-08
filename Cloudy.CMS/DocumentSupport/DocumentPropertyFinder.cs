@@ -62,52 +62,69 @@ namespace Cloudy.CMS.DocumentSupport
 
             var facetId = segments[0];
 
-            if(facetId != nameof(Document.GlobalFacet))
+            if (facetId != nameof(Document.GlobalFacet))
             {
                 return null;
             }
 
             var facet = document.GlobalFacet;
 
-            if(facet == null)
+            if (facet == null)
             {
                 return null;
             }
 
-            if(segments[1] != nameof(DocumentFacet.Interfaces))
+
+            if (segments[1] == nameof(DocumentInterface.Properties))
             {
-                return null;
+                var propertyId = segments[2];
+
+                if (!facet.Properties.ContainsKey(propertyId))
+                {
+                    return null;
+                }
+
+                var property = facet.Properties[propertyId];
+
+                return property;
             }
 
-            var coreInterfaceId = segments[2];
-
-            if (!facet.Interfaces.ContainsKey(coreInterfaceId))
             {
-                return null;
+                if (segments[1] != nameof(DocumentFacet.Interfaces))
+                {
+                    return null;
+                }
+
+                var coreInterfaceId = segments[2];
+
+                if (!facet.Interfaces.ContainsKey(coreInterfaceId))
+                {
+                    return null;
+                }
+
+                var coreInterface = facet.Interfaces[coreInterfaceId];
+
+                if (coreInterface == null)
+                {
+                    return null;
+                }
+
+                if (segments[3] != nameof(DocumentInterface.Properties))
+                {
+                    return null;
+                }
+
+                var propertyId = segments[4];
+
+                if (!coreInterface.Properties.ContainsKey(propertyId))
+                {
+                    return null;
+                }
+
+                var property = coreInterface.Properties[propertyId];
+
+                return property;
             }
-
-            var coreInterface = facet.Interfaces[coreInterfaceId];
-
-            if(coreInterface == null)
-            {
-                return null;
-            }
-
-            if (segments[3] != nameof(DocumentInterface.Properties))
-            {
-                return null;
-            }
-
-            var propertyId = segments[4];
-
-            if (!coreInterface.Properties.ContainsKey(propertyId))
-            {
-                return null;
-            }
-
-            var property = coreInterface.Properties[propertyId];
-
-            return property;
         }
     }
 }

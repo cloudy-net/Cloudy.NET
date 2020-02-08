@@ -30,8 +30,13 @@ namespace Cloudy.CMS.DocumentSupport
             var segments = new List<string>();
 
             segments.Add(nameof(Document.GlobalFacet));
-            segments.Add(nameof(DocumentFacet.Interfaces));
-            segments.Add(coreInterface.Id);
+
+            if (coreInterface != null)
+            {
+                segments.Add(nameof(DocumentFacet.Interfaces));
+                segments.Add(coreInterface.Id);
+            }
+
             segments.Add(nameof(DocumentInterface.Properties));
 
             var memberExpression = lambda.Body as MemberExpression;
