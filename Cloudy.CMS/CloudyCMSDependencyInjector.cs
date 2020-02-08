@@ -13,6 +13,7 @@ using Cloudy.CMS.Routing;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 using Cloudy.CMS.DocumentSupport.MongoSupport;
+using Cloudy.CMS.ContainerSpecificContentSupport.FinderSupport;
 
 namespace Cloudy.CMS
 {
@@ -46,6 +47,8 @@ namespace Cloudy.CMS
             container.RegisterSingleton<IContainerSpecificContentDeleter, ContainerSpecificContentDeleter>();
             container.RegisterSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
             container.RegisterSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
+            container.RegisterSingleton<IContainerSpecificContentFinder, ContainerSpecificContentFinder>();
+            container.RegisterSingleton<IExpressionParser, ExpressionParser>();
 
             container.RegisterSingleton<IContentRouter, ContentRouter>();
             container.RegisterSingleton<IContentRouteActionFinder, ContentRouteActionFinder>();
