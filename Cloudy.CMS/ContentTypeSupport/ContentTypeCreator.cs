@@ -35,6 +35,8 @@ namespace Cloudy.CMS.ContentTypeSupport
                     .SelectMany(a => a.Assembly.Types)
                     .Where(a => typeof(IContent).IsAssignableFrom(a));
 
+            var result = new List<ContentTypeDescriptor>();
+
             foreach (var type in types)
             {
                 var contentTypeAttribute = type.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>();
@@ -74,8 +76,10 @@ namespace Cloudy.CMS.ContentTypeSupport
                     .Select(i => CoreInterfaceProvider.GetFor(i))
                     .Where(i => i != null);
 
-                yield return new ContentTypeDescriptor(contentTypeAttribute.Id, type, container, propertyDefinitions, coreInterfaces);
+                result.Add(new ContentTypeDescriptor(contentTypeAttribute.Id, type, container, propertyDefinitions, coreInterfaces));
             }
+
+            return result;
         }
     }
 }
