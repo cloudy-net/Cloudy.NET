@@ -26,6 +26,7 @@ namespace Tests
 
             var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
+            Mock.Get(serviceProvider).Setup(s => s.GetService(typeof(IActionDescriptorCollectionProvider))).Returns(actions);
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { action }.AsReadOnly(), 0));
 
             var result = new ContentRouteActionFinder(serviceProvider).Find("ipsum", new MyContentA());
@@ -40,6 +41,7 @@ namespace Tests
 
             var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
+            Mock.Get(serviceProvider).Setup(s => s.GetService(typeof(IActionDescriptorCollectionProvider))).Returns(actions);
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { action }.AsReadOnly(), 0));
 
             var result = new ContentRouteActionFinder(serviceProvider).Find("ipsum", new MyContentA());
@@ -55,6 +57,7 @@ namespace Tests
 
             var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
+            Mock.Get(serviceProvider).Setup(s => s.GetService(typeof(IActionDescriptorCollectionProvider))).Returns(actions);
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { actionA, actionB }.AsReadOnly(), 0));
 
             var result = new ContentRouteActionFinder(serviceProvider).Find("lorem", new MyContentA());
@@ -69,6 +72,7 @@ namespace Tests
 
             var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
+            Mock.Get(serviceProvider).Setup(s => s.GetService(typeof(IActionDescriptorCollectionProvider))).Returns(actions);
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { action }.AsReadOnly(), 0));
 
             var result = new ContentRouteActionFinder(serviceProvider).Find("lorem", new MyContentA());
@@ -84,6 +88,7 @@ namespace Tests
 
             var serviceProvider = Mock.Of<IServiceProvider>();
             var actions = Mock.Of<IActionDescriptorCollectionProvider>();
+            Mock.Get(serviceProvider).Setup(s => s.GetService(typeof(IActionDescriptorCollectionProvider))).Returns(actions);
             Mock.Get(actions).SetupGet(a => a.ActionDescriptors).Returns(new ActionDescriptorCollection(new List<ActionDescriptor> { actionA, actionB }.AsReadOnly(), 0));
 
             var result = new ContentRouteActionFinder(serviceProvider).Find("lorem", new MyContentADescendant());
