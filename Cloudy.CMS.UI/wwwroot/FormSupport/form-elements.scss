@@ -124,7 +124,8 @@ poetry-ui-checkbox-container {
     input:checked + & {
         background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 3H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-9 14l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L19 8l-9 9z' fill='%231976d2'/%3E%3C/svg%3E");
     }
-    &:hover {
+
+    poetry-ui-checkbox-container:hover & {
         background-color: rgba(0, 0, 0, 0.04);
     }
 }
