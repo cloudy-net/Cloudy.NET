@@ -21,7 +21,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     [Area("Cloudy.CMS")]
     public class ContentAppController
     {
-        IContentTypeProvider ContentTypeRepository { get; }
+        IContentTypeProvider ContentTypeProvider { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
         IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
         IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
@@ -34,7 +34,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
         public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer)
         {
-            ContentTypeRepository = contentTypeRepository;
+            ContentTypeProvider = contentTypeRepository;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
             ContainerSpecificContentCreator = containerSpecificContentCreator;
             ContainerSpecificContentUpdater = containerSpecificContentUpdater;
@@ -50,7 +50,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         {
             var result = new List<ContentTypeResponseItem>();
             
-            foreach(var contentType in ContentTypeRepository.GetAll())
+            foreach(var contentType in ContentTypeProvider.GetAll())
             {
                 var name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Type.Name;
                 string pluralName;
@@ -99,7 +99,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
         public IEnumerable<object> GetContentList(string contentTypeId)
         {
-            var contentType = ContentTypeRepository.Get(contentTypeId);
+            var contentType = ContentTypeProvider.Get(contentTypeId);
 
             var documents = DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.ContentTypeId, contentType.Id).GetResultAsync().Result.ToList();
 
@@ -123,7 +123,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
         public IContent GetSingleton(string id)
         {
-            var contentType = ContentTypeRepository.Get(id);
+            var contentType = ContentTypeProvider.Get(id);
 
             var singleton = SingletonProvider.Get(id);
 
@@ -132,7 +132,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
         public string SaveContent([FromBody] SaveContentRequestBody data)
         {
-            var contentType = ContentTypeRepository.Get(data.ContentTypeId);
+            var contentType = ContentTypeProvider.Get(data.ContentTypeId);
 
             var item = (IContent)JsonConvert.DeserializeObject(data.Content, contentType.Type);
 
@@ -159,7 +159,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         
         public string GetUrl(string id, string contentTypeId)
         {
-            var contentType = ContentTypeRepository.Get(contentTypeId);
+            var contentType = ContentTypeProvider.Get(contentTypeId);
 
             var content = ContainerSpecificContentGetter.Get<IContent>(id, null, contentType.Container);
 
