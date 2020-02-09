@@ -134,17 +134,31 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         {
             var contentType = ContentTypeProvider.Get(data.ContentTypeId);
 
-            var item = (IContent)JsonConvert.DeserializeObject(data.Content, contentType.Type);
+            var b = (IContent)JsonConvert.DeserializeObject(data.Content, contentType.Type);
 
-            if (item.Id != null)
+            if (b.Id != null)
             {
-                ContainerSpecificContentUpdater.Update(item, contentType.Container);
+                var a = (IContent)typeof(IContainerSpecificContentGetter).GetMethod(nameof(ContainerSpecificContentGetter.Get)).MakeGenericMethod(contentType.Type).Invoke(ContainerSpecificContentGetter, new[] { data.Id, null, contentType.Container });
+
+                foreach(var propertyDefinition in contentType.PropertyDefinitions)
+                {
+                    var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
+
+                    if(display != null && display.GetAutoGenerateField() == false)
+                    {
+                        continue;
+                    }
+
+                    propertyDefinition.Setter(a, propertyDefinition.Getter(b));
+                }
+
+                ContainerSpecificContentUpdater.Update(a, contentType.Container);
 
                 return "Updated";
             }
             else
             {
-                ContainerSpecificContentCreator.Create(item, contentType.Container);
+                ContainerSpecificContentCreator.Create(b, contentType.Container);
 
                 return "Saved";
             }
