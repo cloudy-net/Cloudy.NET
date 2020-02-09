@@ -7,6 +7,6 @@ namespace Cloudy.CMS.ContentSupport
     public interface INameable
     {
         [LanguageSpecific]
-        string Name { get; set; }
+        string Name { get; }
     }
 }
