@@ -46,6 +46,16 @@ namespace Cloudy.CMS
 
         public static void UseCloudyAdmin(this IApplicationBuilder app, Action<CloudyAdminConfigurator> configure)
         {
+            if (app.ApplicationServices.GetService(typeof(IComponentTypeProvider)) == null)
+            {
+                throw new Exception("Please add Cloudy services first by doing: services.AddCloudy(...)");
+            }
+
+            if (!((IComponentTypeProvider)app.ApplicationServices.GetService(typeof(IComponentTypeProvider))).GetAll().Contains(typeof(CloudyAdminComponent)))
+            {
+                throw new Exception("Please add Cloudy Admin services first by doing: services.AddCloudy(cloudy => cloudy.AddAdmin())");
+            }
+
             var options = new CloudyAdminOptions();
             var configurator = new CloudyAdminConfigurator(options);
 
