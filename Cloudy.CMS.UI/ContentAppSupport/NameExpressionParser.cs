@@ -13,7 +13,23 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     {
         public string Parse(Type type)
         {
-            var method = type.GetInterfaceMap(typeof(INameable)).TargetMethods.Where(m => m.Name == $"get_{nameof(INameable.Name)}").Single();
+            var interfaceMap = type.GetInterfaceMap(typeof(INameable));
+            var method = interfaceMap.TargetMethods.Where(m => m.Name == $"get_{nameof(INameable.Name)}" || m.Name == $"{typeof(INameable).FullName}.get_{nameof(INameable.Name)}").FirstOrDefault();
+
+            if(method == null)
+            {
+                return null;
+            }
+
+            var property = type.GetProperty(nameof(INameable.Name));
+
+            if (property != null && property.GetGetMethod() != null && property.GetSetMethod() != null)
+            {
+                if(property.GetGetMethod() == method)
+                {
+                    return nameof(INameable.Name);
+                }
+            }
 
             var body = method.GetMethodBody().GetILAsByteArray();
 

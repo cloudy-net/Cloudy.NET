@@ -13,15 +13,41 @@ namespace Tests
         [Fact]
         public void ParsesSimpleGetter()
         {
-            var result = new NameExpressionParser().Parse(typeof(MyContent));
+            var result = new NameExpressionParser().Parse(typeof(ContentWithNameToOtherProperty));
 
-            Assert.Equal(nameof(MyContent.MyProperty), result);
+            Assert.Equal(nameof(ContentWithNameToOtherProperty.OtherProperty), result);
         }
 
-        public class MyContent : INameable
+        public class ContentWithNameToOtherProperty : INameable
         {
-            public string MyProperty { get; set; }
-            public string Name => MyProperty;
+            public string OtherProperty { get; set; }
+            public string Name => OtherProperty;
+        }
+        [Fact]
+        public void ParsesExplicitImplementation()
+        {
+            var result = new NameExpressionParser().Parse(typeof(ContentWithExplicitNameToOtherProperty));
+
+            Assert.Equal(nameof(ContentWithExplicitNameToOtherProperty.OtherProperty), result);
+        }
+
+        public class ContentWithExplicitNameToOtherProperty : INameable
+        {
+            public string OtherProperty { get; set; }
+            string INameable.Name => OtherProperty;
+        }
+
+        [Fact]
+        public void ParsesNameIfNormalProperty()
+        {
+            var result = new NameExpressionParser().Parse(typeof(ContentWithNormalProperty));
+
+            Assert.Equal(nameof(ContentWithNormalProperty.Name), result);
+        }
+
+        public class ContentWithNormalProperty : INameable
+        {
+            public string Name { get; set; }
         }
     }
 }
