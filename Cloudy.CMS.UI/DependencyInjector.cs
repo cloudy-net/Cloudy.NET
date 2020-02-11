@@ -17,6 +17,7 @@ namespace Cloudy.CMS.UI
             container.RegisterSingleton<IStaticFilesBasePathProvider, StaticFilesBasePathProvider>();
             container.RegisterSingleton<IPluralizer, Pluralizer>();
             container.RegisterSingleton<IHumanizer, Humanizer>();
+            container.RegisterSingleton<INameExpressionParser, NameExpressionParser>();
         }
     }
 }

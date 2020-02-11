@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Linq;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
+using Newtonsoft.Json.Serialization;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
@@ -31,8 +32,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         IHumanizer Humanizer { get; }
         IDocumentFinder DocumentFinder { get; }
         IContentDeserializer ContentDeserializer { get; }
+        INameExpressionParser NameExpressionParser { get; }
+        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
 
-        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer)
+        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, INameExpressionParser nameExpressionParser)
         {
             ContentTypeProvider = contentTypeRepository;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
@@ -44,6 +47,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             Humanizer = humanizer;
             DocumentFinder = documentFinder;
             ContentDeserializer = contentDeserializer;
+            NameExpressionParser = nameExpressionParser;
         }
 
         public IEnumerable<ContentTypeResponseItem> GetContentTypes()
@@ -76,6 +80,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
                     Name = name,
                     PluralName = pluralName,
                     IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
+                    NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
                     IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                     IsSingleton = singleton != null,
                     Count = -1,
@@ -91,6 +96,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public string Name { get; set; }
             public string PluralName { get; set; }
             public bool IsNameable { get; set; }
+            public string NameablePropertyName { get; set; }
             public bool IsRoutable { get; set; }
             public bool IsSingleton { get; set; }
             public string SingletonId { get; set; }

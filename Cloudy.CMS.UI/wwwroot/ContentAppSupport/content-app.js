@@ -187,7 +187,7 @@ class ListContentBlade extends Blade {
 
                 var list = new List();
                 response.forEach(content => list.addItem(item => {
-                    item.setText(contentType.isNameable ? content.name : content.id);
+                    item.setText(contentType.isNameable ? (contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name) : content.id);
 
                     item.onClick(() => {
                         item.setActive();

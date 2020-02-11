@@ -15,11 +15,12 @@ namespace IdentityTest
      */
     [Container("users")]
     [ContentType("a4b8fd79-2432-4535-8ab8-5860c3bdb04d")]
-    public class User : IContent
+    public class User : IContent, INameable
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }
 
+        string INameable.Name => Username;
         public string Username { get; set; }
         [Display(AutoGenerateField = false)]
         public string NormalizedUsername { get; set; }
