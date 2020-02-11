@@ -62,6 +62,9 @@ class Nav {
                     item.onClick(() => portal.openApp(appDescriptor));
                 });
             });
+            if (appDescriptors.length == 1) {
+                portal.openApp(appDescriptors[0]);
+            }
         });
 
         if (document.readyState != 'loading') {
