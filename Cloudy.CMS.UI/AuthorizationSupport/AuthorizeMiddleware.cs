@@ -35,9 +35,14 @@ namespace Cloudy.CMS.UI.AuthorizationSupport
                 return;
             }
 
-            await context.ChallengeAsync(new AuthenticationProperties()
+            if (context.Request.QueryString.Value.Contains("ReturnUrl%253D"))
             {
-                RedirectUri = context.Request.PathBase + context.Request.Path + context.Request.QueryString,
+                throw new Exception("Redirection loop detected during authorization. Did you UseAuthentication?");
+            }
+
+            await context.ChallengeAsync(new AuthenticationProperties
+            {
+                RedirectUri = context.Request.PathBase.Add(context.Request.Path).Value + context.Request.QueryString,
             });
         }
     }
