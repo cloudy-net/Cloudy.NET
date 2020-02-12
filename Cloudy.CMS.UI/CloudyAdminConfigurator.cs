@@ -20,6 +20,11 @@ namespace Cloudy.CMS.UI
             return this;
         }
 
+        public CloudyAdminConfigurator Authorize()
+        {
+            return Authorize(new AuthorizeOptions());
+        }
+
         public CloudyAdminConfigurator Authorize(AuthorizeOptions authorizeOptions)
         {
             Options.AuthorizeOptions = authorizeOptions;
