@@ -35,6 +35,8 @@ In the controller, do:
 
 To use IHierarchical content (nested pages), you need to use a `**` wildcard like `{**route:....`
 
+To use ASP.NET Identity with Users managed by Cloudy, do `services.AddIdentityCore<User>().AddUserStore<UserStore>()` and don't forget to use `Authorize()` in UseCloudyAdmin!
+
 # Database
 
 Uses inmemory database by default.

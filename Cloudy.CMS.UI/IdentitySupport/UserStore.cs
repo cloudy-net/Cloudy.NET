@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace IdentityTest
+namespace Cloudy.CMS.UI.IdentitySupport
 {
     public class UserStore :
         IUserStore<User>,

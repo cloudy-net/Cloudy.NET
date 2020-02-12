@@ -8,11 +8,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace IdentityTest
+namespace Cloudy.CMS.UI.IdentitySupport
 {
-    /*
-     * To use this, do: services.AddDefaultIdentity<User>().AddUserStore<UserStore>();
-     */
     [Container("users")]
     [ContentType("a4b8fd79-2432-4535-8ab8-5860c3bdb04d")]
     public class User : IContent, INameable
