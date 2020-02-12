@@ -30,7 +30,7 @@ namespace Website.AspNetCore
             services.AddControllers();
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
-                //.WithFileBasedDocuments()
+                .WithFileBasedDocuments()
                 .AddContentRoute()
                 .AddAdmin()
             );
