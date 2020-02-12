@@ -12,7 +12,6 @@ using Poetry.AspNetCore;
 using Cloudy.CMS.UI;
 using Poetry.UI.AspNetCore;
 using Cloudy.CMS;
-using Serilog;
 using Cloudy.CMS.SingletonSupport;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Routing;

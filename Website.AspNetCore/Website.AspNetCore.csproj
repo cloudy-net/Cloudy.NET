@@ -5,10 +5,7 @@
     <UserSecretsId>1eebc780-ddb5-4ad2-8b94-3b8a1089619c</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.9.0" />  
-    <PackageReference Include="Serilog.AspNetCore" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+  <ItemGroup>  
   </ItemGroup>
 
   <ItemGroup>
