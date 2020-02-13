@@ -20,6 +20,7 @@ using Cloudy.CMS.Routing;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
+using Cloudy.CMS.UI.IdentitySupport;
 
 namespace Website.AspNetCore
 {
@@ -34,6 +35,7 @@ namespace Website.AspNetCore
                 .AddContentRoute()
                 .AddAdmin()
             );
+            //services.AddCloudyIdentity();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,7 +45,7 @@ namespace Website.AspNetCore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCloudyAdmin(cloudy => cloudy.WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "../Cloudy.CMS.UI/wwwroot"))).Unprotect());
+            app.UseCloudyAdmin(cloudy => cloudy.WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "../Cloudy.CMS.UI/wwwroot")))/*.Authorize()*/.Unprotect());
             app.UseRouting();
             app.UseEndpoints(endpoints => {
                 endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));

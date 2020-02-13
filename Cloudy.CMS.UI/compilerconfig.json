@@ -22,5 +22,9 @@
   {
     "outputFile": "wwwroot/DataTableSupport/data-table.css",
     "inputFile": "wwwroot/DataTableSupport/data-table.scss"
+  },
+  {
+    "outputFile": "wwwroot/login.css",
+    "inputFile": "wwwroot/login.scss"
   }
 ]

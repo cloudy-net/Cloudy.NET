@@ -27,7 +27,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Poetry.ComponentSupport;
-using Cloudy.CMS.UI.AuthorizationSupport;
 using Cloudy.CMS.UI.PortalSupport;
 using Cloudy.CMS.UI;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -76,63 +75,7 @@ namespace Cloudy.CMS
                 throw new ArgumentException($"You have called both {nameof(CloudyAdminConfigurator.Authorize)}() and {nameof(CloudyAdminConfigurator.Unprotect)}(), they are mutually exclusive. You probably want to remove the latter");
             }
 
-            app.Map(new PathString(options.BasePath), adminBranch =>
-            {
-                if (options.AuthorizeOptions != null)
-                {
-                    if (app.ApplicationServices.GetService<IAuthorizationService>() == null)
-                    {
-                        throw new Exception($"Could not find {nameof(IAuthorizationService)} in DI container. Call services.{nameof(PolicyServiceCollectionExtensions.AddAuthorization)}() in ConfigureServices");
-                    }
-
-                    var policy =
-                        options.AuthorizeOptions != null ?
-                        AuthorizationPolicy.CombineAsync(app.ApplicationServices.GetRequiredService<IAuthorizationPolicyProvider>(), new List<IAuthorizeData> { options.AuthorizeOptions }).Result :
-                        new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                    
-                    adminBranch.UseMiddleware<AuthorizeMiddleware>(policy);
-                }
-
-                if (options.StaticFilesFileProvider != null)
-                {
-                    adminBranch.UseStaticFiles(new StaticFileOptions
-                    {
-                        FileProvider = options.StaticFilesFileProvider,
-                        OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
-                    });
-                }
-                else
-                {
-                    ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.StaticFilesBaseUri;
-                }
-
-                adminBranch.UseRouting();
-                adminBranch.UseEndpoints(endpoints => {
-                    endpoints.MapGet("/", async context => {
-                        if (!PathEndsInSlash(context.Request.Path))
-                        {
-                            RedirectToPathWithSlash(context);
-                            return;
-                        }
-
-                        await context.RequestServices.GetRequiredService<IPortalPageRenderer>().RenderPageAsync(context); 
-                    });
-                    endpoints.MapAreaControllerRoute(null, "Cloudy.CMS", "{controller}/{action}");
-                });
-            });
-
-            bool PathEndsInSlash(PathString path)
-            {
-                return path.Value.EndsWith("/", StringComparison.Ordinal);
-            }
-
-            void RedirectToPathWithSlash(HttpContext context)
-            {
-                context.Response.StatusCode = StatusCodes.Status301MovedPermanently;
-                var request = context.Request;
-                var redirect = UriHelper.BuildAbsolute(request.Scheme, request.Host, request.PathBase, request.Path + "/", request.QueryString);
-                context.Response.Headers[HeaderNames.Location] = redirect;
-            }
+            app.Map(new PathString(options.BasePath), branch => app.ApplicationServices.GetService<IPipelineBuilder>().Build(branch, options));
         }
     }
 }

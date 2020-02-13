@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.Mvc.Routing;
 using Cloudy.CMS.Reflection;
 using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.IdentitySupport;
 using Cloudy.CMS.UI.PortalSupport;
 using Poetry.DependencyInjectionSupport;
 using Poetry.UI.AppSupport;
@@ -34,6 +35,9 @@ namespace Cloudy.CMS.UI
             container.RegisterSingleton<IPluralizer, Pluralizer>();
             container.RegisterSingleton<IHumanizer, Humanizer>();
             container.RegisterSingleton<INameExpressionParser, NameExpressionParser>();
+            container.RegisterSingleton<IPipelineBuilder, PipelineBuilder>();
+            container.RegisterSingleton<ILoginPipelineBuilder, LoginPipelineBuilder>();
+            container.RegisterSingleton<ILoginPageRenderer, LoginPageRenderer>();
         }
     }
 }

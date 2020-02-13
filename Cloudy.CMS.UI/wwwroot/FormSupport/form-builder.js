@@ -12,10 +12,15 @@ import SortableItem from './sortable-item.js';
 
 class FormBuilder {
     constructor(formId, app) {
-        this.formId = formId;
-        this.app = app;
+        if (typeof formId == 'string') {
+            this.formId = formId;
+            this.fieldModels = this.getFieldModels(formId);
+        } else if (formId instanceof Array) {
+            var fieldModels = formId;
+            this.fieldModels = Promise.resolve(fieldModels);
+        }
 
-        this.fieldModels = this.getFieldModels(formId);
+        this.app = app;
     }
 
     getFieldModels(formId) {

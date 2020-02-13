@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.AuthorizationSupport
+namespace Cloudy.CMS.UI.IdentitySupport
 {
     public class AuthorizeMiddleware
     {
@@ -40,7 +40,7 @@ namespace Cloudy.CMS.UI.AuthorizationSupport
                 throw new Exception("Redirection loop detected during authorization. Did you UseAuthentication?");
             }
 
-            await context.ChallengeAsync(new AuthenticationProperties
+            await context.ChallengeAsync(IdentityConstants.ApplicationScheme, new AuthenticationProperties
             {
                 RedirectUri = context.Request.PathBase.Add(context.Request.Path).Value + context.Request.QueryString,
             });
