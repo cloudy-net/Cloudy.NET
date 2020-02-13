@@ -37,7 +37,7 @@ To use IHierarchical content (nested pages), you need to use a `**` wildcard lik
 
 To use ASP.NET Identity (UI) with Users managed by Cloudy, create an example project with individual user accounts, and uninstall the EF stuff. Instead uf IdentityUser and IdentityUserStore, use `User` and `UserStore` and don't forget to use `Authorize()` in UseCloudyAdmin!
 
-The UI works well with external login providers. Just follow the guides eg. [Google authentication](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/social-without-identity?view=aspnetcore-3.0) and don't forget to use `Authorize()` in UseCloudyAdmin!
+The UI works well with OAuth aka external login providers. Just follow the guides eg. [Google authentication](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/social-without-identity?view=aspnetcore-3.0) and don't forget to use `Authorize()` in UseCloudyAdmin!
 
 # Database
 
