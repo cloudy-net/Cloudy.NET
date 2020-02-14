@@ -38,9 +38,13 @@ namespace Cloudy.CMS.ContentSupport.Serialization
                     {
                         value = (int)(long)value;
                     }
-                    if(value is JArray)
+                    if (value is JArray)
                     {
                         value = ((JArray)value).ToObject(definition.Type);
+                    }
+                    if (value is JObject)
+                    {
+                        value = ((JObject)value).ToObject(definition.Type);
                     }
 
                     definition.Setter(content, value);
