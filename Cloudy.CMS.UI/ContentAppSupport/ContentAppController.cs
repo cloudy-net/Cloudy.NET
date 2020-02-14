@@ -16,6 +16,7 @@ using System.Linq;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Newtonsoft.Json.Serialization;
+using Cloudy.CMS.UI.ContentAppSupport.ActionSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
@@ -34,8 +35,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         IContentDeserializer ContentDeserializer { get; }
         INameExpressionParser NameExpressionParser { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
+        IContentActionModuleProvider ContentActionProvider { get; }
 
-        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, INameExpressionParser nameExpressionParser)
+        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, INameExpressionParser nameExpressionParser, IContentActionModuleProvider contentActionProvider)
         {
             ContentTypeProvider = contentTypeRepository;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
@@ -48,6 +50,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             DocumentFinder = documentFinder;
             ContentDeserializer = contentDeserializer;
             NameExpressionParser = nameExpressionParser;
+            ContentActionProvider = contentActionProvider;
         }
 
         public IEnumerable<ContentTypeResponseItem> GetContentTypes()
@@ -84,6 +87,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
                     IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                     IsSingleton = singleton != null,
                     Count = -1,
+                    ListActionModules = ContentActionProvider.GetModulesFor(contentType.Id),
                 });
             }
 
@@ -101,6 +105,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public bool IsSingleton { get; set; }
             public string SingletonId { get; set; }
             public int Count { get; set; }
+            public IEnumerable<string> ListActionModules { get; set; }
         }
 
         public IEnumerable<object> GetContentList(string contentTypeId)

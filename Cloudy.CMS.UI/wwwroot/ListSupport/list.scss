@@ -19,8 +19,8 @@ poetry-ui-list-sub-header {
 }
 
 poetry-ui-list-item {
-    display: block;
-    padding: 12px 16px;
+    display: flex;
+    align-items: center;
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     cursor: pointer;
 
@@ -36,6 +36,16 @@ poetry-ui-list-item {
     &:focus {
         outline: none;
     }
+
+    .poetry-ui-context-menu-outer {
+        padding: 4px;
+    }
+}
+
+poetry-ui-list-item-content {
+    flex-grow: 1;
+    display: block;
+    padding: 12px 16px;
 }
 
 poetry-ui-list-item-text {

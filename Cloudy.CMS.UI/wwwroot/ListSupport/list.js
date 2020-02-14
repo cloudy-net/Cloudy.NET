@@ -36,23 +36,25 @@ class List {
 class ListItem {
     constructor() {
         this.element = document.createElement('poetry-ui-list-item');
+        this.content = document.createElement('poetry-ui-list-item-content');
+        this.element.append(this.content);
 
-        this.element.tabIndex = 0;
+        this.content.tabIndex = 0;
 
-        this.element.addEventListener("keyup", event => {
+        this.content.addEventListener("keyup", event => {
             if (event.keyCode != 13) {
                 return;
             }
 
             event.preventDefault();
-            this.element.click();
+            this.content.click();
         });
 
         this.callbacks = {
             click: [],
         };
 
-        this.element.addEventListener('click', () => this.triggerClick());
+        this.content.addEventListener('click', () => this.triggerClick());
     }
 
     triggerClick() {
@@ -68,7 +70,7 @@ class ListItem {
     setText(value) {
         if (!this.text) {
             this.text = document.createElement('poetry-ui-list-item-text');
-            this.element.append(this.text);
+            this.content.append(this.text);
         }
         this.text.innerText = value;
 
@@ -78,11 +80,16 @@ class ListItem {
     setSubText(value) {
         if (!this.subText) {
             this.subText = document.createElement('poetry-ui-list-item-sub-text');
-            this.element.append(this.subText);
+            this.content.append(this.subText);
         }
         this.subText.innerText = value;
 
         return this;
+    }
+
+    setMenu(menu) {
+        this.menu = menu;
+        this.menu.appendTo(this.element);
     }
 
     setActive(value = true) {

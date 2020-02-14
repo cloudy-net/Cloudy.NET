@@ -13,8 +13,8 @@ poetry-ui-list-sub-header {
   line-height: 18px; }
 
 poetry-ui-list-item {
-  display: block;
-  padding: 12px 16px;
+  display: flex;
+  align-items: center;
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   cursor: pointer; }
   poetry-ui-list-item:hover {
@@ -23,6 +23,13 @@ poetry-ui-list-item {
     background-color: rgba(0, 0, 0, 0.1); }
   poetry-ui-list-item:focus {
     outline: none; }
+  poetry-ui-list-item .poetry-ui-context-menu-outer {
+    padding: 4px; }
+
+poetry-ui-list-item-content {
+  flex-grow: 1;
+  display: block;
+  padding: 12px 16px; }
 
 poetry-ui-list-item-text {
   display: block; }

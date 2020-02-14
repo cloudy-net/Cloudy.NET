@@ -141,13 +141,15 @@ class ListContentBlade extends Blade {
         this.setTitle(contentType.pluralName);
         this.setToolbar(new Button('New').setInherit().onClick(createNew));
 
+        var listActions = contentType.listActionModules.map(path => import(path));
+
         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
         var formFieldsPromise = formBuilder.fieldModels;
 
         var update = () => {
             var contentListPromise = fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
 
-            Promise.all([contentListPromise, formFieldsPromise]).then(([response, formFields]) => {
+            Promise.all([contentListPromise, formFieldsPromise, Promise.all(listActions)]).then(([response, formFields]) => {
                 if (response.length == 0) {
                     if (contentTypeCount == 1 && formFields.length == 0) {
                         var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_suburbs_8b83.svg" alt="Illustration of a row of houses.">`;
@@ -188,11 +190,16 @@ class ListContentBlade extends Blade {
                 var list = new List();
                 response.forEach(content => list.addItem(item => {
                     item.setText(contentType.isNameable ? (contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name) : content.id);
-
                     item.onClick(() => {
                         item.setActive();
                         app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
                     });
+
+                    if (listActions.length) {
+                        var menu = new ContextMenu();
+                        item.setMenu(menu);
+                        Promise.all(listActions).then(listActions => listActions.forEach(module => module.default(menu)));
+                    }
                 }));
                 this.setContent(list);
             });
