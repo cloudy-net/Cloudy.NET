@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.UI.ContentAppSupport.ActionSupport;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.UI.IdentitySupport
 {
     [Container("users")]
+    [ListActions("IdentitySupport/user-actions.js")]
     [ContentType("a4b8fd79-2432-4535-8ab8-5860c3bdb04d")]
     public class User : IContent, INameable
     {

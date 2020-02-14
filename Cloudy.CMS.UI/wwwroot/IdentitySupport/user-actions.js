@@ -1,0 +1,1 @@
+﻿export default menu => menu.addItem(item => item.setText('Change password'));

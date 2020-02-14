@@ -141,7 +141,7 @@ class ListContentBlade extends Blade {
         this.setTitle(contentType.pluralName);
         this.setToolbar(new Button('New').setInherit().onClick(createNew));
 
-        var listActions = contentType.listActionModules.map(path => import(path));
+        var listActions = contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
 
         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
         var formFieldsPromise = formBuilder.fieldModels;
