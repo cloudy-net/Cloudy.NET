@@ -48,3 +48,11 @@ Uses inmemory database by default.
 To use a physical folder with JSON documents, do: `.WithStaticFiles()` under AddCloudy.
 
 To use MongoDB, do: `.WithMongoDatabaseConnectionStringNamed("mongo")` under AddCloudy.
+
+# Usage for large corporations
+
+This CMS is under active development, and is not guaranteed to keep API compatibility between releases.
+
+If you are a large corporation or otherwise require something like a LTS, the best practice is to *clone the repo* and setup your own build pipeline with your own NuGet packages.
+
+When you wish to upgrade (either for security reasons or if necessary functionality has been added or changed), you merge from this repo at the tag you planned, and only deploy to production after the upgrade has been fully regression tested by your QA team.
