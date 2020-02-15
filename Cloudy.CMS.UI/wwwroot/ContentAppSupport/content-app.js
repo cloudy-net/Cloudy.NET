@@ -79,45 +79,45 @@ class ListContentTypesBlade extends Blade {
 
                     var list = new List();
 
+
+                    //var listActions = contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
+
+                    //if (listActions.length) {
+                    //    var menu = new ContextMenu();
+                    //    item.setMenu(menu);
+                    //    Promise.all(listActions).then(listActions => listActions.forEach(module => module.default(menu)));
+                    //}
+
+
+
                     if (contentTypes.filter(t => !t.isSingleton).length) {
                         list.addSubHeader('General');
                         contentTypes.filter(t => !t.isSingleton).forEach(contentType => list.addItem(item => {
                             item.setText(contentType.pluralName);
 
-                            item.onClick(() => {
-                                item.setActive();
-                                app.openAfter(new ListContentBlade(app, contentType, contentTypes.length).onClose(() => item.setActive(false)), this);
-                            });
+                            if (!contentType.isSingleton) {
+                                item.onClick(() => {
+                                    item.setActive();
+                                    app.openAfter(new ListContentBlade(app, contentType, contentTypes.length).onClose(() => item.setActive(false)), this);
+                                });
+                            } else {
+                                var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
+                                var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
+
+                                item.onClick(() => {
+                                    Promise.all([formBuilder.fieldModels, content]).then(results => {
+                                        item.setActive();
+                                        app.openAfter(
+                                            new EditContentBlade(app, contentType, formBuilder, results[1])
+                                                .onClose(() => item.setActive(false)),
+                                            this);
+                                    });
+                                });
+                            }
 
                             if (contentTypes.length == 1) {
                                 item.element.click();
                             }
-                        }));
-                    }
-
-                    var singletons = contentTypes.filter(t => t.isSingleton);
-
-                    if (singletons.length) {
-                        list.addSubHeader('Singletons');
-                        singletons.forEach(contentType => list.addItem(item => {
-                            item.setText(contentType.name);
-
-                            var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-                            var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
-
-                            Promise.all([formBuilder.fieldModels, content]).then(results => {
-                                item.onClick(() => {
-                                    item.setActive();
-                                    app.openAfter(
-                                        new EditContentBlade(app, contentType, formBuilder, results[1])
-                                            .onClose(() => item.setActive(false)),
-                                        this);
-                                });
-
-                                if (contentTypes.length == 1) {
-                                    item.element.click();
-                                }
-                            });
                         }));
                     }
 
