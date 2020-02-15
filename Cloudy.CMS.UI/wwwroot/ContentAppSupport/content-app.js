@@ -322,6 +322,11 @@ class EditContentBlade extends Blade {
                     })
                 })
                     .then(() => this.onSaveCallbacks.forEach(callback => callback(content)))
+                    .then(() => {
+                        if (!content.id) {
+                            app.close(this);
+                        }
+                    })
             );
         var cancelButton = new Button('Cancel').onClick(() => app.close(this));
         var paste = text => {
