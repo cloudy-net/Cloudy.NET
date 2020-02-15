@@ -10,7 +10,6 @@
 
 poetry-ui-context-menu-button {
     display: block;
-    display: block;
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -34,30 +33,10 @@ poetry-ui-context-menu-button {
 }
 
 poetry-ui-context-menu {
-    margin-top: 2px;
     position: absolute;
-    top: 100%;
-    left: 0;
     z-index: 10;
     display: block;
     border-radius: 4px;
     background: white;
     box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
-
-    &.poetry-ui-context-menu-right {
-        left: auto;
-        right: 0;
-    }
-
-    &.poetry-ui-context-menu-bottom {
-        margin-top: 0;
-        margin-bottom: 4px;
-        top: auto;
-        bottom: 100%;
-    }
-
-    poetry-ui-list-item {
-        padding-top: 6px;
-        padding-bottom: 6px;
-    }
 }

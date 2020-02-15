@@ -1,11 +1,13 @@
-﻿import RemoveElementListener from '../remove-element-listener.js';
-import List from '../ListSupport/list.js';
+﻿import List from '../ListSupport/list.js';
+import DocumentActivityEvent from '../DocumentActivityEvent.js';
 
 
 
 /* CONTEXT MENU */
 
 class ContextMenu {
+    generators = [];
+
     constructor() {
         this.element = document.createElement('div');
 
@@ -21,60 +23,71 @@ class ContextMenu {
             this.button.click();
         });
 
+        var remove = () => {
+            this.button.classList.remove('poetry-ui-active');
+            this.menu.remove();
+            this.menu = null;
+            this.list = null;
+        };
+
         this.button.addEventListener('click', () => {
-            if (!this.button.classList.contains('poetry-ui-active')) {
-                this.button.classList.add('poetry-ui-active');
-                this.menu.style.display = '';
-                this.menu.classList.remove('poetry-ui-context-menu-right');
-                this.menu.classList.remove('poetry-ui-context-menu-bottom');
-
-                if (!this.element.offsetParent || !this.menu.offsetParent) { // hidden or detached
-                    return;
-                }
-
-                var menuOffset = this.menu.getBoundingClientRect();
-                var windowRight = window.innerWidth + window.pageXOffset;
-                var windowBottom = window.innerHeight + window.pageYOffset;
-
-                if (menuOffset.right + window.pageXOffset > windowRight) {
-                    this.menu.classList.add('poetry-ui-context-menu-right');
-                } else {
-                    this.menu.classList.remove('poetry-ui-context-menu-right');
-                }
-
-                if (menuOffset.bottom > windowBottom) {
-                    this.menu.classList.add('poetry-ui-context-menu-bottom');
-                }
-            } else {
-                this.button.classList.remove('poetry-ui-active');
-                this.menu.style.display = 'none';
+            if (this.button.classList.contains('poetry-ui-active')) {
+                remove();
+                return;
             }
+
+            this.button.classList.add('poetry-ui-active');
+
+            this.menu = document.createElement('poetry-ui-context-menu');
+            this.menu.style.opacity = 'none';
+            this.list = new List();
+            this.menu.append(this.list.element);
+            document.body.append(this.menu);
+
+            this.generators.forEach(generator => generator(this));
+
+            this.menu.style.display = 'block';
+            var offset = this.element.getBoundingClientRect();
+            var menuOffset = this.menu.getBoundingClientRect();
+
+            this.menu.style.top = `${offset.top - ((menuOffset.height - offset.height) / 2)}px`;
+            this.menu.style.left = `${offset.left}px`;
         });
 
         this.element.appendChild(this.button);
 
-        this.menu = document.createElement('poetry-ui-context-menu');
-        this.menu.style.display = 'none';
+        DocumentActivityEvent.addCallback(event => {
+            if (!this.button.classList.contains('poetry-ui-active')) {
+                return;
+            }
 
-        this.list = new List();
-        this.menu.append(this.list.element);
+            var found = false;
 
-        this.element.appendChild(this.menu);
+            for (var position = event.target; position && position != document; position = position.parentNode) {
+                if (position == this.element) {
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                remove();
+            }
+        });
     }
 
     addItem(configurator) {
-        this.list.addItem(item => {
+        this.generators.push(() => this.list.addItem(item => {
             configurator(item);
             item.onClick(() => {
                 this.button.classList.remove('poetry-ui-active');
                 this.menu.style.display = 'none';
             });
-        });
+        }));
         return this;
     }
 
     addSubHeader(text) {
-        this.list.addSubHeader(text);
+        this.generators.push(() => this.list.addSubHeader(text));
         return this;
     }
 

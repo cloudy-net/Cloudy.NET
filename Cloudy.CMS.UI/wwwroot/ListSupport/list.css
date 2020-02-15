@@ -21,15 +21,19 @@ poetry-ui-list-item {
     background-color: rgba(0, 0, 0, 0.04); }
   poetry-ui-list-item.poetry-ui-active, poetry-ui-list-item:focus {
     background-color: rgba(0, 0, 0, 0.1); }
-  poetry-ui-list-item:focus {
-    outline: none; }
   poetry-ui-list-item .poetry-ui-context-menu-outer {
     padding: 4px; }
 
 poetry-ui-list-item-content {
   flex-grow: 1;
+  align-self: stretch;
   display: block;
   padding: 12px 16px; }
+  poetry-ui-list-item-content:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+    outline: none; }
+  poetry-ui-list-item.poetry-ui-active > poetry-ui-list-item-content {
+    background: none; }
 
 poetry-ui-list-item-text {
   display: block; }
