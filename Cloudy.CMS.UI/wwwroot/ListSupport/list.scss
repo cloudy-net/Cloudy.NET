@@ -32,10 +32,6 @@ poetry-ui-list-item {
     &:focus {
         background-color: rgba(0, 0, 0, 0.1);
     }
-
-    .poetry-ui-context-menu-outer {
-        padding: 4px;
-    }
 }
 
 poetry-ui-list-item-content {
@@ -49,6 +45,7 @@ poetry-ui-list-item-content {
         outline: none;
     }
 
+    poetry-ui-list-item:hover > &,
     poetry-ui-list-item.poetry-ui-active > & {
         background: none;
     }

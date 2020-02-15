@@ -51,7 +51,7 @@ class ContextMenu {
             var menuOffset = this.menu.getBoundingClientRect();
 
             this.menu.style.top = `${offset.top - ((menuOffset.height - offset.height) / 2)}px`;
-            this.menu.style.left = `${offset.left}px`;
+            this.menu.style.left = `${offset.left + window.pageXOffset}px`;
         });
 
         this.element.appendChild(this.button);
