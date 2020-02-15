@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.UI.ContentAppSupport.ActionSupport
+namespace Cloudy.CMS.UI.ContentAppSupport.ListActionSupport
 {
     public class ListActionsAttribute : Attribute
     {

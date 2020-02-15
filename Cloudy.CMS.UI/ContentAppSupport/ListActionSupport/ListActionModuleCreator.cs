@@ -3,26 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.UI.ContentAppSupport.ActionSupport
+namespace Cloudy.CMS.UI.ContentAppSupport.ListActionSupport
 {
-    public class ContentActionModuleCreator : IContentActionModuleCreator
+    public class ListActionModuleCreator : IListActionModuleCreator
     {
         IContentTypeProvider ContentTypeProvider { get; }
 
-        public ContentActionModuleCreator(IContentTypeProvider contentTypeProvider)
+        public ListActionModuleCreator(IContentTypeProvider contentTypeProvider)
         {
             ContentTypeProvider = contentTypeProvider;
         }
 
-        public IEnumerable<ContentActionModuleDescriptor> Create()
+        public IEnumerable<ListActionModuleDescriptor> Create()
         {
-            var result = new List<ContentActionModuleDescriptor>();
+            var result = new List<ListActionModuleDescriptor>();
 
             foreach(var contentType in ContentTypeProvider.GetAll())
             {
                 foreach(ListActionsAttribute attribute in contentType.Type.GetCustomAttributes(typeof(ListActionsAttribute), true))
                 {
-                    result.Add(new ContentActionModuleDescriptor(contentType.Id, attribute.ModulePath));
+                    result.Add(new ListActionModuleDescriptor(contentType.Id, attribute.ModulePath));
                 }
             }
 

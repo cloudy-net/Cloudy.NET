@@ -1,11 +1,11 @@
-﻿namespace Cloudy.CMS.UI.ContentAppSupport.ActionSupport
+﻿namespace Cloudy.CMS.UI.ContentAppSupport.ListActionSupport
 {
-    public class ContentActionModuleDescriptor
+    public class ListActionModuleDescriptor
     {
         public string ContentTypeId { get; }
         public string ModulePath { get; }
 
-        public ContentActionModuleDescriptor(string contentTypeId, string modulePath)
+        public ListActionModuleDescriptor(string contentTypeId, string modulePath)
         {
             ContentTypeId = contentTypeId;
             ModulePath = modulePath;
