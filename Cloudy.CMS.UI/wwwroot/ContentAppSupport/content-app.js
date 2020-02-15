@@ -79,17 +79,6 @@ class ListContentTypesBlade extends Blade {
 
                     var list = new List();
 
-
-                    //var listActions = contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
-
-                    //if (listActions.length) {
-                    //    var menu = new ContextMenu();
-                    //    item.setMenu(menu);
-                    //    Promise.all(listActions).then(listActions => listActions.forEach(module => module.default(menu)));
-                    //}
-
-
-
                     if (contentTypes.filter(t => !t.isSingleton).length) {
                         list.addSubHeader('General');
                         contentTypes.filter(t => !t.isSingleton).forEach(contentType => list.addItem(item => {
@@ -114,6 +103,14 @@ class ListContentTypesBlade extends Blade {
                                     });
                                 });
                             }
+
+                            var actions = contentType.contentTypeActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
+
+                            if (actions.length) {
+                                var menu = new ContextMenu();
+                                item.setMenu(menu);
+                                Promise.all(actions).then(actions => actions.forEach(module => module.default(menu)));
+                            }   
 
                             if (contentTypes.length == 1) {
                                 item.element.click();
@@ -141,7 +138,7 @@ class ListContentBlade extends Blade {
         this.setTitle(contentType.pluralName);
         this.setToolbar(new Button('New').setInherit().onClick(createNew));
 
-        var listActions = contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
+        var actions = contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
 
         var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
         var formFieldsPromise = formBuilder.fieldModels;
@@ -149,7 +146,7 @@ class ListContentBlade extends Blade {
         var update = () => {
             var contentListPromise = fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
 
-            Promise.all([contentListPromise, formFieldsPromise, Promise.all(listActions)]).then(([response, formFields]) => {
+            Promise.all([contentListPromise, formFieldsPromise, Promise.all(actions)]).then(([response, formFields]) => {
                 if (response.length == 0) {
                     if (contentTypeCount == 1 && formFields.length == 0) {
                         var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_suburbs_8b83.svg" alt="Illustration of a row of houses.">`;
@@ -195,10 +192,10 @@ class ListContentBlade extends Blade {
                         app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
                     });
 
-                    if (listActions.length) {
+                    if (actions.length) {
                         var menu = new ContextMenu();
                         item.setMenu(menu);
-                        Promise.all(listActions).then(listActions => listActions.forEach(module => module.default(menu)));
+                        Promise.all(actions).then(actions => actions.forEach(module => module.default(menu)));
                     }
                 }));
                 this.setContent(list);

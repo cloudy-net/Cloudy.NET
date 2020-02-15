@@ -68,7 +68,7 @@ namespace Tests
 
             Mock.Get(containerSpecificContentGetter).Setup(g => g.Get<MyContent>(id, null, container)).Returns(a);
 
-            new ContentAppController(contentTypeRepository, containerSpecificContentGetter, null, containerSpecificContentUpdater, null, null, null, null, null, null, null, null).SaveContent(body);
+            new ContentAppController(contentTypeRepository, containerSpecificContentGetter, null, containerSpecificContentUpdater, null, null, null, null, null, null, null, null, null).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.Update(It.IsAny<MyContent>(), container));
         }

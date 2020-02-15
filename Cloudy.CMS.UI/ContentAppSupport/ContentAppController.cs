@@ -17,6 +17,7 @@ using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Newtonsoft.Json.Serialization;
 using Cloudy.CMS.UI.ContentAppSupport.ListActionSupport;
+using Cloudy.CMS.UI.ContentAppSupport.ContentTypeActionSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
@@ -36,8 +37,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         INameExpressionParser NameExpressionParser { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IListActionModuleProvider ListActionModuleProvider { get; }
+        IContentTypeActionModuleProvider ContentTypeActionModuleProvider { get; }
 
-        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider)
+        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider)
         {
             ContentTypeProvider = contentTypeRepository;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
@@ -51,6 +53,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             ContentDeserializer = contentDeserializer;
             NameExpressionParser = nameExpressionParser;
             ListActionModuleProvider = listActionModuleProvider;
+            ContentTypeActionModuleProvider = contentTypeActionModuleProvider;
         }
 
         public IEnumerable<ContentTypeResponseItem> GetContentTypes()
@@ -87,6 +90,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
                     IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                     IsSingleton = singleton != null,
                     Count = -1,
+                    ContentTypeActionModules = ContentTypeActionModuleProvider.GetContentTypeActionModulesFor(contentType.Id),
                     ListActionModules = ListActionModuleProvider.GetListActionModulesFor(contentType.Id),
                 });
             }
@@ -105,6 +109,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             public bool IsSingleton { get; set; }
             public string SingletonId { get; set; }
             public int Count { get; set; }
+            public IEnumerable<string> ContentTypeActionModules { get; set; }
             public IEnumerable<string> ListActionModules { get; set; }
         }
 

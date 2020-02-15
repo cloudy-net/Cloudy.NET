@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.Mvc.Routing;
 using Cloudy.CMS.Reflection;
 using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.ContentAppSupport.ContentTypeActionSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ListActionSupport;
 using Cloudy.CMS.UI.IdentitySupport;
 using Cloudy.CMS.UI.PortalSupport;
@@ -41,6 +42,8 @@ namespace Cloudy.CMS.UI
             container.RegisterSingleton<ILoginPageRenderer, LoginPageRenderer>();
             container.RegisterSingleton<IListActionModuleCreator, ListActionModuleCreator>();
             container.RegisterSingleton<IListActionModuleProvider, ListActionModuleProvider>();
+            container.RegisterSingleton<IContentTypeActionModuleCreator, ContentTypeActionModuleCreator>();
+            container.RegisterSingleton<IContentTypeActionModuleProvider, ContentTypeActionModuleProvider>();
         }
     }
 }
