@@ -109,7 +109,7 @@ class ListContentTypesBlade extends Blade {
                             if (actions.length) {
                                 var menu = new ContextMenu();
                                 item.setMenu(menu);
-                                Promise.all(actions).then(actions => actions.forEach(module => module.default(menu, this, app)));
+                                Promise.all(actions).then(actions => actions.forEach(module => module.default(menu, contentType, this, app)));
                             }   
 
                             if (contentTypes.length == 1) {
@@ -195,7 +195,7 @@ class ListContentBlade extends Blade {
                     if (actions.length) {
                         var menu = new ContextMenu();
                         item.setMenu(menu);
-                        Promise.all(actions).then(actions => actions.forEach(module => module.default(menu, this, app)));
+                        Promise.all(actions).then(actions => actions.forEach(module => module.default(menu, content, this, app)));
                     }
                 }));
                 this.setContent(list);
