@@ -10,16 +10,25 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 {
     public class ContentSerializer : IContentSerializer
     {
+        IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
+        IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
+
+        public ContentSerializer(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider)
+        {
+            PropertyDefinitionProvider = propertyDefinitionProvider;
+            ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
+        }
+
         public Document Serialize(IContent content, ContentTypeDescriptor contentType)
         {
             var globalInterfaces = new List<DocumentInterface>();
 
-            foreach (var coreInterface in contentType.CoreInterfaces)
+            foreach (var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
             {
                 globalInterfaces.Add(DocumentInterface.CreateFrom(coreInterface.Id, GetProperties(content, coreInterface.PropertyDefinitions)));
             }
 
-            var global = DocumentFacet.CreateFrom(DocumentLanguageConstants.Global, globalInterfaces, GetProperties(content, contentType.PropertyDefinitions));
+            var global = DocumentFacet.CreateFrom(DocumentLanguageConstants.Global, globalInterfaces, GetProperties(content, PropertyDefinitionProvider.GetFor(contentType.Id)));
 
             return Document.CreateFrom(content.Id, global, Enumerable.Empty<DocumentFacet>().ToDictionary(f => f.Language, f => f));
         }

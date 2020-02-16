@@ -10,7 +10,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 {
     public static class StartupExtensions
     {
-        public static IdentityBuilder AddCloudyIdentity(this IServiceCollection services) => services.AddCloudyIdentity<User>(_ => { });
+        public static IdentityBuilder AddCloudyIdentity(this IServiceCollection services) => services.AddCloudyIdentity<CloudyUser>(_ => { });
         public static IdentityBuilder AddCloudyIdentity<TUser>(this IServiceCollection services, Action<IdentityOptions> configureOptions) where TUser : class
         {
             services.AddAuthentication(o =>
@@ -31,7 +31,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
                 o.Stores.MaxLengthForKeys = 128;
                 configureOptions?.Invoke(o);
             })
-                .AddUserStore<UserStore>()
+                .AddUserStore<CloudyUserStore>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
         }

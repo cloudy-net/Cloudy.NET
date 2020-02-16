@@ -1,14 +1,11 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Microsoft.Extensions.Logging;
+﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Moq;
+using Poetry;
 using Poetry.ComponentSupport;
-using Poetry.ComponentSupport.DuplicateComponentIdCheckerSupport;
-using Poetry.ComponentSupport.MissingComponentAttributeCheckerSupport;
-using Poetry.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using Xunit;
 
@@ -17,13 +14,22 @@ namespace Tests
     public class ContentTypeCreatorTests
     {
         [Fact]
-        public void UsesAssemblyNameForAssemblyComponent()
+        public void IgnoresAbstractClasses()
         {
-            var componentAssemblyProvider = Mock.Of<IComponentAssemblyProvider>();
+            var component = new ComponentDescriptor("ipsum", new AssemblyWrapper(new List<Type> { typeof(Class_A_Abstract) }));
+            var componentProvider = Mock.Of<IComponentProvider>();
+            Mock.Get(componentProvider).Setup(p => p.GetAll()).Returns(new List<ComponentDescriptor> { component });
 
-            Mock.Get(componentAssemblyProvider).Setup(c => c.GetAll()).Returns(new List<Assembly> { Assembly.GetExecutingAssembly() });
+            var result = new ContentTypeCreator(componentProvider).Create();
 
-            Assert.Equal("Tests", new ComponentCreator(Mock.Of<ILogger<ComponentCreator>>(), Mock.Of<IComponentTypeProvider>(), componentAssemblyProvider, Mock.Of<IMissingComponentAttributeChecker>(), Mock.Of<IMultipleComponentsInSingleAssemblyChecker>(), Mock.Of<IDuplicateComponentIdChecker>()).Create().Single().Id);
+            Assert.Empty(result);
+        }
+
+        [ContentType("lorem")]
+        public abstract class Class_A_Abstract : IContent
+        {
+            public string Id { get; set; }
+            public string ContentTypeId { get; set; }
         }
     }
 }

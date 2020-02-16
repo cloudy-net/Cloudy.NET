@@ -15,16 +15,10 @@ namespace Cloudy.CMS.ContentTypeSupport
 {
     public class ContentTypeCreator : IContentTypeCreator
     {
-        IPropertyDefinitionCreator PropertyDefinitionCreator { get; }
-        ICoreInterfaceProvider CoreInterfaceProvider { get; }
-        IPropertyMappingProvider PropertyMappingRepository { get; }
         IComponentProvider ComponentProvider { get; }
 
-        public ContentTypeCreator(IPropertyDefinitionCreator propertyDefinitionCreator, ICoreInterfaceProvider coreInterfaceProvider, IPropertyMappingProvider propertyMappingRepository, IComponentProvider componentProvider)
+        public ContentTypeCreator(IComponentProvider componentProvider)
         {
-            PropertyDefinitionCreator = propertyDefinitionCreator;
-            CoreInterfaceProvider = coreInterfaceProvider;
-            PropertyMappingRepository = propertyMappingRepository;
             ComponentProvider = componentProvider;
         }
 
@@ -46,37 +40,14 @@ namespace Cloudy.CMS.ContentTypeSupport
                     continue;
                 }
 
-                var container = type.GetTypeInfo().GetCustomAttribute<ContainerAttribute>()?.Id ?? ContainerConstants.Content;
-
-                var propertyDefinitions = new List<PropertyDefinitionDescriptor>();
-
-                foreach (var property in type.GetProperties())
+                if (type.IsAbstract)
                 {
-                    var mapping = PropertyMappingRepository.Get(property);
-
-                    if (mapping.PropertyMappingType == PropertyMappingType.Ignored)
-                    {
-                        continue;
-                    }
-
-                    if (mapping.PropertyMappingType == PropertyMappingType.CoreInterface)
-                    {
-                        continue;
-                    }
-
-                    if (mapping.PropertyMappingType == PropertyMappingType.Incomplete)
-                    {
-                        continue;
-                    }
-
-                    propertyDefinitions.Add(PropertyDefinitionCreator.Create(property));
+                    continue;
                 }
 
-                var coreInterfaces = type.GetInterfaces()
-                    .Select(i => CoreInterfaceProvider.GetFor(i))
-                    .Where(i => i != null);
+                var container = type.GetTypeInfo().GetCustomAttribute<ContainerAttribute>()?.Id ?? ContainerConstants.Content;
 
-                result.Add(new ContentTypeDescriptor(contentTypeAttribute.Id, type, container, propertyDefinitions, coreInterfaces));
+                result.Add(new ContentTypeDescriptor(contentTypeAttribute.Id, type, container));
             }
 
             return result;

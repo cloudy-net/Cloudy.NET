@@ -38,8 +38,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IListActionModuleProvider ListActionModuleProvider { get; }
         IContentTypeActionModuleProvider ContentTypeActionModuleProvider { get; }
+        IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
 
-        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider)
+        public ContentAppController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter, IContainerSpecificContentCreator containerSpecificContentCreator, IContainerSpecificContentUpdater containerSpecificContentUpdater, IUrlProvider urlProvider, ISingletonProvider singletonProvider, IPluralizer pluralizer, IHumanizer humanizer, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, IPropertyDefinitionProvider propertyDefinitionProvider)
         {
             ContentTypeProvider = contentTypeRepository;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
@@ -54,6 +55,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             NameExpressionParser = nameExpressionParser;
             ListActionModuleProvider = listActionModuleProvider;
             ContentTypeActionModuleProvider = contentTypeActionModuleProvider;
+            PropertyDefinitionProvider = propertyDefinitionProvider;
         }
 
         public IEnumerable<ContentTypeResponseItem> GetContentTypes()
@@ -127,7 +129,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             }
 
             var sortByPropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? "Name" : "Id";
-            var sortByProperty = contentType.PropertyDefinitions.FirstOrDefault(p => p.Name == sortByPropertyName);
+            var sortByProperty = PropertyDefinitionProvider.GetFor(contentType.Id).FirstOrDefault(p => p.Name == sortByPropertyName);
 
             if (sortByProperty != null)
             {
@@ -156,7 +158,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             {
                 var a = (IContent)typeof(IContainerSpecificContentGetter).GetMethod(nameof(ContainerSpecificContentGetter.Get)).MakeGenericMethod(contentType.Type).Invoke(ContainerSpecificContentGetter, new[] { data.Id, null, contentType.Container });
 
-                foreach(var propertyDefinition in contentType.PropertyDefinitions)
+                foreach(var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType.Id))
                 {
                     var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 

@@ -41,7 +41,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
                 {
                     var inputString = await new StreamReader(context.Request.Body).ReadToEndAsync();
                     var input = JsonConvert.DeserializeObject<LoginInput>(inputString);
-                    var result = await context.RequestServices.GetService<SignInManager<User>>().PasswordSignInAsync(input.Email, input.Password, false, false);
+                    var result = await context.RequestServices.GetService<SignInManager<CloudyUser>>().PasswordSignInAsync(input.Email, input.Password, false, false);
                     
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new { success = result.Succeeded }));
                 });

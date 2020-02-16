@@ -14,16 +14,12 @@ namespace Cloudy.CMS.ContentTypeSupport
         public string Id { get; }
         public Type Type { get; }
         public string Container { get; }
-        public IEnumerable<PropertyDefinitionDescriptor> PropertyDefinitions { get; }
-        public IEnumerable<CoreInterfaceDescriptor> CoreInterfaces { get; set; }
 
-        public ContentTypeDescriptor(string id, Type type, string container, IEnumerable<PropertyDefinitionDescriptor> propertyDefinitions, IEnumerable<CoreInterfaceDescriptor> coreInterfaces)
+        public ContentTypeDescriptor(string id, Type type, string container)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
             Type = type ?? throw new ArgumentNullException(nameof(type));
             Container = container ?? throw new ArgumentNullException(nameof(container));
-            PropertyDefinitions = propertyDefinitions ?? throw new ArgumentNullException(nameof(propertyDefinitions));
-            CoreInterfaces = coreInterfaces ?? throw new ArgumentNullException(nameof(coreInterfaces));
         }
 
         public override bool Equals(object obj)
