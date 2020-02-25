@@ -10,6 +10,7 @@ class TextControl extends FieldControl {
         input.classList.add('poetry-ui-form-input');
         input.type = 'text';
         input.value = value || null;
+        input.name = fieldModel.descriptor.camelCaseId;
 
         container.append(input);
 

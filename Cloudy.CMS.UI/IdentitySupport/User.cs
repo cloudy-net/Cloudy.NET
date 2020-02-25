@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.IdentitySupport
@@ -14,7 +15,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
     [Container("users")]
     [ListActions("IdentitySupport/user-actions.js")]
     [ContentType("a4b8fd79-2432-4535-8ab8-5860c3bdb04d")]
-    public abstract class CloudyUser : IContent, INameable
+    public class User : IContent, INameable, IIdentity
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }
@@ -51,5 +52,9 @@ namespace Cloudy.CMS.UI.IdentitySupport
         public string AuthenticatorKey { get; set; }
         [Display(AutoGenerateField = false)]
         public List<string> TwoFactorRecoveryCodes { get; set; }
+
+        string IIdentity.AuthenticationType => IdentityConstants.ApplicationScheme;
+        bool IIdentity.IsAuthenticated => true;
+        string IIdentity.Name => Username;
     }
 }

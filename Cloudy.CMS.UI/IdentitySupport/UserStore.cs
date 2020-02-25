@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.IdentitySupport
 {
-    public class CloudyUserStore :
-        IUserStore<CloudyUser>,
-        IUserClaimStore<CloudyUser>,
-        IUserLoginStore<CloudyUser>,
-        IUserPasswordStore<CloudyUser>,
-        IUserEmailStore<CloudyUser>,
-        IUserPhoneNumberStore<CloudyUser>
+    public class UserStore :
+        IUserStore<User>,
+        IUserClaimStore<User>,
+        IUserLoginStore<User>,
+        IUserPasswordStore<User>,
+        IUserEmailStore<User>,
+        IUserPhoneNumberStore<User>
     {
         IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
@@ -29,7 +29,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
         ContentTypeDescriptor ContentType { get; }
         string Container { get; }
 
-        public CloudyUserStore(
+        public UserStore(
             IContainerSpecificContentCreator containerSpecificContentCreator,
             IContainerSpecificContentGetter containerSpecificContentGetter,
             IContainerSpecificContentUpdater containerSpecificContentUpdater,
@@ -45,18 +45,18 @@ namespace Cloudy.CMS.UI.IdentitySupport
             ContainerSpecificContentDeleter = containerSpecificContentDeleter;
             DocumentFinder = documentFinder;
             ContentDeserializer = contentDeserializer;
-            ContentType = contentTypeProvider.Get(typeof(CloudyUser));
+            ContentType = contentTypeProvider.Get(typeof(User));
             Container = ContentType.Container;
         }
 
-        public async Task<IdentityResult> CreateAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
             await ContainerSpecificContentCreator.CreateAsync(user, Container);
 
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> DeleteAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
             await ContainerSpecificContentDeleter.DeleteAsync(user.Id, Container);
 
@@ -65,41 +65,41 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
         public void Dispose() { }
 
-        public async Task<CloudyUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await ContainerSpecificContentGetter.GetAsync<CloudyUser>(userId, null, Container);
+            return await ContainerSpecificContentGetter.GetAsync<User>(userId, null, Container);
         }
 
-        public async Task<CloudyUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var document = (await DocumentFinder.Find(Container).WhereEquals<CloudyUser, string>(u => u.NormalizedUsername, normalizedUserName).GetResultAsync()).FirstOrDefault();
+            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedUsername, normalizedUserName).GetResultAsync()).FirstOrDefault();
 
             if(document == null)
             {
                 return null;
             }
 
-            var content = ContentDeserializer.Deserialize(document, ContentType, null) as CloudyUser;
+            var content = ContentDeserializer.Deserialize(document, ContentType, null) as User;
 
             return content;
         }
 
-        public async Task<string> GetNormalizedUserNameAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
         {
             return user.NormalizedUsername;
         }
 
-        public async Task<string> GetUserIdAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
         {
             return user.Id;
         }
 
-        public async Task<string> GetUserNameAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<string> GetUserNameAsync(User user, CancellationToken cancellationToken)
         {
             return user.Username;
         }
 
-        public async Task SetNormalizedUserNameAsync(CloudyUser user, string normalizedName, CancellationToken cancellationToken)
+        public async Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken)
         {
             user.NormalizedUsername = normalizedName;
 
@@ -109,7 +109,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task SetUserNameAsync(CloudyUser user, string userName, CancellationToken cancellationToken)
+        public async Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken)
         {
             user.Username = userName;
 
@@ -119,7 +119,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task<IdentityResult> UpdateAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
             if(user.Id != null)
             {
@@ -129,7 +129,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             return IdentityResult.Success;
         }
 
-        public async Task AddLoginAsync(CloudyUser user, UserLoginInfo login, CancellationToken cancellationToken)
+        public async Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             user.Logins.Add(login);
 
@@ -139,7 +139,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task RemoveLoginAsync(CloudyUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public async Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             user.Logins.Remove(user.Logins.Single(l => l.ProviderKey == providerKey));
 
@@ -149,22 +149,22 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task<IList<UserLoginInfo>> GetLoginsAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
         {
             return user.Logins;
         }
 
-        public Task<CloudyUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IList<Claim>> GetClaimsAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<IList<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken)
         {
             return user.Claims ?? new List<Claim>();
         }
 
-        public async Task AddClaimsAsync(CloudyUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        public async Task AddClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
             if(user.Claims == null)
             {
@@ -179,7 +179,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task ReplaceClaimAsync(CloudyUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        public async Task ReplaceClaimAsync(User user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
         {
             if (user.Claims == null)
             {
@@ -201,7 +201,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task RemoveClaimsAsync(CloudyUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        public async Task RemoveClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
             if (user.Claims == null)
             {
@@ -218,12 +218,12 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public Task<IList<CloudyUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        public Task<IList<User>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task SetPasswordHashAsync(CloudyUser user, string passwordHash, CancellationToken cancellationToken)
+        public async Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
         {
             user.PasswordHash = passwordHash;
 
@@ -233,17 +233,17 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task<string> GetPasswordHashAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
         {
             return user.PasswordHash;
         }
 
-        public async Task<bool> HasPasswordAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
         {
             return user.PasswordHash != null;
         }
 
-        public async Task SetEmailAsync(CloudyUser user, string email, CancellationToken cancellationToken)
+        public async Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
         {
             user.Email = email;
 
@@ -253,17 +253,17 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task<string> GetEmailAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
         {
             return user.Email;
         }
 
-        public async Task<bool> GetEmailConfirmedAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
         {
             return user.EmailConfirmed;
         }
 
-        public async Task SetEmailConfirmedAsync(CloudyUser user, bool confirmed, CancellationToken cancellationToken)
+        public async Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
         {
             user.EmailConfirmed = confirmed;
 
@@ -273,26 +273,26 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task<CloudyUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            var document = (await DocumentFinder.Find(Container).WhereEquals<CloudyUser, string>(u => u.NormalizedEmail, normalizedEmail).GetResultAsync()).FirstOrDefault();
+            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedEmail, normalizedEmail).GetResultAsync()).FirstOrDefault();
 
             if (document == null)
             {
                 return null;
             }
 
-            var content = ContentDeserializer.Deserialize(document, ContentType, null) as CloudyUser;
+            var content = ContentDeserializer.Deserialize(document, ContentType, null) as User;
 
             return content;
         }
 
-        public async Task<string> GetNormalizedEmailAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
         {
             return user.NormalizedEmail;
         }
 
-        public async Task SetNormalizedEmailAsync(CloudyUser user, string normalizedEmail, CancellationToken cancellationToken)
+        public async Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
         {
             user.NormalizedEmail = normalizedEmail;
 
@@ -302,7 +302,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task SetPhoneNumberAsync(CloudyUser user, string phoneNumber, CancellationToken cancellationToken)
+        public async Task SetPhoneNumberAsync(User user, string phoneNumber, CancellationToken cancellationToken)
         {
             user.PhoneNumber = phoneNumber;
 
@@ -312,17 +312,17 @@ namespace Cloudy.CMS.UI.IdentitySupport
             }
         }
 
-        public async Task<string> GetPhoneNumberAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<string> GetPhoneNumberAsync(User user, CancellationToken cancellationToken)
         {
             return user.PhoneNumber;
         }
 
-        public async Task<bool> GetPhoneNumberConfirmedAsync(CloudyUser user, CancellationToken cancellationToken)
+        public async Task<bool> GetPhoneNumberConfirmedAsync(User user, CancellationToken cancellationToken)
         {
             return user.PhoneNumberConfirmed;
         }
 
-        public async Task SetPhoneNumberConfirmedAsync(CloudyUser user, bool confirmed, CancellationToken cancellationToken)
+        public async Task SetPhoneNumberConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
         {
             user.PhoneNumberConfirmed = confirmed;
 

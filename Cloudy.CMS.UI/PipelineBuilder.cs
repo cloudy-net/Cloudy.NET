@@ -1,14 +1,17 @@
 ﻿using Cloudy.CMS.UI;
 using Cloudy.CMS.UI.IdentitySupport;
 using Cloudy.CMS.UI.PortalSupport;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Cloudy.CMS.UI
 {
@@ -16,11 +19,8 @@ namespace Cloudy.CMS.UI
     {
         public void Build(IApplicationBuilder app, CloudyAdminOptions options)
         {
-            app.Map(new PathString("/Login"), branch => app.ApplicationServices.GetService<ILoginPipelineBuilder>().Build(branch, options));
-
             if (options.StaticFilesFileProvider != null)
             {
-                
                 app.UseStaticFiles(new StaticFileOptions
                 {
                     RequestPath = "/files",
@@ -34,6 +34,9 @@ namespace Cloudy.CMS.UI
                 ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.StaticFilesBaseUri;
             }
 
+            app.UseRouting();
+            app.UseAuthentication();
+            
             if (options.AuthorizeOptions != null)
             {
                 if (app.ApplicationServices.GetService<IAuthorizationService>() == null)
@@ -41,6 +44,8 @@ namespace Cloudy.CMS.UI
                     throw new Exception($"Could not find {nameof(IAuthorizationService)} in DI container. Call services.{nameof(PolicyServiceCollectionExtensions.AddAuthorization)}() in ConfigureServices");
                 }
 
+                app.Map(new PathString("/Login"), branch => app.ApplicationServices.GetService<ILoginPipelineBuilder>().Build(branch, options));
+                
                 var policy =
                     options.AuthorizeOptions != null ?
                     AuthorizationPolicy.CombineAsync(app.ApplicationServices.GetRequiredService<IAuthorizationPolicyProvider>(), new List<IAuthorizeData> { options.AuthorizeOptions }).Result :
@@ -48,9 +53,7 @@ namespace Cloudy.CMS.UI
 
                 app.UseMiddleware<AuthorizeMiddleware>(policy);
             }
-
-            app.UseRouting();
-            app.UseAuthentication();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>

@@ -35,7 +35,7 @@ namespace Website.AspNetCore
                 .AddContentRoute()
                 .AddAdmin()
             );
-            //services.AddCloudyIdentity();
+            services.AddCloudyIdentity();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -48,8 +48,8 @@ namespace Website.AspNetCore
             app.UseCloudyAdmin(cloudy => 
                 cloudy
                     .WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "../Cloudy.CMS.UI/wwwroot")))
-                    //.Authorize()
-                    .Unprotect()
+                    .Authorize()
+                    //.Unprotect()
             );
             app.UseRouting();
             app.UseEndpoints(endpoints => {
