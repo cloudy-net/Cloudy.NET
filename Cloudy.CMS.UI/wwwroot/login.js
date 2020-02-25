@@ -12,14 +12,50 @@ import notificationManager from './NotificationSupport/notification-manager.js';
 class Login {
     constructor() {
         this.container = document.createElement('poetry-ui-login-container');
-        this.login = document.createElement('poetry-ui-login');
-        this.container.append(this.login);
+
+        this.formTarget = document.createElement('iframe');
+        this.formTarget.style.display = 'none';
+        this.formTarget.name = "cloudy-login-target";
+        this.formTarget.src = "about:blank";
+        this.container.append(this.formTarget);
+
+        this.form = document.createElement('form');
+        this.form.classList.add('poetry-ui-login');
+        this.form.target = "cloudy-login-target";
+        this.form.action = "about:blank";
+        this.form.addEventListener('submit', event => {
+            this.form.style.opacity = 0.5;
+            fetch('Login', {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(target)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    this.form.style.opacity = '';
+
+                    if (!result.success) {
+                        notificationManager.addNotification(n => n.setText(result.message));
+                        return;
+                    }
+
+                    location.href = new URLSearchParams(window.location.search).get('ReturnUrl');
+                })
+                .catch(e => {
+                    this.form.style.opacity = '';
+                    notificationManager.addNotification(n => n.setText(e.toString()));
+                });
+        });
+        this.container.append(this.form);
 
         this.header = document.createElement('poetry-ui-login-header');
-        this.login.append(this.header);
+        this.form.append(this.header);
 
         this.content = document.createElement('poetry-ui-login-content');
-        this.login.append(this.content);
+        this.form.append(this.content);
 
         var target = {};
 
@@ -38,31 +74,19 @@ class Login {
             }, TextControl, null),
         ]).build(target).then(form => {
             this.content.append(form.element);
-            form.element.querySelector('input[type="text"]').focus();
+            form.element.querySelector('input[name="password"]').type = 'password';
+            form.element.querySelector('input[name="email"]').focus();
         });
 
         this.footer = document.createElement('poetry-ui-login-footer');
-        this.login.append(this.footer);
-        new Button('Login').setPrimary().onClick(() => {
-            fetch('Login', {
-                credentials: 'include',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(target)
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (!result.success) {
-                        notificationManager.addNotification(n => n.setText(result.message));
-                        return;
-                    }
+        this.form.append(this.footer);
 
-                    location.href = new URLSearchParams(window.location.search).get('ReturnUrl');
-                })
-                .catch(e => notificationManager.addNotification(n => n.setText(e.toString())))
-        }).appendTo(this.footer);
+        var button = document.createElement('button');
+        button.classList.add('poetry-ui-button');
+        button.classList.add('primary');
+        button.innerText = 'Login';
+        button.type = 'submit';
+        this.footer.append(button);
 
         if (document.readyState != 'loading') {
             document.body.appendChild(this.container);
