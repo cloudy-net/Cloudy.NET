@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.Controls.TextControlSupport
 {
-    [Control("text", "FormSupport/Controls/text-control.js")]
+    [Control("password", "FormSupport/Controls/text-control.js")]
     [MapControlToType(typeof(double))]
     [MapControlToType(typeof(double?))]
     [MapControlToType(typeof(int))]
@@ -13,6 +13,7 @@ namespace Poetry.UI.FormSupport.Controls.TextControlSupport
     [MapControlToType(typeof(long))]
     [MapControlToType(typeof(long?))]
     [MapControlToType(typeof(string))]
+    [MapControlToUIHint("password")]
     public class TextControl
     {
     }

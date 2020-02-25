@@ -64,17 +64,16 @@ class Login {
                 id: 'Email',
                 label: 'Email',
                 camelCaseId: 'email',
-                control: 'email',
+                control: { id: 'text', parameters: {} },
             }, TextControl, null),
             new FieldModel({
                 id: 'Password',
                 label: 'Password',
                 camelCaseId: 'password',
-                control: 'password',
+                control: { id: 'password', parameters: {} },
             }, TextControl, null),
         ]).build(target).then(form => {
             this.content.append(form.element);
-            form.element.querySelector('input[name="password"]').type = 'password';
             form.element.querySelector('input[name="email"]').focus();
         });
 
