@@ -1,4 +1,4 @@
-﻿@import '../../Styles/variables.scss';
+﻿@import '../variables.scss';
 
 
 
@@ -6,19 +6,14 @@
 
 poetry-ui-notifications {
     position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    left: 1rem;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
     z-index: 10;
-    display: block;
+    display: flex;
+    flex-direction: column;
     pointer-events: none;
-}
-
-@media(min-width: 567px) {
-    poetry-ui-notifications {
-        left: auto;
-        width: 20rem;
-    }
+    justify-content: center;
 }
 
 
@@ -27,30 +22,40 @@ poetry-ui-notifications {
 
 poetry-ui-notification {
     overflow: hidden;
+    flex-grow: 1;
     position: relative;
     display: block;
-    padding: 1rem;
     background: white;
+    padding: 14px 16px;
+    border-radius: 4px;
+    background-color: rgb(50, 50, 50);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
     cursor: pointer;
     pointer-events: all;
-    transition: border-color 0.2s;
-    border: solid 2px $almost-white;
-
-    &:hover,
-    &:focus {
-        border-color: $light-gray;
-    }
+    box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12);
+    transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
     &:focus {
         outline: none;
     }
 
     & + & {
-        margin-top: 2rem;
+        margin-top: 16px;
     }
 }
 
-poetry-ui-notification-close {
+@media(min-width: 567px) {
+    poetry-ui-notification {
+        flex-grow: 0;
+        width: 288px;
+    }
+}
+
+/*poetry-ui-notification-close {
     float: right;
     display: block;
     width: 1rem;
@@ -68,15 +73,15 @@ poetry-ui-notification-close {
     &:focus {
         outline: none;
     }
-}
+}*/
 
-poetry-ui-notification-content {
+/*poetry-ui-notification-content {
     overflow: hidden;
     display: block;
     padding-right: 1rem;
-}
+}*/
 
-poetry-ui-notification-text {
+/*poetry-ui-notification-text {
     overflow: hidden;
     margin-top: 0.25rem;
     display: block;
@@ -87,9 +92,9 @@ poetry-ui-notification-text {
 poetry-ui-notification-footer {
     clear: both;
     display: block;
-}
+}*/
 
-poetry-ui-notification-buttons {
+/*poetry-ui-notification-buttons {
     float: right;
     padding-top: 1rem;
     padding-left: 1rem;
@@ -119,4 +124,4 @@ poetry-ui-notification-source {
     &:empty {
         display: none;
     }
-}
+}*/

@@ -2,6 +2,7 @@
 import FormBuilder from './FormSupport/form-builder.js';
 import FieldModel from './FormSupport/field-model.js';
 import TextControl from './FormSupport/Controls/text-control.js';
+import notificationManager from './NotificationSupport/notification-manager.js';
 
 
 
@@ -35,7 +36,10 @@ class Login {
                 camelCaseId: 'password',
                 control: 'password',
             }, TextControl, null),
-        ]).build(target).then(form => this.content.append(form.element));
+        ]).build(target).then(form => {
+            this.content.append(form.element);
+            form.element.querySelector('input[type="text"]').focus();
+        });
 
         this.footer = document.createElement('poetry-ui-login-footer');
         this.login.append(this.footer);
@@ -49,7 +53,15 @@ class Login {
                 body: JSON.stringify(target)
             })
                 .then(response => response.json())
-                .then(result => console.log(target, result))
+                .then(result => {
+                    if (!result.success) {
+                        notificationManager.addNotification(n => n.setText(result.message));
+                        return;
+                    }
+
+                    location.href = new URLSearchParams(window.location.search).get('ReturnUrl');
+                })
+                .catch(e => notificationManager.addNotification(n => n.setText(e.toString())))
         }).appendTo(this.footer);
 
         if (document.readyState != 'loading') {

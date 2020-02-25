@@ -20,7 +20,7 @@ poetry-ui-login {
 }
 
 poetry-ui-login-header {
-    padding: 16px;
+    padding: 16px 16px 0;
     font-size: 1.25rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 500;
@@ -29,15 +29,14 @@ poetry-ui-login-header {
 }
 
 poetry-ui-login-content {
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 poetry-ui-login-footer {
-    padding: 8px;
+    padding: 0 16px 16px;
     display: flex;
     flex-direction: column;
 
-    .poetry-ui-button {
-        flex-grow: 1;
+    poetry-ui-button {
+        margin-left: auto;
     }
 }

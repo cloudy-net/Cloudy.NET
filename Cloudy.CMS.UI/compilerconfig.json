@@ -26,5 +26,9 @@
   {
     "outputFile": "wwwroot/login.css",
     "inputFile": "wwwroot/login.scss"
+  },
+  {
+    "outputFile": "wwwroot/NotificationSupport/notification-manager.css",
+    "inputFile": "wwwroot/NotificationSupport/notification-manager.scss"
   }
 ]

@@ -41,6 +41,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "portal.css").Replace('\\', '/')}\" />\n");
             await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "login.css").Replace('\\', '/')}\" />\n");
             await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "FormSupport/form-elements.css").Replace('\\', '/')}\" />\n");
+            await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "NotificationSupport/notification-manager.css").Replace('\\', '/')}\" />\n");
             await context.Response.WriteAsync($"</head>\n");
             await context.Response.WriteAsync($"<body>\n");
             await context.Response.WriteAsync($"    <script type=\"module\">\n");
