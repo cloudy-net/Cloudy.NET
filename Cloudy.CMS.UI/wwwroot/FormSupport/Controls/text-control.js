@@ -9,7 +9,7 @@ class TextControl extends FieldControl {
         var input = document.createElement('input');
         input.classList.add('poetry-ui-form-input');
 
-        if (fieldModel.descriptor.control.id == 'password') {
+        if (fieldModel.descriptor.control.uiHint == 'password') {
             input.type = 'password';
         } else {
             input.type = 'text';

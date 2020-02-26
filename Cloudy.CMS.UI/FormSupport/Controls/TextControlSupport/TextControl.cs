@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Poetry.UI.FormSupport.Controls.TextControlSupport
 {
-    [Control("password", "FormSupport/Controls/text-control.js")]
+    [Control("text", "FormSupport/Controls/text-control.js")]
     [MapControlToType(typeof(double))]
     [MapControlToType(typeof(double?))]
     [MapControlToType(typeof(int))]

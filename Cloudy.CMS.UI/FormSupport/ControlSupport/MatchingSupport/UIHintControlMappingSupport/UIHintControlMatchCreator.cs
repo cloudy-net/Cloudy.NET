@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
 using Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
 using Poetry.UI.FormSupport.UIHintSupport;
 
 namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
 {
-    public class ControlReferenceCreator : IControlReferenceCreator
+    public class UIHintControlMatchCreator : IUIHintControlMatchCreator
     {
-        public ControlReference Create(UIHint uiHint, UIHintControlMapping mapping)
+        public UIHintControlMatch Create(UIHint uiHint, UIHintControlMapping mapping)
         {
             var definition = mapping.UIHintDefinition;
             var parameters = new Dictionary<string, object>();
@@ -18,7 +19,7 @@ namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMapp
                 parameters[definition.Parameters[i].Id] = uiHint.Parameters[i].Value;
             }
 
-            return new ControlReference(mapping.ControlId, parameters);
+            return new UIHintControlMatch(mapping.ControlId, uiHint.Id, parameters);
         }
     }
 }

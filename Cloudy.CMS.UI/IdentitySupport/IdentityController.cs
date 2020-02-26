@@ -22,7 +22,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
         [HttpPost]
         [Route("ChangePassword")]
-        public async Task<object> ChangePassword([FromBody] ChangePasswordInput input)
+        public async Task<object> ChangePassword([FromBody] ChangePassword input)
         {
             var user = await UserManager.FindByIdAsync(input.UserId);
             var addPasswordResult = await UserManager.AddPasswordAsync(user, input.Password);
@@ -36,16 +36,5 @@ namespace Cloudy.CMS.UI.IdentitySupport
                 success = true,
             };
         }
-    }
-
-    [Form("Cloudy.CMS.Identity.ChangePassword")]
-    public class ChangePasswordInput
-    {
-        [UIHint("hidden")]
-        public string UserId { get; set; }
-        [UIHint("password")]
-        public string Password { get; set; }
-        [UIHint("password")]
-        public string VerifyPassword { get; set; }
     }
 }

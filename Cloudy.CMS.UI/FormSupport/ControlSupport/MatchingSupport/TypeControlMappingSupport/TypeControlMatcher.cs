@@ -1,4 +1,5 @@
-﻿using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMappingSupport;
+using Poetry.ComposableSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +20,14 @@ namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMappin
                 .ToDictionary(m => m.Key, m => m.First().ControlId);
         }
 
-        public ControlReference GetFor(Type type)
+        public TypeControlMatch GetFor(Type type)
         {
             if (!Mappings.ContainsKey(type))
             {
                 return null;
             }
 
-            return new ControlReference(Mappings[type], new Dictionary<string, object>());
+            return new TypeControlMatch(Mappings[type], type.Name);
         }
     }
 }

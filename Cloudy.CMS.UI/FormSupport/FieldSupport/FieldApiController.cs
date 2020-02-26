@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using Poetry.UI.FormSupport.ControlSupport;
@@ -68,7 +69,7 @@ namespace Poetry.UI.FormSupport.FieldSupport
             public string Id { get; set; }
             public string Label { get; set; }
             public string CamelCaseId { get; set; }
-            public ControlReference Control { get; set; }
+            public object Control { get; set; }
             public string EmbeddedFormId { get; set; }
             public bool IsSortable { get; set; }
             public string Group { get; set; }

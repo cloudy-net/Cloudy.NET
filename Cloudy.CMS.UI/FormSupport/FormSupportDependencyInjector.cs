@@ -27,7 +27,7 @@ namespace Poetry.UI.FormSupport
             container.RegisterSingleton<IUIHintDefinitionParser, UIHintDefinitionParser>();
             container.RegisterSingleton<IUIHintControlMatcher, UIHintControlMatcher>();
             container.RegisterSingleton<IExpressionParser, ExpressionParser>();
-            container.RegisterSingleton<IControlReferenceCreator, ControlReferenceCreator>();
+            container.RegisterSingleton<IUIHintControlMatchCreator, UIHintControlMatchCreator>();
             container.RegisterSingleton<ITypeControlMatcher, TypeControlMatcher>();
             container.RegisterSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
             container.RegisterSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();

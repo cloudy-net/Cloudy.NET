@@ -1,4 +1,5 @@
-﻿using Poetry.UI.FormSupport.UIHintSupport;
+﻿using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
+using Poetry.UI.FormSupport.UIHintSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,6 @@ namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport
 {
     public interface IControlMatcher
     {
-        ControlReference GetFor(Type type, IEnumerable<UIHint> uiHints);
+        IControlMatch GetFor(Type type, IEnumerable<UIHint> uiHints);
     }
 }

@@ -1,4 +1,6 @@
-﻿using Poetry.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMappingSupport;
+﻿using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
+using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
+using Poetry.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMappingSupport;
 using Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
 using Poetry.UI.FormSupport.UIHintSupport;
 using System;
@@ -21,23 +23,25 @@ namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport
             Controls = controlProvider.GetAll().ToDictionary(c => c.Id, c => c);
         }
 
-        public ControlReference GetFor(Type type, IEnumerable<UIHint> uiHints)
+        public IControlMatch GetFor(Type type, IEnumerable<UIHint> uiHints)
         {
             foreach (var uiHint in uiHints)
             {
-                var uiHintControlMatch = UIHintControlMatcher.GetFor(uiHint);
+                var match = UIHintControlMatcher.GetFor(uiHint);
 
-                if(uiHintControlMatch != null)
+                if(match != null)
                 {
-                    return uiHintControlMatch;
+                    return match;
                 }
             }
 
-            var typeControlMatch = TypeControlMatcher.GetFor(type);
-
-            if(typeControlMatch != null)
             {
-                return typeControlMatch;
+                var match = TypeControlMatcher.GetFor(type);
+
+                if (match != null)
+                {
+                    return match;
+                }
             }
 
             foreach (var uiHint in uiHints)
@@ -48,7 +52,7 @@ namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport
                 }
 
                 if (Controls.ContainsKey(uiHint.Id)) {
-                    return new ControlReference(uiHint.Id, new Dictionary<string, object>());
+                    return new UIHintControlMatch(uiHint.Id, uiHint.Id, new Dictionary<string, object>());
                 }
             }
 

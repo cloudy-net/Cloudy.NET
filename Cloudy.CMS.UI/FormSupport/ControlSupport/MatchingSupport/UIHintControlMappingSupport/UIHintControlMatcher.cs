@@ -1,4 +1,5 @@
-﻿using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
+using Poetry.ComposableSupport;
 using Poetry.UI.FormSupport.UIHintSupport;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,10 @@ namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMapp
 {
     public class UIHintControlMatcher : IUIHintControlMatcher
     {
-        IControlReferenceCreator ControlReferenceCreator { get; }
+        IUIHintControlMatchCreator ControlReferenceCreator { get; }
         IDictionary<string, IEnumerable<UIHintControlMapping>> Mappings { get; }
 
-        public UIHintControlMatcher(IComposableProvider composableProvider, IControlReferenceCreator controlReferenceCreator)
+        public UIHintControlMatcher(IComposableProvider composableProvider, IUIHintControlMatchCreator controlReferenceCreator)
         {
             ControlReferenceCreator = controlReferenceCreator;
             Mappings = composableProvider
@@ -22,7 +23,7 @@ namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMapp
                 .ToDictionary(m => m.Key, m => (IEnumerable<UIHintControlMapping>)m);
         }
 
-        public ControlReference GetFor(UIHint uiHint)
+        public UIHintControlMatch GetFor(UIHint uiHint)
         {
             if (!Mappings.ContainsKey(uiHint.Id))
             {
