@@ -17,6 +17,8 @@ namespace Website.AspNetCore
         public string Name { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
+        [UIHint("password")]
+        public string PinCode { get; set; }
         public bool PinnedToTop { get; set; }
         public Meta Metadata { get; set; }
 
