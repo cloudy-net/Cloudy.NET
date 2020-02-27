@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Cloudy.CMS.UI.IdentitySupport;
+using Website.AspNetCore.DemoSupport;
 
 namespace Website.AspNetCore
 {
@@ -28,6 +29,7 @@ namespace Website.AspNetCore
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IDemoPageRenderer, DemoPageRenderer>();
             services.AddControllers();
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
@@ -51,8 +53,10 @@ namespace Website.AspNetCore
                     .Authorize()
                     //.Unprotect()
             );
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseEndpoints(endpoints => {
+                endpoints.MapGet("/", app.ApplicationServices.GetService<IDemoPageRenderer>().RenderAsync);
                 endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
             });
