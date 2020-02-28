@@ -13,7 +13,11 @@ class ListContentTypesBlade extends Blade{
         var helpContainer = document.createElement('poetry-ui-help-container');
         helpContainer.innerHTML = image + heading + text;
 
-        var button = new LinkButton('To the Admin UI', '/Admin').setPrimary();
+        var button = new LinkButton('Admin UI', '/Admin').setPrimary();
+        helpContainer.append(button.element);
+
+        var button = new LinkButton('Website', 'https://cloudy-cms.net/').setPrimary();
+        button.element.style.marginLeft = '8px';
         helpContainer.append(button.element);
 
         this.setContent(helpContainer);
