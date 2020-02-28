@@ -7,10 +7,11 @@ class ListContentTypesBlade extends Blade{
         super();
         this.setTitle('Welcome screen');
         var image = `<img class="poetry-ui-help-illustration" src="/demo/feeling-proud.svg" alt="Illustration of a desktop with a computer, signifying work that can be commenced.">`;
-        var text = '<p>Choose what you would like to do now:</p>';
+        var heading = '<h2 class="poetry-ui-help-heading">You\'ve started the demo project</h2>';
+        var text = '<p>What you would like to do now?</p>';
 
         var helpContainer = document.createElement('poetry-ui-help-container');
-        helpContainer.innerHTML = image + text;
+        helpContainer.innerHTML = image + heading + text;
 
         var button = new LinkButton('To the Admin UI', '/Admin').setPrimary();
         helpContainer.append(button.element);
