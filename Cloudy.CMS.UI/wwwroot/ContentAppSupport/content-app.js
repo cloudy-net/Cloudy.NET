@@ -79,9 +79,9 @@ class ListContentTypesBlade extends Blade {
 
                     var list = new List();
 
-                    if (contentTypes.filter(t => !t.isSingleton).length) {
-                        list.addSubHeader('General');
-                        contentTypes.filter(t => !t.isSingleton).forEach(contentType => list.addItem(item => {
+                    if (contentTypes.length) {
+                        //list.addSubHeader('General');
+                        contentTypes.forEach(contentType => list.addItem(item => {
                             item.setText(contentType.pluralName);
 
                             if (!contentType.isSingleton) {
