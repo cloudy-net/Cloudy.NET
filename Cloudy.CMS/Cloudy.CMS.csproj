@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Björn Ali Göransson</Authors>
-    <Description>Cloudy CMS with InMemory, File-based or MongoDB Support</Description>
+    <Description>.NET Core CMS with InMemory, File-based or MongoDB Support</Description>
     <Copyright>2018 Björn Ali Göransson</Copyright>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
