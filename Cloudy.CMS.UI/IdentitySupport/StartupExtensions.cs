@@ -18,10 +18,6 @@ namespace Cloudy.CMS.UI.IdentitySupport
             {
                 o.LoginPath = new PathString("/Login/");
                 o.Cookie.Path = "/";
-                o.Events = new CookieAuthenticationEvents
-                {
-                    OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync
-                };
             });
 
             return services.AddIdentityCore<TUser>(o =>

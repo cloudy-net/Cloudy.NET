@@ -30,7 +30,7 @@ namespace Website.AspNetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IDemoPageRenderer, DemoPageRenderer>();
-            services.AddControllers();
+            services.AddMvc();
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .WithFileBasedDocuments()

@@ -6,6 +6,7 @@ import LinkButton from '../link-button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
 import TabSystem from '../TabSupport/tab-system.js';
+import notificationManager from '../NotificationSupport/notification-manager.js';
 
 
 
@@ -41,8 +42,8 @@ class ListContentTypesBlade extends Blade {
 
         var update = () =>
             fetch('ContentApp/GetContentTypes', { credentials: 'include' })
+                .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content types (${error.name}: ${error.message})`)))
                 .then(response => response.json())
-                .catch(e => console.log(e))
                 .then(contentTypes => {
                     if (!contentTypes.length) {
                         var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
@@ -89,7 +90,9 @@ class ListContentTypesBlade extends Blade {
                                 });
                             } else {
                                 var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-                                var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
+                                var content = fetch(`ContentApp/GetSingleton?id=${contentType.id}`, { credentials: 'include' })
+                                    .catch(error => notificationManager.addNotification(item => item.setText(`Could not get singleton (${error.name}: ${error.message})`)))
+                                    .then(response => response.json());
 
                                 item.onClick(() => {
                                     Promise.all([formBuilder.fieldModels, content]).then(results => {
@@ -131,7 +134,7 @@ class ListContentBlade extends Blade {
     constructor(app, contentType, contentTypeCount) {
         super();
 
-        var createNew = () => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onSave(() => update()), this);
+        var createNew = () => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onComplete(() => update()), this);
 
         this.setTitle(contentType.pluralName);
         this.setToolbar(new Button('New').setInherit().onClick(createNew));
@@ -142,7 +145,9 @@ class ListContentBlade extends Blade {
         var formFieldsPromise = formBuilder.fieldModels;
 
         var update = () => {
-            var contentListPromise = fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' }).then(response => response.json());
+            var contentListPromise = fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
+                .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content list (${error.name}: ${error.message})`)))
+                .then(response => response.json());
 
             Promise.all([contentListPromise, formFieldsPromise, Promise.all(actions)]).then(([response, formFields]) => {
                 if (response.length == 0) {
@@ -167,7 +172,7 @@ class ListContentBlade extends Blade {
                         var header1 = `<h2 class="poetry-ui-help-heading">There's nothing here</h2>`;
                         var text1 = `<p>You haven’t created any ${contentType.pluralName[0].toLowerCase()}${contentType.pluralName.substr(1)} yet. Let’s do it!</p>`;
 
-                        var button = new Button(`Get to work`).setPrimary().onClick(createNew);
+                        var button = new Button(`Create new ${contentType.name[0].toLowerCase()}${contentType.name.substr(1)}`).setPrimary().onClick(createNew);
                         var buttonContainer = document.createElement('div');
                         buttonContainer.style.textAlign = 'center';
                         buttonContainer.append(button.element);
@@ -184,17 +189,49 @@ class ListContentBlade extends Blade {
 
                 var list = new List();
                 response.forEach(content => list.addItem(item => {
-                    item.setText(contentType.isNameable ? (contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name) : content.id);
+                    var name;
+
+                    if (contentType.isNameable) {
+                        name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+
+                        if (!name) {
+                            name = `${contentType.name} ${content.id}`;
+                        }
+                    } else {
+                        name = content.id;
+                    }
+
+                    item.setText(name);
                     item.onClick(() => {
                         item.setActive();
-                        app.openAfter(new EditContentBlade(app, contentType, formBuilder, content).onSave(() => item.setText(contentType.isNameable ? content.name : content.id)).onClose(() => item.setActive(false)), this);
+                        var blade = new EditContentBlade(app, contentType, formBuilder, content)
+                            .onComplete(() => {
+                                var name;
+
+                                if (contentType.isNameable) {
+                                    name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+
+                                    if (!name) {
+                                        name = `${contentType.name} ${content.id}`;
+                                    }
+                                } else {
+                                    name = content.id;
+                                }
+
+                                item.setText(name);
+                            })
+                            .onClose(() => item.setActive(false));
+                        app.openAfter(blade, this);
                     });
 
-                    if (actions.length) {
-                        var menu = new ContextMenu();
-                        item.setMenu(menu);
-                        Promise.all(actions).then(actions => actions.forEach(module => module.default(menu, content, this, app)));
-                    }
+                    var menu = new ContextMenu();
+                    item.setMenu(menu);
+                    Promise
+                        .all(actions)
+                        .then(actions => actions.forEach(module => module.default(menu, content, this, app)))
+                        .then(() => {
+                            menu.addItem(item => item.setText('Remove').onClick(() => app.openAfter(new RemoveContentBlade(app, contentType, formBuilder, content).onComplete(() => update()), this)));
+                        });
                 }));
                 this.setContent(list);
             });
@@ -206,10 +243,77 @@ class ListContentBlade extends Blade {
 
 
 
+/* REMOVE CONTENT */
+
+class RemoveContentBlade extends Blade {
+    onCompleteCallbacks = [];
+
+    constructor(app, contentType, formBuilder, content) {
+        super();
+
+        if (contentType.isNameable && (contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name)) {
+            this.setTitle(`Remove ${(contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name)}`);
+        } else {
+            this.setTitle(`Remove ${contentType.name}`);
+        }
+
+        var container = document.createElement('div');
+        container.style.padding = '16px';
+        container.innerText = 'Are you sure?';
+
+        this.setContent(container);
+
+        var saveButton = new Button('Remove')
+            .setPrimary()
+            .onClick(() =>
+                fetch('Content/RemoveContent', {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: content.id,
+                        contentTypeId: contentType.id
+                    })
+                })
+                    .catch(error => notificationManager.addNotification(item => item.setText(`Could not remove content (${error.name}: ${error.message})`)))
+                    .then(() => {
+                        var name;
+
+                        if (contentType.isNameable) {
+                            name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+
+                            if (!name) {
+                                name = content.id;
+                            }
+                        } else {
+                            name = content.id;
+                        }
+
+                        notificationManager.addNotification(item => item.setText(`Removed ${contentType.name} ${name}`));
+                        this.onCompleteCallbacks.forEach(callback => callback(content));
+                        app.close(this);
+                    })
+            );
+        var cancelButton = new Button('Cancel').onClick(() => app.close(this));
+
+        this.setFooter(saveButton, cancelButton);
+    }
+
+    onComplete(callback) {
+        this.onCompleteCallbacks.push(callback);
+
+        return this;
+    }
+}
+
+
+
 /* EDIT CONTENT */
 
 class EditContentBlade extends Blade {
-    onSaveCallbacks = [];
+    onCompleteCallbacks = [];
 
     constructor(app, contentType, formBuilder, content) {
         super();
@@ -233,6 +337,7 @@ class EditContentBlade extends Blade {
                         'Content-Type': 'application/json'
                     }
                 })
+                    .catch(error => notificationManager.addNotification(item => item.setText(`Could not get URL (${error.name}: ${error.message})`)))
                     .then(response => response.text())
                     .then(url => {
                         if (!url) {
@@ -316,10 +421,26 @@ class EditContentBlade extends Blade {
                         content: JSON.stringify(content)
                     })
                 })
-                    .then(() => this.onSaveCallbacks.forEach(callback => callback(content)))
+                    .catch(error => notificationManager.addNotification(item => item.setText(`Could not save content (${error.name}: ${error.message})`)))
+                    .then(() => this.onCompleteCallbacks.forEach(callback => callback(content)))
                     .then(() => {
+                        var name;
+
+                        if (contentType.isNameable) {
+                            name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+
+                            if (!name) {
+                                name = content.id || ''; // if content is newly created, id will still be null
+                            }
+                        } else {
+                            name = content.id;
+                        }
+
                         if (!content.id) {
+                            notificationManager.addNotification(item => item.setText(`Created ${contentType.name} ${name}`));
                             app.close(this);
+                        } else {
+                            notificationManager.addNotification(item => item.setText(`Updated ${contentType.name} ${name}`));
                         }
                     })
             );
@@ -367,8 +488,8 @@ class EditContentBlade extends Blade {
         this.setFooter(saveButton, cancelButton, moreButton);
     }
 
-    onSave(callback) {
-        this.onSaveCallbacks.push(callback);
+    onComplete(callback) {
+        this.onCompleteCallbacks.push(callback);
 
         return this;
     }

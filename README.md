@@ -8,7 +8,7 @@ Install Cloudy.CMS and Cloudy.CMS.UI from NuGet.
 
 In Startup.cs, under ConfigureServices, do:
 
-    services.AddControllers();
+    services.AddMvc();
     services.AddCloudy(cloudy => cloudy.AddAdmin());
 
 And in the Configure method, do:
