@@ -145,7 +145,7 @@ class ListContentBlade extends Blade {
         var formFieldsPromise = formBuilder.fieldModels;
 
         var update = () => {
-            var contentListPromise = fetch(`ContentApp/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
+            var contentListPromise = fetch(`Content/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
                 .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content list (${error.name}: ${error.message})`)))
                 .then(response => response.json());
 
