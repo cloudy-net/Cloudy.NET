@@ -25,10 +25,29 @@ namespace Cloudy.CMS.UI.IdentitySupport
         public async Task<object> ChangePassword([FromBody] ChangePassword input)
         {
             var user = await UserManager.FindByIdAsync(input.UserId);
+
+            if (await UserManager.HasPasswordAsync(user))
+            {
+                var removePasswordResult = await UserManager.RemovePasswordAsync(user);
+
+                if (!removePasswordResult.Succeeded)
+                {
+                    return new
+                    {
+                        success = false,
+                        errors = removePasswordResult.Errors,
+                    };
+                }
+            }
+
             var addPasswordResult = await UserManager.AddPasswordAsync(user, input.Password);
             if (!addPasswordResult.Succeeded)
             {
-                return addPasswordResult.Errors;
+                return new
+                {
+                    success = false,
+                    errors = addPasswordResult.Errors,
+                };
             }
 
             return new
