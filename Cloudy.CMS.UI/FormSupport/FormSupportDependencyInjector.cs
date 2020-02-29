@@ -26,8 +26,10 @@ namespace Cloudy.CMS.UI.FormSupport
             container.RegisterSingleton<IUIHintParser, UIHintParser>();
             container.RegisterSingleton<IUIHintDefinitionParser, UIHintDefinitionParser>();
             container.RegisterSingleton<IUIHintControlMatcher, UIHintControlMatcher>();
+            container.RegisterSingleton<IUIHintControlMatchEvaluator, UIHintControlMatchEvaluator>();
             container.RegisterSingleton<IExpressionParser, ExpressionParser>();
             container.RegisterSingleton<IUIHintControlMatchCreator, UIHintControlMatchCreator>();
+            container.RegisterSingleton<IUIHintControlMappingProvider, UIHintControlMappingProvider>();
             container.RegisterSingleton<ITypeControlMatcher, TypeControlMatcher>();
             container.RegisterSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
             container.RegisterSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();

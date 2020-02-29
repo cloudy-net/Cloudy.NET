@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
-using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 
 namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
@@ -14,7 +12,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControl
             var definition = mapping.UIHintDefinition;
             var parameters = new Dictionary<string, object>();
 
-            for (var i = 0; i < definition.Parameters.Count; i++)
+            for (var i = 0; i < uiHint.Parameters.Count; i++)
             {
                 parameters[definition.Parameters[i].Id] = uiHint.Parameters[i].Value;
             }

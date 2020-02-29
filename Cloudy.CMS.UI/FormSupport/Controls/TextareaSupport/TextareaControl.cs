@@ -6,7 +6,7 @@ using System.Text;
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Control("textarea", "FormSupport/Controls/textarea.js")]
-    [MapControlToUIHint("textarea(options)")]
+    [MapControlToUIHint("textarea(options?)")]
     public class TextareaControl
     {
     }
