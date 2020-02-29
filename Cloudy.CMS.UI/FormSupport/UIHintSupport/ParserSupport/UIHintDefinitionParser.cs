@@ -33,7 +33,15 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
             while (!parser.Is(')'))
             {
                 parser.SkipWhitespace();
-                var parameterId = parser.ReadUntil(',', ')', ':');
+                var parameterId = parser.ReadUntil(',', ')', ':', '?');
+                var optional = false;
+
+                if (parser.Is('?'))
+                {
+                    optional = true;
+                    parser.Skip();
+                }
+
                 var type = UIHintParameterType.Any;
 
                 parser.SkipWhitespace();
@@ -52,7 +60,7 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
                     type = Types[typeName];
                 }
 
-                parameters.Add(new UIHintParameterDefinition(parameterId, type));
+                parameters.Add(new UIHintParameterDefinition(parameterId, type, optional));
 
                 parser.SkipWhitespace();
 
