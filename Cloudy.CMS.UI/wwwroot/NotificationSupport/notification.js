@@ -30,34 +30,6 @@ class Notification {
 
         this.element.addEventListener('mouseover', stopTimeout);
         this.element.addEventListener('mouseout', startTimeout);
-
-        this.closeButton = document.createElement('poetry-ui-notification-close');
-        this.closeButton.setAttribute('tabindex', 0);
-        this.closeButton.addEventListener('click', event => {
-            event.stopPropagation();
-
-            this.close();
-        });
-        this.closeButton.addEventListener('keyup', event => {
-            if (event.keyCode != 13) {
-                return;
-            }
-
-            event.preventDefault();
-            this.closeButton.click();
-        });
-        this.element.appendChild(this.closeButton);
-        this.content = document.createElement('poetry-ui-notification-content');
-        this.element.appendChild(this.content);
-        this.text = document.createElement('poetry-ui-notification-text');
-        this.element.appendChild(this.text);
-        this.footer = document.createElement('poetry-ui-notification-footer');
-        this.element.appendChild(this.footer);
-        this.buttons = document.createElement('poetry-ui-notification-buttons');
-        this.footer.appendChild(this.buttons);
-        this.source = document.createElement('poetry-ui-notification-source');
-        this.source.setAttribute('tabindex', 0);
-        this.footer.appendChild(this.source);
     }
 
     close() {
@@ -74,26 +46,10 @@ class Notification {
         return this;
     }
 
-    setContent(...items) {
-        setContents(this.content, items);
-
-        return this;
-    }
-
     setText(...items) {
-        setContents(this.text, items);
-
-        return this;
-    }
-
-    setSource(...items) {
-        setContents(this.source, items);
-
-        return this;
-    }
-
-    setButtons(...items) {
-        setContents(this.buttons, items);
+        this.element.style.display = '';
+        [...this.element.children].forEach(c => this.element.removeChild(c));
+        items.forEach(item => this.element.append(item.element || item));
 
         return this;
     }
@@ -120,17 +76,3 @@ class Notification {
 }
 
 export default Notification;
-
-function setContents(container, items) {
-    items.forEach(item => {
-        if (item instanceof Node) {
-            container.appendChild(item);
-        } else if (item.appendTo) {
-            item.appendTo(container);
-        } else if (item.element instanceof Node) {
-            container.appendChild(item.element);
-        } else {
-            container.innerText = item;
-        }
-    });
-}
