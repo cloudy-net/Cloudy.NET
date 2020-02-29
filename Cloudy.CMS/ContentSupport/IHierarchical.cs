@@ -14,7 +14,7 @@ namespace Cloudy.CMS.ContentSupport
     public interface IHierarchical
     {
         [Display(GroupName = "Settings")]
-        [UIHint("dropdown(parent)")]
+        [UIHint("dropdown('parent')")]
         string ParentId { get; set; }
     }
 }

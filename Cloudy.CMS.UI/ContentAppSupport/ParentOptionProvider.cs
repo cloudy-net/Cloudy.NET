@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.Serialization;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
@@ -15,34 +16,36 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     {
         IDocumentFinder DocumentFinder { get; }
         IContentTypeProvider ContentTypeProvider { get; }
+        IContentDeserializer ContentDeserializer { get; }
 
-        public ParentOptionProvider(IDocumentFinder documentFinder, IContentTypeProvider contentTypeProvider)
+        public ParentOptionProvider(IDocumentFinder documentFinder, IContentTypeProvider contentTypeProvider, IContentDeserializer contentDeserializer)
         {
             DocumentFinder = documentFinder;
             ContentTypeProvider = contentTypeProvider;
+            ContentDeserializer = contentDeserializer;
         }
 
         public IEnumerable<Option> GetAll()
         {
             var contentTypes = ContentTypeProvider.GetAll().Where(t => typeof(IHierarchical).IsAssignableFrom(t.Type));
 
-            var documents = DocumentFinder.Find(ContainerConstants.Content).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypes.Select(t => t.Id)).Select<IContent, string>(x => x.Id).Select<INameable, string>(x => x.Name).GetResultAsync().Result;
-
             var result = new List<Option>();
 
-            result.Add(new Option("(root)", null));
-
-            foreach(var document in documents)
+            foreach (var contentType in contentTypes)
             {
-                var name = document.GlobalFacet.Interfaces.ContainsKey("INameable") &&
-                    document.GlobalFacet.Interfaces["INameable"].Properties.ContainsKey("Name") &&
-                    document.GlobalFacet.Interfaces["INameable"].Properties["Name"] is string ?
-                    (string)document.GlobalFacet.Interfaces["INameable"].Properties["Name"] :
-                    document.Id;
-                var option = new Option(name, document.Id);
+                var documents = DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.ContentTypeId, contentType.Id).GetResultAsync().Result.ToList();
 
-                result.Add(option);
+                foreach (var document in documents)
+                {
+                    var content = ContentDeserializer.Deserialize(document, contentType, DocumentLanguageConstants.Global);
+
+                    result.Add(new Option((content as INameable).Name ?? content.Id, content.Id));
+                }
             }
+
+            result = result.OrderBy(i => i.Value).ToList();
+
+            result.Insert(0, new Option("(root)", null));
 
             return result.AsReadOnly();
         }

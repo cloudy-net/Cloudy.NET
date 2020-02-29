@@ -6,7 +6,7 @@ using System.Text;
 namespace Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport
 {
     [Control("dropdown", "FormSupport/Controls/dropdown-control.js")]
-    [MapControlToUIHint("dropdown(provider)")]
+    [MapControlToUIHint("dropdown(provider:string)")]
     public class DropdownControl
     {
     }

@@ -10,10 +10,11 @@ using System.Threading.Tasks;
 namespace Website.AspNetCore
 {
     [ContentType("80ca82a2-b46e-4394-88e0-a77ae93a9366")]
-    public class Page : IContent, INameable, IRoutable
+    public class Page : IContent, INameable, IRoutable, IHierarchical
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }
+        public string ParentId { get; set; }
         public string Name { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
