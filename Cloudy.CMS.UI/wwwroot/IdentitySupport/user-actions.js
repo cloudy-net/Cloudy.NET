@@ -31,6 +31,7 @@ class ChangePasswordBlade extends Blade {
                 .then(result => {
                     if (result.success) {
                         notificationManager.addNotification(item => item.setText('Password changed.'));
+                        app.close(this);
                     } else {
                         var errors = document.createElement('ul');
                         result.errors.forEach(error => {
@@ -40,7 +41,6 @@ class ChangePasswordBlade extends Blade {
                         });
                         notificationManager.addNotification(item => item.setText('Error changing password:', errors));
                     }
-                    //app.close(this);
                 })
         };
 
