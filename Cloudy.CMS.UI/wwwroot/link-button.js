@@ -8,7 +8,9 @@ class LinkButton {
         this.element = document.createElement('a');
         this.element.classList.add('poetry-ui-button');
         this.element.href = url;
-        this.element.target = target;
+        if (target) {
+            this.element.target = target;
+        }
         this.element.innerText = text;
     }
 
