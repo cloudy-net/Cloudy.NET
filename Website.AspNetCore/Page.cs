@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Website.AspNetCore
 {
     [ContentType("80ca82a2-b46e-4394-88e0-a77ae93a9366")]
-    public class Page : IContent, INameable
+    public class Page : IContent, INameable, IRoutable
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }
@@ -34,12 +34,15 @@ namespace Website.AspNetCore
             public Item Item { get; set; }
         }
 
+        [Display(GroupName = "Examples")]
         public IEnumerable<string> Ids { get; set; }
-
+        [Display(GroupName = "Examples")]
         public IEnumerable<Item> Items { get; set; }
 
+        [Display(GroupName = "Examples")]
         [UIHint("table({Name:name,Price:price})")]
         public IEnumerable<Item> ItemsTable { get; set; }
+        public string UrlSegment { get; set; }
 
         [Form("d21d20a4-dc8a-415e-82c9-849037b972d0")]
         public class Item
