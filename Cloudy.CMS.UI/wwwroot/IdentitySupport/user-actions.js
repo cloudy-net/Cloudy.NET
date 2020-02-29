@@ -1,6 +1,7 @@
 ﻿import Blade from "../blade.js";
 import FormBuilder from "../FormSupport/form-builder.js";
 import Button from "../button.js";
+import notificationManager from "../NotificationSupport/notification-manager.js";
 
 export default (menu, user, blade, app) => menu.addItem(item => item.setText('Change password').onClick(() => app.openAfter(new ChangePasswordBlade(user, app), blade)));
 
@@ -27,8 +28,18 @@ class ChangePasswordBlade extends Blade {
                 body: JSON.stringify(target)
             })
                 .then(response => response.json())
-                .then(body => {
-                    console.log(body)
+                .then(result => {
+                    if (result.success) {
+                        notificationManager.addNotification(item => item.setText('Password changed.'));
+                    } else {
+                        var errors = document.createElement('ul');
+                        result.errors.forEach(error => {
+                            var item = document.createElement('li');
+                            item.innerText = error.description;
+                            errors.append(item);
+                        });
+                        notificationManager.addNotification(item => item.setText('Error changing password:', errors));
+                    }
                     //app.close(this);
                 })
         };
