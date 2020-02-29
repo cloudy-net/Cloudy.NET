@@ -1,11 +1,11 @@
-﻿using Poetry.ComponentSupport;
-using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.ComposableSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Poetry.UI.ScriptSupport
+namespace Cloudy.CMS.UI.ScriptSupport
 {
     public class ScriptCreator : IScriptCreator
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Poetry.DependencyInjectionSupport
+namespace Cloudy.CMS.DependencyInjectionSupport
 {
     public class DependencyInjectorProvider : IDependencyInjectorProvider
     {

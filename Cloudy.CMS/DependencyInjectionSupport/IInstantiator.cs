@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Poetry.DependencyInjectionSupport
+namespace Cloudy.CMS.DependencyInjectionSupport
 {
     public interface IInstantiator
     {

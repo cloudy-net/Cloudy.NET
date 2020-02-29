@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Diagnostics;
 
-namespace Poetry.ComponentSupport
+namespace Cloudy.CMS.ComponentSupport
 {
     [DebuggerDisplay("{Id}")]
     public class ComponentDescriptor

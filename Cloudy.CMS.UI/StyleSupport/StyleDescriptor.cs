@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace Poetry.UI.StyleSupport
+namespace Cloudy.CMS.UI.StyleSupport
 {
     [DebuggerDisplay("{Path}")]
     public class StyleDescriptor

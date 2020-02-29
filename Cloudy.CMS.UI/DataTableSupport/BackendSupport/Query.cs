@@ -1,4 +1,4 @@
-﻿namespace Poetry.UI.DataTableSupport.BackendSupport
+﻿namespace Cloudy.CMS.UI.DataTableSupport.BackendSupport
 {
     public class Query
     {

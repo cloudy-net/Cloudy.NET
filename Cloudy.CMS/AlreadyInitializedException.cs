@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry
+namespace Cloudy.CMS
 {
     public class AlreadyInitializedException : Exception
     {
-        public AlreadyInitializedException() : base("Poetry is already initialized") { }
+        public AlreadyInitializedException() : base("Cloudy.CMS is already initialized") { }
     }
 }

@@ -10,18 +10,18 @@ class DataTable {
         this.columns = [];
         this.page = 1;
 
-        this.element = document.createElement('poetry-ui-data-table');
+        this.element = document.createElement('cloudy-ui-data-table');
 
-        this.header = document.createElement('poetry-ui-data-table-header');
+        this.header = document.createElement('cloudy-ui-data-table-header');
         this.header.style.display = 'none';
         this.element.appendChild(this.header);
 
         this.tableOuter = document.createElement('div');
-        this.tableOuter.classList.add('poetry-ui-data-table-outer');
+        this.tableOuter.classList.add('cloudy-ui-data-table-outer');
         this.element.appendChild(this.tableOuter);
 
         var table = document.createElement('table');
-        table.classList.add('poetry-ui-data-table');
+        table.classList.add('cloudy-ui-data-table');
         this.tableOuter.appendChild(table);
 
         var tableHeader = document.createElement('thead');
@@ -33,10 +33,10 @@ class DataTable {
         this.tableBody = document.createElement('tbody');
         table.appendChild(this.tableBody);
 
-        this.footer = document.createElement('poetry-ui-data-table-footer');
+        this.footer = document.createElement('cloudy-ui-data-table-footer');
         this.element.appendChild(this.footer);
 
-        this.paging = document.createElement('poetry-ui-data-table-paging');
+        this.paging = document.createElement('cloudy-ui-data-table-paging');
         this.footer.appendChild(this.paging);
     }
 
@@ -59,8 +59,8 @@ class DataTable {
     }
 
     update() {
-        this.element.classList.add('poetry-ui-loading');
-        this.element.classList.remove('poetry-ui-not-loading');
+        this.element.classList.add('cloudy-ui-loading');
+        this.element.classList.remove('cloudy-ui-not-loading');
 
         this.backend.load({
             page: this.page,
@@ -68,8 +68,8 @@ class DataTable {
             sortDirection: this.sortDirection,
         })
             .then(response => {
-                this.element.classList.remove('poetry-ui-loading');
-                this.element.classList.add('poetry-ui-not-loading');
+                this.element.classList.remove('cloudy-ui-loading');
+                this.element.classList.add('cloudy-ui-not-loading');
 
                 if (!this.columnHeaderRow.children.length) {
                     var shrinkColumnCount = this.columns.filter(a => a.shrink).length;
@@ -87,11 +87,11 @@ class DataTable {
                         }
 
                         if (column.sorting) {
-                            var sorter = document.createElement('poetry-ui-data-table-sorter');
+                            var sorter = document.createElement('cloudy-ui-data-table-sorter');
 
                             sorter.tabIndex = 0;
                             sorter.addEventListener('click', () => {
-                                [...this.columnHeaderRow.querySelectorAll('poetry-ui-data-table-sorter')].forEach(e => e.classList.remove('poetry-ui-active', 'poetry-ui-descending'));
+                                [...this.columnHeaderRow.querySelectorAll('cloudy-ui-data-table-sorter')].forEach(e => e.classList.remove('cloudy-ui-active', 'cloudy-ui-descending'));
 
                                 if (this.sortBy == column.sorting && this.sortDirection == 'descending') {
                                     this.sortBy = null;
@@ -102,13 +102,13 @@ class DataTable {
                                     return;
                                 }
 
-                                sorter.classList.add('poetry-ui-active');
+                                sorter.classList.add('cloudy-ui-active');
 
                                 if (this.sortBy != column.sorting) {
                                     this.sortBy = column.sorting;
                                     this.sortDirection = 'ascending';
 
-                                    sorter.classList.remove('poetry-ui-descending');
+                                    sorter.classList.remove('cloudy-ui-descending');
 
                                     this.update();
 
@@ -118,7 +118,7 @@ class DataTable {
                                 this.sortDirection = this.sortDirection == 'ascending' ? 'descending' : 'ascending';
 
                                 if (this.sortDirection == 'descending') {
-                                    sorter.classList.add('poetry-ui-descending');
+                                    sorter.classList.add('cloudy-ui-descending');
                                 }
 
                                 this.update();
@@ -151,7 +151,7 @@ class DataTable {
                         var element = document.createElement('td');
 
                         if (column.buttonColumn) {
-                            element.classList.add('poetry-ui-data-table-button-column');
+                            element.classList.add('cloudy-ui-data-table-button-column');
                         }
 
                         if (column.contentGenerator) {
@@ -212,7 +212,7 @@ class DataTable {
                         this.page = this.page - 1;
                         this.update();
                     })
-                    .addClass('poetry-ui-data-table-paging-previous')
+                    .addClass('cloudy-ui-data-table-paging-previous')
                     .setDisabled(this.page == 1)
                     .appendTo(this.paging);
 
@@ -226,7 +226,7 @@ class DataTable {
                             this.page = page;
                             this.update();
                         })
-                        .addClass('poetry-ui-active', this.page == page)
+                        .addClass('cloudy-ui-active', this.page == page)
                         .appendTo(this.paging);
 
                     if (this.page == page) {
@@ -243,7 +243,7 @@ class DataTable {
                         this.page = this.page + 1;
                         this.update();
                     })
-                    .addClass('poetry-ui-data-table-paging-next')
+                    .addClass('cloudy-ui-data-table-paging-next')
                     .setDisabled(this.page == response.pageCount)
                     .appendTo(this.paging);
             });

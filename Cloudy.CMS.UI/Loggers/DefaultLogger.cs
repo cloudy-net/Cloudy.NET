@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Poetry.UI.AspNetCore.Loggers
+namespace Cloudy.CMS.UI.AspNetCore.Loggers
 {
     public class DefaultLogger<T> : ILogger<T>
     {

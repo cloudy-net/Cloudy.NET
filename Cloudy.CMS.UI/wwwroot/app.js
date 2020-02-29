@@ -6,8 +6,8 @@
 class App {
     constructor() {
         this.blades = [];
-        this.element = document.createElement('poetry-ui-app');
-        this.element.addEventListener('poetry-ui-close-blade', event => this.close.apply(this, [event.detail.blade, ...event.detail.parameters]));
+        this.element = document.createElement('cloudy-ui-app');
+        this.element.addEventListener('cloudy-ui-close-blade', event => this.close.apply(this, [event.detail.blade, ...event.detail.parameters]));
     }
 
     open(blade) {

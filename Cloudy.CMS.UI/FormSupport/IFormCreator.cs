@@ -1,9 +1,9 @@
-﻿using Poetry.ComponentSupport;
-using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.ComposableSupport;
 using System;
 using System.Collections.Generic;
 
-namespace Poetry.UI.FormSupport
+namespace Cloudy.CMS.UI.FormSupport
 {
     public interface IFormCreator : IComposable
     {

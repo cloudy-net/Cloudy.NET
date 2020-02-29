@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.StyleSupport
+namespace Cloudy.CMS.UI.StyleSupport
 {
     public class AbsoluteStylePathException : Exception
     {

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Poetry.ComponentSupport.MissingComponentAttributeCheckerSupport;
-using Poetry.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
-using Poetry.ComponentSupport.DuplicateComponentIdCheckerSupport;
+using Cloudy.CMS.ComponentSupport.MissingComponentAttributeCheckerSupport;
+using Cloudy.CMS.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
+using Cloudy.CMS.ComponentSupport.DuplicateComponentIdCheckerSupport;
 using Cloudy.CMS.ComponentSupport;
 
-namespace Poetry.ComponentSupport
+namespace Cloudy.CMS.ComponentSupport
 {
     public class ComponentCreator : IComponentCreator
     {

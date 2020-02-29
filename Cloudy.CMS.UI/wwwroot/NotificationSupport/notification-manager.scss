@@ -4,7 +4,7 @@
 
 /* NOTIFICATIONS */
 
-poetry-ui-notifications {
+cloudy-ui-notifications {
     position: fixed;
     right: 16px;
     bottom: 16px;
@@ -20,7 +20,7 @@ poetry-ui-notifications {
 
 /* NOTIFICATION */
 
-poetry-ui-notification {
+cloudy-ui-notification {
     overflow: hidden;
     flex-grow: 1;
     position: relative;
@@ -49,17 +49,17 @@ poetry-ui-notification {
 }
 
 @media(min-width: 567px) {
-    poetry-ui-notification {
+    cloudy-ui-notification {
         flex-grow: 0;
         width: 288px;
     }
 }
 
-poetry-ui-notification ul {
+cloudy-ui-notification ul {
     margin: 0;
     padding-left: 20px;
 }
 
-poetry-ui-notification li {
+cloudy-ui-notification li {
     margin: 8px 0 0;
 }

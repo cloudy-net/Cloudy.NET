@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.DependencyInjectionSupport
+namespace Cloudy.CMS.DependencyInjectionSupport
 {
     public interface IResolver
     {

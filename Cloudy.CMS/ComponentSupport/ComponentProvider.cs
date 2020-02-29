@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Poetry.ComponentSupport
+namespace Cloudy.CMS.ComponentSupport
 {
     public class ComponentProvider : IComponentProvider
     {

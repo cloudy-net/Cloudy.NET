@@ -1,9 +1,9 @@
-﻿using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.ComposableSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.FormSupport.Controls.DropdownControlSupport
+namespace Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport
 {
     public interface IOptionProvider : IComposable
     {

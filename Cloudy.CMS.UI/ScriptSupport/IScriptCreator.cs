@@ -1,10 +1,10 @@
-﻿using Poetry.ComponentSupport;
-using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.ComposableSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.ScriptSupport
+namespace Cloudy.CMS.UI.ScriptSupport
 {
     public interface IScriptCreator : IComposable
     {

@@ -1,4 +1,4 @@
-﻿poetry-ui-login-container {
+﻿cloudy-ui-login-container {
   position: absolute;
   top: 0;
   right: 0;
@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center; }
 
-.poetry-ui-login {
+.cloudy-ui-login {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -18,7 +18,7 @@
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; }
 
-poetry-ui-login-header {
+cloudy-ui-login-header {
   padding: 16px 16px 0;
   font-size: 1.25rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -26,9 +26,9 @@ poetry-ui-login-header {
   line-height: 1.6;
   letter-spacing: 0.0075em; }
 
-poetry-ui-login-footer {
+cloudy-ui-login-footer {
   padding: 0 16px 16px;
   display: flex;
   flex-direction: column; }
-  poetry-ui-login-footer .poetry-ui-button {
+  cloudy-ui-login-footer .cloudy-ui-button {
     margin-left: auto; }

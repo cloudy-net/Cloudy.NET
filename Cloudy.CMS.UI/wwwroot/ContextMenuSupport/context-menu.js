@@ -11,9 +11,9 @@ class ContextMenu {
     constructor() {
         this.element = document.createElement('div');
 
-        this.element.classList.add('poetry-ui-context-menu-outer');
+        this.element.classList.add('cloudy-ui-context-menu-outer');
 
-        this.button = document.createElement('poetry-ui-context-menu-button');
+        this.button = document.createElement('cloudy-ui-context-menu-button');
         this.button.tabIndex = 0;
         this.button.addEventListener("keyup", event => {
             if (event.keyCode != 13) {
@@ -24,21 +24,21 @@ class ContextMenu {
         });
 
         var remove = () => {
-            this.button.classList.remove('poetry-ui-active');
+            this.button.classList.remove('cloudy-ui-active');
             this.menu.remove();
             this.menu = null;
             this.list = null;
         };
 
         this.button.addEventListener('click', () => {
-            if (this.button.classList.contains('poetry-ui-active')) {
+            if (this.button.classList.contains('cloudy-ui-active')) {
                 remove();
                 return;
             }
 
-            this.button.classList.add('poetry-ui-active');
+            this.button.classList.add('cloudy-ui-active');
 
-            this.menu = document.createElement('poetry-ui-context-menu');
+            this.menu = document.createElement('cloudy-ui-context-menu');
             this.menu.style.opacity = 'none';
             this.list = new List();
             this.menu.append(this.list.element);
@@ -68,7 +68,7 @@ class ContextMenu {
         this.element.appendChild(this.button);
 
         DocumentActivityEvent.addCallback(event => {
-            if (!this.button.classList.contains('poetry-ui-active')) {
+            if (!this.button.classList.contains('cloudy-ui-active')) {
                 return;
             }
 
@@ -90,7 +90,7 @@ class ContextMenu {
         this.generators.push(() => this.list.addItem(item => {
             configurator(item);
             item.onClick(() => {
-                this.button.classList.remove('poetry-ui-active');
+                this.button.classList.remove('cloudy-ui-active');
                 this.menu.style.display = 'none';
             });
         }));

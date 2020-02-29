@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Poetry.ComponentSupport;
+using Cloudy.CMS.ComponentSupport;
 
-namespace Poetry.UI.StyleSupport
+namespace Cloudy.CMS.UI.StyleSupport
 {
     public class StyleProvider : IStyleProvider
     {

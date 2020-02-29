@@ -7,14 +7,14 @@ class DataTableButton {
     constructor(text, url = null, target = null) {
         if (url) {
             this.element = document.createElement('a');
-            this.element.classList.add('poetry-ui-data-table-button');
+            this.element.classList.add('cloudy-ui-data-table-button');
             this.element.setAttribute('href', url);
 
             if (target) {
                 this.element.setAttribute('target', target);
             }
         } else {
-            this.element = document.createElement('poetry-ui-data-table-button');
+            this.element = document.createElement('cloudy-ui-data-table-button');
             this.element.tabIndex = 0;
             this.element.addEventListener("keyup", event => {
                 if (event.keyCode != 13) {
@@ -77,9 +77,9 @@ class DataTableButton {
 
     setActive(test = true) {
         if (test) {
-            this.element.classList.add('poetry-ui-active');
+            this.element.classList.add('cloudy-ui-active');
         } else {
-            this.element.classList.remove('poetry-ui-active');
+            this.element.classList.remove('cloudy-ui-active');
         }
 
         return this;

@@ -1,9 +1,9 @@
-﻿using Poetry.UI.FormSupport.ControlSupport;
+﻿using Cloudy.CMS.UI.FormSupport.ControlSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.FormSupport.Controls.TextControlSupport
+namespace Cloudy.CMS.UI.FormSupport.Controls.TextControlSupport
 {
     [Control("text", "FormSupport/Controls/text-control.js")]
     [MapControlToType(typeof(double))]

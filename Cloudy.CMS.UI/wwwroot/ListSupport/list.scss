@@ -4,12 +4,12 @@
 
 /* LIST */
 
-poetry-ui-list {
+cloudy-ui-list {
     display: block;
     padding: 8px 0;
 }
 
-poetry-ui-list-sub-header {
+cloudy-ui-list-sub-header {
     display: block;
     padding: 15px 16px 15px;
     color: rgba(0, 0, 0, 0.4);
@@ -18,7 +18,7 @@ poetry-ui-list-sub-header {
     line-height: 18px;
 }
 
-poetry-ui-list-item {
+cloudy-ui-list-item {
     display: flex;
     align-items: center;
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -28,13 +28,13 @@ poetry-ui-list-item {
         background-color: rgba(0, 0, 0, 0.04);
     }
 
-    &.poetry-ui-active,
+    &.cloudy-ui-active,
     &:focus {
         background-color: rgba(0, 0, 0, 0.1);
     }
 }
 
-poetry-ui-list-item-content {
+cloudy-ui-list-item-content {
     flex-grow: 1;
     align-self: stretch;
     display: block;
@@ -45,17 +45,17 @@ poetry-ui-list-item-content {
         outline: none;
     }
 
-    poetry-ui-list-item:hover > &,
-    poetry-ui-list-item.poetry-ui-active > & {
+    cloudy-ui-list-item:hover > &,
+    cloudy-ui-list-item.cloudy-ui-active > & {
         background: none;
     }
 }
 
-poetry-ui-list-item-text {
+cloudy-ui-list-item-text {
     display: block;
 }
 
-poetry-ui-list-item-sub-text {
+cloudy-ui-list-item-sub-text {
     display: block;
     font-size: 0.875rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;

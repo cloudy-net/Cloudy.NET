@@ -1,10 +1,10 @@
-﻿using Poetry.ComponentSupport;
+﻿using Cloudy.CMS.ComponentSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Poetry.UI.StyleSupport
+namespace Cloudy.CMS.UI.StyleSupport
 {
     public class StyleCreator : IStyleCreator
     {

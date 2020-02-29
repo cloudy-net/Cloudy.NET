@@ -1,8 +1,8 @@
-﻿using Poetry.ComponentSupport;
-using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.ComposableSupport;
 using System.Collections.Generic;
 
-namespace Poetry.UI.DataTableSupport.BackendSupport
+namespace Cloudy.CMS.UI.DataTableSupport.BackendSupport
 {
     public interface IBackendCreator : IComposable
     {

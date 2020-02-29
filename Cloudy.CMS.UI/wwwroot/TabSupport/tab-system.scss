@@ -4,12 +4,12 @@
 
 /* TAB SYSTEM */
 
-poetry-ui-tab-system {
+cloudy-ui-tab-system {
     display: block;
     padding: 8px 0;
 }
 
-poetry-ui-tab {
+cloudy-ui-tab {
     display: inline-block;
     min-width: 100px;
     max-width: 264px;
@@ -40,11 +40,11 @@ poetry-ui-tab {
         outline: none;
     }
 
-    &.poetry-ui-active {
+    &.cloudy-ui-active {
         border-bottom-color: #1976d2;
     }
 }
 
-poetry-ui-tab-panel {
+cloudy-ui-tab-panel {
     display: block;
 }

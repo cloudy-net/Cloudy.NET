@@ -4,7 +4,7 @@
 
 /* FORM */
 
-.poetry-ui-form {
+.cloudy-ui-form {
     padding: 16px;
 }
 
@@ -12,7 +12,7 @@
 
 /* FIELD */
 
-.poetry-ui-form-field {
+.cloudy-ui-form-field {
     margin: 0;
     padding: 0;
     border: none;
@@ -22,7 +22,7 @@
     }
 }
 
-fieldset.poetry-ui-form-field {
+fieldset.cloudy-ui-form-field {
     min-inline-size: unset;
 }
 
@@ -30,7 +30,7 @@ fieldset.poetry-ui-form-field {
 
 /* LABEL */
 
-.poetry-ui-form-field-label {
+.cloudy-ui-form-field-label {
     margin-bottom: 8px;
     display: block;
     padding: 0;
@@ -41,20 +41,20 @@ fieldset.poetry-ui-form-field {
     line-height: 1;
     letter-spacing: 0.00938em;
 
-    &.poetry-ui-enlargeable-label {
+    &.cloudy-ui-enlargeable-label {
         margin-bottom: 0;
         transition: color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
         transform: translate(0, 1.5px) scale(0.75);
         transform-origin: top left;
         color: rgba(0, 0, 0, 0.54);
 
-        &.poetry-ui-enlarge-label {
+        &.cloudy-ui-enlarge-label {
             transform: translate(0, 24px) scale(1);
             cursor: text;
         }
     }
 
-    &.poetry-ui-focus {
+    &.cloudy-ui-focus {
         color: $bright-blue;
     }
 }
@@ -63,7 +63,7 @@ fieldset.poetry-ui-form-field {
 
 /* INPUT */
 
-.poetry-ui-form-input {
+.cloudy-ui-form-input {
     box-sizing: content-box;
     margin: 0;
     display: block;
@@ -77,19 +77,19 @@ fieldset.poetry-ui-form-field {
     font: inherit;
     color: currentColor;
 
-    .poetry-ui-form-field.poetry-ui-simple:hover &,
+    .cloudy-ui-form-field.cloudy-ui-simple:hover &,
     &:hover {
         border-bottom-color: black;
     }
 
     &:focus,
-    .poetry-ui-form-field.poetry-ui-simple:hover &:focus {
+    .cloudy-ui-form-field.cloudy-ui-simple:hover &:focus {
         outline: none;
         border-bottom-color: #1976d2;
     }
 }
 
-textarea.poetry-ui-form-input {
+textarea.cloudy-ui-form-input {
     height: auto;
     word-break: break-all;
 }
@@ -98,17 +98,17 @@ textarea.poetry-ui-form-input {
 
 /* GRAPHICAL CHECKBOX */
 
-poetry-ui-checkbox-container {
+cloudy-ui-checkbox-container {
     margin-left: -12px;
     display: flex;
 }
 
-.poetry-ui-checkbox {
+.cloudy-ui-checkbox {
     opacity: 0;
     position: absolute;
 }
 
-.poetry-ui-graphical-checkbox {
+.cloudy-ui-graphical-checkbox {
     flex-grow: 0;
     display: block;
     width: 42px;
@@ -125,16 +125,16 @@ poetry-ui-checkbox-container {
         background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 3H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-9 14l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L19 8l-9 9z' fill='%231976d2'/%3E%3C/svg%3E");
     }
 
-    poetry-ui-checkbox-container:hover & {
+    cloudy-ui-checkbox-container:hover & {
         background-color: rgba(0, 0, 0, 0.04);
     }
 }
 
-poetry-ui-checkbox-label {
+cloudy-ui-checkbox-label {
     flex-grow: 1;
     padding: 9px 0;
     
-    .poetry-ui-checkbox:focus + .poetry-ui-graphical-checkbox + & {
+    .cloudy-ui-checkbox:focus + .cloudy-ui-graphical-checkbox + & {
         color: $bright-blue;
     }
 }
@@ -143,36 +143,36 @@ poetry-ui-checkbox-label {
 
 /* SORTABLE FIELD */
 
-poetry-ui-sortable {
+cloudy-ui-sortable {
     display: block;
 }
 
-poetry-ui-sortable-items {
+cloudy-ui-sortable-items {
     margin-bottom: 0.5rem;
     display: block;
 }
 
-poetry-ui-sortable-item {
+cloudy-ui-sortable-item {
     display: flex;
 }
 
-poetry-ui-sortable-item-field {
+cloudy-ui-sortable-item-field {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-poetry-ui-sortable-item-action {
+cloudy-ui-sortable-item-action {
     flex-grow: 0;
 }
 
-poetry-ui-sortable-item-form {
+cloudy-ui-sortable-item-form {
     flex: 1;
     padding-left: 2px;
 }
 
-poetry-ui-sortable-buttons {
+cloudy-ui-sortable-buttons {
     display: block;
     font-size: $small-font;
     text-align: right;
@@ -182,28 +182,28 @@ poetry-ui-sortable-buttons {
 
 /* EMBEDDED FORM */
 
-.poetry-ui-embedded-form-label {
+.cloudy-ui-embedded-form-label {
     display: flex;
     
-    .poetry-ui-form-field-label {
+    .cloudy-ui-form-field-label {
         flex: 1 1 auto;
     }
 }
 
-.poetry-ui-embedded-form,
-poetry-ui-sortable-item-form {
+.cloudy-ui-embedded-form,
+cloudy-ui-sortable-item-form {
     padding: 16px;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.04);
 }
 
-poetry-ui-sortable-item-form {
+cloudy-ui-sortable-item-form {
     margin-bottom: 8px;
     display: flex;
     padding-right: 2px;
 }
 
-poetry-ui-sortable-item-form .poetry-ui-embedded-form {
+cloudy-ui-sortable-item-form .cloudy-ui-embedded-form {
     flex: 1;
     padding: 0;
     border-radius: 0;
@@ -214,18 +214,18 @@ poetry-ui-sortable-item-form .poetry-ui-embedded-form {
 
 /* FORM TABLE */
 
-poetry-ui-form-table {
-    poetry-ui-data-table-header {
+cloudy-ui-form-table {
+    cloudy-ui-data-table-header {
         padding-left: 16px;
         padding-right: 16px;
     }
 
-    > poetry-ui-data-table {
+    > cloudy-ui-data-table {
         margin-left: -16px;
         margin-right: -16px;
     }
 
-    poetry-ui-data-table-footer {
+    cloudy-ui-data-table-footer {
         padding-left: 16px;
         padding-right: 16px;
     }

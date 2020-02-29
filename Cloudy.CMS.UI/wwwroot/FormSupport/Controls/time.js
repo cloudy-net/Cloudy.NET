@@ -3,7 +3,7 @@
 class TimeControl extends FieldControl {
     constructor(fieldModel, value, app) {
         var input = document.createElement('input');
-        input.classList.add('poetry-ui-form-input');
+        input.classList.add('cloudy-ui-form-input');
         input.type = 'time';
         input.value = value || null;
 

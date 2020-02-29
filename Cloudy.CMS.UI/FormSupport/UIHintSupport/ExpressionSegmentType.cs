@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Poetry.UI.FormSupport.UIHintSupport
+namespace Cloudy.CMS.UI.FormSupport.UIHintSupport
 {
     public enum ExpressionSegmentType
     {

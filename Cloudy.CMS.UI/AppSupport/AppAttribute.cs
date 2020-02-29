@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Poetry.UI.AppSupport
+namespace Cloudy.CMS.UI.AppSupport
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class AppAttribute : Attribute {

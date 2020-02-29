@@ -32,10 +32,10 @@ class ListContentTypesBlade extends Blade {
                 .then(response => response.json())
                 .then(contentTypes => {
                     if (!contentTypes.length) {
-                        var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
-                        var header = '<h2 class="poetry-ui-help-heading">Welcome to your new home!</h2>';
+                        var image = `<img class="cloudy-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
+                        var header = '<h2 class="cloudy-ui-help-heading">Welcome to your new home!</h2>';
                         var text = '<p>It\'s time to create your first content type:</p>';
-                        var code = `<pre class="poetry-ui-help-code">[ContentType("${guid}")]\n` +
+                        var code = `<pre class="cloudy-ui-help-code">[ContentType("${guid}")]\n` +
                             'public class Page : IContent\n' +
                             '{\n' +
                             '    public string Id { get; set; }\n' +
@@ -43,7 +43,7 @@ class ListContentTypesBlade extends Blade {
                             '}</pre>';
                         var textAfterCode = '<p>Save it, build it, and come back here!</p>';
 
-                        var helpContainer = document.createElement('poetry-ui-help-container');
+                        var helpContainer = document.createElement('cloudy-ui-help-container');
                         helpContainer.innerHTML = image + header + text + code + textAfterCode;
 
                         var reloadButton = new Button('Done').setPrimary().onClick(() => {

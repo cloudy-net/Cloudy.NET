@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.ComposableSupport
+namespace Cloudy.CMS.ComposableSupport
 {
     public interface IComposableProvider
     {

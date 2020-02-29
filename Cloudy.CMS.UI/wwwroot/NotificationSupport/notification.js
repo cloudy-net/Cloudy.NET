@@ -5,10 +5,10 @@
 
 class Notification {
     constructor() {
-        this.element = document.createElement('poetry-ui-notification');
+        this.element = document.createElement('cloudy-ui-notification');
         this.element.setAttribute('tabindex', 0);
         this.element.addEventListener('click', event => {
-            if (event.target.matches('poetry-ui-button')) {
+            if (event.target.matches('cloudy-ui-button')) {
                 return;
             }
 

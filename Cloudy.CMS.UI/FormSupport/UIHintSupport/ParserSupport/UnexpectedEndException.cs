@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Poetry.UI.FormSupport.UIHintSupport.ParserSupport
+namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 {
     public class UnexpectedEndException : Exception
     {

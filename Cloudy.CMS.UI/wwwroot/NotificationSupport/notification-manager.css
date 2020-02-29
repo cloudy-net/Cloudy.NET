@@ -1,6 +1,6 @@
 ﻿/* VARIABLES */
 /* NOTIFICATIONS */
-poetry-ui-notifications {
+cloudy-ui-notifications {
   position: fixed;
   right: 16px;
   bottom: 16px;
@@ -12,7 +12,7 @@ poetry-ui-notifications {
   justify-content: center; }
 
 /* NOTIFICATION */
-poetry-ui-notification {
+cloudy-ui-notification {
   overflow: hidden;
   flex-grow: 1;
   position: relative;
@@ -30,19 +30,19 @@ poetry-ui-notification {
   pointer-events: all;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
   transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; }
-  poetry-ui-notification:focus {
+  cloudy-ui-notification:focus {
     outline: none; }
-  poetry-ui-notification + poetry-ui-notification {
+  cloudy-ui-notification + cloudy-ui-notification {
     margin-top: 16px; }
 
 @media (min-width: 567px) {
-  poetry-ui-notification {
+  cloudy-ui-notification {
     flex-grow: 0;
     width: 288px; } }
 
-poetry-ui-notification ul {
+cloudy-ui-notification ul {
   margin: 0;
   padding-left: 20px; }
 
-poetry-ui-notification li {
+cloudy-ui-notification li {
   margin: 8px 0 0; }

@@ -1,10 +1,9 @@
 ﻿using Cloudy.CMS.ComponentSupport;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Poetry.ComponentSupport;
-using Poetry.ComponentSupport.DuplicateComponentIdCheckerSupport;
-using Poetry.ComponentSupport.MissingComponentAttributeCheckerSupport;
-using Poetry.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
+using Cloudy.CMS.ComponentSupport.DuplicateComponentIdCheckerSupport;
+using Cloudy.CMS.ComponentSupport.MissingComponentAttributeCheckerSupport;
+using Cloudy.CMS.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;

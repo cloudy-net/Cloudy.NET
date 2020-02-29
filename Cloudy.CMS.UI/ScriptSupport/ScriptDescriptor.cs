@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Poetry.UI.ScriptSupport
+namespace Cloudy.CMS.UI.ScriptSupport
 {
     [DebuggerDisplay("{ComponentId}/{Path}")]
     public class ScriptDescriptor

@@ -7,7 +7,7 @@ class TextareaControl extends FieldControl {
         super(container);
 
         var input = document.createElement('textarea');
-        input.classList.add('poetry-ui-form-input');
+        input.classList.add('cloudy-ui-form-input');
         input.rows = fieldModel.descriptor.control.parameters.options && fieldModel.descriptor.control.parameters.options.rows ? fieldModel.descriptor.control.parameters.options.rows.value : 8;
         input.value = value || null;
         container.append(input);
@@ -22,28 +22,28 @@ class TextareaControl extends FieldControl {
         }
 
         var label = document.createElement('div');
-        label.classList.add('poetry-ui-form-field-label');
-        label.classList.add('poetry-ui-enlargeable-label');
+        label.classList.add('cloudy-ui-form-field-label');
+        label.classList.add('cloudy-ui-enlargeable-label');
         label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
         container.prepend(label);
 
         if (value == null) {
-            label.classList.add('poetry-ui-enlarge-label');
+            label.classList.add('cloudy-ui-enlarge-label');
         }
 
         input.addEventListener('focus', () => {
-            label.classList.add('poetry-ui-focus');
+            label.classList.add('cloudy-ui-focus');
 
             if (input.value == '') {
-                label.classList.remove('poetry-ui-enlarge-label');
+                label.classList.remove('cloudy-ui-enlarge-label');
             }
         });
 
         input.addEventListener('blur', () => {
-            label.classList.remove('poetry-ui-focus');
+            label.classList.remove('cloudy-ui-focus');
 
             if (input.value == '') {
-                label.classList.add('poetry-ui-enlarge-label');
+                label.classList.add('cloudy-ui-enlarge-label');
             }
         });
     }

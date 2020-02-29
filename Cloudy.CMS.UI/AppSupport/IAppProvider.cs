@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Poetry.ComponentSupport;
+using Cloudy.CMS.ComponentSupport;
 
-namespace Poetry.UI.AppSupport
+namespace Cloudy.CMS.UI.AppSupport
 {
     public interface IAppProvider
     {

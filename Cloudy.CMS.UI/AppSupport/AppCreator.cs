@@ -1,4 +1,4 @@
-﻿using Poetry.ComponentSupport;
+﻿using Cloudy.CMS.ComponentSupport;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Poetry.UI.AppSupport
+namespace Cloudy.CMS.UI.AppSupport
 {
     public class AppCreator : IAppCreator
     {

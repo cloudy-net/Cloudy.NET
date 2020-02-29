@@ -1,10 +1,10 @@
 ﻿/* VARIABLES */
 /* TAB SYSTEM */
-poetry-ui-tab-system {
+cloudy-ui-tab-system {
   display: block;
   padding: 8px 0; }
 
-poetry-ui-tab {
+cloudy-ui-tab {
   display: inline-block;
   min-width: 100px;
   max-width: 264px;
@@ -22,14 +22,14 @@ poetry-ui-tab {
   text-align: center;
   cursor: pointer;
   user-select: none; }
-  poetry-ui-tab:hover {
+  cloudy-ui-tab:hover {
     background-color: rgba(0, 0, 0, 0.04); }
-  poetry-ui-tab:focus {
+  cloudy-ui-tab:focus {
     background-color: rgba(0, 0, 0, 0.1); }
-  poetry-ui-tab:focus {
+  cloudy-ui-tab:focus {
     outline: none; }
-  poetry-ui-tab.poetry-ui-active {
+  cloudy-ui-tab.cloudy-ui-active {
     border-bottom-color: #1976d2; }
 
-poetry-ui-tab-panel {
+cloudy-ui-tab-panel {
   display: block; }

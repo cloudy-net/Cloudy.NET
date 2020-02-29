@@ -2,8 +2,8 @@
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Moq;
-using Poetry;
-using Poetry.ComponentSupport;
+using Cloudy.CMS;
+using Cloudy.CMS.ComponentSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;

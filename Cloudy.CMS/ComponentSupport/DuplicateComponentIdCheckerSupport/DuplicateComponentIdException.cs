@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Poetry.ComponentSupport.DuplicateComponentIdCheckerSupport
+namespace Cloudy.CMS.ComponentSupport.DuplicateComponentIdCheckerSupport
 {
     public class DuplicateComponentIdException : Exception
     {

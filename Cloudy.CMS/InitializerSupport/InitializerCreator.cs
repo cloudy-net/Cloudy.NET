@@ -1,11 +1,11 @@
-﻿using Poetry.ComponentSupport;
-using Poetry.DependencyInjectionSupport;
+﻿using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Poetry.InitializerSupport
+namespace Cloudy.CMS.InitializerSupport
 {
     public class InitializerCreator : IInitializerCreator
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Poetry.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport
+namespace Cloudy.CMS.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport
 {
     public class MultipleComponentsInSingleAssemblyChecker : IMultipleComponentsInSingleAssemblyChecker
     {

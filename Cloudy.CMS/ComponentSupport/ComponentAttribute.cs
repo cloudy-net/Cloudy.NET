@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.ComponentSupport
+namespace Cloudy.CMS.ComponentSupport
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ComponentAttribute : Attribute {

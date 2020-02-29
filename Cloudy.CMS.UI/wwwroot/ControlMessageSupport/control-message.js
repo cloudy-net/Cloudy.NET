@@ -6,7 +6,7 @@
 class ControlMessage {
     constructor(target, text) {
         this.target = target;
-        this.target.classList.add('poetry-ui-has-control-message');
+        this.target.classList.add('cloudy-ui-has-control-message');
         this.mouseOverCallback = () => {
             this.element.style.display = 'block';
         };
@@ -16,16 +16,16 @@ class ControlMessage {
         };
         this.target.addEventListener('mouseout', this.mouseOutCallback);
 
-        this.element = document.createElement('poetry-ui-control-message');
+        this.element = document.createElement('cloudy-ui-control-message');
         this.element.style.display = 'none';
         document.body.appendChild(this.element);
 
-        this.arrow = document.createElement('poetry-ui-control-message-arrow-outer');
-        this.arrow.appendChild(document.createElement('poetry-ui-control-message-arrow-1'));
-        this.arrow.appendChild(document.createElement('poetry-ui-control-message-arrow-2'));
+        this.arrow = document.createElement('cloudy-ui-control-message-arrow-outer');
+        this.arrow.appendChild(document.createElement('cloudy-ui-control-message-arrow-1'));
+        this.arrow.appendChild(document.createElement('cloudy-ui-control-message-arrow-2'));
         this.element.appendChild(this.arrow);
 
-        this.text = document.createElement('poetry-ui-control-message-text');
+        this.text = document.createElement('cloudy-ui-control-message-text');
         this.element.appendChild(this.text);
         this.text.innerText = text;
 
@@ -55,7 +55,7 @@ class ControlMessage {
     }
 
     remove() {
-        this.target.classList.remove('poetry-ui-has-control-message');
+        this.target.classList.remove('cloudy-ui-has-control-message');
         this.target.removeEventListener('mouseover', this.mouseOverCallback);
         this.target.removeEventListener('mouseout', this.mouseOutCallback);
         this.element.remove();

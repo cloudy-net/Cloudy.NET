@@ -74,7 +74,7 @@ td, th {
 
 /* PORTAL */
 
-poetry-ui-portal {
+cloudy-ui-portal {
     display: block;
 }
 
@@ -82,7 +82,7 @@ poetry-ui-portal {
 
 /* MAIN NAV */
 
-poetry-ui-portal-nav {
+cloudy-ui-portal-nav {
     position: fixed;
     top: 0;
     right: 0;
@@ -96,13 +96,13 @@ poetry-ui-portal-nav {
 }
 
 @media(min-width: $screen-sm) {
-    poetry-ui-portal-nav {
+    cloudy-ui-portal-nav {
         height: 64px;
         padding-left: 12px;
     }
 }
 
-poetry-ui-portal-nav-toggle {
+cloudy-ui-portal-nav-toggle {
     display: block;
     width: 24px;
     height: 24px;
@@ -120,7 +120,7 @@ poetry-ui-portal-nav-toggle {
     }
 
     &:focus,
-    &.poetry-ui-active {
+    &.cloudy-ui-active {
         background-color: rgba(255, 255, 255, 0.25);
     }
 
@@ -129,7 +129,7 @@ poetry-ui-portal-nav-toggle {
     }
 }
 
-poetry-ui-portal-nav-title {
+cloudy-ui-portal-nav-title {
     flex-grow: 1;
     margin-left: 16px;
     font-size: 1.25rem;
@@ -140,7 +140,7 @@ poetry-ui-portal-nav-title {
     letter-spacing: 0.0075em;
 }
 
-poetry-ui-portal-nav-menu-fade {
+cloudy-ui-portal-nav-menu-fade {
     position: fixed;
     top: 56px;
     right: 0;
@@ -150,7 +150,7 @@ poetry-ui-portal-nav-menu-fade {
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
-    &.poetry-ui-hidden {
+    &.cloudy-ui-hidden {
         transform: translate3d(-1rem, 0, 0) rotate3d(0, 1, 0, -20deg);
         visibility: hidden;
         opacity: 0;
@@ -158,12 +158,12 @@ poetry-ui-portal-nav-menu-fade {
 }
 
 @media(min-width: $screen-sm) {
-    poetry-ui-portal-nav-menu-fade {
+    cloudy-ui-portal-nav-menu-fade {
         top: 64px;
     }
 }
 
-poetry-ui-portal-nav-menu {
+cloudy-ui-portal-nav-menu {
     position: fixed;
     top: 56px;
     bottom: 0;
@@ -175,7 +175,7 @@ poetry-ui-portal-nav-menu {
     box-shadow: 0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12);
     transition: 225ms cubic-bezier(0, 0, 0.2, 1);
 
-    &.poetry-ui-hidden {
+    &.cloudy-ui-hidden {
         transform: translate3d(-100%, 0, 0);
         visibility: hidden;
 
@@ -186,7 +186,7 @@ poetry-ui-portal-nav-menu {
 }
 
 @media(min-width: $screen-sm) {
-    poetry-ui-portal-nav-menu {
+    cloudy-ui-portal-nav-menu {
         top: 64px;
     }
 }
@@ -195,7 +195,7 @@ poetry-ui-portal-nav-menu {
 
 /* APP */
 
-poetry-ui-app {
+cloudy-ui-app {
     position: absolute;
     top: 56px;
     right: 0;
@@ -207,7 +207,7 @@ poetry-ui-app {
 }
 
 @media(min-width: $screen-sm) {
-    poetry-ui-app {
+    cloudy-ui-app {
         top: 64px;
         right: auto;
         padding-top: 8px;
@@ -221,7 +221,7 @@ poetry-ui-app {
 
 /* BLADE */
 
-poetry-ui-blade {
+cloudy-ui-blade {
     flex: 0 0 100%;
     flex-direction: column;
     position: relative;
@@ -240,7 +240,7 @@ poetry-ui-blade {
 }
 
 @media(min-width: $screen-sm) {
-    poetry-ui-blade {
+    cloudy-ui-blade {
         flex: 0 0 auto;
         display: flex;
         width: 25rem;
@@ -250,7 +250,7 @@ poetry-ui-blade {
         transition-duration: 0.5s;
         box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
 
-        &.poetry-ui-fullwidth {
+        &.cloudy-ui-fullwidth {
             width: 100vw;
         }
 
@@ -264,13 +264,13 @@ poetry-ui-blade {
 
 /* TITLE */
 
-poetry-ui-blade-title {
+cloudy-ui-blade-title {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
 }
 
-poetry-ui-blade-title-text {
+cloudy-ui-blade-title-text {
     flex-grow: 1;
     display: block;
     padding: 16px;
@@ -281,12 +281,12 @@ poetry-ui-blade-title-text {
     letter-spacing: 0.0075em;
 }
 
-poetry-ui-blade-title-text {
+cloudy-ui-blade-title-text {
     display: block;
     padding: 16px;
 }
 
-poetry-ui-blade-title-close {
+cloudy-ui-blade-title-close {
     margin-left: auto;
     margin-right: 8px;
     display: block;
@@ -316,7 +316,7 @@ poetry-ui-blade-title-close {
 
 /* HEADER */
 
-poetry-ui-blade-header {
+cloudy-ui-blade-header {
     flex: 0 0 auto;
     display: flex;
     flex-wrap: nowrap;
@@ -332,7 +332,7 @@ poetry-ui-blade-header {
         }
     }
 
-    poetry-ui-blade-content + & {
+    cloudy-ui-blade-content + & {
         flex-grow: 1;
         align-items: baseline;
     }
@@ -342,7 +342,7 @@ poetry-ui-blade-header {
 
 /* CONTENT */
 
-poetry-ui-blade-content {
+cloudy-ui-blade-content {
     flex: 1 1 auto;
     overflow: auto;
     position: relative;
@@ -355,7 +355,7 @@ poetry-ui-blade-content {
 
 /* FOOTER */
 
-poetry-ui-blade-footer {
+cloudy-ui-blade-footer {
     flex: 0 0 auto;
     display: flex;
     flex-wrap: nowrap;
@@ -371,7 +371,7 @@ poetry-ui-blade-footer {
         }
     }
 
-    poetry-ui-blade-content + & {
+    cloudy-ui-blade-content + & {
         border-top: solid 1px $light-gray;
         border-bottom: none;
     }
@@ -381,11 +381,11 @@ poetry-ui-blade-footer {
 
 /* LOADING STATE */
 
-.poetry-ui-not-loading {
+.cloudy-ui-not-loading {
     transition: opacity 0.2s, filter 0.2s;
 }
 
-.poetry-ui-loading {
+.cloudy-ui-loading {
     opacity: 0.5;
     filter: grayscale(100%);
     transition: opacity 0.2s, filter 0.2s;
@@ -395,8 +395,8 @@ poetry-ui-blade-footer {
 
 /* BUTTON */
 
-poetry-ui-button,
-.poetry-ui-button {
+cloudy-ui-button,
+.cloudy-ui-button {
     display: inline-block;
     min-width: 64px;
     padding: 6px 16px;
@@ -468,19 +468,19 @@ poetry-ui-button,
 
 /* HELP */
 
-poetry-ui-help-container {
+cloudy-ui-help-container {
     display: block;
     padding: 16px;
 }
 
-.poetry-ui-help-illustration {
+.cloudy-ui-help-illustration {
     margin: 0 auto 16px;
     display: block;
     width: 15rem;
     max-width: 100%;
 }
 
-.poetry-ui-help-heading {
+.cloudy-ui-help-heading {
     font-size: 1.25rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 500;
@@ -488,7 +488,7 @@ poetry-ui-help-container {
     letter-spacing: 0.0075em;
 }
 
-.poetry-ui-help-code {
+.cloudy-ui-help-code {
     margin: 0 0 16px;
     padding: 12px 18px;
     box-sizing: border-box;

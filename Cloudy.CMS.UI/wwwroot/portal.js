@@ -7,7 +7,7 @@ import Nav from "./nav.js";
 class Portal {
     constructor() {
         this.apps = {};
-        this.element = document.createElement('poetry-ui-portal');
+        this.element = document.createElement('cloudy-ui-portal');
 
         this.nav = new Nav(this);
 
@@ -23,7 +23,7 @@ class Portal {
     }
 
     openApp(appDescriptor) {
-        [...this.element.querySelectorAll('poetry-ui-app')].forEach(a => this.element.removeChild(a));
+        [...this.element.querySelectorAll('cloudy-ui-app')].forEach(a => this.element.removeChild(a));
 
         this.nav.openApp(appDescriptor);
 

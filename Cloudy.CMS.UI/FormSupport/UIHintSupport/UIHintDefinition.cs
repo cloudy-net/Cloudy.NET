@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace Poetry.UI.FormSupport.UIHintSupport
+namespace Cloudy.CMS.UI.FormSupport.UIHintSupport
 {
     [DebuggerDisplay("{Id}[{Parameters.Count}]")]
     public class UIHintDefinition

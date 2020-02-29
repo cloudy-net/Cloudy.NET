@@ -1,13 +1,13 @@
-﻿using Poetry.ComponentSupport;
-using Poetry.UI.FormSupport.UIHintSupport;
-using Poetry.UI.FormSupport.UIHintSupport.ParserSupport;
+﻿using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.UI.FormSupport.UIHintSupport;
+using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
+namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
 {
     public class UIHintControlMappingCreator : IUIHintControlMappingCreator
     {

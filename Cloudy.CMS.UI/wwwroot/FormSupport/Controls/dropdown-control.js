@@ -3,7 +3,7 @@
 class DropdownControl extends FieldControl {
     constructor(fieldModel, value, app) {
         var select = document.createElement('select');
-        select.classList.add('poetry-ui-form-input');
+        select.classList.add('cloudy-ui-form-input');
         select.value = value || null;
 
         super(select);

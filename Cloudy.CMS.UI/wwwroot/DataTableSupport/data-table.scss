@@ -4,11 +4,11 @@
 
 /* TABLE */
 
-poetry-ui-data-table {
+cloudy-ui-data-table {
     display: block;
 }
 
-.poetry-ui-data-table {
+.cloudy-ui-data-table {
     width: 100%;
     margin: 16px 0;
 
@@ -18,7 +18,7 @@ poetry-ui-data-table {
         border-bottom: solid 1px rgba(224, 224, 224, 1);
         font-size: 0.875rem;
 
-        &.poetry-ui-data-table-button-column {
+        &.cloudy-ui-data-table-button-column {
             padding: 2px;
             vertical-align: middle;
         }
@@ -33,8 +33,8 @@ poetry-ui-data-table {
     }
 }
 
-poetry-ui-data-table-button,
-.poetry-ui-data-table-button {
+cloudy-ui-data-table-button,
+.cloudy-ui-data-table-button {
     display: block;
     padding: 0.5rem 0;
     padding-right: 0;
@@ -50,27 +50,27 @@ poetry-ui-data-table-button,
     }
 
     &:focus,
-    &.poetry-ui-active {
+    &.cloudy-ui-active {
         background: rgba($bright-blue, 0.1);
     }
 }
 
-poetry-ui-data-table-footer {
+cloudy-ui-data-table-footer {
     margin-bottom: 1rem;
     display: flex;
     text-align: center;
     font-size: $small-font;
 
-    poetry-ui-button {
+    cloudy-ui-button {
         margin-left: auto;
     }
 }
 
-poetry-ui-data-table-paging {
+cloudy-ui-data-table-paging {
     display: block;
 }
 
-.poetry-ui-data-table-paging-previous {
+.cloudy-ui-data-table-paging-previous {
     margin-right: 1px;
 
     &:after {
@@ -86,7 +86,7 @@ poetry-ui-data-table-paging {
     }
 }
 
-.poetry-ui-data-table-paging-next {
+.cloudy-ui-data-table-paging-next {
     margin-left: 1px;
 
     &:after {
@@ -106,7 +106,7 @@ poetry-ui-data-table-paging {
 
 /* SORTING */
 
-poetry-ui-data-table-sorter {
+cloudy-ui-data-table-sorter {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -121,11 +121,11 @@ poetry-ui-data-table-sorter {
         box-shadow: 0 0 0 0.25rem rgba($bright-blue, 0.25);
     }
 
-    &.poetry-ui-active {
+    &.cloudy-ui-active {
         background-image: url("data:image/svg+xml,%3Csvg height='10' width='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E  %3Cpath d='M0 0h4v2H0zm0 4h6v2H0zm0 4h10v2H0z' fill='%23#{str-slice(#{$bright-blue}, 2)}'/%3E%3C/svg%3E");
     }
 
-    &.poetry-ui-descending {
+    &.cloudy-ui-descending {
         background-image: url("data:image/svg+xml,%3Csvg height='10' width='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E  %3Cpath d='M0 0h10v2H0zm0 4h6v2H0zm0 4h4v2H0z' fill='%23#{str-slice(#{$bright-blue}, 2)}'/%3E%3C/svg%3E");
     }
 }

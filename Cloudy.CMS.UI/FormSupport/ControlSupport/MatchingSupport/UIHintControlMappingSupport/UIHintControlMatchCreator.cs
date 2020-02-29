@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
-using Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
-using Poetry.UI.FormSupport.UIHintSupport;
+using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport;
+using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 
-namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
+namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
 {
     public class UIHintControlMatchCreator : IUIHintControlMatchCreator
     {

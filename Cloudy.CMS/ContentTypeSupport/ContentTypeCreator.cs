@@ -1,4 +1,4 @@
-﻿using Poetry.ComponentSupport;
+﻿using Cloudy.CMS.ComponentSupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Cloudy.CMS.Core;

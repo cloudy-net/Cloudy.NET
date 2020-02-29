@@ -1,7 +1,7 @@
-﻿using Poetry.ComposableSupport;
+﻿using Cloudy.CMS.ComposableSupport;
 using System.Collections.Generic;
 
-namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
+namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControlMappingSupport
 {
     public interface IUIHintControlMappingCreator : IComposable
     {

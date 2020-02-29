@@ -6,7 +6,7 @@
 
 class NotificationManager {
     constructor() {
-        this.element = document.createElement('poetry-ui-notifications');
+        this.element = document.createElement('cloudy-ui-notifications');
 
         var bootstrap = () => { document.body.appendChild(this.element); }
 

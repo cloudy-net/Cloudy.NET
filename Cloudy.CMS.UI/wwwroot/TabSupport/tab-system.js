@@ -2,15 +2,15 @@
 
 class TabSystem {
     constructor() {
-        this.element = document.createElement('poetry-ui-tab-system');
-        this.tabs = document.createElement('poetry-ui-tabs');
+        this.element = document.createElement('cloudy-ui-tab-system');
+        this.tabs = document.createElement('cloudy-ui-tabs');
         this.element.append(this.tabs);
-        this.content = document.createElement('poetry-ui-tab-panel');
+        this.content = document.createElement('cloudy-ui-tab-panel');
         this.element.append(this.content);
     }
 
     addTab(text, content) {
-        var tab = document.createElement('poetry-ui-tab');
+        var tab = document.createElement('cloudy-ui-tab');
         tab.innerText = text;
         tab.tabIndex = 0;
 
@@ -24,8 +24,8 @@ class TabSystem {
         });
 
         tab.addEventListener('click', () => {
-            [...this.tabs.children].forEach(c => c.classList.remove('poetry-ui-active'));
-            tab.classList.add('poetry-ui-active');
+            [...this.tabs.children].forEach(c => c.classList.remove('cloudy-ui-active'));
+            tab.classList.add('cloudy-ui-active');
 
             [...this.content.children].forEach(c => this.content.removeChild(c));
             this.content.append(content());

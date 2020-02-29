@@ -11,7 +11,7 @@ import notificationManager from './NotificationSupport/notification-manager.js';
 
 class Login {
     constructor() {
-        this.container = document.createElement('poetry-ui-login-container');
+        this.container = document.createElement('cloudy-ui-login-container');
 
         this.formTarget = document.createElement('iframe');
         this.formTarget.style.display = 'none';
@@ -20,7 +20,7 @@ class Login {
         this.container.append(this.formTarget);
 
         this.form = document.createElement('form');
-        this.form.classList.add('poetry-ui-login');
+        this.form.classList.add('cloudy-ui-login');
         this.form.target = "cloudy-login-target";
         this.form.action = "about:blank";
         this.form.addEventListener('submit', event => {
@@ -51,10 +51,10 @@ class Login {
         });
         this.container.append(this.form);
 
-        this.header = document.createElement('poetry-ui-login-header');
+        this.header = document.createElement('cloudy-ui-login-header');
         this.form.append(this.header);
 
-        this.content = document.createElement('poetry-ui-login-content');
+        this.content = document.createElement('cloudy-ui-login-content');
         this.form.append(this.content);
 
         var target = {};
@@ -77,11 +77,11 @@ class Login {
             form.element.querySelector('input[name="email"]').focus();
         });
 
-        this.footer = document.createElement('poetry-ui-login-footer');
+        this.footer = document.createElement('cloudy-ui-login-footer');
         this.form.append(this.footer);
 
         var button = document.createElement('button');
-        button.classList.add('poetry-ui-button');
+        button.classList.add('cloudy-ui-button');
         button.classList.add('primary');
         button.innerText = 'Login';
         button.type = 'submit';
@@ -99,7 +99,7 @@ class Login {
     }
 
     openApp(appDescriptor) {
-        [...this.element.querySelectorAll('poetry-ui-app')].forEach(a => this.element.removeChild(a));
+        [...this.element.querySelectorAll('cloudy-ui-app')].forEach(a => this.element.removeChild(a));
 
         this.nav.openApp(appDescriptor);
 

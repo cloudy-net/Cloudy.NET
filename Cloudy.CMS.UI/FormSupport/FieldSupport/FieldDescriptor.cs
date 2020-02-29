@@ -1,6 +1,6 @@
-﻿using Poetry.UI.FormSupport.ControlSupport;
-using Poetry.UI.FormSupport.ControlSupport.MatchingSupport;
-using Poetry.UI.FormSupport.UIHintSupport;
+﻿using Cloudy.CMS.UI.FormSupport.ControlSupport;
+using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
+using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Poetry.UI.FormSupport.FieldSupport
+namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     [DebuggerDisplay("{Id}")]
     public class FieldDescriptor

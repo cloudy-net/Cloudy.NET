@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Poetry.UI.FormSupport
+namespace Cloudy.CMS.UI.FormSupport
 {
     public interface IFormProvider
     {

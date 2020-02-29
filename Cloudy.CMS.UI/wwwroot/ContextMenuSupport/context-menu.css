@@ -1,9 +1,9 @@
 ﻿/* VARIABLES */
 /* BUTTON */
-.poetry-ui-context-menu-outer {
+.cloudy-ui-context-menu-outer {
   position: relative; }
 
-poetry-ui-context-menu-button {
+cloudy-ui-context-menu-button {
   display: block;
   width: 48px;
   height: 48px;
@@ -13,14 +13,14 @@ poetry-ui-context-menu-button {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z' fill='%23000' fill-opacity='0.54'%3E%3C/path%3E%3C/svg%3E");
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   cursor: pointer; }
-  poetry-ui-context-menu-button:hover {
+  cloudy-ui-context-menu-button:hover {
     background-color: rgba(0, 0, 0, 0.04); }
-  poetry-ui-context-menu-button:focus {
+  cloudy-ui-context-menu-button:focus {
     background-color: rgba(0, 0, 0, 0.1); }
-  poetry-ui-context-menu-button:focus {
+  cloudy-ui-context-menu-button:focus {
     outline: none; }
 
-poetry-ui-context-menu {
+cloudy-ui-context-menu {
   position: absolute;
   z-index: 10;
   display: block;
@@ -28,7 +28,7 @@ poetry-ui-context-menu {
   background: white;
   box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
   max-width: 300px; }
-  poetry-ui-context-menu poetry-ui-list-item-text,
-  poetry-ui-context-menu poetry-ui-list-item-sub-text {
+  cloudy-ui-context-menu cloudy-ui-list-item-text,
+  cloudy-ui-context-menu cloudy-ui-list-item-sub-text {
     display: block;
     white-space: nowrap; }

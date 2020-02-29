@@ -1,10 +1,10 @@
-﻿using Poetry.ComponentSupport;
+﻿using Cloudy.CMS.ComponentSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Poetry.DependencyInjectionSupport
+namespace Cloudy.CMS.DependencyInjectionSupport
 {
     public class DependencyInjectorCreator : IDependencyInjectorCreator
     {

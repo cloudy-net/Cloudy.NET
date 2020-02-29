@@ -4,11 +4,11 @@
 
 /* BUTTON */
 
-.poetry-ui-context-menu-outer {
+.cloudy-ui-context-menu-outer {
     position: relative;
 }
 
-poetry-ui-context-menu-button {
+cloudy-ui-context-menu-button {
     display: block;
     width: 48px;
     height: 48px;
@@ -32,7 +32,7 @@ poetry-ui-context-menu-button {
     }
 }
 
-poetry-ui-context-menu {
+cloudy-ui-context-menu {
     position: absolute;
     z-index: 10;
     display: block;
@@ -42,8 +42,8 @@ poetry-ui-context-menu {
     max-width: 300px;
 
 
-    poetry-ui-list-item-text,
-    poetry-ui-list-item-sub-text {
+    cloudy-ui-list-item-text,
+    cloudy-ui-list-item-sub-text {
         display: block;
         white-space: nowrap;
     }

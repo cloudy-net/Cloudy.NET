@@ -81,7 +81,7 @@ class SortableTableControl extends Sortable {
 
         dataTable.paging.remove();
 
-        var container = document.createElement('poetry-ui-form-table');
+        var container = document.createElement('cloudy-ui-form-table');
         container.append(dataTable.element);
         this.element = container;
     }

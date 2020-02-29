@@ -3,11 +3,10 @@ using Cloudy.CMS.DocumentSupport.MongoSupport;
 using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Poetry;
-using Poetry.AspNetCore.DependencyInjectionSupport;
-using Poetry.ComponentSupport;
-using Poetry.DependencyInjectionSupport;
-using Poetry.InitializerSupport;
+using Cloudy.CMS;
+using Cloudy.CMS.AspNetCore.DependencyInjectionSupport;
+using Cloudy.CMS.DependencyInjectionSupport;
+using Cloudy.CMS.InitializerSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -51,7 +50,7 @@ namespace Cloudy.CMS
             container.RegisterSingleton<IComponentAssemblyProvider>(new ComponentAssemblyProvider(options.ComponentAssemblies));
             container.RegisterSingleton<IComponentTypeProvider>(new ComponentTypeProvider(options.Components));
 
-            new PoetryDependencyInjector().InjectDependencies(container);
+            new CloudyDependencyInjector().InjectDependencies(container);
 
             foreach (var injector in container.CreateResolver().Resolve<IDependencyInjectorProvider>().GetAll())
             {

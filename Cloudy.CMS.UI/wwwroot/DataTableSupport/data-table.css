@@ -1,57 +1,57 @@
 ﻿/* VARIABLES */
 /* TABLE */
-poetry-ui-data-table {
+cloudy-ui-data-table {
   display: block; }
 
-.poetry-ui-data-table {
+.cloudy-ui-data-table {
   width: 100%;
   margin: 16px 0; }
-  .poetry-ui-data-table th,
-  .poetry-ui-data-table td {
+  .cloudy-ui-data-table th,
+  .cloudy-ui-data-table td {
     padding: 16px;
     border-bottom: solid 1px #e0e0e0;
     font-size: 0.875rem; }
-    .poetry-ui-data-table th.poetry-ui-data-table-button-column,
-    .poetry-ui-data-table td.poetry-ui-data-table-button-column {
+    .cloudy-ui-data-table th.cloudy-ui-data-table-button-column,
+    .cloudy-ui-data-table td.cloudy-ui-data-table-button-column {
       padding: 2px;
       vertical-align: middle; }
-  .poetry-ui-data-table th {
+  .cloudy-ui-data-table th {
     font-weight: 500; }
-  .poetry-ui-data-table tr:hover td {
+  .cloudy-ui-data-table tr:hover td {
     background: #f1f1f1; }
 
-poetry-ui-data-table-button,
-.poetry-ui-data-table-button {
+cloudy-ui-data-table-button,
+.cloudy-ui-data-table-button {
   display: block;
   padding: 0.5rem 0;
   padding-right: 0;
   cursor: pointer;
   transition: background 0.2s; }
-  poetry-ui-data-table-button:hover,
-  .poetry-ui-data-table-button:hover {
+  cloudy-ui-data-table-button:hover,
+  .cloudy-ui-data-table-button:hover {
     background: #f1f1f1; }
-  poetry-ui-data-table-button:focus,
-  .poetry-ui-data-table-button:focus {
+  cloudy-ui-data-table-button:focus,
+  .cloudy-ui-data-table-button:focus {
     outline: none; }
-  poetry-ui-data-table-button:focus, poetry-ui-data-table-button.poetry-ui-active,
-  .poetry-ui-data-table-button:focus,
-  .poetry-ui-data-table-button.poetry-ui-active {
+  cloudy-ui-data-table-button:focus, cloudy-ui-data-table-button.cloudy-ui-active,
+  .cloudy-ui-data-table-button:focus,
+  .cloudy-ui-data-table-button.cloudy-ui-active {
     background: rgba(25, 118, 210, 0.1); }
 
-poetry-ui-data-table-footer {
+cloudy-ui-data-table-footer {
   margin-bottom: 1rem;
   display: flex;
   text-align: center;
   font-size: 0.8rem; }
-  poetry-ui-data-table-footer poetry-ui-button {
+  cloudy-ui-data-table-footer cloudy-ui-button {
     margin-left: auto; }
 
-poetry-ui-data-table-paging {
+cloudy-ui-data-table-paging {
   display: block; }
 
-.poetry-ui-data-table-paging-previous {
+.cloudy-ui-data-table-paging-previous {
   margin-right: 1px; }
-  .poetry-ui-data-table-paging-previous:after {
+  .cloudy-ui-data-table-paging-previous:after {
     content: '';
     display: inline-block;
     width: 0.8em;
@@ -62,9 +62,9 @@ poetry-ui-data-table-paging {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' width='20' height='20'%3E%3Cpath transform='translate(16, 0) scale(-1, 1)' d='M2 2L10 10L2 18' fill='none' stroke='%23ffffff' stroke-width='2' /%3E%3C/svg%3E");
     vertical-align: baseline; }
 
-.poetry-ui-data-table-paging-next {
+.cloudy-ui-data-table-paging-next {
   margin-left: 1px; }
-  .poetry-ui-data-table-paging-next:after {
+  .cloudy-ui-data-table-paging-next:after {
     content: '';
     display: inline-block;
     width: 0.8em;
@@ -76,7 +76,7 @@ poetry-ui-data-table-paging {
     vertical-align: baseline; }
 
 /* SORTING */
-poetry-ui-data-table-sorter {
+cloudy-ui-data-table-sorter {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -85,10 +85,10 @@ poetry-ui-data-table-sorter {
   background-image: url("data:image/svg+xml,%3Csvg height='10' width='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E  %3Cpath d='M0 0h4v2H0zm0 4h6v2H0zm0 4h10v2H0z' fill='%23ccc'/%3E%3C/svg%3E");
   vertical-align: bottom;
   cursor: pointer; }
-  poetry-ui-data-table-sorter:focus {
+  cloudy-ui-data-table-sorter:focus {
     outline: none;
     box-shadow: 0 0 0 0.25rem rgba(25, 118, 210, 0.25); }
-  poetry-ui-data-table-sorter.poetry-ui-active {
+  cloudy-ui-data-table-sorter.cloudy-ui-active {
     background-image: url("data:image/svg+xml,%3Csvg height='10' width='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E  %3Cpath d='M0 0h4v2H0zm0 4h6v2H0zm0 4h10v2H0z' fill='%231976d2'/%3E%3C/svg%3E"); }
-  poetry-ui-data-table-sorter.poetry-ui-descending {
+  cloudy-ui-data-table-sorter.cloudy-ui-descending {
     background-image: url("data:image/svg+xml,%3Csvg height='10' width='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E  %3Cpath d='M0 0h10v2H0zm0 4h6v2H0zm0 4h4v2H0z' fill='%231976d2'/%3E%3C/svg%3E"); }

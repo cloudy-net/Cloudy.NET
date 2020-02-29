@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Poetry.ComponentSupport;
+using Cloudy.CMS.ComponentSupport;
 
-namespace Poetry.UI.AppSupport
+namespace Cloudy.CMS.UI.AppSupport
 {
     public class AppProvider : IAppProvider
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace Poetry.UI.FormSupport.UIHintSupport
+namespace Cloudy.CMS.UI.FormSupport.UIHintSupport
 {
     public enum UIHintParameterType
     {

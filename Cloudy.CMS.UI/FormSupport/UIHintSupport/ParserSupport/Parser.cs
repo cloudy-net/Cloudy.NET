@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace Poetry.UI.FormSupport.UIHintSupport.ParserSupport
+namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 {
     [DebuggerDisplay("{Data.Insert(Position, \"↓\")}")]
     public class Parser

@@ -1,11 +1,11 @@
-﻿using Poetry.ComponentSupport;
-using Poetry.DependencyInjectionSupport;
+﻿using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Poetry.ComposableSupport
+namespace Cloudy.CMS.ComposableSupport
 {
     public class ComposableProvider : IComposableProvider
     {

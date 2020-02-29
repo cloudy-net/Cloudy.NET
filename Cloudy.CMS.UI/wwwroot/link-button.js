@@ -6,7 +6,7 @@
 class LinkButton {
     constructor(text, url, target) {
         this.element = document.createElement('a');
-        this.element.classList.add('poetry-ui-button');
+        this.element.classList.add('cloudy-ui-button');
         this.element.href = url;
         if (target) {
             this.element.target = target;

@@ -65,7 +65,7 @@ class FormBuilder {
 
             var form = this.buildForm(fieldModels, target);
 
-            form.element.classList.add('poetry-ui-form');
+            form.element.classList.add('cloudy-ui-form');
 
             return form;
         });
@@ -83,11 +83,11 @@ class FormBuilder {
 
     buildField(fieldModel, target) {
         var element = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'label');
-        element.classList.add('poetry-ui-form-field');
+        element.classList.add('cloudy-ui-form-field');
 
         if (!(fieldModel.controlType && fieldModel.controlType.customLabel) || (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId)) {
             var heading = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
-            heading.classList.add('poetry-ui-form-field-label');
+            heading.classList.add('cloudy-ui-form-field-label');
             heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
             element.appendChild(heading);
         }
@@ -116,7 +116,7 @@ class FormBuilder {
     }
 
     buildSimpleField(fieldModel, target, element) {
-        element.classList.add('poetry-ui-simple');
+        element.classList.add('cloudy-ui-simple');
 
         var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app);
 
@@ -156,7 +156,7 @@ class FormBuilder {
                     target[index] = {};
                 }
 
-                var container = document.createElement('poetry-ui-sortable-item-form');
+                var container = document.createElement('cloudy-ui-sortable-item-form');
 
                 var form = this.buildEmbeddedForm(fieldModel, target[index]);
 
@@ -167,7 +167,7 @@ class FormBuilder {
 
         var sortable = new Sortable(fieldModel, target, createItem);
 
-        sortable.element.classList.add('poetry-ui-sortable-form');
+        sortable.element.classList.add('cloudy-ui-sortable-form');
 
         return sortable;
     }
@@ -179,7 +179,7 @@ class FormBuilder {
                     target[index] = null;
                 }
 
-                var container = document.createElement('poetry-ui-sortable-item-field');
+                var container = document.createElement('cloudy-ui-sortable-item-field');
 
                 var control = new fieldModel.controlType(fieldModel, target[index], this.app);
 
@@ -194,7 +194,7 @@ class FormBuilder {
 
         var sortable = new Sortable(fieldModel, target, createItem);
 
-        sortable.element.classList.add('poetry-ui-sortable-field');
+        sortable.element.classList.add('cloudy-ui-sortable-field');
 
         return sortable;
     }
@@ -202,7 +202,7 @@ class FormBuilder {
     buildEmbeddedForm(fieldModel, target) {
         var form = this.buildForm(fieldModel.fields, target);
 
-        form.element.classList.add('poetry-ui-embedded-form');
+        form.element.classList.add('cloudy-ui-embedded-form');
 
         return form;
     }

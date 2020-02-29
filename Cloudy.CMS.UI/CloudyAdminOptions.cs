@@ -1,6 +1,6 @@
 ﻿
 using Microsoft.Extensions.FileProviders;
-using Poetry.UI.AspNetCore;
+using Cloudy.CMS.UI.AspNetCore;
 using System;
 
 namespace Cloudy.CMS.UI

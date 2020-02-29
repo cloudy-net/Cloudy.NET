@@ -3,26 +3,26 @@
 class Nav {
     constructor(portal) {
         this.portal = portal;
-        this.element = document.createElement('poetry-ui-portal-nav');
+        this.element = document.createElement('cloudy-ui-portal-nav');
         document.body.append(this.element);
-        this.toggle = document.createElement('poetry-ui-portal-nav-toggle');
+        this.toggle = document.createElement('cloudy-ui-portal-nav-toggle');
         this.element.appendChild(this.toggle);
 
         this.toggle.tabIndex = 0;
         var hideToggle = () => {
-            if (!this.toggle.classList.contains('poetry-ui-active')) {
+            if (!this.toggle.classList.contains('cloudy-ui-active')) {
                 return;
             }
 
-            this.toggle.classList.remove('poetry-ui-active');
-            this.menu.classList.add('poetry-ui-hidden');
-            this.menuFade.classList.add('poetry-ui-hidden');
+            this.toggle.classList.remove('cloudy-ui-active');
+            this.menu.classList.add('cloudy-ui-hidden');
+            this.menuFade.classList.add('cloudy-ui-hidden');
         };
         this.toggle.addEventListener('click', () => {
-            if (!this.toggle.classList.contains('poetry-ui-active')) {
-                this.toggle.classList.add('poetry-ui-active');
-                this.menu.classList.remove('poetry-ui-hidden');
-                this.menuFade.classList.remove('poetry-ui-hidden');
+            if (!this.toggle.classList.contains('cloudy-ui-active')) {
+                this.toggle.classList.add('cloudy-ui-active');
+                this.menu.classList.remove('cloudy-ui-hidden');
+                this.menuFade.classList.remove('cloudy-ui-hidden');
             } else {
                 hideToggle();
             }
@@ -36,20 +36,20 @@ class Nav {
             this.toggle.click();
         });
         document.documentElement.addEventListener('click', event => {
-            if (!event.target.matches('poetry-ui-portal-nav, poetry-ui-portal-nav-toggle')) {
+            if (!event.target.matches('cloudy-ui-portal-nav, cloudy-ui-portal-nav-toggle')) {
                 hideToggle();
             }
         });
 
-        this.menu = document.createElement('poetry-ui-portal-nav-menu');
-        this.menu.classList.add('poetry-ui-hidden');
+        this.menu = document.createElement('cloudy-ui-portal-nav-menu');
+        this.menu.classList.add('cloudy-ui-hidden');
         this.element.appendChild(this.menu);
 
         this.menuList = new List();
         this.menuList.appendTo(this.menu);
 
-        this.menuFade = document.createElement('poetry-ui-portal-nav-menu-fade');
-        this.menuFade.classList.add('poetry-ui-hidden');
+        this.menuFade = document.createElement('cloudy-ui-portal-nav-menu-fade');
+        this.menuFade.classList.add('cloudy-ui-hidden');
         this.element.appendChild(this.menuFade);
 
         this.appDescriptorsPromise = fetch('App/GetAll', { credentials: 'include' }).then(response => response.json());
@@ -58,7 +58,7 @@ class Nav {
             appDescriptors.forEach(appDescriptor => {
                 this.menuList.addItem(item => {
                     item.setText(appDescriptor.name);
-                    item.element.setAttribute('poetry-ui-app-id', appDescriptor.id);
+                    item.element.setAttribute('cloudy-ui-app-id', appDescriptor.id);
                     item.onClick(() => portal.openApp(appDescriptor));
                 });
             });
@@ -98,13 +98,13 @@ class Nav {
 
     openApp(appDescriptor) {
         this.appDescriptorsPromise.then(() => {
-            [...this.menuList.element.querySelectorAll('poetry-ui-portal-nav-item')].forEach(c => c.classList.remove('poetry-ui-active'));
-            this.menuList.element.querySelector(`[poetry-ui-app-id="${appDescriptor.id}"]`).classList.add('poetry-ui-active');
+            [...this.menuList.element.querySelectorAll('cloudy-ui-portal-nav-item')].forEach(c => c.classList.remove('cloudy-ui-active'));
+            this.menuList.element.querySelector(`[cloudy-ui-app-id="${appDescriptor.id}"]`).classList.add('cloudy-ui-active');
         });
     }
 
     setTitle(value) {
-        var title = document.createElement('poetry-ui-portal-nav-title');
+        var title = document.createElement('cloudy-ui-portal-nav-title');
         title.innerText = value;
         this.element.append(title);
     }

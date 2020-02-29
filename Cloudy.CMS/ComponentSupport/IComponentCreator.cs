@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Poetry.ComponentSupport
+namespace Cloudy.CMS.ComponentSupport
 {
     public interface IComponentCreator
     {

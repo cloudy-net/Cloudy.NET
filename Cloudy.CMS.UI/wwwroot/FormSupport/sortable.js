@@ -7,8 +7,8 @@ class SortableField {
             add: [],
             move: [],
         };
-        this.element = document.createElement('poetry-ui-sortable');
-        this.fields = document.createElement('poetry-ui-sortable-items');
+        this.element = document.createElement('cloudy-ui-sortable');
+        this.fields = document.createElement('cloudy-ui-sortable-items');
         this.element.appendChild(this.fields);
         this.items = [];
 
@@ -31,7 +31,7 @@ class SortableField {
             this.items.splice(newIndex, 0, this.items.splice(index, 1)[0]);
         });
 
-        var buttonContainer = document.createElement('poetry-ui-sortable-buttons');
+        var buttonContainer = document.createElement('cloudy-ui-sortable-buttons');
         this.element.appendChild(buttonContainer);
 
         new Button('Add')
@@ -47,12 +47,12 @@ class SortableField {
     addItem(item) {
         this.items.push(item);
 
-        var field = document.createElement('poetry-ui-sortable-item');
+        var field = document.createElement('cloudy-ui-sortable-item');
         this.fields.appendChild(field);
 
         field.appendChild(item.element);
 
-        var fieldAction = document.createElement('poetry-ui-sortable-item-action');
+        var fieldAction = document.createElement('cloudy-ui-sortable-item-action');
         (item.data.actionContainer || field).appendChild(fieldAction);
 
         new ContextMenu()

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-namespace Poetry.UI.FormSupport.UIHintSupport
+namespace Cloudy.CMS.UI.FormSupport.UIHintSupport
 {
     [DebuggerDisplay("{Type}")]
     public class UIHintParameterValue

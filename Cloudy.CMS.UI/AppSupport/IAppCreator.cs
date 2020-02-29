@@ -1,7 +1,7 @@
-﻿using Poetry.ComponentSupport;
+﻿using Cloudy.CMS.ComponentSupport;
 using System.Collections.Generic;
 
-namespace Poetry.UI.AppSupport
+namespace Cloudy.CMS.UI.AppSupport
 {
     public interface IAppCreator
     {

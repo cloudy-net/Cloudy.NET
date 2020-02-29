@@ -5,7 +5,7 @@
 
 class Button {
     constructor(text) {
-        this.element = document.createElement('poetry-ui-button');
+        this.element = document.createElement('cloudy-ui-button');
         this.element.tabIndex = 0;
         this.element.innerText = text;
 

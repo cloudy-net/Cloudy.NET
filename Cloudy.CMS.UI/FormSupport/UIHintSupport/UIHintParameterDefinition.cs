@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Poetry.UI.FormSupport.UIHintSupport
+namespace Cloudy.CMS.UI.FormSupport.UIHintSupport
 {
     [DebuggerDisplay("{Id}: {Type}")]
     public class UIHintParameterDefinition

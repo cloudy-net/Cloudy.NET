@@ -54,8 +54,8 @@ class EditContentBlade extends Blade {
         formBuilder.fieldModels.then(fieldModels => {
             if (fieldModels.length == 0) {
 
-                var image = `<img class="poetry-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_order_a_car_3tww.svg" alt="Illustration of a house with cars surrounding it, bearing checkmarks.">`;
-                var header1 = `<h2 class="poetry-ui-help-heading">No properties</h2>`;
+                var image = `<img class="cloudy-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_order_a_car_3tww.svg" alt="Illustration of a house with cars surrounding it, bearing checkmarks.">`;
+                var header1 = `<h2 class="cloudy-ui-help-heading">No properties</h2>`;
                 var text1 = '<p>You should probably define some kind of properties here.</p>';
                 var text2 = '<p>Some helpful topics:</p>';
 
@@ -69,7 +69,7 @@ class EditContentBlade extends Blade {
                 helpList.addItem(item => item.setText('I want to have lists of custom objects'));
                 helpList.addItem(item => item.setText('I want to reuse several properties between content types'));
 
-                var helpContainer = document.createElement('poetry-ui-help-container');
+                var helpContainer = document.createElement('cloudy-ui-help-container');
                 helpContainer.innerHTML = image + header1 + text1 + text2;
                 helpContainer.append(helpList.element);
                 this.setContent(helpContainer);

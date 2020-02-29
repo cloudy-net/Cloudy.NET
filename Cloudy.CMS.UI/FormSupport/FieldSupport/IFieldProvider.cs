@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.FormSupport.FieldSupport
+namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     public interface IFieldProvider
     {

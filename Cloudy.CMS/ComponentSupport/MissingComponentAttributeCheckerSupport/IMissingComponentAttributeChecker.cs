@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Poetry.ComponentSupport.MissingComponentAttributeCheckerSupport
+namespace Cloudy.CMS.ComponentSupport.MissingComponentAttributeCheckerSupport
 {
     public interface IMissingComponentAttributeChecker
     {

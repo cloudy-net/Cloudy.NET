@@ -1,10 +1,10 @@
-﻿using Poetry.UI.DataTableSupport.BackendSupport;
-using Poetry.DependencyInjectionSupport;
+﻿using Cloudy.CMS.UI.DataTableSupport.BackendSupport;
+using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.DataTableSupport
+namespace Cloudy.CMS.UI.DataTableSupport
 {
     public class DataTableDependencyInjector : IDependencyInjector
     {

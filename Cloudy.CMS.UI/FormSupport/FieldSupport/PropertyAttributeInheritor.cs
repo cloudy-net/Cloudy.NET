@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Poetry.UI.FormSupport.FieldSupport
+namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     public class PropertyAttributeInheritor : IPropertyAttributeInheritor
     {

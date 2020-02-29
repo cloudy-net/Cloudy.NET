@@ -1,4 +1,4 @@
-﻿namespace Poetry.UI.FormSupport.UIHintSupport.ParserSupport
+﻿namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 {
     public interface IExpressionParser
     {

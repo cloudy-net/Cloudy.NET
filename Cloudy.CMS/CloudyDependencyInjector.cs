@@ -1,6 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DocumentSupport;
-using Poetry.DependencyInjectionSupport;
+using Cloudy.CMS.DependencyInjectionSupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
@@ -13,10 +13,17 @@ using Cloudy.CMS.Routing;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 using Cloudy.CMS.DocumentSupport.MongoSupport;
+using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.ComposableSupport;
+using Cloudy.CMS.ComponentSupport.MissingComponentAttributeCheckerSupport;
+using Cloudy.CMS.ComponentSupport.DuplicateComponentIdCheckerSupport;
+using Cloudy.CMS.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
+using Cloudy.CMS.InitializerSupport;
+using Cloudy.CMS.AspNetCore.DependencyInjectionSupport;
 
 namespace Cloudy.CMS
 {
-    public class CloudyCMSDependencyRegisteror : IDependencyInjector
+    public class CloudyDependencyInjector : IDependencyInjector
     {
         public void InjectDependencies(IContainer container)
         {
@@ -57,6 +64,18 @@ namespace Cloudy.CMS
             container.RegisterSingleton<ISingletonCreator, SingletonCreator>();
             container.RegisterSingleton<ISingletonGetter, SingletonGetter>();
             container.RegisterSingleton<ISingletonProvider, SingletonProvider>();
+
+            container.RegisterSingleton<IComponentCreator, ComponentCreator>();
+            container.RegisterSingleton<IComponentProvider, ComponentProvider>();
+            container.RegisterSingleton<IComposableProvider, ComposableProvider>();
+            container.RegisterSingleton<IMissingComponentAttributeChecker, MissingComponentAttributeChecker>();
+            container.RegisterSingleton<IDuplicateComponentIdChecker, DuplicateComponentIdChecker>();
+            container.RegisterSingleton<IMultipleComponentsInSingleAssemblyChecker, MultipleComponentsInSingleAssemblyChecker>();
+            container.RegisterSingleton<IInitializerProvider, InitializerProvider>();
+            container.RegisterSingleton<IInitializerCreator, InitializerCreator>();
+            container.RegisterSingleton<IInstantiator, Instantiator>();
+            container.RegisterSingleton<IDependencyInjectorCreator, DependencyInjectorCreator>();
+            container.RegisterSingleton<IDependencyInjectorProvider, DependencyInjectorProvider>();
         }
     }
 }

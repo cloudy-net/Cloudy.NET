@@ -1,4 +1,4 @@
-﻿namespace Poetry.ComposableSupport
+﻿namespace Cloudy.CMS.ComposableSupport
 {
     public interface IComposable
     {

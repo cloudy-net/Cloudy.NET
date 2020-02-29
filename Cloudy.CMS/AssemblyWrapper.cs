@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Poetry
+namespace Cloudy.CMS
 {
     [DebuggerDisplay("{Assembly != null ? Assembly.GetName().Name : \"{\" + string.Join(\", \", Types) + \"}\"}")]
     public class AssemblyWrapper

@@ -3,20 +3,20 @@
 class CheckboxControl extends FieldControl {
     static customLabel = true;
     constructor(fieldModel, value, app) {
-        var container = document.createElement('poetry-ui-checkbox-container');
+        var container = document.createElement('cloudy-ui-checkbox-container');
         super(container);
 
         var input = document.createElement('input');
-        input.classList.add('poetry-ui-checkbox');
+        input.classList.add('cloudy-ui-checkbox');
         input.type = 'checkbox';
         input.checked = value || null;
         container.append(input);
 
         var graphicalCheckbox = document.createElement('span');
-        graphicalCheckbox.classList.add('poetry-ui-graphical-checkbox');
+        graphicalCheckbox.classList.add('cloudy-ui-graphical-checkbox');
         container.append(graphicalCheckbox);
 
-        var label = document.createElement('poetry-ui-checkbox-label');
+        var label = document.createElement('cloudy-ui-checkbox-label');
         label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
         container.append(label);
 

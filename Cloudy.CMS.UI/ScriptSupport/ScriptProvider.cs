@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Poetry.ComponentSupport;
-using Poetry.ComposableSupport;
+using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.ComposableSupport;
 
-namespace Poetry.UI.ScriptSupport
+namespace Cloudy.CMS.UI.ScriptSupport
 {
     public class ScriptProvider : IScriptProvider
     {

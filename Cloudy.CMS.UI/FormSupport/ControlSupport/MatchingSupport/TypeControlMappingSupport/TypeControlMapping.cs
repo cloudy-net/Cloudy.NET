@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Poetry.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMappingSupport
+namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMappingSupport
 {
     public class TypeControlMapping
     {

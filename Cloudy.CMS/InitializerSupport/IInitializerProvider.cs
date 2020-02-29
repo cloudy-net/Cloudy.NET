@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Poetry.InitializerSupport
+namespace Cloudy.CMS.InitializerSupport
 {
     public interface IInitializerProvider
     {

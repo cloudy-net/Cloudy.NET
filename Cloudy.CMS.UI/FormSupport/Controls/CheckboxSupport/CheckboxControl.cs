@@ -1,9 +1,9 @@
-﻿using Poetry.UI.FormSupport.ControlSupport;
+﻿using Cloudy.CMS.UI.FormSupport.ControlSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.FormSupport.Controls.CheckboxSupport
+namespace Cloudy.CMS.UI.FormSupport.Controls.CheckboxSupport
 {
     [Control("checkbox", "FormSupport/Controls/checkbox.js")]
     [MapControlToType(typeof(bool))]

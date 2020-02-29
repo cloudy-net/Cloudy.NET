@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.AspNetCore
+namespace Cloudy.CMS.UI.AspNetCore
 {
     public class AuthorizeOptions : IAuthorizeData
     {

@@ -1,9 +1,9 @@
-﻿using Poetry.DependencyInjectionSupport;
+﻿using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.AspNetCore.DependencyInjectionSupport
+namespace Cloudy.CMS.AspNetCore.DependencyInjectionSupport
 {
     public class Resolver : IResolver
     {

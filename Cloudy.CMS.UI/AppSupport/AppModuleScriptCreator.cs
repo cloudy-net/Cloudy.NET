@@ -1,9 +1,9 @@
-﻿using Poetry.UI.ScriptSupport;
+﻿using Cloudy.CMS.UI.ScriptSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Poetry.UI.AppSupport
+namespace Cloudy.CMS.UI.AppSupport
 {
     public class AppModuleScriptCreator : IScriptCreator
     {
