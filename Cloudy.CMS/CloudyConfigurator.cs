@@ -58,16 +58,6 @@ namespace Cloudy.CMS
             return this;
         }
 
-        public CloudyConfigurator AddContentRoute()
-        {
-            Services.Configure<RouteOptions>(options =>
-            {
-                options.ConstraintMap.Add("contentroute", typeof(ContentRouteConstraint));
-            });
-
-            return this;
-        }
-
         public CloudyConfigurator AddComponent<T>() where T : class
         {
             Options.Components.Add(typeof(T));

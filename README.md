@@ -19,10 +19,6 @@ Then visit `/Admin` for the royal tour.
 
 To route INavigatable content (will work on /pages/MyUrlSegment etc), do:
 
-    services.AddCloudy(cloudy => cloudy.AddContentRoute() // ...
-
-And do:
-
     app.UseRouting();
     app.UseEndpoints(endpoints => {
         endpoints.MapGet("/pages/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute().Id}"));

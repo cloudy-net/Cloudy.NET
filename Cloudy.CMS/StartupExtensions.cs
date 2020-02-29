@@ -1,5 +1,7 @@
 ﻿using Cloudy.CMS.ComponentSupport;
 using Cloudy.CMS.DocumentSupport.MongoSupport;
+using Cloudy.CMS.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Poetry;
 using Poetry.AspNetCore.DependencyInjectionSupport;
@@ -22,6 +24,11 @@ namespace Cloudy.CMS
         }
         public static void AddCloudy(this IServiceCollection services, Action<CloudyConfigurator> configure)
         {
+            services.Configure<RouteOptions>(options =>
+            {
+                options.ConstraintMap.Add("contentroute", typeof(ContentRouteConstraint));
+            });
+
             var options = new CloudyOptions();
             var configurator = new CloudyConfigurator(services, options);
 
