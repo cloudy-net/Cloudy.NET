@@ -82,15 +82,13 @@ class FormBuilder {
     }
 
     buildField(fieldModel, target) {
-        var element = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'label');
+        var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'label');
         element.classList.add('cloudy-ui-form-field');
 
-        if (!(fieldModel.controlType && fieldModel.controlType.customLabel) || (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId)) {
-            var heading = document.createElement(fieldModel.descriptor.isSortable || fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
-            heading.classList.add('cloudy-ui-form-field-label');
-            heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
-            element.appendChild(heading);
-        }
+        var heading = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
+        heading.classList.add('cloudy-ui-form-field-label');
+        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        element.appendChild(heading);
 
         if (fieldModel.descriptor.isSortable) {
             return this.buildSortableField(fieldModel, target, element);
