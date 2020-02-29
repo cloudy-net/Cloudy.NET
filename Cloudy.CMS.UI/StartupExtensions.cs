@@ -65,16 +65,6 @@ namespace Cloudy.CMS
                 configurator.WithStaticFilesFromVersion(Assembly.GetExecutingAssembly().GetName().Version);
             }
 
-            if (!options.AllowUnauthenticatedUsers && options.AuthorizeOptions == null)
-            {
-                throw new ArgumentException($"You have called neither {nameof(CloudyAdminConfigurator.Authorize)}() or {nameof(CloudyAdminConfigurator.Unprotect)}(). You probably want to use the first one");
-            }
-
-            if (options.AllowUnauthenticatedUsers && options.AuthorizeOptions != null)
-            {
-                throw new ArgumentException($"You have called both {nameof(CloudyAdminConfigurator.Authorize)}() and {nameof(CloudyAdminConfigurator.Unprotect)}(), they are mutually exclusive. You probably want to remove the latter");
-            }
-
             app.Map(new PathString(options.BasePath), branch => app.ApplicationServices.GetService<IPipelineBuilder>().Build(branch, options));
         }
     }

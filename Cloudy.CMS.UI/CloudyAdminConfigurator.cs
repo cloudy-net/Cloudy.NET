@@ -20,11 +20,6 @@ namespace Cloudy.CMS.UI
             return this;
         }
 
-        public CloudyAdminConfigurator Authorize()
-        {
-            return Authorize(new AuthorizeOptions());
-        }
-
         public CloudyAdminConfigurator Authorize(AuthorizeOptions authorizeOptions)
         {
             Options.AuthorizeOptions = authorizeOptions;
@@ -34,7 +29,7 @@ namespace Cloudy.CMS.UI
 
         public CloudyAdminConfigurator Unprotect()
         {
-            Options.AllowUnauthenticatedUsers = true;
+            Options.AuthorizeOptions = null;
 
             return this;
         }

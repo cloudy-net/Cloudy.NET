@@ -49,8 +49,7 @@ namespace Website.AspNetCore
             app.UseCloudyAdmin(cloudy => 
                 cloudy
                     .WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "../Cloudy.CMS.UI/wwwroot")))
-                    .Authorize()
-                    //.Unprotect()
+                    .Unprotect()
             );
             app.UseStaticFiles();
             app.UseRouting();
