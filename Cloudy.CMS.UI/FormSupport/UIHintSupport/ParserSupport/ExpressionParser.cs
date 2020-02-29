@@ -6,7 +6,7 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 {
     public class ExpressionParser : IExpressionParser
     {
-        public Expression Parse(Parser parser)
+        public Expression Parse(IParser parser)
         {
             var segments = new List<ExpressionSegment>();
 

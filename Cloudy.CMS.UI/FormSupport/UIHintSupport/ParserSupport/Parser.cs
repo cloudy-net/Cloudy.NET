@@ -5,7 +5,7 @@ using System.Linq;
 namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 {
     [DebuggerDisplay("{Data.Insert(Position, \"↓\")}")]
-    public class Parser
+    public class Parser : IParser
     {
         string Data { get; }
         int Length { get; }

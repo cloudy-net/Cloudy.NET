@@ -56,7 +56,7 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
             return new UIHint(id, parameters);
         }
 
-        UIHintParameterValue ParseParameter(Parser parser)
+        UIHintParameterValue ParseParameter(IParser parser)
         {
             parser.SkipWhitespace();
 
@@ -101,7 +101,7 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
             }
         }
 
-        UIHintParameterValue ParseObject(Parser parser) {
+        UIHintParameterValue ParseObject(IParser parser) {
             var instance = new Dictionary<string, UIHintParameterValue>();
 
             parser.SkipWhitespace();

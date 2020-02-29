@@ -2,6 +2,6 @@
 {
     public interface IExpressionParser
     {
-        Expression Parse(Parser parser);
+        Expression Parse(IParser parser);
     }
 }
