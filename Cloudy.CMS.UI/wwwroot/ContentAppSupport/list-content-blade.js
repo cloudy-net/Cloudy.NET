@@ -5,6 +5,7 @@ import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import EditContentBlade from './edit-content-blade.js';
+import RemoveContentBlade from './remove-content-blade.js';
 
 
 
