@@ -3,6 +3,7 @@ using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.ContentAppSupport.Controllers;
 using Moq;
 using Newtonsoft.Json;
 using System;
@@ -53,7 +54,7 @@ namespace Tests
                 NotGenerated = null,
             };
 
-            var body = new ContentAppController.SaveContentRequestBody
+            var body = new SaveContentController.SaveContentRequestBody
             {
                 Id = id,
                 ContentTypeId = contentTypeId,
@@ -71,7 +72,7 @@ namespace Tests
 
             Mock.Get(containerSpecificContentGetter).Setup(g => g.Get<MyContent>(id, null, container)).Returns(a);
 
-            new ContentAppController(contentTypeRepository, containerSpecificContentGetter, null, containerSpecificContentUpdater, null, null, null, null, null, null, null, null, null, propertyDefinitionProvider).SaveContent(body);
+            new SaveContentController(contentTypeRepository, containerSpecificContentGetter, propertyDefinitionProvider, containerSpecificContentUpdater, null).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.Update(It.IsAny<MyContent>(), container));
         }
