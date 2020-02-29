@@ -19,12 +19,9 @@ class App {
         this.element.appendChild(blade.element);
         this.blades.push(blade);
 
-        if (this.blades.length > 2) {
-            this.blades[this.blades.length - 2].element.scrollIntoView({
-                behavior: 'smooth',
-                inline: 'start',
-            });
-        }
+        blade.element.scrollIntoView({
+            behavior: 'smooth',
+        });
 
         return blade.open();
     }
