@@ -17,13 +17,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
         IUrlProvider UrlProvider { get; }
 
-        public GetUrlController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter)
+        public GetUrlController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IUrlProvider urlProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
+            UrlProvider = urlProvider;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetUrl")]
         public string GetUrl(string id, string contentTypeId)
         {
