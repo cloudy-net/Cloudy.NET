@@ -3,8 +3,6 @@ import Blade from '../blade.js';
 import FormBuilder from '../FormSupport/form-builder.js';
 import Button from '../button.js';
 import LinkButton from '../link-button.js';
-import DataTable from '../DataTableSupport/data-table.js';
-import DataTableButton from '../DataTableSupport/data-table-button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
 import TabSystem from '../TabSupport/tab-system.js';
