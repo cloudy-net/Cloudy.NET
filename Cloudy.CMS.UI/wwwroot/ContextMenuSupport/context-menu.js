@@ -51,7 +51,18 @@ class ContextMenu {
             var menuOffset = this.menu.getBoundingClientRect();
 
             this.menu.style.top = `${offset.top - ((menuOffset.height - offset.height) / 2)}px`;
-            this.menu.style.left = `${offset.left + window.pageXOffset}px`;
+
+            var left = offset.left + window.pageXOffset;
+
+            if (left == 0) {
+                left = -4;
+            }
+
+            if (left + menuOffset.width > window.innerWidth + window.pageXOffset) {
+                left = window.innerWidth + window.pageXOffset - menuOffset.width + 4;
+            }
+
+            this.menu.style.left = `${left}px`;
         });
 
         this.element.appendChild(this.button);
