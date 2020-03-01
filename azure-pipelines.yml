@@ -54,15 +54,6 @@ steps:
     nuGetFeedType: 'external'
     publishFeedCredentials: 'Cloudy.CMS nuget.org'
 
-# - task: Docker@2
-#   displayName: Build static files
-#   inputs:
-#     containerRegistry: 'ACR bjorngoranssoninvest'
-#     repository: 'cloudy-cms-ui-static-files'
-#     command: 'buildAndPush'
-#     Dockerfile: 'Cloudy.CMS.UI/wwwroot/Dockerfile'
-#     tags: '$(VERSION_TAG)'
-
 - script: |
     CONTAINER_NAME=`git describe --tags`
     CONTAINER_NAME=${CONTAINER_NAME:1}
