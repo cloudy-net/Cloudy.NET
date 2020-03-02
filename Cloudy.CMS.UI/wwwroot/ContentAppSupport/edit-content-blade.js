@@ -119,9 +119,26 @@ class EditContentBlade extends Blade {
                         content: JSON.stringify(content)
                     })
                 })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`${response.status} (${response.statusText})`);
+                        }
+
+                        return response.json();
+                    })
                     .catch(error => notificationManager.addNotification(item => item.setText(`Could not save content (${error.name}: ${error.message})`)))
-                    .then(() => this.onCompleteCallbacks.forEach(callback => callback(content)))
-                    .then(() => {
+                    .then(result => {
+                        if (!result.success) {
+                            var errors = document.createElement('ul');
+                            Object.entries(result.validationErrors).forEach(error => {
+                                var item = document.createElement('li');
+                                item.innerText = `${error[0]}: ${error[1]}`;
+                                errors.append(item);
+                            });
+                            notificationManager.addNotification(item => item.setText(`Error saving ${contentType.name}:`, errors));
+                            return;
+                        }
+
                         var name;
 
                         if (contentType.isNameable) {
@@ -141,6 +158,7 @@ class EditContentBlade extends Blade {
                             notificationManager.addNotification(item => item.setText(`Updated ${contentType.name} ${name}`));
                         }
                     })
+                    .then(() => this.onCompleteCallbacks.forEach(callback => callback(content)))
             );
         var cancelButton = new Button('Cancel').onClick(() => app.close(this));
         var paste = text => {

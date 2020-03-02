@@ -73,9 +73,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentRequestBody
         {
-            [MaxLength(10)]
+            [Required]
             public string Id { get; set; }
+            [Required]
             public string ContentTypeId { get; set; }
+            [Required]
             public string Content { get; set; }
         }
     }
