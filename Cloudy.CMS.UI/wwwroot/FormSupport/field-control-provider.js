@@ -9,7 +9,8 @@
                 }
 
                 return response.json();
-            });
+            })
+            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get module paths for form field controls (${error.name}: ${error.message})`)));;
 
         this.typeModulesPromises = {};
     }

@@ -52,7 +52,14 @@ class Nav {
         this.menuFade.classList.add('cloudy-ui-hidden');
         this.element.appendChild(this.menuFade);
 
-        this.appDescriptorsPromise = fetch('App/GetAll', { credentials: 'include' }).then(response => response.json());
+        this.appDescriptorsPromise = fetch('App/GetAll', { credentials: 'include' }).then(response => {
+            if (!response.ok) {
+                throw new Error(`${response.status} (${response.statusText})`);
+            }
+
+            return response.json();
+        })
+            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get apps (${error.name}: ${error.message})`)));;
         this.appDescriptorsPromise.then(appDescriptors => {
             this.menuList.addSubHeader('Apps');
             appDescriptors.forEach(appDescriptor => {

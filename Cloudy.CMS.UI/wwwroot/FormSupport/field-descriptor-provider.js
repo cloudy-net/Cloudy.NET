@@ -1,4 +1,5 @@
-﻿
+﻿import notificationManager from "../NotificationSupport/notification-manager.js";
+
 
 
 /* FORM FIELD DESCRIPTOR PROVIDER */
@@ -14,7 +15,8 @@ class FormFieldDescriptorProvider {
                 }
 
                 return response.json();
-            });
+            })
+            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get field descriptors for form ${formId} (${error.name}: ${error.message})`)));
     }
 }
 

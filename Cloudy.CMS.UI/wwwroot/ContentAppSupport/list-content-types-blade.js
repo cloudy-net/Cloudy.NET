@@ -28,8 +28,14 @@ class ListContentTypesBlade extends Blade {
 
         var update = () =>
             fetch('Content/GetContentTypeList', { credentials: 'include' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`${response.status} (${response.statusText})`);
+                    }
+
+                    return response.json();
+                })
                 .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content types (${error.name}: ${error.message})`)))
-                .then(response => response.json())
                 .then(contentTypes => {
                     if (!contentTypes.length) {
                         var image = `<img class="cloudy-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
@@ -77,8 +83,14 @@ class ListContentTypesBlade extends Blade {
                             } else {
                                 var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
                                 var content = fetch(`Content/GetSingleton?id=${contentType.id}`, { credentials: 'include' })
-                                    .catch(error => notificationManager.addNotification(item => item.setText(`Could not get singleton (${error.name}: ${error.message})`)))
-                                    .then(response => response.json());
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error(`${response.status} (${response.statusText})`);
+                                        }
+
+                                        return response.json();
+                                    })
+                                    .catch(error => notificationManager.addNotification(item => item.setText(`Could not get singleton (${error.name}: ${error.message})`)));
 
                                 item.onClick(() => {
                                     Promise.all([formBuilder.fieldModels, content]).then(results => {

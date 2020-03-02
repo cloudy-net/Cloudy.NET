@@ -57,7 +57,8 @@ class Backend {
                 }
 
                 return response.json();
-            });
+            })
+            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get data from datatable backend ${this.name} (${error.name}: ${error.message})`)));;
     }
 }
 

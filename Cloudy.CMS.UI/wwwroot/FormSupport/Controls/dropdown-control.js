@@ -18,7 +18,14 @@ class DropdownControl extends FieldControl {
                 'Content-Type': 'application/json'
             }
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`${response.status} (${response.statusText})`);
+                }
+
+                return response.json();
+            })
+            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get options for dropdown control ${fieldModel.descriptor.control.parameters['provider']} (${error.name}: ${error.message})`)));
             .then(items => {
                 items.forEach(item => {
                     var option = document.createElement('option');
