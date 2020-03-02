@@ -28,7 +28,14 @@ class TabSystem {
             tab.classList.add('cloudy-ui-active');
 
             [...this.content.children].forEach(c => this.content.removeChild(c));
-            this.content.append(content());
+
+            var result = content();
+
+            if (result instanceof Promise) {
+                result.then(element => this.content.append(element));
+            } else {
+                this.content.append(result);
+            }
 
             tab.blur();
         });
