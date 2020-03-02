@@ -34,7 +34,7 @@ class ChangePasswordBlade extends Blade {
 
                     return response.json();
                 })
-                .catch(error => notificationManager.addNotification(item => item.setText(`Could not change password (${error.name}: ${error.message})`)));
+                .catch(error => notificationManager.addNotification(item => item.setText(`Could not change password (${error.name}: ${error.message})`)))
                 .then(result => {
                     if (result.success) {
                         notificationManager.addNotification(item => item.setText('Password changed.'));
