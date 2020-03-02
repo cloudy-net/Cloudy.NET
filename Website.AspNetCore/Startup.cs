@@ -49,7 +49,7 @@ namespace Website.AspNetCore
             app.UseCloudyAdmin(cloudy => 
                 cloudy
                     .WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "../Cloudy.CMS.UI/wwwroot")))
-                    .WithHelpSectionsFrom("https://localhost:44369/help-sections")
+                    //.WithHelpSectionsFrom("https://localhost:44369/help-sections")
                     .Unprotect()
             );
             app.UseStaticFiles();
