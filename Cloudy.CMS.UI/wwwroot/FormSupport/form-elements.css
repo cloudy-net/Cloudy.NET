@@ -7,11 +7,7 @@
 .cloudy-ui-form-field {
   margin: 0;
   padding: 0;
-  border: none;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px; }
-  .cloudy-ui-form-field:focus-within > .cloudy-ui-form-field-label {
-    color: #1976d2; }
+  border: none; }
   .cloudy-ui-form-field + .cloudy-ui-form-field {
     margin-top: 16px; }
 
@@ -30,8 +26,13 @@ fieldset.cloudy-ui-form-field {
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0.00938em;
-  color: rgba(0, 0, 0, 0.54); }
+  color: rgba(0, 0, 0, 0.54);
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; }
   .cloudy-ui-form-field-label.cloudy-ui-focus {
+    color: #1976d2; }
+  .cloudy-ui-form-field:hover > .cloudy-ui-form-field-label {
+    color: black; }
+  .cloudy-ui-form-field:focus-within > .cloudy-ui-form-field-label {
     color: #1976d2; }
   fieldset.cloudy-ui-form-field > .cloudy-ui-form-field-label {
     padding: 0 8px; }
@@ -47,7 +48,7 @@ fieldset.cloudy-ui-form-field {
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
   background-color: transparent;
-  transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  /*transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;*/
   font: inherit;
   color: currentColor; }
   .cloudy-ui-form-field.cloudy-ui-simple:hover .cloudy-ui-form-input, .cloudy-ui-form-input:hover {
