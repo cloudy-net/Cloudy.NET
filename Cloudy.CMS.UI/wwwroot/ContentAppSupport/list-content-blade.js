@@ -39,20 +39,8 @@ class ListContentBlade extends Blade {
 
             Promise.all([contentListPromise, formFieldsPromise, Promise.all(actions)]).then(([response, formFields]) => {
                 if (response.length == 0) {
-                    if (contentTypeCount == 1 && formFields.length == 0) {
-                        var image = `<img class="cloudy-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_suburbs_8b83.svg" alt="Illustration of a row of houses.">`;
-                        var header1 = `<h2 class="cloudy-ui-help-heading">No ${contentType.pluralName[0].toLowerCase()}${contentType.pluralName.substr(1)}, no properties … yet</h2>`;
-                        var text1 = '<p>Your content type looks a bit empty. Let\'s add some properties!</p>';
-                        var text2 = '<p>Try implementing INameable:</p>';
-                        var code = '<pre class="cloudy-ui-help-code">public class MyClass : …, INameable\n' +
-                            '{\n' +
-                            '    …\n' +
-                            '    public string Name { get; set; }\n' +
-                            '}</pre>';
-
-                        var helpContainer = document.createElement('cloudy-ui-help-container');
-                        helpContainer.innerHTML = image + header1 + text1 + text2 + code;
-                        this.setContent(helpContainer);
+                    if (contentTypeCount == 2 && formFields.length == 0) {
+                        HelpSectionLoader.load('content-list-no-properties', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, { }).then(element => this.setContent(element))
 
                         return;
                     } else {
