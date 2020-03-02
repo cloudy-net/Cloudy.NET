@@ -39,6 +39,7 @@ namespace Cloudy.CMS
         public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator)
         {
             configurator.AddComponent<CloudyAdminComponent>();
+            configurator.Services.AddSingleton(new CloudyAdminOptions());
 
             return configurator;
         }
@@ -55,7 +56,7 @@ namespace Cloudy.CMS
                 throw new Exception("Please add Cloudy Admin services first by doing: services.AddCloudy(cloudy => cloudy.AddAdmin())");
             }
 
-            var options = new CloudyAdminOptions();
+            var options = app.ApplicationServices.GetService<CloudyAdminOptions>();
             var configurator = new CloudyAdminConfigurator(options);
 
             configure(configurator);

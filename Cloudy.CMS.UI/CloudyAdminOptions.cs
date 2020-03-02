@@ -11,5 +11,6 @@ namespace Cloudy.CMS.UI
         public AuthorizeOptions AuthorizeOptions { get; set; } = new AuthorizeOptions();
         public IFileProvider StaticFilesFileProvider { get; set; }
         public string StaticFilesBaseUri { get; set; }
+        public string HelpSectionBaseUri { get; set; } = "https://cloudy-cms.net/help-sections";
     }
 }

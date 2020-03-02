@@ -6,6 +6,7 @@ import List from '../ListSupport/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import EditContentBlade from './edit-content-blade.js';
 import RemoveContentBlade from './remove-content-blade.js';
+import HelpSectionLoader from './help-section-loader.js';
 
 
 
@@ -27,8 +28,14 @@ class ListContentBlade extends Blade {
 
         var update = () => {
             var contentListPromise = fetch(`Content/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
-                .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content list (${error.name}: ${error.message})`)))
-                .then(response => response.json());
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`${response.status} (${response.statusText})`);
+                    }
+
+                    return response.json();
+                })
+                .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content list (${error.name}: ${error.message})`)));
 
             Promise.all([contentListPromise, formFieldsPromise, Promise.all(actions)]).then(([response, formFields]) => {
                 if (response.length == 0) {
@@ -49,20 +56,7 @@ class ListContentBlade extends Blade {
 
                         return;
                     } else {
-                        var image = `<img class="cloudy-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_remotely_2j6y.svg" alt="Illustration of a row of houses.">`;
-                        var header1 = `<h2 class="cloudy-ui-help-heading">There's nothing here</h2>`;
-                        var text1 = `<p>You haven’t created any ${contentType.pluralName[0].toLowerCase()}${contentType.pluralName.substr(1)} yet. Let’s do it!</p>`;
-
-                        var button = new Button(`Create new ${contentType.name[0].toLowerCase()}${contentType.name.substr(1)}`).setPrimary().onClick(createNew);
-                        var buttonContainer = document.createElement('div');
-                        buttonContainer.style.textAlign = 'center';
-                        buttonContainer.append(button.element);
-
-                        var helpContainer = document.createElement('cloudy-ui-help-container');
-                        helpContainer.innerHTML = image + header1 + text1;
-
-                        helpContainer.append(buttonContainer);
-                        this.setContent(helpContainer);
+                        HelpSectionLoader.load('content-list-empty', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, { createNew }).then(element => this.setContent(element))
 
                         return;
                     }

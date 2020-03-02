@@ -68,7 +68,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 {
                     Id = contentType.Id,
                     Name = name,
+                    LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
                     PluralName = pluralName,
+                    LowerCasePluralName = pluralName.Substring(0, 1).ToLower() + pluralName.Substring(1),
                     IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
                     NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
                     IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
@@ -86,7 +88,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             public string Id { get; set; }
             public string Name { get; set; }
+            public string LowerCaseName { get; set; }
             public string PluralName { get; set; }
+            public string LowerCasePluralName { get; set; }
             public bool IsNameable { get; set; }
             public string NameablePropertyName { get; set; }
             public bool IsRoutable { get; set; }

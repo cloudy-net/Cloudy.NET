@@ -66,5 +66,12 @@ namespace Cloudy.CMS.UI
 
             return this;
         }
+
+        public CloudyAdminConfigurator WithHelpSectionsFrom(string baseUri)
+        {
+            Options.HelpSectionBaseUri = baseUri.TrimEnd('/');
+
+            return this;
+        }
     }
 }
