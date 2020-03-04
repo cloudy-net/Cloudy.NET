@@ -32,7 +32,7 @@ using Cloudy.CMS.UI;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Net.Http.Headers;
 
-namespace Cloudy.CMS
+namespace Microsoft.AspNetCore.Builder
 {
     public static class StartupExtensions
     {
