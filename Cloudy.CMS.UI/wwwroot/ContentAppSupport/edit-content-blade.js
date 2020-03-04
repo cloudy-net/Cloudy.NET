@@ -47,6 +47,8 @@ class EditContentBlade extends Blade {
                     notificationManager.addNotification(item => item.setText(`Could not get URL (${error.name}: ${error.message})`));
                 }
 
+                var url = await response.text();
+
                 if (!url) {
                     return;
                 }
