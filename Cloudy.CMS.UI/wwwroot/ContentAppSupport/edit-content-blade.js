@@ -92,29 +92,27 @@ class EditContentBlade extends Blade {
             var form = await this.formBuilder.build(this.content, { group: groups[0] });
 
             this.setContent(form);
+        } else {
+            var tabSystem = new TabSystem();
 
-            return;
-        }
+            if (groups.indexOf(null) != -1) {
+                tabSystem.addTab('General', async () => {
+                    var element = document.createElement('div');
+                    var form = await this.formBuilder.build(this.content, { group: null });
+                    form.appendTo(element);
+                    return element;
+                });
+            }
 
-        var tabSystem = new TabSystem();
-
-        if (groups.indexOf(null) != -1) {
-            tabSystem.addTab('General', async () => {
+            groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                 var element = document.createElement('div');
-                var form = await this.formBuilder.build(this.content, { group: null });
+                var form = await this.formBuilder.build(this.content, { group: group });
                 form.appendTo(element);
                 return element;
-            });
+            }));
+
+            this.setContent(tabSystem);
         }
-
-        groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
-            var element = document.createElement('div');
-            var form = await this.formBuilder.build(this.content, { group: group });
-            form.appendTo(element);
-            return element;
-        }));
-
-        this.setContent(tabSystem);
 
         var saveButton = new Button('Save')
             .setPrimary()
