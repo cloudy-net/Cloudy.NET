@@ -1,4 +1,6 @@
-﻿class FieldControlProvider {
+﻿import notificationManager from "../NotificationSupport/notification-manager.js";
+
+class FieldControlProvider {
     constructor() {
         this.modulePathsPromise = fetch('Control/ModulePaths', {
             credentials: 'include'
@@ -15,19 +17,24 @@
         this.typeModulesPromises = {};
     }
     
-    getFor(field) {
-        return this
-            .modulePathsPromise
-            .then(modulePaths => {
-                var modulePath = modulePaths[field.control.id];
+    async getFor(field) {
+        var modulePaths = await this.modulePathsPromise;
+        var modulePath = modulePaths[field.control.id];
 
-                if (!this.typeModulesPromises[field.control.id]) {
-                    this.typeModulesPromises[field.control.id] = import(`../${modulePath}`);
-                }
+        if (!this.typeModulesPromises[field.control.id]) {
+            this.typeModulesPromises[field.control.id] = import(`../${modulePath}`);
+        }
 
-                return this.typeModulesPromises[field.control.id];
-            })
-            .then(module => module.default);
+        var module;
+
+        try {
+            module = await this.typeModulesPromises[field.control.id];
+        } catch (error) {
+            notificationManager.addNotification(item => item.setText(`Could not load field control ${field.control.id} (${error.name}: ${error.message})`));
+            throw error;
+        }
+
+        return module.default;
     }
 }
 
