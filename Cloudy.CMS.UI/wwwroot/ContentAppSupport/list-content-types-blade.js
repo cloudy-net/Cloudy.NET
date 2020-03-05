@@ -6,6 +6,7 @@ import List from '../ListSupport/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import ListContentBlade from './list-content-blade.js';
 import EditContentBlade from './edit-content-blade.js';
+import HelpSectionLoader from './help-section-loader.js';
 
 
 
@@ -78,7 +79,23 @@ class ListContentTypesBlade extends Blade {
                             if (!contentType.isSingleton) {
                                 item.onClick(() => {
                                     item.setActive();
-                                    app.openAfter(new ListContentBlade(app, contentType, contentTypes.length).onClose(() => item.setActive(false)), this);
+                                    var blade = new ListContentBlade(app, contentType, contentTypes.length).onClose(() => item.setActive(false));
+                                    blade.onEmpty(async function() {
+                                        if (contentTypes.length == 2 && this.formBuilder.fieldModels.length == 0) {
+                                            var section = await HelpSectionLoader.load('content-list-no-properties', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, {});
+
+                                            this.setContent(section);
+
+                                            return;
+                                        } else {
+                                            var section = await HelpSectionLoader.load('content-list-empty', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, { createNew: this.createNew });
+
+                                            this.setContent(section);
+
+                                            return;
+                                        }
+                                    });
+                                    app.openAfter(blade, this);
                                 });
                             } else {
                                 var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);

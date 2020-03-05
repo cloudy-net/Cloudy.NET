@@ -13,94 +13,103 @@ import HelpSectionLoader from './help-section-loader.js';
 /* LIST CONTENT BLADE */
 
 class ListContentBlade extends Blade {
+    onEmptyCallbacks = [];
+
     constructor(app, contentType, contentTypeCount) {
         super();
 
-        var createNew = () => app.openAfter(new EditContentBlade(app, contentType, formBuilder).onComplete(() => update()), this);
+        this.app = app;
+        this.contentType = contentType;
+    }
 
-        this.setTitle(contentType.pluralName);
-        this.setToolbar(new Button('New').setInherit().onClick(createNew));
+    async open() {
+        this.setTitle(this.contentType.pluralName);
 
-        var actions = contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
+        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${this.contentType.id}]`, this.app);
+        await formBuilder.fieldModels;
 
-        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
-        var formFieldsPromise = formBuilder.fieldModels;
+        this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType, formBuilder).onComplete(() => update()), this);
+        this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
-        var update = () => {
-            var contentListPromise = fetch(`Content/GetContentList?contentTypeId=${contentType.id}`, { credentials: 'include' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`${response.status} (${response.statusText})`);
-                    }
+        var actions = this.contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
+        await Promise.all(actions);
 
-                    return response.json();
-                })
-                .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content list (${error.name}: ${error.message})`)));
+        var update = async () => {
+            var contentList;
+            try {
+                var response = await fetch(`Content/GetContentList?contentTypeId=${this.contentType.id}`, { credentials: 'include' });
 
-            Promise.all([contentListPromise, formFieldsPromise, Promise.all(actions)]).then(([response, formFields]) => {
-                if (response.length == 0) {
-                    if (contentTypeCount == 2 && formFields.length == 0) {
-                        HelpSectionLoader.load('content-list-no-properties', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, { }).then(element => this.setContent(element))
-
-                        return;
-                    } else {
-                        HelpSectionLoader.load('content-list-empty', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, { createNew }).then(element => this.setContent(element))
-
-                        return;
-                    }
+                if (!response.ok) {
+                    throw new Error(`${response.status} (${response.statusText})`);
                 }
 
-                var list = new List();
-                response.forEach(content => list.addItem(item => {
-                    var name;
+                contentList = await response.json();
+            } catch (error) {
+                notificationManager.addNotification(item => item.setText(`Could not get content list (${error.name}: ${error.message})`));
+            }
 
-                    if (contentType.isNameable) {
-                        name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+            if (contentList.length == 0) {
+                this.onEmptyCallbacks.forEach(callback => callback.apply(this));
+                return;
+            }
 
-                        if (!name) {
-                            name = `${contentType.name} ${content.id}`;
-                        }
-                    } else {
-                        name = content.id;
+            var list = new List();
+            contentList.forEach(content => list.addItem(item => {
+                var name;
+
+                if (this.contentType.isNameable) {
+                    name = this.contentType.nameablePropertyName ? content[this.contentType.nameablePropertyName] : content.name;
+
+                    if (!name) {
+                        name = `${this.contentType.name} ${content.id}`;
                     }
+                } else {
+                    name = content.id;
+                }
 
-                    item.setText(name);
-                    item.onClick(() => {
-                        item.setActive();
-                        var blade = new EditContentBlade(app, contentType, formBuilder, content)
-                            .onComplete(() => {
-                                var name;
+                item.setText(name);
+                item.onClick(() => {
+                    item.setActive();
+                    var blade = new EditContentBlade(this.app, this.contentType, formBuilder, content)
+                        .onComplete(() => {
+                            var name;
 
-                                if (contentType.isNameable) {
-                                    name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+                            if (this.contentType.isNameable) {
+                                name = this.contentType.nameablePropertyName ? content[this.contentType.nameablePropertyName] : content.name;
 
-                                    if (!name) {
-                                        name = `${contentType.name} ${content.id}`;
-                                    }
-                                } else {
-                                    name = content.id;
+                                if (!name) {
+                                    name = `${this.contentType.name} ${content.id}`;
                                 }
+                            } else {
+                                name = content.id;
+                            }
 
-                                item.setText(name);
-                            })
-                            .onClose(() => item.setActive(false));
-                        app.openAfter(blade, this);
+                            item.setText(name);
+                        })
+                        .onClose(() => item.setActive(false));
+
+                    this.app.openAfter(blade, this);
+                });
+
+                var menu = new ContextMenu();
+                item.setMenu(menu);
+                Promise
+                    .all(actions)
+                    .then(actions => actions.forEach(module => module.default(menu, content, this, app)))
+                    .then(() => {
+                        menu.addItem(item => item.setText('Remove').onClick(() => app.openAfter(new RemoveContentBlade(app, contentType, formBuilder, content).onComplete(() => update()), this)));
                     });
-
-                    var menu = new ContextMenu();
-                    item.setMenu(menu);
-                    Promise
-                        .all(actions)
-                        .then(actions => actions.forEach(module => module.default(menu, content, this, app)))
-                        .then(() => {
-                            menu.addItem(item => item.setText('Remove').onClick(() => app.openAfter(new RemoveContentBlade(app, contentType, formBuilder, content).onComplete(() => update()), this)));
-                        });
-                }));
                 this.setContent(list);
-            });
+            }));
         };
 
         update();
+    }
+
+    onEmpty(callback) {
+        this.onEmptyCallbacks.push(callback);
+
+        return this;
     }
 }
 
