@@ -19,6 +19,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport
             value = Regex.Replace(value, @"([a-z])([A-Z])", "$1 $2");
             value = Regex.Replace(value, @" [A-Z][a-z]", m => m.Value.ToLower());
 
+            if(value.EndsWith(" id"))
+            {
+                value = value.Substring(0, value.Length - " id".Length);
+            }
+
             return value;
         }
     }
