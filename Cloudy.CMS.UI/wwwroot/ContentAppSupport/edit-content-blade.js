@@ -133,12 +133,20 @@ class EditContentBlade extends Blade {
                     });
 
                     if (!response.ok) {
-                        throw new Error(`${response.status} (${response.statusText})`);
+                        var text = await response.text;
+
+                        if (text) {
+                            throw new Error(text.split('\n')[0]);
+                        } else {
+                            text = response.statusText;
+                        }
+
+                        throw new Error(`${response.status} (${text})`);
                     }
 
                     var result = await response.json();
                 } catch (error) {
-                    notificationManager.addNotification(item => item.setText(`Could not save content (${error.name}: ${error.message})`));
+                    notificationManager.addNotification(item => item.setText(`Could not save content (${error.message})`));
                 }
 
                 if (!result.success) {

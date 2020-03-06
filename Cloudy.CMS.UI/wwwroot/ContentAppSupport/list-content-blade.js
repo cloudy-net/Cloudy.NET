@@ -36,12 +36,20 @@ class ListContentBlade extends Blade {
                 var response = await fetch(`Content/GetContentList?contentTypeId=${this.contentType.id}`, { credentials: 'include' });
 
                 if (!response.ok) {
-                    throw new Error(`${response.status} (${response.statusText})`);
+                    var text = await response.text;
+
+                    if (text) {
+                        throw new Error(text.split('\n')[0]);
+                    } else {
+                        text = response.statusText;
+                    }
+
+                    throw new Error(`${response.status} (${text})`);
                 }
 
                 contentList = await response.json();
             } catch (error) {
-                notificationManager.addNotification(item => item.setText(`Could not get content list (${error.name}: ${error.message})`));
+                notificationManager.addNotification(item => item.setText(`Could not get content list (${error.message})`));
             }
 
             if (contentList.length == 0) {

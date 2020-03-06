@@ -13,32 +13,45 @@ class DropdownControl extends FieldControl {
 
         this.onSet(v => value = select.value = v || null);
 
-        fetch(`DropdownControl/GetOptions?provider=${fieldModel.descriptor.control.parameters['provider']}`, {
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`${response.status} (${response.statusText})`);
+        this.load(fieldModel.descriptor.control.parameters['provider']);
+    }
+
+    async load(provider) {
+        try {
+            var response = await fetch(`DropdownControl/GetOptions?provider=${provider}`, {
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                var text = await response.text;
+
+                if (text) {
+                    throw new Error(text.split('\n')[0]);
+                } else {
+                    text = response.statusText;
                 }
 
-                return response.json();
-            })
-            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get options for dropdown control ${fieldModel.descriptor.control.parameters['provider']} (${error.name}: ${error.message})`)))
-            .then(items => {
-                items.forEach(item => {
-                    var option = document.createElement('option');
+                throw new Error(`${response.status} (${text})`);
+            }
 
-                    option.value = item.value;
-                    option.innerText = item.text;
+            var items = await response.json();
 
-                    select.append(option);
-                });
+            items.forEach(item => {
+                var option = document.createElement('option');
 
-                select.value = value;
+                option.value = item.value;
+                option.innerText = item.text;
+
+                this.element.append(option);
             });
+
+            this.element.value = value;
+        } catch (error) {
+            notificationManager.addNotification(item => item.setText(`Could not get options for dropdown control ${provider} (${error.message})`));
+        }
     }
 }
 

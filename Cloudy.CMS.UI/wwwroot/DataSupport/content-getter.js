@@ -8,12 +8,20 @@ class ContentGetter {
             var response = await fetch(`Data/ContentGetter/Get?id=${id}&contentTypeId=${contentTypeId}`, { credentials: 'include' });
 
             if (!response.ok) {
-                throw new Error(`${response.status} (${response.statusText})`);
+                var text = await response.text;
+
+                if (text) {
+                    throw new Error(text.split('\n')[0]);
+                } else {
+                    text = response.statusText;
+                }
+
+                throw new Error(`${response.status} (${text})`);
             }
 
             return await response.json();
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get content with id ${id} (${error.name}: ${error.message})`));
+            notificationManager.addNotification(item => item.setText(`Could not get content with id ${id} (${error.message})`));
         }
     }
 }

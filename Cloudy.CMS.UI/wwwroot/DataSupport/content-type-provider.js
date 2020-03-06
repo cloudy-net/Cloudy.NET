@@ -13,7 +13,15 @@ class ContentTypeProvider {
                 this.all = fetch('ContentTypeProvider/GetAll', { credentials: 'include' })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error(`${response.status} (${response.statusText})`);
+                            var text = await response.text;
+
+                            if (text) {
+                                throw new Error(text.split('\n')[0]);
+                            } else {
+                                text = response.statusText;
+                            }
+
+                            throw new Error(`${response.status} (${text})`);
                         }
 
                         return response.json();
@@ -22,7 +30,7 @@ class ContentTypeProvider {
 
             return await this.all;
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get content types (${error.name}: ${error.message})`));
+            notificationManager.addNotification(item => item.setText(`Could not get content types (${error.message})`));
             throw error;
         }
     }

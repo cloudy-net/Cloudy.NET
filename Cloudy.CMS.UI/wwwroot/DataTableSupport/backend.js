@@ -53,12 +53,20 @@ class Backend {
         return fetch(`Backend/GetAll?provider=${this.name}&page=${query.page}${sort}`, { credentials: 'include' })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`DataTable backend returned ${response.status} (${response.statusText})`);
+                    var text = await response.text;
+
+                    if (text) {
+                        throw new Error(text.split('\n')[0]);
+                    } else {
+                        text = response.statusText;
+                    }
+
+                    throw new Error(`${response.status} (${text})`);
                 }
 
                 return response.json();
             })
-            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get data from datatable backend ${this.name} (${error.name}: ${error.message})`)));;
+            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get data from datatable backend ${this.name} (${error.message})`)));;
     }
 }
 
