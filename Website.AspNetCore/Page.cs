@@ -16,6 +16,8 @@ namespace Website.AspNetCore
         public string ContentTypeId { get; set; }
         public string ParentId { get; set; }
         public string Name { get; set; }
+        [UIHint("select('83b91be7-80f1-42b0-a828-919a7f792c29')")]
+        public string TagId { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
         [UIHint("password")]

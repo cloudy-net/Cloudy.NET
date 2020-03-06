@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DocumentSupport;
 using MongoDB.Driver;
+using Cloudy.CMS.ContentSupport;
 
 namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 {
@@ -26,7 +27,7 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
             return GetAsync<T>(id, language, container).WaitAndUnwrapException();
         }
 
-        public async Task<T> GetAsync<T>(string id, string language, string container) where T : class
+        public async Task<IContent> GetAsync(string id, string language, string container)
         {
             if (id == null)
             {
@@ -46,7 +47,12 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 
             var contentType = ContentTypeRepository.Get(document.GlobalFacet.Interfaces["IContent"].Properties["ContentTypeId"] as string);
 
-            return (T)ContentDeserializer.Deserialize(document, contentType, language);
+            return ContentDeserializer.Deserialize(document, contentType, language);
+        }
+
+        public async Task<T> GetAsync<T>(string id, string language, string container) where T : class
+        {
+            return (T)await GetAsync(id, language, container);
         }
     }
 }

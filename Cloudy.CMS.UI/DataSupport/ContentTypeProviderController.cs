@@ -15,8 +15,8 @@ using System.Text;
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Area("Cloudy.CMS")]
-    [Route("Content")]
-    public class GetContentTypeListController : Controller
+    [Route("ContentTypeProvider/")]
+    public class ContentTypeProviderController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IHumanizer Humanizer { get; }
@@ -27,7 +27,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         INameExpressionParser NameExpressionParser { get; }
         IListActionModuleProvider ListActionModuleProvider { get; }
 
-        public GetContentTypeListController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider)
+        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
@@ -39,49 +39,55 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         }
 
         [HttpGet]
-        [Route("GetContentTypeList")]
+        [Route("GetAll")]
         public IEnumerable<ContentTypeResponseItem> GetContentTypeList()
         {
             var result = new List<ContentTypeResponseItem>();
 
             foreach (var contentType in ContentTypeProvider.GetAll())
             {
-                var name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Type.Name;
-                string pluralName;
-
-                if (name.Contains(':') && !contentType.Id.Contains(':'))
-                {
-                    var nameSplit = name.Split(':');
-
-                    name = nameSplit.First();
-                    pluralName = nameSplit.Last();
-                }
-                else
-                {
-                    name = Humanizer.Humanize(name);
-                    pluralName = Pluralizer.Pluralize(name);
-                }
-
-                var singleton = SingletonProvider.Get(contentType.Id);
-
-                result.Add(new ContentTypeResponseItem
-                {
-                    Id = contentType.Id,
-                    Name = name,
-                    LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
-                    PluralName = pluralName,
-                    LowerCasePluralName = pluralName.Substring(0, 1).ToLower() + pluralName.Substring(1),
-                    IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
-                    NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
-                    IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
-                    IsSingleton = singleton != null,
-                    Count = -1,
-                    ContentTypeActionModules = ContentTypeActionModuleProvider.GetContentTypeActionModulesFor(contentType.Id),
-                    ListActionModules = ListActionModuleProvider.GetListActionModulesFor(contentType.Id),
-                });
+                result.Add(GetItem(contentType));
             }
 
             return result.AsReadOnly();
+        }
+
+        private ContentTypeResponseItem GetItem(ContentTypeDescriptor contentType)
+        {
+            var name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Type.Name;
+            string pluralName;
+
+            if (name.Contains(':') && !contentType.Id.Contains(':'))
+            {
+                var nameSplit = name.Split(':');
+
+                name = nameSplit.First();
+                pluralName = nameSplit.Last();
+            }
+            else
+            {
+                name = Humanizer.Humanize(name);
+                pluralName = Pluralizer.Pluralize(name);
+            }
+
+            var singleton = SingletonProvider.Get(contentType.Id);
+
+            var item = new ContentTypeResponseItem
+            {
+                Id = contentType.Id,
+                Name = name,
+                LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
+                PluralName = pluralName,
+                LowerCasePluralName = pluralName.Substring(0, 1).ToLower() + pluralName.Substring(1),
+                IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
+                NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
+                IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
+                IsSingleton = singleton != null,
+                Count = -1,
+                ContentTypeActionModules = ContentTypeActionModuleProvider.GetContentTypeActionModulesFor(contentType.Id),
+                ListActionModules = ListActionModuleProvider.GetListActionModulesFor(contentType.Id),
+            };
+            return item;
         }
 
         public class ContentTypeResponseItem

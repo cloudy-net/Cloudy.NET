@@ -11,7 +11,7 @@ import SortableItem from './sortable-item.js';
 /* FORM BUILDER */
 
 class FormBuilder {
-    constructor(formId, app) {
+    constructor(formId, app, blade) {
         if (typeof formId == 'string') {
             this.formId = formId;
             this.fieldModels = this.getFieldModels(formId);
@@ -21,6 +21,7 @@ class FormBuilder {
         }
 
         this.app = app;
+        this.blade = blade;
     }
 
     getFieldModels(formId) {
@@ -116,7 +117,7 @@ class FormBuilder {
     buildSimpleField(fieldModel, target, element) {
         element.classList.add('cloudy-ui-simple');
 
-        var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app);
+        var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade);
 
         control.onChange(value => target[fieldModel.descriptor.camelCaseId] = value);
 
@@ -125,7 +126,7 @@ class FormBuilder {
         return new Field(fieldModel, element, { control });
     }
 
-    buildSortableField(fieldModel, target, element) {
+    buildSortableField(fieldModel, target, element, blade) {
         if (!target[fieldModel.descriptor.camelCaseId]) {
             target[fieldModel.descriptor.camelCaseId] = [];
         }
@@ -134,7 +135,7 @@ class FormBuilder {
 
         if (fieldModel.descriptor.embeddedFormId) {
             if (fieldModel.descriptor.control) {
-                sortable = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app);
+                sortable = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade);
             } else {
                 sortable = this.buildSortableEmbeddedForm(fieldModel, target[fieldModel.descriptor.camelCaseId]);
             }

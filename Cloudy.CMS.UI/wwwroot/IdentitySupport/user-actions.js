@@ -15,7 +15,7 @@ class ChangePasswordBlade extends Blade {
             userId: user.id,
         };
 
-        new FormBuilder("Cloudy.CMS.Identity.ChangePassword", app).build(target, {}).then(form => this.setContent(form));
+        new FormBuilder("Cloudy.CMS.Identity.ChangePassword", app, this).build(target, {}).then(form => this.setContent(form));
 
         var save = () => {
 

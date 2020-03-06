@@ -1,7 +1,7 @@
 ﻿import FieldControl from '../field-control.js';
 
 class TextControl extends FieldControl {
-    constructor(fieldModel, value, app) {
+    constructor(fieldModel, value, app, blade) {
         var container = document.createElement('div');
         super(container);
 

@@ -9,7 +9,7 @@ import notificationManager from '../NotificationSupport/notification-manager.js'
 class RemoveContentBlade extends Blade {
     onCompleteCallbacks = [];
 
-    constructor(app, contentType, formBuilder, content) {
+    constructor(app, contentType, content) {
         super();
 
         if (contentType.isNameable && (contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name)) {

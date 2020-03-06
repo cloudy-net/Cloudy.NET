@@ -77,7 +77,7 @@ class Login {
                 label: 'Password',
                 camelCaseId: 'password',
                 control: { id: 'password', parameters: {} },
-            }, TextControl, null),
+            }, TextControl, null, null),
         ]).build(target).then(form => {
             this.content.append(form.element);
             form.element.querySelector('input[name="email"]').focus();

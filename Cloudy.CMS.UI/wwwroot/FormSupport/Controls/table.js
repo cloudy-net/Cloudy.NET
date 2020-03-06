@@ -8,7 +8,7 @@ import Button from '../../button.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
 class SortableTableControl extends Sortable {
-    constructor(fieldModel, target, app) {
+    constructor(fieldModel, target, app, blade) {
         super(fieldModel, target, index => {
             if (!(index in target)) {
                 target[index] = {};
@@ -34,7 +34,7 @@ class SortableTableControl extends Sortable {
             }
         };
 
-        var formBuilder = new FormBuilder(fieldModel.descriptor.embeddedFormId, app);
+        var formBuilder = new FormBuilder(fieldModel.descriptor.embeddedFormId, app, this);
 
         var dataTable = new DataTable()
             .setBackend(backend);
@@ -73,11 +73,18 @@ class SortableTableControl extends Sortable {
                 .setButtonColumn()
                 .setContent(item =>
                     new ContextMenu()
-                        .addItem(menuItem => menuItem.setText('Edit').onClick(() => app.open(new EditRow(formBuilder, item, app).onClose(message => { if (message == 'saved') { dataTable.update(); } }), dataTable.element)))
+                        .addItem(menuItem => menuItem.setText('Edit').onClick(() => {
+                            var edit = new EditRow(formBuilder, item, app).onClose(message => { if (message == 'saved') { dataTable.update(); } });
+                            app.open(edit, blade);
+                        }))
                         .addItem(menuItem => menuItem.setText('Remove').onClick(() => { target.splice(target.indexOf(item), 1); dataTable.update(); }))
                 )
         )
-            .setFooter(new Button('Add').setInherit().onClick(() => app.open(new EditRow(formBuilder, null, app).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } }), dataTable.element)));
+            .setFooter(new Button('Add').setInherit().onClick(() => {
+                var edit = new EditRow(formBuilder, null, app).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } });
+
+                app.openAfter(edit, blade);
+            }));
 
         dataTable.paging.remove();
 

@@ -2,9 +2,9 @@
 import Button from '../button.js';
 import LinkButton from '../link-button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
-import List from '../ListSupport/list.js';
 import TabSystem from '../TabSupport/tab-system.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
+import FormBuilder from '../FormSupport/form-builder.js';
 
 
 
@@ -13,7 +13,7 @@ import notificationManager from '../NotificationSupport/notification-manager.js'
 class EditContentBlade extends Blade {
     onCompleteCallbacks = [];
 
-    constructor(app, contentType, formBuilder, content) {
+    constructor(app, contentType, content) {
         super();
 
         if (!content) {
@@ -22,11 +22,12 @@ class EditContentBlade extends Blade {
 
         this.app = app;
         this.contentType = contentType;
-        this.formBuilder = formBuilder;
         this.content = content;
     }
 
     async open() {
+        this.formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${this.contentType.id}]`, this.app, this);
+
         if (this.content.id) {
             if (this.contentType.isNameable && this.content.name) {
                 this.setTitle(`Edit ${this.content.name}`);

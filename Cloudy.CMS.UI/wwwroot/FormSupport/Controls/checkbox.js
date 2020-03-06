@@ -1,7 +1,7 @@
 ﻿import FieldControl from '../field-control.js';
 
 class CheckboxControl extends FieldControl {
-    constructor(fieldModel, value, app) {
+    constructor(fieldModel, value, app, blade) {
         var container = document.createElement('cloudy-ui-checkbox-container');
         super(container);
 

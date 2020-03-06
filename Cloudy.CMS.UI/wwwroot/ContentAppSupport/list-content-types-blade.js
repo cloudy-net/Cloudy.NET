@@ -7,6 +7,7 @@ import notificationManager from '../NotificationSupport/notification-manager.js'
 import ListContentBlade from './list-content-blade.js';
 import EditContentBlade from './edit-content-blade.js';
 import HelpSectionLoader from './help-section-loader.js';
+import ContentTypeProvider from '../DataSupport/content-type-provider.js';
 
 
 
@@ -25,18 +26,11 @@ class ListContentTypesBlade extends Blade {
     constructor(app) {
         super();
 
+        this.app = app;
+
         this.setTitle('What to edit');
 
-        var update = () =>
-            fetch('Content/GetContentTypeList', { credentials: 'include' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`${response.status} (${response.statusText})`);
-                    }
-
-                    return response.json();
-                })
-                .catch(error => notificationManager.addNotification(item => item.setText(`Could not get content types (${error.name}: ${error.message})`)))
+        var update = () => ContentTypeProvider.getAll()
                 .then(contentTypes => {
                     if (!contentTypes.length) {
                         var image = `<img class="cloudy-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
@@ -81,12 +75,12 @@ class ListContentTypesBlade extends Blade {
                                     item.setActive();
                                     var blade = new ListContentBlade(app, contentType, contentTypes.length).onClose(() => item.setActive(false));
                                     blade.onEmpty(async function() {
-                                        if (contentTypes.length == 2 && this.formBuilder.fieldModels.length == 0) {
-                                            var section = await HelpSectionLoader.load('content-list-no-properties', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, {});
+                                        if (contentTypes.length == 2 /*&& this.formBuilder.fieldModels.length == 0*/) {
+                                            //var section = await HelpSectionLoader.load('content-list-no-properties', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, {});
 
-                                            this.setContent(section);
+                                            //this.setContent(section);
 
-                                            return;
+                                            //return;
                                         } else {
                                             var section = await HelpSectionLoader.load('content-list-empty', { contentTypeLowerCasePluralName: contentType.lowerCasePluralName, contentTypeLowerCaseName: contentType.lowerCaseName }, { createNew: this.createNew });
 
@@ -95,10 +89,30 @@ class ListContentTypesBlade extends Blade {
                                             return;
                                         }
                                     });
+                                    blade.onSelect(function (content) {
+                                        var blade = new EditContentBlade(this.app, contentType, content)
+                                            .onComplete(() => {
+                                                var name;
+
+                                                if (contentType.isNameable) {
+                                                    name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+
+                                                    if (!name) {
+                                                        name = `${contentType.name} ${content.id}`;
+                                                    }
+                                                } else {
+                                                    name = content.id;
+                                                }
+
+                                                item.setText(name);
+                                            })
+                                            .onClose(() => item.setActive(false));
+
+                                        this.app.openAfter(blade, this);
+                                    });
                                     app.openAfter(blade, this);
                                 });
                             } else {
-                                var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${contentType.id}]`, app);
                                 var content = fetch(`Content/GetSingleton?id=${contentType.id}`, { credentials: 'include' })
                                     .then(response => {
                                         if (!response.ok) {
@@ -110,10 +124,10 @@ class ListContentTypesBlade extends Blade {
                                     .catch(error => notificationManager.addNotification(item => item.setText(`Could not get singleton (${error.name}: ${error.message})`)));
 
                                 item.onClick(() => {
-                                    Promise.all([formBuilder.fieldModels, content]).then(results => {
+                                    content.then(content => {
                                         item.setActive();
                                         app.openAfter(
-                                            new EditContentBlade(app, contentType, formBuilder, results[1])
+                                            new EditContentBlade(app, contentType, content)
                                                 .onClose(() => item.setActive(false)),
                                             this);
                                     });

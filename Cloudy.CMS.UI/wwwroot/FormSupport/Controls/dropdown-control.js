@@ -2,7 +2,7 @@
 import notificationManager from '../../NotificationSupport/notification-manager.js';
 
 class DropdownControl extends FieldControl {
-    constructor(fieldModel, value, app) {
+    constructor(fieldModel, value, app, blade) {
         var select = document.createElement('select');
         select.classList.add('cloudy-ui-form-input');
         select.value = value || null;

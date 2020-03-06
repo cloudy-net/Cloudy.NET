@@ -1,7 +1,7 @@
 ﻿import FieldControl from '../field-control.js';
 
 class TimeControl extends FieldControl {
-    constructor(fieldModel, value, app) {
+    constructor(fieldModel, value, app, blade) {
         var input = document.createElement('input');
         input.classList.add('cloudy-ui-form-input');
         input.type = 'time';

@@ -1,12 +1,10 @@
 ﻿import Blade from '../blade.js';
-import FormBuilder from '../FormSupport/form-builder.js';
 import Button from '../button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import EditContentBlade from './edit-content-blade.js';
 import RemoveContentBlade from './remove-content-blade.js';
-import HelpSectionLoader from './help-section-loader.js';
 
 
 
@@ -14,6 +12,7 @@ import HelpSectionLoader from './help-section-loader.js';
 
 class ListContentBlade extends Blade {
     onEmptyCallbacks = [];
+    onSelectCallbacks = [];
 
     constructor(app, contentType, contentTypeCount) {
         super();
@@ -25,10 +24,7 @@ class ListContentBlade extends Blade {
     async open() {
         this.setTitle(this.contentType.pluralName);
 
-        var formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${this.contentType.id}]`, this.app);
-        await formBuilder.fieldModels;
-
-        this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType, formBuilder).onComplete(() => update()), this);
+        this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
         this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
         var actions = this.contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
@@ -70,25 +66,7 @@ class ListContentBlade extends Blade {
                 item.setText(name);
                 item.onClick(() => {
                     item.setActive();
-                    var blade = new EditContentBlade(this.app, this.contentType, formBuilder, content)
-                        .onComplete(() => {
-                            var name;
-
-                            if (this.contentType.isNameable) {
-                                name = this.contentType.nameablePropertyName ? content[this.contentType.nameablePropertyName] : content.name;
-
-                                if (!name) {
-                                    name = `${this.contentType.name} ${content.id}`;
-                                }
-                            } else {
-                                name = content.id;
-                            }
-
-                            item.setText(name);
-                        })
-                        .onClose(() => item.setActive(false));
-
-                    this.app.openAfter(blade, this);
+                    this.onSelectCallbacks.forEach(callback => callback.apply(this, [content]));
                 });
 
                 var menu = new ContextMenu();
@@ -97,7 +75,7 @@ class ListContentBlade extends Blade {
                     .all(actions)
                     .then(actions => actions.forEach(module => module.default(menu, content, this, app)))
                     .then(() => {
-                        menu.addItem(item => item.setText('Remove').onClick(() => app.openAfter(new RemoveContentBlade(app, contentType, formBuilder, content).onComplete(() => update()), this)));
+                        menu.addItem(item => item.setText('Remove').onClick(() => app.openAfter(new RemoveContentBlade(app, contentType, content).onComplete(() => update()), this)));
                     });
                 this.setContent(list);
             }));
@@ -108,6 +86,12 @@ class ListContentBlade extends Blade {
 
     onEmpty(callback) {
         this.onEmptyCallbacks.push(callback);
+
+        return this;
+    }
+
+    onSelect(callback) {
+        this.onSelectCallbacks.push(callback);
 
         return this;
     }
