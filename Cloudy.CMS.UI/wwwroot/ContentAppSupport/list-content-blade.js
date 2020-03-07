@@ -79,12 +79,13 @@ class ListContentBlade extends Blade {
 
                 var menu = new ContextMenu();
                 item.setMenu(menu);
-                Promise
-                    .all(actions)
-                    .then(actions => actions.forEach(module => module.default(menu, content, this, app)))
-                    .then(() => {
-                        menu.addItem(item => item.setText('Remove').onClick(() => app.openAfter(new RemoveContentBlade(app, contentType, content).onComplete(() => update()), this)));
-                    });
+
+                (async () => {
+                    await Promise.all(actions);
+                    actions.forEach(module => module.default(menu, content, this, this.app));
+                    menu.addItem(item => item.setText('Remove').onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, this.contentType, content).onComplete(() => update()), this)));
+                })();
+
                 this.setContent(list);
             }));
         };
