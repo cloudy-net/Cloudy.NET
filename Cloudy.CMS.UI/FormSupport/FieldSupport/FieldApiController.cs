@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
@@ -20,13 +21,15 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         IControlMatcher ControlMatcher { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IHumanizer Humanizer { get; }
+        IPluralizer Pluralizer { get; }
 
-        public FieldApiController(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer)
+        public FieldApiController(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer)
         {
             FormProvider = formProvider;
             FieldProvider = fieldProvider;
             ControlMatcher = controlMatcher;
             Humanizer = humanizer;
+            Pluralizer = pluralizer;
         }
 
         [Route("GetAllForForm")]
@@ -49,10 +52,28 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     continue;
                 }
 
+                var label = field.Label;
+
+                if(label == null)
+                {
+                    label = field.Id;
+                    label = Humanizer.Humanize(field.Id);
+
+                    if (label.EndsWith(" ids"))
+                    {
+                        label = label.Substring(0, label.Length - " ids".Length);
+                        label = Pluralizer.Pluralize(label);
+                    }
+                    else if (label.EndsWith(" id"))
+                    {
+                        label = label.Substring(0, label.Length - " id".Length);
+                    }
+                }
+
                 result.Add(new FieldResponse
                 {
                     Id = field.Id,
-                    Label = field.Label ?? Humanizer.Humanize(field.Id),
+                    Label = label,
                     CamelCaseId = CamelCaseNamingStrategy.GetPropertyName(field.Id, false),
                     Control = control,
                     EmbeddedFormId = embeddedFormId?.Id,
