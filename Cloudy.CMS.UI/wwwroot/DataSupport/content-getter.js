@@ -8,7 +8,7 @@ class ContentGetter {
             var response = await fetch(`Data/ContentGetter/Get?id=${id}&contentTypeId=${contentTypeId}`, { credentials: 'include' });
 
             if (!response.ok) {
-                var text = await response.text;
+                var text = await response.text();
 
                 if (text) {
                     throw new Error(text.split('\n')[0]);

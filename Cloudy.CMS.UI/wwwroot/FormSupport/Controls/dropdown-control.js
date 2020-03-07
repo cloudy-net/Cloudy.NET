@@ -26,7 +26,7 @@ class DropdownControl extends FieldControl {
             });
 
             if (!response.ok) {
-                var text = await response.text;
+                var text = await response.text();
 
                 if (text) {
                     throw new Error(text.split('\n')[0]);

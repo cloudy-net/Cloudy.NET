@@ -53,15 +53,15 @@ class Backend {
         return fetch(`Backend/GetAll?provider=${this.name}&page=${query.page}${sort}`, { credentials: 'include' })
             .then(response => {
                 if (!response.ok) {
-                    var text = await response.text;
+                    return response.text().then(text => {
+                        if (text) {
+                            throw new Error(text.split('\n')[0]);
+                        } else {
+                            text = response.statusText;
+                        }
 
-                    if (text) {
-                        throw new Error(text.split('\n')[0]);
-                    } else {
-                        text = response.statusText;
-                    }
-
-                    throw new Error(`${response.status} (${text})`);
+                        throw new Error(`${response.status} (${text})`);
+                    });
                 }
 
                 return response.json();

@@ -36,7 +36,7 @@ class ListContentBlade extends Blade {
                 var response = await fetch(`Content/GetContentList?contentTypeId=${this.contentType.id}`, { credentials: 'include' });
 
                 if (!response.ok) {
-                    var text = await response.text;
+                    var text = await response.text();
 
                     if (text) {
                         throw new Error(text.split('\n')[0]);

@@ -10,22 +10,21 @@ class ContentTypeProvider {
     async getAll() {
         try {
             if (!this.all) {
-                this.all = fetch('ContentTypeProvider/GetAll', { credentials: 'include' })
-                    .then(response => {
-                        if (!response.ok) {
-                            var text = await response.text;
-
-                            if (text) {
-                                throw new Error(text.split('\n')[0]);
-                            } else {
-                                text = response.statusText;
-                            }
-
-                            throw new Error(`${response.status} (${text})`);
+                this.all = (async () => {
+                    var response = await fetch('ContentTypeProvider/GetAll', { credentials: 'include' });
+                    if (!response.ok) {
+                        var text = await response.text();
+                        if (text) {
+                            throw new Error(text.split('\n')[0]);
+                        } else {
+                            text = response.statusText;
                         }
 
-                        return response.json();
-                    });
+                        throw new Error(`${response.status} (${text})`);
+                    }
+
+                    return response.json();
+                })();
             }
 
             return await this.all;
