@@ -180,7 +180,7 @@ class FormBuilder {
 
                 var container = document.createElement('cloudy-ui-sortable-item-field');
 
-                var control = new fieldModel.controlType(fieldModel, target[index], this.app);
+                var control = new fieldModel.controlType(fieldModel, target[index], this.app, this.blade);
 
                 control.onChange(value => target[index] = value);
 
