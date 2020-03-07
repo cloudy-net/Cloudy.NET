@@ -38,12 +38,14 @@ class SelectControl extends FieldControl {
             item.setText(name);
         };
 
+        item.setText('&nbsp;');
+
         if (typeof value == 'string') {
-            item.setText('(loading name...)');
-            updateId(value);
+            var timeout = setTimeout(() => item.setText('(loading name...)'), 200);
+            updateId(value).then(() => clearTimeout(timeout));
         }
 
-        item.onClick(async () => {
+        var open = async () => {
             item.setActive(true);
 
             var contentType = await getContentType;
@@ -57,7 +59,13 @@ class SelectControl extends FieldControl {
                 .onClose(() => item.setActive(false));
 
             app.openAfter(list, blade);
-        });
+        };
+
+        item.onClick(open);
+
+        if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
+            open();
+        }
 
         this.onSet(value => {
             update(value);
