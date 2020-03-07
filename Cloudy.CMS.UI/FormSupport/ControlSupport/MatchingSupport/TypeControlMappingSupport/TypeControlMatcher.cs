@@ -27,7 +27,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMa
                 return null;
             }
 
-            return new TypeControlMatch(Mappings[type], type.Name);
+            return new TypeControlMatch(Mappings[type], type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) ? $"{type.GetGenericArguments()[0].Name}?" : type.Name);
         }
     }
 }
