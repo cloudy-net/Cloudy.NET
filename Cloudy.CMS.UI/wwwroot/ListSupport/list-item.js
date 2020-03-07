@@ -42,7 +42,7 @@ class ListItem {
             this.text = document.createElement('cloudy-ui-list-item-text');
             this.content.append(this.text);
         }
-        this.text.innerText = value;
+        this.text.innerHTML = value;
 
         return this;
     }
@@ -52,7 +52,7 @@ class ListItem {
             this.subText = document.createElement('cloudy-ui-list-item-sub-text');
             this.content.append(this.subText);
         }
-        this.subText.innerText = value;
+        this.subText.innerHTML = value;
 
         return this;
     }
