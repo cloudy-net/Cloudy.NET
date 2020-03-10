@@ -12,7 +12,7 @@ namespace Cloudy.CMS
     public class CloudyConfigurator
     {
         public IServiceCollection Services { get; }
-        CloudyOptions Options { get; }
+        public CloudyOptions Options { get; }
 
         public CloudyConfigurator(IServiceCollection services, CloudyOptions options)
         {
