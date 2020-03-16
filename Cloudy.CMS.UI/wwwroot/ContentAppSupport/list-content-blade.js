@@ -81,8 +81,8 @@ class ListContentBlade extends Blade {
                 item.setMenu(menu);
 
                 (async () => {
-                    await Promise.all(actions);
-                    actions.forEach(module => module.default(menu, content, this, this.app));
+                    var modules = await Promise.all(actions);
+                    modules.forEach(module => module.default(menu, content, this, this.app));
                     menu.addItem(item => item.setText('Remove').onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, this.contentType, content).onComplete(() => update()), this)));
                 })();
 
