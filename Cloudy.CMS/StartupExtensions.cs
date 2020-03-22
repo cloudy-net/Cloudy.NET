@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -62,10 +63,7 @@ namespace Microsoft.AspNetCore.Builder
                 container.RegisterSingleton<IDatabaseConnectionStringNameProvider>(new DatabaseConnectionStringNameProvider(options.DatabaseConnectionString));
             }
 
-            foreach (var initializer in services.BuildServiceProvider().GetRequiredService<IInitializerProvider>().GetAll())
-            {
-                initializer.InitializeAsync().GetAwaiter().GetResult();
-            }
+            services.AddTransient<IStartupFilter, InitializerBootstrapper>();
         }
     }
 }
