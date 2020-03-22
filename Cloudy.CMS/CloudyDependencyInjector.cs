@@ -20,62 +20,63 @@ using Cloudy.CMS.ComponentSupport.DuplicateComponentIdCheckerSupport;
 using Cloudy.CMS.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSupport;
 using Cloudy.CMS.InitializerSupport;
 using Cloudy.CMS.AspNetCore.DependencyInjectionSupport;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudy.CMS
 {
     public class CloudyDependencyInjector : IDependencyInjector
     {
-        public void InjectDependencies(IContainer container)
+        public void InjectDependencies(IServiceCollection services)
         {
-            container.RegisterSingleton<IIdGenerator, IdGenerator>();
-            container.RegisterSingleton<IPropertyDefinitionCreator, PropertyDefinitionCreator>();
-            container.RegisterSingleton<ICoreInterfaceCreator, CoreInterfaceCreator>();
-            container.RegisterSingleton<ICoreInterfaceProvider, CoreInterfaceProvider>();
-            container.RegisterSingleton<IPropertyMappingCreator, PropertyMappingCreator>();
-            container.RegisterSingleton<IPropertyMappingProvider, PropertyMappingProvider>();
+            services.AddSingleton<IIdGenerator, IdGenerator>();
+            services.AddSingleton<IPropertyDefinitionCreator, PropertyDefinitionCreator>();
+            services.AddSingleton<ICoreInterfaceCreator, CoreInterfaceCreator>();
+            services.AddSingleton<ICoreInterfaceProvider, CoreInterfaceProvider>();
+            services.AddSingleton<IPropertyMappingCreator, PropertyMappingCreator>();
+            services.AddSingleton<IPropertyMappingProvider, PropertyMappingProvider>();
 
-            container.RegisterSingleton<IContentTypeCreator, ContentTypeCreator>();
-            container.RegisterSingleton<IContentTypeProvider, ContentTypeProvider>();
-            container.RegisterSingleton<IContentTypeCoreInterfaceProvider, ContentTypeCoreInterfaceProvider>();
-            container.RegisterSingleton<IPropertyDefinitionProvider, PropertyDefinitionProvider>();
-            container.RegisterSingleton<IContentSerializer, ContentSerializer>();
-            container.RegisterSingleton<IContentDeserializer, ContentDeserializer>();
-            container.RegisterSingleton<IDocumentPropertyPathProvider, DocumentPropertyPathProvider>();
+            services.AddSingleton<IContentTypeCreator, ContentTypeCreator>();
+            services.AddSingleton<IContentTypeProvider, ContentTypeProvider>();
+            services.AddSingleton<IContentTypeCoreInterfaceProvider, ContentTypeCoreInterfaceProvider>();
+            services.AddSingleton<IPropertyDefinitionProvider, PropertyDefinitionProvider>();
+            services.AddSingleton<IContentSerializer, ContentSerializer>();
+            services.AddSingleton<IContentDeserializer, ContentDeserializer>();
+            services.AddSingleton<IDocumentPropertyPathProvider, DocumentPropertyPathProvider>();
 
-            container.RegisterSingleton<IContentGetter, ContentGetter>();
-            container.RegisterSingleton<IContentDeleter, ContentDeleter>();
-            container.RegisterSingleton<IContentCreator, ContentCreator>();
-            container.RegisterSingleton<IContentInserter, ContentInserter>();
-            container.RegisterSingleton<IContentUpdater, ContentUpdater>();
-            container.RegisterSingleton<IChildLinkProvider, ChildLinkProvider>();
-            container.RegisterSingleton<IChildrenGetter, ChildrenGetter>();
-            container.RegisterSingleton<IAncestorLinkProvider, AncestorLinkProvider>();
+            services.AddSingleton<IContentGetter, ContentGetter>();
+            services.AddSingleton<IContentDeleter, ContentDeleter>();
+            services.AddSingleton<IContentCreator, ContentCreator>();
+            services.AddSingleton<IContentInserter, ContentInserter>();
+            services.AddSingleton<IContentUpdater, ContentUpdater>();
+            services.AddSingleton<IChildLinkProvider, ChildLinkProvider>();
+            services.AddSingleton<IChildrenGetter, ChildrenGetter>();
+            services.AddSingleton<IAncestorLinkProvider, AncestorLinkProvider>();
 
-            container.RegisterSingleton<IContainerSpecificContentGetter, ContainerSpecificContentGetter>();
-            container.RegisterSingleton<IContainerSpecificContentDeleter, ContainerSpecificContentDeleter>();
-            container.RegisterSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
-            container.RegisterSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
+            services.AddSingleton<IContainerSpecificContentGetter, ContainerSpecificContentGetter>();
+            services.AddSingleton<IContainerSpecificContentDeleter, ContainerSpecificContentDeleter>();
+            services.AddSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
+            services.AddSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
 
-            container.RegisterSingleton<IContentRouter, ContentRouter>();
-            container.RegisterSingleton<IContentRouteActionFinder, ContentRouteActionFinder>();
-            container.RegisterSingleton<IRootContentRouter, RootContentRouter>();
-            container.RegisterSingleton<IRoutableRootContentProvider, RoutableRootContentProvider>();
-            container.RegisterSingleton<IContentSegmentRouter, ContentSegmentRouter>();
-            container.RegisterSingleton<ISingletonCreator, SingletonCreator>();
-            container.RegisterSingleton<ISingletonGetter, SingletonGetter>();
-            container.RegisterSingleton<ISingletonProvider, SingletonProvider>();
+            services.AddSingleton<IContentRouter, ContentRouter>();
+            services.AddSingleton<IContentRouteActionFinder, ContentRouteActionFinder>();
+            services.AddSingleton<IRootContentRouter, RootContentRouter>();
+            services.AddSingleton<IRoutableRootContentProvider, RoutableRootContentProvider>();
+            services.AddSingleton<IContentSegmentRouter, ContentSegmentRouter>();
+            services.AddSingleton<ISingletonCreator, SingletonCreator>();
+            services.AddSingleton<ISingletonGetter, SingletonGetter>();
+            services.AddSingleton<ISingletonProvider, SingletonProvider>();
 
-            container.RegisterSingleton<IComponentCreator, ComponentCreator>();
-            container.RegisterSingleton<IComponentProvider, ComponentProvider>();
-            container.RegisterSingleton<IComposableProvider, ComposableProvider>();
-            container.RegisterSingleton<IMissingComponentAttributeChecker, MissingComponentAttributeChecker>();
-            container.RegisterSingleton<IDuplicateComponentIdChecker, DuplicateComponentIdChecker>();
-            container.RegisterSingleton<IMultipleComponentsInSingleAssemblyChecker, MultipleComponentsInSingleAssemblyChecker>();
-            container.RegisterSingleton<IInitializerProvider, InitializerProvider>();
-            container.RegisterSingleton<IInitializerCreator, InitializerCreator>();
-            container.RegisterSingleton<IInstantiator, Instantiator>();
-            container.RegisterSingleton<IDependencyInjectorCreator, DependencyInjectorCreator>();
-            container.RegisterSingleton<IDependencyInjectorProvider, DependencyInjectorProvider>();
+            services.AddSingleton<IComponentCreator, ComponentCreator>();
+            services.AddSingleton<IComponentProvider, ComponentProvider>();
+            services.AddSingleton<IComposableProvider, ComposableProvider>();
+            services.AddSingleton<IMissingComponentAttributeChecker, MissingComponentAttributeChecker>();
+            services.AddSingleton<IDuplicateComponentIdChecker, DuplicateComponentIdChecker>();
+            services.AddSingleton<IMultipleComponentsInSingleAssemblyChecker, MultipleComponentsInSingleAssemblyChecker>();
+            services.AddSingleton<IInitializerProvider, InitializerProvider>();
+            services.AddSingleton<IInitializerCreator, InitializerCreator>();
+            services.AddSingleton<IInstantiator, Instantiator>();
+            services.AddSingleton<IDependencyInjectorCreator, DependencyInjectorCreator>();
+            services.AddSingleton<IDependencyInjectorProvider, DependencyInjectorProvider>();
         }
     }
 }

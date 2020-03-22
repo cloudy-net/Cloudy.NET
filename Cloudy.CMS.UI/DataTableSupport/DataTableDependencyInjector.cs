@@ -3,15 +3,16 @@ using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudy.CMS.UI.DataTableSupport
 {
     public class DataTableDependencyInjector : IDependencyInjector
     {
-        public void InjectDependencies(IContainer container)
+        public void InjectDependencies(IServiceCollection services)
         {
-            container.RegisterSingleton<IBackendCreator, BackendCreator>();
-            container.RegisterSingleton<IBackendProvider, BackendProvider>();
+            services.AddSingleton<IBackendCreator, BackendCreator>();
+            services.AddSingleton<IBackendProvider, BackendProvider>();
         }
     }
 }

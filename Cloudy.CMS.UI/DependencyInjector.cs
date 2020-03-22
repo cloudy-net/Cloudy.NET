@@ -12,38 +12,39 @@ using Cloudy.CMS.UI.StyleSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudy.CMS.UI
 {
     public class DependencyInjector : IDependencyInjector
     {
-        public void InjectDependencies(IContainer container)
+        public void InjectDependencies(IServiceCollection services)
         {
-            container.RegisterSingleton<IFaviconProvider, FaviconProvider>();
-            container.RegisterSingleton<ITitleProvider, TitleProvider>();
-            container.RegisterSingleton<IAppCreator, AppCreator>();
-            container.RegisterSingleton<IAppProvider, AppProvider>();
-            container.RegisterSingleton<IScriptProvider, ScriptProvider>();
-            container.RegisterSingleton<IScriptCreator, ScriptCreator>();
-            container.RegisterSingleton<IStyleProvider, StyleProvider>();
-            container.RegisterSingleton<IStyleCreator, StyleCreator>();
-            container.RegisterSingleton<IAppProvider, AppProvider>();
-            container.RegisterSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
-            container.RegisterSingleton<IUrlProvider, UrlProvider>();
-            container.RegisterSingleton<ITitleProvider, TitleProvider>();
-            container.RegisterSingleton<IFaviconProvider, FaviconProvider>();
-            container.RegisterSingleton<IPortalPageRenderer, PortalPageRenderer>();
-            container.RegisterSingleton<IStaticFilesBasePathProvider, StaticFilesBasePathProvider>();
-            container.RegisterSingleton<IPluralizer, Pluralizer>();
-            container.RegisterSingleton<IHumanizer, Humanizer>();
-            container.RegisterSingleton<INameExpressionParser, NameExpressionParser>();
-            container.RegisterSingleton<IPipelineBuilder, PipelineBuilder>();
-            container.RegisterSingleton<ILoginPipelineBuilder, LoginPipelineBuilder>();
-            container.RegisterSingleton<ILoginPageRenderer, LoginPageRenderer>();
-            container.RegisterSingleton<IListActionModuleCreator, ListActionModuleCreator>();
-            container.RegisterSingleton<IListActionModuleProvider, ListActionModuleProvider>();
-            container.RegisterSingleton<IContentTypeActionModuleCreator, ContentTypeActionModuleCreator>();
-            container.RegisterSingleton<IContentTypeActionModuleProvider, ContentTypeActionModuleProvider>();
+            services.AddSingleton<IFaviconProvider, FaviconProvider>();
+            services.AddSingleton<ITitleProvider, TitleProvider>();
+            services.AddSingleton<IAppCreator, AppCreator>();
+            services.AddSingleton<IAppProvider, AppProvider>();
+            services.AddSingleton<IScriptProvider, ScriptProvider>();
+            services.AddSingleton<IScriptCreator, ScriptCreator>();
+            services.AddSingleton<IStyleProvider, StyleProvider>();
+            services.AddSingleton<IStyleCreator, StyleCreator>();
+            services.AddSingleton<IAppProvider, AppProvider>();
+            services.AddSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
+            services.AddSingleton<IUrlProvider, UrlProvider>();
+            services.AddSingleton<ITitleProvider, TitleProvider>();
+            services.AddSingleton<IFaviconProvider, FaviconProvider>();
+            services.AddSingleton<IPortalPageRenderer, PortalPageRenderer>();
+            services.AddSingleton<IStaticFilesBasePathProvider, StaticFilesBasePathProvider>();
+            services.AddSingleton<IPluralizer, Pluralizer>();
+            services.AddSingleton<IHumanizer, Humanizer>();
+            services.AddSingleton<INameExpressionParser, NameExpressionParser>();
+            services.AddSingleton<IPipelineBuilder, PipelineBuilder>();
+            services.AddSingleton<ILoginPipelineBuilder, LoginPipelineBuilder>();
+            services.AddSingleton<ILoginPageRenderer, LoginPageRenderer>();
+            services.AddSingleton<IListActionModuleCreator, ListActionModuleCreator>();
+            services.AddSingleton<IListActionModuleProvider, ListActionModuleProvider>();
+            services.AddSingleton<IContentTypeActionModuleCreator, ContentTypeActionModuleCreator>();
+            services.AddSingleton<IContentTypeActionModuleProvider, ContentTypeActionModuleProvider>();
         }
     }
 }

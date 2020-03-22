@@ -9,30 +9,31 @@ using System.Collections.Generic;
 using System.Text;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
     public class FormSupportDependencyInjector : IDependencyInjector
     {
-        public void InjectDependencies(IContainer container)
+        public void InjectDependencies(IServiceCollection services)
         {
-            container.RegisterSingleton<IFieldCreator, FieldCreator>();
-            container.RegisterSingleton<IFieldProvider, FieldProvider>();
-            container.RegisterSingleton<IFormCreator, FormCreator>();
-            container.RegisterSingleton<IFormProvider, FormProvider>();
-            container.RegisterSingleton<IControlProvider, ControlProvider>();
-            container.RegisterSingleton<IControlCreator, ControlCreator>();
-            container.RegisterSingleton<IControlMatcher, ControlMatcher>();
-            container.RegisterSingleton<IUIHintParser, UIHintParser>();
-            container.RegisterSingleton<IUIHintDefinitionParser, UIHintDefinitionParser>();
-            container.RegisterSingleton<IUIHintControlMatcher, UIHintControlMatcher>();
-            container.RegisterSingleton<IUIHintControlMatchEvaluator, UIHintControlMatchEvaluator>();
-            container.RegisterSingleton<IExpressionParser, ExpressionParser>();
-            container.RegisterSingleton<IUIHintControlMatchCreator, UIHintControlMatchCreator>();
-            container.RegisterSingleton<IUIHintControlMappingProvider, UIHintControlMappingProvider>();
-            container.RegisterSingleton<ITypeControlMatcher, TypeControlMatcher>();
-            container.RegisterSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
-            container.RegisterSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();
+            services.AddSingleton<IFieldCreator, FieldCreator>();
+            services.AddSingleton<IFieldProvider, FieldProvider>();
+            services.AddSingleton<IFormCreator, FormCreator>();
+            services.AddSingleton<IFormProvider, FormProvider>();
+            services.AddSingleton<IControlProvider, ControlProvider>();
+            services.AddSingleton<IControlCreator, ControlCreator>();
+            services.AddSingleton<IControlMatcher, ControlMatcher>();
+            services.AddSingleton<IUIHintParser, UIHintParser>();
+            services.AddSingleton<IUIHintDefinitionParser, UIHintDefinitionParser>();
+            services.AddSingleton<IUIHintControlMatcher, UIHintControlMatcher>();
+            services.AddSingleton<IUIHintControlMatchEvaluator, UIHintControlMatchEvaluator>();
+            services.AddSingleton<IExpressionParser, ExpressionParser>();
+            services.AddSingleton<IUIHintControlMatchCreator, UIHintControlMatchCreator>();
+            services.AddSingleton<IUIHintControlMappingProvider, UIHintControlMappingProvider>();
+            services.AddSingleton<ITypeControlMatcher, TypeControlMatcher>();
+            services.AddSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
+            services.AddSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();
         }
     }
 }

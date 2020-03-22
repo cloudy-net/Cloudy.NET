@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.ComponentSupport;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -8,35 +9,47 @@ namespace Cloudy.CMS.DependencyInjectionSupport
 {
     public class DependencyInjectorCreator : IDependencyInjectorCreator
     {
-        IComponentProvider ComponentProvider { get; }
-        IInstantiator Instantiator { get; }
+        IComponentAssemblyProvider ComponentAssemblyProvider { get; }
+        IComponentTypeProvider ComponentTypeProvider { get; }
 
-        public DependencyInjectorCreator(IComponentProvider componentProvider, IInstantiator instantiator)
+        public DependencyInjectorCreator(IComponentAssemblyProvider componentAssemblyProvider, IComponentTypeProvider componentTypeProvider)
         {
-            ComponentProvider = componentProvider;
-            Instantiator = instantiator;
+            ComponentAssemblyProvider = componentAssemblyProvider;
+            ComponentTypeProvider = componentTypeProvider;
         }
 
         public IEnumerable<IDependencyInjector> Create()
         {
             var result = new List<IDependencyInjector>();
 
-            foreach (var component in ComponentProvider.GetAll())
+            foreach (var type in ComponentAssemblyProvider.GetAll().SelectMany(a => a.GetTypes()))
             {
-                foreach (var type in component.Assembly.Types)
+                if (!typeof(IDependencyInjector).IsAssignableFrom(type))
                 {
-                    if (!typeof(IDependencyInjector).IsAssignableFrom(type))
-                    {
-                        continue;
-                    }
-
-                    if(type.IsAbstract || type.IsInterface)
-                    {
-                        continue;
-                    }
-
-                    result.Add((IDependencyInjector)Instantiator.Instantiate(type));
+                    continue;
                 }
+
+                if (type.IsAbstract || type.IsInterface)
+                {
+                    continue;
+                }
+
+                result.Add((IDependencyInjector)Activator.CreateInstance(type));
+            }
+
+            foreach (var type in ComponentTypeProvider.GetAll().SelectMany(t => t.Assembly.GetTypes()))
+            {
+                if (!typeof(IDependencyInjector).IsAssignableFrom(type))
+                {
+                    continue;
+                }
+
+                if (type.IsAbstract || type.IsInterface)
+                {
+                    continue;
+                }
+
+                result.Add((IDependencyInjector)Activator.CreateInstance(type));
             }
 
             return result;

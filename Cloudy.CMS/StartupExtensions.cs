@@ -46,21 +46,22 @@ namespace Microsoft.AspNetCore.Builder
                 configurator.WithInMemoryDatabase();
             }
 
-            var container = new Container(services);
+            var componentAssemblyProvider = new ComponentAssemblyProvider(options.ComponentAssemblies);
+            services.AddSingleton<IComponentAssemblyProvider>(componentAssemblyProvider);
 
-            container.RegisterSingleton<IComponentAssemblyProvider>(new ComponentAssemblyProvider(options.ComponentAssemblies));
-            container.RegisterSingleton<IComponentTypeProvider>(new ComponentTypeProvider(options.Components));
+            var componentTypeProvider = new ComponentTypeProvider(options.Components);
+            services.AddSingleton<IComponentTypeProvider>(componentTypeProvider);
 
-            new CloudyDependencyInjector().InjectDependencies(container);
+            new CloudyDependencyInjector().InjectDependencies(services);
 
-            foreach (var injector in container.CreateResolver().Resolve<IDependencyInjectorProvider>().GetAll())
+            foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(componentAssemblyProvider, componentTypeProvider)).GetAll())
             {
-                injector.InjectDependencies(container);
+                injector.InjectDependencies(services);
             }
 
             if (options.DatabaseConnectionString != null)
             {
-                container.RegisterSingleton<IDatabaseConnectionStringNameProvider>(new DatabaseConnectionStringNameProvider(options.DatabaseConnectionString));
+                services.AddSingleton<IDatabaseConnectionStringNameProvider>(new DatabaseConnectionStringNameProvider(options.DatabaseConnectionString));
             }
 
             services.AddTransient<IStartupFilter, InitializerBootstrapper>();
