@@ -64,7 +64,7 @@ namespace Microsoft.AspNetCore.Builder
 
             foreach (var initializer in services.BuildServiceProvider().GetRequiredService<IInitializerProvider>().GetAll())
             {
-                initializer.Initialize();
+                initializer.InitializeAsync().GetAwaiter().GetResult();
             }
         }
     }

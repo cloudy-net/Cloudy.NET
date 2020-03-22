@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.SingletonSupport
 {
@@ -25,7 +26,7 @@ namespace Cloudy.CMS.SingletonSupport
             ContentInserter = contentInserter;
         }
 
-        public void Initialize()
+        public async Task InitializeAsync()
         {
             foreach(var singleton in SingletonProvider.GetAll())
             {
