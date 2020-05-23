@@ -51,7 +51,7 @@ namespace Website.AspNetCore
         public class Item
         {
             public string Name { get; set; }
-            public double Price { get; set; }
+            public double? Price { get; set; }
         }
     }
 }
