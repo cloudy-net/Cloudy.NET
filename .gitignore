@@ -13,3 +13,4 @@ obj
 *.user
 Logs
 .vscode
+Website.AspNetCore/data
