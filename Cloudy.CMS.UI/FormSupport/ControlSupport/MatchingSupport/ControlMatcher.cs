@@ -7,17 +7,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport
 {
     public class ControlMatcher : IControlMatcher
     {
+        ILogger<ControlMatcher> Logger { get; }
         IUIHintControlMatcher UIHintControlMatcher { get; }
         ITypeControlMatcher TypeControlMatcher { get; }
         IDictionary<string, ControlDescriptor> Controls { get; }
 
-        public ControlMatcher(IUIHintControlMatcher uiHintControlMatcher, ITypeControlMatcher typeControlMatcher, IControlProvider controlProvider)
+        public ControlMatcher(ILogger<ControlMatcher> logger, IUIHintControlMatcher uiHintControlMatcher, ITypeControlMatcher typeControlMatcher, IControlProvider controlProvider)
         {
+            Logger = logger;
             TypeControlMatcher = typeControlMatcher;
             UIHintControlMatcher = uiHintControlMatcher;
             Controls = controlProvider.GetAll().ToDictionary(c => c.Id, c => c);
@@ -28,6 +32,11 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport
             foreach (var uiHint in uiHints)
             {
                 var match = UIHintControlMatcher.GetFor(uiHint);
+
+                if (Logger.IsEnabled(LogLevel.Information))
+                {
+                    Logger.LogInformation($"Match for {JsonConvert.SerializeObject(uiHint, Formatting.None)}: {JsonConvert.SerializeObject(match, Formatting.None)}");
+                }
 
                 if(match != null)
                 {
