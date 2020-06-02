@@ -6,7 +6,6 @@ using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
-using MongoDB.Driver;
 
 namespace Cloudy.CMS.Routing
 {

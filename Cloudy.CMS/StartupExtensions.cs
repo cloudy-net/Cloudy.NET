@@ -1,5 +1,4 @@
 ﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.DocumentSupport.MongoSupport;
 using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,11 +56,6 @@ namespace Microsoft.AspNetCore.Builder
             foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(componentAssemblyProvider, componentTypeProvider)).GetAll())
             {
                 injector.InjectDependencies(services);
-            }
-
-            if (options.DatabaseConnectionString != null)
-            {
-                services.AddSingleton<IDatabaseConnectionStringNameProvider>(new DatabaseConnectionStringNameProvider(options.DatabaseConnectionString));
             }
 
             services.AddTransient<IStartupFilter, InitializerBootstrapper>();

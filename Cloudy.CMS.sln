@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.CMS.UI", "Cloudy.CMS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{058E1ED7-8528-4FB0-8044-84CDCB344518}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.CMS.MongoDB", "Cloudy.CMS.MongoDB\Cloudy.CMS.MongoDB.csproj", "{0D3310F5-A37A-47F5-A766-160072B46D44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{058E1ED7-8528-4FB0-8044-84CDCB344518}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{058E1ED7-8528-4FB0-8044-84CDCB344518}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{058E1ED7-8528-4FB0-8044-84CDCB344518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D3310F5-A37A-47F5-A766-160072B46D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D3310F5-A37A-47F5-A766-160072B46D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D3310F5-A37A-47F5-A766-160072B46D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D3310F5-A37A-47F5-A766-160072B46D44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

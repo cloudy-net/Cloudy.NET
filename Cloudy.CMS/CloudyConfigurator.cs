@@ -1,6 +1,5 @@
 ﻿using Cloudy.CMS.DocumentSupport.FileSupport;
 using Cloudy.CMS.DocumentSupport.InMemorySupport;
-using Cloudy.CMS.DocumentSupport.MongoSupport;
 using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,20 +30,6 @@ namespace Cloudy.CMS
         public CloudyConfigurator WithFileBasedDocuments(string jsonPath)
         {
             this.AddFileBased(jsonPath);
-            Options.HasDocumentProvider = true;
-
-            return this;
-        }
-
-        public CloudyConfigurator WithMongoDatabaseConnectionStringNamed(string name)
-        {
-            if (name.Contains(":") || name.Contains("/"))
-            {
-                throw new ArgumentException("Connection strings have to be referenced by name from your appsettings.json. No direct URLs here. You'll thank me later!");
-            }
-
-            this.AddMongo();
-            Options.DatabaseConnectionString = name;
             Options.HasDocumentProvider = true;
 
             return this;

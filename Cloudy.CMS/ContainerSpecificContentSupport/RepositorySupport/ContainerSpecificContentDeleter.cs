@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver;
-using Cloudy.CMS.DocumentSupport;
+﻿using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
