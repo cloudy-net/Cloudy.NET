@@ -33,7 +33,7 @@ class ListContentTypesBlade extends Blade {
         var update = () => ContentTypeProvider.getAll()
                 .then(contentTypes => {
                     if (!contentTypes.length) {
-                        var image = `<img class="cloudy-ui-help-illustration" src="${window.cloudyPath}/ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
+                        var image = `<img class="cloudy-ui-help-illustration" src="./ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
                         var header = '<h2 class="cloudy-ui-help-heading">Welcome to your new home!</h2>';
                         var text = '<p>It\'s time to create your first content type:</p>';
                         var code = `<pre class="cloudy-ui-help-code">[ContentType("${guid}")]\n` +
@@ -134,7 +134,7 @@ class ListContentTypesBlade extends Blade {
                                 });
                             }
 
-                            var actions = contentType.contentTypeActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.cloudyPath}/${path}`));
+                            var actions = contentType.contentTypeActionModules.map(path => import(path));
 
                             if (actions.length) {
                                 var menu = new ContextMenu();
