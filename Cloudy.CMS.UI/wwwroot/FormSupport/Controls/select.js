@@ -9,7 +9,7 @@ class SelectControl extends FieldControl {
         var item = new ListItem();
         super(item.element);
 
-        var getContentType = ContentTypeProvider.get(fieldModel.descriptor.control.parameters['contenttype']);
+        var getContentType = ContentTypeProvider.get(fieldModel.descriptor.control.parameters['type']);
 
         var updateId = async id => {
             if (!id) {
