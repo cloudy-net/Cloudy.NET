@@ -66,7 +66,7 @@ class EditContentBlade extends Blade {
         
         if (fieldModels.length == 0) {
 
-            //var image = `<img class="cloudy-ui-help-illustration" src="${window.staticFilesBasePath}/ContentAppSupport/images/undraw_order_a_car_3tww.svg" alt="Illustration of a house with cars surrounding it, bearing checkmarks.">`;
+            //var image = `<img class="cloudy-ui-help-illustration" src="${window.cloudyPath}/ContentAppSupport/images/undraw_order_a_car_3tww.svg" alt="Illustration of a house with cars surrounding it, bearing checkmarks.">`;
             //var header1 = `<h2 class="cloudy-ui-help-heading">No properties</h2>`;
             //var text1 = '<p>You should probably define some kind of properties here.</p>';
             //var text2 = '<p>Some helpful topics:</p>';

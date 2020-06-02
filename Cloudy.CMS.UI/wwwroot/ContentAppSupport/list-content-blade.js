@@ -27,7 +27,7 @@ class ListContentBlade extends Blade {
         this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
         this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
-        var actions = this.contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.staticFilesBasePath}/${path}`));
+        var actions = this.contentType.listActionModules.map(path => path[0] == '/' || path[0] == '.' ? import(path) : import(`${window.cloudyPath}/${path}`));
         await Promise.all(actions);
 
         var update = async () => {
