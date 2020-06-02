@@ -39,7 +39,7 @@ class Portal {
             return;
         }
 
-        import(`./${appDescriptor.modulePath}`).then(module => open(new module.default()));
+        import(appDescriptor.modulePath.indexOf('/') == 0 ? appDescriptor.modulePath : `./${appDescriptor.modulePath}`).then(module => open(new module.default()));
     }
 }
 
