@@ -7,7 +7,6 @@
     <Copyright>2018 Björn Ali Göransson</Copyright>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
-    <WebPage>https://cloudy-cms.net/</WebPage>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
