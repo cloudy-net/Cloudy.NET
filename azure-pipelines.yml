@@ -51,6 +51,7 @@ steps:
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'Cloudy.CMS nuget.org'
+    allowPackageConflicts: true
 
 - script: |
     CONTAINER_NAME=`git describe --tags`
