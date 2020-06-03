@@ -14,7 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cloudy.CMS.MongoDB.Integrations.JsonDotNet" Version="1.20.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cloudy.CMS.MongoDB.Integrations.JsonDotNet\Cloudy.CMS.MongoDB.Integrations.JsonDotNet.csproj" />
     <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
   </ItemGroup>
 
