@@ -25,6 +25,7 @@ steps:
     projects: |
       Cloudy.CMS/Cloudy.CMS.csproj
       Cloudy.CMS.UI/Cloudy.CMS.UI.csproj
+      Cloudy.CMS.MongoDB/Cloudy.CMS.MongoDB.csproj
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
@@ -34,13 +35,14 @@ steps:
     projects: |
       Cloudy.CMS/Cloudy.CMS.csproj
       Cloudy.CMS.UI/Cloudy.CMS.UI.csproj
+      Cloudy.CMS.MongoDB/Cloudy.CMS.MongoDB.csproj
     arguments: '/p:Version=$(VERSION_TAG)'
 
 - task: DotNetCoreCLI@2
   displayName: Pack NuGet
   inputs:
     command: 'pack'
-    packagesToPack: 'Cloudy.CMS/Cloudy.CMS.csproj;Cloudy.CMS.UI/Cloudy.CMS.UI.csproj'
+    packagesToPack: 'Cloudy.CMS/Cloudy.CMS.csproj;Cloudy.CMS.UI/Cloudy.CMS.UI.csproj;Cloudy.CMS.UI/Cloudy.CMS.MongoDB.csproj'
     nobuild: true
     includesymbols: true
     versioningScheme: 'byEnvVar'
