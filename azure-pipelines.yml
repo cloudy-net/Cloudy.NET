@@ -43,6 +43,7 @@ steps:
     includesymbols: true
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'VERSION_TAG'
+    verbosityPack: 'Normal'
 
 - task: NuGetCommand@2
   displayName: Push NuGet
