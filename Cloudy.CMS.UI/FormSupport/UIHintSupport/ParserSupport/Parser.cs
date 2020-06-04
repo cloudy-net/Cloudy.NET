@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 {
-    [DebuggerDisplay("{Data.Insert(Position, \"↓\")}")]
+    [DebuggerDisplay("{this.ToString()}")]
     public class Parser : IParser
     {
         string Data { get; }
@@ -103,6 +103,26 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 
             return tokens.Contains(Data[Position]);
         }
+        public bool IsThenSkip(string value)
+        {
+            if(Data.IndexOf(value, Position) == Position)
+            {
+                Position += value.Length;
+                return true;
+            }
+
+            return false;
+        }
         public bool Was(params char[] tokens) => tokens.Contains(Data[Position - 1]);
+
+        public void Skip(int number)
+        {
+            Position += number;
+        }
+
+        public override string ToString()
+        {
+            return Data.Insert(Position, "↓");
+        }
     }
 }

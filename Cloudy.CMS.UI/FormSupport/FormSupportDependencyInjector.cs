@@ -25,6 +25,7 @@ namespace Cloudy.CMS.UI.FormSupport
             services.AddSingleton<IControlCreator, ControlCreator>();
             services.AddSingleton<IControlMatcher, ControlMatcher>();
             services.AddSingleton<IUIHintParser, UIHintParser>();
+            services.AddSingleton<IUIHintParameterValueParser, UIHintParameterValueParser>();
             services.AddSingleton<IUIHintDefinitionParser, UIHintDefinitionParser>();
             services.AddSingleton<IUIHintControlMatcher, UIHintControlMatcher>();
             services.AddSingleton<IUIHintControlMatchEvaluator, UIHintControlMatchEvaluator>();

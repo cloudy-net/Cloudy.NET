@@ -12,9 +12,11 @@
         void ReverseWhile(params char[] tokens);
 
         void Skip();
+        void Skip(int number);
         bool IsStart();
         bool IsEnd();
         bool Is(params char[] tokens);
+        bool IsThenSkip(string value);
         bool Was(params char[] tokens);
     }
 }

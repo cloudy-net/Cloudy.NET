@@ -7,11 +7,11 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
 {
     public class UIHintParser : IUIHintParser
     {
-        IExpressionParser ExpressionParser { get; }
+        IUIHintParameterValueParser UIHintParameterValueParser { get; }
 
-        public UIHintParser(IExpressionParser expressionParser)
+        public UIHintParser(IUIHintParameterValueParser uiHintParameterValueParser)
         {
-            ExpressionParser = expressionParser;
+            UIHintParameterValueParser = uiHintParameterValueParser;
         }
 
         public UIHint Parse(string value)
@@ -39,12 +39,22 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
             {
                 parser.SkipWhitespace();
 
-                var parameter = ParseParameter(parser);
+                var parameter = UIHintParameterValueParser.Parse(parser);
+
+                if(parameter == null)
+                {
+                    throw new Exception("UIHintParameterValueParser returned null");
+                }
 
                 parameters.Add(parameter);
 
                 parser.SkipWhitespace();
                 parser.Expect(',', ')');
+
+                if (parser.Is(','))
+                {
+                    parser.Skip();
+                }
             }
 
             parser.SkipWhitespace();
@@ -54,116 +64,6 @@ namespace Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport
             parser.ExpectEnd();
 
             return new UIHint(id, parameters);
-        }
-
-        UIHintParameterValue ParseParameter(IParser parser)
-        {
-            parser.SkipWhitespace();
-
-            if (parser.Is('`'))
-            {
-                parser.Expect('`');
-                parser.Skip();
-
-                var value = ExpressionParser.Parse(parser);
-
-                parser.Expect('`');
-                parser.Skip();
-
-                return new UIHintParameterValue(value);
-            }
-
-            if (parser.Is('{'))
-            {
-                return ParseObject(parser);
-            }
-
-            if (parser.Is('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-'))
-            {
-                return new UIHintParameterValue(int.Parse(parser.ReadUntil(',', ')', '}')));
-            }
-
-            if (parser.Is('\''))
-            {
-                parser.Skip();
-                var value = parser.ReadUntil('\'');
-
-                parser.Expect('\'');
-                parser.Skip();
-
-                return new UIHintParameterValue(value);
-            }
-            else
-            {
-                var segments = new List<ExpressionSegment>();
-                segments.Add(new ExpressionSegment(ExpressionSegmentType.Interpolated, parser.ReadUntil(',', ')', '}')));
-                return new UIHintParameterValue(new Expression(segments));
-            }
-        }
-
-        UIHintParameterValue ParseObject(IParser parser) {
-            var instance = new Dictionary<string, UIHintParameterValue>();
-
-            parser.SkipWhitespace();
-            parser.Expect('{');
-            parser.Skip();
-
-            parser.SkipWhitespace();
-            while (!parser.Is('}'))
-            {
-                parser.SkipWhitespace();
-
-                string key;
-
-                if (parser.Is('\''))
-                {
-                    parser.Skip();
-                    key = parser.ReadUntil('\'');
-
-                    parser.Expect('\'');
-                    parser.Skip();
-                }
-                else
-                {
-                    key = parser.ReadUntil(':', ',', '}');
-                }
-
-                parser.SkipWhitespace();
-
-                if (parser.Is(',', '}'))
-                {
-                    var value = new Expression(new List<ExpressionSegment>
-                    {
-                        new ExpressionSegment(ExpressionSegmentType.Interpolated, key),
-                    });
-
-                    instance[key] = new UIHintParameterValue(value);
-                }
-                else
-                {
-                    parser.Expect(':');
-                    parser.Skip();
-
-                    parser.SkipWhitespace();
-
-                    instance[key] = ParseParameter(parser);
-                }
-
-                parser.SkipWhitespace();
-
-                if (parser.Is('}'))
-                {
-                    break;
-                }
-
-                parser.Expect(',');
-                parser.Skip();
-            }
-
-            parser.Expect('}');
-            parser.Skip();
-
-            return new UIHintParameterValue(instance);
         }
     }
 }
