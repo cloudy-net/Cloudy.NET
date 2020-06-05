@@ -68,7 +68,11 @@ class ListContentTypesBlade extends Blade {
                     if (contentTypes.length) {
                         //list.addSubHeader('General');
                         contentTypes.forEach(contentType => list.addItem(item => {
-                            item.setText(contentType.pluralName);
+                            if (contentType.isSingleton) {
+                                item.setText(contentType.name);
+                            } else {
+                                item.setText(contentType.pluralName);
+                            }
 
                             if (!contentType.isSingleton) {
                                 item.onClick(() => {
