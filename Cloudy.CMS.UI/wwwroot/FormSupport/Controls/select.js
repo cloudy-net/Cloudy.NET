@@ -1,67 +1,49 @@
 ﻿import FieldControl from '../field-control.js';
-import ListContentBlade from '../../ContentAppSupport/list-content-blade.js';
 import ListItem from '../../ListSupport/list-item.js';
-import ContentTypeProvider from '../../DataSupport/content-type-provider.js';
-import ContentGetter from '../../DataSupport/content-getter.js';
+import ItemProvider from './select-item-provider.js';
+import Blade from '../../blade.js';
+import Button from '../../button.js';
+//import ContextMenu from '../ContextMenuSupport/context-menu.js';
+import List from '../../ListSupport/list.js';
+import notificationManager from '../../NotificationSupport/notification-manager.js';
+
+
+
+/* SELECT CONTROL */
 
 class SelectControl extends FieldControl {
     constructor(fieldModel, value, app, blade) {
         var item = new ListItem();
         super(item.element);
+        this.setupProvider(fieldModel, value, app, blade, item);
+    }
 
-        var getContentType = ContentTypeProvider.get(fieldModel.descriptor.control.parameters['type']);
-
-        var updateId = async id => {
-            if (!id) {
-                item.setText('(nothing selected)');
-                return;
-            }
-
-            var contentType = await getContentType;
-            update(await ContentGetter.get(id, contentType.id));
+    async setupProvider(fieldModel, value, app, blade, listItem) {
+        var update = item => {
+            listItem.setText(item.text);
         };
-
-        var update = async content => {
-            var contentType = await getContentType;
-            var name;
-
-            if (contentType.isNameable) {
-                name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
-
-                if (!name) {
-                    name = `${contentType.name} ${content.id}`;
-                }
-            } else {
-                name = content.id;
-            }
-
-            item.setText(name);
-        };
-
-        item.setText('&nbsp;');
 
         if (typeof value == 'string') {
-            var timeout = setTimeout(() => item.setText('(loading name...)'), 200);
-            updateId(value).then(() => clearTimeout(timeout));
+            update(await ItemProvider.get(fieldModel.descriptor.control.parameters['provider'], fieldModel.descriptor.control.parameters['type'], value));
         }
 
+        listItem.setText('&nbsp;');
+
         var open = async () => {
-            item.setActive(true);
+            listItem.setActive(true);
 
-            var contentType = await getContentType;
-
-            var list = new ListContentBlade(app, contentType)
-                .onSelect(content => {
-                    this.triggerChange(content.id);
-                    update(content);
+            var list = new ListItemsBlade(app, fieldModel)
+                .onSelect(item => {
+                    this.triggerChange(item.value);
+                    update(item);
                     app.close(list);
                 })
-                .onClose(() => item.setActive(false));
+                .onClose(() => listItem.setActive(false));
 
             app.openAfter(list, blade);
         };
 
-        item.onClick(open);
+        listItem.onClick(open);
 
         if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
             open();
@@ -70,6 +52,57 @@ class SelectControl extends FieldControl {
         this.onSet(value => {
             update(value);
         });
+    }
+}
+
+
+
+/* LIST ITEMS BLADE */
+
+class ListItemsBlade extends Blade {
+    onSelectCallbacks = [];
+
+    constructor(app, fieldModel) {
+        super();
+
+        this.app = app;
+        this.name = fieldModel.descriptor.label;
+        this.provider = fieldModel.descriptor.control.parameters['provider'];
+        this.type = fieldModel.descriptor.control.parameters['type'];
+    }
+
+    async open() {
+        this.setTitle(`Select ${this.name.substr(0, 1).toLowerCase()}${this.name.substr(1)}`);
+
+        //this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
+        this.setToolbar(new Button('New').setInherit()/*.onClick(this.createNew)*/);
+
+        var list = new List();
+        this.setContent(list);
+
+        var update = async () => {
+            for (var item of await ItemProvider.getAll(this.provider, this.type)) {
+                list.addItem(listItem => {
+                    if (item.image) {
+                        listItem.setImage(item.image);
+                    }
+                    listItem.setText(item.text);
+                    listItem.onClick(() => {
+                        listItem.setActive();
+                        this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
+                    });
+
+                });
+            }
+        };
+
+        update();
+    }
+
+    onSelect(callback) {
+        this.onSelectCallbacks.push(callback);
+
+        return this;
     }
 }
 

@@ -4,11 +4,13 @@
     {
         public string Text { get; }
         public string Value { get; }
+        public string Image { get; }
 
-        public Item(string text, string value)
+        public Item(string text, string value, string image)
         {
             Text = text;
             Value = value;
+            Image = image;
         }
     }
 }
