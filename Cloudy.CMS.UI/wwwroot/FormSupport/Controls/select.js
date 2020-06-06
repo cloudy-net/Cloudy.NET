@@ -15,18 +15,35 @@ import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
 class SelectControl extends FieldControl {
     constructor(fieldModel, value, app, blade) {
-        var listItem = new SelectItemPreview();
-        super(listItem.element);
-        listItem.setText('&nbsp;');
-        listItem.setSubText('&nbsp;');
+        var element = document.createElement('div');
+        var empty = document.createElement('cloudy-ui-select-empty');
+        var emptyText = document.createElement('cloudy-ui-select-empty-text');
+        emptyText.innerText = '(none)';
+        empty.append(emptyText);
+        element.append(empty);
+        var emptyAdd = new Button('Add').setInherit().appendTo(empty);
+        var preview = new SelectItemPreview().appendTo(element);
+        super(element);
+        preview.setText('&nbsp;');
+        preview.setSubText('&nbsp;');
 
         var update = item => {
-            listItem.setImage(item ? item.image : null);
-            listItem.setText(item ? item.text : null);
-            listItem.setSubText(item && item.metadata ? Object.entries(item.metadata).map(([name, value]) => `${name.substr(0, 1).toUpperCase()}${name.substr(1)}: ${value}`).join(", ") : null);
+            if (!item) {
+                preview.element.style.display = 'none';
+                empty.style.display = '';
+
+                return;
+            }
+
+            preview.element.style.display = '';
+            empty.style.display = 'none';
+
+            preview.setImage(item.image);
+            preview.setText(item.text);
+            preview.setSubText(item.metadata ? Object.entries(item.metadata).map(([name, value]) => `${name.substr(0, 1).toUpperCase()}${name.substr(1)}: ${value}`).join(", ") : null);
         };
 
-        if (typeof value == 'string') {
+        if (value) {
             ItemProvider
                 .get(fieldModel.descriptor.control.parameters['provider'], fieldModel.descriptor.control.parameters['type'], value)
                 .then(item => {
@@ -34,6 +51,8 @@ class SelectControl extends FieldControl {
                         update(item);
                     }
                 });
+        } else {
+            update();
         }
 
         var open = () => {
@@ -50,11 +69,12 @@ class SelectControl extends FieldControl {
         var menu = new ContextMenu();
 
         menu.addItem(item => item.setText('Replace').onClick(open));
-        menu.addItem(item => item.setText('Remove').onClick(() => { this.triggerChange(null); update(null); }));
+        menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
 
-        listItem.setMenu(menu);
+        preview.setMenu(menu);
 
-        listItem.onClick(() => menu.button.click());
+        preview.onClick(() => menu.button.click());
+        emptyAdd.onClick(open);
 
         if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
             open();

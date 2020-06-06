@@ -68,7 +68,7 @@ class SelectItemPreview {
             this.content.append(this.textContainer);
         }
         if (!this.subText) {
-            this.subText = document.createElement('cloudy-ui-list-item-sub-text');
+            this.subText = document.createElement('cloudy-ui-select-preview-sub-text');
             this.textContainer.append(this.subText);
         }
 
@@ -86,7 +86,7 @@ class SelectItemPreview {
     setImage(value) {
         if (!this.image) {
             this.image = document.createElement('img');
-            this.image.classList.add('cloudy-ui-list-item-image');
+            this.image.classList.add('cloudy-ui-select-preview-image');
             this.content.insertBefore(this.image, this.textContainer);
         }
 
