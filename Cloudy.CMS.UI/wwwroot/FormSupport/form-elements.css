@@ -148,3 +148,38 @@ cloudy-ui-form-table > cloudy-ui-data-table {
 cloudy-ui-form-table cloudy-ui-data-table-footer {
   padding-left: 16px;
   padding-right: 16px; }
+
+/* SELECT */
+cloudy-ui-select-preview {
+  margin-top: 8px;
+  display: flex;
+  align-items: center; }
+
+cloudy-ui-select-preview-content {
+  flex-grow: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center; }
+
+.cloudy-ui-select-preview-image {
+  display: block;
+  align-self: center;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAGUExURf///+Xl5QmC0GsAAAARSURBVAjXY/jBwICM2A8gIwCK3gi823XM2QAAAABJRU5ErkJggg==);
+  width: 40px;
+  height: 40px;
+  margin-right: 8px; }
+
+cloudy-ui-select-preview-text-container {
+  display: block; }
+
+cloudy-ui-select-preview-text {
+  display: block; }
+
+cloudy-ui-select-preview-sub-text {
+  display: block;
+  font-size: 0.875rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.54);
+  line-height: 1.43;
+  letter-spacing: 0.01071em; }

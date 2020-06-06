@@ -6,6 +6,8 @@ import Button from '../../button.js';
 //import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../../ListSupport/list.js';
 import notificationManager from '../../NotificationSupport/notification-manager.js';
+import SelectItemPreview from './select-item-preview.js';
+import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
 
 
@@ -13,37 +15,46 @@ import notificationManager from '../../NotificationSupport/notification-manager.
 
 class SelectControl extends FieldControl {
     constructor(fieldModel, value, app, blade) {
-        var item = new ListItem();
-        super(item.element);
-        this.setupProvider(fieldModel, value, app, blade, item);
-    }
+        var listItem = new SelectItemPreview();
+        super(listItem.element);
+        listItem.setText('&nbsp;');
+        listItem.setSubText('&nbsp;');
 
-    async setupProvider(fieldModel, value, app, blade, listItem) {
         var update = item => {
-            listItem.setText(item.text);
+            listItem.setImage(item ? item.image : null);
+            listItem.setText(item ? item.text : null);
+            listItem.setSubText(item && item.metadata ? Object.entries(item.metadata).map(([name, value]) => `${name.substr(0, 1).toUpperCase()}${name.substr(1)}: ${value}`).join(", ") : null);
         };
 
         if (typeof value == 'string') {
-            update(await ItemProvider.get(fieldModel.descriptor.control.parameters['provider'], fieldModel.descriptor.control.parameters['type'], value));
+            ItemProvider
+                .get(fieldModel.descriptor.control.parameters['provider'], fieldModel.descriptor.control.parameters['type'], value)
+                .then(item => {
+                    if (item) {
+                        update(item);
+                    }
+                });
         }
 
-        listItem.setText('&nbsp;');
-
-        var open = async () => {
-            listItem.setActive(true);
-
+        var open = () => {
             var list = new ListItemsBlade(app, fieldModel)
                 .onSelect(item => {
                     this.triggerChange(item.value);
                     update(item);
                     app.close(list);
-                })
-                .onClose(() => listItem.setActive(false));
+                });
 
             app.openAfter(list, blade);
         };
 
-        listItem.onClick(open);
+        var menu = new ContextMenu();
+
+        menu.addItem(item => item.setText('Replace').onClick(open));
+        menu.addItem(item => item.setText('Remove').onClick(() => { this.triggerChange(null); update(null); }));
+
+        listItem.setMenu(menu);
+
+        listItem.onClick(() => menu.button.click());
 
         if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
             open();
@@ -81,19 +92,23 @@ class ListItemsBlade extends Blade {
         this.setContent(list);
 
         var update = async () => {
-            for (var item of await ItemProvider.getAll(this.provider, this.type)) {
+            var items = await ItemProvider.getAll(this.provider, this.type);
+            items.forEach(item =>
                 list.addItem(listItem => {
                     if (item.image) {
                         listItem.setImage(item.image);
                     }
                     listItem.setText(item.text);
+                    var metadata = Object.entries(item.metadata).map(([name, value]) => `${name.substr(0, 1).toUpperCase()}${name.substr(1)}: ${value}`).join(", ");
+                    if (metadata) {
+                        listItem.setSubText(metadata);
+                    }
                     listItem.onClick(() => {
                         listItem.setActive();
                         this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
                     });
-
-                });
-            }
+                })
+            );
         };
 
         update();
