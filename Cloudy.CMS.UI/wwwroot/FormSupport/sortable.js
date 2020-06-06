@@ -34,14 +34,17 @@ class SortableField {
         var buttonContainer = document.createElement('cloudy-ui-sortable-buttons');
         this.element.appendChild(buttonContainer);
 
-        new Button('Add')
-            .setInherit()
+        var addButton = new Button('Add')
             .onClick(() => {
                 var item = this.createItem(this.target.length);
                 this.addItem(item);
                 this.triggerAdd(item);
             })
             .appendTo(buttonContainer);
+
+        if (!fieldModel.descriptor.embeddedFormId) {
+            addButton.element.style.marginTop = '8px';
+        }
     }
 
     addItem(item) {
@@ -86,7 +89,16 @@ class SortableField {
                         this.triggerMove(index, newIndex);
                     });
             })
-            .addItem(item => item.setText('Delete'))
+            .addItem(item => {
+                item
+                    .setText('Delete')
+                    .onClick(() => {
+                        var index = [...this.fields.children].indexOf(field);
+                        this.fields.children[index].remove();
+                        this.target.splice(index, 1);
+                        this.items.splice(index, 1);
+                    });
+            })
             .appendTo(fieldAction);
     }
 
