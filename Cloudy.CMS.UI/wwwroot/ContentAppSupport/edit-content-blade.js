@@ -69,60 +69,7 @@ class EditContentBlade extends Blade {
             this.setToolbar(new LinkButton('View', `${location.origin}${url}`, '_blank').setInherit());
         }
 
-        var fieldModels = await this.formBuilder.fieldModels;
-        
-        if (fieldModels.length == 0) {
-
-            //var image = `<img class="cloudy-ui-help-illustration" src="/cloudyui/files/ContentAppSupport/images/undraw_order_a_car_3tww.svg" alt="Illustration of a house with cars surrounding it, bearing checkmarks.">`;
-            //var header1 = `<h2 class="cloudy-ui-help-heading">No properties</h2>`;
-            //var text1 = '<p>You should probably define some kind of properties here.</p>';
-            //var text2 = '<p>Some helpful topics:</p>';
-
-            //var helpList = new List();
-            //helpList.addItem(item => item.setText('I want to make my content translateable'));
-            //helpList.addItem(item => item.setText('I want to make my content navigatable with a browser'));
-            //helpList.addItem(item => item.setText('I want to support sub pages'));
-            //helpList.addItem(item => item.setText('I want to use a text area'));
-            //helpList.addItem(item => item.setText('I want to upload images'));
-            //helpList.addItem(item => item.setText('I want to create links to other content'));
-            //helpList.addItem(item => item.setText('I want to have lists of custom objects'));
-            //helpList.addItem(item => item.setText('I want to reuse several properties between content types'));
-
-            //var helpContainer = document.createElement('cloudy-ui-help-container');
-            //helpContainer.innerHTML = image + header1 + text1 + text2;
-            //helpContainer.append(helpList.element);
-            //this.setContent(helpContainer);
-
-            //return;
-        }
-
-        var groups = [...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.group))].sort();
-
-        if (groups.length == 1) {
-            var form = await this.formBuilder.build(this.content, { group: groups[0] });
-
-            this.setContent(form);
-        } else {
-            var tabSystem = new TabSystem();
-
-            if (groups.indexOf(null) != -1) {
-                tabSystem.addTab('General', async () => {
-                    var element = document.createElement('div');
-                    var form = await this.formBuilder.build(this.content, { group: null });
-                    form.appendTo(element);
-                    return element;
-                });
-            }
-
-            groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
-                var element = document.createElement('div');
-                var form = await this.formBuilder.build(this.content, { group: group });
-                form.appendTo(element);
-                return element;
-            }));
-
-            this.setContent(tabSystem);
-        }
+        this.buildForm();
 
         var saveButton = new Button('Save')
             .setPrimary()
@@ -224,12 +171,72 @@ class EditContentBlade extends Blade {
 
                 this.content[propertyKey] = propertyValue;
             }
+
+            this.buildForm();
         };
         var moreButton = new ContextMenu()
             .addItem(item => item.setText('Copy').onClick(() => navigator.clipboard.writeText(JSON.stringify(this.content, null, '  '))))
             .addItem(item => item.setText('Paste').onClick(() => { this.app.closeAfter(this); navigator.clipboard.readText().then(paste); }));
 
         this.setFooter(saveButton, cancelButton, moreButton);
+    }
+
+    async buildForm() {
+
+        var fieldModels = await this.formBuilder.fieldModels;
+
+        if (fieldModels.length == 0) {
+
+            //var image = `<img class="cloudy-ui-help-illustration" src="/cloudyui/files/ContentAppSupport/images/undraw_order_a_car_3tww.svg" alt="Illustration of a house with cars surrounding it, bearing checkmarks.">`;
+            //var header1 = `<h2 class="cloudy-ui-help-heading">No properties</h2>`;
+            //var text1 = '<p>You should probably define some kind of properties here.</p>';
+            //var text2 = '<p>Some helpful topics:</p>';
+
+            //var helpList = new List();
+            //helpList.addItem(item => item.setText('I want to make my content translateable'));
+            //helpList.addItem(item => item.setText('I want to make my content navigatable with a browser'));
+            //helpList.addItem(item => item.setText('I want to support sub pages'));
+            //helpList.addItem(item => item.setText('I want to use a text area'));
+            //helpList.addItem(item => item.setText('I want to upload images'));
+            //helpList.addItem(item => item.setText('I want to create links to other content'));
+            //helpList.addItem(item => item.setText('I want to have lists of custom objects'));
+            //helpList.addItem(item => item.setText('I want to reuse several properties between content types'));
+
+            //var helpContainer = document.createElement('cloudy-ui-help-container');
+            //helpContainer.innerHTML = image + header1 + text1 + text2;
+            //helpContainer.append(helpList.element);
+            //this.setContent(helpContainer);
+
+            //return;
+        }
+
+        var groups = [...new Set(fieldModels.map(fieldModel => fieldModel.descriptor.group))].sort();
+
+        if (groups.length == 1) {
+            var form = await this.formBuilder.build(this.content, { group: groups[0] });
+
+            this.setContent(form);
+        } else {
+            var tabSystem = new TabSystem();
+
+            if (groups.indexOf(null) != -1) {
+                tabSystem.addTab('General', async () => {
+                    var element = document.createElement('div');
+                    var form = await this.formBuilder.build(this.content, { group: null });
+                    form.appendTo(element);
+                    return element;
+                });
+            }
+
+            groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
+                var element = document.createElement('div');
+                var form = await this.formBuilder.build(this.content, { group: group });
+                form.appendTo(element);
+                return element;
+            }));
+
+            this.setContent(tabSystem);
+        }
     }
 
     onComplete(callback) {
