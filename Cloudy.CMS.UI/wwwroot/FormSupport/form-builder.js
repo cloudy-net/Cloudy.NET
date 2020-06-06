@@ -83,7 +83,7 @@ class FormBuilder {
     }
 
     buildField(fieldModel, target) {
-        var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'label');
+        var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
         element.classList.add('cloudy-ui-form-field');
 
         var heading = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
