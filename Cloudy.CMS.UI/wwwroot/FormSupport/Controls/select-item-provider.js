@@ -26,7 +26,7 @@ class SelectItemProvider {
 
             return await response.json();
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get item ${value} for select control ${provider} (${error.message})`));
+            notificationManager.addNotification(item => item.setText(`Could not get item ${value} of type ${type} for select control ${provider} (${error.message})`));
         }
     }
 
@@ -53,7 +53,7 @@ class SelectItemProvider {
 
             return await response.json();
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get item ${value} for select control ${provider} (${error.message})`));
+            notificationManager.addNotification(item => item.setText(`Could not get items of type ${type} for select control ${provider} (${error.message})`));
         }
     }
 }
