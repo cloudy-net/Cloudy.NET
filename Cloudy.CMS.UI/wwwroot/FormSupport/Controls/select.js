@@ -21,7 +21,6 @@ class SelectControl extends FieldControl {
         emptyText.innerText = '(none)';
         empty.append(emptyText);
         element.append(empty);
-        var emptyAdd = new Button('Add').appendTo(empty);
         var preview = new SelectItemPreview().appendTo(element);
         super(element);
 
@@ -67,18 +66,20 @@ class SelectControl extends FieldControl {
             app.openAfter(list, blade);
         };
 
-        var menu = new ContextMenu();
-
-        menu.addItem(item => item.setText('Replace').onClick(open));
-        menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
-
-        preview.setMenu(menu);
-
-        preview.onClick(() => menu.button.click());
-        emptyAdd.onClick(open);
 
         if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
             open();
+        } else {
+            new Button('Add').onClick(open).appendTo(empty);
+
+            var menu = new ContextMenu();
+
+            menu.addItem(item => item.setText('Replace').onClick(open));
+            menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
+
+            preview.setMenu(menu);
+
+            preview.onClick(() => menu.button.click());
         }
 
         this.onSet(value => {
