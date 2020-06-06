@@ -34,7 +34,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                 return null;
             }
 
-            return new Item((content as INameable)?.Name ?? content.Id, content.Id, null);
+            return new Item((content as INameable)?.Name ?? content.Id, content.Id, null, new Dictionary<string, string> { });
         }
 
         public async Task<IEnumerable<Item>> GetAll(string type)
@@ -45,7 +45,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 
             foreach (var content in await DocumentFinder.Find(contentType.Container).GetResultAsync().ConfigureAwait(false))
             {
-                result.Add(new Item((content as INameable)?.Name ?? content.Id, content.Id, null));
+                result.Add(new Item((content as INameable)?.Name ?? content.Id, content.Id, null, new Dictionary<string, string> { }));
             }
 
             return result.AsReadOnly();
