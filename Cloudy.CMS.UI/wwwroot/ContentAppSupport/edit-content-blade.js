@@ -29,37 +29,44 @@ class EditContentBlade extends Blade {
         this.formBuilder = new FormBuilder(`Cloudy.CMS.Content[type=${this.contentType.id}]`, this.app, this);
 
         if (this.content.id) {
-            if (this.contentType.isNameable && this.content.name) {
-                this.setTitle(`Edit ${this.content.name}`);
-            } else {
-                this.setTitle(`Edit ${this.contentType.name}`);
+            var name = '';
+
+            if (!this.contentType.isSingleton) {
+                if (this.contentType.isNameable) {
+                    name = this.contentType.nameablePropertyName ? this.content[this.contentType.nameablePropertyName] : this.content.name;
+                }
+            }
+            if (!name) {
+                name = this.contentType.name;
             }
 
-            if (this.contentType.isRoutable) {
-                var response;
-
-                try {
-                    response = await fetch(`Content/GetUrl?id=${encodeURIComponent(this.content.id)}&contentTypeId=${encodeURIComponent(this.content.contentTypeId)}`, {
-                        credentials: 'include',
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                } catch (error) {
-                    notificationManager.addNotification(item => item.setText(`Could not get URL (${error.name}: ${error.message})`));
-                }
-
-                var url = await response.text();
-
-                if (!url) {
-                    return;
-                }
-
-                url = url.substr(1, url.length - 2);
-
-                this.setToolbar(new LinkButton('View', `${location.origin}${url}`, '_blank').setInherit());
-            }
+            this.setTitle(`Edit ${name}`);
         } else {
             this.setTitle(`New ${this.contentType.name}`);
+        }
+
+        if (this.content.id && this.contentType.isRoutable) {
+            var response;
+
+            try {
+                response = await fetch(`Content/GetUrl?id=${encodeURIComponent(this.content.id)}&contentTypeId=${encodeURIComponent(this.content.contentTypeId)}`, {
+                    credentials: 'include',
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            } catch (error) {
+                notificationManager.addNotification(item => item.setText(`Could not get URL (${error.name}: ${error.message})`));
+            }
+
+            var url = await response.text();
+
+            if (!url) {
+                return;
+            }
+
+            url = url.substr(1, url.length - 2);
+
+            this.setToolbar(new LinkButton('View', `${location.origin}${url}`, '_blank').setInherit());
         }
 
         var fieldModels = await this.formBuilder.fieldModels;
@@ -160,23 +167,22 @@ class EditContentBlade extends Blade {
                     return;
                 }
 
-                var name;
+                var name = null;
 
-                if (this.contentType.isNameable) {
-                    name = this.contentType.nameablePropertyName ? this.content[this.contentType.nameablePropertyName] : this.content.name;
-
-                    if (!name) {
-                        name = this.content.id || ''; // if content is newly created, id will still be null
+                if (!this.contentType.isSingleton) {
+                    if (this.contentType.isNameable) {
+                        name = this.contentType.nameablePropertyName ? this.content[this.contentType.nameablePropertyName] : this.content.name;
                     }
-                } else {
-                    name = this.content.id;
+                    if (!name) {
+                        name = this.content.id;
+                    }
                 }
 
                 if (!this.content.id) {
-                    notificationManager.addNotification(item => item.setText(`Created ${this.contentType.name} ${name}`));
+                    notificationManager.addNotification(item => item.setText(`Created ${this.contentType.name} ${name || ''}`));
                     this.app.close(this);
                 } else {
-                    notificationManager.addNotification(item => item.setText(`Updated ${this.contentType.name} ${name}`));
+                    notificationManager.addNotification(item => item.setText(`Updated ${this.contentType.name} ${name || ''}`));
                 }
 
                 this.onCompleteCallbacks.forEach(callback => callback(this.content));

@@ -12,11 +12,16 @@ class RemoveContentBlade extends Blade {
     constructor(app, contentType, content) {
         super();
 
-        if (contentType.isNameable && (contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name)) {
-            this.setTitle(`Remove ${(contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name)}`);
-        } else {
-            this.setTitle(`Remove ${contentType.name}`);
+        var name = null;
+
+        if (contentType.isNameable) {
+            name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
         }
+        if (!name) {
+            name = `${contentType.name} ${content.id}`;
+        }
+
+        this.setTitle(`Remove ${name}`);
 
         var container = document.createElement('div');
         container.style.padding = '16px';
@@ -40,19 +45,18 @@ class RemoveContentBlade extends Blade {
                 })
                     .catch(error => notificationManager.addNotification(item => item.setText(`Could not remove content (${error.name}: ${error.message})`)))
                     .then(() => {
-                        var name;
+                        var name = null;
 
-                        if (contentType.isNameable) {
-                            name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
-
+                        if (!contentType.isSingleton) {
+                            if (contentType.isNameable) {
+                                name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+                            }
                             if (!name) {
                                 name = content.id;
                             }
-                        } else {
-                            name = content.id;
                         }
 
-                        notificationManager.addNotification(item => item.setText(`Removed ${contentType.name} ${name}`));
+                        notificationManager.addNotification(item => item.setText(`Removed ${contentType.name} ${name || ''}`));
                         this.onCompleteCallbacks.forEach(callback => callback(content));
                         app.close(this);
                     })
