@@ -21,11 +21,9 @@ class SelectControl extends FieldControl {
         emptyText.innerText = '(none)';
         empty.append(emptyText);
         element.append(empty);
-        var emptyAdd = new Button('Add').setInherit().appendTo(empty);
+        var emptyAdd = new Button('Add').appendTo(empty);
         var preview = new SelectItemPreview().appendTo(element);
         super(element);
-        preview.setText('&nbsp;');
-        preview.setSubText('&nbsp;');
 
         var update = item => {
             if (!item) {
@@ -44,6 +42,9 @@ class SelectControl extends FieldControl {
         };
 
         if (value) {
+            preview.setText('&nbsp;');
+            preview.setSubText('&nbsp;');
+
             ItemProvider
                 .get(fieldModel.descriptor.control.parameters['provider'], fieldModel.descriptor.control.parameters['type'], value)
                 .then(item => {
