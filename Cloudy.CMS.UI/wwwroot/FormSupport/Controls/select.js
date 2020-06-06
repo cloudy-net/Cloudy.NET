@@ -66,20 +66,18 @@ class SelectControl extends FieldControl {
             app.openAfter(list, blade);
         };
 
+        new Button('Add').onClick(open).appendTo(empty);
+
+        var menu = new ContextMenu();
+
+        menu.addItem(item => item.setText('Replace').onClick(open));
+        menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
+
+        preview.setMenu(menu);
+        preview.onClick(() => menu.button.click());
 
         if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
             open();
-        } else {
-            new Button('Add').onClick(open).appendTo(empty);
-
-            var menu = new ContextMenu();
-
-            menu.addItem(item => item.setText('Replace').onClick(open));
-            menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
-
-            preview.setMenu(menu);
-
-            preview.onClick(() => menu.button.click());
         }
 
         this.onSet(value => {
