@@ -5,18 +5,26 @@
 /* FORM FIELD DESCRIPTOR PROVIDER */
 
 class FormFieldDescriptorProvider {
-    getFor(formId) {
-        return fetch(`Field/GetAllForForm?id=${formId}`, {
-            credentials: 'include'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`${response.status} (${response.statusText})`);
+    async getFor(formId) {
+        try {
+            var response = await fetch(`Field/GetAllForForm?id=${formId}`, { credentials: 'include' });
+
+            if (!response.ok) {
+                var text = await response.text();
+
+                if (text) {
+                    throw new Error(text.split('\n')[0]);
+                } else {
+                    text = response.statusText;
                 }
 
-                return response.json();
-            })
-            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get field descriptors for form ${formId} (${error.name}: ${error.message})`)));
+                throw new Error(`${response.status} (${text})`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            notificationManager.addNotification(item => item.setText(`Could not get field descriptors for form ${formId} (${error.message})`));
+        }
     }
 }
 
