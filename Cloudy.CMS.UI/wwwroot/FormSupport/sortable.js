@@ -98,12 +98,15 @@ class SortableField {
                         this.target.splice(index, 1);
                         this.items.splice(index, 1);
                     });
-            });
+            })
+            .appendTo(fieldAction);
 
         if (this.fieldModel.descriptor.embeddedFormId) {
-            menu.setHorizontal().appendTo(field);
+            menu.setHorizontal();
+            field.append(fieldAction);
         } else {
-            menu.appendTo(item.element);
+            menu.setCompact();
+            item.element.append(fieldAction);
         }
 
         field.appendChild(item.element);

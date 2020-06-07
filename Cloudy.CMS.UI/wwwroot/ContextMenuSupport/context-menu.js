@@ -89,7 +89,11 @@ class ContextMenu {
     setHorizontal() {
         this.element.classList.add('cloudy-ui-horizontal');
         this.button.classList.add('cloudy-ui-horizontal');
+        return this;
+    }
 
+    setCompact() {
+        this.button.classList.add('cloudy-ui-compact');
         return this;
     }
 
@@ -111,6 +115,7 @@ class ContextMenu {
 
     appendTo(element) {
         element.appendChild(this.element);
+        return this;
     }
 }
 

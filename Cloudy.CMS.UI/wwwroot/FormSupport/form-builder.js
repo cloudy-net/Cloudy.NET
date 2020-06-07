@@ -178,17 +178,19 @@ class FormBuilder {
                     target[index] = null;
                 }
 
-                var container = document.createElement('cloudy-ui-sortable-item-field');
+                var fieldElement = document.createElement('cloudy-ui-sortable-item-field');
+                var fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
+                fieldElement.appendChild(fieldControlElement);
 
                 var control = new fieldModel.controlType(fieldModel, target[index], this.app, this.blade);
 
                 control.onChange(value => target[index] = value);
 
-                container.appendChild(control.element);
+                fieldControlElement.appendChild(control.element);
 
-                var field = new Field(fieldModel, container, { control });
+                var field = new Field(fieldModel, fieldElement, { control });
 
-                return new SortableItem(container, { field });
+                return new SortableItem(fieldElement, { field });
             };
 
         var sortable = new Sortable(fieldModel, target, createItem);
