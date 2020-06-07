@@ -86,6 +86,13 @@ class ContextMenu {
         });
     }
 
+    setHorizontal() {
+        this.element.classList.add('cloudy-ui-horizontal');
+        this.button.classList.add('cloudy-ui-horizontal');
+
+        return this;
+    }
+
     addItem(configurator) {
         this.generators.push(() => this.list.addItem(item => {
             configurator(item);

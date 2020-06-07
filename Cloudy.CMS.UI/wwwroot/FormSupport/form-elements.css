@@ -102,7 +102,7 @@ cloudy-ui-sortable-items {
   display: block; }
 
 cloudy-ui-sortable-item {
-  display: flex; }
+  display: block; }
 
 cloudy-ui-sortable-item-field {
   flex: 1;

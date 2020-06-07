@@ -2,15 +2,17 @@
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 
 class SortableField {
+    callbacks = {
+        add: [],
+        move: [],
+    };
+    items = [];
+
     constructor(fieldModel, target, createItem) {
-        this.callbacks = {
-            add: [],
-            move: [],
-        };
-        this.element = document.createElement('cloudy-ui-sortable');
+        this.fieldModel = fieldModel;
         this.fields = document.createElement('cloudy-ui-sortable-items');
+        this.element = document.createElement('cloudy-ui-sortable');
         this.element.appendChild(this.fields);
-        this.items = [];
 
         this.target = target;
         this.createItem = createItem;
@@ -53,12 +55,10 @@ class SortableField {
         var field = document.createElement('cloudy-ui-sortable-item');
         this.fields.appendChild(field);
 
-        field.appendChild(item.element);
-
         var fieldAction = document.createElement('cloudy-ui-sortable-item-action');
         (item.data.actionContainer || field).appendChild(fieldAction);
 
-        new ContextMenu()
+        var menu = new ContextMenu()
             .addItem(item => {
                 item
                     .setText('Move up')
@@ -70,7 +70,7 @@ class SortableField {
                         }
 
                         var newIndex = index - 1;
-                        
+
                         this.triggerMove(index, newIndex);
                     });
             })
@@ -98,8 +98,15 @@ class SortableField {
                         this.target.splice(index, 1);
                         this.items.splice(index, 1);
                     });
-            })
-            .appendTo(fieldAction);
+            });
+
+        if (this.fieldModel.descriptor.embeddedFormId) {
+            menu.setHorizontal().appendTo(field);
+        } else {
+            menu.appendTo(item.element);
+        }
+
+        field.appendChild(item.element);
     }
 
     triggerAdd(value) {
