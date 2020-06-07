@@ -1,8 +1,10 @@
 ﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
+using Cloudy.CMS.DocumentSupport.FileSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,12 +18,14 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
         public IContentTypeProvider ContentTypeProvider { get; }
         public IDocumentFinder DocumentFinder { get; }
         public IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
+        public IContentDeserializer ContentDeserializer { get; }
 
-        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContainerSpecificContentGetter containerSpecificContentGetter)
+        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContainerSpecificContentGetter containerSpecificContentGetter, IContentDeserializer contentDeserializer)
         {
             ContentTypeProvider = contentTypeProvider;
             DocumentFinder = documentFinder;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContentDeserializer = contentDeserializer;
         }
 
         public async Task<Item> Get(string type, string value)
@@ -43,8 +47,9 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 
             var contentType = ContentTypeProvider.Get(type);
 
-            foreach (var content in await DocumentFinder.Find(contentType.Container).GetResultAsync().ConfigureAwait(false))
+            foreach (var document in await DocumentFinder.Find(contentType.Container).GetResultAsync().ConfigureAwait(false))
             {
+                var content = ContentDeserializer.Deserialize(document, contentType, null);
                 result.Add(new Item((content as INameable)?.Name ?? content.Id, content.Id, null, new Dictionary<string, string> { }));
             }
 
