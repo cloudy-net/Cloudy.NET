@@ -32,6 +32,14 @@ cloudy-ui-list-item {
     &:focus {
         background-color: rgba(0, 0, 0, 0.1);
     }
+
+    &.cloudy-ui-disabled {
+        opacity: 0.5;
+    }
+
+    .cloudy-ui-context-menu-outer {
+        margin-right: 4px;
+    }
 }
 
 cloudy-ui-list-item-content {

@@ -4,6 +4,8 @@
 /* LIST ITEM */
 
 class ListItem {
+    onDisabledClickCallbacks = [];
+    onClickCallbacks = [];
     element = null;
     content = null;
     textContainer = null;
@@ -25,19 +27,26 @@ class ListItem {
             this.content.click();
         });
 
-        this.callbacks = {
-            click: [],
-        };
-
         this.content.addEventListener('click', () => this.triggerClick());
     }
 
     triggerClick() {
-        this.callbacks.click.forEach(callback => callback());
+        if (this.element.classList.contains('cloudy-ui-disabled')) {
+            this.onDisabledClickCallbacks.forEach(callback => callback());
+            return;
+        }
+
+        this.onClickCallbacks.forEach(callback => callback());
     }
 
     onClick(callback) {
-        this.callbacks.click.push(callback);
+        this.onClickCallbacks.push(callback);
+
+        return this;
+    }
+
+    onDisabledClick(callback) {
+        this.onDisabledClickCallbacks.push(callback);
 
         return this;
     }
@@ -92,6 +101,16 @@ class ListItem {
             this.element.classList.add('cloudy-ui-active');
         } else {
             this.element.classList.remove('cloudy-ui-active');
+        }
+
+        return this;
+    }
+
+    setDisabled(value = true) {
+        if (value) {
+            this.element.classList.add('cloudy-ui-disabled');
+        } else {
+            this.element.classList.remove('cloudy-ui-disabled');
         }
 
         return this;

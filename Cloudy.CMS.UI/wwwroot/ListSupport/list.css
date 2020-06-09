@@ -21,6 +21,10 @@ cloudy-ui-list-item {
     background-color: rgba(0, 0, 0, 0.04); }
   cloudy-ui-list-item.cloudy-ui-active, cloudy-ui-list-item:focus {
     background-color: rgba(0, 0, 0, 0.1); }
+  cloudy-ui-list-item.cloudy-ui-disabled {
+    opacity: 0.5; }
+  cloudy-ui-list-item .cloudy-ui-context-menu-outer {
+    margin-right: 4px; }
 
 cloudy-ui-list-item-content {
   flex-grow: 1;

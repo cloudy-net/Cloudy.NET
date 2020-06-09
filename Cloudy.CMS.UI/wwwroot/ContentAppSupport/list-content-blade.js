@@ -25,14 +25,15 @@ class ListContentBlade extends Blade {
     }
 
     async open() {
-        //this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
-        //this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
+        var creatableContentTypes = this.contentTypes.filter(t => !t.isSingleton);
+        this.createNew = () => this.app.openAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0]) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => update()), this);
+        this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
-        //var actions = {};
+        var actions = {};
 
-        //for (var contentType of this.contentTypes) {
-        //    actions[contentType.id] = await Promise.all(contentType.listActionModules.map(path => import(path.indexOf('.') == 0 ? path : `../${path}`)));
-        //}
+        for (var contentType of this.contentTypes) {
+            actions[contentType.id] = await Promise.all(contentType.listActionModules.map(path => import(path.indexOf('.') == 0 ? path : `../${path}`)));
+        }
 
         var update = async () => {
             var contentList;
@@ -98,8 +99,16 @@ class ListContentBlade extends Blade {
                 });
 
                 var menu = new ContextMenu();
-                //actions[contentType.id].forEach(module => module.default(menu, content, this, this.app));
-                menu.addItem(item => item.setText('Remove').onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => update()), this)));
+                actions[contentType.id].forEach(module => module.default(menu, content, this, this.app));
+                menu.addItem(item => {
+                    item.setText('Remove');
+
+                    if (contentType.isSingleton) {
+                        item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - it must always exist.`)));
+                    } else {
+                        item.onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => update()), this))
+                    }
+                });
                 listItem.setMenu(menu);
 
                 list.addItem(listItem);
@@ -111,5 +120,53 @@ class ListContentBlade extends Blade {
         update();
     }
 }
+
+
+
+/* CHOOSE CONTENT TYPE BLADE */
+
+class ChooseContentTypeBlade extends Blade {
+    onCompleteCallbacks = [];
+
+    constructor(app, contentTypes) {
+        super();
+
+        this.app = app;
+        this.contentTypes = contentTypes;
+        this.setTitle('Choose content type');
+    }
+
+    async open() {
+        var list = new List();
+        this.contentTypes.forEach(contentType => {
+            var listItem = new ListItem();
+
+            listItem.setText(contentType.name);
+            listItem.onClick(() => {
+                listItem.setActive();
+
+                var blade = new EditContentBlade(this.app, contentType)
+                    .onComplete(() => {
+                        this.onCompleteCallbacks.forEach(callback => callback());
+                        this.app.close(this);
+                    })
+                    .onClose(() => listItem.setActive(false));
+
+                this.app.openAfter(blade, this);
+            });
+
+            list.addItem(listItem);
+        });
+        this.setContent(list);
+    }
+
+    onComplete(callback) {
+        this.onCompleteCallbacks.push(callback);
+
+        return this;
+    }
+}
+
+
 
 export default ListContentBlade;
