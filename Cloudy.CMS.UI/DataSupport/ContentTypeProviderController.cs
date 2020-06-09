@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.ContentTypeSupport.GroupSupport;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ContentTypeActionSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ListActionSupport;
@@ -26,8 +27,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentTypeActionModuleProvider ContentTypeActionModuleProvider { get; }
         INameExpressionParser NameExpressionParser { get; }
         IListActionModuleProvider ListActionModuleProvider { get; }
+        IContentTypeGroupMatcher ContentTypeGroupMatcher { get; }
 
-        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider)
+        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher)
         {
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
@@ -36,6 +38,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentTypeActionModuleProvider = contentTypeActionModuleProvider;
             NameExpressionParser = nameExpressionParser;
             ListActionModuleProvider = listActionModuleProvider;
+            ContentTypeGroupMatcher = contentTypeGroupMatcher;
         }
 
         [HttpGet]
@@ -86,6 +89,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 Count = -1,
                 ContentTypeActionModules = ContentTypeActionModuleProvider.GetContentTypeActionModulesFor(contentType.Id),
                 ListActionModules = ListActionModuleProvider.GetListActionModulesFor(contentType.Id),
+                ContentTypeGroups = ContentTypeGroupMatcher.GetContentTypeGroupsFor(contentType.Id).Select(t => t.Id).ToList().AsReadOnly(),
             };
             return item;
         }
@@ -105,6 +109,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public int Count { get; set; }
             public IEnumerable<string> ContentTypeActionModules { get; set; }
             public IEnumerable<string> ListActionModules { get; set; }
+            public IEnumerable<string> ContentTypeGroups { get; set; }
         }
     }
 }

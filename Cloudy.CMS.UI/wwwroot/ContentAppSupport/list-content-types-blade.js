@@ -10,6 +10,7 @@ import HelpSectionLoader from './help-section-loader.js';
 import ContentTypeProvider from '../DataSupport/content-type-provider.js';
 import ContentTypeGroupProvider from '../DataSupport/content-type-group-provider.js';
 import SingletonGetter from '../DataSupport/singleton-getter.js';
+import ListItem from '../ListSupport/list-item.js';
 
 
 
@@ -70,48 +71,47 @@ class ListContentTypesBlade extends Blade {
 
             var list = new List();
 
-            if (items.length) {
-                items.forEach(item => {
-                    list.addItem(listItem => {
-                        if (item.type == 'contentTypeGroup') {
-                            var contentTypeGroup = item.value;
-                            listItem.setText(contentTypeGroup.pluralName);
-                        } else {
-                            var contentType = item.value;
+            items.forEach(item => {
+                var listItem = new ListItem();
 
-                            if (contentType.isSingleton) {
-                                listItem.setText(contentType.name);
-                            } else {
-                                listItem.setText(contentType.pluralName);
-                            }
+                if (item.type == 'contentTypeGroup') {
+                    var contentTypeGroup = item.value;
+                    listItem.setText(contentTypeGroup.pluralName);
+                } else {
+                    var contentType = item.value;
 
-                            if (!contentType.isSingleton) {
-                                listItem.onClick(() => {
-                                    listItem.setActive();
-                                    app.openAfter(new ListContentBlade(app, contentType, items.length).onClose(() => listItem.setActive(false)), this);
-                                });
-                            } else {
-                                listItem.onClick(async () => {
-                                    listItem.setActive();
-                                    app.openAfter(new EditContentBlade(app, contentType, await SingletonGetter.get(contentType.id)).onClose(() => listItem.setActive(false)), this);
-                                });
-                            }
+                    if (contentType.contentTypeGroups.length) {
+                        return;
+                    }
 
-                            var actions = contentType.contentTypeActionModules.map(path => import(path));
+                    if (!contentType.isSingleton) {
+                        listItem.setText(contentType.pluralName);
+                        listItem.onClick(() => {
+                            listItem.setActive();
+                            app.openAfter(new ListContentBlade(app, contentType, items.length).onClose(() => listItem.setActive(false)), this);
+                        });
+                    } else {
+                        listItem.setText(contentType.name);
+                        listItem.onClick(async () => {
+                            listItem.setActive();
+                            app.openAfter(new EditContentBlade(app, contentType, await SingletonGetter.get(contentType.id)).onClose(() => listItem.setActive(false)), this);
+                        });
+                    }
 
-                            if (actions.length) {
-                                var menu = new ContextMenu();
-                                listItem.setMenu(menu);
-                                Promise.all(actions).then(actions => actions.forEach(module => module.default(menu, contentType, this, app)));
-                            }
+                    if (contentType.contentTypeActionModules.length) {
+                        var menu = new ContextMenu();
+                        listItem.setMenu(menu);
+                        Promise.all(contentType.contentTypeActionModules.map(path => import(path)))
+                            .then(actions => actions.forEach(module => module.default(menu, contentType, this, app)));
+                    }
 
-                            if (items.length == 1) {
-                                listItem.element.click();
-                            }
-                        }
-                    });
-                });
-            }
+                    if (items.length == 1) {
+                        listItem.element.click();
+                    }
+                }
+
+                list.addItem(listItem);
+            });
 
             this.setContent(list);
         };

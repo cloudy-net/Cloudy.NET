@@ -9,12 +9,16 @@ class List {
         this.element = document.createElement('cloudy-ui-list');
     }
 
-    addItem(configurator) {
-        var item = new ListItem();
+    addItem(argument) {
+        if (argument instanceof ListItem) {
+            argument.appendTo(this.element);
+        } else {
+            var item = new ListItem();
 
-        configurator(item);
+            argument(item);
 
-        item.appendTo(this.element);
+            item.appendTo(this.element);
+        }
 
         return this;
     }

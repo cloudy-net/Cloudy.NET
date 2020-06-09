@@ -22,15 +22,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentTypeGroupProvider ContentTypeGroupProvider { get; }
         IHumanizer Humanizer { get; }
         IPluralizer Pluralizer { get; }
-        ISingletonProvider SingletonProvider { get; }
-        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
+        IContentTypeGroupMatcher ContentTypeGroupMatcher { get; }
 
-        public ContentTypeGroupProviderController(IContentTypeGroupProvider contentTypeGroupProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider)
+        public ContentTypeGroupProviderController(IContentTypeGroupProvider contentTypeGroupProvider, IHumanizer humanizer, IPluralizer pluralizer, IContentTypeGroupMatcher contentTypeGroupMatcher)
         {
             ContentTypeGroupProvider = contentTypeGroupProvider;
             Humanizer = humanizer;
             Pluralizer = pluralizer;
-            SingletonProvider = singletonProvider;
+            ContentTypeGroupMatcher = contentTypeGroupMatcher;
         }
 
         [HttpGet]
@@ -75,6 +74,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 Id = contentTypeGroup.Id,
                 Name = name,
                 PluralName = pluralName,
+                ContentTypes = ContentTypeGroupMatcher.GetContentTypesFor(contentTypeGroup.Id).Select(t => t.Id).ToList().AsReadOnly(),
             };
             return item;
         }
@@ -84,6 +84,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public string Id { get; set; }
             public string Name { get; set; }
             public string PluralName { get; set; }
+            public IEnumerable<string> ContentTypes { get; set; }
         }
     }
 }
