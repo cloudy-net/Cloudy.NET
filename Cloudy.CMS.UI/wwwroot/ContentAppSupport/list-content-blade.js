@@ -12,25 +12,32 @@ import ListItem from '../ListSupport/list-item.js';
 /* LIST CONTENT BLADE */
 
 class ListContentBlade extends Blade {
-    constructor(app, contentType) {
+    constructor(app, contentTypes) {
         super();
 
         this.app = app;
-        this.contentType = contentType;
+        this.contentTypes = contentTypes;
+
+        this.contentTypesById = {};
+        for (var contentType of contentTypes) {
+            this.contentTypesById[contentType.id] = contentType;
+        }
     }
 
     async open() {
-        this.setTitle(this.contentType.pluralName);
+        //this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
+        //this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
-        this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
-        this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
+        //var actions = {};
 
-        var actions = await Promise.all(this.contentType.listActionModules.map(path => import(path.indexOf('.') == 0 ? path : `../${path}`)));
+        //for (var contentType of this.contentTypes) {
+        //    actions[contentType.id] = await Promise.all(contentType.listActionModules.map(path => import(path.indexOf('.') == 0 ? path : `../${path}`)));
+        //}
 
         var update = async () => {
             var contentList;
             try {
-                var response = await fetch(`Content/GetContentList?contentTypeId=${this.contentType.id}`, { credentials: 'include' });
+                var response = await fetch(`Content/GetContentList?${this.contentTypes.map((t, i) => `contentTypeId[${i}]=${t.id}`).join('&')}`, { credentials: 'include' });
 
                 if (!response.ok) {
                     var text = await response.text();
@@ -51,14 +58,15 @@ class ListContentBlade extends Blade {
 
             var list = new List();
             contentList.forEach(content => {
+                var contentType = this.contentTypesById[content.contentTypeId];
                 var listItem = new ListItem();
                 var name;
 
-                if (this.contentType.isNameable) {
-                    name = this.contentType.nameablePropertyName ? content[this.contentType.nameablePropertyName] : content.name;
+                if (contentType.isNameable) {
+                    name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
 
                     if (!name) {
-                        name = `${this.contentType.name} ${content.id}`;
+                        name = `${contentType.name} ${content.id}`;
                     }
                 } else {
                     name = content.id;
@@ -68,15 +76,15 @@ class ListContentBlade extends Blade {
                 listItem.onClick(() => {
                     listItem.setActive();
 
-                    var blade = new EditContentBlade(this.app, this.contentType, content)
+                    var blade = new EditContentBlade(this.app, contentType, content)
                         .onComplete(() => {
                             var name;
 
-                            if (this.contentType.isNameable) {
-                                name = this.contentType.nameablePropertyName ? content[this.contentType.nameablePropertyName] : content.name;
+                            if (contentType.isNameable) {
+                                name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
 
                                 if (!name) {
-                                    name = `${this.contentType.name} ${content.id}`;
+                                    name = `${contentType.name} ${content.id}`;
                                 }
                             } else {
                                 name = content.id;
@@ -90,8 +98,8 @@ class ListContentBlade extends Blade {
                 });
 
                 var menu = new ContextMenu();
-                actions.forEach(module => module.default(menu, content, this, this.app));
-                menu.addItem(item => item.setText('Remove').onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, this.contentType, content).onComplete(() => update()), this)));
+                //actions[contentType.id].forEach(module => module.default(menu, content, this, this.app));
+                menu.addItem(item => item.setText('Remove').onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => update()), this)));
                 listItem.setMenu(menu);
 
                 list.addItem(listItem);

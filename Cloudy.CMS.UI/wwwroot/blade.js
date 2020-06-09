@@ -44,6 +44,8 @@ class Blade {
 
     setTitle(text) {
         this._titleText.innerText = text;
+
+        return this;
     }
 
     setToolbar(...items) {

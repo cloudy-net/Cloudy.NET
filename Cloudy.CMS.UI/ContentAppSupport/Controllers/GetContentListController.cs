@@ -29,26 +29,27 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         [HttpGet]
         [Route("GetContentList")]
-        public IEnumerable<object> GetContentList(string contentTypeId)
+        public IEnumerable<object> GetContentList(string[] contentTypeId)
         {
-            var contentType = ContentTypeProvider.Get(contentTypeId);
-
-            var documents = DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.ContentTypeId, contentType.Id).GetResultAsync().Result.ToList();
-
             var result = new List<object>();
 
-            foreach (var document in documents)
+            foreach (var contentType in contentTypeId.Select(t => ContentTypeProvider.Get(t)))
             {
-                result.Add(ContentDeserializer.Deserialize(document, contentType, DocumentLanguageConstants.Global));
+                var documents = DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.ContentTypeId, contentType.Id).GetResultAsync().Result.ToList();
+
+                foreach (var document in documents)
+                {
+                    result.Add(ContentDeserializer.Deserialize(document, contentType, DocumentLanguageConstants.Global));
+                }
             }
 
-            var sortByPropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? "Name" : "Id";
-            var sortByProperty = PropertyDefinitionProvider.GetFor(contentType.Id).FirstOrDefault(p => p.Name == sortByPropertyName);
+            //var sortByPropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? "Name" : "Id";
+            //var sortByProperty = PropertyDefinitionProvider.GetFor(contentType.Id).FirstOrDefault(p => p.Name == sortByPropertyName);
 
-            if (sortByProperty != null)
-            {
-                result = result.OrderBy(i => sortByProperty.Getter(i)).ToList();
-            }
+            //if (sortByProperty != null)
+            //{
+            //    result = result.OrderBy(i => sortByProperty.Getter(i)).ToList();
+            //}
 
             return result.AsReadOnly();
         }

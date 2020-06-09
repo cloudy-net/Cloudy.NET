@@ -76,7 +76,12 @@ class ListContentTypesBlade extends Blade {
 
                 if (item.type == 'contentTypeGroup') {
                     var contentTypeGroup = item.value;
+                    var groupContentTypes = contentTypes.filter(t => contentTypeGroup.contentTypes.includes(t.id));
                     listItem.setText(contentTypeGroup.pluralName);
+                    listItem.onClick(() => {
+                        listItem.setActive();
+                        app.openAfter(new ListContentBlade(app, groupContentTypes).setTitle(contentTypeGroup.pluralName).onClose(() => listItem.setActive(false)), this);
+                    });
                 } else {
                     var contentType = item.value;
 
@@ -88,7 +93,7 @@ class ListContentTypesBlade extends Blade {
                         listItem.setText(contentType.pluralName);
                         listItem.onClick(() => {
                             listItem.setActive();
-                            app.openAfter(new ListContentBlade(app, contentType).onClose(() => listItem.setActive(false)), this);
+                            app.openAfter(new ListContentBlade(app, [contentType]).setTitle(contentType.pluralName).onClose(() => listItem.setActive(false)), this);
                         });
                     } else {
                         listItem.setText(contentType.name);
