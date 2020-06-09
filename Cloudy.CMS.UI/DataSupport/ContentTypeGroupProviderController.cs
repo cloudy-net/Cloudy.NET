@@ -61,7 +61,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             }
             else
             {
-                if(name.Length >= 2 && name.StartsWith('I') && Char.IsUpper(name[1]))
+                if(name.Length >= 2 && name.StartsWith('I') && char.IsUpper(name[1]))
                 {
                     name = name.Substring(1);
                 }
