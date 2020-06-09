@@ -19,6 +19,29 @@ class ListContentBlade extends Blade {
 
         this.app = app;
         this.contentType = contentType;
+
+
+        this.onSelect(function (content, item) {
+            var blade = new EditContentBlade(this.app, contentType, content)
+                .onComplete(() => {
+                    var name;
+
+                    if (contentType.isNameable) {
+                        name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+
+                        if (!name) {
+                            name = `${contentType.name} ${content.id}`;
+                        }
+                    } else {
+                        name = content.id;
+                    }
+
+                    item.setText(name);
+                })
+                .onClose(() => item.setActive(false));
+
+            this.app.openAfter(blade, this);
+        });
     }
 
     async open() {
@@ -74,7 +97,7 @@ class ListContentBlade extends Blade {
                 item.setText(name);
                 item.onClick(() => {
                     item.setActive();
-                    this.onSelectCallbacks.forEach(callback => callback.apply(this, [content]));
+                    this.onSelectCallbacks.forEach(callback => callback.apply(this, [content, item]));
                 });
 
                 var menu = new ContextMenu();

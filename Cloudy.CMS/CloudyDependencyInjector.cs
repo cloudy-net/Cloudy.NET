@@ -20,6 +20,7 @@ using Cloudy.CMS.ComponentSupport.MultipleComponentsInSingleAssemblyCheckerSuppo
 using Cloudy.CMS.InitializerSupport;
 using Cloudy.CMS.AspNetCore.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
+using Cloudy.CMS.ContentTypeSupport.GroupSupport;
 
 namespace Cloudy.CMS
 {
@@ -36,6 +37,8 @@ namespace Cloudy.CMS
 
             services.AddSingleton<IContentTypeCreator, ContentTypeCreator>();
             services.AddSingleton<IContentTypeProvider, ContentTypeProvider>();
+            services.AddSingleton<IContentTypeGroupCreator, ContentTypeGroupCreator>();
+            services.AddSingleton<IContentTypeGroupProvider, ContentTypeGroupProvider>();
             services.AddSingleton<IContentTypeCoreInterfaceProvider, ContentTypeCoreInterfaceProvider>();
             services.AddSingleton<IPropertyDefinitionProvider, PropertyDefinitionProvider>();
             services.AddSingleton<IContentSerializer, ContentSerializer>();
