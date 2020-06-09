@@ -39,6 +39,7 @@ namespace Cloudy.CMS
             services.AddSingleton<IContentTypeProvider, ContentTypeProvider>();
             services.AddSingleton<IContentTypeGroupCreator, ContentTypeGroupCreator>();
             services.AddSingleton<IContentTypeGroupProvider, ContentTypeGroupProvider>();
+            services.AddSingleton<IContentTypeGroupMatcher, ContentTypeGroupMatcher>();
             services.AddSingleton<IContentTypeCoreInterfaceProvider, ContentTypeCoreInterfaceProvider>();
             services.AddSingleton<IPropertyDefinitionProvider, PropertyDefinitionProvider>();
             services.AddSingleton<IContentSerializer, ContentSerializer>();
