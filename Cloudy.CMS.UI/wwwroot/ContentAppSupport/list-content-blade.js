@@ -5,43 +5,18 @@ import List from '../ListSupport/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import EditContentBlade from './edit-content-blade.js';
 import RemoveContentBlade from './remove-content-blade.js';
+import ListItem from '../ListSupport/list-item.js';
 
 
 
 /* LIST CONTENT BLADE */
 
 class ListContentBlade extends Blade {
-    onEmptyCallbacks = [];
-    onSelectCallbacks = [];
-
-    constructor(app, contentType, contentTypeCount) {
+    constructor(app, contentType) {
         super();
 
         this.app = app;
         this.contentType = contentType;
-
-
-        this.onSelect(function (content, item) {
-            var blade = new EditContentBlade(this.app, contentType, content)
-                .onComplete(() => {
-                    var name;
-
-                    if (contentType.isNameable) {
-                        name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
-
-                        if (!name) {
-                            name = `${contentType.name} ${content.id}`;
-                        }
-                    } else {
-                        name = content.id;
-                    }
-
-                    item.setText(name);
-                })
-                .onClose(() => item.setActive(false));
-
-            this.app.openAfter(blade, this);
-        });
     }
 
     async open() {
@@ -50,8 +25,7 @@ class ListContentBlade extends Blade {
         this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
         this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
-        var actions = this.contentType.listActionModules.map(path => import(path));
-        await Promise.all(actions);
+        var actions = await Promise.all(this.contentType.listActionModules.map(path => import(path.indexOf('.') == 0 ? path : `../${path}`)));
 
         var update = async () => {
             var contentList;
@@ -75,13 +49,9 @@ class ListContentBlade extends Blade {
                 notificationManager.addNotification(item => item.setText(`Could not get content list (${error.message})`));
             }
 
-            if (contentList.length == 0) {
-                this.onEmptyCallbacks.forEach(callback => callback.apply(this));
-                return;
-            }
-
             var list = new List();
-            contentList.forEach(content => list.addItem(item => {
+            contentList.forEach(content => {
+                var listItem = new ListItem();
                 var name;
 
                 if (this.contentType.isNameable) {
@@ -94,38 +64,43 @@ class ListContentBlade extends Blade {
                     name = content.id;
                 }
 
-                item.setText(name);
-                item.onClick(() => {
-                    item.setActive();
-                    this.onSelectCallbacks.forEach(callback => callback.apply(this, [content, item]));
+                listItem.setText(name);
+                listItem.onClick(() => {
+                    listItem.setActive();
+
+                    var blade = new EditContentBlade(this.app, this.contentType, content)
+                        .onComplete(() => {
+                            var name;
+
+                            if (this.contentType.isNameable) {
+                                name = this.contentType.nameablePropertyName ? content[this.contentType.nameablePropertyName] : content.name;
+
+                                if (!name) {
+                                    name = `${this.contentType.name} ${content.id}`;
+                                }
+                            } else {
+                                name = content.id;
+                            }
+
+                            listItem.setText(name);
+                        })
+                        .onClose(() => listItem.setActive(false));
+
+                    this.app.openAfter(blade, this);
                 });
 
                 var menu = new ContextMenu();
-                item.setMenu(menu);
+                actions.forEach(module => module.default(menu, content, this, this.app));
+                menu.addItem(item => item.setText('Remove').onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, this.contentType, content).onComplete(() => update()), this)));
+                listItem.setMenu(menu);
 
-                (async () => {
-                    var modules = await Promise.all(actions);
-                    modules.forEach(module => module.default(menu, content, this, this.app));
-                    menu.addItem(item => item.setText('Remove').onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, this.contentType, content).onComplete(() => update()), this)));
-                })();
+                list.addItem(listItem);
+            });
 
-                this.setContent(list);
-            }));
+            this.setContent(list);
         };
 
         update();
-    }
-
-    onEmpty(callback) {
-        this.onEmptyCallbacks.push(callback);
-
-        return this;
-    }
-
-    onSelect(callback) {
-        this.onSelectCallbacks.push(callback);
-
-        return this;
     }
 }
 

@@ -88,7 +88,7 @@ class ListContentTypesBlade extends Blade {
                         listItem.setText(contentType.pluralName);
                         listItem.onClick(() => {
                             listItem.setActive();
-                            app.openAfter(new ListContentBlade(app, contentType, items.length).onClose(() => listItem.setActive(false)), this);
+                            app.openAfter(new ListContentBlade(app, contentType).onClose(() => listItem.setActive(false)), this);
                         });
                     } else {
                         listItem.setText(contentType.name);
