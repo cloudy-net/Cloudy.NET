@@ -117,6 +117,11 @@ class ContextMenu {
         return this;
     }
 
+    addSeparator() {
+        this.generators.push(() => this.list.addSeparator());
+        return this;
+    }
+
     appendTo(element) {
         element.appendChild(this.element);
         return this;

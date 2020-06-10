@@ -58,48 +58,56 @@ class SortableField {
         var fieldAction = document.createElement('cloudy-ui-sortable-item-action');
         (item.data.actionContainer || field).appendChild(fieldAction);
 
-        var menu = new ContextMenu()
-            .addItem(item => {
-                item
-                    .setText('Move up')
-                    .onClick(() => {
-                        var index = [...this.fields.children].indexOf(field);
+        if (item.data.field.data.control.menu) {
+            var menu = item.data.field.data.control.menu;
 
-                        if (index == 0) {
-                            return;
-                        }
+            if (menu.generators.length) {
+                menu.addSeparator();
+            }
+        } else {
+            var menu = new ContextMenu().appendTo(fieldAction);
+        }
 
-                        var newIndex = index - 1;
+        menu.addItem(item => {
+            item
+                .setText('Move up')
+                .onClick(() => {
+                    var index = [...this.fields.children].indexOf(field);
 
-                        this.triggerMove(index, newIndex);
-                    });
-            })
-            .addItem(item => {
-                item
-                    .setText('Move down')
-                    .onClick(() => {
-                        var index = [...this.fields.children].indexOf(field);
+                    if (index == 0) {
+                        return;
+                    }
 
-                        if (index == this.fields.children.length - 1) {
-                            return;
-                        }
+                    var newIndex = index - 1;
 
-                        var newIndex = index + 1;
+                    this.triggerMove(index, newIndex);
+                });
+        });
+        menu.addItem(item => {
+            item
+                .setText('Move down')
+                .onClick(() => {
+                    var index = [...this.fields.children].indexOf(field);
 
-                        this.triggerMove(index, newIndex);
-                    });
-            })
-            .addItem(item => {
-                item
-                    .setText('Delete')
-                    .onClick(() => {
-                        var index = [...this.fields.children].indexOf(field);
-                        this.fields.children[index].remove();
-                        this.target.splice(index, 1);
-                        this.items.splice(index, 1);
-                    });
-            })
-            .appendTo(fieldAction);
+                    if (index == this.fields.children.length - 1) {
+                        return;
+                    }
+
+                    var newIndex = index + 1;
+
+                    this.triggerMove(index, newIndex);
+                });
+        });
+        menu.addItem(item => {
+            item
+                .setText('Delete')
+                .onClick(() => {
+                    var index = [...this.fields.children].indexOf(field);
+                    this.fields.children[index].remove();
+                    this.target.splice(index, 1);
+                    this.items.splice(index, 1);
+                });
+        });
 
         if (this.fieldModel.descriptor.embeddedFormId) {
             menu.setHorizontal();

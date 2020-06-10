@@ -1,4 +1,6 @@
 ﻿class FieldControl {
+    menu = null;
+
     constructor(element) {
         this.element = element;
         this.callbacks = {

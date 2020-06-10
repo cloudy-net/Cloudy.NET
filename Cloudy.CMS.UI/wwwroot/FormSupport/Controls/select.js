@@ -1,11 +1,8 @@
 ﻿import FieldControl from '../field-control.js';
-import ListItem from '../../ListSupport/list-item.js';
 import ItemProvider from './select-item-provider.js';
 import Blade from '../../blade.js';
 import Button from '../../button.js';
-//import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../../ListSupport/list.js';
-import notificationManager from '../../NotificationSupport/notification-manager.js';
 import SelectItemPreview from './select-item-preview.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
@@ -68,13 +65,13 @@ class SelectControl extends FieldControl {
 
         new Button('Add').onClick(open).appendTo(empty);
 
-        var menu = new ContextMenu();
+        this.menu = new ContextMenu();
 
-        menu.addItem(item => item.setText('Replace').onClick(open));
-        menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
+        this.menu.addItem(item => item.setText('Replace').onClick(open));
+        this.menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
 
-        preview.setMenu(menu);
-        preview.onClick(() => menu.toggle());
+        preview.setMenu(this.menu);
+        preview.onClick(() => this.menu.toggle());
 
         if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
             open();

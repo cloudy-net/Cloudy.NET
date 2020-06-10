@@ -152,6 +152,8 @@ cloudy-ui-form-table cloudy-ui-data-table-footer {
 cloudy-ui-select {
   display: block;
   margin-top: 8px; }
+  cloudy-ui-sortable-item-field-control cloudy-ui-select {
+    margin: 8px 0; }
 
 cloudy-ui-select-empty {
   display: flex;

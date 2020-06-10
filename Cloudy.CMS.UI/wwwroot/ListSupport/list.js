@@ -31,6 +31,13 @@ class List {
         return this;
     }
 
+    addSeparator() {
+        var separator = document.createElement('cloudy-ui-list-separator');
+        this.element.append(separator);
+
+        return this;
+    }
+
     appendTo(element) {
         element.appendChild(this.element);
 
