@@ -4,6 +4,8 @@
 /* BUTTON */
 
 class Button {
+    onClickCallbacks = [];
+
     constructor(text) {
         this.element = document.createElement('cloudy-ui-button');
         this.element.tabIndex = 0;
@@ -18,19 +20,15 @@ class Button {
             this.element.click();
         });
 
-        this.callbacks = {
-            click: [],
-        };
-
         this.element.addEventListener('click', () => this.triggerClick());
     }
 
     triggerClick() {
-        this.callbacks.click.forEach(callback => callback());
+        this.onClickCallbacks.forEach(callback => callback());
     }
 
     onClick(callback) {
-        this.callbacks.click.push(callback);
+        this.onClickCallbacks.push(callback);
 
         return this;
     }
