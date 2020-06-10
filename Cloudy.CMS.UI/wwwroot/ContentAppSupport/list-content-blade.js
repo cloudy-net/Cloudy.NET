@@ -74,6 +74,11 @@ class ListContentBlade extends Blade {
                 }
 
                 listItem.setText(name);
+
+                if (this.contentTypes.length > 1) {
+                    listItem.setSubText(contentType.name);
+                }
+
                 listItem.onClick(() => {
                     listItem.setActive();
 
