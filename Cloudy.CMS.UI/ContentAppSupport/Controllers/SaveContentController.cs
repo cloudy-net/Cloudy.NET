@@ -17,14 +17,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
+        IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
         IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IContainerSpecificContentUpdater containerSpecificContentUpdater, IContainerSpecificContentCreator containerSpecificContentCreator)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContainerSpecificContentUpdater containerSpecificContentUpdater, IContainerSpecificContentCreator containerSpecificContentCreator)
         {
             ContentTypeProvider = contentTypeProvider;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContainerSpecificContentUpdater = containerSpecificContentUpdater;
             ContainerSpecificContentCreator = containerSpecificContentCreator;
@@ -46,6 +48,21 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             if (b.Id != null)
             {
                 var a = (IContent)typeof(IContainerSpecificContentGetter).GetMethod(nameof(ContainerSpecificContentGetter.Get)).MakeGenericMethod(contentType.Type).Invoke(ContainerSpecificContentGetter, new[] { data.Id, null, contentType.Container });
+
+                foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
+                {
+                    foreach(var propertyDefinition in coreInterface.PropertyDefinitions)
+                    {
+                        var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
+
+                        if (display != null && display.GetAutoGenerateField() == false)
+                        {
+                            continue;
+                        }
+
+                        propertyDefinition.Setter(a, propertyDefinition.Getter(b));
+                    }
+                }
 
                 foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType.Id))
                 {
