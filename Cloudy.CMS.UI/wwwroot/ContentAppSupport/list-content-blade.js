@@ -104,7 +104,7 @@ class ListContentBlade extends Blade {
                     item.setText('Remove');
 
                     if (contentType.isSingleton) {
-                        item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - it must always exist.`)));
+                        item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
                     } else {
                         item.onClick(() => this.app.openAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => update()), this))
                     }
