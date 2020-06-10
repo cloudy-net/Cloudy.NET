@@ -233,6 +233,8 @@ cloudy-ui-select {
 
 cloudy-ui-select-empty {
     display: flex;
+    padding: 8px;
+    padding-right: 0;
     align-items: center;
 }
 
@@ -243,7 +245,6 @@ cloudy-ui-select-empty-text {
 
 cloudy-ui-select-preview {
     display: flex;
-    padding: 8px;
     align-items: center;
 }
 
@@ -251,6 +252,7 @@ cloudy-ui-select-preview-content {
     flex-grow: 1;
     align-self: stretch;
     display: flex;
+    padding: 8px;
     align-items: center;
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     cursor: pointer;
