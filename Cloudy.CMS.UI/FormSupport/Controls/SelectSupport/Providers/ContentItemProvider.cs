@@ -49,6 +49,10 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 
             foreach (var document in await DocumentFinder.Find(contentType.Container).GetResultAsync().ConfigureAwait(false))
             {
+                if(document.GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)] as string != type)
+                {
+                    continue;
+                }
                 var content = ContentDeserializer.Deserialize(document, contentType, null);
                 result.Add(new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image));
             }
