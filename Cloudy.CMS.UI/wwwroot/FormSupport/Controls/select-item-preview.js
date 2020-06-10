@@ -8,35 +8,22 @@ class SelectItemPreview {
     content = null;
     textContainer = null;
     text = null;
-    callbacks = {
-        click: [],
-    };
+    onClickCallbacks = [];
 
     constructor() {
         this.element = document.createElement('cloudy-ui-select-preview');
         this.content = document.createElement('cloudy-ui-select-preview-content');
         this.element.append(this.content);
 
-        this.content.tabIndex = 0;
-
-        this.content.addEventListener("keyup", event => {
-            if (event.keyCode != 13) {
-                return;
-            }
-
-            event.preventDefault();
-            this.content.click();
-        });
-
         this.content.addEventListener('click', () => this.triggerClick());
     }
 
     triggerClick() {
-        this.callbacks.click.forEach(callback => callback());
+        this.onClickCallbacks.forEach(callback => callback());
     }
 
     onClick(callback) {
-        this.callbacks.click.push(callback);
+        this.onClickCallbacks.push(callback);
 
         return this;
     }

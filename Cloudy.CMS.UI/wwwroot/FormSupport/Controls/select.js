@@ -15,7 +15,7 @@ import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
 class SelectControl extends FieldControl {
     constructor(fieldModel, value, app, blade) {
-        var element = document.createElement('div');
+        var element = document.createElement('cloudy-ui-select');
         var empty = document.createElement('cloudy-ui-select-empty');
         var emptyText = document.createElement('cloudy-ui-select-empty-text');
         emptyText.innerText = '(none)';
@@ -74,7 +74,7 @@ class SelectControl extends FieldControl {
         menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
 
         preview.setMenu(menu);
-        preview.onClick(() => menu.button.click());
+        preview.onClick(() => menu.toggle());
 
         if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
             open();

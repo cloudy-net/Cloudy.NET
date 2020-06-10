@@ -149,8 +149,11 @@ cloudy-ui-form-table cloudy-ui-data-table-footer {
   padding-right: 16px; }
 
 /* SELECT */
+cloudy-ui-select {
+  display: block;
+  margin-top: 8px; }
+
 cloudy-ui-select-empty {
-  margin-top: 8px;
   display: flex;
   align-items: center; }
 
@@ -159,7 +162,6 @@ cloudy-ui-select-empty-text {
   color: rgba(0, 0, 0, 0.54); }
 
 cloudy-ui-select-preview {
-  margin-top: 8px;
   display: flex;
   align-items: center; }
 
@@ -167,7 +169,11 @@ cloudy-ui-select-preview-content {
   flex-grow: 1;
   align-self: stretch;
   display: flex;
-  align-items: center; }
+  align-items: center;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  cursor: pointer; }
+  cloudy-ui-select-preview-content:hover {
+    background-color: rgba(0, 0, 0, 0.04); }
 
 .cloudy-ui-select-preview-image {
   display: block;

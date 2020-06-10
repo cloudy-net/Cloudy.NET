@@ -226,8 +226,12 @@ cloudy-ui-form-table {
 
 /* SELECT */
 
-cloudy-ui-select-empty {
+cloudy-ui-select {
+    display: block;
     margin-top: 8px;
+}
+
+cloudy-ui-select-empty {
     display: flex;
     align-items: center;
 }
@@ -238,7 +242,6 @@ cloudy-ui-select-empty-text {
 }
 
 cloudy-ui-select-preview {
-    margin-top: 8px;
     display: flex;
     align-items: center;
 }
@@ -248,6 +251,12 @@ cloudy-ui-select-preview-content {
     align-self: stretch;
     display: flex;
     align-items: center;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
 }
 
 .cloudy-ui-select-preview-image {
