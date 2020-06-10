@@ -84,6 +84,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 LowerCasePluralName = pluralName.Substring(0, 1).ToLower() + pluralName.Substring(1),
                 IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
                 NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
+                IsImageable = typeof(IImageable).IsAssignableFrom(contentType.Type),
                 IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
                 Count = -1,
@@ -103,6 +104,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public string LowerCasePluralName { get; set; }
             public bool IsNameable { get; set; }
             public string NameablePropertyName { get; set; }
+            public bool IsImageable { get; set; }
             public bool IsRoutable { get; set; }
             public bool IsSingleton { get; set; }
             public string SingletonId { get; set; }

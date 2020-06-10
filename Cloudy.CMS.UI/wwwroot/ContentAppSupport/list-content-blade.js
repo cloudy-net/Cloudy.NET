@@ -75,6 +75,10 @@ class ListContentBlade extends Blade {
 
                 listItem.setText(name);
 
+                if (contentType.isImageable) {
+                    listItem.setImage(content.image || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
+                }
+
                 if (this.contentTypes.length > 1) {
                     listItem.setSubText(contentType.name);
                 }
@@ -97,6 +101,10 @@ class ListContentBlade extends Blade {
                             }
 
                             listItem.setText(name);
+
+                            if (contentType.isImageable) {
+                                listItem.setImage(content.image || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
+                            }
                         })
                         .onClose(() => listItem.setActive(false));
 
