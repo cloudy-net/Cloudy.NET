@@ -27,7 +27,7 @@ namespace Cloudy.CMS.ContentTypeSupport
             var types = ComponentProvider
                     .GetAll()
                     .SelectMany(a => a.Assembly.Types)
-                    .Where(a => typeof(IContent).IsAssignableFrom(a));
+                    .Where(t => t.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>() != null);
 
             var result = new List<ContentTypeDescriptor>();
 
@@ -35,9 +35,9 @@ namespace Cloudy.CMS.ContentTypeSupport
             {
                 var contentTypeAttribute = type.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>();
 
-                if (contentTypeAttribute == null)
+                if (!typeof(IContent).IsAssignableFrom(type))
                 {
-                    continue;
+                    throw new ContentTypeDoesNotImplementIContentException(type, contentTypeAttribute.Id);
                 }
 
                 if (type.IsAbstract)
