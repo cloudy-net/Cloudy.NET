@@ -43,7 +43,7 @@ namespace Cloudy.CMS.UI.PortalSupport
             await context.Response.WriteAsync($"    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap\"/>\n");
             await context.Response.WriteAsync($"    <title>{TitleProvider.Title}</title>\n");
             await context.Response.WriteAsync($"\n");
-            await context.Response.WriteAsync($"    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
+            await context.Response.WriteAsync($"    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n");
             await context.Response.WriteAsync($"\n");
             await context.Response.WriteAsync($"    <link rel=\"icon\" href=\"{FaviconProvider.Favicon}\">\n");
             await context.Response.WriteAsync($"\n");
