@@ -11,6 +11,8 @@ import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 /* SELECT CONTROL */
 
 class SelectControl extends FieldControl {
+    open = null;
+
     constructor(fieldModel, value, app, blade) {
         var element = document.createElement('cloudy-ui-select');
         var empty = document.createElement('cloudy-ui-select-empty');
@@ -52,7 +54,7 @@ class SelectControl extends FieldControl {
             update();
         }
 
-        var open = () => {
+        this.open = () => {
             var list = new ListItemsBlade(app, fieldModel)
                 .onSelect(item => {
                     this.triggerChange(item.value);
@@ -63,19 +65,15 @@ class SelectControl extends FieldControl {
             app.openAfter(list, blade);
         };
 
-        new Button('Add').onClick(open).appendTo(empty);
+        new Button('Add').onClick(this.open).appendTo(empty);
 
         this.menu = new ContextMenu();
 
-        this.menu.addItem(item => item.setText('Replace').onClick(open));
+        this.menu.addItem(item => item.setText('Replace').onClick(this.open));
         this.menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
 
         preview.setMenu(this.menu);
         preview.onClick(() => this.menu.toggle());
-
-        if (fieldModel.descriptor.isSortable && !fieldModel.descriptor.embeddedFormId) {
-            open();
-        }
 
         this.onSet(value => {
             update(value);

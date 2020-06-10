@@ -197,6 +197,12 @@ class FormBuilder {
 
         sortable.element.classList.add('cloudy-ui-sortable-field');
 
+        sortable.onAdd(item => {
+            if (item.data.field.data.control.open) {
+                item.data.field.data.control.open();
+            }
+        });
+
         return sortable;
     }
 
