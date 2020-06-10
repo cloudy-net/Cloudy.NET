@@ -36,7 +36,7 @@ class SelectControl extends FieldControl {
 
             preview.setImage(item.image);
             preview.setText(item.text);
-            preview.setSubText(item.metadata ? Object.entries(item.metadata).map(([name, value]) => `${name.substr(0, 1).toUpperCase()}${name.substr(1)}: ${value}`).join(", ") : null);
+            preview.setSubText(item.subText);
         };
 
         if (value) {
@@ -110,14 +110,9 @@ class ListItemsBlade extends Blade {
             var items = await ItemProvider.getAll(this.provider, this.type);
             items.forEach(item =>
                 list.addItem(listItem => {
-                    if (item.image) {
-                        listItem.setImage(item.image);
-                    }
+                    listItem.setImage(item.image);
                     listItem.setText(item.text);
-                    var metadata = Object.entries(item.metadata).map(([name, value]) => `${name.substr(0, 1).toUpperCase()}${name.substr(1)}: ${value}`).join(", ");
-                    if (metadata) {
-                        listItem.setSubText(metadata);
-                    }
+                    listItem.setSubText(item.subText);
                     listItem.onClick(() => {
                         listItem.setActive();
                         this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));

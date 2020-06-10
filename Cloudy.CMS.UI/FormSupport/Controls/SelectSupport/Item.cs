@@ -7,16 +7,16 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
     public class Item
     {
         public string Text { get; }
+        public string SubText { get; }
         public string Value { get; }
         public string Image { get; }
-        public IDictionary<string, string> Metadata { get; }
 
-        public Item(string text, string value, string image, IDictionary<string, string> metadata)
+        public Item(string text, string subText, string value, string image)
         {
             Text = text;
+            SubText = subText;
             Value = value;
             Image = image;
-            Metadata = new ReadOnlyDictionary<string, string>(metadata);
         }
     }
 }

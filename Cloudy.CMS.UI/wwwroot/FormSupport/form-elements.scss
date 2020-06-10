@@ -229,10 +229,6 @@ cloudy-ui-form-table {
 cloudy-ui-select {
     display: block;
     margin-top: 8px;
-
-    cloudy-ui-sortable-item-field-control & {
-        margin: 8px 0;
-    }
 }
 
 cloudy-ui-select-empty {
@@ -247,6 +243,7 @@ cloudy-ui-select-empty-text {
 
 cloudy-ui-select-preview {
     display: flex;
+    padding: 8px;
     align-items: center;
 }
 

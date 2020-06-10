@@ -59,22 +59,25 @@ cloudy-ui-list-item-content {
     }
 }
 
-cloudy-ui-list-item-text-container {
-    display: block;
-    padding: 12px 0;
-}
-
-cloudy-ui-list-item-text {
-    display: block;
-}
-
 .cloudy-ui-list-item-image {
     display: block;
     align-self: center;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAGUExURf///+Xl5QmC0GsAAAARSURBVAjXY/jBwICM2A8gIwCK3gi823XM2QAAAABJRU5ErkJggg==);
     width: 40px;
     height: 40px;
+    margin: 12px 0;
     margin-right: 8px;
+}
+
+cloudy-ui-list-item-text-container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 12px 0;
+}
+
+cloudy-ui-list-item-text {
+    display: block;
 }
 
 cloudy-ui-list-item-sub-text {

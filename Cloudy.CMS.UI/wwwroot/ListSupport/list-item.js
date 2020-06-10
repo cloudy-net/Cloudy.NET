@@ -74,6 +74,14 @@ class ListItem {
             this.subText = document.createElement('cloudy-ui-list-item-sub-text');
             this.textContainer.append(this.subText);
         }
+
+        if (!value) {
+            this.subText.style.display = 'none';
+            return;
+        } else {
+            this.subText.style.display = 'block';
+        }
+
         this.subText.innerHTML = value;
 
         return this;
@@ -84,6 +92,13 @@ class ListItem {
             this.image = document.createElement('img');
             this.image.classList.add('cloudy-ui-list-item-image');
             this.content.insertBefore(this.image, this.textContainer);
+        }
+
+        if (!value) {
+            this.image.style.display = 'none';
+            return;
+        } else {
+            this.image.style.display = 'block';
         }
 
         this.image.src = value;

@@ -38,7 +38,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                 return null;
             }
 
-            return new Item((content as INameable)?.Name ?? content.Id, content.Id, (content as IImageable)?.Image, new Dictionary<string, string> { });
+            return new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image);
         }
 
         public async Task<IEnumerable<Item>> GetAll(string type)
@@ -50,7 +50,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
             foreach (var document in await DocumentFinder.Find(contentType.Container).GetResultAsync().ConfigureAwait(false))
             {
                 var content = ContentDeserializer.Deserialize(document, contentType, null);
-                result.Add(new Item((content as INameable)?.Name ?? content.Id, content.Id, (content as IImageable)?.Image, new Dictionary<string, string> { }));
+                result.Add(new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image));
             }
 
             return result.AsReadOnly();
