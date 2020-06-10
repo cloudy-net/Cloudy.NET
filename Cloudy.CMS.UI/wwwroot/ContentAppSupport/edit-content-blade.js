@@ -23,6 +23,15 @@ class EditContentBlade extends Blade {
         this.app = app;
         this.contentType = contentType;
         this.content = content;
+
+        this.element.addEventListener("keydown", (event) => {
+            if ((String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) || event.which == 19) { // 19 for Mac:s "Command+S"
+                if (this.saveButton) {
+                    this.saveButton.triggerClick();
+                }
+                event.preventDefault();
+            }
+        });
     }
 
     async open() {
@@ -71,7 +80,7 @@ class EditContentBlade extends Blade {
 
         this.buildForm();
 
-        var saveButton = new Button('Save')
+        this.saveButton = new Button('Save')
             .setPrimary()
             .onClick(async () => {
                 try {
@@ -178,7 +187,7 @@ class EditContentBlade extends Blade {
             .addItem(item => item.setText('Copy').onClick(() => navigator.clipboard.writeText(JSON.stringify(this.content, null, '  '))))
             .addItem(item => item.setText('Paste').onClick(() => { this.app.closeAfter(this); navigator.clipboard.readText().then(paste); }));
 
-        this.setFooter(saveButton, cancelButton, moreButton);
+        this.setFooter(this.saveButton, cancelButton, moreButton);
     }
 
     async buildForm() {
