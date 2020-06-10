@@ -5,6 +5,8 @@ import Nav from "./nav.js";
 /* PORTAL */
 
 class Portal {
+    currentAppId = null;
+
     constructor() {
         this.apps = {};
         this.element = document.createElement('cloudy-ui-portal');
@@ -23,7 +25,9 @@ class Portal {
     }
 
     openApp(appDescriptor) {
-        [...this.element.querySelectorAll('cloudy-ui-app')].forEach(a => this.element.removeChild(a));
+        if (appDescriptor.id == this.currentAppId) {
+            return;
+        }
 
         this.nav.openApp(appDescriptor);
 
@@ -34,12 +38,23 @@ class Portal {
             app.openStartBlade();
         }
 
-        if (this.apps[appDescriptor.id]) {
+        if (this.apps[appDescriptor.id]) { // app is already open
             open(this.apps[appDescriptor.id]);
             return;
         }
 
-        import(appDescriptor.modulePath.indexOf('/') == 0 ? appDescriptor.modulePath : `./${appDescriptor.modulePath}`).then(module => open(new module.default()));
+        if (this.apps[this.currentAppId]) {
+            this.apps[this.currentAppId].element.remove();
+        }
+        this.currentAppId = appDescriptor.id;
+
+        import(appDescriptor.modulePath.indexOf('/') == 0 ? appDescriptor.modulePath : `./${appDescriptor.modulePath}`).then(module => {
+            if (appDescriptor.id != this.currentAppId) {
+                return; // switched app during loading. abort.
+            }
+
+            open(new module.default());
+        });
     }
 }
 
