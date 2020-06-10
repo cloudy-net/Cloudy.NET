@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Cloudy.CMS.UI.ScriptSupport;
 
 namespace Cloudy.CMS.UI.PortalSupport
 {
@@ -15,13 +16,15 @@ namespace Cloudy.CMS.UI.PortalSupport
         IFaviconProvider FaviconProvider { get; }
         IStaticFilesBasePathProvider StaticFilesBasePathProvider { get; }
         IStyleProvider StyleProvider { get; }
+        IScriptProvider ScriptProvider { get; }
 
-        public PortalPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStaticFilesBasePathProvider staticFilesBasePathProvider, IStyleProvider styleProvider)
+        public PortalPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStaticFilesBasePathProvider staticFilesBasePathProvider, IStyleProvider styleProvider, IScriptProvider scriptProvider)
         {
             TitleProvider = titleProvider;
             FaviconProvider = faviconProvider;
             StaticFilesBasePathProvider = staticFilesBasePathProvider;
             StyleProvider = styleProvider;
+            ScriptProvider = scriptProvider;
         }
 
         public async Task RenderPageAsync(HttpContext context)
@@ -44,9 +47,15 @@ namespace Cloudy.CMS.UI.PortalSupport
             await context.Response.WriteAsync($"\n");
             await context.Response.WriteAsync($"    <link rel=\"icon\" href=\"{FaviconProvider.Favicon}\">\n");
             await context.Response.WriteAsync($"\n");
-            foreach(var style in StyleProvider.GetAll())
+            foreach (var style in StyleProvider.GetAll())
             {
-                await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(basePath, style.Path).Replace('\\', '/')}\" />\n");
+                var path = style.Path.StartsWith("http") || style.Path.StartsWith("/") ? style.Path : Path.Combine(basePath, style.Path).Replace('\\', '/');
+                await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{path}\" />\n");
+            }
+            foreach (var script in ScriptProvider.GetAll())
+            {
+                var path = script.Path.StartsWith("http") || script.Path.StartsWith("/") ? script.Path : Path.Combine(basePath, script.Path).Replace('\\', '/');
+                await context.Response.WriteAsync($"    <script src=\"{path}\"></script>\n");
             }
             await context.Response.WriteAsync($"</head>\n");
             await context.Response.WriteAsync($"<body>\n");

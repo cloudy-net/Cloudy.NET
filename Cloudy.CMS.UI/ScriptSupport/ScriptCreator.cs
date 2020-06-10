@@ -26,12 +26,7 @@ namespace Cloudy.CMS.UI.ScriptSupport
 
                 foreach (var scriptAttribute in type.GetCustomAttributes<ScriptAttribute>())
                 {
-                    if (scriptAttribute.Path.StartsWith("/"))
-                    {
-                        throw new AbsoluteScriptPathException(type, scriptAttribute.Path);
-                    }
-
-                    result.Add(new ScriptDescriptor(componentAttribute.Id, scriptAttribute.Path));
+                    result.Add(new ScriptDescriptor(scriptAttribute.Path));
                 }
             }
 

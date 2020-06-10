@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cloudy.CMS.ComponentSupport;
+using Cloudy.CMS.ComposableSupport;
 
 namespace Cloudy.CMS.UI.StyleSupport
 {
@@ -10,9 +11,9 @@ namespace Cloudy.CMS.UI.StyleSupport
     {
         IEnumerable<StyleDescriptor> Styles { get; }
 
-        public StyleProvider(IStyleCreator styleCreator)
+        public StyleProvider(IComposableProvider composableProvider)
         {
-            Styles = styleCreator.Create().ToList().AsReadOnly();
+            Styles = composableProvider.GetAll<IStyleCreator>().SelectMany(c => c.Create()).ToList().AsReadOnly();
         }
 
         public IEnumerable<StyleDescriptor> GetAll()

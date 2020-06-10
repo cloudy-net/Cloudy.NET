@@ -10,11 +10,13 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport
     {
         public string Id { get; }
         public string ModulePath { get; }
+        public Type Type { get; }
 
-        public ControlDescriptor(string id, string modulePath)
+        public ControlDescriptor(string id, string modulePath, Type type)
         {
             Id = id;
             ModulePath = modulePath;
+            Type = type;
         }
     }
 }

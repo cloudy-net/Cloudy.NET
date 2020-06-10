@@ -30,12 +30,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport
                         continue;
                     }
 
-                    if (attribute.ModulePath.StartsWith("/"))
-                    {
-                        throw new AbsoluteControlModulePathException(type, attribute.ModulePath);
-                    }
-
-                    result.Add(new ControlDescriptor(attribute.Id, attribute.ModulePath));
+                    result.Add(new ControlDescriptor(attribute.Id, attribute.ModulePath, type));
                 }
             }
 

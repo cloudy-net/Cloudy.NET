@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.UI.ScriptSupport;
+using Cloudy.CMS.UI.StyleSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,24 +7,24 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.ControlSupport
 {
-    public class ControlScriptCreator : IScriptCreator
+    public class ControlStyleCreator : IStyleCreator
     {
         IControlProvider ControlProvider { get; }
 
-        public ControlScriptCreator(IControlProvider controlProvider)
+        public ControlStyleCreator(IControlProvider controlProvider)
         {
             ControlProvider = controlProvider;
         }
 
-        public IEnumerable<ScriptDescriptor> Create()
+        public IEnumerable<StyleDescriptor> Create()
         {
-            var result = new List<ScriptDescriptor>();
+            var result = new List<StyleDescriptor>();
 
             foreach(var control in ControlProvider.GetAll())
             {
-                foreach(var script in control.Type.GetCustomAttributes<ScriptAttribute>())
+                foreach(var style in control.Type.GetCustomAttributes<StyleAttribute>())
                 {
-                    result.Add(new ScriptDescriptor(script.Path));
+                    result.Add(new StyleDescriptor(style.Path));
                 }
             }
 

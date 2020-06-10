@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ScriptSupport
 {
+    /// <summary>
+    /// Specifies a script that should be included at page load.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public class ScriptAttribute : Attribute
     {

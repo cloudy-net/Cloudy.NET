@@ -25,12 +25,7 @@ namespace Cloudy.CMS.UI.StyleSupport
 
                 foreach (var scriptAttribute in type.GetCustomAttributes<StyleAttribute>())
                 {
-                    if (scriptAttribute.Path.StartsWith("/"))
-                    {
-                        throw new AbsoluteStylePathException(type, scriptAttribute.Path);
-                    }
-
-                    result.Add(new StyleDescriptor(componentAttribute.Id, scriptAttribute.Path));
+                    result.Add(new StyleDescriptor(scriptAttribute.Path));
                 }
             }
 
