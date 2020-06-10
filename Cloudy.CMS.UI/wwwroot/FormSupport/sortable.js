@@ -58,7 +58,7 @@ class SortableField {
         var fieldAction = document.createElement('cloudy-ui-sortable-item-action');
         (item.data.actionContainer || field).appendChild(fieldAction);
 
-        if (item.data.field.data.control.menu) {
+        if (item.data.field && item.data.field.data.control.menu) {
             var menu = item.data.field.data.control.menu;
 
             if (menu.generators.length) {
