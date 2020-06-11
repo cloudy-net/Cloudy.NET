@@ -3,6 +3,7 @@ import ItemProvider from './select-item-provider.js';
 import Blade from '../../blade.js';
 import Button from '../../button.js';
 import List from '../../ListSupport/list.js';
+import ListItem from '../../ListSupport/list-item.js';
 import SelectItemPreview from './select-item-preview.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
@@ -108,6 +109,15 @@ class ListItemsBlade extends Blade {
 
         var update = async () => {
             var items = await ItemProvider.getAll(this.provider, this.type);
+
+            if (!items.length) {
+                var listItem = new ListItem();
+                listItem.setDisabled();
+                listItem.setText('(no items)');
+                list.addItem(listItem);
+                return;
+            }
+
             items.forEach(item =>
                 list.addItem(listItem => {
                     listItem.setImage(item.image);
