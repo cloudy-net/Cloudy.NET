@@ -12,11 +12,12 @@ import ListItem from '../ListSupport/list-item.js';
 /* LIST CONTENT BLADE */
 
 class ListContentBlade extends Blade {
-    constructor(app, contentTypes) {
+    constructor(app, contentTypes, taxonomy) {
         super();
 
         this.app = app;
         this.contentTypes = contentTypes;
+        this.taxonomy = taxonomy;
 
         this.contentTypesById = {};
         for (var contentType of contentTypes) {
@@ -59,6 +60,17 @@ class ListContentBlade extends Blade {
             }
 
             var list = new List();
+            this.setContent(list);
+
+            if (!contentList.length) {
+                var listItem = new ListItem();
+                listItem.setText(`(no ${this.taxonomy.lowerCasePluralName})`);
+                listItem.setDisabled();
+                list.addItem(listItem);
+
+                return;
+            }
+
             contentList.forEach(content => {
                 var contentType = this.contentTypesById[content.contentTypeId];
                 var listItem = new ListItem();
@@ -127,8 +139,6 @@ class ListContentBlade extends Blade {
 
                 list.addItem(listItem);
             });
-
-            this.setContent(list);
         };
 
         update();

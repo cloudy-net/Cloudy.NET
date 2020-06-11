@@ -73,7 +73,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             {
                 Id = contentTypeGroup.Id,
                 Name = name,
+                LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
                 PluralName = pluralName,
+                LowerCasePluralName = pluralName.Substring(0, 1).ToLower() + pluralName.Substring(1),
                 ContentTypes = ContentTypeGroupMatcher.GetContentTypesFor(contentTypeGroup.Id).Select(t => t.Id).ToList().AsReadOnly(),
             };
             return item;
@@ -83,7 +85,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             public string Id { get; set; }
             public string Name { get; set; }
+            public string LowerCaseName { get; set; }
             public string PluralName { get; set; }
+            public string LowerCasePluralName { get; set; }
             public IEnumerable<string> ContentTypes { get; set; }
         }
     }
