@@ -4,6 +4,9 @@
 /* NOTIFICATION */
 
 class Notification {
+    onClickCallbacks = [];
+    onCloseCallbacks = [];
+
     constructor() {
         this.element = document.createElement('cloudy-ui-notification');
         this.element.setAttribute('tabindex', 0);
@@ -11,7 +14,11 @@ class Notification {
             if (event.target.matches('cloudy-ui-button')) {
                 return;
             }
+            if (window.getSelection().type == 'Range') {
+                return;
+            }
 
+            this.triggerClick();
             this.close();
         });
         this.element.addEventListener('keyup', event => {
@@ -20,7 +27,8 @@ class Notification {
             }
 
             event.preventDefault();
-            this.element.click();
+            this.triggerClick();
+            this.close();
         });
 
         this.timeout = 10 * 1000;
@@ -34,16 +42,19 @@ class Notification {
 
     close() {
         this.element.parentElement.removeChild(this.element);
-
-        this.triggerOnClose();
+        this.triggerClose();
 
         return this;
     }
 
     onClick(callback) {
-        this.element.addEventListener('click', callback);
+        this.onClickCallbacks.push(callback);
 
         return this;
+    }
+
+    triggerClick() {
+        this.onClickCallbacks.forEach(callback => callback());
     }
 
     setText(...items) {
@@ -61,17 +72,13 @@ class Notification {
     }
 
     onClose(callback) {
-        this.onCloseCallback = callback;
+        this.onCloseCallbacks.push(callback);
 
         return this;
     }
 
-    triggerOnClose(...parameters) {
-        if (!this.onCloseCallback) {
-            return;
-        }
-
-        this.onCloseCallback(...parameters);
+    triggerClose(...parameters) {
+        this.onCloseCallbacks.forEach(callback => callback(...parameters));
     }
 }
 
