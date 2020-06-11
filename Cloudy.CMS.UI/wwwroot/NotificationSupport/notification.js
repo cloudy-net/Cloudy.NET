@@ -14,6 +14,9 @@ class Notification {
             if (event.target.matches('cloudy-ui-button')) {
                 return;
             }
+            if (event.target.matches('code')) {
+                return;
+            }
             if (window.getSelection().type == 'Range') {
                 return;
             }
