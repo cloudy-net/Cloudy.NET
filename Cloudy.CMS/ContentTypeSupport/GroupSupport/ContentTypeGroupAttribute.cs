@@ -12,7 +12,7 @@ namespace Cloudy.CMS.ContentTypeSupport.GroupSupport
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new Exception($"Id must be provided when using [ContentTypeGroup(...)]. How about {Guid.NewGuid()} ?");
+                throw new Exception($"Id must be provided when using [ContentTypeGroup(...)]. How about `{Guid.NewGuid()}` ?");
             }
 
             Id = id;

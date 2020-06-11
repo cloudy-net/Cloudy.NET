@@ -10,7 +10,7 @@ namespace Cloudy.CMS.ContentTypeSupport
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new Exception($"Id must be provided when using [ContentType(...)]. How about {Guid.NewGuid()} ?");
+                throw new Exception($"Id must be provided when using [ContentType(...)]. How about `{Guid.NewGuid()}` ?");
             }
 
             Id = id;

@@ -41,6 +41,9 @@ cloudy-ui-notification {
     flex-grow: 0;
     width: 288px; } }
 
+cloudy-ui-notification code {
+  cursor: text; }
+
 cloudy-ui-notification ul {
   margin: 0;
   padding-left: 20px; }

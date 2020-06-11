@@ -24,6 +24,7 @@ class FormFieldDescriptorProvider {
             return await response.json();
         } catch (error) {
             notificationManager.addNotification(item => item.setText(`Could not get field descriptors for form ${formId} (${error.message})`));
+            throw error;
         }
     }
 }

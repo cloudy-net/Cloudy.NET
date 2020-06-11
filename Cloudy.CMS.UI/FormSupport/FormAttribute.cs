@@ -12,7 +12,7 @@ namespace Cloudy.CMS.UI.FormSupport
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new Exception($"Id must be provided when using [Form(...)]. How about {Guid.NewGuid()} ?");
+                throw new Exception($"Id must be provided when using [Form(...)]. How about `{Guid.NewGuid()}` ?");
             }
 
             Id = id;
