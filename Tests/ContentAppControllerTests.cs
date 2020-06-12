@@ -72,7 +72,9 @@ namespace Tests
 
             Mock.Get(containerSpecificContentGetter).Setup(g => g.Get<MyContent>(id, null, container)).Returns(a);
 
-            new SaveContentController(contentTypeRepository, containerSpecificContentGetter, propertyDefinitionProvider, containerSpecificContentUpdater, null).SaveContent(body);
+            var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
+
+            new SaveContentController(contentTypeRepository, containerSpecificContentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.Update(It.IsAny<MyContent>(), container));
         }

@@ -38,17 +38,13 @@ namespace Cloudy.CMS.ContentTypeSupport.GroupSupport
         {
             var result = new List<ContentTypeDescriptor>();
 
-            var contentTypeGroups = ContentTypeGroupProvider.GetAll();
+            var contentTypeGroup = ContentTypeGroupProvider.Get(contentTypeGroupId);
 
             foreach(var contentType in ContentTypeProvider.GetAll())
             {
-                foreach(var contentTypeGroup in contentTypeGroups)
+                if (contentTypeGroup.Type.IsAssignableFrom(contentType.Type))
                 {
-                    if (contentTypeGroup.Type.IsAssignableFrom(contentType.Type))
-                    {
-                        result.Add(contentType);
-                        break;
-                    }
+                    result.Add(contentType);
                 }
             }
 

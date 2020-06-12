@@ -13,17 +13,21 @@ namespace Tests
         [Fact]
         public void FindsContentTypes()
         {
-            var contentTypeA = new ContentTypeDescriptor("ipsum", typeof(ContentTypeA), "dolor");
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { contentTypeA });
+            var typeA = new ContentTypeDescriptor("ipsum", typeof(ContentTypeA), "dolor");
+            var typeB = new ContentTypeDescriptor("sit", typeof(ContentTypeB), "amet");
+            var typeProvider = Mock.Of<IContentTypeProvider>();
+            Mock.Get(typeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { typeA, typeB });
 
-            var contentTypeGroupA = new ContentTypeGroupDescriptor("lorem", typeof(ContentTypeGroupA));
-            var contentTypeGroupProvider = Mock.Of<IContentTypeGroupProvider>();
-            Mock.Get(contentTypeGroupProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeGroupDescriptor> { contentTypeGroupA });
+            var groupA = new ContentTypeGroupDescriptor("lorem", typeof(ContentTypeGroupA));
+            var groupB = new ContentTypeGroupDescriptor("adipiscing", typeof(ContentTypeGroupB));
+            var groupProvider = Mock.Of<IContentTypeGroupProvider>();
+            Mock.Get(groupProvider).Setup(p => p.Get("lorem")).Returns(groupA);
+            Mock.Get(groupProvider).Setup(p => p.Get("adipiscing")).Returns(groupB);
 
-            var result = new ContentTypeGroupMatcher(contentTypeProvider, contentTypeGroupProvider).GetContentTypesFor("lorem");
+            var sut = new ContentTypeGroupMatcher(typeProvider, groupProvider);
 
-            Assert.Equal(new List<ContentTypeDescriptor> { contentTypeA }, result);
+            Assert.Equal(new List<ContentTypeDescriptor> { typeA }, sut.GetContentTypesFor("lorem"));
+            Assert.Equal(new List<ContentTypeDescriptor> { typeA, typeB }, sut.GetContentTypesFor("adipiscing"));
         }
 
         [Fact]
@@ -47,7 +51,17 @@ namespace Tests
 
         }
 
-        public class ContentTypeA : ContentTypeGroupA
+        public class ContentTypeA : ContentTypeGroupA, ContentTypeGroupB
+        {
+
+        }
+
+        public interface ContentTypeGroupB
+        {
+
+        }
+
+        public class ContentTypeB : ContentTypeGroupB
         {
 
         }
