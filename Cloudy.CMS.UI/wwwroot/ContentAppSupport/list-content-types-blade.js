@@ -69,6 +69,7 @@ class ListContentTypesBlade extends Blade {
                             listItem.setActive(false);
                         });
                     await this.app.addBladeAfter(blade, this);
+                    blade.stateUpdate();
                 };
 
                 return;
@@ -107,6 +108,7 @@ class ListContentTypesBlade extends Blade {
                             listItem.setActive(false);
                         });
                     await this.app.addBladeAfter(blade, this);
+                    blade.stateUpdate();
                 };
             }
 
