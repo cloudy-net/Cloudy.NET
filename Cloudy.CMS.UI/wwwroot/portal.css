@@ -215,6 +215,7 @@ cloudy-ui-blade-title-close {
   display: block;
   width: 48px;
   height: 48px;
+  flex: 0 0 48px;
   border-radius: 50%;
   background: center no-repeat;
   background-size: 16px;
