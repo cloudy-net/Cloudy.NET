@@ -109,11 +109,11 @@ class ListContentBlade extends Blade {
 
             this.actions[content.id] = async () => {
                 listItem.setActive();
-
                 var blade = new EditContentBlade(this.app, contentType, content)
                     .onComplete(() => updateListItem(listItem, content, contentType))
-                    .onClose(() => listItem.setActive(false));
-
+                    .onClose(() => {
+                        listItem.setActive(false);
+                    });
                 await this.app.addBladeAfter(blade, this);
             };
 
@@ -145,7 +145,7 @@ class ListContentBlade extends Blade {
 
         this.action = action;
 
-        await this.app.removeBladeAfter(this);
+        await this.app.removeBladesAfter(this);
 
         if (!this.action) {
             return;

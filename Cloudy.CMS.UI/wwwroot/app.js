@@ -33,7 +33,7 @@ class App {
     }
 
     addBladeAfter(blade, parentBlade) {
-        return this.removeBladeAfter(parentBlade).then(() => this.addBlade(blade));
+        return this.removeBladesAfter(parentBlade).then(() => this.addBlade(blade));
     }
 
     async removeBlade(blade, ...parameters) {
@@ -46,18 +46,22 @@ class App {
             });
         }
 
-        await this.removeBladeAfter(blade);
+        await this.removeBladesAfter(blade);
         await blade.close(...parameters);
 
         blade.element.remove();
         this.blades.splice(this.blades.indexOf(blade), 1);
     }
 
-    async removeBladeAfter(blade) {
+    async removeBladesAfter(blade) {
         var index = this.blades.indexOf(blade);
 
         if (index == this.blades.length - 1) {
-            return Promise.resolve();
+            return;
+        }
+
+        if (index == -1) {
+            return;
         }
 
         var blades = this.blades.slice(index + 1);

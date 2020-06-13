@@ -30,6 +30,7 @@ class ListContentTypesBlade extends Blade {
     constructor(app) {
         super();
         this.app = app;
+        this._close.remove();
     }
 
     async open() {
@@ -62,9 +63,12 @@ class ListContentTypesBlade extends Blade {
 
                 this.actions[item.id] = async () => {
                     listItem.setActive();
-                    var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup).setTitle(contentTypeGroup.pluralName).onClose(() => listItem.setActive(false));
+                    var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup)
+                        .setTitle(contentTypeGroup.pluralName)
+                        .onClose(() => {
+                            listItem.setActive(false);
+                        });
                     await this.app.addBladeAfter(blade, this);
-                    blade.stateUpdate();
                 };
 
                 return;
@@ -84,7 +88,10 @@ class ListContentTypesBlade extends Blade {
                 this.actions[item.id] = async () => {
                     listItem.setActive();
                     var content = await SingletonGetter.get(contentType.id);
-                    var blade = new EditContentBlade(this.app, contentType, content).onClose(() => listItem.setActive(false));
+                    var blade = new EditContentBlade(this.app, contentType, content)
+                        .onClose(() => {
+                            listItem.setActive(false);
+                        });
                     await this.app.addBladeAfter(blade, this);
                 };
             } else {
@@ -94,9 +101,12 @@ class ListContentTypesBlade extends Blade {
 
                 this.actions[item.id] = async () => {
                     listItem.setActive();
-                    var blade = new ListContentBlade(this.app, [contentType], contentType).setTitle(contentType.pluralName).onClose(() => listItem.setActive(false));
+                    var blade = new ListContentBlade(this.app, [contentType], contentType)
+                        .setTitle(contentType.pluralName)
+                        .onClose(() => {
+                            listItem.setActive(false);
+                        });
                     await this.app.addBladeAfter(blade, this);
-                    blade.stateUpdate();
                 };
             }
 
@@ -122,7 +132,7 @@ class ListContentTypesBlade extends Blade {
 
         this.action = action;
 
-        await this.app.removeBladeAfter(this);
+        await this.app.removeBladesAfter(this);
 
         if (!this.action) {
             return;

@@ -185,7 +185,7 @@ class EditContentBlade extends Blade {
         };
         var moreButton = new ContextMenu()
             .addItem(item => item.setText('Copy').onClick(() => navigator.clipboard.writeText(JSON.stringify(this.content, null, '  '))))
-            .addItem(item => item.setText('Paste').onClick(() => { this.app.removeBladeAfter(this); navigator.clipboard.readText().then(paste); }));
+            .addItem(item => item.setText('Paste').onClick(() => { this.app.removeBladesAfter(this); navigator.clipboard.readText().then(paste); }));
 
         this.setFooter(this.saveButton, cancelButton, moreButton);
     }

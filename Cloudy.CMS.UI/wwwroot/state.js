@@ -32,7 +32,7 @@
     }
 
     pop(blade) {
-        this.segments = this.segments.slice(0, blade.getIndex());
+        this.segments = this.segments.slice(0, blade.getIndex() + 1);
         location.href = `#${this.segments.join('/')}`;
     }
 }

@@ -23,7 +23,8 @@ class Blade {
         this._title.append(this._titleText);
         this._toolbar = document.createElement('cloudy-ui-blade-toolbar');
         this._title.append(this._toolbar);
-        this._title.append(new BladeCloseButton().element);
+        this._close = new BladeCloseButton().element;
+        this._title.append(this._close);
 
         this._header = document.createElement('cloudy-ui-blade-header');
         this._header.style.display = 'none';
