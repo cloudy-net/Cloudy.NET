@@ -243,6 +243,18 @@ cloudy-ui-select-empty-text {
     color: rgba(0, 0, 0, 0.54);
 }
 
+cloudy-ui-select-loading {
+    display: flex;
+    padding: 8px;
+    padding-right: 0;
+    align-items: center;
+}
+
+cloudy-ui-select-loading-text {
+    flex-grow: 1;
+    color: rgba(0, 0, 0, 0.54);
+}
+
 cloudy-ui-select-preview {
     display: flex;
     align-items: center;

@@ -21,12 +21,18 @@ class SelectControl extends FieldControl {
         emptyText.innerText = '(none)';
         empty.append(emptyText);
         element.append(empty);
+        var loading = document.createElement('cloudy-ui-select-loading');
+        var loadingText = document.createElement('cloudy-ui-select-loading-text');
+        loadingText.innerText = '(loading)';
+        loading.append(loadingText);
+        element.append(loading);
         var preview = new SelectItemPreview().appendTo(element);
         super(element);
 
         var update = item => {
             if (!item) {
                 preview.element.style.display = 'none';
+                loading.style.display = 'none';
                 empty.style.display = '';
 
                 return;
@@ -34,6 +40,7 @@ class SelectControl extends FieldControl {
 
             preview.element.style.display = '';
             empty.style.display = 'none';
+            loading.style.display = 'none';
 
             preview.setImage(item.image);
             preview.setText(item.text);
@@ -41,8 +48,9 @@ class SelectControl extends FieldControl {
         };
 
         if (value) {
-            preview.setText('&nbsp;');
-            preview.setSubText('&nbsp;');
+            preview.element.style.display = 'none';
+            empty.style.display = 'none';
+            loading.style.display = '';
 
             ItemProvider
                 .get(fieldModel.descriptor.control.parameters['provider'], fieldModel.descriptor.control.parameters['type'], value)
