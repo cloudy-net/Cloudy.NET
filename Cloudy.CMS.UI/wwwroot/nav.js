@@ -1,8 +1,11 @@
 ﻿import List from './ListSupport/list.js';
+import ListItem from './ListSupport/list-item.js';
 
 class Nav {
-    constructor(portal) {
+    constructor(portal, title, apps) {
         this.portal = portal;
+        this.apps = apps;
+
         this.element = document.createElement('cloudy-ui-portal-nav');
         document.body.append(this.element);
         this.toggle = document.createElement('cloudy-ui-portal-nav-toggle');
@@ -52,68 +55,34 @@ class Nav {
         this.menuFade.classList.add('cloudy-ui-hidden');
         this.element.appendChild(this.menuFade);
 
-        this.appDescriptorsPromise = fetch('App/GetAll', { credentials: 'include' }).then(response => {
-            if (!response.ok) {
-                throw new Error(`${response.status} (${response.statusText})`);
+        this.menuList.addSubHeader('Apps');
+        for (var appDescriptor of apps) {
+            var listItem = new ListItem();
+            listItem.setText(appDescriptor.name);
+            listItem.element.setAttribute('cloudy-ui-app-id', appDescriptor.id);
+            listItem.onClick(() => location.hash = '#' + appDescriptor.id);
+            this.menuList.addItem(listItem);
+        }
+
+        this.title = document.createElement('cloudy-ui-portal-nav-title');
+        this.title.innerText = title;
+        this.element.append(this.title);
+
+        window.addEventListener("hashchange", () => this.update());
+        this.update();
+    }
+
+    update() {
+        var appId = location.hash.substr(1).split('/')[0];
+
+        for (var item of this.menuList.element.children) {
+            if (item.getAttribute('cloudy-ui-app-id') != appId) {
+                item.classList.remove('cloudy-ui-active');
+                continue;
             }
 
-            return response.json();
-        })
-            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get apps (${error.name}: ${error.message})`)));;
-        this.appDescriptorsPromise.then(appDescriptors => {
-            this.menuList.addSubHeader('Apps');
-            appDescriptors.forEach(appDescriptor => {
-                this.menuList.addItem(item => {
-                    item.setText(appDescriptor.name);
-                    item.element.setAttribute('cloudy-ui-app-id', appDescriptor.id);
-                    item.onClick(() => portal.openApp(appDescriptor));
-                });
-            });
-            if (appDescriptors.length == 1) {
-                portal.openApp(appDescriptors[0]);
-            }
-        });
-
-        if (document.readyState != 'loading') {
-            this.openStartApp();
-        } else {
-            document.addEventListener('DOMContentLoaded', this.openStartApp);
+            item.classList.add('cloudy-ui-active');
         }
-    }
-
-    openStartApp() {
-        if (!location.hash) {
-            return;
-        }
-
-        var match = location.hash.substr(1).match(/^[a-z0-9-_.]+/i);
-
-        if (match) {
-            var appId = match[0];
-
-            this.appDescriptorsPromise.then(appDescriptors => {
-                var appDescriptor = appDescriptors.find(a => a.id == appId);
-
-                if (!appDescriptor) {
-                    throw `App not found: ${appId}`;
-                }
-
-                this.portal.openApp(appDescriptor);
-            });
-        }
-    }
-
-    openApp(appDescriptor) {
-        this.appDescriptorsPromise.then(() => {
-            [...this.menuList.element.querySelectorAll('cloudy-ui-portal-nav-item')].forEach(c => c.classList.remove('cloudy-ui-active'));
-            this.menuList.element.querySelector(`[cloudy-ui-app-id="${appDescriptor.id}"]`).classList.add('cloudy-ui-active');
-        });
-    }
-
-    setTitle(value) {
-        var title = document.createElement('cloudy-ui-portal-nav-title');
-        title.innerText = value;
-        this.element.append(title);
     }
 }
 

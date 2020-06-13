@@ -95,7 +95,7 @@ cloudy-ui-portal-nav {
     background: #1976d2;
 }
 
-@media(min-width: $screen-sm) {
+@media(min-width: $screen-tn) {
     cloudy-ui-portal-nav {
         height: 64px;
         padding-left: 12px;
@@ -157,7 +157,7 @@ cloudy-ui-portal-nav-menu-fade {
     }
 }
 
-@media(min-width: $screen-sm) {
+@media(min-width: $screen-tn) {
     cloudy-ui-portal-nav-menu-fade {
         top: 64px;
     }
@@ -185,7 +185,7 @@ cloudy-ui-portal-nav-menu {
     }
 }
 
-@media(min-width: $screen-sm) {
+@media(min-width: $screen-tn) {
     cloudy-ui-portal-nav-menu {
         top: 64px;
     }
@@ -206,7 +206,7 @@ cloudy-ui-app {
     overflow-x: auto;
 }
 
-@media(min-width: $screen-sm) {
+@media(min-width: $screen-tn) {
     cloudy-ui-app {
         top: 64px;
         right: auto;
@@ -239,7 +239,7 @@ cloudy-ui-blade {
     }
 }
 
-@media(min-width: $screen-sm) {
+@media(min-width: $screen-tn) {
     cloudy-ui-blade {
         flex: 0 0 auto;
         display: flex;

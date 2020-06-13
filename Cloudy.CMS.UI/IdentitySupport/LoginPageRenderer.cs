@@ -46,7 +46,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             await context.Response.WriteAsync($"<body>\n");
             await context.Response.WriteAsync($"    <script type=\"module\">\n");
             await context.Response.WriteAsync($"        import Login from '{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "login.js").Replace('\\', '/')}';\n");
-            await context.Response.WriteAsync($"        new Login().setTitle('Login to {TitleProvider.Title}');\n");
+            await context.Response.WriteAsync($"        new Login('Login to {TitleProvider.Title}');\n");
             await context.Response.WriteAsync($"    </script>\n");
             await context.Response.WriteAsync($"</body>\n");
             await context.Response.WriteAsync($"</html>\n");

@@ -60,10 +60,10 @@ class SelectControl extends FieldControl {
                 .onSelect(item => {
                     this.triggerChange(item.value);
                     update(item);
-                    app.close(list);
+                    app.removeBlade(list);
                 });
 
-            app.openAfter(list, blade);
+            app.addBladeAfter(list, blade);
         };
 
         new Button('Add').onClick(this.open).appendTo(empty);
@@ -101,7 +101,7 @@ class ListItemsBlade extends Blade {
     async open() {
         this.setTitle(`Select ${this.name.substr(0, 1).toLowerCase()}${this.name.substr(1)}`);
 
-        //this.createNew = () => this.app.openAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
+        //this.createNew = () => this.app.addBladeAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
         this.setToolbar(new Button('New').setInherit()/*.onClick(this.createNew)*/);
 
         var list = new List();

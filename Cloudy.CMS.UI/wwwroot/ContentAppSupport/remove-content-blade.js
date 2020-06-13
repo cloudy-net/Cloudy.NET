@@ -58,10 +58,10 @@ class RemoveContentBlade extends Blade {
 
                         notificationManager.addNotification(item => item.setText(`Removed ${contentType.name} ${name || ''}`));
                         this.onCompleteCallbacks.forEach(callback => callback(content));
-                        app.close(this);
+                        app.removeBlade(this);
                     })
             );
-        var cancelButton = new Button('Cancel').onClick(() => app.close(this));
+        var cancelButton = new Button('Cancel').onClick(() => app.removeBlade(this));
 
         this.setFooter(saveButton, cancelButton);
     }

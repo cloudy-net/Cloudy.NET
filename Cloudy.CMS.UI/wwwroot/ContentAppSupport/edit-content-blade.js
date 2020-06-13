@@ -136,7 +136,7 @@ class EditContentBlade extends Blade {
 
                 if (!this.content.id) {
                     notificationManager.addNotification(item => item.setText(`Created ${this.contentType.name} ${name || ''}`));
-                    this.app.close(this);
+                    this.app.removeBlade(this);
                 } else {
                     notificationManager.addNotification(item => item.setText(`Updated ${this.contentType.name} ${name || ''}`));
                 }
@@ -144,7 +144,7 @@ class EditContentBlade extends Blade {
                 this.onCompleteCallbacks.forEach(callback => callback(this.content));
             });
 
-        var cancelButton = new Button('Cancel').onClick(() => this.app.close(this));
+        var cancelButton = new Button('Cancel').onClick(() => this.app.removeBlade(this));
         var paste = text => {
             const value = JSON.parse(text);
 
@@ -185,7 +185,7 @@ class EditContentBlade extends Blade {
         };
         var moreButton = new ContextMenu()
             .addItem(item => item.setText('Copy').onClick(() => navigator.clipboard.writeText(JSON.stringify(this.content, null, '  '))))
-            .addItem(item => item.setText('Paste').onClick(() => { this.app.closeAfter(this); navigator.clipboard.readText().then(paste); }));
+            .addItem(item => item.setText('Paste').onClick(() => { this.app.removeBladeAfter(this); navigator.clipboard.readText().then(paste); }));
 
         this.setFooter(this.saveButton, cancelButton, moreButton);
     }

@@ -67,7 +67,7 @@ cloudy-ui-portal-nav {
   padding-left: 4px;
   background: #1976d2; }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   cloudy-ui-portal-nav {
     height: 64px;
     padding-left: 12px; } }
@@ -115,7 +115,7 @@ cloudy-ui-portal-nav-menu-fade {
     visibility: hidden;
     opacity: 0; }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   cloudy-ui-portal-nav-menu-fade {
     top: 64px; } }
 
@@ -136,7 +136,7 @@ cloudy-ui-portal-nav-menu {
     cloudy-ui-portal-nav-menu.cloudy-ui-hidden:after {
       left: 0; }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   cloudy-ui-portal-nav-menu {
     top: 64px; } }
 
@@ -151,7 +151,7 @@ cloudy-ui-app {
   box-sizing: border-box;
   overflow-x: auto; }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   cloudy-ui-app {
     top: 64px;
     right: auto;
@@ -174,7 +174,7 @@ cloudy-ui-blade {
   cloudy-ui-blade:focus {
     outline: none; }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   cloudy-ui-blade {
     flex: 0 0 auto;
     display: flex;

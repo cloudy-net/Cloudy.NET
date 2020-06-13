@@ -107,7 +107,7 @@ class Login {
     openApp(appDescriptor) {
         [...this.element.querySelectorAll('cloudy-ui-app')].forEach(a => this.element.removeChild(a));
 
-        this.nav.openApp(appDescriptor);
+        this.nav.selectItem(appDescriptor.id);
 
         history.pushState(null, null, `#${appDescriptor.id}`);
 

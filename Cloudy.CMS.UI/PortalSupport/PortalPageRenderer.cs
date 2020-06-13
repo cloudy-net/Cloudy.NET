@@ -61,7 +61,8 @@ namespace Cloudy.CMS.UI.PortalSupport
             await context.Response.WriteAsync($"<body>\n");
             await context.Response.WriteAsync($"    <script type=\"module\">\n");
             await context.Response.WriteAsync($"        import Portal from '{Path.Combine(basePath, "portal.js").Replace('\\', '/')}';\n");
-            await context.Response.WriteAsync($"        new Portal().setTitle('{TitleProvider.Title}');\n");
+            await context.Response.WriteAsync($"        import appProvider from '{Path.Combine(basePath, "app-provider.js").Replace('\\', '/')}';\n");
+            await context.Response.WriteAsync($"        appProvider.getAll().then(apps => new Portal('{TitleProvider.Title}', apps).appendTo(document.body));\n");
             await context.Response.WriteAsync($"    </script>\n");
             await context.Response.WriteAsync($"</body>\n");
             await context.Response.WriteAsync($"</html>\n");

@@ -3,7 +3,7 @@ import FormBuilder from "../FormSupport/form-builder.js";
 import Button from "../button.js";
 import notificationManager from "../NotificationSupport/notification-manager.js";
 
-export default (menu, user, blade, app) => menu.addItem(item => item.setText('Change password').onClick(() => app.openAfter(new ChangePasswordBlade(user, app), blade)));
+export default (menu, user, blade, app) => menu.addItem(item => item.setText('Change password').onClick(() => app.addBladeAfter(new ChangePasswordBlade(user, app), blade)));
 
 class ChangePasswordBlade extends Blade {
     constructor(user, app) {
@@ -38,7 +38,7 @@ class ChangePasswordBlade extends Blade {
                 .then(result => {
                     if (result.success) {
                         notificationManager.addNotification(item => item.setText('Password changed.'));
-                        app.close(this);
+                        app.removeBlade(this);
                     } else {
                         var errors = document.createElement('ul');
                         result.errors.forEach(error => {
@@ -51,6 +51,6 @@ class ChangePasswordBlade extends Blade {
                 })
         };
 
-        this.setFooter(new Button('Save').setPrimary().onClick(() => save()), new Button('Cancel').onClick(() => app.close(this)));
+        this.setFooter(new Button('Save').setPrimary().onClick(() => save()), new Button('Cancel').onClick(() => app.removeBlade(this)));
     }
 }

@@ -7,10 +7,16 @@ class App {
     constructor() {
         this.blades = [];
         this.element = document.createElement('cloudy-ui-app');
-        this.element.addEventListener('cloudy-ui-close-blade', event => this.close.apply(this, [event.detail.blade, ...event.detail.parameters]));
+        this.element.addEventListener('cloudy-ui-close-blade', event => this.removeBlade.apply(this, [event.detail.blade, ...event.detail.parameters]));
     }
 
-    open(blade) {
+    async open() {
+    }
+
+    async close() {
+    }
+
+    async addBlade(blade) {
         if (!this.element.parentElement) {
             this.startBlade = blade;
             return;
@@ -23,22 +29,14 @@ class App {
             behavior: 'smooth',
         });
 
-        return blade.open();
+        return await blade.open();
     }
 
-    openStartBlade() {
-        if (!this.startBlade) {
-            return;
-        }
-
-        this.open(this.startBlade);
+    addBladeAfter(blade, parentBlade) {
+        return this.removeBladeAfter(parentBlade).then(() => this.addBlade(blade));
     }
 
-    openAfter(blade, parentBlade) {
-        return this.closeAfter(parentBlade).then(() => this.open(blade));
-    }
-
-    close(blade, ...parameters) {
+    async removeBlade(blade, ...parameters) {
         var index = this.blades.indexOf(blade);
 
         if (index > 1) {
@@ -48,13 +46,14 @@ class App {
             });
         }
 
-        return this.closeAfter(blade).then(() => blade.close(...parameters).then(() => {
-            blade.element.remove();
-            this.blades.splice(this.blades.indexOf(blade), 1);
-        }));
+        await this.removeBladeAfter(blade);
+        await blade.close(...parameters);
+
+        blade.element.remove();
+        this.blades.splice(this.blades.indexOf(blade), 1);
     }
 
-    closeAfter(blade) {
+    async removeBladeAfter(blade) {
         var index = this.blades.indexOf(blade);
 
         if (index == this.blades.length - 1) {
@@ -65,21 +64,17 @@ class App {
 
         blades.forEach((b, i) => b.element.style.zIndex = -(1 + i));
 
-        var promises = blades
+        await Promise.all(blades
             .reverse()
-            .map((b, i) => new Promise(done => {
-                setTimeout(() => b.close().then(() => {
+            .map((b, i) => new Promise(done => setTimeout(
+                async () => {
+                    await b.close();
                     b.element.remove();
                     this.blades.splice(this.blades.indexOf(b), 1);
                     done();
-                }), i * 200);
-            }));
-
-        return Promise.all(promises);
-    }
-
-    getBladeByElement(element) {
-        return this.blades.find(b => b.element == element);
+                },
+                i * 200
+            ))));
     }
 }
 

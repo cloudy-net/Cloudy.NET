@@ -46,7 +46,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             return result.AsReadOnly();
         }
 
-        private ContentTypeGroupResponseItem GetItem(ContentTypeGroupDescriptor contentTypeGroup)
+        ContentTypeGroupResponseItem GetItem(ContentTypeGroupDescriptor contentTypeGroup)
         {
             var name = contentTypeGroup.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentTypeGroup.Type.Name;
             string pluralName;

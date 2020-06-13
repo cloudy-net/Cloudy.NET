@@ -71,12 +71,11 @@ class Blade {
         items.forEach(item => this._footer.append(item.element || item));
     }
 
-    open() {
-        return Promise.resolve();
+    async open() {
     }
 
-    close(...parameters) {
-        return Promise.resolve().then(() => this.triggerOnClose(...parameters));
+    async close(...parameters) {
+        this.triggerOnClose(...parameters);
     }
 
     onClose(callback) {
@@ -91,6 +90,19 @@ class Blade {
         }
 
         this.onCloseCallback(...parameters);
+    }
+
+    getIndex() {
+        if (!this.element.parentNode) {
+            return -1;
+        }
+
+        let node = this.element;
+        let index = 0;
+        while ((node = node.previousElementSibling)) {
+            index++;
+        }
+        return index;
     }
 }
 

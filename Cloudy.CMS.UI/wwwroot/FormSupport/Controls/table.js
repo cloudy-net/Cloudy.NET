@@ -75,7 +75,7 @@ class SortableTableControl extends Sortable {
                     new ContextMenu()
                         .addItem(menuItem => menuItem.setText('Edit').onClick(() => {
                             var edit = new EditRow(formBuilder, item, app).onClose(message => { if (message == 'saved') { dataTable.update(); } });
-                            app.open(edit, blade);
+                            app.addBlade(edit, blade);
                         }))
                         .addItem(menuItem => menuItem.setText('Remove').onClick(() => { target.splice(target.indexOf(item), 1); dataTable.update(); }))
                 )
@@ -83,7 +83,7 @@ class SortableTableControl extends Sortable {
             .setFooter(new Button('Add').setInherit().onClick(() => {
                 var edit = new EditRow(formBuilder, null, app).onClose((message, values) => { if (message == 'saved') { target.push(values); dataTable.update(); } });
 
-                app.openAfter(edit, blade);
+                app.addBladeAfter(edit, blade);
             }));
 
         dataTable.paging.remove();
@@ -112,7 +112,7 @@ class EditRow extends Blade {
 
         formBuilder.build(item).then(form => {
             this.setContent(form);
-            this.setFooter(new Button('Ok').setPrimary().onClick(() => app.close(this, 'saved', form.getValues())), new Button('Cancel').onClick(() => app.close(this)));
+            this.setFooter(new Button('Ok').setPrimary().onClick(() => app.removeBlade(this, 'saved', form.getValues())), new Button('Cancel').onClick(() => app.removeBlade(this)));
         });
 
     }

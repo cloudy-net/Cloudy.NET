@@ -1,16 +1,14 @@
 ﻿import Blade from '../blade.js';
-import FormBuilder from '../FormSupport/form-builder.js';
-import Button from '../button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
-import notificationManager from '../NotificationSupport/notification-manager.js';
 import ListContentBlade from './list-content-blade.js';
 import EditContentBlade from './edit-content-blade.js';
-import HelpSectionLoader from './help-section-loader.js';
 import ContentTypeProvider from '../DataSupport/content-type-provider.js';
 import ContentTypeGroupProvider from '../DataSupport/content-type-group-provider.js';
 import SingletonGetter from '../DataSupport/singleton-getter.js';
 import ListItem from '../ListSupport/list-item.js';
+import state from '../state.js';
+import notificationManager from '../NotificationSupport/notification-manager.js';
 
 
 
@@ -26,102 +24,120 @@ function uuidv4() { // https://stackoverflow.com/a/2117523
 }
 
 class ListContentTypesBlade extends Blade {
+    action = null;
+    actions = null;
+
     constructor(app) {
         super();
-
         this.app = app;
+    }
 
+    async open() {
         this.setTitle('What to edit');
 
-        var update = async () => {
-            const [contentTypes, contentTypeGroups] = await Promise.all([ContentTypeProvider.getAll(), ContentTypeGroupProvider.getAll()]);
+        const list = new List();
+        this.setContent(list);
 
-            const items = [...contentTypes.map(t => ({ type: 'contentType', value: t })), ...contentTypeGroups.map(t => ({ type: 'contentTypeGroup', value: t }))];
+        const [contentTypes, contentTypeGroups] = await Promise.all([
+            ContentTypeProvider.getAll(),
+            ContentTypeGroupProvider.getAll()
+        ]);
 
-            if (!items.length && !items.length) {
-                var image = `<img class="cloudy-ui-help-illustration" src="./ContentAppSupport/images/undraw_coming_home_52ir.svg" alt="Illustration of an idyllic house with a direction sign, indicating a home.">`;
-                var header = '<h2 class="cloudy-ui-help-heading">Welcome to your new home!</h2>';
-                var text = '<p>It\'s time to create your first content type:</p>';
-                var code = `<pre class="cloudy-ui-help-code">[ContentType("${guid}")]\n` +
-                    'public class Page : IContent\n' +
-                    '{\n' +
-                    '    public string Id { get; set; }\n' +
-                    '    public string ContentTypeId { get; set; }\n' +
-                    '}</pre>';
-                var textAfterCode = '<p>Save it, build it, and come back here!</p>';
+        const items = [
+            ...contentTypes.map(t => ({ id: t.id, type: 'contentType', value: t })),
+            ...contentTypeGroups.map(t => ({ id: t.id, type: 'contentTypeGroup', value: t }))
+        ];
 
-                var helpContainer = document.createElement('cloudy-ui-help-container');
-                helpContainer.innerHTML = image + header + text + code + textAfterCode;
+        this.actions = {};
 
-                var reloadButton = new Button('Done').setPrimary().onClick(() => {
-                    helpContainer.style.transition = '0.2s';
-                    helpContainer.style.opacity = '0.3';
+        items.forEach(item => {
+            const listItem = new ListItem();
+            list.addItem(listItem);
 
-                    setTimeout(() => update(), 300);
-                });
-                var reloadButtonContainer = document.createElement('div');
-                reloadButtonContainer.style.textAlign = 'center';
-                reloadButtonContainer.append(reloadButton.element);
+            if (item.type == 'contentTypeGroup') {
+                var contentTypeGroup = item.value;
+                var groupContentTypes = contentTypes.filter(t => contentTypeGroup.contentTypes.includes(t.id));
+                listItem.setText(contentTypeGroup.pluralName);
+                listItem.onClick(() => state.set(contentTypeGroup.id, this));
 
-                helpContainer.append(reloadButtonContainer);
-                this.setContent(helpContainer);
+                this.actions[item.id] = async () => {
+                    listItem.setActive();
+                    var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup).setTitle(contentTypeGroup.pluralName).onClose(() => listItem.setActive(false));
+                    await this.app.addBladeAfter(blade, this);
+                    blade.stateUpdate();
+                };
 
                 return;
             }
 
-            var list = new List();
+            var contentType = item.value;
 
-            items.forEach(item => {
-                var listItem = new ListItem();
+            if (contentType.contentTypeGroups.length) {
+                return;
+            }
 
-                if (item.type == 'contentTypeGroup') {
-                    var contentTypeGroup = item.value;
-                    var groupContentTypes = contentTypes.filter(t => contentTypeGroup.contentTypes.includes(t.id));
-                    listItem.setText(contentTypeGroup.pluralName);
-                    listItem.onClick(() => {
-                        listItem.setActive();
-                        app.openAfter(new ListContentBlade(app, groupContentTypes, contentTypeGroup).setTitle(contentTypeGroup.pluralName).onClose(() => listItem.setActive(false)), this);
-                    });
-                } else {
-                    var contentType = item.value;
+            if (contentType.isSingleton) {
+                listItem.setText(contentType.name);
 
-                    if (contentType.contentTypeGroups.length) {
-                        return;
-                    }
+                listItem.onClick(() => state.set(contentType.id, this));
 
-                    if (!contentType.isSingleton) {
-                        listItem.setText(contentType.pluralName);
-                        listItem.onClick(() => {
-                            listItem.setActive();
-                            app.openAfter(new ListContentBlade(app, [contentType], contentType).setTitle(contentType.pluralName).onClose(() => listItem.setActive(false)), this);
-                        });
-                    } else {
-                        listItem.setText(contentType.name);
-                        listItem.onClick(async () => {
-                            listItem.setActive();
-                            app.openAfter(new EditContentBlade(app, contentType, await SingletonGetter.get(contentType.id)).onClose(() => listItem.setActive(false)), this);
-                        });
-                    }
+                this.actions[item.id] = async () => {
+                    listItem.setActive();
+                    var content = await SingletonGetter.get(contentType.id);
+                    var blade = new EditContentBlade(this.app, contentType, content).onClose(() => listItem.setActive(false));
+                    await this.app.addBladeAfter(blade, this);
+                };
+            } else {
+                listItem.setText(contentType.pluralName);
 
-                    if (contentType.contentTypeActionModules.length) {
-                        var menu = new ContextMenu();
-                        listItem.setMenu(menu);
-                        Promise.all(contentType.contentTypeActionModules.map(path => import(path)))
-                            .then(actions => actions.forEach(module => module.default(menu, contentType, this, app)));
-                    }
+                listItem.onClick(() => state.set(contentType.id, this));
 
-                    if (items.length == 1) {
-                        listItem.element.click();
-                    }
-                }
+                this.actions[item.id] = async () => {
+                    listItem.setActive();
+                    var blade = new ListContentBlade(this.app, [contentType], contentType).setTitle(contentType.pluralName).onClose(() => listItem.setActive(false));
+                    await this.app.addBladeAfter(blade, this);
+                    blade.stateUpdate();
+                };
+            }
 
-                list.addItem(listItem);
-            });
+            if (contentType.contentTypeActionModules.length) {
+                var menu = new ContextMenu();
+                listItem.setMenu(menu);
+                Promise.all(contentType.contentTypeActionModules.map(path => import(path)))
+                    .then(actions => actions.forEach(module => module.default(menu, contentType, this, this.app)));
+            }
+        });
 
-            this.setContent(list);
-        };
+        if (this.actions[this.action]) {
+            this.actions[this.action]();
+        }
+    }
 
-        update();
+    async stateUpdate() {
+        var action = state.getFor(this);
+
+        if (this.action == action) {
+            return;
+        }
+
+        this.action = action;
+
+        await this.app.removeBladeAfter(this);
+
+        if (!this.action) {
+            return;
+        }
+
+        if (!this.actions) {
+            return;
+        }
+
+        if (!this.actions[this.action]) {
+            notificationManager.addNotification(item => item.setText(`Unknown action: \`${this.action}\``));
+            return;
+        }
+
+        await this.actions[this.action]();
     }
 }
 
