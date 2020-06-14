@@ -3,12 +3,12 @@ using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using Cloudy.CMS.UI.FormSupport.ControlSupport;
-using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
@@ -16,6 +16,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     [Route("Field")]
     public class FieldApiController
     {
+        ILogger Logger { get; }
         IFormProvider FormProvider { get; }
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
@@ -23,8 +24,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         IHumanizer Humanizer { get; }
         IPluralizer Pluralizer { get; }
 
-        public FieldApiController(IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer)
+        public FieldApiController(ILogger<FieldApiController> logger, IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer)
         {
+            Logger = logger;
             FormProvider = formProvider;
             FieldProvider = fieldProvider;
             ControlMatcher = controlMatcher;
@@ -49,6 +51,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 if(control == null && embeddedFormId == null)
                 {
+                    Logger.LogInformation($"Could not find control for {id} {field.Id}");
                     continue;
                 }
 
