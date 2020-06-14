@@ -34,7 +34,7 @@ class PolymorphicForm extends FieldControl {
 
             this.element.append(element);
 
-            this.form = await new FormBuilder(value.formId, app, blade).build(value, {});
+            this.form = await new FormBuilder(value.formId, app, blade).build(value.value, {});
             this.form.element.classList.remove('cloudy-ui-form');
             this.form.element.classList.add('cloudy-ui-embedded-form');
             this.form.appendTo(element);
