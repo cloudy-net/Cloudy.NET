@@ -1,8 +1,8 @@
 import Form from './form.js';
 import Field from './field.js';
 import FieldModel from './field-model.js';
-import FieldDescriptorProvider from './field-descriptor-provider.js';
-import FieldControlProvider from './field-control-provider.js';
+import fieldDescriptorProvider from './field-descriptor-provider.js';
+import fieldControlProvider from './field-control-provider.js';
 import Sortable from './sortable.js';
 import SortableItem from './sortable-item.js';
 
@@ -12,64 +12,52 @@ import SortableItem from './sortable-item.js';
 
 class FormBuilder {
     constructor(formId, app, blade) {
-        if (typeof formId == 'string') {
-            this.formId = formId;
-            this.fieldModels = this.getFieldModels(formId);
-        } else if (formId instanceof Array) {
-            var fieldModels = formId;
-            this.fieldModels = Promise.resolve(fieldModels);
-        }
-
+        this.formId = formId;
         this.app = app;
         this.blade = blade;
     }
 
-    getFieldModels(formId) {
-        return new FieldDescriptorProvider()
-            .getFor(formId)
-            .then(fieldDescriptors =>
-                Promise.all(
-                    fieldDescriptors
-                        .map(fieldDescriptor => this.getFieldModel(fieldDescriptor))
-                )
-            );
-    }
-
-    getFieldModel(fieldDescriptor) {
-        if (fieldDescriptor.embeddedFormId) {
-            var getFieldModels = this.getFieldModels(fieldDescriptor.embeddedFormId);
-
-            if (fieldDescriptor.control) {
-                var getFieldControl = FieldControlProvider.getFor(fieldDescriptor);
-                return Promise.all([getFieldControl, getFieldModels])
-                    .then(result => new FieldModel(fieldDescriptor, result[0], result[1]));
-            }
-
-            return getFieldModels
-                .then(formFields => new FieldModel(fieldDescriptor, null, formFields));
-        } else {
-            return FieldControlProvider
-                .getFor(fieldDescriptor)
-                .then(fieldControl => new FieldModel(fieldDescriptor, fieldControl, null));
-        }
-    }
-
-    build(target, options) {
+    async build(target, options) {
         if (!target) {
             target = {};
         }
 
-        return this.fieldModels.then(fieldModels => {
-            if (options && 'group' in options) {
-                fieldModels = fieldModels.filter(fieldModel => fieldModel.descriptor.group == options.group);
+        var fieldModels = await this.getFieldModels(this.formId);
+
+        if (options && 'group' in options) {
+            fieldModels = fieldModels.filter(fieldModel => fieldModel.descriptor.group == options.group);
+        }
+
+        var form = this.buildForm(fieldModels, target);
+
+        form.element.classList.add('cloudy-ui-form');
+
+        return form;
+    }
+
+    async getFieldModels(formId) {
+        var fieldDescriptors = await fieldDescriptorProvider.getFor(formId);
+
+        var fieldModelPromises = fieldDescriptors.map(fieldDescriptor => this.getFieldModel(fieldDescriptor));
+
+        return await Promise.all(fieldModelPromises);
+    }
+
+    async getFieldModel(fieldDescriptor) {
+        if (fieldDescriptor.embeddedFormId) {
+            var fieldModels = await this.getFieldModels(fieldDescriptor.embeddedFormId);
+
+            if (fieldDescriptor.control) {
+                var fieldControl = await fieldControlProvider.getFor(fieldDescriptor);
+                return new FieldModel(fieldDescriptor, fieldControl, fieldModels);
             }
 
-            var form = this.buildForm(fieldModels, target);
+            return new FieldModel(fieldDescriptor, null, fieldModels);
+        }
 
-            form.element.classList.add('cloudy-ui-form');
+        var fieldControl = await fieldControlProvider.getFor(fieldDescriptor);
 
-            return form;
-        });
+        return new FieldModel(fieldDescriptor, fieldControl, null);
     }
 
     buildForm(fieldModels, target) {

@@ -10,6 +10,7 @@ using System.Text;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
 using Microsoft.Extensions.DependencyInjection;
+using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicControlMappingSupport;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
@@ -33,6 +34,7 @@ namespace Cloudy.CMS.UI.FormSupport
             services.AddSingleton<IUIHintControlMatchCreator, UIHintControlMatchCreator>();
             services.AddSingleton<IUIHintControlMappingProvider, UIHintControlMappingProvider>();
             services.AddSingleton<ITypeControlMatcher, TypeControlMatcher>();
+            services.AddSingleton<IPolymorphicFormFinder, PolymorphicFormFinder>();
             services.AddSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
             services.AddSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();
         }

@@ -35,6 +35,7 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<IFaviconProvider, FaviconProvider>();
             services.AddSingleton<IPortalPageRenderer, PortalPageRenderer>();
             services.AddSingleton<IStaticFilesBasePathProvider, StaticFilesBasePathProvider>();
+            services.AddSingleton<IContentFormIdGenerator, ContentFormIdGenerator>();
             services.AddSingleton<IPluralizer, Pluralizer>();
             services.AddSingleton<IHumanizer, Humanizer>();
             services.AddSingleton<INameExpressionParser, NameExpressionParser>();
