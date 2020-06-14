@@ -4,6 +4,8 @@ using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.UI.ContentAppSupport;
 using Cloudy.CMS.UI.ContentAppSupport.Controllers;
+using Cloudy.CMS.UI.FormSupport;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using System;
@@ -74,7 +76,10 @@ namespace Tests
 
             var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
 
-            new SaveContentController(contentTypeRepository, containerSpecificContentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null).SaveContent(body);
+            var formProvider = Mock.Of<IFormProvider>();
+            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<FormDescriptor> { });
+
+            new SaveContentController(contentTypeRepository, containerSpecificContentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider)).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.Update(It.IsAny<MyContent>(), container));
         }

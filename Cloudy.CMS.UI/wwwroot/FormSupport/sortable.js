@@ -109,7 +109,7 @@ class SortableField {
                 });
         });
 
-        if (this.fieldModel.descriptor.embeddedFormId) {
+        if (this.fieldModel.descriptor.embeddedFormId || this.fieldModel.descriptor.control.id == 'polymorphic-form') {
             menu.setHorizontal();
             field.append(fieldAction);
         } else {

@@ -21,8 +21,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
         IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
+        PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContainerSpecificContentUpdater containerSpecificContentUpdater, IContainerSpecificContentCreator containerSpecificContentCreator)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContainerSpecificContentUpdater containerSpecificContentUpdater, IContainerSpecificContentCreator containerSpecificContentCreator, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeProvider;
             ContainerSpecificContentGetter = containerSpecificContentGetter;
@@ -30,6 +31,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContainerSpecificContentUpdater = containerSpecificContentUpdater;
             ContainerSpecificContentCreator = containerSpecificContentCreator;
+            PolymorphicFormConverter = polymorphicFormConverter;
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             var contentType = ContentTypeProvider.Get(data.ContentTypeId);
 
-            var b = (IContent)JsonConvert.DeserializeObject(data.Content, contentType.Type);
+            var b = (IContent)JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
 
             if (b.Id != null)
             {
