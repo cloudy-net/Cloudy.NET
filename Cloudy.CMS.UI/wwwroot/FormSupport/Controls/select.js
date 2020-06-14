@@ -79,7 +79,10 @@ class SelectControl extends FieldControl {
         this.menu = new ContextMenu();
 
         this.menu.addItem(item => item.setText('Replace').onClick(this.open));
-        this.menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
+
+        if (!fieldModel.descriptor.isSortable) {
+            this.menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
+        }
 
         preview.setMenu(this.menu);
         preview.onClick(() => this.menu.toggle());
