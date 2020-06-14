@@ -37,6 +37,7 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<IStaticFilesBasePathProvider, StaticFilesBasePathProvider>();
             services.AddSingleton<IContentFormIdGenerator, ContentFormIdGenerator>();
             services.AddSingleton<IPluralizer, Pluralizer>();
+            services.AddSingleton<ISingularizer, Singularizer>();
             services.AddSingleton<IHumanizer, Humanizer>();
             services.AddSingleton<INameExpressionParser, NameExpressionParser>();
             services.AddSingleton<IPipelineBuilder, PipelineBuilder>();
