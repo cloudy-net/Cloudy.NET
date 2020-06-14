@@ -58,6 +58,16 @@ cloudy-ui-notification {
 
 cloudy-ui-notification code {
     cursor: text;
+
+    &:hover {
+        background: rgba(white, 0.25);
+    }
+}
+
+cloudy-ui-notification hr {
+    border: none;
+    height: 0;
+    border-bottom: solid 1px rgba(white, 0.1);
 }
 
 cloudy-ui-notification ul {
