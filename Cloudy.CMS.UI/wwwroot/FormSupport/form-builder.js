@@ -126,7 +126,7 @@ class FormBuilder {
         return new Field(fieldModel, element, { control });
     }
 
-    buildSortableField(fieldModel, target, element, blade) {
+    buildSortableField(fieldModel, target, element) {
         if (!target[fieldModel.descriptor.camelCaseId]) {
             target[fieldModel.descriptor.camelCaseId] = [];
         }
