@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.UI.FormSupport.Controls.TextControlSupport
+namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Control("text", "FormSupport/Controls/text-control.js")]
     [MapControlToType(typeof(double))]

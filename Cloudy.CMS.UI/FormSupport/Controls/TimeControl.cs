@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Cloudy.CMS.UI.FormSupport.Controls.TimeSupport
+namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Control("time", "FormSupport/Controls/time.js")]
     [MapControlToUIHint("time")]

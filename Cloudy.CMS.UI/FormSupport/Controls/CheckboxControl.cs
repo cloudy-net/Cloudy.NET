@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.UI.FormSupport.Controls.CheckboxSupport
+namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Control("checkbox", "FormSupport/Controls/checkbox.js")]
     [MapControlToType(typeof(bool))]

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.UI.FormSupport.Controls.TableControlSupport
+namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Control("table", "FormSupport/Controls/table.js")]
     [MapControlToUIHint("table(columns)")]
