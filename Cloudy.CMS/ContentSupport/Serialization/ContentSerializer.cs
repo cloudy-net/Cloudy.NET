@@ -5,18 +5,24 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.ContentTypeSupport;
+using System.Collections;
+using Microsoft.Extensions.Logging;
 
 namespace Cloudy.CMS.ContentSupport.Serialization
 {
     public class ContentSerializer : IContentSerializer
     {
+        ILogger Logger { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
+        IPolymorphicSerializer PolymorphicSerializer { get; }
 
-        public ContentSerializer(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider)
+        public ContentSerializer(ILogger<ContentSerializer> logger, IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPolymorphicSerializer polymorphicSerializer)
         {
+            Logger = logger;
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
+            PolymorphicSerializer = polymorphicSerializer;
         }
 
         public Document Serialize(IContent content, ContentTypeDescriptor contentType)
@@ -39,7 +45,31 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 
             foreach(var definition in definitions)
             {
-                values[definition.Name] = definition.Getter(content);
+                object value = definition.Getter(content);
+
+                if (definition.Type.IsGenericType && (definition.Type.GetGenericTypeDefinition() == typeof(IEnumerable<>) || definition.Type.GetGenericTypeDefinition() == typeof(List<>) || definition.Type.GetGenericTypeDefinition() == typeof(IList<>)) && definition.Type.GetGenericArguments().Single().IsInterface)
+                {
+                    var type = definition.Type.GetGenericArguments().Single();
+                    var list = new JArray();
+
+                    for (var i = 0; i < ((IList)value).Count; i++)
+                    {
+                        var element = ((IList)value)[i];
+                        var result = PolymorphicSerializer.Serialize(element, type);
+
+                        if (result == null)
+                        {
+                            Logger.LogInformation($"Skipping element {i} on ({definition.Type}) {definition.Name} with id {content.Id} because it was not polymorphically serializable");
+                            continue;
+                        }
+
+                        list.Add(result);
+                    }
+
+                    value = list;
+                }
+
+                values[definition.Name] = value;
             }
 
             return values;

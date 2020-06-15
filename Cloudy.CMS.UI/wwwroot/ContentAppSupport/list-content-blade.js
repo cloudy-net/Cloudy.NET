@@ -58,7 +58,7 @@ class ListContentBlade extends Blade {
 
             contentList = await response.json();
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get content list (${error.message})`));
+            notificationManager.addNotification(item => item.setText(`Could not get content list --- ${error.message}`));
             throw error;
         }
 

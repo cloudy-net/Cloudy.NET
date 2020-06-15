@@ -31,21 +31,25 @@ class PolymorphicForm extends FieldControl {
         element.appendChild(heading);
 
         var update = async () => {
-
             this.element.append(element);
+            heading.innerText = value.name;
 
-            this.form = await new FormBuilder(value.formId, app, blade).build(value.value, {});
+            this.form = await new FormBuilder(value.type, app, blade).build(value.value, {});
             this.form.element.classList.remove('cloudy-ui-form');
             this.form.element.classList.add('cloudy-ui-embedded-form');
             this.form.appendTo(element);
         };
 
+        if (value.type) {
+            update();
+        }
+
         this.open = () => {
             var list = new ListItemsBlade(app, fieldModel)
                 .onSelect(item => {
-                    value.formId = item.formId;
+                    value.type = item.type;
+                    value.name = item.name;
                     value.value = {};
-                    heading.innerText = item.name;
                     update();
                     this.triggerChange(value);
                     app.removeBlade(list);

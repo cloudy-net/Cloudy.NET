@@ -2,11 +2,16 @@
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -18,18 +23,20 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IDocumentFinder DocumentFinder { get; }
         IContentDeserializer ContentDeserializer { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
+        PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public GetContentListController(IContentTypeProvider contentTypeRepository, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, IPropertyDefinitionProvider propertyDefinitionProvider)
+        public GetContentListController(IContentTypeProvider contentTypeRepository, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeRepository;
             DocumentFinder = documentFinder;
             ContentDeserializer = contentDeserializer;
             PropertyDefinitionProvider = propertyDefinitionProvider;
+            PolymorphicFormConverter = polymorphicFormConverter;
         }
 
         [HttpGet]
         [Route("GetContentList")]
-        public IEnumerable<object> GetContentList(string[] contentTypeId)
+        public async Task GetContentList(string[] contentTypeId)
         {
             var result = new List<object>();
 
@@ -51,7 +58,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             //    result = result.OrderBy(i => sortByProperty.Getter(i)).ToList();
             //}
 
-            return result.AsReadOnly();
+            Response.ContentType = "application/json";
+
+            await Response.WriteAsync(JsonConvert.SerializeObject(result.AsReadOnly(), new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver(), Converters = new List<JsonConverter> { PolymorphicFormConverter } }));
         }
     }
 }

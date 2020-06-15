@@ -1,4 +1,5 @@
 ﻿
+using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.UI.ContentAppSupport;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,6 +31,11 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
 
             foreach (var form in FormProvider.GetAll())
             {
+                if (typeof(IContent).IsAssignableFrom(form.Type))
+                {
+                    continue;
+                }
+
                 if (!types.Contains(form.Id))
                 {
                     continue;
@@ -37,7 +43,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
 
                 result.Add(new FormResponseItem
                 {
-                    FormId = form.Id,
+                    Type = form.Id,
                     Name = form.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(form.Type.Name),
                 });
             }
@@ -47,7 +53,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
 
         public class FormResponseItem
         {
-            public string FormId { get; set; }
+            public string Type { get; set; }
             public string Name { get; set; }
         }
     }

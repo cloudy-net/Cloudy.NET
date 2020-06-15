@@ -11,7 +11,7 @@ namespace Cloudy.CMS.ContentTypeSupport
     {
         public PropertyDefinitionDescriptor Create(PropertyInfo property)
         {
-            return new PropertyDefinitionDescriptor(property.Name, property.PropertyType, (instance) => property.GetGetMethod().Invoke(instance, new object[] { }), (instance, value) => property.GetSetMethod().Invoke(instance, new object[] { value }), property.GetCustomAttributes());
+            return new PropertyDefinitionDescriptor(property.Name, property.PropertyType, (instance) => property.GetValue(instance), (instance, value) => property.SetValue(instance, value), property.GetCustomAttributes());
         }
     }
 }

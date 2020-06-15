@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Cloudy.CMS.UI.ContentAppSupport.Controllers;
 
 namespace Cloudy.CMS.UI
 {
@@ -47,6 +48,7 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<IListActionModuleProvider, ListActionModuleProvider>();
             services.AddSingleton<IContentTypeActionModuleCreator, ContentTypeActionModuleCreator>();
             services.AddSingleton<IContentTypeActionModuleProvider, ContentTypeActionModuleProvider>();
+            services.AddScoped<PolymorphicFormConverter, PolymorphicFormConverter>();
         }
     }
 }

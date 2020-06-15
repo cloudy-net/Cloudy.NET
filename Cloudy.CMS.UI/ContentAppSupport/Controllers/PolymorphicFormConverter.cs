@@ -1,27 +1,35 @@
-﻿using Cloudy.CMS.UI.FormSupport;
+﻿using Cloudy.CMS.ContentSupport.Serialization;
+using Cloudy.CMS.UI.FormSupport;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     public class PolymorphicFormConverter : JsonConverter
     {
         ILogger Logger { get; }
-        IFormProvider FormProvider { get; }
+        IPolymorphicCandidateProvider PolymorphicCandidateProvider { get; }
+        IHumanizer Humanizer { get; }
 
-        public PolymorphicFormConverter(ILogger<PolymorphicFormConverter> logger, IFormProvider formProvider)
+        JsonSerializer JsonWebSerializer { get; } = JsonSerializer.Create(new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver() });
+
+        public PolymorphicFormConverter(ILogger<PolymorphicFormConverter> logger, IPolymorphicCandidateProvider polymorphicCandidateProvider, IHumanizer humanizer)
         {
             Logger = logger;
-            FormProvider = formProvider;
+            PolymorphicCandidateProvider = polymorphicCandidateProvider;
+            Humanizer = humanizer;
         }
 
         public override bool CanConvert(Type objectType)
         {
-            foreach(var form in FormProvider.GetAll())
+            foreach(var candidate in PolymorphicCandidateProvider.GetAll())
             {
-                foreach(var @interface in form.Type.GetInterfaces())
+                foreach(var @interface in candidate.Type.GetInterfaces())
                 {
                     if (@interface.IsAssignableFrom(objectType))
                     {
@@ -37,7 +45,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             if (!objectType.IsInterface)
             {
-                return JObject.Load(reader).ToObject(objectType, serializer);
+                return JObject.Load(reader).ToObject(objectType);
             }
 
             if (reader.TokenType == JsonToken.Null)
@@ -45,46 +53,47 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             if (reader.TokenType != JsonToken.StartObject)
             {
-                Logger.LogInformation("Polymorphic forms must be JObjects of the schema: { formId: ..., value: {...} }");
+                Logger.LogInformation("Polymorphic properties must be JSON objects of the schema: { type: ..., value: {...} }");
                 return null;
             }
 
             var container = JObject.Load(reader);
 
-            var formId = container.Value<string>("formId");
+            var typeId = container.Value<string>("type");
 
-            if(formId == null)
+            if(typeId == null)
             {
-                Logger.LogInformation("Container object is missing the required formId property");
+                Logger.LogInformation("Container object is missing the required type property");
                 return null;
             }
 
-            var form = FormProvider.Get(formId);
+            var candidate = PolymorphicCandidateProvider.Get(typeId);
 
-            if (form == null)
+            if (candidate == null)
             {
-                Logger.LogInformation($"No such form: {formId}");
+                Logger.LogInformation($"No such type: {typeId}");
                 return null;
             }
 
             var value = container.Value<JObject>("value");
 
-            return value.ToObject(form.Type, serializer);
+            return value.ToObject(candidate.Type);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var o = new JObject();
 
-            var form = FormProvider.Get(value.GetType());
+            var candidate = PolymorphicCandidateProvider.Get(value.GetType());
 
-            if(form == null)
+            if(candidate == null)
             {
-                throw new Exception($"Value of type ({value.GetType()}) must be a form when saving to an interface type property (polymorphic form)");
+                throw new Exception($"Value (of type {value.GetType()}) must be a [Form] when saving to an interface type property for polymorphic serialization to work");
             }
 
-            o["FormId"] = form.Id;
-            o["Value"] = JObject.FromObject(value);
+            o["type"] = candidate.Id;
+            o["name"] = candidate.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(candidate.Type.Name);
+            o["value"] = JObject.FromObject(value, JsonWebSerializer);
 
             o.WriteTo(writer);
         }
