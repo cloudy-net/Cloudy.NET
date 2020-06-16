@@ -10,13 +10,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     {
         public string Humanize(string value)
         {
-            if (value.Any(c => char.IsDigit(c)))
-            {
-                return value;
-            }
-
             value = Regex.Replace(value, @"([A-Z])([A-Z][a-z])", "$1 $2");
             value = Regex.Replace(value, @"([a-z])([A-Z])", "$1 $2");
+            value = Regex.Replace(value, @"([a-z])([0-9])", "$1 $2");
+            value = Regex.Replace(value, @"([0-9])([A-Z])", "$1 $2");
             value = Regex.Replace(value, @" [A-Z][a-z]", m => m.Value.ToLower());
 
             return value;
