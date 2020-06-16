@@ -1,4 +1,6 @@
-﻿using Cloudy.CMS.UI.ContentAppSupport.Controllers;
+﻿using Cloudy.CMS.ContentSupport.Serialization;
+using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.ContentAppSupport.Controllers;
 using Cloudy.CMS.UI.FormSupport;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -16,12 +18,12 @@ namespace Tests
         [Fact]
         public void Deserializes()
         {
-            var form = new FormDescriptor("lorem", typeof(FormA));
-            var formProvider = Mock.Of<IFormProvider>();
-            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<FormDescriptor> { form });
+            var form = new PolymorphicCandidateDescriptor("lorem", typeof(FormA));
+            var formProvider = Mock.Of<IPolymorphicCandidateProvider>();
+            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<PolymorphicCandidateDescriptor> { form });
             Mock.Get(formProvider).Setup(p => p.Get("lorem")).Returns(form);
 
-            var sut = new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider);
+            var sut = new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>());
             var result = JsonConvert.DeserializeObject<ContentTypeA>("{ form: { formId: 'lorem', value: { property: 'ipsum' } } }", sut);
 
             Assert.IsType<FormA>(result.Form);
@@ -31,13 +33,13 @@ namespace Tests
         [Fact]
         public void Serializes()
         {
-            var form = new FormDescriptor("lorem", typeof(FormA));
-            var formProvider = Mock.Of<IFormProvider>();
-            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<FormDescriptor> { form });
+            var form = new PolymorphicCandidateDescriptor("lorem", typeof(FormA));
+            var formProvider = Mock.Of<IPolymorphicCandidateProvider>();
+            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<PolymorphicCandidateDescriptor> { form });
             Mock.Get(formProvider).Setup(p => p.Get("lorem")).Returns(form);
             Mock.Get(formProvider).Setup(p => p.Get(typeof(FormA))).Returns(form);
 
-            var sut = new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider);
+            var sut = new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>());
             var result = JsonConvert.SerializeObject(new ContentTypeA { Form = new FormA { Property = "ipsum" } }, sut);
 
             Assert.Equal("{\"Form\":{\"FormId\":\"lorem\",\"Value\":{\"Property\":\"ipsum\"}}}", result);

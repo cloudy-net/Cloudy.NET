@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.UI.ContentAppSupport;
@@ -76,10 +77,10 @@ namespace Tests
 
             var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
 
-            var formProvider = Mock.Of<IFormProvider>();
-            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<FormDescriptor> { });
+            var formProvider = Mock.Of<IPolymorphicCandidateProvider>();
+            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<PolymorphicCandidateDescriptor> { });
 
-            new SaveContentController(contentTypeRepository, containerSpecificContentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider)).SaveContent(body);
+            new SaveContentController(contentTypeRepository, containerSpecificContentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>())).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.Update(It.IsAny<MyContent>(), container));
         }

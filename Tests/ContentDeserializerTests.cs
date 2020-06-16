@@ -1,7 +1,9 @@
-﻿using Cloudy.CMS.ContentSupport;
+﻿using Castle.Core.Logging;
+using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json.Linq;
 using System;
@@ -26,7 +28,7 @@ namespace Tests
             var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
             Mock.Get(contentTypeCoreInterfaceProvider).Setup(p => p.GetFor(It.IsAny<string>())).Returns(Enumerable.Empty<CoreInterfaceDescriptor>());
 
-            var result = (MyContent)new ContentDeserializer(propertyDefinitionProvider, contentTypeCoreInterfaceProvider).Deserialize(document, contentType, null);
+            var result = (MyContent)new ContentDeserializer(Mock.Of<ILogger<ContentDeserializer>>(), propertyDefinitionProvider, contentTypeCoreInterfaceProvider, Mock.Of<IPolymorphicDeserializer>()).Deserialize(document, contentType, null);
 
             Assert.Equal(new List<string> { value }, result.ArrayProperty);
         }
@@ -43,7 +45,7 @@ namespace Tests
             var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
             Mock.Get(contentTypeCoreInterfaceProvider).Setup(p => p.GetFor(It.IsAny<string>())).Returns(Enumerable.Empty<CoreInterfaceDescriptor>());
 
-            var result = (MyContent)new ContentDeserializer(propertyDefinitionProvider, contentTypeCoreInterfaceProvider).Deserialize(document, contentType, null);
+            var result = (MyContent)new ContentDeserializer(Mock.Of<ILogger<ContentDeserializer>>(), propertyDefinitionProvider, contentTypeCoreInterfaceProvider, Mock.Of<IPolymorphicDeserializer>()).Deserialize(document, contentType, null);
 
             Assert.NotNull(result.ObjectProperty);
             Assert.Equal(value, result.ObjectProperty.Value);
