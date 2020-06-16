@@ -26,10 +26,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentTypeActionModuleProvider ContentTypeActionModuleProvider { get; }
         INameExpressionParser NameExpressionParser { get; }
+        IImageExpressionParser ImageExpressionParser { get; }
         IListActionModuleProvider ListActionModuleProvider { get; }
         IContentTypeGroupMatcher ContentTypeGroupMatcher { get; }
 
-        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher)
+        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher)
         {
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
@@ -37,6 +38,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             SingletonProvider = singletonProvider;
             ContentTypeActionModuleProvider = contentTypeActionModuleProvider;
             NameExpressionParser = nameExpressionParser;
+            ImageExpressionParser = imageExpressionParser;
             ListActionModuleProvider = listActionModuleProvider;
             ContentTypeGroupMatcher = contentTypeGroupMatcher;
         }
@@ -85,6 +87,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
                 NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
                 IsImageable = typeof(IImageable).IsAssignableFrom(contentType.Type),
+                ImageablePropertyName = typeof(IImageable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(ImageExpressionParser.Parse(contentType.Type), false) : null,
                 IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
                 Count = -1,
@@ -105,6 +108,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public bool IsNameable { get; set; }
             public string NameablePropertyName { get; set; }
             public bool IsImageable { get; set; }
+            public string ImageablePropertyName { get; set; }
             public bool IsRoutable { get; set; }
             public bool IsSingleton { get; set; }
             public string SingletonId { get; set; }

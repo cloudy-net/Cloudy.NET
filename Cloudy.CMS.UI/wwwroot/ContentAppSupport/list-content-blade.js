@@ -90,7 +90,8 @@ class ListContentBlade extends Blade {
             listItem.setText(name);
 
             if (contentType.isImageable) {
-                listItem.setImage(content.image || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
+                var image = contentType.imageablePropertyName ? content[contentType.imageablePropertyName] : content.image;
+                listItem.setImage(image || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
             }
 
             if (this.contentTypes.length > 1) {
