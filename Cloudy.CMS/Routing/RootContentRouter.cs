@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentTypeSupport;
 
 namespace Cloudy.CMS.Routing
 {
@@ -15,34 +16,35 @@ namespace Cloudy.CMS.Routing
             ContentSegmentRouter = contentSegmentRouter;
         }
 
-        public IContent Route(IContent root, IEnumerable<string> segments, string language)
+        public IContent Route(IContent root, IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types, string language)
         {
-            if (segments.Any())
+            if (!segments.Any())
             {
-                if (((IRoutable)root).UrlSegment != null && ((IRoutable)root).UrlSegment.Equals(segments.First()))
-                {
-                    segments = segments.Skip(1);
-                }
-            }
-            else
-            {
-                if (((IRoutable)root).UrlSegment == null)
+                if (((IRoutable)root).UrlSegment == null && (!types.Any() || types.Any(t => t.Type == root.GetType())))
                 {
                     return root;
                 }
-                else
-                {
-                    return null;
-                }
+                
+                return null;
+            }
+
+            if (((IRoutable)root).UrlSegment != null && ((IRoutable)root).UrlSegment.Equals(segments.First()))
+            {
+                segments = segments.Skip(1);
             }
 
             IContent content = root;
 
             while (segments.Any())
             {
-                content = ContentSegmentRouter.RouteContentSegment(content?.Id, segments.First(), language);
+                content = ContentSegmentRouter.RouteContentSegment(content?.Id, segments.First(), types, language);
 
                 if (content == null)
+                {
+                    return null;
+                }
+
+                if(types.Any() && !types.Any(t => t.Type == root.GetType()))
                 {
                     return null;
                 }

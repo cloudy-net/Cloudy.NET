@@ -22,9 +22,9 @@ namespace Cloudy.CMS.Routing
             ContentDeserializer = contentDeserializer;
         }
 
-        public IContent RouteContentSegment(string parentId, string segment, string language)
+        public IContent RouteContentSegment(string parentId, string segment, IEnumerable<ContentTypeDescriptor> types, string language)
         {
-            var document = DocumentFinder.Find(ContainerConstants.Content).WhereEquals<IHierarchical, string>(x => x.ParentId, parentId).WhereEquals<IRoutable, string>(x => x.UrlSegment, segment).GetResultAsync().Result.FirstOrDefault();
+            var document = DocumentFinder.Find(ContainerConstants.Content).WhereIn<IContent, string>(c => c.ContentTypeId, types.Select(t => t.Id)).WhereEquals<IHierarchical, string>(x => x.ParentId, parentId).WhereEquals<IRoutable, string>(x => x.UrlSegment, segment).GetResultAsync().Result.FirstOrDefault();
 
             if (document == null)
             {

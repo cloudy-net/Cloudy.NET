@@ -21,16 +21,23 @@ namespace Cloudy.CMS.Routing
             RoutableRootContentProvider = routableRootContentProvider;
         }
 
-        public IContent RouteContent(IEnumerable<string> segments, string language)
+        public IContent RouteContent(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types, string language)
         {
             foreach(var root in RoutableRootContentProvider.GetAll())
             {
-                var result = RootContentRouter.Route(root, segments, language);
-
-                if(result != null)
+                if(types.Any() && !types.Any(t => t.Type == root.GetType()))
                 {
-                    return result;
+                    continue;
                 }
+
+                var result = RootContentRouter.Route(root, segments, types, language);
+
+                if(result == null)
+                {
+                    continue;
+                }
+
+                return result;
             }
 
             return null;

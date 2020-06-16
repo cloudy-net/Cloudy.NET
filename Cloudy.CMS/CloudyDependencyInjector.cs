@@ -48,6 +48,7 @@ namespace Cloudy.CMS
             services.AddSingleton<IPolymorphicSerializer, PolymorphicSerializer>();
             services.AddSingleton<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
             services.AddSingleton<IDocumentPropertyPathProvider, DocumentPropertyPathProvider>();
+            services.AddSingleton<IContentTypeExpander, ContentTypeExpander>();
 
             services.AddSingleton<IContentGetter, ContentGetter>();
             services.AddSingleton<IContentDeleter, ContentDeleter>();
