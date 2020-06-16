@@ -1,9 +1,7 @@
 ﻿import FieldControl from '../field-control.js';
 import Blade from '../../blade.js';
-import Button from '../../button.js';
 import List from '../../ListSupport/list.js';
 import ListItem from '../../ListSupport/list-item.js';
-import contentTypeProvider from '../../ContentAppSupport/content-type-provider.js';
 import FormBuilder from '../form-builder.js';
 
 
