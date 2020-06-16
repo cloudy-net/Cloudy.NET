@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.UI.FormSupport.ControlSupport;
+﻿using Cloudy.CMS.ComposableSupport;
+using Cloudy.CMS.UI.FormSupport.ControlSupport;
 using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
@@ -16,12 +17,14 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         IPropertyAttributeInheritor PropertyAttributeInheritor { get; }
         IInterfacePropertyMapper InterfacePropertyMapper { get; }
         IUIHintParser UIHintParser { get; }
+        IComposableProvider ComposableProvider { get; }
 
-        public FieldCreator(IPropertyAttributeInheritor propertyAttributeInheritor, IInterfacePropertyMapper interfacePropertyMapper, IUIHintParser uiHintParser)
+        public FieldCreator(IPropertyAttributeInheritor propertyAttributeInheritor, IInterfacePropertyMapper interfacePropertyMapper, IUIHintParser uiHintParser, IComposableProvider composableProvider)
         {
             PropertyAttributeInheritor = propertyAttributeInheritor;
             InterfacePropertyMapper = interfacePropertyMapper;
             UIHintParser = uiHintParser;
+            ComposableProvider = composableProvider;
         }
 
         public FieldDescriptor Create(PropertyInfo property)
@@ -41,13 +44,20 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 isSortable = true;
             }
 
-            var uiHints = PropertyAttributeInheritor.GetFor<UIHintAttribute>(property)
-                .Select(a => a.UIHint)
-                .Select(uiHint => UIHintParser.Parse(uiHint))
-                .ToList()
-                .AsReadOnly();
+            var uiHints = new List<UIHint>();
+            foreach(var uiHintAttribute in PropertyAttributeInheritor.GetFor<UIHintAttribute>(property))
+            {
+                var uiHint = uiHintAttribute.UIHint;
 
-            return new FieldDescriptor(property.Name, type, uiHints, label, isSortable, autoGenerate, group);
+                foreach(var replacer in ComposableProvider.GetAll<IUIHintReplacer>())
+                {
+                    uiHint = replacer.Replace(uiHint);
+                }
+
+                uiHints.Add(UIHintParser.Parse(uiHint));
+            }
+            
+            return new FieldDescriptor(property.Name, type, uiHints.AsReadOnly(), label, isSortable, autoGenerate, group);
         }
     }
 }
