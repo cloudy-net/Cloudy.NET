@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,10 +13,21 @@ namespace Cloudy.CMS.ContentSupport.Serialization
         ILogger Logger { get; }
         IPolymorphicCandidateProvider PolymorphicCandidateProvider { get; }
 
+        JsonSerializer JsonSerializer { get; }
+
         public PolymorphicDeserializer(ILogger<PolymorphicDeserializer> logger, IPolymorphicCandidateProvider polymorphicCandidateProvider)
         {
             Logger = logger;
             PolymorphicCandidateProvider = polymorphicCandidateProvider;
+            JsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                Error = delegate (object sender, ErrorEventArgs args)
+                {
+                    Logger.LogInformation(args.ErrorContext.Error.Message);
+                    args.ErrorContext.Handled = true;
+                },
+            });
         }
 
         public object Deserialize(JObject @object, Type type)
@@ -35,7 +48,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
                 return null;
             }
 
-            return @object.Value<JObject>("Value").ToObject(candidate.Type);
+            return @object.Value<JObject>("Value").ToObject(candidate.Type, JsonSerializer);
         }
     }
 }

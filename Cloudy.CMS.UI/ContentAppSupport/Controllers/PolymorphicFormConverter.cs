@@ -16,13 +16,23 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPolymorphicCandidateProvider PolymorphicCandidateProvider { get; }
         IHumanizer Humanizer { get; }
 
-        JsonSerializer JsonWebSerializer { get; } = JsonSerializer.Create(new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver() });
+        JsonSerializer JsonWebSerializer { get; }
 
         public PolymorphicFormConverter(ILogger<PolymorphicFormConverter> logger, IPolymorphicCandidateProvider polymorphicCandidateProvider, IHumanizer humanizer)
         {
             Logger = logger;
             PolymorphicCandidateProvider = polymorphicCandidateProvider;
             Humanizer = humanizer;
+            JsonWebSerializer = JsonSerializer.Create(new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Error = delegate (object sender, ErrorEventArgs args)
+                {
+                    Logger.LogInformation(args.ErrorContext.Error.Message);
+                    args.ErrorContext.Handled = true;
+                },
+            });
         }
 
         public override bool CanConvert(Type objectType)
