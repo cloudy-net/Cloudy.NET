@@ -22,7 +22,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
             JsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
-                Error = delegate (object sender, ErrorEventArgs args)
+                Error = (sender, args) =>
                 {
                     Logger.LogInformation(args.ErrorContext.Error.Message);
                     args.ErrorContext.Handled = true;

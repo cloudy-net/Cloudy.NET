@@ -27,7 +27,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             {
                 Formatting = Formatting.Indented,
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Error = delegate (object sender, ErrorEventArgs args)
+                Error = (sender, args) =>
                 {
                     Logger.LogInformation(args.ErrorContext.Error.Message);
                     args.ErrorContext.Handled = true;
