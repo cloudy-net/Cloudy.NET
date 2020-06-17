@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.DocumentSupport.InMemorySupport
+namespace Cloudy.CMS.DocumentSupport.CacheSupport
 {
     public class DocumentFinderQueryBuilder : IDocumentFinderQueryBuilder
     {
+        IDocumentLister DocumentLister { get; }
         IDocumentPropertyPathProvider DocumentPropertyPathProvider { get; }
         IDocumentPropertyFinder DocumentPropertyFinder { get; }
 
-        public DocumentFinderQueryBuilder(IDocumentPropertyPathProvider documentPropertyPathProvider, IDocumentPropertyFinder documentPropertyFinder)
+        public DocumentFinderQueryBuilder(IDocumentLister documentLister, IDocumentPropertyPathProvider documentPropertyPathProvider, IDocumentPropertyFinder documentPropertyFinder)
         {
+            DocumentLister = documentLister;
             DocumentPropertyPathProvider = documentPropertyPathProvider;
             DocumentPropertyFinder = documentPropertyFinder;
         }
@@ -85,16 +87,11 @@ namespace Cloudy.CMS.DocumentSupport.InMemorySupport
             return this;
         }
 
-        public Task<IEnumerable<Document>> GetResultAsync()
+        public async Task<IEnumerable<Document>> GetResultAsync()
         {
-            if (!DocumentRepository.Documents.ContainsKey(Container))
-            {
-                return Task.FromResult(Enumerable.Empty<Document>());
-            }
-
             var result = new List<Document>();
 
-            foreach(var document in DocumentRepository.Documents[Container].Values)
+            foreach(var document in await DocumentLister.ListAsync(Container))
             {
                 if(Criteria.All(c => c(document)))
                 {
@@ -102,7 +99,7 @@ namespace Cloudy.CMS.DocumentSupport.InMemorySupport
                 }
             }
 
-            return Task.FromResult((IEnumerable<Document>)result);
+            return result.AsReadOnly();
         }
     }
 }

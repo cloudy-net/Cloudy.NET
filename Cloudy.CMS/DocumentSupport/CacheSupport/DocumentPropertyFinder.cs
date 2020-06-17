@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.DocumentSupport.CacheSupport
 {
     public class DocumentPropertyFinder : IDocumentPropertyFinder
     {

@@ -23,7 +23,7 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-            return File.Exists(path);
+            return File.Exists(path) || Directory.Exists(path);
         }
 
         public string Get(string path)

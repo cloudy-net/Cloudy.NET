@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Cloudy.CMS.DocumentSupport.CacheSupport;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,18 +10,11 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
     {
         public static CloudyConfigurator AddFileBased(this CloudyConfigurator configurator, string path = "json")
         {
-            configurator.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions(path));
-            configurator.Services.AddSingleton<IFilePathProvider, FilePathProvider>();
+            configurator.AddCachedDocuments();
+            configurator.Services.AddSingleton<IDataSource, FileDataSource>();
             configurator.Services.AddSingleton<IFileHandler, FileHandler>();
-            configurator.Services.AddSingleton<IDocumentSerializer, DocumentSerializer>();
-            configurator.Services.AddSingleton<IDocumentDeserializer, DocumentDeserializer>();
-            configurator.Services.AddTransient<IDocumentPropertyFinder, DocumentPropertyFinder>();
-            configurator.Services.AddSingleton<IDocumentCreator, DocumentCreator>();
-            configurator.Services.AddSingleton<IDocumentDeleter, DocumentDeleter>();
-            configurator.Services.AddSingleton<IDocumentFinder, DocumentFinder>();
-            configurator.Services.AddSingleton<IDocumentGetter, DocumentGetter>();
-            configurator.Services.AddSingleton<IDocumentUpdater, DocumentUpdater>();
-            configurator.Services.AddTransient<IDocumentFinderQueryBuilder, DocumentFinderQueryBuilder>();
+            configurator.Services.AddSingleton<IFilePathProvider, FilePathProvider>();
+            configurator.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions(path));
 
             return configurator;
         }

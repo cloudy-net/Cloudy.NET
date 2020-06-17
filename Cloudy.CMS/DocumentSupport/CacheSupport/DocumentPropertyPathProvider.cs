@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Cloudy.CMS.DocumentSupport
+namespace Cloudy.CMS.DocumentSupport.CacheSupport
 {
     public class DocumentPropertyPathProvider : IDocumentPropertyPathProvider
     {

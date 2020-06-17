@@ -21,6 +21,7 @@ using Cloudy.CMS.InitializerSupport;
 using Cloudy.CMS.AspNetCore.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using Cloudy.CMS.ContentTypeSupport.GroupSupport;
+using Cloudy.CMS.DocumentSupport.CacheSupport;
 
 namespace Cloudy.CMS
 {
