@@ -25,7 +25,14 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
         {
             var contentTypes = ContentTypeProvider.GetAll().Where(t => typeof(T).IsAssignableFrom(t.Type));
 
-            var documents = DocumentFinder.Find(ContainerConstants.Content).WhereEquals<IHierarchical, string>(x => x.ParentId, id).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypes.Select(t => t.Id)).GetResultAsync().Result.ToList();
+            var containers = contentTypes.Select(t => t.Container).ToList().AsReadOnly();
+
+            if (containers.Count > 1)
+            {
+                throw new ContentTypesSpanSeveralContainersException(contentTypes);
+            }
+
+            var documents = DocumentFinder.Find(containers.Single()).WhereEquals<IHierarchical, string>(x => x.ParentId, id).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypes.Select(t => t.Id)).GetResultAsync().Result.ToList();
 
             var result = new List<T>();
 

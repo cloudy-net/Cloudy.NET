@@ -40,11 +40,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             var result = new List<object>();
 
-            var containers = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).Select(t => t.Container).ToList();
+            var contentTypes = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).ToList().AsReadOnly();
+            var containers = contentTypes.Select(t => t.Container).ToList();
 
             if(containers.Count > 1)
             {
-                throw new Exception("Content type group seems to span different containers, which is disallowed");
+                throw new ContentTypesSpanSeveralContainersException(contentTypes);
             }
 
             var documents = DocumentFinder.Find(containers.Single()).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypeIds).GetResultAsync().Result.ToList();
