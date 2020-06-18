@@ -7,7 +7,6 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
         bool Exists(string path);
         void Create(string path, string contents);
         void Delete(string path);
-        string Get(string path);
         void Update(string path, string contents);
         IEnumerable<string> List(string path);
     }

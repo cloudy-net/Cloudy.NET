@@ -47,20 +47,6 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
             return Task.CompletedTask;
         }
 
-        public Task<Document> GetAsync(string container, string id)
-        {
-            var path = FilePathProvider.GetPathFor(container, id);
-
-            if (!FileHandler.Exists(path))
-            {
-                return Task.FromResult<Document>(null);
-            }
-
-            string contents = FileHandler.Get(path);
-
-            return Task.FromResult(JsonConvert.DeserializeObject<Document>(contents));
-        }
-
         public Task UpdateAsync(string container, string id, Document document)
         {
             var path = FilePathProvider.GetPathFor(container, id);

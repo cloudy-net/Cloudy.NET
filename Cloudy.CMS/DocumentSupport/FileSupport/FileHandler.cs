@@ -26,13 +26,6 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
             return File.Exists(path) || Directory.Exists(path);
         }
 
-        public string Get(string path)
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-
-            return File.ReadAllText(path);
-        }
-
         public IEnumerable<string> List(string path)
         {
             Directory.CreateDirectory(path);

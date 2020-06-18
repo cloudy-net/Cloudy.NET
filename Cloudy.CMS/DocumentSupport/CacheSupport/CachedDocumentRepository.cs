@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.DocumentSupport.CacheSupport
 {
-    public class DocumentRepository : IDocumentGetter, IDocumentCreator, IDocumentUpdater, IDocumentFinder, IDocumentDeleter, IDocumentLister
+    public class CachedDocumentRepository : IDocumentGetter, IDocumentCreator, IDocumentUpdater, IDocumentFinder, IDocumentDeleter, IDocumentLister
     {
         static IDictionary<string, IDictionary<string, Document>> Documents { get; } = new Dictionary<string, IDictionary<string, Document>>();
 
         IServiceProvider ServiceProvider { get; set; }
         IDataSource DataSource { get; }
 
-        public DocumentRepository(IServiceProvider serviceProvider, IDataSource inMemoryDataSource)
+        public CachedDocumentRepository(IServiceProvider serviceProvider, IDataSource inMemoryDataSource)
         {
             ServiceProvider = serviceProvider;
             DataSource = inMemoryDataSource;
@@ -49,7 +49,7 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
 
             if (!Documents[container].ContainsKey(id))
             {
-                Documents[container][id] = await DataSource.GetAsync(container, id).ConfigureAwait(false);
+                return null;
             }
 
             return Documents[container][id];

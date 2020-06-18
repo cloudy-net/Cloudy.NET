@@ -23,11 +23,6 @@ namespace Cloudy.CMS.DocumentSupport.InMemorySupport
             return Task.CompletedTask;
         }
 
-        public Task<Document> GetAsync(string container, string id)
-        {
-            return Task.FromResult<Document>(null);
-        }
-
         public Task UpdateAsync(string container, string id, Document document)
         {
             return Task.CompletedTask;

@@ -9,12 +9,12 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
     {
         public static CloudyConfigurator AddCachedDocuments(this CloudyConfigurator instance)
         {
-            instance.Services.AddSingleton<IDocumentGetter, DocumentRepository>();
-            instance.Services.AddSingleton<IDocumentCreator, DocumentRepository>();
-            instance.Services.AddSingleton<IDocumentUpdater, DocumentRepository>();
-            instance.Services.AddSingleton<IDocumentDeleter, DocumentRepository>();
-            instance.Services.AddSingleton<IDocumentFinder, DocumentRepository>();
-            instance.Services.AddSingleton<IDocumentLister, DocumentRepository>();
+            instance.Services.AddSingleton<IDocumentGetter, CachedDocumentRepository>();
+            instance.Services.AddSingleton<IDocumentCreator, CachedDocumentRepository>();
+            instance.Services.AddSingleton<IDocumentUpdater, CachedDocumentRepository>();
+            instance.Services.AddSingleton<IDocumentDeleter, CachedDocumentRepository>();
+            instance.Services.AddSingleton<IDocumentFinder, CachedDocumentRepository>();
+            instance.Services.AddSingleton<IDocumentLister, CachedDocumentRepository>();
             instance.Services.AddSingleton<IDocumentFinderQueryBuilder, DocumentFinderQueryBuilder>();
             instance.Services.AddSingleton<IDocumentPropertyFinder, DocumentPropertyFinder>();
             return instance;
