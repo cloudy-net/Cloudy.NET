@@ -15,7 +15,7 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
             instance.Services.AddSingleton<IDocumentDeleter, CachedDocumentRepository>();
             instance.Services.AddSingleton<IDocumentFinder, CachedDocumentRepository>();
             instance.Services.AddSingleton<IDocumentLister, CachedDocumentRepository>();
-            instance.Services.AddSingleton<IDocumentFinderQueryBuilder, DocumentFinderQueryBuilder>();
+            instance.Services.AddTransient<IDocumentFinderQueryBuilder, DocumentFinderQueryBuilder>();
             instance.Services.AddSingleton<IDocumentPropertyFinder, DocumentPropertyFinder>();
             return instance;
         }
