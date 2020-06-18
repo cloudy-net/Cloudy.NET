@@ -41,7 +41,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
                 throw new Exception("Redirection loop detected during authorization. Did you UseAuthentication?");
             }
 
-            await context.ChallengeAsync(IdentityConstants.ApplicationScheme, new AuthenticationProperties
+            await context.ChallengeAsync(/*IdentityConstants.ApplicationScheme, */new AuthenticationProperties
             {
                 RedirectUri = context.Request.PathBase.Add(context.Request.Path).Value + context.Request.QueryString,
             });
