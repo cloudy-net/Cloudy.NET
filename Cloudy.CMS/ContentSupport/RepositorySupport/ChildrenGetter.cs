@@ -25,7 +25,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
         {
             var contentTypes = ContentTypeProvider.GetAll().Where(t => typeof(T).IsAssignableFrom(t.Type));
 
-            var containers = contentTypes.Select(t => t.Container).ToList().AsReadOnly();
+            var containers = contentTypes.Select(t => t.Container).Distinct().ToList().AsReadOnly();
 
             if (containers.Count > 1)
             {

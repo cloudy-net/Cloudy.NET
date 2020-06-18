@@ -41,7 +41,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             var result = new List<object>();
 
             var contentTypes = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).ToList().AsReadOnly();
-            var containers = contentTypes.Select(t => t.Container).ToList();
+            var containers = contentTypes.Select(t => t.Container).Distinct().ToList();
 
             if(containers.Count > 1)
             {
