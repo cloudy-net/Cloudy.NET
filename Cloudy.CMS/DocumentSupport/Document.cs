@@ -27,9 +27,9 @@ namespace Cloudy.CMS.DocumentSupport
 
         string DebugDisplay()
         {
-            if(GlobalFacet.Interfaces.ContainsKey(nameof(INameable)) && GlobalFacet.Interfaces[nameof(INameable)].Properties[nameof(INameable.Name)] != null)
+            if(GlobalFacet.Properties["Name"] != null)
             {
-                return $"{GlobalFacet.Interfaces[nameof(INameable)].Properties[nameof(INameable.Name)]} ({Id}) [{GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)]}]";
+                return $"{GlobalFacet.Properties["Name"]} ({Id}) [{GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)]}]";
             }
 
             return $"{Id} [{GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)]}]";
