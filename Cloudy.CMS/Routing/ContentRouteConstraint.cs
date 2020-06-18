@@ -14,16 +14,16 @@ namespace Cloudy.CMS.Routing
         IContentTypeExpander ContentTypeExpander { get; }
         IEnumerable<ContentTypeDescriptor> Types { get; }
 
-        public ContentRouteConstraint(IContentRouter contentRouter, IContentTypeExpander contentTypeExpander, string contentTypeorGroupId = null)
+        public ContentRouteConstraint(IContentRouter contentRouter, IContentTypeExpander contentTypeExpander, string contentTypeorGroupIdOrTypeName = null)
         {
             ContentRouter = contentRouter;
             ContentTypeExpander = contentTypeExpander;
 
-            Types = contentTypeorGroupId != null ? ContentTypeExpander.Expand(contentTypeorGroupId) : Enumerable.Empty<ContentTypeDescriptor>();
+            Types = contentTypeorGroupIdOrTypeName != null ? ContentTypeExpander.Expand(contentTypeorGroupIdOrTypeName) : Enumerable.Empty<ContentTypeDescriptor>();
 
             if(Types == null)
             {
-                throw new Exception($"Routing could not use the constraint :contentroute({contentTypeorGroupId}) because it did not resolve to a content type or group");
+                throw new Exception($"Routing could not use the constraint :contentroute({contentTypeorGroupIdOrTypeName}) because it did not resolve to a content type or group or type name");
             }
         }
 

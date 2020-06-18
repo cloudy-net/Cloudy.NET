@@ -5,6 +5,6 @@ namespace Cloudy.CMS.ContentTypeSupport
 {
     public interface IContentTypeExpander
     {
-        IEnumerable<ContentTypeDescriptor> Expand(string typeOrGroupId);
+        IEnumerable<ContentTypeDescriptor> Expand(string typeOrGroupIdOrTypeName);
     }
 }
