@@ -42,7 +42,7 @@ class ListContentBlade extends Blade {
 
         var contentList;
         try {
-            var response = await fetch(`Content/GetContentList?${this.contentTypes.map((t, i) => `contentTypeId[${i}]=${t.id}`).join('&')}`, { credentials: 'include' });
+            var response = await fetch(`Content/GetContentList?${this.contentTypes.map((t, i) => `contentTypeIds[${i}]=${t.id}`).join('&')}`, { credentials: 'include' });
 
             if (!response.ok) {
                 var text = await response.text();

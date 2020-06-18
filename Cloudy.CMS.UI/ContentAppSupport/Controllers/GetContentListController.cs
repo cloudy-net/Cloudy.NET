@@ -36,18 +36,23 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         [HttpGet]
         [Route("GetContentList")]
-        public async Task GetContentList(string[] contentTypeId)
+        public async Task GetContentList(string[] contentTypeIds)
         {
             var result = new List<object>();
 
-            foreach (var contentType in contentTypeId.Select(t => ContentTypeProvider.Get(t)))
-            {
-                var documents = DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.ContentTypeId, contentType.Id).GetResultAsync().Result.ToList();
+            var containers = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).Select(t => t.Container).ToList();
 
-                foreach (var document in documents)
-                {
-                    result.Add(ContentDeserializer.Deserialize(document, contentType, DocumentLanguageConstants.Global));
-                }
+            if(containers.Count > 1)
+            {
+                throw new Exception("Content type group seems to span different containers, which is disallowed");
+            }
+
+            var documents = DocumentFinder.Find(containers.Single()).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypeIds).GetResultAsync().Result.ToList();
+
+            foreach (var document in documents)
+            {
+                var contentTypeId = (string)document.GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)];
+                result.Add(ContentDeserializer.Deserialize(document, ContentTypeProvider.Get(contentTypeId), DocumentLanguageConstants.Global));
             }
 
             //var sortByPropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? "Name" : "Id";
