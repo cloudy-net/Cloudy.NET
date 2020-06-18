@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.DocumentSupport;
+using Cloudy.CMS.DocumentSupport.CacheSupport;
 using Cloudy.CMS.DocumentSupport.FileSupport;
 using System;
 using System.Collections.Generic;

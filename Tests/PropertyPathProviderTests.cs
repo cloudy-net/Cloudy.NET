@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
+using Cloudy.CMS.DocumentSupport.CacheSupport;
 using Moq;
 using System;
 using System.Collections.Generic;

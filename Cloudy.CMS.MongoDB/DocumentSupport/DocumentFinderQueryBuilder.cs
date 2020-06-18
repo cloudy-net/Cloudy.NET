@@ -10,10 +10,10 @@ namespace Cloudy.CMS.DocumentSupport.MongoSupport
 {
     public class DocumentFinderQueryBuilder : IDocumentFinderQueryBuilder
     {
-        IDocumentPropertyPathProvider DocumentPropertyPathProvider { get; }
+        CacheSupport.IDocumentPropertyPathProvider DocumentPropertyPathProvider { get; }
         IContainerProvider ContainerProvider { get; }
 
-        public DocumentFinderQueryBuilder(IDocumentPropertyPathProvider documentPropertyPathProvider, IContainerProvider containerProvider)
+        public DocumentFinderQueryBuilder(CacheSupport.IDocumentPropertyPathProvider documentPropertyPathProvider, IContainerProvider containerProvider)
         {
             DocumentPropertyPathProvider = documentPropertyPathProvider;
             ContainerProvider = containerProvider;
