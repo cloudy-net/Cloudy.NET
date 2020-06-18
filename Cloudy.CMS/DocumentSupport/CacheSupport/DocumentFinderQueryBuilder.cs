@@ -91,15 +91,32 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
         {
             var result = new List<Document>();
 
-            foreach(var document in await DocumentLister.ListAsync(Container))
+            var documents = await DocumentLister.ListAsync(Container);
+
+            foreach (var document in documents)
             {
-                if(Criteria.All(c => c(document)))
+                if (!CheckCriteria(document))
                 {
-                    result.Add(document);
+                    continue;
                 }
+
+                result.Add(document);
             }
 
             return result.AsReadOnly();
+        }
+
+        private bool CheckCriteria(Document document)
+        {
+            foreach (var criterion in Criteria)
+            {
+                if (!criterion(document))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
