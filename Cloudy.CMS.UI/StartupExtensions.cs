@@ -61,12 +61,19 @@ namespace Microsoft.AspNetCore.Builder
 
             configure(configurator);
 
-            if (options.StaticFilesBaseUri == null && options.StaticFilesFileProvider == null)
+            if (options.StaticFilesBasePath == null && options.StaticFileProvider == null)
             {
-                configurator.WithStaticFilesFromVersion(Assembly.GetExecutingAssembly().GetName().Version);
+                var version = Assembly.GetExecutingAssembly().GetName().Version;
+
+                if (version == new Version(1, 0))
+                {
+                    throw new Exception("It seems you have linked Cloudy CMS through a project reference. Please add something like configure.WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, \"../cloudy-cms/Cloudy.CMS.UI/wwwroot\"))) to find the correct static files");
+                }
+
+                configurator.WithStaticFilesFromVersion(version);
             }
 
-            app.Map(new PathString(options.BasePath), branch => app.ApplicationServices.GetService<IPipelineBuilder>().Build(branch, options));
+            app.Map(new PathString(options.BasePath), branch => app.ApplicationServices.GetService<IRequestPipelineBuilder>().Build(branch, options));
         }
     }
 }

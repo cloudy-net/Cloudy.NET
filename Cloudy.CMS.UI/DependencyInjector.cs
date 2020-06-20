@@ -35,14 +35,13 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<ITitleProvider, TitleProvider>();
             services.AddSingleton<IFaviconProvider, FaviconProvider>();
             services.AddSingleton<IPortalPageRenderer, PortalPageRenderer>();
-            services.AddSingleton<IStaticFilesBasePathProvider, StaticFilesBasePathProvider>();
             services.AddSingleton<IContentFormIdGenerator, ContentFormIdGenerator>();
             services.AddSingleton<IPluralizer, Pluralizer>();
             services.AddSingleton<ISingularizer, Singularizer>();
             services.AddSingleton<IHumanizer, Humanizer>();
             services.AddSingleton<INameExpressionParser, NameExpressionParser>();
             services.AddSingleton<IImageExpressionParser, ImageExpressionParser>();
-            services.AddSingleton<IPipelineBuilder, PipelineBuilder>();
+            services.AddSingleton<IRequestPipelineBuilder, RequestPipelineBuilder>();
             services.AddSingleton<ILoginPipelineBuilder, LoginPipelineBuilder>();
             services.AddSingleton<ILoginPageRenderer, LoginPageRenderer>();
             services.AddSingleton<IListActionModuleCreator, ListActionModuleCreator>();

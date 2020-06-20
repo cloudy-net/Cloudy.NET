@@ -14,27 +14,20 @@ namespace Cloudy.CMS.UI.PortalSupport
     {
         ITitleProvider TitleProvider { get; }
         IFaviconProvider FaviconProvider { get; }
-        IStaticFilesBasePathProvider StaticFilesBasePathProvider { get; }
         IStyleProvider StyleProvider { get; }
         IScriptProvider ScriptProvider { get; }
 
-        public PortalPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStaticFilesBasePathProvider staticFilesBasePathProvider, IStyleProvider styleProvider, IScriptProvider scriptProvider)
+        public PortalPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStyleProvider styleProvider, IScriptProvider scriptProvider)
         {
             TitleProvider = titleProvider;
             FaviconProvider = faviconProvider;
-            StaticFilesBasePathProvider = staticFilesBasePathProvider;
             StyleProvider = styleProvider;
             ScriptProvider = scriptProvider;
         }
 
         public async Task RenderPageAsync(HttpContext context)
         {
-            var basePath = StaticFilesBasePathProvider.StaticFilesBasePath;
-
-            if (basePath.StartsWith("./"))
-            {
-                basePath = Path.Combine(context.Request.PathBase.Value, basePath.Substring(2)).Replace('\\', '/');
-            }
+            var basePath = Path.Combine(context.Request.PathBase.Value, "files").Replace('\\', '/');
 
             await context.Response.WriteAsync($"<!DOCTYPE html>\n");
             await context.Response.WriteAsync($"<html>\n");

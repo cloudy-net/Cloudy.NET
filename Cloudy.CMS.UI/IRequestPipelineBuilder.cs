@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Cloudy.CMS
 {
-    public interface IPipelineBuilder
+    public interface IRequestPipelineBuilder
     {
         void Build(IApplicationBuilder app, CloudyAdminOptions options);
     }

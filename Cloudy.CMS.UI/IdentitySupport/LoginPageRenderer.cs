@@ -13,14 +13,12 @@ namespace Cloudy.CMS.UI.IdentitySupport
     {
         ITitleProvider TitleProvider { get; }
         IFaviconProvider FaviconProvider { get; }
-        IStaticFilesBasePathProvider StaticFilesBasePathProvider { get; }
         IStyleProvider StyleProvider { get; }
 
-        public LoginPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStaticFilesBasePathProvider staticFilesBasePathProvider, IStyleProvider styleProvider)
+        public LoginPageRenderer(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStyleProvider styleProvider)
         {
             TitleProvider = titleProvider;
             FaviconProvider = faviconProvider;
-            StaticFilesBasePathProvider = staticFilesBasePathProvider;
             StyleProvider = styleProvider;
         }
 
@@ -38,16 +36,16 @@ namespace Cloudy.CMS.UI.IdentitySupport
             await context.Response.WriteAsync($"\n");
             await context.Response.WriteAsync($"    <link rel=\"icon\" href=\"{FaviconProvider.Favicon}\">\n");
             await context.Response.WriteAsync($"\n");
-            await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "portal.css").Replace('\\', '/')}\" />\n");
-            await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "login.css").Replace('\\', '/')}\" />\n");
-            await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "FormSupport/form-elements.css").Replace('\\', '/')}\" />\n");
-            await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "NotificationSupport/notification-manager.css").Replace('\\', '/')}\" />\n");
-            await context.Response.WriteAsync($"</head>\n");
-            await context.Response.WriteAsync($"<body>\n");
-            await context.Response.WriteAsync($"    <script type=\"module\">\n");
-            await context.Response.WriteAsync($"        import Login from '{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "login.js").Replace('\\', '/')}';\n");
-            await context.Response.WriteAsync($"        new Login('Login to {TitleProvider.Title}');\n");
-            await context.Response.WriteAsync($"    </script>\n");
+            //await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "portal.css").Replace('\\', '/')}\" />\n");
+            //await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "login.css").Replace('\\', '/')}\" />\n");
+            //await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "FormSupport/form-elements.css").Replace('\\', '/')}\" />\n");
+            //await context.Response.WriteAsync($"    <link rel=\"stylesheet\" type=\"text/css\" href=\"{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "NotificationSupport/notification-manager.css").Replace('\\', '/')}\" />\n");
+            //await context.Response.WriteAsync($"</head>\n");
+            //await context.Response.WriteAsync($"<body>\n");
+            //await context.Response.WriteAsync($"    <script type=\"module\">\n");
+            //await context.Response.WriteAsync($"        import Login from '{Path.Combine(StaticFilesBasePathProvider.StaticFilesBasePath, "login.js").Replace('\\', '/')}';\n");
+            //await context.Response.WriteAsync($"        new Login('Login to {TitleProvider.Title}');\n");
+            //await context.Response.WriteAsync($"    </script>\n");
             await context.Response.WriteAsync($"</body>\n");
             await context.Response.WriteAsync($"</html>\n");
         }

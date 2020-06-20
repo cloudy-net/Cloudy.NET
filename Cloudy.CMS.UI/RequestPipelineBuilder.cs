@@ -6,32 +6,39 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 
 namespace Cloudy.CMS.UI
 {
-    public class PipelineBuilder : IPipelineBuilder
+    public class RequestPipelineBuilder : IRequestPipelineBuilder
     {
         public void Build(IApplicationBuilder app, CloudyAdminOptions options)
         {
-            if (options.StaticFilesFileProvider != null)
+            if (options.StaticFileProvider != null)
             {
                 app.UseStaticFiles(new StaticFileOptions
                 {
                     RequestPath = "/files",
-                    FileProvider = options.StaticFilesFileProvider,
+                    FileProvider = options.StaticFileProvider,
                     OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
                 });
-                ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = "./files";
             }
-            else
+            else if(options.StaticFilesBasePath != null)
             {
-                ((StaticFilesBasePathProvider)app.ApplicationServices.GetRequiredService<IStaticFilesBasePathProvider>()).StaticFilesBasePath = options.StaticFilesBaseUri;
+
+                app.Use(async (context, next) =>
+                {
+                    if (!context.Request.Path.Value.StartsWith("/files/")) {
+                        await next.Invoke();
+                        return;
+                    }
+
+                    context.Response.StatusCode = 302;
+                    context.Response.Headers[HeaderNames.Location] = options.StaticFilesBasePath + context.Request.Path.Value.Substring("/files".Length);
+                });
             }
 
             app.UseRouting();

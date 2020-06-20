@@ -23,7 +23,22 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport
         public IDictionary<string, string> GetModulePaths()
         {
             var basePath = HttpContext.Request.PathBase;
-            return new ReadOnlyDictionary<string, string>(ControlProvider.GetAll().ToDictionary(t => t.Id, t => t.ModulePath));
+
+            var result = new Dictionary<string, string>();
+
+            foreach(var control in ControlProvider.GetAll())
+            {
+                var modulePath = control.ModulePath;
+
+                if (modulePath.StartsWith('/'))
+                {
+                    modulePath = $"{Request.Scheme}://{Request.Host}{modulePath}";
+                }
+
+                result[control.Id] = modulePath;
+            }
+
+            return new ReadOnlyDictionary<string, string>(result);
         }
     }
 }

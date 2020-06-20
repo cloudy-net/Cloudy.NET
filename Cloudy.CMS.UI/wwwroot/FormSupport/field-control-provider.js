@@ -26,7 +26,7 @@ class FieldControlProvider {
         }
 
         if (!this.typeModulesPromises[field.control.id]) {
-            this.typeModulesPromises[field.control.id] = import(modulePath.indexOf('/') == 0 ? modulePath : `../${modulePath}`);
+            this.typeModulesPromises[field.control.id] = import(modulePath.indexOf('/') == 0 || modulePath.indexOf('://') != -1 ? modulePath : `../${modulePath}`);
         }
 
         try {

@@ -36,7 +36,7 @@ namespace Cloudy.CMS.UI
 
         public CloudyAdminConfigurator WithStaticFilesFrom(IFileProvider fileProvider)
         {
-            Options.StaticFilesFileProvider = fileProvider;
+            Options.StaticFileProvider = fileProvider;
 
             return this;
         }
@@ -55,14 +55,14 @@ namespace Cloudy.CMS.UI
                 containerName += $"-{version.Build}";
             }
 
-            Options.StaticFilesBaseUri = $"https://cloudycmsui.blob.core.windows.net/{containerName}";
+            Options.StaticFilesBasePath = $"https://cloudycmsui.blob.core.windows.net/{containerName}";
 
             return this;
         }
 
         public CloudyAdminConfigurator WithStaticFilesFrom(string baseUri)
         {
-            Options.StaticFilesBaseUri = baseUri.TrimEnd();
+            Options.StaticFilesBasePath = baseUri;
 
             return this;
         }
