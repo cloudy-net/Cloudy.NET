@@ -65,9 +65,9 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var version = Assembly.GetExecutingAssembly().GetName().Version;
 
-                if (version == new Version(1, 0))
+                if (version.Equals(new Version(1, 0, 0, 0)))
                 {
-                    throw new Exception("It seems you have linked Cloudy CMS through a project reference. Please add something like configure.WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, \"../cloudy-cms/Cloudy.CMS.UI/wwwroot\"))) to find the correct static files");
+                    throw new Exception("It seems you have linked Cloudy CMS through a project reference. Please add something like configure.WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, \"../cloudy-cms/Cloudy.CMS.UI/wwwroot\"))) to find your local static files");
                 }
 
                 configurator.WithStaticFilesFromVersion(version);
