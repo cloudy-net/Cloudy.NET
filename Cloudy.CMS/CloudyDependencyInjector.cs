@@ -66,7 +66,6 @@ namespace Cloudy.CMS
             services.AddSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
 
             services.AddSingleton<IContentRouter, ContentRouter>();
-            services.AddSingleton<IContentRouteActionFinder, ContentRouteActionFinder>();
             services.AddSingleton<IRootContentRouter, RootContentRouter>();
             services.AddSingleton<IRoutableRootContentProvider, RoutableRootContentProvider>();
             services.AddSingleton<IContentSegmentRouter, ContentSegmentRouter>();
