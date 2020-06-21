@@ -65,11 +65,23 @@ class EditContentBlade extends Blade {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
-            } catch (error) {
-                notificationManager.addNotification(item => item.setText(`Could not get URL (${error.name}: ${error.message})`));
-            }
 
-            var url = await response.text();
+                if (!response.ok) {
+                    var text = await response.text();
+
+                    if (text) {
+                        throw new Error(text.split('\n')[0]);
+                    } else {
+                        text = response.statusText;
+                    }
+
+                    throw new Error(`${response.status} (${text})`);
+                }
+
+                var url = await response.text();
+            } catch (error) {
+                notificationManager.addNotification(item => item.setText(`Could not get URL --- ${error.message}`));
+            }
 
             if (!url) {
                 return;
