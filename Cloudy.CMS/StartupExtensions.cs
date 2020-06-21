@@ -51,10 +51,15 @@ namespace Microsoft.AspNetCore.Builder
             var componentTypeProvider = new ComponentTypeProvider(options.Components);
             services.AddSingleton<IComponentTypeProvider>(componentTypeProvider);
 
-            new CloudyDependencyInjector().InjectDependencies(services);
+            new BootstrappingDependencyInjector().InjectDependencies(services);
 
             foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(componentAssemblyProvider, componentTypeProvider)).GetAll())
             {
+                if(injector is BootstrappingDependencyInjector)
+                {
+                    continue;
+                }
+
                 injector.InjectDependencies(services);
             }
 

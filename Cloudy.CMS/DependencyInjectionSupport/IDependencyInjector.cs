@@ -7,6 +7,6 @@ namespace Cloudy.CMS.DependencyInjectionSupport
 {
     public interface IDependencyInjector
     {
-        void InjectDependencies(IServiceCollection container);
+        void InjectDependencies(IServiceCollection services);
     }
 }

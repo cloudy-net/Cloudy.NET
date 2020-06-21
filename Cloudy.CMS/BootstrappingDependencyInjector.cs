@@ -25,7 +25,7 @@ using Cloudy.CMS.DocumentSupport.CacheSupport;
 
 namespace Cloudy.CMS
 {
-    public class CloudyDependencyInjector : IDependencyInjector
+    public class BootstrappingDependencyInjector : IDependencyInjector
     {
         public void InjectDependencies(IServiceCollection services)
         {
@@ -73,9 +73,6 @@ namespace Cloudy.CMS
             services.AddSingleton<IContentRouteProvider, ContentRouteProvider>();
             services.AddSingleton<IContentRouteMatcher, ContentRouteMatcher>();
 
-            services.AddSingleton<ISingletonCreator, SingletonCreator>();
-            services.AddSingleton<ISingletonGetter, SingletonGetter>();
-            services.AddSingleton<ISingletonProvider, SingletonProvider>();
 
             services.AddSingleton<IComponentCreator, ComponentCreator>();
             services.AddSingleton<IComponentProvider, ComponentProvider>();
