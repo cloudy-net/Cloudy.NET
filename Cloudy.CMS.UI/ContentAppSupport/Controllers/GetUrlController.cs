@@ -2,6 +2,7 @@
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.Mvc.Routing;
+using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentTypeProvider ContentTypeProvider { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
         IUrlProvider UrlProvider { get; }
+        IContentRouteMatcher ContentRouteMatcher { get; }
 
         public GetUrlController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IUrlProvider urlProvider)
         {
@@ -26,13 +28,24 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         [HttpGet]
         [Route("GetUrl")]
-        public string GetUrl(string id, string contentTypeId)
+        public IEnumerable<string> GetUrl(string id, string contentTypeId)
         {
             var contentType = ContentTypeProvider.Get(contentTypeId);
 
             var content = ContainerSpecificContentGetter.Get<IContent>(id, null, contentType.Container);
 
-            return UrlProvider.Get(content);
+            var contentRouteSegment = UrlProvider.Get(content);
+
+            var contentRoutes = ContentRouteMatcher.GetFor(contentType);
+
+            var result = new List<string>();
+
+            foreach(var contentRoute in contentRoutes)
+            {
+                result.Add(contentRoute.Apply(contentRouteSegment));
+            }
+
+            return result.AsReadOnly();
         }
     }
 }
