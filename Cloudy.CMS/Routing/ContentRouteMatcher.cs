@@ -17,7 +17,19 @@ namespace Cloudy.CMS.Routing
 
         public IEnumerable<ContentRouteDescriptor> GetFor(ContentTypeDescriptor contentType)
         {
-            throw new NotImplementedException();
+            var result = new List<ContentRouteDescriptor>();
+
+            foreach(var contentRoute in ContentRouteProvider.GetAll())
+            {
+                if(!contentRoute.ContentTypes.Any(c => c.Id == contentType.Id))
+                {
+                    continue;
+                }
+
+                result.Add(contentRoute);
+            }
+
+            return result.AsReadOnly();
         }
     }
 }

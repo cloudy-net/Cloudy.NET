@@ -22,7 +22,7 @@ namespace Tests
             Mock.Get(contentRouteProvider).Setup(p => p.GetAll()).Returns(new List<ContentRouteDescriptor> { routeA, routeB });
             
             var sut = new ContentRouteMatcher(contentRouteProvider);
-            Assert.Same(routeA, sut.GetFor(contentTypeA));
+            Assert.Equal(new List<ContentRouteDescriptor> { routeA }, sut.GetFor(contentTypeA));
             Assert.Empty(sut.GetFor(contentTypeB));
         }
     }
