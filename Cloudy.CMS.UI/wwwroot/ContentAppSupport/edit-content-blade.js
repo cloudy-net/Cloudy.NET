@@ -75,9 +75,7 @@ class EditContentBlade extends Blade {
                 return;
             }
 
-            url = url.substr(1, url.length - 2);
-
-            this.setToolbar(new LinkButton('View', `${location.origin}${url}`, '_blank').setInherit());
+            this.setToolbar(new LinkButton('View', `${location.origin}/${url}`, '_blank').setInherit());
         }
 
         this.buildForm();
