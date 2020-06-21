@@ -22,8 +22,6 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport
         [Route("ModulePaths")]
         public IDictionary<string, string> GetModulePaths()
         {
-            var basePath = HttpContext.Request.PathBase;
-
             var result = new Dictionary<string, string>();
 
             foreach(var control in ControlProvider.GetAll())
