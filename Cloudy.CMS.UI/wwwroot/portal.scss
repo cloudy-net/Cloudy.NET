@@ -83,22 +83,21 @@ cloudy-ui-portal {
 /* MAIN NAV */
 
 cloudy-ui-portal-nav {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    height: 56px;
-    padding-left: 4px;
-    background: #1976d2;
+    display: none;
 }
 
 @media(min-width: $screen-tn) {
     cloudy-ui-portal-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
         height: 64px;
         padding-left: 12px;
+        background: #1976d2;
     }
 }
 
@@ -142,7 +141,7 @@ cloudy-ui-portal-nav-title {
 
 cloudy-ui-portal-nav-menu-fade {
     position: fixed;
-    top: 56px;
+    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
@@ -165,7 +164,7 @@ cloudy-ui-portal-nav-menu-fade {
 
 cloudy-ui-portal-nav-menu {
     position: fixed;
-    top: 56px;
+    top: 0;
     bottom: 0;
     left: 0;
     z-index: 10;
@@ -197,7 +196,7 @@ cloudy-ui-portal-nav-menu {
 
 cloudy-ui-app {
     position: absolute;
-    top: 56px;
+    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
