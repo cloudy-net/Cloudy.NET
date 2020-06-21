@@ -24,7 +24,7 @@ namespace Tests
             Mock.Get(formProvider).Setup(p => p.Get("lorem")).Returns(form);
 
             var sut = new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>());
-            var result = JsonConvert.DeserializeObject<ContentTypeA>("{ form: { formId: 'lorem', value: { property: 'ipsum' } } }", sut);
+            var result = JsonConvert.DeserializeObject<ContentTypeA>("{ form: { type: 'lorem', value: { property: 'ipsum' } } }", sut);
 
             Assert.IsType<FormA>(result.Form);
             Assert.Equal("ipsum", ((FormA)result.Form).Property);
@@ -42,7 +42,7 @@ namespace Tests
             var sut = new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>());
             var result = JsonConvert.SerializeObject(new ContentTypeA { Form = new FormA { Property = "ipsum" } }, sut);
 
-            Assert.Equal("{\"Form\":{\"FormId\":\"lorem\",\"Value\":{\"Property\":\"ipsum\"}}}", result);
+            Assert.Equal("{\"Form\":{\"type\":\"lorem\",\"name\":null,\"value\":{\"property\":\"ipsum\"}}}", result);
         }
 
         class ContentTypeA
