@@ -33,7 +33,7 @@ namespace Cloudy.CMS.Routing
                 return Enumerable.Empty<ContentRouteDescriptor>();
             }
 
-            var result = new List<ContentRouteDescriptor>();
+            var result = new Dictionary<string, ContentRouteDescriptor>();
 
             foreach(var dataSource in endpointDataSource.DataSources)
             {
@@ -42,6 +42,11 @@ namespace Cloudy.CMS.Routing
                     var routeEndpoint = endpoint as RouteEndpoint;
 
                     if(routeEndpoint == null)
+                    {
+                        continue;
+                    }
+
+                    if (result.ContainsKey(routeEndpoint.RoutePattern.RawText))
                     {
                         continue;
                     }
@@ -100,14 +105,11 @@ namespace Cloudy.CMS.Routing
                         contentTypes = ContentTypeProvider.GetAll().ToList().AsReadOnly();
                     }
 
-                    result.Add(new ContentRouteDescriptor(string.Join("/", path), contentTypes));
+                    result[routeEndpoint.RoutePattern.RawText] = new ContentRouteDescriptor(string.Join("/", path), contentTypes);
                 }
             }
 
-            return result.AsReadOnly();
-
-            //var test = .RoutePattern.Parameters[0].ParameterPolicies.Any(p => p.Content == "contentroute" || p.Content.StartsWith("contentroute("));
-
+            return result.Values.ToList().AsReadOnly();
         }
     }
 }
