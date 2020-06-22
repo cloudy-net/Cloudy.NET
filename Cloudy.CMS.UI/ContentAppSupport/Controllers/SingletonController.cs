@@ -10,14 +10,13 @@ using System.Text;
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Area("Cloudy.CMS")]
-    [Route("Content")]
-    public class GetSingletonController : Controller
+    public class SingletonController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
         ISingletonProvider SingletonProvider { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
 
-        public GetSingletonController(IContentTypeProvider contentTypeProvider, ISingletonProvider singletonProvider, IContainerSpecificContentGetter containerSpecificContentGetter)
+        public SingletonController(IContentTypeProvider contentTypeProvider, ISingletonProvider singletonProvider, IContainerSpecificContentGetter containerSpecificContentGetter)
         {
             ContentTypeProvider = contentTypeProvider;
             SingletonProvider = singletonProvider;
@@ -25,8 +24,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         }
 
         [HttpGet]
-        [Route("GetSingleton")]
-        public IContent GetSingleton(string id)
+        public IContent Get(string id)
         {
             var contentType = ContentTypeProvider.Get(id);
 

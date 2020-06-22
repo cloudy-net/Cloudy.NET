@@ -16,7 +16,6 @@ using System.Text;
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Area("Cloudy.CMS")]
-    [Route("ContentTypeGroupProvider/")]
     public class ContentTypeGroupProviderController : Controller
     {
         IContentTypeGroupProvider ContentTypeGroupProvider { get; }
@@ -33,8 +32,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         }
 
         [HttpGet]
-        [Route("GetAll")]
-        public IEnumerable<ContentTypeGroupResponseItem> GetContentTypeGroupList()
+        public IEnumerable<ContentTypeGroupResponseItem> GetAll()
         {
             var result = new List<ContentTypeGroupResponseItem>();
 

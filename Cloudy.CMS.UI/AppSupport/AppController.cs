@@ -8,18 +8,16 @@ using System.Text;
 namespace Cloudy.CMS.UI.Apis
 {
     [Area("Cloudy.CMS")]
-    [Route("App")]
-    public class AppApiController
+    public class AppController
     {
         IAppProvider AppProvider { get; }
 
-        public AppApiController(IAppProvider appProvider)
+        public AppController(IAppProvider appProvider)
         {
             AppProvider = appProvider;
         }
 
-        [Route("GetAll")]
-        public IEnumerable<object> GetNames()
+        public IEnumerable<object> GetAll()
         {
             return AppProvider.GetAll().ToList();
         }

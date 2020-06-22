@@ -9,18 +9,16 @@ using System.Text;
 namespace Cloudy.CMS.UI.FormSupport.ControlSupport
 {
     [Area("Cloudy.CMS")]
-    [Route("Control")]
-    public class ControlApiController : Controller
+    public class ControlController : Controller
     {
         IControlProvider ControlProvider { get; }
 
-        public ControlApiController(IControlProvider controlProvider)
+        public ControlController(IControlProvider controlProvider)
         {
             ControlProvider = controlProvider;
         }
 
-        [Route("ModulePaths")]
-        public IDictionary<string, string> GetModulePaths()
+        public IDictionary<string, string> ModulePaths()
         {
             var result = new Dictionary<string, string>();
 

@@ -11,11 +11,11 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
     [Area("Cloudy.CMS")]
     [Route("SelectControl")]
-    public class SelectControlApiController
+    public class SelectControlController
     {
         IDictionary<string, IItemProvider> OptionProviders { get; }
 
-        public SelectControlApiController(IComposableProvider composableProvider)
+        public SelectControlController(IComposableProvider composableProvider)
         {
             OptionProviders = composableProvider.GetAll<IItemProvider>().ToDictionary(p => p.GetType().GetCustomAttribute<ItemProviderAttribute>().Id, p => p);
         }

@@ -10,11 +10,11 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport
 {
     [Area("Cloudy.CMS")]
     [Route("DropdownControl")]
-    public class DropdownControlApiController
+    public class DropdownControlController
     {
         IDictionary<string, IOptionProvider> OptionProviders { get; }
 
-        public DropdownControlApiController(IComposableProvider composableProvider)
+        public DropdownControlController(IComposableProvider composableProvider)
         {
             OptionProviders = composableProvider.GetAll<IOptionProvider>().ToDictionary(p => p.GetType().GetCustomAttribute<OptionProviderAttribute>().Id, p => p);
         }

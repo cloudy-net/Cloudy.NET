@@ -16,8 +16,7 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Area("Cloudy.CMS")]
-    [Route("Content")]
-    public class GetContentListController : Controller
+    public class ContentListController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IDocumentFinder DocumentFinder { get; }
@@ -25,7 +24,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public GetContentListController(IContentTypeProvider contentTypeRepository, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
+        public ContentListController(IContentTypeProvider contentTypeRepository, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeRepository;
             DocumentFinder = documentFinder;
@@ -35,8 +34,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         }
 
         [HttpGet]
-        [Route("GetContentList")]
-        public async Task GetContentList(string[] contentTypeIds)
+        public async Task Get(string[] contentTypeIds)
         {
             var result = new List<object>();
 

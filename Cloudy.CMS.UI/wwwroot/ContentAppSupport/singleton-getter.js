@@ -5,7 +5,7 @@
 class SingletonGetter {
     async get(contentTypeId) {
         try {
-            var response = await fetch(`Content/GetSingleton?id=${contentTypeId}`, { credentials: 'include' });
+            var response = await fetch(`Singleton/Get?id=${contentTypeId}`, { credentials: 'include' });
 
             if (!response.ok) {
                 var text = await response.text();

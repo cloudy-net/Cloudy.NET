@@ -13,8 +13,7 @@ using Microsoft.Extensions.Logging;
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     [Area("Cloudy.CMS")]
-    [Route("Field")]
-    public class FieldApiController
+    public class FieldController
     {
         ILogger Logger { get; }
         IFormProvider FormProvider { get; }
@@ -25,7 +24,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         IPluralizer Pluralizer { get; }
         ISingularizer Singularizer { get; }
 
-        public FieldApiController(ILogger<FieldApiController> logger, IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer)
+        public FieldController(ILogger<FieldController> logger, IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer)
         {
             Logger = logger;
             FormProvider = formProvider;
@@ -36,7 +35,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             Singularizer = singularizer;
         }
 
-        [Route("GetAllForForm")]
         public IEnumerable<FieldResponse> GetAllForForm(string id)
         {
             var result = new List<FieldResponse>();
