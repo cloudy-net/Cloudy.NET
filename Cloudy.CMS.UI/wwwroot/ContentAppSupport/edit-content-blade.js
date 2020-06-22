@@ -78,16 +78,16 @@ class EditContentBlade extends Blade {
                     throw new Error(`${response.status} (${text})`);
                 }
 
-                var url = await response.text();
+                var urls = await response.json();
             } catch (error) {
                 notificationManager.addNotification(item => item.setText(`Could not get URL --- ${error.message}`));
             }
 
-            if (!url) {
+            if (!urls.length) {
                 return;
             }
 
-            this.setToolbar(new LinkButton('View', `${location.origin}/${url}`, '_blank').setInherit());
+            this.setToolbar(new LinkButton('View', `${location.origin}/${urls[0]}`, '_blank').setInherit());
         }
 
         this.buildForm();
