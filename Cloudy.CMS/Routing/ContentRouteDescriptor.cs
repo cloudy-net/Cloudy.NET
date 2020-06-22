@@ -19,7 +19,7 @@ namespace Cloudy.CMS.Routing
 
         public string Apply(string contentRouteSegment)
         {
-            throw new NotImplementedException();
+            return Template.Replace("{contentroute}", contentRouteSegment);
         }
     }
 }
