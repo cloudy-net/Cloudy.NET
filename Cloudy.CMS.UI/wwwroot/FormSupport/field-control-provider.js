@@ -26,7 +26,15 @@ class FieldControlProvider {
         }
 
         if (!this.typeModulesPromises[field.control.id]) {
-            this.typeModulesPromises[field.control.id] = import(modulePath.indexOf('/') == 0 || modulePath.indexOf('://') != -1 ? modulePath : `../${modulePath}`);
+            if (modulePath.indexOf('/') == 0 || modulePath.indexOf('://') != -1) {
+                if (location.href.indexOf('https://') == 0 && modulePath.indexOf(`http://${location.hostname}`) == 0) { // unterminate SSL termination
+                    modulePath = modulePath.replace('http://', 'https://');
+                }
+            } else {
+                modulePath = `../${modulePath}`;
+            }
+
+            this.typeModulesPromises[field.control.id] = import(modulePath);
         }
 
         try {
