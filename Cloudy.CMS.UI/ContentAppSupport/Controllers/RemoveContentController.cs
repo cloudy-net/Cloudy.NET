@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     [Route("Content")]
     public class RemoveContentController : Controller

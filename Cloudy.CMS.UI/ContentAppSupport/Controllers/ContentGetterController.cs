@@ -2,6 +2,7 @@
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     [Route("Data/ContentGetter")]
     public class ContentGetterController : Controller

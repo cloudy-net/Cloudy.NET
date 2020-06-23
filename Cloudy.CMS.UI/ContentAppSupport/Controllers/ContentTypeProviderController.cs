@@ -4,6 +4,7 @@ using Cloudy.CMS.ContentTypeSupport.GroupSupport;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ContentTypeActionSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ListActionSupport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -15,6 +16,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     public class ContentTypeProviderController : Controller
     {

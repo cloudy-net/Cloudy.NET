@@ -9,9 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     public class FieldController
     {

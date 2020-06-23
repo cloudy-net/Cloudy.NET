@@ -6,9 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     [Route("SelectControl")]
     public class SelectControlController

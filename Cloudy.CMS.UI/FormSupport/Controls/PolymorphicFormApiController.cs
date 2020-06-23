@@ -1,6 +1,7 @@
 ﻿
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.UI.ContentAppSupport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     [Route("PolymorphicFormControl")]
     public class PolymorphicFormApiController

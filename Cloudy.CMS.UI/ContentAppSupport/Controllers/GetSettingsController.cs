@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("Content")]
-    public class GetSettingsController
+    public class GetSettingsController : Controller
     {
         CloudyAdminOptions CloudyAdminOptions { get; }
 

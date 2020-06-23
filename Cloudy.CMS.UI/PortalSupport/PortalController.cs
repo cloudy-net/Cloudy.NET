@@ -10,9 +10,11 @@ using Cloudy.CMS.UI.ScriptSupport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.PortalSupport
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     public class PortalController : Controller
     {

@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     [Route("DropdownControl")]
     public class DropdownControlController

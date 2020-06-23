@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -11,6 +12,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     [Route("Content")]
     public class SaveContentController : Controller

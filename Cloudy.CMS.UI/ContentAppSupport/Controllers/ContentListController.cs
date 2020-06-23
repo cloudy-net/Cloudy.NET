@@ -2,6 +2,7 @@
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     public class ContentListController : Controller
     {
