@@ -66,12 +66,7 @@ namespace Microsoft.AspNetCore.Builder
                 throw new ArgumentNullException(nameof(version), "Cloudy CMS UI was instructed to link static files based on a Version, but that version was null");
             }
 
-            var containerName = $"v-{version.Major}-{version.Minor}";
-
-            if (version.Build != 0)
-            {
-                containerName += $"-{version.Build}";
-            }
+            var containerName = $"v-{version.Major}-{version.Minor}-{version.Build}";
 
             app.UseCloudyAdminStaticFilesFromUrl($"https://cloudycmsui.blob.core.windows.net/{containerName}");
         }
