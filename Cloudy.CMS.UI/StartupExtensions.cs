@@ -91,7 +91,7 @@ namespace Microsoft.AspNetCore.Builder
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                RequestPath = "/files",
+                RequestPath = "/Admin/files",
                 FileProvider = new PhysicalFileProvider(path),
                 OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
             });
