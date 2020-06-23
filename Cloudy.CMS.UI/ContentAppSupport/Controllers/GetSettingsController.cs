@@ -8,7 +8,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    public class GetSettingsController : Controller
+    public class GetSettingsController
     {
         CloudyAdminOptions CloudyAdminOptions { get; }
 
@@ -17,8 +17,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             CloudyAdminOptions = cloudyAdminOptions;
         }
 
-        [HttpGet]
-        [Route("GetSettings")]
         public ContentAppSettings GetSettings()
         {
             return new ContentAppSettings(CloudyAdminOptions.HelpSectionBaseUri);

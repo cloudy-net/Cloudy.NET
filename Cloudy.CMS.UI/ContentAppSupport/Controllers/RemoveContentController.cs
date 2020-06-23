@@ -13,7 +13,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("Content")]
     public class RemoveContentController : Controller
     {
         IContainerSpecificContentDeleter ContainerSpecificContentDeleter { get; }
@@ -28,7 +27,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         }
 
         [HttpPost]
-        [Route("RemoveContent")]
         public object RemoveContent([FromBody] RemoveContentInput removeContentInput)
         {
             if (!ModelState.IsValid)

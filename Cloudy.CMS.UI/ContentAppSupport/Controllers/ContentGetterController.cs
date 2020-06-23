@@ -13,8 +13,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("Data/ContentGetter")]
-    public class ContentGetterController : Controller
+    public class ContentGetterController
     {
         IContentTypeProvider ContentTypeProvider { get; }
 
@@ -26,8 +25,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContainerSpecificContentGetter = containerSpecificContentGetter;
         }
 
-        [HttpGet]
-        [Route("Get")]
         public async Task<IContent> GetAsync(string id, string contentTypeId)
         {
             var contentType = ContentTypeProvider.Get(contentTypeId);

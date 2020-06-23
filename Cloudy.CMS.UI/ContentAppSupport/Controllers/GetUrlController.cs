@@ -13,8 +13,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("Content")]
-    public class GetUrlController : Controller
+    public class GetUrlController
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
@@ -29,8 +28,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentRouteMatcher = contentRouteMatcher;
         }
 
-        [HttpGet]
-        [Route("GetUrl")]
         public IEnumerable<string> GetUrl(string id, string contentTypeId)
         {
             var contentType = ContentTypeProvider.Get(contentTypeId);

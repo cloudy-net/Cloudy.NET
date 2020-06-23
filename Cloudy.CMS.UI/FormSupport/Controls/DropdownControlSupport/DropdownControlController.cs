@@ -11,7 +11,6 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("DropdownControl")]
     public class DropdownControlController
     {
         IDictionary<string, IOptionProvider> OptionProviders { get; }
@@ -21,7 +20,6 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport
             OptionProviders = composableProvider.GetAll<IOptionProvider>().ToDictionary(p => p.GetType().GetCustomAttribute<OptionProviderAttribute>().Id, p => p);
         }
 
-        [Route("GetOptions")]
         public IEnumerable<Option> GetOptions(string provider)
         {
             return OptionProviders[provider].GetAll();

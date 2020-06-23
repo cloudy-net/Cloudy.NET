@@ -14,7 +14,6 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("PolymorphicFormControl")]
     public class PolymorphicFormApiController
     {
         IFormProvider FormProvider { get; }
@@ -26,7 +25,6 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
             Humanizer = humanizer;
         }
 
-        [Route("GetOptions")]
         public IEnumerable<FormResponseItem> GetOptions(IEnumerable<string> types)
         {
             var result = new List<FormResponseItem>();

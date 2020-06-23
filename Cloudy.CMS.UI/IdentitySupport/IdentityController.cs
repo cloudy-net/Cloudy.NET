@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.UI.IdentitySupport
 {
     [Area("Cloudy.CMS")]
-    [Route("Identity")]
     public class IdentityController : Controller
     {
         UserManager UserManager { get; }
@@ -22,7 +21,6 @@ namespace Cloudy.CMS.UI.IdentitySupport
         }
 
         [HttpPost]
-        [Route("ChangePassword")]
         public async Task<object> ChangePassword([FromBody] ChangePassword input)
         {
             if (!ModelState.IsValid)

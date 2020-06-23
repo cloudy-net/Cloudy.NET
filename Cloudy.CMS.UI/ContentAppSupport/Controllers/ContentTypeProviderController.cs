@@ -18,7 +18,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    public class ContentTypeProviderController : Controller
+    public class ContentTypeProviderController
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IHumanizer Humanizer { get; }
@@ -44,7 +44,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentTypeGroupMatcher = contentTypeGroupMatcher;
         }
 
-        [HttpGet]
         public IEnumerable<ContentTypeResponseItem> GetAll()
         {
             var result = new List<ContentTypeResponseItem>();
@@ -57,7 +56,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             return result.AsReadOnly();
         }
 
-        private ContentTypeResponseItem GetItem(ContentTypeDescriptor contentType)
+        ContentTypeResponseItem GetItem(ContentTypeDescriptor contentType)
         {
             var name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Type.Name;
             string pluralName;

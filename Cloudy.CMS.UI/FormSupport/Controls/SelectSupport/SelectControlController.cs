@@ -12,7 +12,6 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("SelectControl")]
     public class SelectControlController
     {
         IDictionary<string, IItemProvider> OptionProviders { get; }
@@ -22,13 +21,11 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
             OptionProviders = composableProvider.GetAll<IItemProvider>().ToDictionary(p => p.GetType().GetCustomAttribute<ItemProviderAttribute>().Id, p => p);
         }
 
-        [Route("GetItem")]
         public async Task<Item> GetItem(string provider, string type, string value)
         {
             return await OptionProviders[provider].Get(type, value).ConfigureAwait(false);
         }
 
-        [Route("GetItems")]
         public async Task<IEnumerable<Item>> GetItems(string provider, string type)
         {
             return await OptionProviders[provider].GetAll(type).ConfigureAwait(false);

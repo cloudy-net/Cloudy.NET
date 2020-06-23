@@ -32,7 +32,7 @@ class RemoveContentBlade extends Blade {
         var saveButton = new Button('Remove')
             .setPrimary()
             .onClick(() =>
-                fetch('Content/RemoveContent', {
+                fetch('RemoveContent/RemoveContent', {
                     credentials: 'include',
                     method: 'POST',
                     headers: {

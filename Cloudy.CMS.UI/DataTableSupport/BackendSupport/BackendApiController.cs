@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Cloudy.CMS.UI.DataTableSupport.BackendSupport
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
-    [Route("Backend")]
     public class BackendApiController
     {
         IBackendProvider BackendProvider { get; }
@@ -16,7 +17,6 @@ namespace Cloudy.CMS.UI.DataTableSupport.BackendSupport
             BackendProvider = backendProvider;
         }
 
-        [Route("GetAll")]
         public Result GetAll(string provider, int page, string sortBy, string sortDirection)
         {
             var direction = sortDirection == "ascending" ? (SortDirection?)SortDirection.Ascending : sortDirection == "descending" ? (SortDirection?)SortDirection.Descending : null;

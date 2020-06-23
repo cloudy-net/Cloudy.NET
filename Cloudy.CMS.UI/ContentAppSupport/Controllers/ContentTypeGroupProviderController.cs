@@ -18,7 +18,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Authorize]
     [Area("Cloudy.CMS")]
-    public class ContentTypeGroupProviderController : Controller
+    public class ContentTypeGroupProviderController
     {
         IContentTypeGroupProvider ContentTypeGroupProvider { get; }
         IHumanizer Humanizer { get; }
@@ -33,7 +33,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentTypeGroupMatcher = contentTypeGroupMatcher;
         }
 
-        [HttpGet]
         public IEnumerable<ContentTypeGroupResponseItem> GetAll()
         {
             var result = new List<ContentTypeGroupResponseItem>();

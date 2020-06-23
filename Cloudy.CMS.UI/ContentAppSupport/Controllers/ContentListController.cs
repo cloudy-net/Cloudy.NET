@@ -35,7 +35,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             PolymorphicFormConverter = polymorphicFormConverter;
         }
 
-        [HttpGet]
         public async Task Get(string[] contentTypeIds)
         {
             var result = new List<object>();

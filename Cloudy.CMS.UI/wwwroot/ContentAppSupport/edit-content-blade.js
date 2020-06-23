@@ -60,7 +60,7 @@ class EditContentBlade extends Blade {
             var response;
 
             try {
-                response = await fetch(`Content/GetUrl?id=${encodeURIComponent(this.content.id)}&contentTypeId=${encodeURIComponent(this.content.contentTypeId)}`, {
+                response = await fetch(`GetUrl/GetUrl?id=${encodeURIComponent(this.content.id)}&contentTypeId=${encodeURIComponent(this.content.contentTypeId)}`, {
                     credentials: 'include',
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
@@ -96,7 +96,7 @@ class EditContentBlade extends Blade {
             .setPrimary()
             .onClick(async () => {
                 try {
-                    var response = await fetch('Content/SaveContent', {
+                    var response = await fetch('SaveContent/SaveContent', {
                         credentials: 'include',
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },

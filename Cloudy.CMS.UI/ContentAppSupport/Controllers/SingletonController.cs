@@ -25,7 +25,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContainerSpecificContentGetter = containerSpecificContentGetter;
         }
 
-        [HttpGet]
         public IContent Get(string id)
         {
             var contentType = ContentTypeProvider.Get(id);
