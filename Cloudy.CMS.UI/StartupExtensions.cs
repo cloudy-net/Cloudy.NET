@@ -31,6 +31,9 @@ using Cloudy.CMS.UI.PortalSupport;
 using Cloudy.CMS.UI;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Net.Http.Headers;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -44,36 +47,59 @@ namespace Microsoft.AspNetCore.Builder
             return configurator;
         }
 
-        public static void UseCloudyAdmin(this IApplicationBuilder app, Action<CloudyAdminConfigurator> configure)
+        public static void UseCloudyAdminStaticFiles(this IApplicationBuilder app)
         {
-            if (app.ApplicationServices.GetService(typeof(IComponentTypeProvider)) == null)
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+
+            if (version.Equals(new Version(1, 0, 0, 0)))
             {
-                throw new Exception("Please add Cloudy services first by doing: services.AddCloudy(...)");
+                throw new Exception("It seems you have linked Cloudy CMS through a project reference. Please add something like app.UseCloudyAdminStaticFilesFromPath(\"../cloudy-cms/Cloudy.CMS.UI/wwwroot\") to find your local static files");
             }
 
-            if (!((IComponentTypeProvider)app.ApplicationServices.GetService(typeof(IComponentTypeProvider))).GetAll().Contains(typeof(CloudyAdminComponent)))
+            app.UseCloudyAdminStaticFilesWithVersion(version);
+        }
+
+        public static void UseCloudyAdminStaticFilesWithVersion(this IApplicationBuilder app, Version version)
+        {
+            if (version == null)
             {
-                throw new Exception("Please add Cloudy Admin services first by doing: services.AddCloudy(cloudy => cloudy.AddAdmin())");
+                throw new ArgumentNullException(nameof(version), "Cloudy CMS UI was instructed to link static files based on a Version, but that version was null");
             }
 
-            var options = app.ApplicationServices.GetService<CloudyAdminOptions>();
-            var configurator = new CloudyAdminConfigurator(options);
+            var containerName = $"v-{version.Major}-{version.Minor}";
 
-            configure(configurator);
-
-            if (options.StaticFilesBasePath == null && options.StaticFileProvider == null)
+            if (version.Build != 0)
             {
-                var version = Assembly.GetExecutingAssembly().GetName().Version;
-
-                if (version.Equals(new Version(1, 0, 0, 0)))
-                {
-                    throw new Exception("It seems you have linked Cloudy CMS through a project reference. Please add something like configure.WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, \"../cloudy-cms/Cloudy.CMS.UI/wwwroot\"))) to find your local static files");
-                }
-
-                configurator.WithStaticFilesFromVersion(version);
+                containerName += $"-{version.Build}";
             }
 
-            app.Map(new PathString(options.BasePath), branch => app.ApplicationServices.GetService<IRequestPipelineBuilder>().Build(branch, options));
+            app.UseCloudyAdminStaticFilesFromUrl($"https://cloudycmsui.blob.core.windows.net/{containerName}");
+        }
+
+        public static void UseCloudyAdminStaticFilesFromUrl(this IApplicationBuilder app, string url)
+        {
+            url = url.TrimEnd('/');
+            app.UseRewriter(new RewriteOptions().AddRedirect("Admin/files/(.*)", $"{url}/$1"));
+        }
+
+        public static void UseCloudyAdminStaticFilesFromPath(this IApplicationBuilder app, string path)
+        {
+            if (!Path.IsPathRooted(path))
+            {
+                path = Path.Combine(app.ApplicationServices.GetService<IWebHostEnvironment>().ContentRootPath, path);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                RequestPath = "/files",
+                FileProvider = new PhysicalFileProvider(path),
+                OnPrepareResponse = context => context.Context.Response.Headers["Cache-Control"] = "no-cache"
+            });
+        }
+
+        public static void MapCloudyAdminRoutes(this IEndpointRouteBuilder configure)
+        {
+            configure.MapAreaControllerRoute(null, "Cloudy.CMS", "Admin/{controller}/{action}", new { controller = "Portal", action = "Index" });
         }
     }
 }

@@ -20,53 +20,6 @@ namespace Cloudy.CMS.UI
             return this;
         }
 
-        public CloudyAdminConfigurator Authorize(AuthorizeOptions authorizeOptions)
-        {
-            Options.AuthorizeOptions = authorizeOptions;
-
-            return this;
-        }
-
-        public CloudyAdminConfigurator Unprotect()
-        {
-            Options.AuthorizeOptions = null;
-
-            return this;
-        }
-
-        public CloudyAdminConfigurator WithStaticFilesFrom(IFileProvider fileProvider)
-        {
-            Options.StaticFileProvider = fileProvider;
-
-            return this;
-        }
-
-        public CloudyAdminConfigurator WithStaticFilesFromVersion(Version version)
-        {
-            if(version == null)
-            {
-                throw new ArgumentNullException(nameof(version), "Cloudy CMS UI was instructed to link static files based on a Version, but that version was null");
-            }
-
-            var containerName = $"v-{version.Major}-{version.Minor}";
-
-            if(version.Build != 0)
-            {
-                containerName += $"-{version.Build}";
-            }
-
-            Options.StaticFilesBasePath = $"https://cloudycmsui.blob.core.windows.net/{containerName}";
-
-            return this;
-        }
-
-        public CloudyAdminConfigurator WithStaticFilesFrom(string baseUri)
-        {
-            Options.StaticFilesBasePath = baseUri;
-
-            return this;
-        }
-
         public CloudyAdminConfigurator WithHelpSectionsFrom(string baseUri)
         {
             Options.HelpSectionBaseUri = baseUri.TrimEnd('/');

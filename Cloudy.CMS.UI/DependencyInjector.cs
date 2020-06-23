@@ -40,7 +40,6 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<IHumanizer, Humanizer>();
             services.AddSingleton<INameExpressionParser, NameExpressionParser>();
             services.AddSingleton<IImageExpressionParser, ImageExpressionParser>();
-            services.AddSingleton<IRequestPipelineBuilder, RequestPipelineBuilder>();
             services.AddSingleton<ILoginPipelineBuilder, LoginPipelineBuilder>();
             services.AddSingleton<ILoginPageRenderer, LoginPageRenderer>();
             services.AddSingleton<IListActionModuleCreator, ListActionModuleCreator>();
