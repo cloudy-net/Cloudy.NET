@@ -8,6 +8,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using Microsoft.Extensions.Logging;
+using Cloudy.CMS.ContentSupport.RuntimeSupport;
 
 namespace Cloudy.CMS.ContentSupport.Serialization
 {
@@ -17,18 +18,20 @@ namespace Cloudy.CMS.ContentSupport.Serialization
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
         IPolymorphicDeserializer PolymorphicDeserializer { get; }
+        IContentInstanceCreator ContentInstanceCreator { get; }
 
-        public ContentDeserializer(ILogger<ContentDeserializer> logger, IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPolymorphicDeserializer polymorphicDeserializer)
+        public ContentDeserializer(ILogger<ContentDeserializer> logger, IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPolymorphicDeserializer polymorphicDeserializer, IContentInstanceCreator contentInstanceCreator)
         {
             Logger = logger;
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
             PolymorphicDeserializer = polymorphicDeserializer;
+            ContentInstanceCreator = contentInstanceCreator;
         }
 
         public IContent Deserialize(Document document, ContentTypeDescriptor contentType, string language)
         {
-            var content = (IContent)Activator.CreateInstance(contentType.Type);
+            var content = ContentInstanceCreator.Create(contentType);
 
             foreach (var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
             {

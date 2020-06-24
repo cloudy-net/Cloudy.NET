@@ -1,8 +1,5 @@
-﻿using Cloudy.CMS.ContentSupport.Serialization;
-using Cloudy.CMS.DocumentSupport;
+﻿using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.DependencyInjectionSupport;
-using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Cloudy.CMS.Core.ContentSupport.RepositorySupport;
@@ -11,7 +8,6 @@ using System.Collections.Generic;
 using System.Text;
 using Cloudy.CMS.Routing;
 using Cloudy.CMS.SingletonSupport;
-using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 using Cloudy.CMS.ComponentSupport;
 using Cloudy.CMS.ComposableSupport;
 using Cloudy.CMS.ComponentSupport.MissingComponentAttributeCheckerSupport;
@@ -29,7 +25,6 @@ namespace Cloudy.CMS
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IIdGenerator, IdGenerator>();
             services.AddSingleton<IPropertyDefinitionCreator, PropertyDefinitionCreator>();
             services.AddSingleton<ICoreInterfaceCreator, CoreInterfaceCreator>();
             services.AddSingleton<ICoreInterfaceProvider, CoreInterfaceProvider>();
@@ -43,29 +38,8 @@ namespace Cloudy.CMS
             services.AddSingleton<IContentTypeGroupMatcher, ContentTypeGroupMatcher>();
             services.AddSingleton<IContentTypeCoreInterfaceProvider, ContentTypeCoreInterfaceProvider>();
             services.AddSingleton<IPropertyDefinitionProvider, PropertyDefinitionProvider>();
-            services.AddSingleton<IContentSerializer, ContentSerializer>();
-            services.AddSingleton<IContentDeserializer, ContentDeserializer>();
-            services.AddSingleton<IPolymorphicDeserializer, PolymorphicDeserializer>();
-            services.AddSingleton<IPolymorphicSerializer, PolymorphicSerializer>();
-            services.AddSingleton<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
             services.AddSingleton<IDocumentPropertyPathProvider, DocumentPropertyPathProvider>();
             services.AddSingleton<IContentTypeExpander, ContentTypeExpander>();
-
-            services.AddSingleton<IContentGetter, ContentGetter>();
-            services.AddSingleton<IContentDeleter, ContentDeleter>();
-            services.AddSingleton<IContentCreator, ContentCreator>();
-            services.AddSingleton<IContentInserter, ContentInserter>();
-            services.AddSingleton<IContentUpdater, ContentUpdater>();
-            services.AddSingleton<IChildLinkProvider, ChildLinkProvider>();
-            services.AddSingleton<IChildrenGetter, ChildrenGetter>();
-            services.AddSingleton<IAncestorLinkProvider, AncestorLinkProvider>();
-
-            services.AddSingleton<IContainerSpecificContentGetter, ContainerSpecificContentGetter>();
-            services.AddSingleton<IContainerSpecificContentDeleter, ContainerSpecificContentDeleter>();
-            services.AddSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
-            services.AddSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
-
-
 
             services.AddSingleton<IComponentCreator, ComponentCreator>();
             services.AddSingleton<IComponentProvider, ComponentProvider>();

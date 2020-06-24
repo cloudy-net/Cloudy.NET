@@ -11,10 +11,11 @@ using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
 using Microsoft.Extensions.DependencyInjection;
 using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicControlMappingSupport;
+using Cloudy.CMS.UI.FormSupport.RuntimeSupport;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
-    public class FormSupportDependencyInjector : IDependencyInjector
+    public class DependencyInjector : IDependencyInjector
     {
         public void InjectDependencies(IServiceCollection services)
         {
@@ -37,6 +38,7 @@ namespace Cloudy.CMS.UI.FormSupport
             services.AddSingleton<IPolymorphicFormFinder, PolymorphicFormFinder>();
             services.AddSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
             services.AddSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();
+            services.AddSingleton<IFormInstanceInitializer, FormInstanceInitializer>();
         }
     }
 }

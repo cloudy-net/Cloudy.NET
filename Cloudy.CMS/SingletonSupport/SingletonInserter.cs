@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Cloudy.CMS.ContentSupport.RuntimeSupport;
 
 namespace Cloudy.CMS.SingletonSupport
 {
@@ -17,13 +18,15 @@ namespace Cloudy.CMS.SingletonSupport
         IContentTypeProvider ContentTypeProvider { get; }
         IContentGetter ContentGetter { get; }
         IContentInserter ContentInserter { get; }
+        IContentInstanceCreator ContentInstanceCreator { get; }
 
-        public SingletonInserter(ISingletonProvider singletonProvider, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter)
+        public SingletonInserter(ISingletonProvider singletonProvider, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter, IContentInstanceCreator contentInstanceCreator)
         {
             SingletonProvider = singletonProvider;
             ContentTypeProvider = contentTypeProvider;
             ContentGetter = contentGetter;
             ContentInserter = contentInserter;
+            ContentInstanceCreator = contentInstanceCreator;
         }
 
         public async Task InitializeAsync()
@@ -43,7 +46,7 @@ namespace Cloudy.CMS.SingletonSupport
                     continue;
                 }
 
-                content = (IContent)Activator.CreateInstance(contentType.Type);
+                content = ContentInstanceCreator.Create(contentType);
 
                 content.Id = singleton.Id;
 

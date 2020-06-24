@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.PropertyAccess
 {
-    public class PropertyAccessor : IPropertyAccessor
+    public class PropertyGetter : IPropertyGetter
     {
         public object GetProperty(Type type, object instance, string propertyName)
         {
