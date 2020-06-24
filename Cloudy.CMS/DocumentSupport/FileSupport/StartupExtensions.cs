@@ -15,7 +15,6 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
             configurator.Services.AddSingleton<IFileHandler, FileHandler>();
             configurator.Services.AddSingleton<IFilePathProvider, FilePathProvider>();
             configurator.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions(path));
-
             return configurator;
         }
     }

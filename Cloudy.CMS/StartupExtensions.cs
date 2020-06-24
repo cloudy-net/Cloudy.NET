@@ -41,11 +41,6 @@ namespace Microsoft.AspNetCore.Builder
                 configurator.AddComponentAssembly(Assembly.GetCallingAssembly());
             }
 
-            if (!options.HasDocumentProvider)
-            {
-                configurator.WithInMemoryDatabase();
-            }
-
             var AssemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
             services.AddSingleton<IAssemblyProvider>(AssemblyProvider);
 

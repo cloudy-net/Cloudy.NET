@@ -19,30 +19,6 @@ namespace Cloudy.CMS
             Options = options;
         }
 
-        public CloudyConfigurator WithFileBasedDocuments()
-        {
-            this.AddFileBased();
-            Options.HasDocumentProvider = true;
-
-            return this;
-        }
-
-        public CloudyConfigurator WithFileBasedDocuments(string jsonPath)
-        {
-            this.AddFileBased(jsonPath);
-            Options.HasDocumentProvider = true;
-
-            return this;
-        }
-
-        public CloudyConfigurator WithInMemoryDatabase()
-        {
-            this.AddInMemory();
-            Options.HasDocumentProvider = true;
-
-            return this;
-        }
-
         public CloudyConfigurator AddComponent<T>() where T : class
         {
             Options.Assemblies.Add(typeof(T).Assembly);
