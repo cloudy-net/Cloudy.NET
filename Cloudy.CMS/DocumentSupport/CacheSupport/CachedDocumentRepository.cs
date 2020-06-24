@@ -13,10 +13,10 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
         IServiceProvider ServiceProvider { get; set; }
         IDataSource DataSource { get; }
 
-        public CachedDocumentRepository(IServiceProvider serviceProvider, IDataSource inMemoryDataSource)
+        public CachedDocumentRepository(IServiceProvider serviceProvider, IDataSource dataSource)
         {
             ServiceProvider = serviceProvider;
-            DataSource = inMemoryDataSource;
+            DataSource = dataSource;
         }
 
         public async Task Create(string container, Document document)
