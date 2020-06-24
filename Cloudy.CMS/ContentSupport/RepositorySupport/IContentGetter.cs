@@ -7,6 +7,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public interface IContentGetter
     {
+        Task<IContent> GetAsync(string contentTypeId, string id, string language);
         T Get<T>(string id, string language) where T : class;
         Task<T> GetAsync<T>(string id, string language) where T : class;
     }
