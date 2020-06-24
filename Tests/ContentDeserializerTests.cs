@@ -1,5 +1,6 @@
 ﻿using Castle.Core.Logging;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RuntimeSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
@@ -28,7 +29,10 @@ namespace Tests
             var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
             Mock.Get(contentTypeCoreInterfaceProvider).Setup(p => p.GetFor(It.IsAny<string>())).Returns(Enumerable.Empty<CoreInterfaceDescriptor>());
 
-            var result = (MyContent)new ContentDeserializer(Mock.Of<ILogger<ContentDeserializer>>(), propertyDefinitionProvider, contentTypeCoreInterfaceProvider, Mock.Of<IPolymorphicDeserializer>()).Deserialize(document, contentType, null);
+            var contentInstanceCreator = Mock.Of<IContentInstanceCreator>();
+            Mock.Get(contentInstanceCreator).Setup(c => c.Create(It.IsAny<ContentTypeDescriptor>())).Returns<ContentTypeDescriptor>(contentType => (IContent)Activator.CreateInstance(contentType.Type));
+
+            var result = (MyContent)new ContentDeserializer(Mock.Of<ILogger<ContentDeserializer>>(), propertyDefinitionProvider, contentTypeCoreInterfaceProvider, Mock.Of<IPolymorphicDeserializer>(), contentInstanceCreator).Deserialize(document, contentType, null);
 
             Assert.Equal(new List<string> { value }, result.ArrayProperty);
         }
@@ -45,7 +49,10 @@ namespace Tests
             var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
             Mock.Get(contentTypeCoreInterfaceProvider).Setup(p => p.GetFor(It.IsAny<string>())).Returns(Enumerable.Empty<CoreInterfaceDescriptor>());
 
-            var result = (MyContent)new ContentDeserializer(Mock.Of<ILogger<ContentDeserializer>>(), propertyDefinitionProvider, contentTypeCoreInterfaceProvider, Mock.Of<IPolymorphicDeserializer>()).Deserialize(document, contentType, null);
+            var contentInstanceCreator = Mock.Of<IContentInstanceCreator>();
+            Mock.Get(contentInstanceCreator).Setup(c => c.Create(It.IsAny<ContentTypeDescriptor>())).Returns<ContentTypeDescriptor>(contentType => (IContent)Activator.CreateInstance(contentType.Type));
+
+            var result = (MyContent)new ContentDeserializer(Mock.Of<ILogger<ContentDeserializer>>(), propertyDefinitionProvider, contentTypeCoreInterfaceProvider, Mock.Of<IPolymorphicDeserializer>(), contentInstanceCreator).Deserialize(document, contentType, null);
 
             Assert.NotNull(result.ObjectProperty);
             Assert.Equal(value, result.ObjectProperty.Value);
