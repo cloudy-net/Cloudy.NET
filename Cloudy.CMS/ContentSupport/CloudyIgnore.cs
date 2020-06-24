@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.Core.ContentSupport
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class SweekIgnore : Attribute { }
+    public class CloudyIgnore : Attribute { }
 }

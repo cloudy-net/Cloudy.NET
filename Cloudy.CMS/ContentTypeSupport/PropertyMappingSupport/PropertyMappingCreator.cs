@@ -11,7 +11,7 @@ namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
     {
         public PropertyMapping Create(PropertyInfo property)
         {
-            if (property.GetCustomAttribute<SweekIgnore>() != null)
+            if (property.GetCustomAttribute<CloudyIgnore>() != null)
             {
                 return new PropertyMapping(PropertyMappingType.Ignored);
             }
