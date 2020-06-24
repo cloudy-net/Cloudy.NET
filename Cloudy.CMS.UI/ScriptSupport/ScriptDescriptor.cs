@@ -2,7 +2,7 @@
 
 namespace Cloudy.CMS.UI.ScriptSupport
 {
-    [DebuggerDisplay("{ComponentId}/{Path}")]
+    [DebuggerDisplay("{Path}")]
     public class ScriptDescriptor
     {
         public string Path { get; }

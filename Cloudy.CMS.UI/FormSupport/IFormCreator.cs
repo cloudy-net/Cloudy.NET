@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.ComposableSupport;
+﻿using Cloudy.CMS.ComposableSupport;
 using System;
 using System.Collections.Generic;
 

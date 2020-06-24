@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +8,19 @@ namespace Cloudy.CMS.ComposableSupport
 {
     public class ComposableProvider : IComposableProvider
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
         IInstantiator Instantiator { get; }
 
-        public ComposableProvider(IComponentProvider componentProvider, IInstantiator instantiator)
+        public ComposableProvider(IAssemblyProvider assemblyProvider, IInstantiator instantiator)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
             Instantiator = instantiator;
         }
 
         public IEnumerable<T> GetAll<T>() where T : IComposable
         {
-            return ComponentProvider
+            return AssemblyProvider
                 .GetAll()
-                .Select(c => c.Assembly)
                 .SelectMany(a => a.Types)
                 .Where(t => t.IsClass && !t.IsAbstract && !t.IsInterface && typeof(T).IsAssignableFrom(t))
                 .Select(t => (T)Instantiator.Instantiate(t))

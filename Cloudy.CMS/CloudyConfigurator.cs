@@ -45,14 +45,14 @@ namespace Cloudy.CMS
 
         public CloudyConfigurator AddComponent<T>() where T : class
         {
-            Options.Components.Add(typeof(T));
+            Options.Assemblies.Add(typeof(T).Assembly);
 
             return this;
         }
 
         public CloudyConfigurator AddComponentAssembly(Assembly assembly)
         {
-            Options.ComponentAssemblies.Add(assembly);
+            Options.Assemblies.Add(assembly);
 
             return this;
         }

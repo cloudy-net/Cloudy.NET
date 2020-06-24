@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,12 +8,12 @@ namespace Cloudy.CMS.InitializerSupport
 {
     public class InitializerCreator : IInitializerCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
         IInstantiator Instantiator { get; }
 
-        public InitializerCreator(IComponentProvider componentProvider, IInstantiator instantiator)
+        public InitializerCreator(IAssemblyProvider assemblyProvider, IInstantiator instantiator)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
             Instantiator = instantiator;
         }
 
@@ -22,9 +21,9 @@ namespace Cloudy.CMS.InitializerSupport
         {
             var result = new List<IInitializer>();
 
-            foreach (var component in ComponentProvider.GetAll())
+            foreach (var assembly in AssemblyProvider.GetAll())
             {
-                foreach (var type in component.Assembly.Types)
+                foreach (var type in assembly.Types)
                 {
                     if (!typeof(IInitializer).IsAssignableFrom(type))
                     {

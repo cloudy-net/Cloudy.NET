@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.UI.FormSupport.UIHintSupport;
+﻿using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
 using System;
 using System.Collections.Generic;
@@ -11,12 +10,12 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControl
 {
     public class UIHintControlMappingCreator : IUIHintControlMappingCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
         IUIHintDefinitionParser UIHintDefinitionParser { get; }
 
-        public UIHintControlMappingCreator(IComponentProvider componentProvider, IUIHintDefinitionParser uiHintDefinitionParser)
+        public UIHintControlMappingCreator(IAssemblyProvider assemblyProvider, IUIHintDefinitionParser uiHintDefinitionParser)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
             UIHintDefinitionParser = uiHintDefinitionParser;
         }
 
@@ -24,9 +23,9 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControl
         {
             var result = new List<UIHintControlMapping>();
 
-            foreach (var component in ComponentProvider.GetAll())
+            foreach (var assembly in AssemblyProvider.GetAll())
             {
-                foreach (var type in component.Assembly.Types)
+                foreach (var type in assembly.Types)
                 {
                     var controlAttribute = type.GetCustomAttribute<ControlAttribute>();
 

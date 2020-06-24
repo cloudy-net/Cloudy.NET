@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -8,20 +7,20 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport
 {
     public class ControlCreator : IControlCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
 
-        public ControlCreator(IComponentProvider componentProvider)
+        public ControlCreator(IAssemblyProvider assemblyProvider)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
         }
 
         public IEnumerable<ControlDescriptor> Create()
         {
             var result = new List<ControlDescriptor>();
 
-            foreach(var component in ComponentProvider.GetAll())
+            foreach(var assembly in AssemblyProvider.GetAll())
             {
-                foreach (var type in component.Assembly.Types)
+                foreach (var type in assembly.Types)
                 {
                     var attribute = type.GetCustomAttribute<ControlAttribute>();
 

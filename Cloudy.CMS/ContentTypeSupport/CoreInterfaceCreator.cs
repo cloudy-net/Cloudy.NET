@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,11 +9,11 @@ namespace Cloudy.CMS.ContentTypeSupport
     public class CoreInterfaceCreator : ICoreInterfaceCreator
     {
         IPropertyDefinitionCreator PropertyDefinitionCreator { get; }
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
 
-        public CoreInterfaceCreator(IComponentProvider componentProvider, IPropertyDefinitionCreator propertyDefinitionCreator)
+        public CoreInterfaceCreator(IAssemblyProvider assemblyProvider, IPropertyDefinitionCreator propertyDefinitionCreator)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
             PropertyDefinitionCreator = propertyDefinitionCreator;
         }
 
@@ -22,7 +21,7 @@ namespace Cloudy.CMS.ContentTypeSupport
         {
             var result = new List<CoreInterfaceDescriptor>();
 
-            foreach (var type in ComponentProvider.GetAll().SelectMany(c => c.Assembly.Types))
+            foreach (var type in AssemblyProvider.GetAll().SelectMany(c => c.Types))
             {
                 if (!type.IsInterface)
                 {

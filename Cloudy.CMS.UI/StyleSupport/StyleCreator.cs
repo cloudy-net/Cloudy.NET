@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,24 +7,22 @@ namespace Cloudy.CMS.UI.StyleSupport
 {
     public class StyleCreator : IStyleCreator
     {
-        IComponentTypeProvider ComponentTypeProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
 
-        public StyleCreator(IComponentTypeProvider componentTypeProvider)
+        public StyleCreator(IAssemblyProvider assemblyProvider)
         {
-            ComponentTypeProvider = componentTypeProvider;
+            AssemblyProvider = assemblyProvider;
         }
 
         public IEnumerable<StyleDescriptor> Create()
         {
             var result = new List<StyleDescriptor>();
 
-            foreach (var type in ComponentTypeProvider.GetAll())
+            foreach (var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
             {
-                var componentAttribute = type.GetCustomAttribute<ComponentAttribute>();
-
-                foreach (var scriptAttribute in type.GetCustomAttributes<StyleAttribute>())
+                foreach (var attribute in type.GetCustomAttributes<StyleAttribute>())
                 {
-                    result.Add(new StyleDescriptor(scriptAttribute.Path));
+                    result.Add(new StyleDescriptor(attribute.Path));
                 }
             }
 

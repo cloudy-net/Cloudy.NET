@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.ComposableSupport;
+﻿using Cloudy.CMS.ComposableSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +8,22 @@ namespace Cloudy.CMS.UI.ScriptSupport
 {
     public class ScriptCreator : IScriptCreator
     {
-        IComponentTypeProvider ComponentTypeProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
 
-        public ScriptCreator(IComponentTypeProvider componentTypeProvider)
+        public ScriptCreator(IAssemblyProvider assemblyProvider)
         {
-            ComponentTypeProvider = componentTypeProvider;
+            AssemblyProvider = assemblyProvider;
         }
 
         public IEnumerable<ScriptDescriptor> Create()
         {
             var result = new List<ScriptDescriptor>();
 
-            foreach (var type in ComponentTypeProvider.GetAll())
+            foreach (var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
             {
-                var componentAttribute = type.GetCustomAttribute<ComponentAttribute>();
-
-                foreach (var scriptAttribute in type.GetCustomAttributes<ScriptAttribute>())
+                foreach (var attribute in type.GetCustomAttributes<ScriptAttribute>())
                 {
-                    result.Add(new ScriptDescriptor(scriptAttribute.Path));
+                    result.Add(new ScriptDescriptor(attribute.Path));
                 }
             }
 

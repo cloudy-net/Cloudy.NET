@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.Routing;
+﻿using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Cloudy.CMS;
@@ -11,6 +10,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
+using System.Linq;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -34,7 +34,7 @@ namespace Microsoft.AspNetCore.Builder
 
             configure(configurator);
 
-            configurator.AddComponent<CloudyComponent>();
+            configurator.AddComponent<CloudyAssemblyHandle>();
 
             if (Assembly.GetCallingAssembly() != Assembly.GetExecutingAssembly())
             {
@@ -46,13 +46,10 @@ namespace Microsoft.AspNetCore.Builder
                 configurator.WithInMemoryDatabase();
             }
 
-            var componentAssemblyProvider = new ComponentAssemblyProvider(options.ComponentAssemblies);
-            services.AddSingleton<IComponentAssemblyProvider>(componentAssemblyProvider);
+            var AssemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
+            services.AddSingleton<IAssemblyProvider>(AssemblyProvider);
 
-            var componentTypeProvider = new ComponentTypeProvider(options.Components);
-            services.AddSingleton<IComponentTypeProvider>(componentTypeProvider);
-
-            foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(componentAssemblyProvider, componentTypeProvider)).GetAll())
+            foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(AssemblyProvider)).GetAll())
             {
                 injector.InjectDependencies(services);
             }

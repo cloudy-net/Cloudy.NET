@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,12 +7,12 @@ namespace Cloudy.CMS.UI.DataTableSupport.BackendSupport
 {
     public class BackendCreator : IBackendCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
         IInstantiator Instantiator { get; }
 
-        public BackendCreator(IComponentProvider componentProvider, IInstantiator instantiator)
+        public BackendCreator(IAssemblyProvider assemblyProvider, IInstantiator instantiator)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
             Instantiator = instantiator;
         }
 
@@ -21,9 +20,9 @@ namespace Cloudy.CMS.UI.DataTableSupport.BackendSupport
         {
             var result = new Dictionary<string, IBackend>();
 
-            foreach (var component in ComponentProvider.GetAll())
+            foreach (var assembly in AssemblyProvider.GetAll())
             {
-                foreach (var type in component.Assembly.Types)
+                foreach (var type in assembly.Types)
                 {
                     var attribute = type.GetCustomAttribute<DataTableBackendAttribute>();
 

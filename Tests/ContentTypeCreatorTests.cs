@@ -3,7 +3,6 @@ using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Moq;
 using Cloudy.CMS;
-using Cloudy.CMS.ComponentSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +16,10 @@ namespace Tests
         [Fact]
         public void ExcludesAbstractClass()
         {
-            var component = new ComponentDescriptor("ipsum", new AssemblyWrapper(new List<Type> { typeof(Class_A_Abstract) }));
-            var componentProvider = Mock.Of<IComponentProvider>();
-            Mock.Get(componentProvider).Setup(p => p.GetAll()).Returns(new List<ComponentDescriptor> { component });
+            var assemblyProvider = Mock.Of<IAssemblyProvider>();
+            Mock.Get(assemblyProvider).Setup(p => p.GetAll()).Returns(new List<AssemblyWrapper> { new AssemblyWrapper(new List<Type> { typeof(Class_A_Abstract) }) });
 
-            var result = new ContentTypeCreator(componentProvider).Create();
+            var result = new ContentTypeCreator(assemblyProvider).Create();
 
             Assert.Empty(result);
         }
@@ -29,11 +27,10 @@ namespace Tests
         [Fact]
         public void IncludesAbstractClassIfSingleSubclassExists()
         {
-            var component = new ComponentDescriptor("ipsum", new AssemblyWrapper(new List<Type> { typeof(Class_B_Extends_A) }));
-            var componentProvider = Mock.Of<IComponentProvider>();
-            Mock.Get(componentProvider).Setup(p => p.GetAll()).Returns(new List<ComponentDescriptor> { component });
+            var assemblyProvider = Mock.Of<IAssemblyProvider>();
+            Mock.Get(assemblyProvider).Setup(p => p.GetAll()).Returns(new List<AssemblyWrapper> { new AssemblyWrapper(new List<Type> { typeof(Class_B_Extends_A) }) });
 
-            var result = new ContentTypeCreator(componentProvider).Create();
+            var result = new ContentTypeCreator(assemblyProvider).Create();
 
             Assert.Single(result);
 

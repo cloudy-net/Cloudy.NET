@@ -1,7 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.ComponentSupport;
 using Cloudy.CMS.InitializerSupport;
 using System;
 using System.Collections.Generic;

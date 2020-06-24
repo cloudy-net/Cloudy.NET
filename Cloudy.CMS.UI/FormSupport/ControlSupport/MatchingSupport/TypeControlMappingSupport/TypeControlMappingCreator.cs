@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -8,20 +7,20 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMa
 {
     public class TypeControlMappingCreator : ITypeControlMappingCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
 
-        public TypeControlMappingCreator(IComponentProvider componentProvider)
+        public TypeControlMappingCreator(IAssemblyProvider assemblyProvider)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
         }
 
         public IEnumerable<TypeControlMapping> Create()
         {
             var result = new List<TypeControlMapping>();
 
-            foreach (var component in ComponentProvider.GetAll())
+            foreach (var assembly in AssemblyProvider.GetAll())
             {
-                foreach (var type in component.Assembly.Types)
+                foreach (var type in assembly.Types)
                 {
                     var controlAttribute = type.GetCustomAttribute<ControlAttribute>();
 

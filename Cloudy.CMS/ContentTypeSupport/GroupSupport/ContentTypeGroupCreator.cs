@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,18 +8,18 @@ namespace Cloudy.CMS.ContentTypeSupport.GroupSupport
 {
     public class ContentTypeGroupCreator : IContentTypeGroupCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
 
-        public ContentTypeGroupCreator(IComponentProvider componentProvider)
+        public ContentTypeGroupCreator(IAssemblyProvider assemblyProvider)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
         }
 
         public IEnumerable<ContentTypeGroupDescriptor> Create()
         {
-            var types = ComponentProvider
+            var types = AssemblyProvider
                     .GetAll()
-                    .SelectMany(a => a.Assembly.Types)
+                    .SelectMany(a => a.Types)
                     .Where(a => a.GetTypeInfo().GetCustomAttribute<ContentTypeGroupAttribute>() != null);
 
             var result = new List<ContentTypeGroupDescriptor>();

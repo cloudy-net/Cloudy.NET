@@ -26,7 +26,6 @@ using Cloudy.CMS.InitializerSupport;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Cloudy.CMS.ComponentSupport;
 using Cloudy.CMS.UI.PortalSupport;
 using Cloudy.CMS.UI;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -41,7 +40,7 @@ namespace Microsoft.AspNetCore.Builder
     {
         public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator)
         {
-            configurator.AddComponent<CloudyAdminComponent>();
+            configurator.AddComponent<CloudyUIAssemblyHandle>();
             configurator.Services.AddSingleton(new CloudyAdminOptions());
 
             return configurator;

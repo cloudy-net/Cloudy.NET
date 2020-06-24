@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.ContentSupport;
+﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Cloudy.CMS.Core;
 using Cloudy.CMS.Core.ContentSupport;
@@ -15,18 +14,18 @@ namespace Cloudy.CMS.ContentTypeSupport
 {
     public class ContentTypeCreator : IContentTypeCreator
     {
-        IComponentProvider ComponentProvider { get; }
+        IAssemblyProvider AssemblyProvider { get; }
 
-        public ContentTypeCreator(IComponentProvider componentProvider)
+        public ContentTypeCreator(IAssemblyProvider assemblyProvider)
         {
-            ComponentProvider = componentProvider;
+            AssemblyProvider = assemblyProvider;
         }
 
         public IEnumerable<ContentTypeDescriptor> Create()
         {
-            var types = ComponentProvider
+            var types = AssemblyProvider
                     .GetAll()
-                    .SelectMany(a => a.Assembly.Types)
+                    .SelectMany(a => a.Types)
                     .Where(t => t.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>() != null);
 
             var result = new List<ContentTypeDescriptor>();

@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComponentSupport;
-using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.DependencyInjectionSupport;
 using Cloudy.CMS.UI.FormSupport;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using Cloudy.CMS.ContentTypeSupport;
