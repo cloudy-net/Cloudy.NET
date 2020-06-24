@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.AspNetCore.DependencyInjectionSupport
+namespace Cloudy.CMS.DependencyInjectionSupport
 {
     public class Instantiator : IInstantiator
     {

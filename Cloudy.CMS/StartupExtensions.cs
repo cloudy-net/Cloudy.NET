@@ -21,6 +21,7 @@ namespace Microsoft.AspNetCore.Builder
             var assembly = Assembly.GetCallingAssembly();
             AddCloudy(services, cloudy => cloudy.AddComponentAssembly(assembly));
         }
+
         public static void AddCloudy(this IServiceCollection services, Action<CloudyConfigurator> configure)
         {
             services.Configure<RouteOptions>(options =>
@@ -51,15 +52,8 @@ namespace Microsoft.AspNetCore.Builder
             var componentTypeProvider = new ComponentTypeProvider(options.Components);
             services.AddSingleton<IComponentTypeProvider>(componentTypeProvider);
 
-            new BootstrappingDependencyInjector().InjectDependencies(services);
-
             foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(componentAssemblyProvider, componentTypeProvider)).GetAll())
             {
-                if(injector is BootstrappingDependencyInjector)
-                {
-                    continue;
-                }
-
                 injector.InjectDependencies(services);
             }
 
