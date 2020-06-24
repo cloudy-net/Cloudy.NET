@@ -31,7 +31,16 @@ namespace Cloudy.CMS.DependencyInjectionSupport
                     continue;
                 }
 
-                result.Add((IDependencyInjector)Activator.CreateInstance(type));
+                var injectedAssemblyProviderConstructor = type.GetConstructor(new Type[] { typeof(IAssemblyProvider) });
+
+                if (injectedAssemblyProviderConstructor != null)
+                {
+                    result.Add((IDependencyInjector)injectedAssemblyProviderConstructor.Invoke(new object[] { AssemblyProvider }));
+                }
+                else
+                {
+                    result.Add((IDependencyInjector)Activator.CreateInstance(type));
+                }
             }
 
             return result;
