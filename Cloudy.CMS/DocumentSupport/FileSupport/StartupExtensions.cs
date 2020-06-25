@@ -8,14 +8,13 @@ namespace Cloudy.CMS.DocumentSupport.FileSupport
 {
     public static class StartupExtensions
     {
-        public static CloudyConfigurator AddFileBased(this CloudyConfigurator configurator, string path = "json")
+        public static CloudyConfigurator AddFileBasedDocuments(this CloudyConfigurator cloudy, string path = "json")
         {
-            configurator.AddCachedDocuments();
-            configurator.Services.AddSingleton<IDataSource, FileDataSource>();
-            configurator.Services.AddSingleton<IFileHandler, FileHandler>();
-            configurator.Services.AddSingleton<IFilePathProvider, FilePathProvider>();
-            configurator.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions(path));
-            return configurator;
+            cloudy.AddCachedDocuments<FileDataSource>();
+            cloudy.Services.AddSingleton<IFileHandler, FileHandler>();
+            cloudy.Services.AddSingleton<IFilePathProvider, FilePathProvider>();
+            cloudy.Services.AddSingleton<IFileBasedDocumentOptions>(new FileBasedDocumentOptions(path));
+            return cloudy;
         }
     }
 }

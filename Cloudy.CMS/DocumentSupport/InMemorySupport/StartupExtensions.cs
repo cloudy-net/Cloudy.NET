@@ -8,11 +8,10 @@ namespace Cloudy.CMS.DocumentSupport.InMemorySupport
 {
     public static class StartupExtensions
     {
-        public static CloudyConfigurator AddInMemory(this CloudyConfigurator instance)
+        public static CloudyConfigurator AddInMemoryDocuments(this CloudyConfigurator cloudy)
         {
-            instance.AddCachedDocuments();
-            instance.Services.AddSingleton<IDataSource, InMemoryDataSource>();
-            return instance;
+            cloudy.AddCachedDocuments<InMemoryDataSource>();
+            return cloudy;
         }
     }
 }

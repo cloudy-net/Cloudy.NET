@@ -7,19 +7,26 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
 {
     public static class StartupExtensions
     {
-        public static CloudyConfigurator AddCachedDocuments(this CloudyConfigurator instance)
+        /// <summary>
+        /// Adds document repository support with a 2nd level inmemory cache and the specified data source. All documents will be fetched on startup.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="cloudy"></param>
+        /// <returns></returns>
+        public static CloudyConfigurator AddCachedDocuments<T>(this CloudyConfigurator cloudy) where T : class, IDataSource
         {
-            instance.Services.AddSingleton<IDocumentGetter, CachedDocumentRepository>();
-            instance.Services.AddSingleton<IDocumentCreator, CachedDocumentRepository>();
-            instance.Services.AddSingleton<IDocumentUpdater, CachedDocumentRepository>();
-            instance.Services.AddSingleton<IDocumentDeleter, CachedDocumentRepository>();
-            instance.Services.AddSingleton<IDocumentFinder, CachedDocumentRepository>();
-            instance.Services.AddSingleton<IDocumentLister, CachedDocumentRepository>();
-            instance.Services.AddTransient<IDocumentFinderQueryBuilder, DocumentFinderQueryBuilder>();
-            instance.Services.AddSingleton<IDocumentPropertyPathProvider, DocumentPropertyPathProvider>();
-            instance.Services.AddSingleton<IDocumentPropertyFinder, DocumentPropertyFinder>();
+            cloudy.Services.AddSingleton<IDocumentGetter, CachedDocumentRepository>();
+            cloudy.Services.AddSingleton<IDocumentCreator, CachedDocumentRepository>();
+            cloudy.Services.AddSingleton<IDocumentUpdater, CachedDocumentRepository>();
+            cloudy.Services.AddSingleton<IDocumentDeleter, CachedDocumentRepository>();
+            cloudy.Services.AddSingleton<IDocumentFinder, CachedDocumentRepository>();
+            cloudy.Services.AddSingleton<IDocumentLister, CachedDocumentRepository>();
+            cloudy.Services.AddTransient<IDocumentFinderQueryBuilder, DocumentFinderQueryBuilder>();
+            cloudy.Services.AddSingleton<IDocumentPropertyPathProvider, DocumentPropertyPathProvider>();
+            cloudy.Services.AddSingleton<IDocumentPropertyFinder, DocumentPropertyFinder>();
+            cloudy.Services.AddSingleton<IDataSource, T>();
 
-            return instance;
+            return cloudy;
         }
     }
 }

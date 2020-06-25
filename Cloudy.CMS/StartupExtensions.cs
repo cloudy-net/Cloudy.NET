@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.Builder
             AddCloudy(services, cloudy => cloudy.AddComponentAssembly(assembly));
         }
 
-        public static void AddCloudy(this IServiceCollection services, Action<CloudyConfigurator> configure)
+        public static void AddCloudy(this IServiceCollection services, Action<CloudyConfigurator> cloudy)
         {
             services.Configure<RouteOptions>(options =>
             {
@@ -32,7 +32,7 @@ namespace Microsoft.AspNetCore.Builder
             var options = new CloudyOptions();
             var configurator = new CloudyConfigurator(services, options);
 
-            configure(configurator);
+            cloudy(configurator);
 
             configurator.AddComponent<CloudyAssemblyHandle>();
 
