@@ -16,7 +16,6 @@ namespace Cloudy.CMS.MongoDB
             }
 
             configurator.AddMongo();
-            configurator.Options.HasDocumentProvider = true;
             configurator.Services.AddSingleton<IDatabaseConnectionStringNameProvider>(new DatabaseConnectionStringNameProvider(name));
 
             return configurator;
