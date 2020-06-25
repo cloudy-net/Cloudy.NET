@@ -21,7 +21,7 @@ using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Cloudy.CMS.UI.IdentitySupport;
-using Website.AspNetCore.DemoSupport;
+using Cloudy.CMS.DocumentSupport.FileSupport;
 
 namespace Website.AspNetCore
 {
@@ -29,11 +29,10 @@ namespace Website.AspNetCore
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IDemoPageRenderer, DemoPageRenderer>();
             services.AddMvc();
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
-                .WithFileBasedDocuments()
+                .AddFileBasedDocuments()
                 .AddAdmin()
             );
             services.AddCloudyIdentity();
@@ -46,16 +45,13 @@ namespace Website.AspNetCore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCloudyAdmin(cloudy => 
-                cloudy
-                    .WithStaticFilesFrom(new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "../Cloudy.CMS.UI/wwwroot")))
-                    //.WithHelpSectionsFrom("https://localhost:44369/help-sections")
-                    .Unprotect()
-            );
+            app.UseCloudyAdminStaticFilesFromPath("../Cloudy.CMS.UI/wwwroot");
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints => {
-                endpoints.MapGet("/", app.ApplicationServices.GetService<IDemoPageRenderer>().RenderAsync);
+                endpoints.MapCloudyAdminRoutes();
                 endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
             });
