@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,8 +17,17 @@ namespace Cloudy.CMS.UI.IdentitySupport
             services.AddAuthentication(IdentityConstants.ApplicationScheme)
             .AddCookie(IdentityConstants.ApplicationScheme, o =>
             {
-                o.LoginPath = new PathString("/Login/");
                 o.Cookie.Path = "/";
+                o.Events.OnRedirectToLogin = async context =>
+                {
+                    if(context.Request.Headers[HeaderNames.Accept] == "*/*")
+                    {
+                        context.Response.StatusCode = 401;
+                        return;
+                    }
+
+                    context.Response.Redirect("/Admin/Login/");
+                };
             });
 
             return services.AddIdentityCore<TUser>(o =>

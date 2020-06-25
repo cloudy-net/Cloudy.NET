@@ -7,9 +7,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.IdentitySupport
 {
+    [Authorize]
     [Area("Cloudy.CMS")]
     public class IdentityController : Controller
     {
