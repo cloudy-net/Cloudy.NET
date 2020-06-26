@@ -1,8 +1,5 @@
 import Form from './form.js';
 import Field from './field.js';
-import FieldModel from './field-model.js';
-import fieldDescriptorProvider from './field-descriptor-provider.js';
-import fieldControlProvider from './field-control-provider.js';
 import Sortable from './sortable.js';
 import SortableItem from './sortable-item.js';
 
@@ -11,21 +8,14 @@ import SortableItem from './sortable-item.js';
 /* FORM BUILDER */
 
 class FormBuilder {
-    constructor(formId, app, blade) {
-        this.formId = formId;
+    constructor(app, blade) {
         this.app = app;
         this.blade = blade;
     }
 
-    async build(target, options) {
+    async build(target, fieldModels) {
         if (!target) {
             target = {};
-        }
-
-        var fieldModels = await this.getFieldModels(this.formId);
-
-        if (options && 'group' in options) {
-            fieldModels = fieldModels.filter(fieldModel => fieldModel.descriptor.group == options.group);
         }
 
         var form = this.buildForm(fieldModels, target);
@@ -33,31 +23,6 @@ class FormBuilder {
         form.element.classList.add('cloudy-ui-form');
 
         return form;
-    }
-
-    async getFieldModels(formId) {
-        var fieldDescriptors = await fieldDescriptorProvider.getFor(formId);
-
-        var fieldModelPromises = fieldDescriptors.map(fieldDescriptor => this.getFieldModel(fieldDescriptor));
-
-        return await Promise.all(fieldModelPromises);
-    }
-
-    async getFieldModel(fieldDescriptor) {
-        if (fieldDescriptor.embeddedFormId) {
-            var fieldModels = await this.getFieldModels(fieldDescriptor.embeddedFormId);
-
-            if (fieldDescriptor.control) {
-                var fieldControl = await fieldControlProvider.getFor(fieldDescriptor);
-                return new FieldModel(fieldDescriptor, fieldControl, fieldModels);
-            }
-
-            return new FieldModel(fieldDescriptor, null, fieldModels);
-        }
-
-        var fieldControl = await fieldControlProvider.getFor(fieldDescriptor);
-
-        return new FieldModel(fieldDescriptor, fieldControl, null);
     }
 
     buildForm(fieldModels, target) {

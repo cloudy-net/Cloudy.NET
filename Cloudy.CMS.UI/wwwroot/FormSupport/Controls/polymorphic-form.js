@@ -3,6 +3,7 @@ import Blade from '../../blade.js';
 import List from '../../ListSupport/list.js';
 import ListItem from '../../ListSupport/list-item.js';
 import FormBuilder from '../form-builder.js';
+import fieldModelBuilder from '../field-model-builder.js';
 
 
 
@@ -32,7 +33,7 @@ class PolymorphicForm extends FieldControl {
             this.element.append(element);
             heading.innerText = value.name;
 
-            this.form = await new FormBuilder(value.type, app, blade).build(value.value, {});
+            this.form = await new FormBuilder(await fieldModelBuilder.getFieldModels(value.type), app, blade).build(value.value, {});
             this.form.element.classList.remove('cloudy-ui-form');
             this.form.element.classList.add('cloudy-ui-embedded-form');
             this.form.appendTo(element);

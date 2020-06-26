@@ -23,38 +23,7 @@ class Login {
         this.form.classList.add('cloudy-ui-login');
         this.form.target = "cloudy-login-target";
         this.form.action = "about:blank";
-        this.form.addEventListener('submit', event => {
-            this.form.style.opacity = 0.5;
-            fetch('Login', {
-                credentials: 'include',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(target)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`${response.status} (${response.statusText})`);
-                    }
-
-                    return response.json();
-                })
-                .then(result => {
-                    this.form.style.opacity = '';
-
-                    if (!result.success) {
-                        notificationManager.addNotification(n => n.setText(result.message));
-                        return;
-                    }
-
-                    location.href = new URLSearchParams(window.location.search).get('ReturnUrl');
-                })
-                .catch(e => {
-                    this.form.style.opacity = '';
-                    notificationManager.addNotification(n => n.setText(e.toString()));
-                });
-        });
+        this.form.addEventListener('submit', event => this.authorize());
         this.container.append(this.form);
 
         this.header = document.createElement('cloudy-ui-login-header');
@@ -63,9 +32,9 @@ class Login {
         this.content = document.createElement('cloudy-ui-login-content');
         this.form.append(this.content);
 
-        var target = {};
+        this.target = {};
 
-        new FormBuilder([
+        var fieldModels = [
             new FieldModel({
                 id: 'Email',
                 label: 'Email',
@@ -77,8 +46,9 @@ class Login {
                 label: 'Password',
                 camelCaseId: 'password',
                 control: { id: 'password', parameters: {} },
-            }, TextControl, null, null),
-        ]).build(target).then(form => {
+            }, TextControl, null),
+        ];
+        new FormBuilder(null, null).build(this.target, fieldModels).then(form => {
             this.content.append(form.element);
             form.element.querySelector('input[name="email"]').focus();
         });
@@ -92,11 +62,47 @@ class Login {
         button.innerText = 'Login';
         button.type = 'submit';
         this.footer.append(button);
+    }
 
-        if (document.readyState != 'loading') {
-            document.body.appendChild(this.container);
-        } else {
-            document.addEventListener('DOMContentLoaded', document.body.appendChild(this.container));
+    async authorize() {
+        this.form.style.opacity = 0.5;
+
+        try {
+            var response = await fetch('Login/Authorize', {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.target)
+            });
+
+            if (!response.ok) {
+                var text = await response.text();
+
+                if (text) {
+                    throw new Error(text.split('\n')[0]);
+                } else {
+                    text = response.statusText;
+                }
+
+                throw new Error(`${response.status} (${text})`);
+            }
+
+            var result = await response.json();
+
+            if (!result.success) {
+                setTimeout(() => this.form.style.opacity = '', 500);
+                notificationManager.addNotification(n => n.setText(result.message));
+                return;
+            }
+
+            setTimeout(() => this.form.style.opacity = '', 2500);
+            location.href = new URLSearchParams(window.location.search).get('ReturnUrl');
+        } catch (error) {
+            notificationManager.addNotification(item => item.setText(`Could not save content (${error.message})`));
+            setTimeout(() => this.form.style.opacity = '', 500);
+            throw error;
         }
     }
 
@@ -104,24 +110,8 @@ class Login {
         this.header.innerText = value;
     }
 
-    openApp(appDescriptor) {
-        [...this.element.querySelectorAll('cloudy-ui-app')].forEach(a => this.element.removeChild(a));
-
-        this.nav.selectItem(appDescriptor.id);
-
-        history.pushState(null, null, `#${appDescriptor.id}`);
-
-        var open = app => {
-            this.element.appendChild(app.element);
-            app.openStartBlade();
-        }
-
-        if (this.apps[appDescriptor.id]) {
-            open(this.apps[appDescriptor.id]);
-            return;
-        }
-
-        import(`./${appDescriptor.modulePath}`).then(module => open(new module.default()));
+    appendTo(element) {
+        element.append(this.container);
     }
 }
 

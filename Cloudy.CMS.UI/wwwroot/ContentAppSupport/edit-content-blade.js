@@ -6,6 +6,7 @@ import TabSystem from '../TabSupport/tab-system.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import FormBuilder from '../FormSupport/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
+import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 
 
 
@@ -37,7 +38,8 @@ class EditContentBlade extends Blade {
     }
 
     async open() {
-        this.formBuilder = new FormBuilder(this.formId, this.app, this);
+        this.fieldModels = await fieldModelBuilder.getFieldModels(this.formId);
+        this.formBuilder = new FormBuilder(this.app, this);
 
         if (this.content.id) {
             var name = '';
@@ -81,6 +83,7 @@ class EditContentBlade extends Blade {
                 var urls = await response.json();
             } catch (error) {
                 notificationManager.addNotification(item => item.setText(`Could not get URL --- ${error.message}`));
+                throw error;
             }
 
             if (!urls.length) {
@@ -122,6 +125,7 @@ class EditContentBlade extends Blade {
                     var result = await response.json();
                 } catch (error) {
                     notificationManager.addNotification(item => item.setText(`Could not save content (${error.message})`));
+                    throw error;
                 }
 
                 if (!result.success) {
@@ -207,8 +211,8 @@ class EditContentBlade extends Blade {
             var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
             if (groups.length == 1) {
-                var form = await this.formBuilder.build(this.content, { group: groups[0] });
-
+                var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]));
+                
                 this.setContent(form);
             } else {
                 var tabSystem = new TabSystem();
@@ -216,7 +220,7 @@ class EditContentBlade extends Blade {
                 if (groups.indexOf(null) != -1) {
                     tabSystem.addTab('General', async () => {
                         var element = document.createElement('div');
-                        var form = await this.formBuilder.build(this.content, { group: null });
+                        var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null));
                         form.appendTo(element);
                         return element;
                     });
@@ -224,7 +228,7 @@ class EditContentBlade extends Blade {
 
                 groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                     var element = document.createElement('div');
-                    var form = await this.formBuilder.build(this.content, { group: group });
+                    var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group));
                     form.appendTo(element);
                     return element;
                 }));
@@ -233,6 +237,7 @@ class EditContentBlade extends Blade {
             }
         } catch (error) {
             notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
+            throw error;
         }
     }
 
