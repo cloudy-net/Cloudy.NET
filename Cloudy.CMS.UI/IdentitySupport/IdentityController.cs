@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.IdentitySupport
 {
-    [Authorize]
+    [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
     public class IdentityController : Controller
     {

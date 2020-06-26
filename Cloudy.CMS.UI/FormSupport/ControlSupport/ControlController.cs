@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.ControlSupport
 {
-    [Authorize]
+    [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
     public class ControlController : Controller
     {

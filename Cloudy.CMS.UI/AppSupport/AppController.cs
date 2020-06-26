@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.Apis
 {
-    [Authorize]
+    [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
     public class AppController
     {

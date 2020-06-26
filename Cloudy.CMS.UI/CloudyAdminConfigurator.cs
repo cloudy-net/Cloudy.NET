@@ -26,5 +26,12 @@ namespace Cloudy.CMS.UI
 
             return this;
         }
+
+        public CloudyAdminConfigurator Unprotect()
+        {
+            Options.Unprotect = true;
+
+            return this;
+        }
     }
 }

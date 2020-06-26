@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
-    [Authorize]
+    [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
     public class ContentListController : Controller
     {

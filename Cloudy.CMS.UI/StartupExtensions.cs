@@ -1,38 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Cloudy.CMS;
-using Cloudy.CMS;
-using Cloudy.CMS.DocumentSupport;
-using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
-using Cloudy.CMS.ContentSupport.Serialization;
-using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
-using Cloudy.CMS.Core;
-using Cloudy.CMS.Core.ContentSupport.RepositorySupport;
-using Cloudy.CMS.Mvc.Routing;
-using Cloudy.CMS.Reflection;
-using Cloudy.CMS.Routing;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
-using Cloudy.CMS.AspNetCore;
-using Cloudy.CMS.UI.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Cloudy.CMS.InitializerSupport;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Cloudy.CMS.UI.PortalSupport;
 using Cloudy.CMS.UI;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Net.Http.Headers;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -40,8 +17,25 @@ namespace Microsoft.AspNetCore.Builder
     {
         public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator)
         {
+            return configurator.AddAdmin(admin => { });
+        }
+
+        public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator, Action<CloudyAdminConfigurator> admin)
+        {
             configurator.AddComponent<CloudyUIAssemblyHandle>();
-            configurator.Services.AddSingleton(new CloudyAdminOptions());
+
+            var options = new CloudyAdminOptions();
+            admin(new CloudyAdminConfigurator(options));
+            configurator.Services.AddSingleton(options);
+
+            if (options.Unprotect)
+            {
+                configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("Cloudy.CMS.UI", builder => builder.RequireAssertion(a => true)));
+            }
+            else
+            {
+                configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("Cloudy.CMS.UI", builder => builder.RequireAuthenticatedUser()));
+            }
 
             return configurator;
         }

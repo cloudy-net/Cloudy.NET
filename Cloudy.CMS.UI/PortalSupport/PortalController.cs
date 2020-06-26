@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.PortalSupport
 {
-    [Authorize]
+    [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
     public class PortalController : Controller
     {

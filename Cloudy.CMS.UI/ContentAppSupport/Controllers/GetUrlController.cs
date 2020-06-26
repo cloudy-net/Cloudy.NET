@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
-    [Authorize]
+    [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
     public class GetUrlController
     {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.DataTableSupport.BackendSupport
 {
-    [Authorize]
+    [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
     public class BackendApiController
     {
