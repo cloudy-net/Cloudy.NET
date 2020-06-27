@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport;
 
 namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 {
@@ -12,13 +13,15 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
         IDocumentCreator DocumentCreator { get; }
         IIdGenerator IdGenerator { get; }
         IContentTypeProvider ContentTypeRepository { get; }
+        ISaveListenerProvider SaveListenerProvider { get; }
         IContentSerializer ContentSerializer { get; }
 
-        public ContainerSpecificContentCreator(IDocumentCreator documentCreator, IIdGenerator idGenerator, IContentTypeProvider contentTypeRepository, IContentSerializer contentSerializer)
+        public ContainerSpecificContentCreator(IDocumentCreator documentCreator, IIdGenerator idGenerator, IContentTypeProvider contentTypeRepository, ISaveListenerProvider saveListenerProvider, IContentSerializer contentSerializer)
         {
             DocumentCreator = documentCreator;
             IdGenerator = idGenerator;
             ContentTypeRepository = contentTypeRepository;
+            SaveListenerProvider = saveListenerProvider;
             ContentSerializer = contentSerializer;
         }
 
@@ -43,6 +46,11 @@ namespace Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport
 
             content.Id = IdGenerator.Generate();
             content.ContentTypeId = contentType.Id;
+
+            foreach (var saveListener in SaveListenerProvider.GetFor(content))
+            {
+                saveListener.BeforeSave(content);
+            }
 
             await DocumentCreator.Create(container, ContentSerializer.Serialize(content, contentType));
         }
