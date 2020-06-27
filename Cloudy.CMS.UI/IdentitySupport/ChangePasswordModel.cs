@@ -7,9 +7,9 @@ using System.Text;
 namespace Cloudy.CMS.UI.IdentitySupport
 {
     [Form("Cloudy.CMS.Identity.ChangePassword")]
-    public class ChangePassword
+    public class ChangePasswordModel
     {
-        [UIHint("hidden")]
+        [Display(AutoGenerateField = false)]
         [Required]
         public string UserId { get; set; }
         [UIHint("password")]

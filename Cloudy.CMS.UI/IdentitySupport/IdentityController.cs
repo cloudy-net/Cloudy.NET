@@ -23,7 +23,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
         }
 
         [HttpPost]
-        public async Task<object> ChangePassword([FromBody] ChangePassword input)
+        public async Task<object> ChangePassword([FromBody] ChangePasswordModel input)
         {
             if (!ModelState.IsValid)
             {

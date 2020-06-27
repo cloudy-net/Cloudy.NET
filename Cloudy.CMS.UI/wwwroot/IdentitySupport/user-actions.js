@@ -11,50 +11,63 @@ class ChangePasswordBlade extends Blade {
         super();
 
         this.user = user;
+        this.app = app;
     }
 
     async open() {
-        this.setTitle(`Change password for ${this.user.username}`);
+        var name = this.user.username || `User ${this.user.id}`;
+
+        this.setTitle(`Change password for ${name}`);
 
         var target = {
             userId: this.user.id,
         };
 
-        this.setContent(await new FormBuilder(await fieldModelBuilder.getFieldModels('Cloudy.CMS.Identity.ChangePassword'), app, this).build(target, {}));
+        this.setContent(await new FormBuilder(this.app, this).build(target, await fieldModelBuilder.getFieldModels('Cloudy.CMS.Identity.ChangePassword')));
 
-        var save = () => {
-            fetch('Identity/ChangePassword', {
-                credentials: 'include',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(target)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`${response.status} (${response.statusText})`);
-                    }
+        var save = async () => {
+            try {
+                var response = await fetch('Identity/ChangePassword', {
+                        credentials: 'include',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(target)
+                    });
 
-                    return response.json();
-                })
-                .catch(error => notificationManager.addNotification(item => item.setText(`Could not change password (${error.name}: ${error.message})`)))
-                .then(result => {
-                    if (result.success) {
-                        notificationManager.addNotification(item => item.setText('Password changed.'));
-                        app.removeBlade(this);
+                if (!response.ok) {
+                    var text = await response.text();
+
+                    if (text) {
+                        throw new Error(text.split('\n')[0]);
                     } else {
-                        var errors = document.createElement('ul');
-                        result.errors.forEach(error => {
-                            var item = document.createElement('li');
-                            item.innerText = error.description;
-                            errors.append(item);
-                        });
-                        notificationManager.addNotification(item => item.setText('Error changing password:', errors));
+                        text = response.statusText;
                     }
-                });
+
+                    throw new Error(`${response.status} (${text})`);
+                }
+
+                var result = await response.json();
+
+                if (result.success) {
+                    notificationManager.addNotification(item => item.setText('Password changed.'));
+                    this.app.removeBlade(this);
+                } else {
+                    var errors = document.createElement('ul');
+                    result.errors.forEach(error => {
+                        var item = document.createElement('li');
+                        item.innerText = error.description;
+                        errors.append(item);
+                    });
+                    notificationManager.addNotification(item => item.setText('Error changing password:', errors));
+                }
+            } catch (error) {
+                notificationManager.addNotification(item => item.setText(`Could not change password --- ${error.message}`));
+                throw error;
+            }
         };
 
-        this.setFooter(new Button('Save').setPrimary().onClick(() => save()), new Button('Cancel').onClick(() => app.removeBlade(this)));
+        this.setFooter(new Button('Save').setPrimary().onClick(() => save()), new Button('Cancel').onClick(() => this.app.removeBlade(this)));
     }
 }
