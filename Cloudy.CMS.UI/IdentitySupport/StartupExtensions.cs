@@ -14,9 +14,6 @@ namespace Cloudy.CMS.UI.IdentitySupport
         public static IdentityBuilder AddCloudyIdentity(this IServiceCollection services) => services.AddCloudyIdentity<User>(_ => { });
         public static IdentityBuilder AddCloudyIdentity<TUser>(this IServiceCollection services, Action<IdentityOptions> configureOptions) where TUser : class
         {
-            services.AddSingleton<INormalizer, Normalizer>();
-            services.AddSingleton<ILoginPageBrandingPathProvider>(new LoginPageBrandingPathProvider(null));
-
             services.AddAuthentication(IdentityConstants.ApplicationScheme)
             .AddCookie(IdentityConstants.ApplicationScheme, o =>
             {
