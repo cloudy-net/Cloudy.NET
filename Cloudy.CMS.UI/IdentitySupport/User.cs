@@ -20,7 +20,8 @@ namespace Cloudy.CMS.UI.IdentitySupport
         public string Id { get; set; }
         public string ContentTypeId { get; set; }
 
-        string INameable.Name => Username;
+        string INameable.Name => Email;
+        [Display(AutoGenerateField = false)]
         public string Username { get; set; }
         [Display(AutoGenerateField = false)]
         public string NormalizedUsername { get; set; }
