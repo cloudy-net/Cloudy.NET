@@ -10,7 +10,7 @@ import notificationManager from './NotificationSupport/notification-manager.js';
 /* LOGIN */
 
 class Login {
-    constructor() {
+    constructor(title, branding) {
         this.container = document.createElement('cloudy-ui-login-container');
 
         this.formTarget = document.createElement('iframe');
@@ -26,8 +26,16 @@ class Login {
         this.form.addEventListener('submit', event => this.authorize());
         this.container.append(this.form);
 
-        this.header = document.createElement('cloudy-ui-login-header');
-        this.form.append(this.header);
+
+        if (branding) {
+            this.branding = document.createElement('img');
+            this.branding.src = branding;
+            this.form.append(this.branding);
+        } else {
+            this.header = document.createElement('cloudy-ui-login-header');
+            this.header.innerText = title;
+            this.form.append(this.header);
+        }
 
         this.content = document.createElement('cloudy-ui-login-content');
         this.form.append(this.content);
@@ -104,10 +112,6 @@ class Login {
             setTimeout(() => this.form.style.opacity = '', 500);
             throw error;
         }
-    }
-
-    setTitle(value) {
-        this.header.innerText = value;
     }
 
     appendTo(element) {

@@ -23,13 +23,15 @@ namespace Cloudy.CMS.UI.IdentitySupport
         IFaviconProvider FaviconProvider { get; }
         IStyleProvider StyleProvider { get; }
         IScriptProvider ScriptProvider { get; }
+        ILoginPageBrandingPathProvider LoginPageBrandingPathProvider { get; }
 
-        public LoginController(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStyleProvider styleProvider, IScriptProvider scriptProvider)
+        public LoginController(ITitleProvider titleProvider, IFaviconProvider faviconProvider, IStyleProvider styleProvider, IScriptProvider scriptProvider, ILoginPageBrandingPathProvider loginPageBrandingPathProvider)
         {
             TitleProvider = titleProvider;
             FaviconProvider = faviconProvider;
             StyleProvider = styleProvider;
             ScriptProvider = scriptProvider;
+            LoginPageBrandingPathProvider = loginPageBrandingPathProvider;
         }
 
         public async Task Index()
@@ -68,7 +70,8 @@ namespace Cloudy.CMS.UI.IdentitySupport
             await Response.WriteAsync($"<body>\n");
             await Response.WriteAsync($"    <script type=\"module\">\n");
             await Response.WriteAsync($"        import Login from '{Path.Combine(basePath, "login.js").Replace('\\', '/')}';\n");
-            await Response.WriteAsync($"        new Login('Login to {TitleProvider.Title}').appendTo(document.body);\n");
+            await Response.WriteAsync($"        var branding = {(LoginPageBrandingPathProvider.BrandingPath != null ? $"'{LoginPageBrandingPathProvider.BrandingPath}'" : "null")};\n");
+            await Response.WriteAsync($"        new Login('Login to {TitleProvider.Title}', branding).appendTo(document.body);\n");
             await Response.WriteAsync($"    </script>\n");
             await Response.WriteAsync($"</body>\n");
             await Response.WriteAsync($"</html>\n");
