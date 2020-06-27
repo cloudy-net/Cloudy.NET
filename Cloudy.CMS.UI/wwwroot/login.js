@@ -98,7 +98,7 @@ class Login {
             }
 
             setTimeout(() => this.form.style.opacity = '', 2500);
-            location.href = new URLSearchParams(window.location.search).get('ReturnUrl');
+            location.href = './' + location.hash;
         } catch (error) {
             notificationManager.addNotification(item => item.setText(`Could not save content (${error.message})`));
             setTimeout(() => this.form.style.opacity = '', 500);
