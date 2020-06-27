@@ -31,15 +31,25 @@ class ListContentBlade extends Blade {
 
     async open() {
         var creatableContentTypes = this.contentTypes.filter(t => !t.isSingleton);
-        this.createNew = () => this.app.addBladeAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0]) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => update()), this);
+        this.createNew = () => this.app.addBladeAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0]) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => this.update()), this);
         this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
-        var contentTypeActions = {};
+        this.contentTypeActions = {};
 
         for (var contentType of this.contentTypes) {
-            contentTypeActions[contentType.id] = await Promise.all(contentType.listActionModules.map(path => import(path.indexOf('.') == 0 ? path : `../${path}`)));
+            this.contentTypeActions[contentType.id] = await Promise.all(contentType.listActionModules.map(path => import(path.indexOf('.') == 0 ? path : `../${path}`)));
         }
 
+        this.actions = {};
+
+        await this.update();
+
+        if (this.actions[this.action]) {
+            this.actions[this.action]();
+        }
+    }
+
+    async update() {
         var contentList;
         try {
             var response = await fetch(`ContentList/Get?${this.contentTypes.map((t, i) => `contentTypeIds[${i}]=${t.id}`).join('&')}`, { credentials: 'include' });
@@ -61,8 +71,6 @@ class ListContentBlade extends Blade {
             notificationManager.addNotification(item => item.setText(`Could not get content list --- ${error.message}`));
             throw error;
         }
-
-        this.actions = {};
 
         var list = new List();
         this.setContent(list);
@@ -119,22 +127,18 @@ class ListContentBlade extends Blade {
             };
 
             var menu = new ContextMenu();
-            contentTypeActions[contentType.id].forEach(module => module.default(menu, content, this, this.app));
+            this.contentTypeActions[contentType.id].forEach(module => module.default(menu, content, this, this.app));
             menu.addItem(item => {
                 item.setText('Remove');
 
                 if (contentType.isSingleton) {
                     item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
                 } else {
-                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => update()), this))
+                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => this.update()), this))
                 }
             });
             listItem.setMenu(menu);
         });
-
-        if (this.actions[this.action]) {
-            this.actions[this.action]();
-        }
     }
 
     async stateUpdate() {
