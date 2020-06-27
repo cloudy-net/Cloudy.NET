@@ -100,7 +100,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             var signinManager = HttpContext.RequestServices.GetService<SignInManager<User>>();
             var result = await signinManager.PasswordSignInAsync(user.Username, input.Password, false, false);
 
-            return new LoginResult { Success = result.Succeeded };
+            return new LoginResult { Success = result.Succeeded, Message = result.IsLockedOut ? "Locked out" : result.IsNotAllowed ? "Not allowed" : result.RequiresTwoFactor ? "Requires two factor" : null };
         }
 
         public class LoginInput
