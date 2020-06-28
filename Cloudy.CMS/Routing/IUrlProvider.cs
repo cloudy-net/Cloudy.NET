@@ -8,6 +8,6 @@ namespace Cloudy.CMS.Mvc.Routing
 {
     public interface IUrlProvider
     {
-        string Get(IContent content);
+        Task<string> GetAsync(IContent content);
     }
 }

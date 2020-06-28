@@ -6,27 +6,47 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DocumentSupport;
-using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentUpdater : IContentUpdater
     {
-        IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
+        IDocumentUpdater DocumentUpdater { get; }
+        IContentTypeProvider ContentTypeRepository { get; }
+        ISaveListenerProvider SaveListenerProvider { get; }
+        IContentSerializer ContentSerializer { get; }
 
-        public ContentUpdater(IContainerSpecificContentUpdater containerSpecificContentUpdater)
+        public ContentUpdater(IDocumentUpdater documentUpdater, IContentTypeProvider contentTypeRepository, ISaveListenerProvider saveListenerProvider, IContentSerializer contentSerializer)
         {
-            ContainerSpecificContentUpdater = containerSpecificContentUpdater;
-        }
-
-        public void Update(IContent content)
-        {
-            ContainerSpecificContentUpdater.Update(content, ContainerConstants.Content);
+            DocumentUpdater = documentUpdater;
+            ContentTypeRepository = contentTypeRepository;
+            SaveListenerProvider = saveListenerProvider;
+            ContentSerializer = contentSerializer;
         }
 
         public async Task UpdateAsync(IContent content)
         {
-            await ContainerSpecificContentUpdater.UpdateAsync(content, ContainerConstants.Content);
+            if (content.Id == null)
+            {
+                throw new InvalidOperationException($"This content cannot be updated as it doesn't seem to exist (Id is null). Did you mean to use IContentCreator?");
+            }
+
+            var contentType = ContentTypeRepository.Get(content.ContentTypeId);
+
+            if (contentType == null)
+            {
+                throw new TypeNotRegisteredContentTypeException(content.GetType());
+            }
+
+            foreach (var saveListener in SaveListenerProvider.GetFor(content))
+            {
+                saveListener.BeforeSave(content);
+            }
+
+            var document = ContentSerializer.Serialize(content, contentType);
+
+            await DocumentUpdater.UpdateAsync(contentType.Container, content.Id, document);
         }
     }
 }

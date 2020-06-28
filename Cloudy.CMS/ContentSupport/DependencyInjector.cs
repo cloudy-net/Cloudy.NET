@@ -1,8 +1,6 @@
-﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.RuntimeSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
-using Cloudy.CMS.Core.ContentSupport.RepositorySupport;
 using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,7 +21,7 @@ namespace Cloudy.CMS.ContentSupport
             services.AddSingleton<IContentUpdater, ContentUpdater>();
             services.AddSingleton<IChildLinkProvider, ChildLinkProvider>();
             services.AddSingleton<IChildrenGetter, ChildrenGetter>();
-            services.AddSingleton<IAncestorLinkProvider, AncestorLinkProvider>();
+            services.AddSingleton<IAncestorProvider, AncestorProvider>();
 
             services.AddSingleton<IContentSerializer, ContentSerializer>();
             services.AddSingleton<IContentDeserializer, ContentDeserializer>();
@@ -32,11 +30,6 @@ namespace Cloudy.CMS.ContentSupport
             services.AddSingleton<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
 
             services.AddSingleton<IContentInstanceCreator, ContentInstanceCreator>();
-
-            services.AddSingleton<IContainerSpecificContentGetter, ContainerSpecificContentGetter>();
-            services.AddSingleton<IContainerSpecificContentDeleter, ContainerSpecificContentDeleter>();
-            services.AddSingleton<IContainerSpecificContentCreator, ContainerSpecificContentCreator>();
-            services.AddSingleton<IContainerSpecificContentUpdater, ContainerSpecificContentUpdater>();
         }
     }
 }

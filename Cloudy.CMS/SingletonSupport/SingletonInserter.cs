@@ -32,7 +32,7 @@ namespace Cloudy.CMS.SingletonSupport
         {
             foreach(var singleton in SingletonProvider.GetAll())
             {
-                var content = ContentGetter.Get<IContent>(singleton.Id, null);
+                var content = await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id, null);
                 var contentType = ContentTypeProvider.Get(singleton.ContentTypeId);
 
                 if (content != null)
@@ -49,7 +49,7 @@ namespace Cloudy.CMS.SingletonSupport
 
                 content.Id = singleton.Id;
 
-                ContentInserter.Insert(content);
+                await ContentInserter.InsertAsync(content).ConfigureAwait(false);
             }
         }
     }

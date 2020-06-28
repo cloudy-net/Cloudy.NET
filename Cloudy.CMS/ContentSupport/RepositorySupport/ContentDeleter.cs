@@ -6,27 +6,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
 
-namespace Cloudy.CMS.Core.ContentSupport.RepositorySupport
+namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentDeleter : IContentDeleter
     {
-        IContainerSpecificContentDeleter ContainerSpecificContentDeleter { get; }
+        IContentTypeProvider ContentTypeProvider { get; }
+        IDocumentDeleter DocumentDeleter { get; }
 
-        public ContentDeleter(IContainerSpecificContentDeleter containerSpecificContentDeleter)
+        public ContentDeleter(IContentTypeProvider contentTypeProvider, IDocumentDeleter documentDeleter)
         {
-            ContainerSpecificContentDeleter = containerSpecificContentDeleter;
+            ContentTypeProvider = contentTypeProvider;
+            DocumentDeleter = documentDeleter;
         }
 
-        public void Delete(string id)
+        public async Task DeleteAsync<T>(string id) where T : class, IContent
         {
-            ContainerSpecificContentDeleter.Delete(id, ContainerConstants.Content);
+            var contentType = ContentTypeProvider.Get(typeof(T));
+
+            if (contentType == null)
+            {
+                throw new TypeNotRegisteredContentTypeException(typeof(T));
+            }
+
+            await DocumentDeleter.DeleteAsync(contentType.Container, id);
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(string contentTypeId, string id)
         {
-            await ContainerSpecificContentDeleter.DeleteAsync(id, ContainerConstants.Content);
+            var contentType = ContentTypeProvider.Get(contentTypeId);
+
+            if (contentType == null)
+            {
+                throw new ArgumentException(nameof(contentTypeId));
+            }
+
+            await DocumentDeleter.DeleteAsync(contentType.Container, id);
         }
     }
 }

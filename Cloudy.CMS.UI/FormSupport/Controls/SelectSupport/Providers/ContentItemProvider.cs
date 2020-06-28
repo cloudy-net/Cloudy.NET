@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.Serialization;
@@ -17,21 +17,20 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
     {
         public IContentTypeProvider ContentTypeProvider { get; }
         public IDocumentFinder DocumentFinder { get; }
-        public IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
+        public IContentGetter ContentGetter { get; }
         public IContentDeserializer ContentDeserializer { get; }
 
-        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContainerSpecificContentGetter containerSpecificContentGetter, IContentDeserializer contentDeserializer)
+        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContentGetter contentGetter, IContentDeserializer contentDeserializer)
         {
             ContentTypeProvider = contentTypeProvider;
             DocumentFinder = documentFinder;
-            ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContentGetter = contentGetter;
             ContentDeserializer = contentDeserializer;
         }
 
         public async Task<Item> Get(string type, string value)
         {
-            var contentType = ContentTypeProvider.Get(type);
-            var content = await ContainerSpecificContentGetter.GetAsync<IContent>(value, null, contentType.Container).ConfigureAwait(false);
+            var content = await ContentGetter.GetAsync(type, value, null).ConfigureAwait(false);
 
             if(content == null)
             {

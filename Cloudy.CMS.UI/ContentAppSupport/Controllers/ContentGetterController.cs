@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
-using Cloudy.CMS.ContentSupport;
+﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Authorization;
@@ -15,21 +15,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     [Area("Cloudy.CMS")]
     public class ContentGetterController
     {
-        IContentTypeProvider ContentTypeProvider { get; }
+        IContentGetter ContentGetter { get; }
 
-        IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
-
-        public ContentGetterController(IContentTypeProvider contentTypeRepository, IContainerSpecificContentGetter containerSpecificContentGetter)
+        public ContentGetterController(IContentGetter contentGetter)
         {
-            ContentTypeProvider = contentTypeRepository;
-            ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContentGetter = contentGetter;
         }
 
         public async Task<IContent> GetAsync(string id, string contentTypeId)
         {
-            var contentType = ContentTypeProvider.Get(contentTypeId);
-
-            return await ContainerSpecificContentGetter.GetAsync(id, null, contentType.Container);
+            return await ContentGetter.GetAsync(contentTypeId, id, null).ConfigureAwait(false);
         }
     }
 }

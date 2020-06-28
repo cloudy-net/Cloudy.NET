@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
-    public interface IAncestorLinkProvider
+    public interface IAncestorProvider
     {
-        IEnumerable<string> GetAncestorLinks(string id);
-        Task<IEnumerable<string>> GetAncestorLinksAsync(string id);
+        Task<IEnumerable<IContent>> GetAncestorsAsync(IContent content);
     }
 }

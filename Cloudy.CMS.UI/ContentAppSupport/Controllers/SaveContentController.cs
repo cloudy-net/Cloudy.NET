@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -19,26 +20,26 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class SaveContentController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
-        IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
+        IContentGetter ContentGetter { get; }
         IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
-        IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
+        IContentUpdater ContentUpdater { get; }
+        IContentCreator ContentCreator { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContainerSpecificContentUpdater containerSpecificContentUpdater, IContainerSpecificContentCreator containerSpecificContentCreator, PolymorphicFormConverter polymorphicFormConverter)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeProvider;
-            ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContentGetter = contentGetter;
             ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            ContainerSpecificContentUpdater = containerSpecificContentUpdater;
-            ContainerSpecificContentCreator = containerSpecificContentCreator;
+            ContentUpdater = contentUpdater;
+            ContentCreator = contentCreator;
             PolymorphicFormConverter = polymorphicFormConverter;
         }
 
         [HttpPost]
-        public ContentResponseMessage SaveContent([FromBody] SaveContentRequestBody data)
+        public async Task<ContentResponseMessage> SaveContent([FromBody] SaveContentRequestBody data)
         {
             if (!ModelState.IsValid)
             {
@@ -51,7 +52,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             if (b.Id != null)
             {
-                var a = (IContent)typeof(IContainerSpecificContentGetter).GetMethod(nameof(ContainerSpecificContentGetter.Get)).MakeGenericMethod(contentType.Type).Invoke(ContainerSpecificContentGetter, new[] { data.Id, null, contentType.Container });
+                var a = await ContentGetter.GetAsync(contentType.Id, data.Id, null).ConfigureAwait(false);
 
                 foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
                 {
@@ -80,13 +81,13 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     propertyDefinition.Setter(a, propertyDefinition.Getter(b));
                 }
 
-                ContainerSpecificContentUpdater.Update(a, contentType.Container);
+                await ContentUpdater.UpdateAsync(a).ConfigureAwait(false);
 
                 return new ContentResponseMessage(true, "Updated");
             }
             else
             {
-                ContainerSpecificContentCreator.Create(b, contentType.Container);
+                await ContentCreator.CreateAsync(b).ConfigureAwait(false);
 
                 return new ContentResponseMessage(true, "Created");
             }

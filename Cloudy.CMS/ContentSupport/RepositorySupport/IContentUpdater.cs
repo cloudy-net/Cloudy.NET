@@ -8,7 +8,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public interface IContentUpdater
     {
-        void Update(IContent content);
         Task UpdateAsync(IContent content);
     }
 }

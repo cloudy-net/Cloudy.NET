@@ -11,15 +11,15 @@ namespace Cloudy.CMS.Mvc.Routing
     public class UrlProvider : IUrlProvider
     {
         IContentGetter ContentGetter { get; }
-        IAncestorLinkProvider AncestorsRepository { get; }
+        IAncestorProvider AncestorProvider { get; }
 
-        public UrlProvider(IAncestorLinkProvider ancestorsRepository, IContentGetter contentGetter)
+        public UrlProvider(IAncestorProvider ancestorProvider, IContentGetter contentGetter)
         {
-            AncestorsRepository = ancestorsRepository;
+            AncestorProvider = ancestorProvider;
             ContentGetter = contentGetter;
         }
 
-        public string Get(IContent content)
+        public async Task<string> GetAsync(IContent content)
         {
             var routable = content as IRoutable;
 
@@ -34,7 +34,7 @@ namespace Cloudy.CMS.Mvc.Routing
             {
                 if(routable.UrlSegment == null)
                 {
-                    return "/";
+                    return string.Empty;
                 }
 
                 return routable.UrlSegment;
@@ -42,7 +42,7 @@ namespace Cloudy.CMS.Mvc.Routing
 
             var languageSpecific = content as ILanguageSpecific;
 
-            var allContent = AncestorsRepository.GetAncestorLinks(content.Id).Reverse().Select(id => ContentGetter.Get<IContent>(id, languageSpecific?.Language));
+            var allContent = (await AncestorProvider.GetAncestorsAsync(content).ConfigureAwait(false)).Reverse();
 
             if (allContent.Any(c => !(c is IRoutable)))
             {

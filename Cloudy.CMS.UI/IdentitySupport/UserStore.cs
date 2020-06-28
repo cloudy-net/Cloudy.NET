@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DocumentSupport;
@@ -20,29 +20,29 @@ namespace Cloudy.CMS.UI.IdentitySupport
         IUserEmailStore<User>,
         IUserPhoneNumberStore<User>
     {
-        IContainerSpecificContentCreator ContainerSpecificContentCreator { get; }
-        IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
-        IContainerSpecificContentUpdater ContainerSpecificContentUpdater { get; }
-        IContainerSpecificContentDeleter ContainerSpecificContentDeleter { get; }
+        IContentCreator ContentCreator { get; }
+        IContentGetter ContentGetter { get; }
+        IContentUpdater ContentUpdater { get; }
+        IContentDeleter ContentDeleter { get; }
         IDocumentFinder DocumentFinder { get; set; }
         IContentDeserializer ContentDeserializer { get; set; }
         ContentTypeDescriptor ContentType { get; }
         string Container { get; }
 
         public UserStore(
-            IContainerSpecificContentCreator containerSpecificContentCreator,
-            IContainerSpecificContentGetter containerSpecificContentGetter,
-            IContainerSpecificContentUpdater containerSpecificContentUpdater,
-            IContainerSpecificContentDeleter containerSpecificContentDeleter,
+            IContentCreator contentCreator,
+            IContentGetter contentGetter,
+            IContentUpdater contentUpdater,
+            IContentDeleter contentDeleter,
             IDocumentFinder documentFinder,
             IContentDeserializer contentDeserializer,
             IContentTypeProvider contentTypeProvider
         )
         {
-            ContainerSpecificContentCreator = containerSpecificContentCreator;
-            ContainerSpecificContentGetter = containerSpecificContentGetter;
-            ContainerSpecificContentUpdater = containerSpecificContentUpdater;
-            ContainerSpecificContentDeleter = containerSpecificContentDeleter;
+            ContentCreator = contentCreator;
+            ContentGetter = contentGetter;
+            ContentUpdater = contentUpdater;
+            ContentDeleter = contentDeleter;
             DocumentFinder = documentFinder;
             ContentDeserializer = contentDeserializer;
             ContentType = contentTypeProvider.Get(typeof(User));
@@ -51,14 +51,14 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
-            await ContainerSpecificContentCreator.CreateAsync(user, Container);
+            await ContentCreator.CreateAsync(user).ConfigureAwait(false);
 
             return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
         {
-            await ContainerSpecificContentDeleter.DeleteAsync(user.Id, Container);
+            await ContentDeleter.DeleteAsync(user.ContentTypeId, user.Id).ConfigureAwait(false);
 
             return IdentityResult.Success;
         }
@@ -67,12 +67,12 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await ContainerSpecificContentGetter.GetAsync<User>(userId, null, Container);
+            return await ContentGetter.GetAsync<User>(userId, null).ConfigureAwait(false);
         }
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedUsername, normalizedUserName).GetResultAsync()).FirstOrDefault();
+            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedUsername, normalizedUserName).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
 
             if(document == null)
             {
@@ -105,7 +105,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -123,7 +123,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
         {
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
 
             return IdentityResult.Success;
@@ -135,7 +135,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -145,7 +145,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -175,7 +175,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -197,7 +197,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -214,7 +214,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -229,7 +229,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -249,7 +249,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -269,13 +269,13 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
         public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedEmail, normalizedEmail).GetResultAsync()).FirstOrDefault();
+            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedEmail, normalizedEmail).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
 
             if (document == null)
             {
@@ -298,7 +298,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if(user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -308,7 +308,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if (user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
 
@@ -328,7 +328,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
             if (user.Id != null)
             {
-                await ContainerSpecificContentUpdater.UpdateAsync(user, Container);
+                await ContentUpdater.UpdateAsync(user).ConfigureAwait(false);
             }
         }
     }

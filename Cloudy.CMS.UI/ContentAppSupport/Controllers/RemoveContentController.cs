@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -15,19 +16,19 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     [Area("Cloudy.CMS")]
     public class RemoveContentController : Controller
     {
-        IContainerSpecificContentDeleter ContainerSpecificContentDeleter { get; }
+        IContentDeleter ContentDeleter { get; }
         IContentTypeProvider ContentTypeProvider { get; }
-        IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
+        IContentGetter ContentGetter { get; }
 
-        public RemoveContentController(IContainerSpecificContentDeleter containerSpecificContentDeleter, IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter)
+        public RemoveContentController(IContentDeleter contentDeleter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter)
         {
-            ContainerSpecificContentDeleter = containerSpecificContentDeleter;
+            ContentDeleter = contentDeleter;
             ContentTypeProvider = contentTypeProvider;
-            ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContentGetter = contentGetter;
         }
 
         [HttpPost]
-        public object RemoveContent([FromBody] RemoveContentInput removeContentInput)
+        public async Task<object> RemoveContent([FromBody] RemoveContentInput removeContentInput)
         {
             if (!ModelState.IsValid)
             {
@@ -38,15 +39,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 };
             }
 
-            var contentType = ContentTypeProvider.Get(removeContentInput.ContentTypeId);
-            var content = ContainerSpecificContentGetter.Get<IContent>(removeContentInput.Id, null, contentType.Container);
-
-            if(content.ContentTypeId != contentType.Id)
-            {
-                throw new Exception($"Content is not of type {contentType.Id}");
-            }
-
-            ContainerSpecificContentDeleter.Delete(content.Id, contentType.Container);
+            await ContentDeleter.DeleteAsync(removeContentInput.ContentTypeId, removeContentInput.Id).ConfigureAwait(false);
 
             return new
             {

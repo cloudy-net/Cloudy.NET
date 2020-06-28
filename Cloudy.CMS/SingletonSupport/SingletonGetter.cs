@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,10 +28,10 @@ namespace Cloudy.CMS.SingletonSupport
                 return null;
             }
 
-            return await ContentGetter.GetAsync(contentTypeId, singleton.Id, language).ConfigureAwait(false);
+            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id, language).ConfigureAwait(false);
         }
 
-        public T Get<T>(string language) where T : class
+        public async Task<T> GetAsync<T>(string language) where T : class, IContent
         {
             var singleton = SingletonProvider.Get<T>();
 
@@ -39,7 +40,7 @@ namespace Cloudy.CMS.SingletonSupport
                 return null;
             }
 
-            return ContentGetter.Get<T>(singleton.Id, language);
+            return (T)await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id, language).ConfigureAwait(false);
         }
     }
 }

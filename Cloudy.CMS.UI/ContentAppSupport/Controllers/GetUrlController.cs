@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContainerSpecificContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.Mvc.Routing;
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -16,25 +17,25 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class GetUrlController
     {
         IContentTypeProvider ContentTypeProvider { get; }
-        IContainerSpecificContentGetter ContainerSpecificContentGetter { get; }
+        IContentGetter ContentGetter { get; }
         IUrlProvider UrlProvider { get; }
         IContentRouteMatcher ContentRouteMatcher { get; }
 
-        public GetUrlController(IContentTypeProvider contentTypeProvider, IContainerSpecificContentGetter containerSpecificContentGetter, IUrlProvider urlProvider, IContentRouteMatcher contentRouteMatcher)
+        public GetUrlController(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IUrlProvider urlProvider, IContentRouteMatcher contentRouteMatcher)
         {
             ContentTypeProvider = contentTypeProvider;
-            ContainerSpecificContentGetter = containerSpecificContentGetter;
+            ContentGetter = contentGetter;
             UrlProvider = urlProvider;
             ContentRouteMatcher = contentRouteMatcher;
         }
 
-        public IEnumerable<string> GetUrl(string id, string contentTypeId)
+        public async Task<IEnumerable<string>> GetUrl(string id, string contentTypeId)
         {
             var contentType = ContentTypeProvider.Get(contentTypeId);
 
-            var content = ContainerSpecificContentGetter.Get<IContent>(id, null, contentType.Container);
+            var content = await ContentGetter.GetAsync(contentTypeId, id, null).ConfigureAwait(false);
 
-            var contentRouteSegment = UrlProvider.Get(content);
+            var contentRouteSegment = await UrlProvider.GetAsync(content).ConfigureAwait(false);
 
             var contentRoutes = ContentRouteMatcher.GetFor(contentType);
 

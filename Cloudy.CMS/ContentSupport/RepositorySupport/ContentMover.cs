@@ -16,7 +16,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             ContentUpdater = contentUpdater;
         }
 
-        public void Move(IContent content, string id)
+        public async Task MoveAsync(IContent content, string id)
         {
             var hierarchical = content as IHierarchical;
 
@@ -27,7 +27,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             hierarchical.ParentId = id;
 
-            ContentUpdater.Update(content);
+            await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
         }
     }
 }
