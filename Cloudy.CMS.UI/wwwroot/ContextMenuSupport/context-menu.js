@@ -80,7 +80,7 @@ class ContextMenu {
 
         this.menu.style.left = `${left}px`;
 
-        event.stopPropagation();
+        //event.stopPropagation();
     }
 
     remove() {
