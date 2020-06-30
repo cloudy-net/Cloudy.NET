@@ -30,7 +30,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             while (true)
             {
-                var document = (await DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.Id, position.Id).WhereExists<IHierarchical, string>(x => x.ParentId).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
+                var document = (await DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.Id, ((IHierarchical)position).ParentId).WhereExists<IHierarchical, string>(x => x.ParentId).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
 
                 if (document == null)
                 {
