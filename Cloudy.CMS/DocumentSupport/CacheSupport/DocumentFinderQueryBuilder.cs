@@ -30,8 +30,8 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
             Criteria.Add(d =>
             {
                 var a = DocumentPropertyFinder.GetFor(d, path);
-                
-                if(a == null)
+
+                if (a == null)
                 {
                     if (value == null)
                     {
@@ -44,6 +44,25 @@ namespace Cloudy.CMS.DocumentSupport.CacheSupport
                 }
 
                 return a.Equals(value);
+            });
+
+            return this;
+        }
+
+        public IDocumentFinderQueryBuilder WhereNullOrMissing<T1>(Expression<Func<T1, object>> property) where T1 : class
+        {
+            var path = DocumentPropertyPathProvider.GetFor(property);
+
+            Criteria.Add(d =>
+            {
+                var a = DocumentPropertyFinder.GetFor(d, path);
+
+                if (a != null)
+                {
+                    return false;
+                }
+
+                return true;
             });
 
             return this;

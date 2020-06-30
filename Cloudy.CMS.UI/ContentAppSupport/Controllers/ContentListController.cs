@@ -37,8 +37,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public async Task Get(string[] contentTypeIds)
         {
-            var result = new List<object>();
-
             var contentTypes = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).ToList().AsReadOnly();
             var containers = contentTypes.Select(t => t.Container).Distinct().ToList();
 
@@ -47,12 +45,31 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 throw new ContentTypesSpanSeveralContainersException(contentTypes);
             }
 
-            var documents = DocumentFinder.Find(containers.Single()).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypeIds).GetResultAsync().Result.ToList();
+            var hierarchical = contentTypes.Any(t => typeof(IHierarchical).IsAssignableFrom(t.Type));
+
+            var items = new List<IContent>();
+            var itemChildrenCounts = new Dictionary<string, int>();
+
+            var documentsQuery = DocumentFinder.Find(containers.Single()).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypeIds);
+
+            if (hierarchical)
+            {
+                documentsQuery.WhereNullOrMissing<IHierarchical>(x => x.ParentId);
+            }
+
+            var documents = (await documentsQuery.GetResultAsync().ConfigureAwait(false)).ToList();
 
             foreach (var document in documents)
             {
                 var contentTypeId = (string)document.GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)];
-                result.Add(ContentDeserializer.Deserialize(document, ContentTypeProvider.Get(contentTypeId), DocumentLanguageConstants.Global));
+                var content = ContentDeserializer.Deserialize(document, ContentTypeProvider.Get(contentTypeId), DocumentLanguageConstants.Global);
+                
+                items.Add(content);
+
+                if (hierarchical)
+                {
+                    itemChildrenCounts[content.Id] = (await DocumentFinder.Find(containers.Single()).WhereEquals<IHierarchical, string>(x => x.ParentId, content.Id).GetResultAsync()).Count();
+                }
             }
 
             //var sortByPropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? "Name" : "Id";
@@ -65,7 +82,13 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             Response.ContentType = "application/json";
 
-            await Response.WriteAsync(JsonConvert.SerializeObject(result.AsReadOnly(), new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver(), Converters = new List<JsonConverter> { PolymorphicFormConverter } }));
+            await Response.WriteAsync(JsonConvert.SerializeObject(new ContentListResult { Items = items, ItemChildrenCounts = itemChildrenCounts }, new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver(), Converters = new List<JsonConverter> { PolymorphicFormConverter } }));
+        }
+
+        public class ContentListResult
+        {
+            public IDictionary<string, int> ItemChildrenCounts { get; set; }
+            public IEnumerable<IContent> Items { get; set; }
         }
     }
 }

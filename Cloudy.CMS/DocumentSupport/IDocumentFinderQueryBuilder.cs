@@ -13,6 +13,7 @@ namespace Cloudy.CMS.DocumentSupport
         IDocumentFinderQueryBuilder WhereExists<T1, T2>(Expression<Func<T1, T2>> property) where T1 : class;
         IDocumentFinderQueryBuilder WhereEquals<T1, T2>(Expression<Func<T1, T2>> property, T2 value) where T1 : class;
         IDocumentFinderQueryBuilder WhereIn<T1, T2>(Expression<Func<T1, T2>> property, IEnumerable<T2> values) where T1 : class;
+        IDocumentFinderQueryBuilder WhereNullOrMissing<T1>(Expression<Func<T1, object>> property) where T1 : class;
         IDocumentFinderQueryBuilder Select<T1, T2>(Expression<Func<T1, T2>> property) where T1 : class;
         Task<IEnumerable<Document>> GetResultAsync();
     }

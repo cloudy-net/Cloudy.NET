@@ -75,7 +75,7 @@ class ListContentBlade extends Blade {
         var list = new List();
         this.setContent(list);
 
-        if (!contentList.length) {
+        if (!contentList.items.length) {
             var listItem = new ListItem();
             listItem.setText(`(no ${this.taxonomy.lowerCasePluralName})`);
             listItem.setDisabled();
@@ -107,7 +107,7 @@ class ListContentBlade extends Blade {
             }
         };
 
-        contentList.forEach(content => {
+        contentList.items.forEach(content => {
             var contentType = this.contentTypesById[content.contentTypeId];
             var listItem = new ListItem();
             list.addItem(listItem);
