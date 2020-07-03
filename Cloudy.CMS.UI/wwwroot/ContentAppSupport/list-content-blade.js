@@ -95,6 +95,12 @@ class ListContentBlade extends Blade {
                 var name = content.id;
             }
 
+            if (contentList.itemChildrenCounts[content.id]) {
+                var folder = document.createElement('cloudy-ui-list-item-folder');
+                //folder.innerHTML = `<cloudy-ui-list-item-folder-child-count>${contentList.itemChildrenCounts[content.id]}</cloudy-ui-list-item-folder-child-count>`;
+                listItem.element.append(folder);
+            }
+
             listItem.setText(name);
 
             if (contentType.isImageable) {
