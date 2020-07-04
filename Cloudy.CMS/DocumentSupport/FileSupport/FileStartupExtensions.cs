@@ -1,12 +1,14 @@
-﻿using Cloudy.CMS.DocumentSupport.CacheSupport;
+﻿using Cloudy.CMS;
+using Cloudy.CMS.DocumentSupport.CacheSupport;
+using Cloudy.CMS.DocumentSupport.FileSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.DocumentSupport.FileSupport
+namespace Microsoft.AspNetCore.Builder
 {
-    public static class StartupExtensions
+    public static class FileStartupExtensions
     {
         public static CloudyConfigurator AddFileBasedDocuments(this CloudyConfigurator cloudy, string path = "json")
         {

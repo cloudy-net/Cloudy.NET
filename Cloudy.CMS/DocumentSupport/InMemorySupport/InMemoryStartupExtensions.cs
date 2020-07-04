@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Cloudy.CMS;
 using Cloudy.CMS.DocumentSupport.CacheSupport;
+using Cloudy.CMS.DocumentSupport.InMemorySupport;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cloudy.CMS.DocumentSupport.InMemorySupport
+namespace Microsoft.AspNetCore.Builder
 {
-    public static class StartupExtensions
+    public static class InMemoryStartupExtensions
     {
         public static CloudyConfigurator AddInMemoryDocuments(this CloudyConfigurator cloudy)
         {
