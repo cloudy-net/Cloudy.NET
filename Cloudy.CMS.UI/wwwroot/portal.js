@@ -21,7 +21,7 @@ class Portal {
     stateUpdate() {
         var appId = location.hash.substr(1).split('/')[0];
 
-        if (!appId && this.appDescriptors.length == 1) {
+        if (!appId) {
             history.replaceState(null, null, `#${this.appDescriptors[0].id}`);
             this.nav.update();
             this.stateUpdate();
@@ -51,6 +51,7 @@ class Portal {
 
         if (!appDescriptor) {
             notificationManager.addNotification(item => item.setText(`No such app: \`${id}\``));
+            throw new Error(`No such app: \`${id}\``);
             return;
         }
 
