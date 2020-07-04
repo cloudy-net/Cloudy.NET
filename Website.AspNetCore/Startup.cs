@@ -33,7 +33,7 @@ namespace Website.AspNetCore
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .AddFileBasedDocuments()
-                .AddAdmin()
+                .AddAdmin(admin => admin.Unprotect())
             );
             services.AddCloudyIdentity();
         }
