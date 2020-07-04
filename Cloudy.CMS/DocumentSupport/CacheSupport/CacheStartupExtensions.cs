@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Cloudy.CMS;
+using Cloudy.CMS.DocumentSupport;
+using Cloudy.CMS.DocumentSupport.CacheSupport;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cloudy.CMS.DocumentSupport.CacheSupport
+namespace Microsoft.AspNetCore.Builder
 {
     public static class CacheStartupExtensions
     {
