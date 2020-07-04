@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudy.CMS.DocumentSupport.CacheSupport
 {
-    public static class StartupExtensions
+    public static class CacheStartupExtensions
     {
         /// <summary>
-        /// Adds document repository support with a 2nd level inmemory cache and the specified data source. All documents will be fetched on startup.
+        /// Adds document repository support with a 2nd level inmemory cache using the specified data source. All documents will be fetched on startup.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="cloudy"></param>
