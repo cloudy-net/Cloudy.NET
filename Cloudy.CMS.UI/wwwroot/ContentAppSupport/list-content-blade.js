@@ -31,7 +31,7 @@ class ListContentBlade extends Blade {
 
     async open() {
         var creatableContentTypes = this.contentTypes.filter(t => !t.isSingleton);
-        this.createNew = () => this.app.addBladeAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0]) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => this.update()), this);
+        this.createNew = () => this.app.addBladeAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0]) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => this.listItems([])), this);
         this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
         this.contentTypeActions = {};
@@ -42,17 +42,33 @@ class ListContentBlade extends Blade {
 
         this.actions = {};
 
-        await this.update();
+        this.breadcrumbs = document.createElement('cloudy-ui-content-list-breadcrumbs');
+        this.list = new List();
+        this.setContent(this.breadcrumbs, this.list);
+
+        await this.listItems([]);
 
         if (this.actions[this.action]) {
             this.actions[this.action]();
         }
     }
 
-    async update() {
+    async listItems(parents) {
+        this.updateBreadcrumbs(parents);
+
+        this.list.clear();
+
         var contentList;
         try {
-            var response = await fetch(`ContentList/Get?${this.contentTypes.map((t, i) => `contentTypeIds[${i}]=${t.id}`).join('&')}`, { credentials: 'include' });
+            var url = 'ContentList/Get?';
+
+            url += this.contentTypes.map((t, i) => `contentTypeIds[${i}]=${t.id}`).join('&');
+
+            if (parents.length) {
+                url += `&parent=${parent}`;
+            }
+
+            var response = await fetch(url, { credentials: 'include' });
 
             if (!response.ok) {
                 var text = await response.text();
@@ -72,14 +88,11 @@ class ListContentBlade extends Blade {
             throw error;
         }
 
-        var list = new List();
-        this.setContent(list);
-
         if (!contentList.items.length) {
             var listItem = new ListItem();
             listItem.setText(`(no ${this.taxonomy.lowerCasePluralName})`);
             listItem.setDisabled();
-            list.addItem(listItem);
+            this.list.addItem(listItem);
 
             return;
         }
@@ -93,12 +106,6 @@ class ListContentBlade extends Blade {
                 }
             } else {
                 var name = content.id;
-            }
-
-            if (contentList.itemChildrenCounts[content.id]) {
-                var folder = document.createElement('cloudy-ui-list-item-folder');
-                //folder.innerHTML = `<cloudy-ui-list-item-folder-child-count>${contentList.itemChildrenCounts[content.id]}</cloudy-ui-list-item-folder-child-count>`;
-                listItem.element.append(folder);
             }
 
             listItem.setText(name);
@@ -116,9 +123,15 @@ class ListContentBlade extends Blade {
         contentList.items.forEach(content => {
             var contentType = this.contentTypesById[content.contentTypeId];
             var listItem = new ListItem();
-            list.addItem(listItem);
+            this.list.addItem(listItem);
 
             updateListItem(listItem, content, contentType);
+
+            if (contentList.itemChildrenCounts[content.id]) {
+                var folder = document.createElement('cloudy-ui-list-item-folder');
+                folder.addEventListener('click', event => this.listItems([...parents, content]));
+                listItem.element.append(folder);
+            }
 
             listItem.onClick(() => state.set(content.id, this));
 
@@ -140,10 +153,33 @@ class ListContentBlade extends Blade {
                 if (contentType.isSingleton) {
                     item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
                 } else {
-                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => this.update()), this))
+                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => this.listItems(parents)), this))
                 }
             });
             listItem.setMenu(menu);
+        });
+    }
+
+    updateBreadcrumbs(parents) {
+        [...this.breadcrumbs.childNodes].forEach(element => element.remove());
+
+        parents.forEach((content, i) => {
+            var contentType = this.contentTypesById[content.contentTypeId];
+
+            if (contentType.isNameable) {
+                var name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+
+                if (!name) {
+                    name = `${contentType.name} ${content.id}`;
+                }
+            } else {
+                var name = content.id;
+            }
+
+            var breadcrumb = document.createElement('cloudy-ui-content-list-breadcrumb');
+            breadcrumb.innerText = name;
+            breadcrumb.addEventListener('click', () => this.listItems(parents.slice(0, i)));
+            this.breadcrumbs.append(breadcrumb);
         });
     }
 

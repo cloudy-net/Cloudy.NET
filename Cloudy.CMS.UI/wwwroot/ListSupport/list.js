@@ -38,6 +38,10 @@ class List {
         return this;
     }
 
+    clear() {
+        [...this.element.childNodes].forEach(element => element.remove());
+    }
+
     appendTo(element) {
         element.appendChild(this.element);
 

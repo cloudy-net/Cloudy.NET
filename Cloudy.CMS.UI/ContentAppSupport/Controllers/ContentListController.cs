@@ -35,7 +35,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             PolymorphicFormConverter = polymorphicFormConverter;
         }
 
-        public async Task Get(string[] contentTypeIds)
+        public async Task Get(string[] contentTypeIds, string parent)
         {
             var contentTypes = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).ToList().AsReadOnly();
             var containers = contentTypes.Select(t => t.Container).Distinct().ToList();
@@ -54,7 +54,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             if (hierarchical)
             {
-                documentsQuery.WhereNullOrMissing<IHierarchical>(x => x.ParentId);
+                if(parent != null)
+                {
+                    documentsQuery.WhereEquals<IHierarchical, string>(x => x.ParentId, parent);
+                }
+                else
+                {
+                    documentsQuery.WhereNullOrMissing<IHierarchical>(x => x.ParentId);
+                }
             }
 
             var documents = (await documentsQuery.GetResultAsync().ConfigureAwait(false)).ToList();
