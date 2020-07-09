@@ -18,10 +18,6 @@ class EditContentBlade extends Blade {
     constructor(app, contentType, content) {
         super();
 
-        if (!content) {
-            content = {};
-        }
-
         this.app = app;
         this.contentType = contentType;
         this.content = content;
