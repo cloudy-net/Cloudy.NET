@@ -65,7 +65,7 @@ class ListContentBlade extends Blade {
             url += this.contentTypes.map((t, i) => `contentTypeIds[${i}]=${t.id}`).join('&');
 
             if (parents.length) {
-                url += `&parent=${parent}`;
+                url += `&parent=${parents[parents.length - 1].id}`;
             }
 
             var response = await fetch(url, { credentials: 'include' });
@@ -163,6 +163,19 @@ class ListContentBlade extends Blade {
     updateBreadcrumbs(parents) {
         [...this.breadcrumbs.childNodes].forEach(element => element.remove());
 
+        if (!parents.length) {
+            this.breadcrumbs.style.display = 'none';
+            return;
+        }
+
+        this.breadcrumbs.style.display = '';
+
+        var breadcrumb = document.createElement('cloudy-ui-content-list-breadcrumb');
+        breadcrumb.innerText = 'Top';
+        breadcrumb.classList.add('cloudy-ui-clickable');
+        breadcrumb.addEventListener('click', () => this.listItems([]));
+        this.breadcrumbs.append(breadcrumb);
+
         parents.forEach((content, i) => {
             var contentType = this.contentTypesById[content.contentTypeId];
 
@@ -176,10 +189,20 @@ class ListContentBlade extends Blade {
                 var name = content.id;
             }
 
+            var breadcrumb = document.createElement('cloudy-ui-content-list-breadcrumb-separator');
+            this.breadcrumbs.append(breadcrumb);
+
             var breadcrumb = document.createElement('cloudy-ui-content-list-breadcrumb');
             breadcrumb.innerText = name;
-            breadcrumb.addEventListener('click', () => this.listItems(parents.slice(0, i)));
             this.breadcrumbs.append(breadcrumb);
+
+            if (i == parents.length - 1) {
+                breadcrumb.classList.add('cloudy-ui-active');
+                return;
+            }
+
+            breadcrumb.classList.add('cloudy-ui-clickable');
+            breadcrumb.addEventListener('click', () => this.listItems(parents.slice(0, i)));
         });
     }
 

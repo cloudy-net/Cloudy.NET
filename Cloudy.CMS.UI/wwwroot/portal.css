@@ -363,3 +363,24 @@ cloudy-ui-help-container {
   background-color: #272c34;
   overflow: auto;
   color: white; }
+
+/* BREADCRUMBS */
+cloudy-ui-content-list-breadcrumbs {
+  display: block;
+  padding: 16px;
+  border-bottom: solid 1px rgba(0, 0, 0, 0.12);
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.54); }
+
+cloudy-ui-content-list-breadcrumb.cloudy-ui-clickable {
+  cursor: pointer; }
+  cloudy-ui-content-list-breadcrumb.cloudy-ui-clickable:hover {
+    text-decoration: underline; }
+
+cloudy-ui-content-list-breadcrumb.cloudy-ui-active {
+  color: rgba(0, 0, 0, 0.87); }
+
+cloudy-ui-content-list-breadcrumb-separator {
+  padding: 0 4px; }
+  cloudy-ui-content-list-breadcrumb-separator:after {
+    content: '/'; }
