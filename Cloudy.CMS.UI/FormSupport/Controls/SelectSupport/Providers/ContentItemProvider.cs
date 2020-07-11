@@ -37,10 +37,10 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                 return null;
             }
 
-            return new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image);
+            return new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image, content is IHierarchical);
         }
 
-        public async Task<IEnumerable<Item>> GetAll(string type)
+        public async Task<IEnumerable<Item>> GetAll(string type, ItemQuery query)
         {
             var result = new List<Item>();
 
@@ -53,7 +53,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                     continue;
                 }
                 var content = ContentDeserializer.Deserialize(document, contentType, null);
-                result.Add(new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image));
+                result.Add(new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image, content is IHierarchical));
             }
 
             return result.AsReadOnly();

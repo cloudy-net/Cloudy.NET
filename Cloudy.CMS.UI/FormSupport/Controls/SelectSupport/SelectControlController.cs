@@ -26,9 +26,9 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
             return await OptionProviders[provider].Get(type, value).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<Item>> GetItems(string provider, string type)
+        public async Task<IEnumerable<Item>> GetItems(string provider, string type, string parent)
         {
-            return await OptionProviders[provider].GetAll(type).ConfigureAwait(false);
+            return await OptionProviders[provider].GetAll(type, new ItemQuery { Parent = parent }).ConfigureAwait(false);
         }
     }
 }

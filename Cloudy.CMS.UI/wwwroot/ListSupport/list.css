@@ -66,6 +66,7 @@ cloudy-ui-list-item-sub-text {
   letter-spacing: 0.01071em; }
 
 cloudy-ui-list-item-folder {
+  margin-right: 4px;
   position: relative;
   display: flex;
   width: 36px;

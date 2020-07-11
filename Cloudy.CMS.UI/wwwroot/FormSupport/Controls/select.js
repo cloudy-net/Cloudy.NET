@@ -134,10 +134,28 @@ class ListItemsBlade extends Blade {
                     listItem.setImage(item.image);
                     listItem.setText(item.text);
                     listItem.setSubText(item.subText);
-                    listItem.onClick(() => {
-                        listItem.setActive();
-                        this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
-                    });
+
+                    if (item.isSelectable) {
+                        listItem.onClick(() => {
+                            listItem.setActive();
+                            this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
+                        });
+                    }
+
+                    if (item.isParent) {
+                        var folder = document.createElement('cloudy-ui-list-item-folder');
+                        folder.addEventListener('click', event => this.listItems([...parents, content]));
+                        listItem.element.append(folder);
+                    }
+
+                    if (item.isSelectable) {
+                        var menu = new ContextMenu();
+                        menu.addItem(menuItem => {
+                            menuItem.setText('Copy');
+                            menuItem.onClick(() => navigator.clipboard.writeText(item.value));
+                        });
+                        listItem.setMenu(menu);
+                    }
                 })
             );
         };
