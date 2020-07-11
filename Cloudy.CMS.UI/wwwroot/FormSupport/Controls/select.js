@@ -115,52 +115,98 @@ class ListItemsBlade extends Blade {
         //this.createNew = () => this.app.addBladeAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
         this.setToolbar(new Button('New').setInherit()/*.onClick(this.createNew)*/);
 
-        var list = new List();
-        this.setContent(list);
+        this.breadcrumbs = document.createElement('cloudy-ui-breadcrumbs');
+        this.list = new List();
+        this.setContent(this.breadcrumbs, this.list);
 
-        var update = async () => {
-            var items = await ItemProvider.getAll(this.provider, this.type);
+        this.listItems([]);
+    }
 
-            if (!items.length) {
-                var listItem = new ListItem();
-                listItem.setDisabled();
-                listItem.setText('(no items)');
-                list.addItem(listItem);
+    async listItems(parents) {
+        this.updateBreadcrumbs(parents);
+
+        this.list.element.opacity = 0.5;
+        var query = {};
+
+        if (parents.length) {
+            query.parent = parents[parents.length - 1].value;
+        }
+
+        var items = await ItemProvider.getAll(this.provider, this.type, query);
+        this.list.element.opacity = 1;
+        this.list.clear();
+
+        if (!items.length) {
+            var listItem = new ListItem();
+            listItem.setDisabled();
+            listItem.setText('(no items)');
+            this.list.addItem(listItem);
+            return;
+        }
+
+        items.forEach(item =>
+            this.list.addItem(listItem => {
+                listItem.setImage(item.image);
+                listItem.setText(item.text);
+                listItem.setSubText(item.subText);
+
+                if (item.isSelectable) {
+                    listItem.onClick(() => {
+                        listItem.setActive();
+                        this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
+                    });
+                }
+
+                if (item.isParent) {
+                    var folder = document.createElement('cloudy-ui-list-item-folder');
+                    folder.addEventListener('click', event => this.listItems([...parents, item]));
+                    listItem.element.append(folder);
+                }
+
+                if (item.isSelectable) {
+                    var menu = new ContextMenu();
+                    menu.addItem(menuItem => {
+                        menuItem.setText('Copy');
+                        menuItem.onClick(() => navigator.clipboard.writeText(item.value));
+                    });
+                    listItem.setMenu(menu);
+                }
+            })
+        );
+    }
+
+    updateBreadcrumbs(parents) {
+        [...this.breadcrumbs.childNodes].forEach(element => element.remove());
+
+        if (!parents.length) {
+            this.breadcrumbs.style.display = 'none';
+            return;
+        }
+
+        this.breadcrumbs.style.display = '';
+
+        var breadcrumb = document.createElement('cloudy-ui-breadcrumb');
+        breadcrumb.innerText = 'Top';
+        breadcrumb.classList.add('cloudy-ui-clickable');
+        breadcrumb.addEventListener('click', () => this.listItems([]));
+        this.breadcrumbs.append(breadcrumb);
+
+        parents.forEach((item, i) => {
+            var breadcrumb = document.createElement('cloudy-ui-breadcrumb-separator');
+            this.breadcrumbs.append(breadcrumb);
+
+            var breadcrumb = document.createElement('cloudy-ui-breadcrumb');
+            breadcrumb.innerText = item.text;
+            this.breadcrumbs.append(breadcrumb);
+
+            if (i == parents.length - 1) {
+                breadcrumb.classList.add('cloudy-ui-active');
                 return;
             }
 
-            items.forEach(item =>
-                list.addItem(listItem => {
-                    listItem.setImage(item.image);
-                    listItem.setText(item.text);
-                    listItem.setSubText(item.subText);
-
-                    if (item.isSelectable) {
-                        listItem.onClick(() => {
-                            listItem.setActive();
-                            this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
-                        });
-                    }
-
-                    if (item.isParent) {
-                        var folder = document.createElement('cloudy-ui-list-item-folder');
-                        folder.addEventListener('click', event => this.listItems([...parents, content]));
-                        listItem.element.append(folder);
-                    }
-
-                    if (item.isSelectable) {
-                        var menu = new ContextMenu();
-                        menu.addItem(menuItem => {
-                            menuItem.setText('Copy');
-                            menuItem.onClick(() => navigator.clipboard.writeText(item.value));
-                        });
-                        listItem.setMenu(menu);
-                    }
-                })
-            );
-        };
-
-        update();
+            breadcrumb.classList.add('cloudy-ui-clickable');
+            breadcrumb.addEventListener('click', () => this.listItems(parents.slice(0, i)));
+        });
     }
 
     onSelect(callback) {

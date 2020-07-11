@@ -44,6 +44,10 @@ cloudy-ui-notification {
         outline: none;
     }
 
+    &:hover {
+        opacity: 0.95;
+    }
+
     & + & {
         margin-top: 16px;
     }

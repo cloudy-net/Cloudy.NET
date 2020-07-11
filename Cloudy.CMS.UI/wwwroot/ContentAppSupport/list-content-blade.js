@@ -38,7 +38,7 @@ class ListContentBlade extends Blade {
 
         this.actions = {};
 
-        this.breadcrumbs = document.createElement('cloudy-ui-content-list-breadcrumbs');
+        this.breadcrumbs = document.createElement('cloudy-ui-breadcrumbs');
         this.list = new List();
         this.setContent(this.breadcrumbs, this.list);
 
@@ -170,7 +170,7 @@ class ListContentBlade extends Blade {
 
         this.breadcrumbs.style.display = '';
 
-        var breadcrumb = document.createElement('cloudy-ui-content-list-breadcrumb');
+        var breadcrumb = document.createElement('cloudy-ui-breadcrumb');
         breadcrumb.innerText = 'Top';
         breadcrumb.classList.add('cloudy-ui-clickable');
         breadcrumb.addEventListener('click', () => this.listItems([]));
@@ -189,10 +189,10 @@ class ListContentBlade extends Blade {
                 var name = content.id;
             }
 
-            var breadcrumb = document.createElement('cloudy-ui-content-list-breadcrumb-separator');
+            var breadcrumb = document.createElement('cloudy-ui-breadcrumb-separator');
             this.breadcrumbs.append(breadcrumb);
 
-            var breadcrumb = document.createElement('cloudy-ui-content-list-breadcrumb');
+            var breadcrumb = document.createElement('cloudy-ui-breadcrumb');
             breadcrumb.innerText = name;
             this.breadcrumbs.append(breadcrumb);
 

@@ -502,7 +502,7 @@ cloudy-ui-help-container {
 
 /* BREADCRUMBS */
 
-cloudy-ui-content-list-breadcrumbs {
+cloudy-ui-breadcrumbs {
     display: block;
     padding: 16px;
     border-bottom: solid 1px rgba(0, 0, 0, 0.12);
@@ -510,7 +510,7 @@ cloudy-ui-content-list-breadcrumbs {
     color: rgba(0, 0, 0, 0.54);
 }
 
-cloudy-ui-content-list-breadcrumb {
+cloudy-ui-breadcrumb {
     &.cloudy-ui-clickable {
         cursor: pointer;
 
@@ -523,7 +523,7 @@ cloudy-ui-content-list-breadcrumb {
         color: rgba(0, 0, 0, 0.87);
     }
 }
-cloudy-ui-content-list-breadcrumb-separator {
+cloudy-ui-breadcrumb-separator {
     padding: 0 4px;
 
     &:after {

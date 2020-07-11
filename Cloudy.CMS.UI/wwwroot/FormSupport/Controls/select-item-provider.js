@@ -26,13 +26,19 @@ class SelectItemProvider {
 
             return await response.json();
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get item ${value} of type ${type} for select control ${provider} (${error.message})`));
+            notificationManager.addNotification(item => item.setText(`Could not get item \`${value}\` of type \`${type}\` for select control \`${provider}\` --- ${error.message}`));
         }
     }
 
-    async getAll(provider, type) {
+    async getAll(provider, type, query) {
         try {
-            var response = await fetch(`SelectControl/GetItems?provider=${provider}&type=${type}`, {
+            var url = `SelectControl/GetItems?provider=${provider}&type=${type}`;
+
+            if (query.parent) {
+                url += `&parent=${query.parent}`;
+            }
+
+            var response = await fetch(url, {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,7 +59,7 @@ class SelectItemProvider {
 
             return await response.json();
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get items of type ${type} for select control ${provider} --- ${error.message}`));
+            notificationManager.addNotification(item => item.setText(`Could not get items of type \`${type}\` for select control \`${provider}\` --- \`${error.message}\``));
         }
     }
 
