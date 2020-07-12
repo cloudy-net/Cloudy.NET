@@ -42,7 +42,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 
             var ancestors = await AncestorProvider.GetAncestorsAsync(content).ConfigureAwait(false);
 
-            return new ItemResponse(GetItem(content), ancestors.Select(a => GetItem(a)).ToList().AsReadOnly());
+            return new ItemResponse(GetItem(content), ancestors.Select(a => new ItemParent((a as INameable)?.Name ?? a.Id, a.Id)).ToList().AsReadOnly());
         }
 
         public async Task<IEnumerable<Item>> GetAll(string type, ItemQuery query)

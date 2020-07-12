@@ -19,23 +19,23 @@ namespace Website.AspNetCore.Models
         {
             if (value == "lorem")
             {
-                return new ItemResponse(Lorem, Enumerable.Empty<Item>());
+                return new ItemResponse(Lorem, Enumerable.Empty<ItemParent>());
             }
             if (value == "ipsum")
             {
-                return new ItemResponse(Ipsum, Enumerable.Empty<Item>());
+                return new ItemResponse(Ipsum, Enumerable.Empty<ItemParent>());
             }
             if (value == "dolor")
             {
-                return new ItemResponse(Dolor, Enumerable.Empty<Item>());
+                return new ItemResponse(Dolor, Enumerable.Empty<ItemParent>());
             }
             if (value == "sit")
             {
-                return new ItemResponse(Sit, new List<Item> { Lorem });
+                return new ItemResponse(Sit, new List<ItemParent> { new ItemParent(Lorem.Text, Lorem.Value) });
             }
             if (value == "amet")
             {
-                return new ItemResponse(Sit, new List<Item> { Ipsum });
+                return new ItemResponse(Sit, new List<ItemParent> { new ItemParent(Ipsum.Text, Ipsum.Value) });
             }
 
             return null;
