@@ -6,90 +6,111 @@ import List from '../../ListSupport/list.js';
 import ListItem from '../../ListSupport/list-item.js';
 import SelectItemPreview from './select-item-preview.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
+import notificationManager from '../../NotificationSupport/notification-manager.js';
 
 
 
 /* SELECT CONTROL */
 
 class SelectControl extends FieldControl {
-    open = null;
+    item = null;
+    parents = [];
 
     constructor(fieldModel, value, app, blade) {
-        var element = document.createElement('cloudy-ui-select');
-        var empty = document.createElement('cloudy-ui-select-empty');
+        super(document.createElement('cloudy-ui-select'));
+
+        this.fieldModel = fieldModel;
+        this.app = app;
+        this.blade = blade;
+
+        this.empty = document.createElement('cloudy-ui-select-empty');
         var emptyText = document.createElement('cloudy-ui-select-empty-text');
         emptyText.innerText = '(none)';
-        empty.append(emptyText);
-        element.append(empty);
-        var loading = document.createElement('cloudy-ui-select-loading');
+        this.empty.append(emptyText);
+        this.element.append(this.empty);
+
+        this.loading = document.createElement('cloudy-ui-select-loading');
         var loadingText = document.createElement('cloudy-ui-select-loading-text');
         loadingText.innerText = '(loading)';
-        loading.append(loadingText);
-        element.append(loading);
-        var preview = new SelectItemPreview().appendTo(element);
-        super(element);
-
-        var update = item => {
-            if (!item) {
-                preview.element.style.display = 'none';
-                loading.style.display = 'none';
-                empty.style.display = '';
-
-                return;
-            }
-
-            preview.element.style.display = '';
-            empty.style.display = 'none';
-            loading.style.display = 'none';
-
-            preview.setImage(item.image);
-            preview.setText(item.text);
-            preview.setSubText(item.subText);
-        };
+        this.loading.append(loadingText);
+        this.element.append(this.loading);
+        this.preview = new SelectItemPreview().appendTo(this.element);
 
         if (value) {
-            preview.element.style.display = 'none';
-            empty.style.display = 'none';
-            loading.style.display = '';
+            this.preview.element.style.display = 'none';
+            this.empty.style.display = 'none';
+            this.loading.style.display = '';
 
             ItemProvider
                 .get(fieldModel.descriptor.control.parameters['provider'], fieldModel.descriptor.control.parameters['type'], value)
-                .then(item => {
-                    if (item) {
-                        update(item);
+                .then(result => {
+                    if (result) {
+                        this.item = result.item;
+                        this.parents = result.parents;
+                    }
+
+                    this.update();
+
+                    if(!result) {
+                        notificationManager.addNotification(item => item.setText(`Could not get item \`${value}\` of type \`${fieldModel.descriptor.control.parameters['type']}\` for select control \`${fieldModel.descriptor.control.parameters['provider']}\``));
                     }
                 });
         } else {
-            update();
+            this.update();
         }
 
-        this.open = () => {
-            var list = new ListItemsBlade(app, fieldModel)
-                .onSelect(item => {
-                    this.triggerChange(item.value);
-                    update(item);
-                    app.removeBlade(list);
-                });
-
-            app.addBladeAfter(list, blade);
-        };
-
-        new Button('Add').onClick(this.open).appendTo(empty);
+        new Button('Add').onClick(() => this.open()).appendTo(this.empty);
 
         this.menu = new ContextMenu();
 
-        this.menu.addItem(item => item.setText('Replace').onClick(this.open));
+        this.menu.addItem(item => item.setText('Replace').onClick(() => this.open()));
 
         if (!fieldModel.descriptor.isSortable) {
-            this.menu.addItem(item => item.setText('Clear').onClick(() => { this.triggerChange(null); update(null); }));
+            this.menu.addItem(item => item.setText('Clear').onClick(() => {
+                this.item = null;
+                this.parents = [];
+                this.triggerChange(null);
+                this.update();
+            }));
         }
 
-        preview.setMenu(this.menu);
-        preview.onClick(() => this.menu.toggle());
+        this.preview.setMenu(this.menu);
+        this.preview.onClick(() => setTimeout(() => this.menu.toggle(), 1));
 
         this.onSet(value => {
             update(value);
         });
+    }
+
+    update() {
+        if (!this.item) {
+            this.preview.element.style.display = 'none';
+            this.loading.style.display = 'none';
+            this.empty.style.display = '';
+
+            return;
+        }
+
+        this.preview.element.style.display = '';
+        this.empty.style.display = 'none';
+        this.loading.style.display = 'none';
+
+        this.preview.setImage(this.item.image);
+        this.preview.setText(this.item.text);
+        this.preview.setSubText(this.item.subText);
+    }
+
+    open() {
+        var list = new ListItemsBlade(this.app, this.fieldModel, this.item, this.parents)
+            .onComplete(result => {
+                this.item = result.item;
+                this.parents = result.parents;
+                this.triggerChange(result.item.value);
+                this.update();
+                this.app.removeBlade(list);
+            });
+
+        this.app.addBladeAfter(list, this.blade);
     }
 }
 
@@ -98,15 +119,18 @@ class SelectControl extends FieldControl {
 /* LIST ITEMS BLADE */
 
 class ListItemsBlade extends Blade {
-    onSelectCallbacks = [];
+    onCompleteCallbacks = [];
 
-    constructor(app, fieldModel) {
+    constructor(app, fieldModel, item, parents) {
         super();
 
         this.app = app;
         this.name = fieldModel.descriptor.label;
         this.provider = fieldModel.descriptor.control.parameters['provider'];
         this.type = fieldModel.descriptor.control.parameters['type'];
+
+        this.item = item;
+        this.parents = parents;
     }
 
     async open() {
@@ -119,12 +143,10 @@ class ListItemsBlade extends Blade {
         this.list = new List();
         this.setContent(this.breadcrumbs, this.list);
 
-        this.listItems([]);
+        this.listItems(this.parents);
     }
 
     async listItems(parents) {
-        this.updateBreadcrumbs(parents);
-
         this.list.element.opacity = 0.5;
         var query = {};
 
@@ -136,6 +158,8 @@ class ListItemsBlade extends Blade {
         this.list.element.opacity = 1;
         this.list.clear();
 
+        this.updateBreadcrumbs(parents);
+
         if (!items.length) {
             var listItem = new ListItem();
             listItem.setDisabled();
@@ -144,35 +168,39 @@ class ListItemsBlade extends Blade {
             return;
         }
 
-        items.forEach(item =>
-            this.list.addItem(listItem => {
-                listItem.setImage(item.image);
-                listItem.setText(item.text);
-                listItem.setSubText(item.subText);
+        items.forEach(item => {
+            var listItem = new ListItem();
+            this.list.addItem(listItem);
 
-                if (item.isSelectable) {
-                    listItem.onClick(() => {
-                        listItem.setActive();
-                        this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
-                    });
-                }
+            if (item.value == this.item.value) {
+                listItem.setActive();
+            }
+            listItem.setImage(item.image);
+            listItem.setText(item.text);
+            listItem.setSubText(item.subText);
 
-                if (item.isParent) {
-                    var folder = document.createElement('cloudy-ui-list-item-folder');
-                    folder.addEventListener('click', event => this.listItems([...parents, item]));
-                    listItem.element.append(folder);
-                }
+            if (item.isSelectable) {
+                listItem.onClick(() => {
+                    listItem.setActive();
+                    this.onCompleteCallbacks.forEach(callback => callback.apply(this, [{ item: item, parents: this.parents }]));
+                });
+            }
 
-                if (item.isSelectable) {
-                    var menu = new ContextMenu();
-                    menu.addItem(menuItem => {
-                        menuItem.setText('Copy');
-                        menuItem.onClick(() => navigator.clipboard.writeText(item.value));
-                    });
-                    listItem.setMenu(menu);
-                }
-            })
-        );
+            if (item.isParent) {
+                var folder = document.createElement('cloudy-ui-list-item-folder');
+                folder.addEventListener('click', () => this.listItems([...parents, item]));
+                listItem.element.append(folder);
+            }
+
+            if (item.isSelectable) {
+                var menu = new ContextMenu();
+                menu.addItem(menuItem => {
+                    menuItem.setText('Copy');
+                    menuItem.onClick(() => navigator.clipboard.writeText(item.value));
+                });
+                listItem.setMenu(menu);
+            }
+        });
     }
 
     updateBreadcrumbs(parents) {
@@ -209,8 +237,8 @@ class ListItemsBlade extends Blade {
         });
     }
 
-    onSelect(callback) {
-        this.onSelectCallbacks.push(callback);
+    onComplete(callback) {
+        this.onCompleteCallbacks.push(callback);
 
         return this;
     }

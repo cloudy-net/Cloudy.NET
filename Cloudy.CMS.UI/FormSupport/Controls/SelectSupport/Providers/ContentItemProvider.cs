@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
@@ -19,16 +20,18 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
         public IDocumentFinder DocumentFinder { get; }
         public IContentGetter ContentGetter { get; }
         public IContentDeserializer ContentDeserializer { get; }
+        public IAncestorProvider AncestorProvider { get; }
 
-        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContentGetter contentGetter, IContentDeserializer contentDeserializer)
+        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContentGetter contentGetter, IContentDeserializer contentDeserializer, IAncestorProvider ancestorProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             DocumentFinder = documentFinder;
             ContentGetter = contentGetter;
             ContentDeserializer = contentDeserializer;
+            AncestorProvider = ancestorProvider;
         }
 
-        public async Task<Item> Get(string type, string value)
+        public async Task<ItemResponse> Get(string type, string value)
         {
             var content = await ContentGetter.GetAsync(type, value, null).ConfigureAwait(false);
 
@@ -37,7 +40,9 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                 return null;
             }
 
-            return new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image, content is IHierarchical);
+            var ancestors = await AncestorProvider.GetAncestorsAsync(content).ConfigureAwait(false);
+
+            return new ItemResponse(GetItem(content), ancestors.Select(a => GetItem(a)).ToList().AsReadOnly());
         }
 
         public async Task<IEnumerable<Item>> GetAll(string type, ItemQuery query)
@@ -52,11 +57,15 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                 {
                     continue;
                 }
+                
                 var content = ContentDeserializer.Deserialize(document, contentType, null);
-                result.Add(new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image, content is IHierarchical));
+
+                result.Add(GetItem(content));
             }
 
             return result.AsReadOnly();
         }
+
+        Item GetItem(IContent content) => new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image, content is IHierarchical);
     }
 }

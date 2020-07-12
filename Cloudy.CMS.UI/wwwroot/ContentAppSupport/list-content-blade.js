@@ -54,9 +54,7 @@ class ListContentBlade extends Blade {
         this.createNew = () => this.app.addBladeAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0], { parentId: parents.length ? parents[parents.length - 1].id : null }) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => this.listItems(parents)), this);
         this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
-        this.updateBreadcrumbs(parents);
-
-        this.list.clear();
+        this.list.element.opacity = 0.5;
 
         var contentList;
         try {
@@ -87,6 +85,10 @@ class ListContentBlade extends Blade {
             notificationManager.addNotification(item => item.setText(`Could not get content list --- ${error.message}`));
             throw error;
         }
+
+        this.updateBreadcrumbs(parents);
+        this.list.element.opacity = 1;
+        this.list.clear();
 
         if (!contentList.items.length) {
             var listItem = new ListItem();
