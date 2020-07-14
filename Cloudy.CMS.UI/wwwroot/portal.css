@@ -250,8 +250,7 @@ cloudy-ui-blade-content {
   overflow: auto;
   position: relative;
   display: block;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  background: white; }
+  border-top: 1px solid rgba(0, 0, 0, 0.12); }
 
 /* FOOTER */
 cloudy-ui-blade-footer {
