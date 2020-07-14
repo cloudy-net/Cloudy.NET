@@ -85,8 +85,10 @@ class ContextMenu {
 
     remove() {
         this.button.classList.remove('cloudy-ui-active');
-        this.menu.remove();
-        this.menu = null;
+        if (this.menu) {
+            this.menu.remove();
+            this.menu = null;
+        }
         this.list = null;
     }
 
@@ -106,7 +108,7 @@ class ContextMenu {
             configurator(item);
             item.onClick(() => {
                 this.button.classList.remove('cloudy-ui-active');
-                this.menu.style.display = 'none';
+                this.remove();
             });
         }));
         return this;
