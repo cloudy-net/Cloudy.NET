@@ -54,6 +54,7 @@ class FileUploadControl extends FieldControl {
 
         if (!fieldModel.descriptor.isSortable) {
             this.menu.addItem(item => item.setText('Clear').onClick(() => {
+                this.input.value = '';
                 this.item = null;
                 this.parents = [];
                 this.triggerChange(null);
