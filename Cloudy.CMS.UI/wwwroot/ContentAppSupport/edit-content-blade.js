@@ -120,7 +120,7 @@ class EditContentBlade extends Blade {
 
                     var result = await response.json();
                 } catch (error) {
-                    notificationManager.addNotification(item => item.setText(`Could not save content (${error.message})`));
+                    notificationManager.addNotification(item => item.setText(`Could not save content --- ${error.message}`));
                     throw error;
                 }
 
