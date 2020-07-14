@@ -7,7 +7,6 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Control("fileupload", "FormSupport/Controls/fileupload.js")]
     [MapControlToType(typeof(FileUpload))]
-    [MapControlToUIHint("fileupload(accept)")]
     public class FileUpload
     {
         public string Name { get; set; }
