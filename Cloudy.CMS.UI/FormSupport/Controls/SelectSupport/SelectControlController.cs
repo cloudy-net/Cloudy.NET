@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
@@ -19,6 +20,44 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
         public SelectControlController(IComposableProvider composableProvider)
         {
             OptionProviders = composableProvider.GetAll<IItemProvider>().ToDictionary(p => p.GetType().GetCustomAttribute<ItemProviderAttribute>().Id, p => p);
+        }
+
+        public async Task<ItemCreationResultMessage> CreateItem([FromBody] ItemCreationModel model)
+        {
+            var provider = OptionProviders[model.Provider];
+            var type = provider.GetType();
+            var @interface = type.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IItemCreator<>));
+
+            if (@interface == null)
+            {
+                return null;
+            }
+
+            var item = JsonConvert.DeserializeObject(model.Item, @interface.GetGenericArguments()[0]);
+
+            @interface.GetMethod(nameof(IItemCreator<object>.CreateAsync)).Invoke(provider, new object[] { item });
+
+            return new ItemCreationResultMessage {  };
+        }
+
+        public string GetCreationForm(string provider)
+        {
+            var type = OptionProviders[provider].GetType();
+            var model = type.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IItemCreator<>))?.GetGenericArguments()[0];
+
+            if(model == null)
+            {
+                return null;
+            }
+
+            var attribute = model.GetCustomAttribute<FormAttribute>();
+
+            if(attribute == null)
+            {
+                throw new Exception("Type parameter IItemCreator<T> must have the attribute [Form(...)]");
+            }
+
+            return attribute.Id;
         }
 
         public async Task<ActionResult> GetItem(string provider, string type, string value)

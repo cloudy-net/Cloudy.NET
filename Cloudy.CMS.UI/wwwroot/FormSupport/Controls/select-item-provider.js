@@ -3,6 +3,34 @@
 
 
 class SelectItemProvider {
+    async getCreationForm(provider) {
+        try {
+            var response = await fetch(`SelectControl/GetCreationForm?provider=${provider}`, {
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                var text = await response.text();
+
+                if (text) {
+                    throw new Error(text.split('\n')[0]);
+                } else {
+                    text = response.statusText;
+                }
+
+                throw new Error(`${response.status} (${text})`);
+            }
+
+            return await response.text() || null;
+        } catch (error) {
+            notificationManager.addNotification(item => item.setText(`Could not get creation action for select control \`${provider}\` --- ${error.message}`));
+            throw error;
+        }
+    }
+
     async get(provider, type, value) {
         try {
             var response = await fetch(`SelectControl/GetItem?provider=${provider}&type=${type}&value=${value}`, {

@@ -7,6 +7,10 @@ import ListItem from '../../ListSupport/list-item.js';
 import SelectItemPreview from './select-item-preview.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 import notificationManager from '../../NotificationSupport/notification-manager.js';
+import TabSystem from '../../TabSupport/tab-system.js';
+import FormBuilder from '../form-builder.js';
+import fieldDescriptorProvider from '../field-descriptor-provider.js';
+import fieldModelBuilder from '../field-model-builder.js';
 
 
 
@@ -136,8 +140,7 @@ class ListItemsBlade extends Blade {
     async open() {
         this.setTitle(`Select ${this.name.substr(0, 1).toLowerCase()}${this.name.substr(1)}`);
 
-        //this.createNew = () => this.app.addBladeAfter(new EditContentBlade(this.app, this.contentType).onComplete(() => update()), this);
-        this.setToolbar(new Button('New').setInherit()/*.onClick(this.createNew)*/);
+        this.loadCreationAction();
 
         this.breadcrumbs = document.createElement('cloudy-ui-breadcrumbs');
         this.list = new List();
@@ -146,8 +149,18 @@ class ListItemsBlade extends Blade {
         this.listItems(this.parents);
     }
 
+    async loadCreationAction() {
+        var formId = await ItemProvider.getCreationForm(this.provider);
+
+        if (!formId) {
+            return;
+        }
+
+        this.setToolbar(new Button('New').setInherit().onClick(() => this.app.addBladeAfter(new CreateItemBlade(this.app, this.provider, formId, this.parents).onComplete(() => this.update(this.parents)), this)));
+    }
+
     async listItems(parents) {
-        this.list.element.opacity = 0.5;
+        this.list.element.style.opacity = 0.5;
         var query = {};
 
         if (parents.length) {
@@ -155,7 +168,7 @@ class ListItemsBlade extends Blade {
         }
 
         var items = await ItemProvider.getAll(this.provider, this.type, query);
-        this.list.element.opacity = 1;
+        this.list.element.style.opacity = 1;
         this.list.clear();
 
         this.updateBreadcrumbs(parents);
@@ -235,6 +248,135 @@ class ListItemsBlade extends Blade {
             breadcrumb.classList.add('cloudy-ui-clickable');
             breadcrumb.addEventListener('click', () => this.listItems(parents.slice(0, i)));
         });
+    }
+
+    onComplete(callback) {
+        this.onCompleteCallbacks.push(callback);
+
+        return this;
+    }
+}
+
+
+
+/* CREATE ITEM */
+
+class CreateItemBlade extends Blade {
+    onCompleteCallbacks = [];
+
+    constructor(app, provider, formId, parents) {
+        super();
+
+        this.app = app;
+        this.provider = provider;
+        this.formId = formId;
+        this.item = {};
+
+        this.element.addEventListener("keydown", (event) => {
+            if ((String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) || event.which == 19) { // 19 for Mac:s "Command+S"
+                if (this.saveButton) {
+                    this.saveButton.triggerClick();
+                }
+                event.preventDefault();
+            }
+        });
+    }
+
+    async open() {
+        this.fieldModels = await fieldModelBuilder.getFieldModels(this.formId);
+        this.formBuilder = new FormBuilder(this.app, this);
+
+        this.setTitle('New item');
+
+        this.buildForm();
+
+        this.saveButton = new Button('Save')
+            .setPrimary()
+            .onClick(async () => {
+                try {
+                    var response = await fetch('SelectControl/CreateItem', {
+                        credentials: 'include',
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            provider: this.provider,
+                            item: JSON.stringify(this.item),
+                        })
+                    });
+
+                    if (!response.ok) {
+                        var text = await response.text();
+
+                        if (text) {
+                            throw new Error(text.split('\n')[0]);
+                        } else {
+                            text = response.statusText;
+                        }
+
+                        throw new Error(`${response.status} (${text})`);
+                    }
+
+                    var result = await response.json();
+                } catch (error) {
+                    notificationManager.addNotification(item => item.setText(`Could not save item --- ${error.message}`));
+                    throw error;
+                }
+
+                if (!result.success) {
+                    var errors = document.createElement('ul');
+                    Object.entries(result.validationErrors).forEach(error => {
+                        var item = document.createElement('li');
+                        item.innerText = `${error[0]}: ${error[1]}`;
+                        errors.append(item);
+                    });
+                    notificationManager.addNotification(item => item.setText(`Error saving item:`, errors));
+                    return;
+                }
+
+
+                notificationManager.addNotification(item => item.setText(`Created item`));
+
+                this.onCompleteCallbacks.forEach(callback => callback(this.content));
+            });
+
+        var cancelButton = new Button('Cancel').onClick(() => this.app.removeBlade(this));
+
+        this.setFooter(this.saveButton, cancelButton);
+    }
+
+    async buildForm() {
+        try {
+            var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
+
+            if (groups.length == 1) {
+                var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]));
+
+                this.setContent(form);
+            } else {
+                var tabSystem = new TabSystem();
+
+                if (groups.indexOf(null) != -1) {
+                    tabSystem.addTab('General', async () => {
+                        var element = document.createElement('div');
+                        var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null));
+                        form.appendTo(element);
+                        return element;
+                    });
+                }
+
+                groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
+                    var element = document.createElement('div');
+                    var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group));
+                    form.appendTo(element);
+                    return element;
+                }));
+
+                this.setContent(tabSystem);
+            }
+        } catch (error) {
+            notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
+            throw error;
+        }
     }
 
     onComplete(callback) {
