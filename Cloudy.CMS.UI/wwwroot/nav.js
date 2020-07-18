@@ -77,6 +77,7 @@ class Nav {
 
         var user = document.createElement('cloudy-ui-nav-user');
         var userMenu = new ContextMenu();
+        userMenu.addItem(item => item.setText('Log out').onClick(() => location.href = 'Logout'));
         userMenu.button.classList.add('cloudy-ui-nav-user-button');
         userMenu.appendTo(user);
         this.element.append(user);
