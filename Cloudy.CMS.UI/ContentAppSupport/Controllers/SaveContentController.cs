@@ -49,6 +49,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             var contentType = ContentTypeProvider.Get(data.ContentTypeId);
 
             var b = (IContent)JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
+            
+            if (!TryValidateModel(b))
+            {
+                return ContentResponseMessage.CreateFrom(ModelState);
+            }
 
             if (b.Id != null)
             {
@@ -79,6 +84,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     }
 
                     propertyDefinition.Setter(a, propertyDefinition.Getter(b));
+                }
+
+                if (!TryValidateModel(b))
+                {
+                    throw new Exception("a was valid but b was not.");
                 }
 
                 await ContentUpdater.UpdateAsync(a).ConfigureAwait(false);
