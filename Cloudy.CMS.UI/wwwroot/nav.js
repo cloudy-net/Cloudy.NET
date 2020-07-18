@@ -1,5 +1,6 @@
 ﻿import List from './ListSupport/list.js';
 import ListItem from './ListSupport/list-item.js';
+import ContextMenu from './ContextMenuSupport/context-menu.js';
 
 class Nav {
     constructor(portal, title, apps) {
@@ -67,6 +68,18 @@ class Nav {
         this.title = document.createElement('cloudy-ui-portal-nav-title');
         this.title.innerText = title;
         this.element.append(this.title);
+
+        var language = document.createElement('cloudy-ui-nav-language');
+        var languageMenu = new ContextMenu();
+        languageMenu.button.classList.add('cloudy-ui-nav-language-button');
+        languageMenu.appendTo(language);
+        this.element.append(language);
+
+        var user = document.createElement('cloudy-ui-nav-user');
+        var userMenu = new ContextMenu();
+        userMenu.button.classList.add('cloudy-ui-nav-user-button');
+        userMenu.appendTo(user);
+        this.element.append(user);
 
         window.addEventListener("hashchange", () => this.update());
         this.update();

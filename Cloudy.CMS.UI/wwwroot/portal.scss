@@ -529,3 +529,29 @@ cloudy-ui-breadcrumb-separator {
         content: '/';
     }
 }
+
+
+
+/* USER MENU */
+
+cloudy-ui-nav-user {
+    margin-right: 12px;
+}
+
+.cloudy-ui-nav-user-button {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true' width='24' height='24'%3E%3Cpath d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zm0 14.2A7.2 7.2 0 016 16c0-2 4-3.1 6-3.1s6 1 6 3a7.2 7.2 0 01-6 3.3z' fill='white'/%3E%3C/svg%3E");
+    background-size: 24px;
+}
+
+
+
+/* LANGUAGE MENU */
+
+cloudy-ui-nav-language {
+    margin-right: 12px;
+}
+
+.cloudy-ui-nav-language-button {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z' fill='white'/%3E%3C/svg%3E");
+    background-size: 24px;
+}
