@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />  
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\demo\feeling-proud.svg" />
-  </ItemGroup>
-
 </Project>
