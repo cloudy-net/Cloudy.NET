@@ -13,6 +13,7 @@ namespace Cloudy.CMS.ContentSupport
     {
         [Display(AutoGenerateField = false)]
         [LanguageSpecific]
+        [Required]
         string Language { get; set; }
     }
 }
