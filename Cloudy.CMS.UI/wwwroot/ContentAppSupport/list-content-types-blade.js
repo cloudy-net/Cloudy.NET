@@ -50,7 +50,12 @@ class ListContentTypesBlade extends Blade {
             var language = document.createElement('cloudy-ui-nav-language');
             var languageMenu = new ContextMenu();
 
-
+            languages.forEach(language => {
+                languageMenu.addItem(item => {
+                    item.setText(language.name);
+                    item.onClick(() => console.log(language));
+                });
+            });
 
             languageMenu.button.classList.add('cloudy-ui-nav-language-button');
             languageMenu.appendTo(language);

@@ -6,23 +6,23 @@ namespace Cloudy.CMS.LanguageSupport
 {
     public class LanguageDescriptor : IComparable
     {
-        public string Code { get; }
+        public string Id { get; }
         public string Name { get; }
 
-        public LanguageDescriptor(string code, string name)
+        public LanguageDescriptor(string id, string name)
         {
-            Code = code ?? throw new ArgumentNullException(nameof(code));
+            Id = id ?? throw new ArgumentNullException(nameof(id));
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         public override bool Equals(object obj)
         {
-            return Code.Equals(obj);
+            return Id.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return Code.GetHashCode();
+            return Id.GetHashCode();
         }
 
         public int CompareTo(object obj)
@@ -34,7 +34,7 @@ namespace Cloudy.CMS.LanguageSupport
                 return 0;
             }
 
-            return Code.CompareTo(language.Code);
+            return Id.CompareTo(language.Id);
         }
     }
 }

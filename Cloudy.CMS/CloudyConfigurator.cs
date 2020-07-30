@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 
 namespace Cloudy.CMS
@@ -35,16 +36,26 @@ namespace Cloudy.CMS
             return this;
         }
 
-        public CloudyConfigurator AddLanguage(string code)
+        public CloudyConfigurator AddLanguage(string id)
         {
-            Options.Languages.Add(new LanguageDescriptor(code, new CultureInfo(code).EnglishName));
+            AddLanguage(id, new CultureInfo(id).EnglishName);
 
             return this;
         }
 
-        public CloudyConfigurator AddLanguage(string code, string name)
+        public CloudyConfigurator AddLanguage(string id, string name)
         {
-            Options.Languages.Add(new LanguageDescriptor(code, name));
+            if (Options.Languages.Any(l => l.Id == id))
+            {
+                throw new Exception($"There is already a language added with the id {id}");
+            }
+
+            if (Options.Languages.Any(l => l.Name == name))
+            {
+                throw new Exception($"There is already a language added with the name {name}");
+            }
+
+            Options.Languages.Add(new LanguageDescriptor(id, name));
 
             return this;
         }
