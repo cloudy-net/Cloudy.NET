@@ -33,6 +33,7 @@ namespace Website.AspNetCore
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .AddLanguage("sv")
+                .AddLanguage("en")
                 .AddFileBasedDocuments()
                 .AddAdmin(admin => admin.Unprotect())
             );
