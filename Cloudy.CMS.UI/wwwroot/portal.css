@@ -394,8 +394,10 @@ cloudy-ui-nav-user {
 
 /* LANGUAGE MENU */
 cloudy-ui-nav-language {
-  margin-right: 12px; }
+  margin-right: 12px;
+  display: inline-block;
+  vertical-align: middle; }
 
 .cloudy-ui-nav-language-button {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z' fill='white'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z' fill-opacity='0.54'/%3E%3C/svg%3E");
   background-size: 24px; }

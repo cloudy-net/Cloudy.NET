@@ -9,6 +9,7 @@ import SingletonGetter from './singleton-getter.js';
 import ListItem from '../ListSupport/list-item.js';
 import state from '../state.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
+import languageProvider from './language-provider.js';
 
 
 
@@ -39,10 +40,22 @@ class ListContentTypesBlade extends Blade {
         const list = new List();
         this.setContent(list);
 
-        const [contentTypes, contentTypeGroups] = await Promise.all([
+        const [contentTypes, contentTypeGroups, languages] = await Promise.all([
             ContentTypeProvider.getAll(),
-            ContentTypeGroupProvider.getAll()
+            ContentTypeGroupProvider.getAll(),
+            languageProvider.getAll(),
         ]);
+
+        if (languages.length) {
+            var language = document.createElement('cloudy-ui-nav-language');
+            var languageMenu = new ContextMenu();
+
+
+
+            languageMenu.button.classList.add('cloudy-ui-nav-language-button');
+            languageMenu.appendTo(language);
+            this.setToolbar(language);
+        }
 
         const items = [
             ...contentTypes.map(t => ({ id: t.id, type: 'contentType', value: t })),

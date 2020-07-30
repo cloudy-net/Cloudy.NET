@@ -69,12 +69,6 @@ class Nav {
         this.title.innerText = title;
         this.element.append(this.title);
 
-        var language = document.createElement('cloudy-ui-nav-language');
-        var languageMenu = new ContextMenu();
-        languageMenu.button.classList.add('cloudy-ui-nav-language-button');
-        languageMenu.appendTo(language);
-        this.element.append(language);
-
         var user = document.createElement('cloudy-ui-nav-user');
         var userMenu = new ContextMenu();
         userMenu.addItem(item => item.setText('Log out').onClick(() => location.href = 'Logout'));
