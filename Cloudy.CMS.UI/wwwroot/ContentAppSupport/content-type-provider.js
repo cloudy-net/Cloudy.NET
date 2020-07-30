@@ -29,7 +29,7 @@ class ContentTypeProvider {
 
             return await this.all;
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get content types (${error.message})`));
+            notificationManager.addNotification(item => item.setText(`Could not get content types --- ${error.message}`));
             throw error;
         }
     }
