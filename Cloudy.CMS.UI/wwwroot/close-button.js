@@ -5,7 +5,7 @@
 
 class BladeCloseButton {
     constructor() {
-        this.element = document.createElement('cloudy-ui-blade-title-close');
+        this.element = document.createElement('cloudy-ui-blade-close');
         this.element.setAttribute('tabindex', 0);
         this.element.addEventListener('click', () => this.element.dispatchEvent(new CustomEvent('cloudy-ui-close-blade', { bubbles: true, detail: { parameters: [] } })));
         this.element.addEventListener("keyup", event => {

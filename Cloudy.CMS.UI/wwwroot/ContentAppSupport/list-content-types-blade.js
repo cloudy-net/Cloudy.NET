@@ -57,7 +57,6 @@ class ListContentTypesBlade extends Blade {
                 });
             });
 
-            languageMenu.button.classList.add('cloudy-ui-nav-language-button');
             languageMenu.appendTo(language);
             this.setToolbar(language);
         }

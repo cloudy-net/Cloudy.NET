@@ -27,6 +27,8 @@ class ListContentBlade extends Blade {
         for (var contentType of contentTypes) {
             this.contentTypesById[contentType.id] = contentType;
         }
+
+        this.onClose(() => state.pop());
     }
 
     async open() {
