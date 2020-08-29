@@ -16,17 +16,20 @@ class ListContentBlade extends Blade {
     action = null;
     actions = null;
 
-    constructor(app, contentTypes, taxonomy) {
+    constructor(app, contentTypes, taxonomy, language) {
         super();
 
         this.app = app;
         this.contentTypes = contentTypes;
         this.taxonomy = taxonomy;
+        this.language = language;
 
         this.contentTypesById = {};
         for (var contentType of contentTypes) {
             this.contentTypesById[contentType.id] = contentType;
         }
+
+        this.setTitle(`${taxonomy.pluralName}`);
 
         this.onClose(() => state.pop());
     }
@@ -167,12 +170,22 @@ class ListContentBlade extends Blade {
     updateBreadcrumbs(parents) {
         [...this.breadcrumbs.childNodes].forEach(element => element.remove());
 
-        if (!parents.length) {
+        if (!parents.length && !this.language) {
             this.breadcrumbs.style.display = 'none';
             return;
         }
 
         this.breadcrumbs.style.display = '';
+
+        if (this.language) {
+            var tag = document.createElement('cloudy-ui-tag');
+            tag.innerText = this.language.name;
+            this.breadcrumbs.append(tag);
+        }
+
+        if (!parents.length) {
+            return;
+        }
 
         var breadcrumb = document.createElement('cloudy-ui-breadcrumb');
         breadcrumb.innerText = 'Top';

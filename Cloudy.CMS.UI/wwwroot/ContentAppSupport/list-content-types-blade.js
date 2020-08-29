@@ -27,6 +27,7 @@ function uuidv4() { // https://stackoverflow.com/a/2117523
 class ListContentTypesBlade extends Blade {
     action = null;
     actions = null;
+    language = null;
 
     constructor(app) {
         super();
@@ -50,10 +51,12 @@ class ListContentTypesBlade extends Blade {
             var language = document.createElement('cloudy-ui-nav-language');
             var languageMenu = new ContextMenu();
 
+            languageMenu.addSubHeader('Language');
+
             languages.forEach(language => {
                 languageMenu.addItem(item => {
                     item.setText(language.name);
-                    item.onClick(() => console.log(language));
+                    item.onClick(() => this.language = language);
                 });
             });
 
@@ -80,8 +83,7 @@ class ListContentTypesBlade extends Blade {
 
                 this.actions[item.id] = async () => {
                     listItem.setActive();
-                    var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup)
-                        .setTitle(contentTypeGroup.pluralName)
+                    var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup, this.language)
                         .onClose(() => {
                             listItem.setActive(false);
                         });
@@ -119,8 +121,7 @@ class ListContentTypesBlade extends Blade {
 
                 this.actions[item.id] = async () => {
                     listItem.setActive();
-                    var blade = new ListContentBlade(this.app, [contentType], contentType)
-                        .setTitle(contentType.pluralName)
+                    var blade = new ListContentBlade(this.app, [contentType], contentType, this.language)
                         .onClose(() => {
                             listItem.setActive(false);
                         });
