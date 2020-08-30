@@ -56,6 +56,7 @@ class ListContentTypesBlade extends Blade {
             languages.forEach(language => {
                 languageMenu.addItem(item => {
                     item.setText(language.name);
+                    item.setActive(this.language && this.language.name == language.name);
                     item.onClick(() => this.language = language);
                 });
             });
