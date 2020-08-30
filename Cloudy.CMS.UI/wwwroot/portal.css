@@ -223,6 +223,18 @@ cloudy-ui-blade-title-text {
 cloudy-ui-blade-title-text {
   display: block; }
 
+/* TITLE TAG */
+cloudy-ui-title-tag {
+  background: rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  margin-left: 7px;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 60%;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle; }
+
 /* TOOLBAR */
 cloudy-ui-blade-toolbar {
   margin-left: auto; }

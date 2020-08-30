@@ -31,6 +31,12 @@ class ListContentBlade extends Blade {
 
         this.setTitle(`${taxonomy.pluralName}`);
 
+        if (this.contentTypes.some(t => t.isLanguageSpecific) && this.language) {
+            var tag = document.createElement('cloudy-ui-title-tag');
+            tag.innerText = this.language.name;
+            this.setTitle(`${taxonomy.pluralName}`, tag);
+        }
+
         this.onClose(() => state.pop());
     }
 
@@ -170,22 +176,12 @@ class ListContentBlade extends Blade {
     updateBreadcrumbs(parents) {
         [...this.breadcrumbs.childNodes].forEach(element => element.remove());
 
-        if (!parents.length && !this.language) {
+        if (!parents.length) {
             this.breadcrumbs.style.display = 'none';
             return;
         }
 
         this.breadcrumbs.style.display = '';
-
-        if (this.language) {
-            var tag = document.createElement('cloudy-ui-tag');
-            tag.innerText = this.language.name;
-            this.breadcrumbs.append(tag);
-        }
-
-        if (!parents.length) {
-            return;
-        }
 
         var breadcrumb = document.createElement('cloudy-ui-breadcrumb');
         breadcrumb.innerText = 'Top';

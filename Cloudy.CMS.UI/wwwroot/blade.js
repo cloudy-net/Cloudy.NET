@@ -43,8 +43,9 @@ class Blade {
         return this;
     }
 
-    setTitle(text) {
-        this._titleText.innerText = text;
+    setTitle(...items) {
+        [...this._titleText.childNodes].forEach(c => this._titleText.removeChild(c));
+        items.forEach(item => this._titleText.append(item.element || item));
 
         return this;
     }
