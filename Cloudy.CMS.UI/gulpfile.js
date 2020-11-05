@@ -19,8 +19,4 @@ gulp.task('clean', () => {
 
 gulp.task('default', gulp.series(['clean', 'styles']));
 
-gulp.task('watch', () => {
-  gulp.watch('wwwroot/**/*.scss', (done) => {
-      gulp.series(['clean', 'styles'])(done);
-  });
-});
+gulp.task('watch', () => gulp.watch('wwwroot/**/*.scss', done => gulp.series(['styles'])(done)));
