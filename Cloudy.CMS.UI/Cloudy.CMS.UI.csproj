@@ -11,6 +11,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <NoWarn>CS1998</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
