@@ -65,6 +65,14 @@ class Button {
         return this;
     }
 
+    setStyle(values) {
+        for(const [key, value] of Object.entries(values)){
+            this.element.style[key] = value;
+        }
+
+        return this;
+    }
+
     setInherit(value = true) {
         if (value) {
             this.element.classList.add('inherit');

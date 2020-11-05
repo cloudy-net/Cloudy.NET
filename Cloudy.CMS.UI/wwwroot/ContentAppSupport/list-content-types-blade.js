@@ -10,6 +10,9 @@ import ListItem from '../ListSupport/list-item.js';
 import state from '../state.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import languageProvider from './language-provider.js';
+import Button from '../button.js';
+import InlineText from '../inline-text.js';
+import changeTracker from './change-tracker.js';
 
 
 
@@ -40,6 +43,7 @@ class ListContentTypesBlade extends Blade {
 
         const list = new List();
         this.setContent(list);
+        this.setFooter(changeTracker);
 
         const [contentTypes, contentTypeGroups, languages] = await Promise.all([
             ContentTypeProvider.getAll(),
