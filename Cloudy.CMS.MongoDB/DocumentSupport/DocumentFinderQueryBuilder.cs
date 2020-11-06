@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace Cloudy.CMS.DocumentSupport.MongoSupport
 
         public IDocumentFinderQueryBuilder WhereEquals<T1, T2>(Expression<Func<T1, T2>> property, T2 value) where T1 : class
         {
-            if(value == null)
+            if (value == null)
             {
                 Filters.Add(
                     Builders<Document>.Filter.And(
@@ -54,6 +55,15 @@ namespace Cloudy.CMS.DocumentSupport.MongoSupport
                     Builders<Document>.Filter.Eq(new StringFieldDefinition<Document, T2>(DocumentPropertyPathProvider.GetFor(property)), value)
                 );
             }
+
+            return this;
+        }
+
+        public IDocumentFinderQueryBuilder WhereNullOrMissing<T1>(Expression<Func<T1, object>> property) where T1 : class
+        {
+            Filters.Add(
+                Builders<Document>.Filter.Eq(DocumentPropertyPathProvider.GetFor(property), BsonNull.Value)
+            );
 
             return this;
         }
