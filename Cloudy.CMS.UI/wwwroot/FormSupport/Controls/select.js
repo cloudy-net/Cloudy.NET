@@ -185,7 +185,7 @@ class ListItemsBlade extends Blade {
             var listItem = new ListItem();
             this.list.addItem(listItem);
 
-            if (item.value == this.item.value) {
+            if (this.item && this.item.value == item.value) {
                 listItem.setActive();
             }
             listItem.setImage(item.image);
