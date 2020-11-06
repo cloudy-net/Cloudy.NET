@@ -9,11 +9,18 @@ Install Cloudy.CMS and Cloudy.CMS.UI from NuGet.
 In Startup.cs, under ConfigureServices, do:
 
     services.AddMvc();
-    services.AddCloudy(cloudy => cloudy.AddAdmin());
+    services.AddCloudy(cloudy => cloudy
+        .AddFileBasedDocuments()              // Uses physical JSON files. Otherwise - inmemory.
+        .AddAdmin(admin => admin.Unprotect()) // NOTE: Admin UI will be publicly available!
+    );
 
 And in the Configure method, do:
 
-    app.UseCloudyAdmin(cloudy => cloudy.Unprotect()); // NOTE: Admin UI will be publicly available!
+    app.UseCloudyAdminStaticFiles();
+
+In the endpoints configuration:
+
+    endpoints.MapCloudyAdminRoutes();
 
 Then visit `/Admin` for the royal tour.
 
