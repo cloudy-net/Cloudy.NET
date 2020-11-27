@@ -22,9 +22,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentGetter = contentGetter;
         }
 
-        public async Task<IContent> GetAsync(string id, string contentTypeId)
+        public async Task<IContent> Get(string contentId, string contentTypeId)
         {
-            return await ContentGetter.GetAsync(contentTypeId, id, null).ConfigureAwait(false);
+            return await ContentGetter.GetAsync(contentTypeId, contentId, null).ConfigureAwait(false);
         }
     }
 }

@@ -91,115 +91,57 @@ class EditContentBlade extends Blade {
 
         this.buildForm();
 
-        this.saveButton = new Button('Save')
-            .setPrimary()
-            .onClick(async () => {
-                try {
-                    var response = await fetch('SaveContent/SaveContent', {
-                        credentials: 'include',
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            id: this.content.id,
-                            contentTypeId: this.contentType.id,
-                            content: JSON.stringify(this.content)
-                        })
-                    });
-
-                    if (!response.ok) {
-                        var text = await response.text();
-
-                        if (text) {
-                            throw new Error(text.split('\n')[0]);
-                        } else {
-                            text = response.statusText;
-                        }
-
-                        throw new Error(`${response.status} (${text})`);
-                    }
-
-                    var result = await response.json();
-                } catch (error) {
-                    notificationManager.addNotification(item => item.setText(`Could not save content --- ${error.message}`));
-                    throw error;
-                }
-
-                if (!result.success) {
-                    var errors = document.createElement('ul');
-                    Object.entries(result.validationErrors).forEach(error => {
-                        var item = document.createElement('li');
-                        item.innerText = `${error[0]}: ${error[1]}`;
-                        errors.append(item);
-                    });
-                    notificationManager.addNotification(item => item.setText(`Error saving ${this.contentType.name}:`, errors));
-                    return;
-                }
-
-                var name = null;
-
-                if (!this.contentType.isSingleton) {
-                    if (this.contentType.isNameable) {
-                        name = this.contentType.nameablePropertyName ? this.content[this.contentType.nameablePropertyName] : this.content.name;
-                    }
-                    if (!name) {
-                        name = this.content.id;
-                    }
-                }
-
-                if (!this.content.id) {
-                    notificationManager.addNotification(item => item.setText(`Created ${this.contentType.name} ${name || ''}`));
-                    this.app.removeBlade(this);
-                } else {
-                    notificationManager.addNotification(item => item.setText(`Updated ${this.contentType.name} ${name || ''}`));
-                }
-
-                this.onCompleteCallbacks.forEach(callback => callback(this.content));
-            });
+        this.saveButton = new Button('Save').setPrimary().onClick(this.save.bind(this));
 
         var cancelButton = new Button('Cancel').onClick(() => this.app.removeBlade(this));
-        var paste = text => {
-            const value = JSON.parse(text);
-
-            for (let [propertyKey, propertyValue] of Object.entries(this.content)) {
-                if (propertyKey == 'id') {
-                    continue;
-                }
-
-                if (propertyKey == 'contentTypeId') {
-                    continue;
-                }
-
-                if (propertyKey == 'language') {
-                    continue;
-                }
-
-                if (!(propertyKey in value)) {
-                    delete this.content[propertyKey];
-                }
-            }
-            for (let [propertyKey, propertyValue] of Object.entries(value)) {
-                if (propertyKey == 'id') {
-                    continue;
-                }
-
-                if (propertyKey == 'contentTypeId') {
-                    continue;
-                }
-
-                if (propertyKey == 'language') {
-                    continue;
-                }
-
-                this.content[propertyKey] = propertyValue;
-            }
-
-            this.buildForm();
-        };
         var moreButton = new ContextMenu()
             .addItem(item => item.setText('Copy').onClick(() => navigator.clipboard.writeText(JSON.stringify(this.content, null, '  '))))
-            .addItem(item => item.setText('Paste').onClick(() => { this.app.removeBladesAfter(this); navigator.clipboard.readText().then(paste); }));
+            .addItem(item => item.setText('Paste').onClick(() => { this.app.removeBladesAfter(this); navigator.clipboard.readText().then(this.paste.bind(this)); }));
 
         this.setFooter(this.saveButton, cancelButton, moreButton);
+    }
+
+    async save(){
+        this.app.changeTracker.save(this.content.id, this.contentType.id, JSON.stringify(this.content));
+    }
+
+    paste(text){
+        const value = JSON.parse(text);
+
+        for (let [propertyKey, propertyValue] of Object.entries(this.content)) {
+            if (propertyKey == 'id') {
+                continue;
+            }
+
+            if (propertyKey == 'contentTypeId') {
+                continue;
+            }
+
+            if (propertyKey == 'language') {
+                continue;
+            }
+
+            if (!(propertyKey in value)) {
+                delete this.content[propertyKey];
+            }
+        }
+        for (let [propertyKey, propertyValue] of Object.entries(value)) {
+            if (propertyKey == 'id') {
+                continue;
+            }
+
+            if (propertyKey == 'contentTypeId') {
+                continue;
+            }
+
+            if (propertyKey == 'language') {
+                continue;
+            }
+
+            this.content[propertyKey] = propertyValue;
+        }
+
+        this.buildForm();
     }
 
     async buildForm() {

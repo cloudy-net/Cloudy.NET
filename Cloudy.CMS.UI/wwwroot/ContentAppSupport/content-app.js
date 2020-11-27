@@ -1,6 +1,7 @@
 ﻿import App from '../app.js';
 import ListContentTypesBlade from './list-content-types-blade.js';
 import state from '../state.js';
+import ChangeTracker from './change-tracker.js';
 
 
 
@@ -8,10 +9,12 @@ import state from '../state.js';
 
 class ContentApp extends App {
     listContentTypesBlade = null;
+    changeTracker = null;
 
     constructor() {
         super();
         this.listContentTypesBlade = new ListContentTypesBlade(this);
+        this.changeTracker = new ChangeTracker(this, this.listContentTypesBlade);
 
         this.stateUpdate = async () => {
             state.update();

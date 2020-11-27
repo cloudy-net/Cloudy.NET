@@ -18,5 +18,7 @@ namespace Website.AspNetCore.Models
         public string Name { get; set; }
         public string UrlSegment { get; set; }
         public string Language { get; set; }
+        [UIHint("select('user', '')")]
+        public string UserId { get; set; }
     }
 }
