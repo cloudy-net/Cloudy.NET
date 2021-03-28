@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>1eebc780-ddb5-4ad2-8b94-3b8a1089619c</UserSecretsId>
+    <NoWarn>CS1998</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
