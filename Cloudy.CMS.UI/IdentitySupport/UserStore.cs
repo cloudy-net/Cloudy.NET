@@ -1,7 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
-using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.DocumentSupport;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -24,8 +22,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
         IContentGetter ContentGetter { get; }
         IContentUpdater ContentUpdater { get; }
         IContentDeleter ContentDeleter { get; }
-        IDocumentFinder DocumentFinder { get; set; }
-        IContentDeserializer ContentDeserializer { get; set; }
+        IContentFinder ContentFinder { get; set; }
         ContentTypeDescriptor ContentType { get; }
         string Container { get; }
 
@@ -34,8 +31,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             IContentGetter contentGetter,
             IContentUpdater contentUpdater,
             IContentDeleter contentDeleter,
-            IDocumentFinder documentFinder,
-            IContentDeserializer contentDeserializer,
+            IContentFinder contentFinder,
             IContentTypeProvider contentTypeProvider
         )
         {
@@ -43,8 +39,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             ContentGetter = contentGetter;
             ContentUpdater = contentUpdater;
             ContentDeleter = contentDeleter;
-            DocumentFinder = documentFinder;
-            ContentDeserializer = contentDeserializer;
+            ContentFinder = contentFinder;
             ContentType = contentTypeProvider.Get(typeof(User));
             Container = ContentType.Container;
         }
@@ -72,16 +67,9 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedUsername, normalizedUserName).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
+            var content = (await ContentFinder.FindInContainer(Container).WhereEquals<User, string>(u => u.NormalizedUsername, normalizedUserName).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
 
-            if(document == null)
-            {
-                return null;
-            }
-
-            var content = ContentDeserializer.Deserialize(document, ContentType, null) as User;
-
-            return content;
+            return content as User;
         }
 
         public async Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
@@ -275,16 +263,9 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
         public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            var document = (await DocumentFinder.Find(Container).WhereEquals<User, string>(u => u.NormalizedEmail, normalizedEmail).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
+            var content = (await ContentFinder.FindInContainer(Container).WhereEquals<User, string>(u => u.NormalizedEmail, normalizedEmail).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
 
-            if (document == null)
-            {
-                return null;
-            }
-
-            var content = ContentDeserializer.Deserialize(document, ContentType, null) as User;
-
-            return content;
+            return content as User;
         }
 
         public async Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)

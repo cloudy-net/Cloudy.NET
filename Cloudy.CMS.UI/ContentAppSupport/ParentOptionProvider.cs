@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.DocumentSupport;
-using Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport;
+﻿using Cloudy.CMS.UI.FormSupport.Controls.DropdownControlSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,21 +6,20 @@ using System.Linq;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport
 {
     [OptionProvider("parent")]
     public class ParentOptionProvider : IOptionProvider
     {
-        IDocumentFinder DocumentFinder { get; }
+        IContentFinder ContentFinder { get; }
         IContentTypeProvider ContentTypeProvider { get; }
-        IContentDeserializer ContentDeserializer { get; }
 
-        public ParentOptionProvider(IDocumentFinder documentFinder, IContentTypeProvider contentTypeProvider, IContentDeserializer contentDeserializer)
+        public ParentOptionProvider(IContentFinder contentFinder, IContentTypeProvider contentTypeProvider)
         {
-            DocumentFinder = documentFinder;
+            ContentFinder = contentFinder;
             ContentTypeProvider = contentTypeProvider;
-            ContentDeserializer = contentDeserializer;
         }
 
         public IEnumerable<Option> GetAll()
@@ -32,12 +30,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
             foreach (var contentType in contentTypes)
             {
-                var documents = DocumentFinder.Find(contentType.Container).WhereEquals<IContent, string>(x => x.ContentTypeId, contentType.Id).GetResultAsync().Result.ToList();
+                var documents = ContentFinder.FindInContainer(contentType.Container).WithContentType(contentType.Id).GetResultAsync().Result.ToList();
 
-                foreach (var document in documents)
+                foreach (var content in documents)
                 {
-                    var content = ContentDeserializer.Deserialize(document, contentType, DocumentLanguageConstants.Global);
-
                     result.Add(new Option((content as INameable).Name ?? content.Id, content.Id));
                 }
             }

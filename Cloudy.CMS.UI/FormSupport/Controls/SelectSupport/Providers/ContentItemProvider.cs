@@ -1,10 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
-using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.DocumentSupport;
-using Cloudy.CMS.DocumentSupport.FileSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,17 +13,15 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
     public class ContentItemProvider : IItemProvider
     {
         public IContentTypeProvider ContentTypeProvider { get; }
-        public IDocumentFinder DocumentFinder { get; }
+        public IContentFinder ContentFinder { get; }
         public IContentGetter ContentGetter { get; }
-        public IContentDeserializer ContentDeserializer { get; }
         public IAncestorProvider AncestorProvider { get; }
 
-        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContentGetter contentGetter, IContentDeserializer contentDeserializer, IAncestorProvider ancestorProvider)
+        public ContentItemProvider(IContentTypeProvider contentTypeProvider, IContentFinder contentFinder, IContentGetter contentGetter, IAncestorProvider ancestorProvider)
         {
             ContentTypeProvider = contentTypeProvider;
-            DocumentFinder = documentFinder;
+            ContentFinder = contentFinder;
             ContentGetter = contentGetter;
-            ContentDeserializer = contentDeserializer;
             AncestorProvider = ancestorProvider;
         }
 
@@ -51,15 +45,8 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 
             var contentType = ContentTypeProvider.Get(type);
 
-            foreach (var document in await DocumentFinder.Find(contentType.Container).GetResultAsync().ConfigureAwait(false))
+            foreach (var content in await ContentFinder.FindInContainer(contentType.Container).WithContentType(type).GetResultAsync().ConfigureAwait(false))
             {
-                if(document.GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)] as string != type)
-                {
-                    continue;
-                }
-                
-                var content = ContentDeserializer.Deserialize(document, contentType, null);
-
                 result.Add(GetItem(content));
             }
 

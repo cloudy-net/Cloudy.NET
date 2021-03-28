@@ -14,7 +14,17 @@ namespace Cloudy.CMS.ContentSupport
         public void InjectDependencies(IServiceCollection services)
         {
             services.AddSingleton<IIdGenerator, IdGenerator>();
+            services.AddSingleton<IContentGetter, ContentGetter>();
+            services.AddSingleton<IContentDeleter, ContentDeleter>();
+            services.AddSingleton<IContentCreator, ContentCreator>();
+            services.AddSingleton<IContentInserter, ContentInserter>();
+            services.AddSingleton<IContentUpdater, ContentUpdater>();
+            services.AddSingleton<IChildLinkProvider, ChildLinkProvider>();
+            services.AddSingleton<IChildrenGetter, ChildrenGetter>();
+            services.AddSingleton<IAncestorProvider, AncestorProvider>();
 
+            services.AddSingleton<IContentSerializer, ContentSerializer>();
+            services.AddSingleton<IContentDeserializer, ContentDeserializer>();
             services.AddSingleton<IPolymorphicDeserializer, PolymorphicDeserializer>();
             services.AddSingleton<IPolymorphicSerializer, PolymorphicSerializer>();
             services.AddSingleton<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();

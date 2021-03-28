@@ -1,7 +1,7 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.DocumentSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,16 +21,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class ContentListController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
-        IDocumentFinder DocumentFinder { get; }
-        IContentDeserializer ContentDeserializer { get; }
+        IContentFinder ContentFinder { get; }
+        IContentChildrenCounter ContentChildrenCounter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public ContentListController(IContentTypeProvider contentTypeRepository, IDocumentFinder documentFinder, IContentDeserializer contentDeserializer, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
+        public ContentListController(IContentTypeProvider contentTypeRepository, IContentFinder contentFinder, IContentChildrenCounter contentChildrenCounter, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeRepository;
-            DocumentFinder = documentFinder;
-            ContentDeserializer = contentDeserializer;
+            ContentFinder = contentFinder;
+            ContentChildrenCounter = contentChildrenCounter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
             PolymorphicFormConverter = polymorphicFormConverter;
         }
@@ -45,37 +45,29 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 throw new ContentTypesSpanSeveralContainersException(contentTypes);
             }
 
-            var hierarchical = contentTypes.Any(t => typeof(IHierarchical).IsAssignableFrom(t.Type));
-
             var items = new List<IContent>();
             var itemChildrenCounts = new Dictionary<string, int>();
 
-            var documentsQuery = DocumentFinder.Find(containers.Single()).WhereIn<IContent, string>(x => x.ContentTypeId, contentTypeIds);
+            var documentsQuery = ContentFinder.FindInContainer(containers.Single()).WithContentType(contentTypeIds);
 
-            if (hierarchical)
+            if(parent != null)
             {
-                if(parent != null)
-                {
-                    documentsQuery.WhereEquals<IHierarchical, string>(x => x.ParentId, parent);
-                }
-                else
-                {
-                    documentsQuery.WhereNullOrMissing<IHierarchical>(x => x.ParentId);
-                }
+                documentsQuery.WhereParent(parent);
+            }
+            else
+            {
+                documentsQuery.WhereHasNoParent();
             }
 
             var documents = (await documentsQuery.GetResultAsync().ConfigureAwait(false)).ToList();
 
-            foreach (var document in documents)
+            foreach (var content in documents)
             {
-                var contentTypeId = (string)document.GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)];
-                var content = ContentDeserializer.Deserialize(document, ContentTypeProvider.Get(contentTypeId), DocumentLanguageConstants.Global);
-                
                 items.Add(content);
 
-                if (hierarchical)
+                if (content is IHierarchical)
                 {
-                    itemChildrenCounts[content.Id] = (await DocumentFinder.Find(containers.Single()).WhereEquals<IHierarchical, string>(x => x.ParentId, content.Id).GetResultAsync()).Count();
+                    itemChildrenCounts[content.Id] = await ContentChildrenCounter.CountChildrenForAsync(containers.Single(), content.Id).ConfigureAwait(false);
                 }
             }
 

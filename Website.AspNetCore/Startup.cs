@@ -21,7 +21,6 @@ using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Cloudy.CMS.UI.IdentitySupport;
-using Cloudy.CMS.DocumentSupport.FileSupport;
 
 namespace Website.AspNetCore
 {
@@ -34,7 +33,6 @@ namespace Website.AspNetCore
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .AddLanguage("sv")
                 .AddLanguage("en")
-                .AddFileBasedDocuments()
                 .AddAdmin(admin => admin.Unprotect())
             );
             services.AddCloudyIdentity();

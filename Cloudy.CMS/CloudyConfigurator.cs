@@ -1,6 +1,4 @@
-﻿using Cloudy.CMS.DocumentSupport.FileSupport;
-using Cloudy.CMS.DocumentSupport.InMemorySupport;
-using Cloudy.CMS.LanguageSupport;
+﻿using Cloudy.CMS.LanguageSupport;
 using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;

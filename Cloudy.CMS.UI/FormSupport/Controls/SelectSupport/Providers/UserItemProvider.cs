@@ -2,9 +2,7 @@
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.DocumentSupport;
 using Cloudy.CMS.UI.FormSupport.Controls.SelectSupport;
-using Cloudy.CMS.DocumentSupport.FileSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,16 +16,14 @@ namespace SakraLyft
     public class UserItemProvider : IItemProvider
     {
         public IContentTypeProvider ContentTypeProvider { get; }
-        public IDocumentFinder DocumentFinder { get; }
+        public IContentFinder ContentFinder { get; }
         public IContentGetter ContentGetter { get; }
-        public IContentDeserializer ContentDeserializer { get; }
 
-        public UserItemProvider(IContentTypeProvider contentTypeProvider, IDocumentFinder documentFinder, IContentGetter contentGetter, IContentDeserializer contentDeserializer)
+        public UserItemProvider(IContentTypeProvider contentTypeProvider, IContentFinder contentFinder, IContentGetter contentGetter)
         {
             ContentTypeProvider = contentTypeProvider;
-            DocumentFinder = documentFinder;
+            ContentFinder = contentFinder;
             ContentGetter = contentGetter;
-            ContentDeserializer = contentDeserializer;
         }
 
         public async Task<ItemResponse> Get(string type, string value)
@@ -48,14 +44,12 @@ namespace SakraLyft
 
             var contentType = ContentTypeProvider.Get(typeof(User));
 
-            foreach (var document in await DocumentFinder.Find(contentType.Container).GetResultAsync().ConfigureAwait(false))
+            foreach (var content in await ContentFinder.FindInContainer(contentType.Container).GetResultAsync().ConfigureAwait(false))
             {
-                if (document.GlobalFacet.Interfaces[nameof(IContent)].Properties[nameof(IContent.ContentTypeId)] as string != type)
+                if (content.ContentTypeId != type)
                 {
                     continue;
                 }
-
-                var content = ContentDeserializer.Deserialize(document, contentType, null);
 
                 result.Add(GetItem(content));
             }
