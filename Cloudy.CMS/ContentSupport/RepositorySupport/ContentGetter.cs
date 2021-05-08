@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
+using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,24 +9,23 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentGetter : IContentGetter
     {
-        IContentTypeProvider ContentTypeProvider { get; }
+        IDbSetProvider DbSetProvider { get; }
 
-        public ContentGetter(IContentTypeProvider contentTypeProvider)
+        public ContentGetter(IDbSetProvider dbSetProvider)
         {
-            ContentTypeProvider = contentTypeProvider;
+            DbSetProvider = dbSetProvider;
         }
 
         public async Task<object> GetAsync(string contentTypeId, params object[] keyValues)
         {
-
-            throw new NotImplementedException();
+            var dbSet = DbSetProvider.Get(contentTypeId);
+            return await dbSet.FindAsync(keyValues).ConfigureAwait(false);
         }
 
         public async Task<T> GetAsync<T>(params object[] keyValues) where T : class
         {
-            var contentType = ContentTypeProvider.Get(typeof(T));
-
-            return (T)await GetAsync(contentType.Id, keyValues);
+            var dbSet = DbSetProvider.Get<T>();
+            return (T)await dbSet.FindAsync(keyValues).ConfigureAwait(false);
         }
     }
 }

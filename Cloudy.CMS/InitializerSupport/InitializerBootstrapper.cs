@@ -13,9 +13,12 @@ namespace Cloudy.CMS.InitializerSupport
         {
             return app =>
             {
-                foreach (var initializer in app.ApplicationServices.GetRequiredService<IInitializerProvider>().GetAll())
+                using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    initializer.InitializeAsync().GetAwaiter().GetResult();
+                    foreach (var initializer in scope.ServiceProvider.GetRequiredService<IInitializerProvider>().GetAll())
+                    {
+                        initializer.InitializeAsync().GetAwaiter().GetResult();
+                    }
                 }
                 next(app);
             };

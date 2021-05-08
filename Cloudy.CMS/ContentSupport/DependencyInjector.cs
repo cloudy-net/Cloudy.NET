@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
+﻿using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.RuntimeSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.DependencyInjectionSupport;
@@ -20,6 +21,10 @@ namespace Cloudy.CMS.ContentSupport
             services.AddSingleton<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
 
             services.AddSingleton<IContentInstanceCreator, ContentInstanceCreator>();
+            services.AddScoped<IContentGetter, ContentGetter>();
+            services.AddScoped<IDbSetProvider, DbSetProvider>();
+            services.AddScoped<IContextProvider, ContextProvider>();
+            services.AddScoped<IContextCreator, ContextCreator>();
         }
     }
 }

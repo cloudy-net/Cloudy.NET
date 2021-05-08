@@ -10,8 +10,8 @@ namespace Cloudy.CMS.InitializerSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IInitializerProvider, InitializerProvider>();
-            services.AddSingleton<IInitializerCreator, InitializerCreator>();
+            services.AddScoped<IInitializerProvider, InitializerProvider>();
+            services.AddScoped<IInitializerCreator, InitializerCreator>();
         }
     }
 }

@@ -20,6 +20,7 @@ using Cloudy.CMS.Routing;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
+using Website.AspNetCore.Models;
 
 namespace Website.AspNetCore
 {
@@ -31,6 +32,7 @@ namespace Website.AspNetCore
             services.AddCloudy(cloudy => cloudy
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .AddAdmin(admin => admin.Unprotect())
+                .AddContext<PageContext>()
             );
         }
 

@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
+using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -43,6 +44,9 @@ namespace Microsoft.AspNetCore.Builder
 
             var AssemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
             services.AddSingleton<IAssemblyProvider>(AssemblyProvider);
+
+            
+            services.AddSingleton<IContextDescriptorProvider>(new ContextDescriptorProvider(ContextDescriptor.CreateFrom(options.Contexts)));
             
             foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(AssemblyProvider)).GetAll())
             {

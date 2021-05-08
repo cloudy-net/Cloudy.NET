@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
@@ -29,6 +30,13 @@ namespace Cloudy.CMS
         public CloudyConfigurator AddComponentAssembly(Assembly assembly)
         {
             Options.Assemblies.Add(assembly);
+
+            return this;
+        }
+
+        public CloudyConfigurator AddContext<T>() where T : class
+        {
+            Options.Contexts[typeof(T)] = typeof(T).GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
 
             return this;
         }

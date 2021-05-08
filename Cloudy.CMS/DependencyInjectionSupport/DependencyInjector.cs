@@ -11,7 +11,7 @@ namespace Cloudy.CMS.DependencyInjectionSupport
         {
             services.AddSingleton<IDependencyInjectorCreator, DependencyInjectorCreator>();
             services.AddSingleton<IDependencyInjectorProvider, DependencyInjectorProvider>();
-            services.AddSingleton<IInstantiator, Instantiator>();
+            services.AddScoped<IInstantiator, Instantiator>();
         }
     }
 }
