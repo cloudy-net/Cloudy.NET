@@ -37,11 +37,6 @@ namespace Cloudy.CMS.SingletonSupport
 
                 if (content != null)
                 {
-                    if(content.ContentTypeId != contentType.Id)
-                    {
-                        throw new SingletonWithIdIsOfWrongType(singleton.Id, contentType, content.GetType(), content.ContentTypeId);
-                    }
-
                     continue;
                 }
 

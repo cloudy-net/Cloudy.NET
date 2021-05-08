@@ -46,7 +46,7 @@ namespace SakraLyft
 
             foreach (var content in await ContentFinder.FindInContainer(contentType.Container).GetResultAsync().ConfigureAwait(false))
             {
-                if (content.ContentTypeId != type)
+                if (!contentType.Type.IsAssignableFrom(content.GetType()))
                 {
                     continue;
                 }
