@@ -24,7 +24,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public async Task<IContent> Get(string contentId, string contentTypeId)
         {
-            return await ContentGetter.GetAsync(contentTypeId, contentId, null).ConfigureAwait(false);
+            return await ContentGetter.GetAsync(contentTypeId, contentId).ConfigureAwait(false);
         }
     }
 }

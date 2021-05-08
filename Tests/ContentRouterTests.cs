@@ -20,7 +20,7 @@ namespace Tests
                 UrlSegment = null,
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { }, Enumerable.Empty<ContentTypeDescriptor>(), null);
+            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(root, result);
         }
@@ -33,7 +33,7 @@ namespace Tests
                 UrlSegment = "lorem",
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem" }, Enumerable.Empty<ContentTypeDescriptor>(), null);
+            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem" }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(root, result);
         }
@@ -53,7 +53,7 @@ namespace Tests
                 UrlSegment = "ipsum",
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem", "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>(), null);
+            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem", "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(page, result);
         }
@@ -73,7 +73,7 @@ namespace Tests
                 UrlSegment = "ipsum",
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>(), null);
+            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(page, result);
         }
@@ -102,7 +102,7 @@ namespace Tests
                 Pages = pages;
             }
 
-            public IContent RouteContentSegment(string parentId, string segment, IEnumerable<ContentTypeDescriptor> types, string language)
+            public IContent RouteContentSegment(string parentId, string segment, IEnumerable<ContentTypeDescriptor> types)
             {
                 return Pages.FirstOrDefault(p => p.ParentId == parentId && p.UrlSegment == segment);
             }

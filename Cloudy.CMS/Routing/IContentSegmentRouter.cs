@@ -8,6 +8,6 @@ namespace Cloudy.CMS.Routing
 {
     public interface IContentSegmentRouter
     {
-        IContent RouteContentSegment(string parentId, string segment, IEnumerable<ContentTypeDescriptor> types, string language);
+        IContent RouteContentSegment(string parentId, string segment, IEnumerable<ContentTypeDescriptor> types);
     }
 }

@@ -89,7 +89,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 ImageablePropertyName = typeof(IImageable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(ImageExpressionParser.Parse(contentType.Type), false) : null,
                 IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
-                IsLanguageSpecific = typeof(ILanguageSpecific).IsAssignableFrom(contentType.Type),
                 Count = -1,
                 ContentTypeActionModules = ContentTypeActionModuleProvider.GetContentTypeActionModulesFor(contentType.Id),
                 ListActionModules = ListActionModuleProvider.GetListActionModulesFor(contentType.Id),
@@ -112,7 +111,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public bool IsRoutable { get; set; }
             public bool IsSingleton { get; set; }
             public string SingletonId { get; set; }
-            public bool IsLanguageSpecific { get; set; }
             public int Count { get; set; }
             public IEnumerable<string> ContentTypeActionModules { get; set; }
             public IEnumerable<string> ListActionModules { get; set; }

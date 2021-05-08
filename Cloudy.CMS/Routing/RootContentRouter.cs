@@ -16,7 +16,7 @@ namespace Cloudy.CMS.Routing
             ContentSegmentRouter = contentSegmentRouter;
         }
 
-        public IContent Route(IContent root, IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types, string language)
+        public IContent Route(IContent root, IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
         {
             if (!segments.Any())
             {
@@ -37,7 +37,7 @@ namespace Cloudy.CMS.Routing
 
             while (segments.Any())
             {
-                content = ContentSegmentRouter.RouteContentSegment(content?.Id, segments.First(), types, language);
+                content = ContentSegmentRouter.RouteContentSegment(content?.Id, segments.First(), types);
 
                 if (content == null)
                 {

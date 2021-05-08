@@ -39,8 +39,6 @@ namespace Cloudy.CMS.Mvc.Routing
                 return routable.UrlSegment;
             }
 
-            var languageSpecific = content as ILanguageSpecific;
-
             var allContent = (await AncestorProvider.GetAncestorsAsync(content).ConfigureAwait(false)).Reverse();
 
             if (allContent.Any(c => !(c is IRoutable)))

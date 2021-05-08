@@ -9,7 +9,6 @@ import SingletonGetter from './singleton-getter.js';
 import ListItem from '../ListSupport/list-item.js';
 import state from '../state.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
-import languageProvider from './language-provider.js';
 
 
 
@@ -27,7 +26,6 @@ function uuidv4() { // https://stackoverflow.com/a/2117523
 class ListContentTypesBlade extends Blade {
     action = null;
     actions = null;
-    language = null;
 
     constructor(app) {
         super();
@@ -42,29 +40,10 @@ class ListContentTypesBlade extends Blade {
         this.setContent(list);
         this.setFooter(this.app.changeTracker);
 
-        const [contentTypes, contentTypeGroups, languages] = await Promise.all([
+        const [contentTypes, contentTypeGroups] = await Promise.all([
             ContentTypeProvider.getAll(),
             ContentTypeGroupProvider.getAll(),
-            languageProvider.getAll(),
         ]);
-
-        if (languages.length) {
-            var language = document.createElement('cloudy-ui-nav-language');
-            var languageMenu = new ContextMenu();
-
-            languageMenu.addSubHeader('Language');
-
-            languages.forEach(language => {
-                languageMenu.addItem(item => {
-                    item.setText(language.name);
-                    item.setActive(this.language && this.language.name == language.name);
-                    item.onClick(() => this.language = language);
-                });
-            });
-
-            languageMenu.appendTo(language);
-            this.setToolbar(language);
-        }
 
         const items = [
             ...contentTypes.map(t => ({ id: t.id, type: 'contentType', value: t })),
@@ -85,7 +64,7 @@ class ListContentTypesBlade extends Blade {
 
                 this.actions[item.id] = async () => {
                     listItem.setActive();
-                    var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup, this.language)
+                    var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup)
                         .onClose(() => {
                             listItem.setActive(false);
                         });
@@ -123,7 +102,7 @@ class ListContentTypesBlade extends Blade {
 
                 this.actions[item.id] = async () => {
                     listItem.setActive();
-                    var blade = new ListContentBlade(this.app, [contentType], contentType, this.language)
+                    var blade = new ListContentBlade(this.app, [contentType], contentType)
                         .onClose(() => {
                             listItem.setActive(false);
                         });

@@ -19,7 +19,7 @@ namespace Cloudy.CMS.SingletonSupport
             ContentGetter = contentGetter;
         }
 
-        public async Task<IContent> GetAsync(string contentTypeId, string language)
+        public async Task<IContent> GetAsync(string contentTypeId)
         {
             var singleton = SingletonProvider.Get(contentTypeId);
 
@@ -28,10 +28,10 @@ namespace Cloudy.CMS.SingletonSupport
                 return null;
             }
 
-            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id, language).ConfigureAwait(false);
+            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id).ConfigureAwait(false);
         }
 
-        public async Task<T> GetAsync<T>(string language) where T : class, IContent
+        public async Task<T> GetAsync<T>() where T : class, IContent
         {
             var singleton = SingletonProvider.Get<T>();
 
@@ -40,7 +40,7 @@ namespace Cloudy.CMS.SingletonSupport
                 return null;
             }
 
-            return (T)await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id, language).ConfigureAwait(false);
+            return (T)await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id).ConfigureAwait(false);
         }
     }
 }

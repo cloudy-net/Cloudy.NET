@@ -14,7 +14,6 @@ namespace Cloudy.CMS.ContentSupport
     public interface IRoutable
     {
         [Display(GroupName = "Settings")]
-        [LanguageSpecific]
         string UrlSegment { get; set; }
     }
 }

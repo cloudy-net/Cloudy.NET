@@ -33,7 +33,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             var contentType = ContentTypeProvider.Get(contentTypeId);
 
-            var content = await ContentGetter.GetAsync(contentTypeId, id, null).ConfigureAwait(false);
+            var content = await ContentGetter.GetAsync(contentTypeId, id).ConfigureAwait(false);
 
             var contentRouteSegment = await UrlProvider.GetAsync(content).ConfigureAwait(false);
 

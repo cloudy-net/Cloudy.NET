@@ -74,7 +74,7 @@ namespace Tests
 
             var contentGetter = Mock.Of<IContentGetter>();
 
-            Mock.Get(contentGetter).Setup(g => g.GetAsync<MyContent>(id, null)).Returns(Task.FromResult(a));
+            Mock.Get(contentGetter).Setup(g => g.GetAsync<MyContent>(id)).Returns(Task.FromResult(a));
 
             var contentTypeCoreInterfaceProvider = Mock.Of<IContentTypeCoreInterfaceProvider>();
 

@@ -62,7 +62,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
 
         public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await ContentGetter.GetAsync<User>(userId, null).ConfigureAwait(false);
+            return await ContentGetter.GetAsync<User>(userId).ConfigureAwait(false);
         }
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)

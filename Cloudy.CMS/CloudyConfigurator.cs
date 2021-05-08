@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.LanguageSupport;
-using Cloudy.CMS.Routing;
+﻿using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -30,30 +29,6 @@ namespace Cloudy.CMS
         public CloudyConfigurator AddComponentAssembly(Assembly assembly)
         {
             Options.Assemblies.Add(assembly);
-
-            return this;
-        }
-
-        public CloudyConfigurator AddLanguage(string id)
-        {
-            AddLanguage(id, new CultureInfo(id).EnglishName);
-
-            return this;
-        }
-
-        public CloudyConfigurator AddLanguage(string id, string name)
-        {
-            if (Options.Languages.Any(l => l.Id == id))
-            {
-                throw new Exception($"There is already a language added with the id {id}");
-            }
-
-            if (Options.Languages.Any(l => l.Name == name))
-            {
-                throw new Exception($"There is already a language added with the name {name}");
-            }
-
-            Options.Languages.Add(new LanguageDescriptor(id, name));
 
             return this;
         }

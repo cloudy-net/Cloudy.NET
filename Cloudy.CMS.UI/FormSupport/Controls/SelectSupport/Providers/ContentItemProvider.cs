@@ -27,7 +27,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 
         public async Task<ItemResponse> Get(string type, string value)
         {
-            var content = await ContentGetter.GetAsync(type, value, null).ConfigureAwait(false);
+            var content = await ContentGetter.GetAsync(type, value).ConfigureAwait(false);
 
             if(content == null)
             {

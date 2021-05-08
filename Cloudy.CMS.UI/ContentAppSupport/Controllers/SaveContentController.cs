@@ -57,7 +57,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             if (b.Id != null)
             {
-                var a = await ContentGetter.GetAsync(contentType.Id, data.Id, null).ConfigureAwait(false);
+                var a = await ContentGetter.GetAsync(contentType.Id, data.Id).ConfigureAwait(false);
 
                 foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
                 {

@@ -113,14 +113,6 @@ class EditContentBlade extends Blade {
                 continue;
             }
 
-            if (propertyKey == 'contentTypeId') {
-                continue;
-            }
-
-            if (propertyKey == 'language') {
-                continue;
-            }
-
             if (!(propertyKey in value)) {
                 delete this.content[propertyKey];
             }
@@ -131,10 +123,6 @@ class EditContentBlade extends Blade {
             }
 
             if (propertyKey == 'contentTypeId') {
-                continue;
-            }
-
-            if (propertyKey == 'language') {
                 continue;
             }
 

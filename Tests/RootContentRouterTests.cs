@@ -29,7 +29,7 @@ namespace Tests
             }
 
             var result = new RootContentRouter(Mock.Of<IContentSegmentRouter>())
-                .Route(root, segments, Enumerable.Empty<ContentTypeDescriptor>(), null);
+                .Route(root, segments, Enumerable.Empty<ContentTypeDescriptor>());
 
             if (shouldMatch)
             {

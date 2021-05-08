@@ -16,13 +16,12 @@ class ListContentBlade extends Blade {
     action = null;
     actions = null;
 
-    constructor(app, contentTypes, taxonomy, language) {
+    constructor(app, contentTypes, taxonomy) {
         super();
 
         this.app = app;
         this.contentTypes = contentTypes;
         this.taxonomy = taxonomy;
-        this.language = language;
 
         this.contentTypesById = {};
         for (var contentType of contentTypes) {
@@ -30,12 +29,6 @@ class ListContentBlade extends Blade {
         }
 
         this.setTitle(`${taxonomy.pluralName}`);
-
-        if (this.contentTypes.some(t => t.isLanguageSpecific) && this.language) {
-            var tag = document.createElement('cloudy-ui-title-tag');
-            tag.innerText = this.language.name;
-            this.setTitle(`${taxonomy.pluralName}`, tag);
-        }
 
         this.onClose(() => state.pop());
     }

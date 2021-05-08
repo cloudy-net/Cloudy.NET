@@ -28,7 +28,7 @@ namespace SakraLyft
 
         public async Task<ItemResponse> Get(string type, string value)
         {
-            var user = await ContentGetter.GetAsync<User>(value, null).ConfigureAwait(false);
+            var user = await ContentGetter.GetAsync<User>(value).ConfigureAwait(false);
 
             if (user == null)
             {
