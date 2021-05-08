@@ -7,7 +7,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public interface IChildLinkProvider
     {
-        IEnumerable<string> GetChildLinks(string id);
-        Task<IEnumerable<string>> GetChildLinksAsync(string id);
+        IEnumerable<string> GetChildLinks(params object[] keyValues);
+        Task<IEnumerable<string>> GetChildLinksAsync(params object[] keyValues);
     }
 }

@@ -20,6 +20,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class SaveContentController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
+        IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentGetter ContentGetter { get; }
         IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
@@ -27,9 +28,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentCreator ContentCreator { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeProvider;
+            PrimaryKeyConverter = primaryKeyConverter;
             ContentGetter = contentGetter;
             ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
             PropertyDefinitionProvider = propertyDefinitionProvider;
@@ -57,7 +59,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             if (b.Id != null)
             {
-                var a = await ContentGetter.GetAsync(contentType.Id, data.Id).ConfigureAwait(false);
+                var a = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(data.KeyValues, contentType.Id)).ConfigureAwait(false);
 
                 foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
                 {
@@ -105,7 +107,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentRequestBody
         {
-            public string Id { get; set; }
+            public string[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
             [Required]

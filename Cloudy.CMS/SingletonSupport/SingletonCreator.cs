@@ -28,9 +28,7 @@ namespace Cloudy.CMS.SingletonSupport
                     continue;
                 }
 
-                var id = singletonAttribute.Id;
-
-                result.Add(new SingletonDescriptor(id, contentType.Id, contentType.Type));
+                result.Add(new SingletonDescriptor(singletonAttribute.KeyValues, contentType.Id, contentType.Type));
             }
 
             return result.AsReadOnly();

@@ -42,25 +42,25 @@ namespace Tests
             var contentTypeRepository = Mock.Of<IContentTypeProvider>();
             Mock.Get(contentTypeRepository).Setup(r => r.Get(contentTypeId)).Returns(contentType);
 
-            var id = "lorem";
+            var id = new string[] { "lorem" };
 
             var a = new MyContent
             {
-                Id = id,
+                KeyValues = id,
                 Generated = "ipsum",
                 NotGenerated = "dolor",
             };
 
             var b = new MyContent
             {
-                Id = id,
+                KeyValues = id,
                 Generated = "sit",
                 NotGenerated = null,
             };
 
             var body = new SaveContentController.SaveContentRequestBody
             {
-                Id = id,
+                KeyValues = id,
                 ContentTypeId = contentTypeId,
                 Content = JsonConvert.SerializeObject(b),
             };
@@ -81,7 +81,7 @@ namespace Tests
             var formProvider = Mock.Of<IPolymorphicCandidateProvider>();
             Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<PolymorphicCandidateDescriptor> { });
 
-            await new SaveContentController(contentTypeRepository, contentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>())).SaveContent(body);
+            await new SaveContentController(contentTypeRepository, null, contentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>())).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.UpdateAsync(It.IsAny<MyContent>()));
         }
@@ -89,6 +89,7 @@ namespace Tests
         public class MyContent : IContent
         {
             public string Id { get; set; }
+            public object KeyValues { get; set; }
             public string ContentTypeId { get; set; }
 
             [Display(AutoGenerateField = true)]

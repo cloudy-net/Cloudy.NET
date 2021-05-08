@@ -7,6 +7,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public interface IContentChildrenCounter
     {
-        Task<int> CountChildrenForAsync(string container, string id);
+        Task<int> CountChildrenForAsync(params object[] keyValues);
     }
 }

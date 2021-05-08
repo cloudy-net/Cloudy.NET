@@ -28,7 +28,7 @@ namespace Cloudy.CMS.SingletonSupport
                 return null;
             }
 
-            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id).ConfigureAwait(false);
+            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues).ConfigureAwait(false);
         }
 
         public async Task<T> GetAsync<T>() where T : class, IContent
@@ -40,7 +40,7 @@ namespace Cloudy.CMS.SingletonSupport
                 return null;
             }
 
-            return (T)await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id).ConfigureAwait(false);
+            return (T)await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues).ConfigureAwait(false);
         }
     }
 }

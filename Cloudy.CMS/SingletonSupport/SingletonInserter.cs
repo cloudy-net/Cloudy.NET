@@ -18,9 +18,11 @@ namespace Cloudy.CMS.SingletonSupport
         IContentGetter ContentGetter { get; }
         IContentInserter ContentInserter { get; }
         IContentInstanceCreator ContentInstanceCreator { get; }
+        IPrimaryKeySetter PrimaryKeySetter { get; }
 
-        public SingletonInserter(ISingletonProvider singletonProvider, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter, IContentInstanceCreator contentInstanceCreator)
+        public SingletonInserter(ISingletonProvider singletonProvider, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter, IContentInstanceCreator contentInstanceCreator, IPrimaryKeySetter primaryKeySetter)
         {
+            PrimaryKeySetter = primaryKeySetter;
             SingletonProvider = singletonProvider;
             ContentTypeProvider = contentTypeProvider;
             ContentGetter = contentGetter;
@@ -32,7 +34,7 @@ namespace Cloudy.CMS.SingletonSupport
         {
             foreach(var singleton in SingletonProvider.GetAll())
             {
-                var content = await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.Id);
+                var content = await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues);
                 var contentType = ContentTypeProvider.Get(singleton.ContentTypeId);
 
                 if (content != null)
@@ -42,7 +44,7 @@ namespace Cloudy.CMS.SingletonSupport
 
                 content = ContentInstanceCreator.Create(contentType);
 
-                content.Id = singleton.Id;
+                PrimaryKeySetter.Set(singleton.KeyValues, content);
 
                 await ContentInserter.InsertAsync(content).ConfigureAwait(false);
             }

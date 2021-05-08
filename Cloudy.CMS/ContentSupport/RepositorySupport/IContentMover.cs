@@ -5,6 +5,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public interface IContentMover
     {
-        Task MoveAsync(IContent content, string id);
+        Task MoveAsync(IContent content, params object[] keyValues);
     }
 }

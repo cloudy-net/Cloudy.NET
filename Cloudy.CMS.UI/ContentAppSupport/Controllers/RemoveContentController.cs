@@ -16,12 +16,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     [Area("Cloudy.CMS")]
     public class RemoveContentController : Controller
     {
+        IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentDeleter ContentDeleter { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IContentGetter ContentGetter { get; }
 
-        public RemoveContentController(IContentDeleter contentDeleter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter)
+        public RemoveContentController(IPrimaryKeyConverter primaryKeyConverter, IContentDeleter contentDeleter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter)
         {
+            PrimaryKeyConverter = primaryKeyConverter;
             ContentDeleter = contentDeleter;
             ContentTypeProvider = contentTypeProvider;
             ContentGetter = contentGetter;
@@ -39,7 +41,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 };
             }
 
-            await ContentDeleter.DeleteAsync(removeContentInput.ContentTypeId, removeContentInput.Id).ConfigureAwait(false);
+            await ContentDeleter.DeleteAsync(removeContentInput.ContentTypeId, PrimaryKeyConverter.Convert(removeContentInput.KeyValues, removeContentInput.ContentTypeId)).ConfigureAwait(false);
 
             return new
             {
@@ -50,7 +52,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         public class RemoveContentInput
         {
             [Required]
-            public string Id { get; set; }
+            public string[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
         }

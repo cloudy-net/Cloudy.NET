@@ -17,23 +17,25 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class GetUrlController
     {
         IContentTypeProvider ContentTypeProvider { get; }
+        IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentGetter ContentGetter { get; }
         IUrlProvider UrlProvider { get; }
         IContentRouteMatcher ContentRouteMatcher { get; }
 
-        public GetUrlController(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IUrlProvider urlProvider, IContentRouteMatcher contentRouteMatcher)
+        public GetUrlController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IUrlProvider urlProvider, IContentRouteMatcher contentRouteMatcher)
         {
             ContentTypeProvider = contentTypeProvider;
+            PrimaryKeyConverter = primaryKeyConverter;
             ContentGetter = contentGetter;
             UrlProvider = urlProvider;
             ContentRouteMatcher = contentRouteMatcher;
         }
 
-        public async Task<IEnumerable<string>> GetUrl(string id, string contentTypeId)
+        public async Task<IEnumerable<string>> GetUrl(string[] id, string contentTypeId)
         {
             var contentType = ContentTypeProvider.Get(contentTypeId);
 
-            var content = await ContentGetter.GetAsync(contentTypeId, id).ConfigureAwait(false);
+            var content = await ContentGetter.GetAsync(contentTypeId, PrimaryKeyConverter.Convert(id, contentTypeId)).ConfigureAwait(false);
 
             var contentRouteSegment = await UrlProvider.GetAsync(content).ConfigureAwait(false);
 

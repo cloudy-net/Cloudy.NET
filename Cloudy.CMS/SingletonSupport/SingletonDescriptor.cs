@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cloudy.CMS.SingletonSupport
 {
     public class SingletonDescriptor
     {
-        public string Id { get; }
+        public IEnumerable<object> KeyValues { get; }
         public string ContentTypeId { get; }
         public Type Type { get; }
 
-        public SingletonDescriptor(string id, string contentTypeId, Type type)
+        public SingletonDescriptor(IEnumerable<object> keyValues, string contentTypeId, Type type)
         {
-            Id = id;
+            KeyValues = keyValues.ToList().AsReadOnly();
             ContentTypeId = contentTypeId;
             Type = type;
         }

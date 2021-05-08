@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Cloudy.CMS.SingletonSupport
 {
     public class SingletonAttribute : Attribute
     {
-        public string Id { get; }
+        public IEnumerable<object> KeyValues { get; }
 
-        public SingletonAttribute(string id)
+        public SingletonAttribute(params object[] keyValues)
         {
-            if (string.IsNullOrEmpty(id))
+            if (keyValues.Length == 0)
             {
                 throw new Exception($"Id must be provided when using [Singleton(...)]. How about `{Guid.NewGuid()}` ?");
             }
 
-            Id = id;
+            KeyValues = keyValues.ToList().AsReadOnly();
         }
     }
 }
