@@ -8,9 +8,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
-using Cloudy.CMS.UI.IdentitySupport;
 
-namespace SakraLyft
+namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport.Providers
 {
     [ItemProvider("user")]
     public class UserItemProvider : IItemProvider
