@@ -20,9 +20,9 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
             Instantiator = instantiator;
         }
 
-        public IEnumerable<ISaveListener<IContent>> Create()
+        public IEnumerable<ISaveListener<object>> Create()
         {
-            var result = new List<ISaveListener<IContent>>();
+            var result = new List<ISaveListener<object>>();
 
             foreach(var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
             {
@@ -36,14 +36,14 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
                     continue;
                 }
 
-                if (!typeof(ISaveListener<IContent>).IsAssignableFrom(type))
+                if (!typeof(ISaveListener<object>).IsAssignableFrom(type))
                 {
                     continue;
                 }
 
                 Logger.LogInformation($"Creating SaveListener {type}");
 
-                result.Add((ISaveListener<IContent>)Instantiator.Instantiate(type));
+                result.Add((ISaveListener<object>)Instantiator.Instantiate(type));
             }
 
             return result.AsReadOnly();

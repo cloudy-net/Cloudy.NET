@@ -7,6 +7,6 @@ namespace Cloudy.CMS.ContentSupport.RuntimeSupport
 {
     public interface IContentInstanceCreator
     {
-        IContent Create(ContentTypeDescriptor contentType);
+        object Create(ContentTypeDescriptor contentType);
     }
 }

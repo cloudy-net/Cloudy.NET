@@ -19,7 +19,7 @@ namespace Cloudy.CMS.UI.FormSupport
             FormInstanceInitializer = formInstanceInitializer;
         }
 
-        public void Initialize(IContent content, ContentTypeDescriptor contentType)
+        public void Initialize(object content, ContentTypeDescriptor contentType)
         {
             var form = FormProvider.Get(contentType.Type);
 

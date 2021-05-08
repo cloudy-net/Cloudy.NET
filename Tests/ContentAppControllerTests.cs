@@ -67,7 +67,7 @@ namespace Tests
 
             var containerSpecificContentUpdater = Mock.Of<IContentUpdater>();
 
-            Mock.Get(containerSpecificContentUpdater).Setup(u => u.UpdateAsync(It.IsAny<MyContent>())).Callback<IContent, string>((content, _) => {
+            Mock.Get(containerSpecificContentUpdater).Setup(u => u.UpdateAsync(It.IsAny<MyContent>())).Callback<object, string>((content, _) => {
                 Assert.Equal(b.Generated, ((MyContent)content).Generated);
                 Assert.Equal(a.NotGenerated, ((MyContent)content).NotGenerated);
             });
@@ -81,14 +81,13 @@ namespace Tests
             var formProvider = Mock.Of<IPolymorphicCandidateProvider>();
             Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<PolymorphicCandidateDescriptor> { });
 
-            await new SaveContentController(contentTypeRepository, null, contentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>())).SaveContent(body);
+            await new SaveContentController(contentTypeRepository, null, null, contentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>())).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.UpdateAsync(It.IsAny<MyContent>()));
         }
 
-        public class MyContent : IContent
+        public class MyContent
         {
-            public string Id { get; set; }
             public object KeyValues { get; set; }
             public string ContentTypeId { get; set; }
 

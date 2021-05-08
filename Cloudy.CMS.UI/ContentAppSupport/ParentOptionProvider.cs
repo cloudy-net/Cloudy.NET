@@ -15,11 +15,13 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     {
         IContentFinder ContentFinder { get; }
         IContentTypeProvider ContentTypeProvider { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public ParentOptionProvider(IContentFinder contentFinder, IContentTypeProvider contentTypeProvider)
+        public ParentOptionProvider(IContentFinder contentFinder, IContentTypeProvider contentTypeProvider, IPrimaryKeyGetter primaryKeyGetter)
         {
             ContentFinder = contentFinder;
             ContentTypeProvider = contentTypeProvider;
+            PrimaryKeyGetter = primaryKeyGetter;
         }
 
         public IEnumerable<Option> GetAll()
@@ -34,7 +36,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
                 foreach (var content in documents)
                 {
-                    result.Add(new Option((content as INameable).Name ?? content.Id, content.Id));
+                    var id = "{" + string.Join(",", PrimaryKeyGetter.Get(content)) + "}";
+                    result.Add(new Option((content as INameable).Name ?? id, id));
                 }
             }
 

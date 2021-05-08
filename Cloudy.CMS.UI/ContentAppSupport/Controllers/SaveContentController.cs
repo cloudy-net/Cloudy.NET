@@ -20,6 +20,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class SaveContentController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentGetter ContentGetter { get; }
         IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
@@ -28,9 +29,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentCreator ContentCreator { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyGetter primaryKeyGetter, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeProvider;
+            PrimaryKeyGetter = primaryKeyGetter;
             PrimaryKeyConverter = primaryKeyConverter;
             ContentGetter = contentGetter;
             ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
@@ -50,14 +52,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             var contentType = ContentTypeProvider.Get(data.ContentTypeId);
 
-            var b = (IContent)JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
+            var b = JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
             
             if (!TryValidateModel(b))
             {
                 return ContentResponseMessage.CreateFrom(ModelState);
             }
 
-            if (b.Id != null)
+            if (PrimaryKeyGetter.Get(b).All(id => id != null))
             {
                 var a = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(data.KeyValues, contentType.Id)).ConfigureAwait(false);
 

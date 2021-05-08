@@ -8,14 +8,14 @@ namespace Cloudy.CMS.Routing
 {
     public static class HttpContextExtensions
     {
-        public static IContent GetContentFromContentRoute(this HttpContext instance)
+        public static object GetContentFromContentRoute(this HttpContext instance)
         {
             if (!instance.Request.RouteValues.ContainsKey("contentFromContentRoute"))
             {
                 return null;
             }
 
-            return instance.Request.RouteValues["contentFromContentRoute"] as IContent;
+            return instance.Request.RouteValues["contentFromContentRoute"];
         }
 
         public static T GetContentFromContentRoute<T>(this HttpContext instance) where T : class

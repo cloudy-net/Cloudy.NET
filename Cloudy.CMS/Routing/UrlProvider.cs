@@ -18,7 +18,7 @@ namespace Cloudy.CMS.Mvc.Routing
             ContentGetter = contentGetter;
         }
 
-        public async Task<string> GetAsync(IContent content)
+        public async Task<string> GetAsync(object content)
         {
             var routable = content as IRoutable;
 

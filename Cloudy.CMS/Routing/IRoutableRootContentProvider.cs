@@ -5,6 +5,6 @@ namespace Cloudy.CMS.Routing
 {
     public interface IRoutableRootContentProvider
     {
-        IEnumerable<IContent> GetAll();
+        IEnumerable<object> GetAll();
     }
 }

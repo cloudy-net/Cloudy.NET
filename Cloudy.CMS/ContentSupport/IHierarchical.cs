@@ -14,6 +14,6 @@ namespace Cloudy.CMS.ContentSupport
     public interface IHierarchical
     {
         [Display(GroupName = "Settings")]
-        string ParentId { get; set; }
+        object[] ParentKeyValues { get; set; }
     }
 }

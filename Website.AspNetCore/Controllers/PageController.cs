@@ -11,9 +11,9 @@ namespace Website.AspNetCore.Controllers
 {
     public class PageController : Controller
     {
-        public ActionResult Index([FromContentRoute] IContent page)
+        public ActionResult Index([FromContentRoute] object page)
         {
-            return Content(page.Id);
+            return Content(page.ToString());
         }
     }
 }

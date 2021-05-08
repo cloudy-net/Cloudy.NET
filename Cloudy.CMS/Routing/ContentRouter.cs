@@ -20,7 +20,7 @@ namespace Cloudy.CMS.Routing
             RoutableRootContentProvider = routableRootContentProvider;
         }
 
-        public IContent RouteContent(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
+        public object RouteContent(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
         {
             foreach(var root in RoutableRootContentProvider.GetAll())
             {

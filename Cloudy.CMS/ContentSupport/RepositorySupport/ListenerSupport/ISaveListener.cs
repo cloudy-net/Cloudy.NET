@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
 {
-    public interface ISaveListener<out T> where T : class, IContent
+    public interface ISaveListener<out T> where T : class
     {
-        void BeforeSave(IContent content);
+        void BeforeSave(object content);
     }
 }

@@ -6,6 +6,6 @@ namespace Cloudy.CMS.Routing
 {
     public interface IContentRouter
     {
-        IContent RouteContent(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types);
+        object RouteContent(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types);
     }
 }

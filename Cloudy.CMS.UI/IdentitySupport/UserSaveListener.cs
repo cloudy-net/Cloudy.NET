@@ -13,7 +13,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
             Normalizer = normalizer;
         }
 
-        public void BeforeSave(IContent content)
+        public void BeforeSave(object content)
         {
             var user = (User)content;
             user.NormalizedEmail = Normalizer.NormalizeEmail(user.Email);

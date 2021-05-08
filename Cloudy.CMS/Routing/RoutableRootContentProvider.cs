@@ -16,9 +16,9 @@ namespace Cloudy.CMS.Routing
             ChildrenGetter = childrenGetter;
         }
 
-        public IEnumerable<IContent> GetAll()
+        public IEnumerable<object> GetAll()
         {
-            return ChildrenGetter.GetChildren<IRoutable>(null).Cast<IContent>().ToList().AsReadOnly();
+            return ChildrenGetter.GetChildren<IRoutable>(null).ToList().AsReadOnly();
         }
     }
 }

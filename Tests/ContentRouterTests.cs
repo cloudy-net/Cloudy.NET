@@ -20,7 +20,7 @@ namespace Tests
                 UrlSegment = null,
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { }, Enumerable.Empty<ContentTypeDescriptor>());
+            var result = new ContentRouter(new RootContentRouter(null, new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(root, result);
         }
@@ -33,7 +33,7 @@ namespace Tests
                 UrlSegment = "lorem",
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem" }, Enumerable.Empty<ContentTypeDescriptor>());
+            var result = new ContentRouter(new RootContentRouter(null, new TestContentSegmentRouter(root)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem" }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(root, result);
         }
@@ -49,11 +49,11 @@ namespace Tests
 
             var page = new Page
             {
-                ParentId = root.Id,
+                ParentKeyValues = new object[] { root.Id },
                 UrlSegment = "ipsum",
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem", "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>());
+            var result = new ContentRouter(new RootContentRouter(null, new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "lorem", "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(page, result);
         }
@@ -69,25 +69,25 @@ namespace Tests
 
             var page = new Page
             {
-                ParentId = root.Id,
+                ParentKeyValues = new object[] { root.Id },
                 UrlSegment = "ipsum",
             };
 
-            var result = new ContentRouter(new RootContentRouter(new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>());
+            var result = new ContentRouter(new RootContentRouter(null, new TestContentSegmentRouter(root, page)), new TestRoutableRootContentProvider(root)).RouteContent(new List<string> { "ipsum" }, Enumerable.Empty<ContentTypeDescriptor>());
 
             Assert.Same(page, result);
         }
 
         public class TestRoutableRootContentProvider : IRoutableRootContentProvider
         {
-            IEnumerable<IContent> Content { get; }
+            IEnumerable<object> Content { get; }
 
-            public TestRoutableRootContentProvider(params IContent[] content)
+            public TestRoutableRootContentProvider(params object[] content)
             {
                 Content = content;
             }
 
-            public IEnumerable<IContent> GetAll()
+            public IEnumerable<object> GetAll()
             {
                 return Content;
             }
@@ -102,17 +102,16 @@ namespace Tests
                 Pages = pages;
             }
 
-            public IContent RouteContentSegment(string parentId, string segment, IEnumerable<ContentTypeDescriptor> types)
+            public object RouteContentSegment(object[] parentKeyValues, string segment, IEnumerable<ContentTypeDescriptor> types)
             {
-                return Pages.FirstOrDefault(p => p.ParentId == parentId && p.UrlSegment == segment);
+                return Pages.FirstOrDefault(p => p.ParentKeyValues == parentKeyValues && p.UrlSegment == segment);
             }
         }
 
-        public class Page : IContent, IHierarchical, IRoutable
+        public class Page : IHierarchical, IRoutable
         {
             public string Id { get; set; }
-            public string ContentTypeId { get; set; }
-            public string ParentId { get; set; }
+            public object[] ParentKeyValues { get; set; }
             public string UrlSegment { get; set; }
         }
     }

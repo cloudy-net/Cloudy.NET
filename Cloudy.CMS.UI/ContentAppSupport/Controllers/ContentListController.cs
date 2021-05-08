@@ -22,14 +22,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContentFinder ContentFinder { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IContentChildrenCounter ContentChildrenCounter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
 
-        public ContentListController(IContentTypeProvider contentTypeRepository, IContentFinder contentFinder, IContentChildrenCounter contentChildrenCounter, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
+        public ContentListController(IContentTypeProvider contentTypeRepository, IContentFinder contentFinder, IPrimaryKeyGetter primaryKeyGetter, IContentChildrenCounter contentChildrenCounter, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
         {
             ContentTypeProvider = contentTypeRepository;
             ContentFinder = contentFinder;
+            PrimaryKeyGetter = primaryKeyGetter;
             ContentChildrenCounter = contentChildrenCounter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
             PolymorphicFormConverter = polymorphicFormConverter;
@@ -45,7 +47,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 throw new ContentTypesSpanSeveralContainersException(contentTypes);
             }
 
-            var items = new List<IContent>();
+            var items = new List<object>();
             var itemChildrenCounts = new Dictionary<string, int>();
 
             var documentsQuery = ContentFinder.FindInContainer(containers.Single()).WithContentType(contentTypeIds);
@@ -67,7 +69,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                 if (content is IHierarchical)
                 {
-                    itemChildrenCounts[content.Id] = await ContentChildrenCounter.CountChildrenForAsync(containers.Single(), content.Id).ConfigureAwait(false);
+                    var id = PrimaryKeyGetter.Get(content);
+
+                    itemChildrenCounts[string.Join(",", id)] = await ContentChildrenCounter.CountChildrenForAsync(containers.Single(), content).ConfigureAwait(false);
                 }
             }
 
@@ -87,7 +91,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         public class ContentListResult
         {
             public IDictionary<string, int> ItemChildrenCounts { get; set; }
-            public IEnumerable<IContent> Items { get; set; }
+            public IEnumerable<object> Items { get; set; }
         }
     }
 }

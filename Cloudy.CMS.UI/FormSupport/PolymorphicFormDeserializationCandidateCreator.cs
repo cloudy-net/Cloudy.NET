@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.Serialization;
+using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,10 +10,12 @@ namespace Cloudy.CMS.UI.FormSupport
     public class PolymorphicFormDeserializationCandidateCreator : IPolymorphicCandidateCreator
     {
         IFormProvider FormProvider { get; }
+        IContentTypeProvider ContentTypeProvider { get; }
 
-        public PolymorphicFormDeserializationCandidateCreator(IFormProvider formProvider)
+        public PolymorphicFormDeserializationCandidateCreator(IFormProvider formProvider, IContentTypeProvider contentTypeProvider)
         {
             FormProvider = formProvider;
+            ContentTypeProvider = contentTypeProvider;
         }
 
         public IEnumerable<PolymorphicCandidateDescriptor> Create()
@@ -21,7 +24,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
             foreach(var form in FormProvider.GetAll())
             {
-                if (typeof(IContent).IsAssignableFrom(form.Type))
+                if (ContentTypeProvider.Get(form.Type) != null)
                 {
                     continue;
                 }

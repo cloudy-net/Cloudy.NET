@@ -8,16 +8,16 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
 {
     public class SaveListenerProvider : ISaveListenerProvider
     {
-        IEnumerable<ISaveListener<IContent>> SaveListeners { get; }
+        IEnumerable<ISaveListener<object>> SaveListeners { get; }
 
         public SaveListenerProvider(ISaveListenerCreator saveListenerCreator)
         {
             SaveListeners = saveListenerCreator.Create().ToList().AsReadOnly();
         }
 
-        public IEnumerable<ISaveListener<IContent>> GetFor(IContent content)
+        public IEnumerable<ISaveListener<object>> GetFor(object content)
         {
-            var result = new List<ISaveListener<IContent>>();
+            var result = new List<ISaveListener<object>>();
 
             foreach(var listener in SaveListeners)
             {

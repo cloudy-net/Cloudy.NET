@@ -18,12 +18,14 @@ namespace SakraLyft
         public IContentTypeProvider ContentTypeProvider { get; }
         public IContentFinder ContentFinder { get; }
         public IContentGetter ContentGetter { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public UserItemProvider(IContentTypeProvider contentTypeProvider, IContentFinder contentFinder, IContentGetter contentGetter)
+        public UserItemProvider(IContentTypeProvider contentTypeProvider, IContentFinder contentFinder, IContentGetter contentGetter, IPrimaryKeyGetter primaryKeyGetter)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentFinder = contentFinder;
             ContentGetter = contentGetter;
+            PrimaryKeyGetter = primaryKeyGetter;
         }
 
         public async Task<ItemResponse> Get(string type, string value)
@@ -57,6 +59,10 @@ namespace SakraLyft
             return result.AsReadOnly();
         }
 
-        Item GetItem(IContent content) => new Item((content as INameable)?.Name ?? content.Id, null, content.Id, (content as IImageable)?.Image, content is IHierarchical);
+        Item GetItem(object content)
+        {
+            var id = "{" + string.Join(",", PrimaryKeyGetter.Get(content)) + "}";
+            return new Item((content as INameable)?.Name ?? id, null, id, (content as IImageable)?.Image, content is IHierarchical);
+        }
     }
 }

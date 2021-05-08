@@ -15,7 +15,7 @@ namespace Cloudy.CMS.UI.IdentitySupport
     [Container("users")]
     [ListActions("IdentitySupport/user-actions.js")]
     [ContentType("a4b8fd79-2432-4535-8ab8-5860c3bdb04d")]
-    public class User : IContent, INameable, IIdentity
+    public class User : INameable, IIdentity
     {
         public string Id { get; set; }
         public string ContentTypeId { get; set; }

@@ -5,6 +5,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
 {
     public interface ISaveListenerCreator
     {
-        IEnumerable<ISaveListener<IContent>> Create();
+        IEnumerable<ISaveListener<object>> Create();
     }
 }

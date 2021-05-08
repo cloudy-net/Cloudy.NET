@@ -19,7 +19,7 @@ namespace Cloudy.CMS.SingletonSupport
             ContentGetter = contentGetter;
         }
 
-        public async Task<IContent> GetAsync(string contentTypeId)
+        public async Task<object> GetAsync(string contentTypeId)
         {
             var singleton = SingletonProvider.Get(contentTypeId);
 
@@ -31,7 +31,7 @@ namespace Cloudy.CMS.SingletonSupport
             return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues).ConfigureAwait(false);
         }
 
-        public async Task<T> GetAsync<T>() where T : class, IContent
+        public async Task<T> GetAsync<T>() where T : class
         {
             var singleton = SingletonProvider.Get<T>();
 

@@ -41,10 +41,9 @@ namespace Tests
         }
 
         [ContentType("lorem")]
-        public abstract class Class_A_Abstract : IContent
+        public abstract class Class_A_Abstract
         {
             public string Id { get; set; }
-            public string ContentTypeId { get; set; }
         }
 
         public class Class_B_Extends_A : Class_A_Abstract { }

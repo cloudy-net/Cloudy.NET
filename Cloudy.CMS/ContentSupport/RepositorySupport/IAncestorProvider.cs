@@ -7,6 +7,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public interface IAncestorProvider
     {
-        Task<IEnumerable<IContent>> GetAncestorsAsync(IContent content);
+        Task<IEnumerable<object>> GetAncestorsAsync(object content);
     }
 }

@@ -9,14 +9,16 @@ namespace Cloudy.CMS.Routing
 {
     public class RootContentRouter : IRootContentRouter
     {
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IContentSegmentRouter ContentSegmentRouter { get; }
 
-        public RootContentRouter(IContentSegmentRouter contentSegmentRouter)
+        public RootContentRouter(IPrimaryKeyGetter primaryKeyGetter, IContentSegmentRouter contentSegmentRouter)
         {
+            PrimaryKeyGetter = primaryKeyGetter;
             ContentSegmentRouter = contentSegmentRouter;
         }
 
-        public IContent Route(IContent root, IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
+        public object Route(object root, IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
         {
             if (!segments.Any())
             {
@@ -33,11 +35,11 @@ namespace Cloudy.CMS.Routing
                 segments = segments.Skip(1);
             }
 
-            IContent content = root;
+            object content = root;
 
             while (segments.Any())
             {
-                content = ContentSegmentRouter.RouteContentSegment(content?.Id, segments.First(), types);
+                content = ContentSegmentRouter.RouteContentSegment(PrimaryKeyGetter.Get(content), segments.First(), types);
 
                 if (content == null)
                 {

@@ -10,7 +10,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
         IContentFinderQuery WithContentType(params string[] contentTypeIds);
         void WhereParent(string parent);
         void WhereHasNoParent();
-        Task<IEnumerable<IContent>> GetResultAsync();
+        Task<IEnumerable<object>> GetResultAsync();
         IContentFinderQuery WhereEquals<T1, T2>(Expression<Func<T1, T2>> property, T2 value) where T1 : class;
     }
 }

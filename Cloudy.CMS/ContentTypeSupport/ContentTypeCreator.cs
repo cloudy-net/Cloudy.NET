@@ -34,11 +34,6 @@ namespace Cloudy.CMS.ContentTypeSupport
             {
                 var contentTypeAttribute = type.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>();
 
-                if (!typeof(IContent).IsAssignableFrom(type))
-                {
-                    throw new ContentTypeDoesNotImplementIContentException(type, contentTypeAttribute.Id);
-                }
-
                 if (type.IsAbstract)
                 {
                     continue;

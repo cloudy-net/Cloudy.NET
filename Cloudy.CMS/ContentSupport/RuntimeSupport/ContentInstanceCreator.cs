@@ -16,9 +16,9 @@ namespace Cloudy.CMS.ContentSupport.RuntimeSupport
             Initializers = composableProvider.GetAll<IContentInstanceInitializer>().ToList().AsReadOnly();
         }
 
-        public IContent Create(ContentTypeDescriptor contentType)
+        public object Create(ContentTypeDescriptor contentType)
         {
-            var content = (IContent)Activator.CreateInstance(contentType.Type);
+            var content = Activator.CreateInstance(contentType.Type);
 
             foreach(var initializer in Initializers)
             {

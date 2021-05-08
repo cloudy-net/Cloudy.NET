@@ -6,6 +6,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
 {
     public interface ISaveListenerProvider
     {
-        IEnumerable<ISaveListener<IContent>> GetFor(IContent content);
+        IEnumerable<ISaveListener<object>> GetFor(object content);
     }
 }

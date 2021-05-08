@@ -28,7 +28,7 @@ namespace Tests
                 segments.Add(pathSegment);
             }
 
-            var result = new RootContentRouter(Mock.Of<IContentSegmentRouter>())
+            var result = new RootContentRouter(null, Mock.Of<IContentSegmentRouter>())
                 .Route(root, segments, Enumerable.Empty<ContentTypeDescriptor>());
 
             if (shouldMatch)
@@ -41,10 +41,9 @@ namespace Tests
             }
         }
 
-        class MyRoot : IContent, IRoutable
+        class MyRoot : IRoutable
         {
             public string Id { get; set; }
-            public string ContentTypeId { get; set; }
             public string UrlSegment { get; set; }
         }
     }

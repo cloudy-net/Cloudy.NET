@@ -1,5 +1,6 @@
 ﻿
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.UI.ContentAppSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
     public class PolymorphicFormApiController
     {
         IFormProvider FormProvider { get; }
+        IContentTypeProvider ContentTypeProvider { get; }
         IHumanizer Humanizer { get; }
 
-        public PolymorphicFormApiController(IFormProvider formProvider, IHumanizer humanizer)
+        public PolymorphicFormApiController(IFormProvider formProvider, IContentTypeProvider contentTypeProvider, IHumanizer humanizer)
         {
             FormProvider = formProvider;
+            ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
         }
 
@@ -31,7 +34,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
 
             foreach (var form in FormProvider.GetAll())
             {
-                if (typeof(IContent).IsAssignableFrom(form.Type))
+                if (ContentTypeProvider.Get(form.Type) != null)
                 {
                     continue;
                 }

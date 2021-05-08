@@ -5,6 +5,6 @@ namespace Cloudy.CMS.ContentSupport.RuntimeSupport
 {
     public interface IContentInstanceInitializer : IComposable
     {
-        void Initialize(IContent content, ContentTypeDescriptor contentType);
+        void Initialize(object content, ContentTypeDescriptor contentType);
     }
 }
