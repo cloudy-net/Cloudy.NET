@@ -20,7 +20,6 @@ using Cloudy.CMS.Routing;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
-using Cloudy.CMS.UI.IdentitySupport;
 
 namespace Website.AspNetCore
 {
@@ -33,7 +32,6 @@ namespace Website.AspNetCore
                 //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .AddAdmin(admin => admin.Unprotect())
             );
-            services.AddCloudyIdentity();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
