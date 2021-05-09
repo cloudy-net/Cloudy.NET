@@ -12,6 +12,7 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
         public void InjectDependencies(IServiceCollection services)
         {
             services.AddScoped<IContentGetter, ContentGetter>();
+            services.AddScoped<IContentInserter, ContentInserter>();
             services.AddScoped<IDbSetProvider, DbSetProvider>();
             services.AddScoped<IContextProvider, ContextProvider>();
             services.AddScoped<IContextCreator, ContextCreator>();

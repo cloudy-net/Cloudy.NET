@@ -21,5 +21,12 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
 
             return task.GetType().GetProperty("Result").GetValue(task);
         }
+
+        public async Task AddAsync(object entity)
+        {
+            var task = (Task)DbSet.GetType().GetMethod(nameof(DbSet<object>.AddAsync)).Invoke(DbSet, new object[] { entity });
+
+            await task.ConfigureAwait(false);
+        }
     }
 }

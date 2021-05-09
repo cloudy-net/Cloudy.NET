@@ -19,7 +19,7 @@ namespace Cloudy.CMS.ContentSupport
             services.AddSingleton<IPolymorphicSerializer, PolymorphicSerializer>();
             services.AddSingleton<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
 
-            services.AddSingleton<IContentInstanceCreator, ContentInstanceCreator>();
+            services.AddScoped<IContentInstanceCreator, ContentInstanceCreator>();
         }
     }
 }

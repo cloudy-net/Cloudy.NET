@@ -10,7 +10,7 @@ namespace Cloudy.CMS.ComposableSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IComposableProvider, ComposableProvider>();
+            services.AddScoped<IComposableProvider, ComposableProvider>();
         }
     }
 }

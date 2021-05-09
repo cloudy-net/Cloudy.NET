@@ -19,10 +19,10 @@ namespace Cloudy.CMS.UI.FormSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IFieldCreator, FieldCreator>();
-            services.AddSingleton<IFieldProvider, FieldProvider>();
+            services.AddScoped<IFieldCreator, FieldCreator>();
+            services.AddScoped<IFieldProvider, FieldProvider>();
             services.AddSingleton<IFormCreator, FormCreator>();
-            services.AddSingleton<IFormProvider, FormProvider>();
+            services.AddScoped<IFormProvider, FormProvider>();
             services.AddSingleton<IControlProvider, ControlProvider>();
             services.AddSingleton<IControlCreator, ControlCreator>();
             services.AddSingleton<IControlMatcher, ControlMatcher>();
@@ -38,7 +38,7 @@ namespace Cloudy.CMS.UI.FormSupport
             services.AddSingleton<IPolymorphicFormFinder, PolymorphicFormFinder>();
             services.AddSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
             services.AddSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();
-            services.AddSingleton<IFormInstanceInitializer, FormInstanceInitializer>();
+            services.AddScoped<IFormInstanceInitializer, FormInstanceInitializer>();
         }
     }
 }

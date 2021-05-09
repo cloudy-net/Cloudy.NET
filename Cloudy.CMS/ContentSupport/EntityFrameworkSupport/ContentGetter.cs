@@ -9,22 +9,25 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
 {
     public class ContentGetter : IContentGetter
     {
+        IContentTypeProvider ContentTypeProvider { get; }
         IDbSetProvider DbSetProvider { get; }
 
-        public ContentGetter(IDbSetProvider dbSetProvider)
+        public ContentGetter(IContentTypeProvider contentTypeProvider, IDbSetProvider dbSetProvider)
         {
+            ContentTypeProvider = contentTypeProvider;
             DbSetProvider = dbSetProvider;
         }
 
         public async Task<object> GetAsync(string contentTypeId, params object[] keyValues)
         {
-            var dbSet = DbSetProvider.Get(contentTypeId);
+            var contentType = ContentTypeProvider.Get(contentTypeId);
+            var dbSet = DbSetProvider.Get(contentType.Type);
             return await dbSet.FindAsync(keyValues).ConfigureAwait(false);
         }
 
         public async Task<T> GetAsync<T>(params object[] keyValues) where T : class
         {
-            var dbSet = DbSetProvider.Get<T>();
+            var dbSet = DbSetProvider.Get(typeof(T));
             return (T)await dbSet.FindAsync(keyValues).ConfigureAwait(false);
         }
     }
