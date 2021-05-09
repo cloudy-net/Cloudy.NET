@@ -15,7 +15,9 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
 
         public async Task<object> FindAsync(params object[] keyValues)
         {
-            var task = (Task)DbSet.GetType().GetMethod(nameof(DbSet<object>.FindAsync)).Invoke(DbSet, new object[] { keyValues });
+            var valueTask = DbSet.GetType().GetMethod(nameof(DbSet<object>.FindAsync), new[] { typeof(object[]) }).Invoke(DbSet, new object[] { keyValues });
+
+            var task = (Task)valueTask.GetType().GetMethod(nameof(ValueTask<object>.AsTask)).Invoke(valueTask, new object[] { });
 
             await task.ConfigureAwait(false);
 
