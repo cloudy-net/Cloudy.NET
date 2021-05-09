@@ -127,7 +127,7 @@ class ListContentBlade extends Blade {
         };
 
         contentList.items.forEach(content => {
-            var contentType = this.contentTypesById[content.contentTypeId];
+            var contentType = this.contentTypes[0];
             var listItem = new ListItem();
             this.list.addItem(listItem);
 
@@ -183,7 +183,7 @@ class ListContentBlade extends Blade {
         this.breadcrumbs.append(breadcrumb);
 
         parents.forEach((content, i) => {
-            var contentType = this.contentTypesById[content.contentTypeId];
+            var contentType = this.contentTypes[0];
 
             if (contentType.isNameable) {
                 var name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
