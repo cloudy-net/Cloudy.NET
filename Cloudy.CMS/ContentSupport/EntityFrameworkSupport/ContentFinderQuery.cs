@@ -1,6 +1,8 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -18,9 +20,16 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
             Type = type;
         }
 
-        public Task<IEnumerable<object>> GetResultAsync()
+        public async Task<IEnumerable<object>> GetResultAsync()
         {
-            throw new NotImplementedException();
+
+            //typeof(Enumerable).GetMethod(nameof(Enumerable.Where)).Invoke(DbSet, Filters.)
+            //IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            var task = (Task)typeof(EntityFrameworkQueryableExtensions).GetMethod(nameof(EntityFrameworkQueryableExtensions.ToListAsync)).MakeGenericMethod(Type).Invoke(null, new object[] { DbSet.DbSet, null });
+
+            await task.ConfigureAwait(false);
+
+            return (IEnumerable<object>)task.GetType().GetProperty("Result").GetValue(task);
         }
 
         public IContentFinderQuery WhereEquals<T1, T2>(Expression<Func<T1, T2>> property, T2 value) where T1 : class
@@ -36,12 +45,10 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
 
         public void WhereHasNoParent()
         {
-            throw new NotImplementedException();
         }
 
         public void WhereParent(string parent)
         {
-            throw new NotImplementedException();
         }
 
         public IContentFinderQuery WithContentType(params string[] contentTypeIds)

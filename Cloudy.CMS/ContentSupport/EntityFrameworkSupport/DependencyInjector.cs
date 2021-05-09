@@ -18,7 +18,8 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
             services.AddScoped<IContentGetter, ContentGetter>();
             services.AddScoped<IContentInserter, ContentInserter>();
             services.AddScoped<IContentFinder, ContentFinder>();
-            
+            services.AddScoped<IContentChildrenCounter, ContentChildrenCounter>();
+
             services.AddScoped<IDbSetProvider, DbSetProvider>();
             services.AddScoped<IContextProvider, ContextProvider>();
             services.AddScoped<IContextCreator, ContextCreator>();

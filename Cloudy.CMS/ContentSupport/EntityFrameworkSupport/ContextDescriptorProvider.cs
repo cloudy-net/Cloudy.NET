@@ -12,7 +12,7 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
         public ContextDescriptorProvider(IEnumerable<ContextDescriptor> contextDescriptors)
         {
             ContextDescriptorsByDbSetType = contextDescriptors
-                .SelectMany(c => c.DbSets.Select(s => new KeyValuePair<Type, ContextDescriptor>(s.PropertyType, c)))
+                .SelectMany(c => c.DbSets.Select(s => new KeyValuePair<Type, ContextDescriptor>(s.PropertyType.GetGenericArguments()[0], c)))
                 .ToDictionary(p => p.Key, p => p.Value);
         }
 
