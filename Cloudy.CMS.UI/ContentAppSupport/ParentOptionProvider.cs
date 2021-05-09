@@ -32,7 +32,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport
 
             foreach (var contentType in contentTypes)
             {
-                var documents = ContentFinder.FindInContainer(contentType.Container).WithContentType(contentType.Id).GetResultAsync().Result.ToList();
+                var documents = ContentFinder.Find(contentType.Type).GetResultAsync().Result.ToList();
 
                 foreach (var content in documents)
                 {

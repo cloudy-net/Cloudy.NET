@@ -6,6 +6,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public interface IContentFinder
     {
-        IContentFinderQuery FindInContainer(string container);
+        IContentFinderQuery Find(Type type);
+        IContentFinderQuery Find<T>() where T : class;
     }
 }

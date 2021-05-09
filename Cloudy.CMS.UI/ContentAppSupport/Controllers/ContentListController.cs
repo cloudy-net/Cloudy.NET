@@ -40,6 +40,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         public async Task Get(string[] contentTypeIds, string parent)
         {
             var contentTypes = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).ToList().AsReadOnly();
+
+            if(contentTypes.Count > 1)
+            {
+                throw new NotImplementedException("Multi type queries are not yet implemented");
+            }
+
             var containers = contentTypes.Select(t => t.Container).Distinct().ToList();
 
             if(containers.Count > 1)
@@ -50,7 +56,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             var items = new List<object>();
             var itemChildrenCounts = new Dictionary<string, int>();
 
-            var documentsQuery = ContentFinder.FindInContainer(containers.Single()).WithContentType(contentTypeIds);
+
+
+            var documentsQuery = ContentFinder.Find(contentTypes.Single().Type);
 
             if(parent != null)
             {

@@ -51,7 +51,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport.Providers
 
             var contentType = ContentTypeProvider.Get(type);
 
-            foreach (var content in await ContentFinder.FindInContainer(contentType.Container).WithContentType(type).GetResultAsync().ConfigureAwait(false))
+            foreach (var content in await ContentFinder.Find(contentType.Type).GetResultAsync().ConfigureAwait(false))
             {
                 result.Add(GetItem(content));
             }
