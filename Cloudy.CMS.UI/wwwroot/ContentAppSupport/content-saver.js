@@ -1,4 +1,6 @@
 import './content-type-provider.js';
+import notificationManager from '../NotificationSupport/notification-manager.js'
+import contentTypeProvider from '../ContentAppSupport/content-type-provider.js'
 
 
 
