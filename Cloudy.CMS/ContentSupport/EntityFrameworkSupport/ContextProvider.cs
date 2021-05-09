@@ -7,15 +7,21 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
     public class ContextProvider : IContextProvider
     {
         IContextCreator ContextCreator { get; }
+        IDictionary<Type, IContextWrapper> Contexts { get; } = new Dictionary<Type, IContextWrapper>();
 
         public ContextProvider(IContextCreator contextCreator)
         {
             ContextCreator = contextCreator;
         }
 
-        public IContextWrapper GetFor(Type type)
+        public IContextWrapper GetFor(Type instanceType)
         {
-            return ContextCreator.CreateFor(type);
+            if (Contexts.ContainsKey(instanceType))
+            {
+                return Contexts[instanceType];
+            }
+
+            return Contexts[instanceType] = ContextCreator.CreateFor(instanceType);
         }
     }
 }

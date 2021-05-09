@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
 {
     public class ContextWrapper : IContextWrapper
     {
-        object Context { get; }
+        public DbContext Context { get; }
 
-        public ContextWrapper(object context)
+        public ContextWrapper(DbContext context)
         {
             Context = context;
         }

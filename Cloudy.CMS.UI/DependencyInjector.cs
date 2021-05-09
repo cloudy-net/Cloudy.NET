@@ -24,9 +24,9 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<ITitleProvider, TitleProvider>();
             services.AddSingleton<IAppCreator, AppCreator>();
             services.AddSingleton<IAppProvider, AppProvider>();
-            services.AddSingleton<IScriptProvider, ScriptProvider>();
+            services.AddScoped<IScriptProvider, ScriptProvider>();
             services.AddSingleton<IScriptCreator, ScriptCreator>();
-            services.AddSingleton<IStyleProvider, StyleProvider>();
+            services.AddScoped<IStyleProvider, StyleProvider>();
             services.AddSingleton<IStyleCreator, StyleCreator>();
             services.AddSingleton<IAppProvider, AppProvider>();
             services.AddSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();

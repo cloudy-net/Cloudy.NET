@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
 
         public IContextWrapper CreateFor(Type type)
         {
-            return new ContextWrapper(ServiceProvider.GetRequiredService(ContextDescriptorProvider.GetFor(type).Type));
+            return new ContextWrapper((DbContext)ServiceProvider.GetRequiredService(ContextDescriptorProvider.GetFor(type).Type));
         }
     }
 }

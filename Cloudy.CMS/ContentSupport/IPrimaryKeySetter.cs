@@ -6,6 +6,6 @@ namespace Cloudy.CMS.ContentSupport
 {
     public interface IPrimaryKeySetter
     {
-        void Set(IEnumerable<object> keyValues, object instance);
+        void Set(IEnumerable<object> keyValues, object content);
     }
 }
