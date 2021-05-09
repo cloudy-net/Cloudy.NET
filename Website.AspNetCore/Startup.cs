@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Website.AspNetCore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Website.AspNetCore
 {
@@ -34,6 +35,7 @@ namespace Website.AspNetCore
                 .AddAdmin(admin => admin.Unprotect())
                 .AddContext<PageContext>()
             );
+            services.AddDbContext<PageContext>(options => options.UseInMemoryDatabase("website"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -48,12 +50,26 @@ namespace Website.AspNetCore
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapCloudyAdminRoutes();
                 endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
                 //endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
                 //endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
             });
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<PageContext>();
+
+                var page = new Page { Description = "Hello world!" };
+
+                context.Add(page);
+
+                context.SaveChanges();
+            }
         }
     }
 }

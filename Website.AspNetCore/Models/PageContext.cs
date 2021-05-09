@@ -8,9 +8,9 @@ namespace Website.AspNetCore.Models
 {
     public class PageContext : DbContext
     {
-        public DbSet<Page> Pages { get; set; }
+        public PageContext(DbContextOptions<PageContext> options) : base(options)
+        { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseInMemoryDatabase("pages");
+        public DbSet<Page> Pages { get; set; }
     }
 }
