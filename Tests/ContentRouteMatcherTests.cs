@@ -13,8 +13,8 @@ namespace Tests
         [Fact]
         public void MatchesType()
         {
-            var contentTypeA = new ContentTypeDescriptor("lorem", typeof(string), "container");
-            var contentTypeB = new ContentTypeDescriptor("ipsum", typeof(string), "container");
+            var contentTypeA = new ContentTypeDescriptor("lorem", typeof(string));
+            var contentTypeB = new ContentTypeDescriptor("ipsum", typeof(string));
             
             var routeA = new ContentRouteDescriptor("template", new List<ContentTypeDescriptor> { contentTypeA });
             var routeB = new ContentRouteDescriptor("template", new List<ContentTypeDescriptor> {  });

@@ -39,9 +39,7 @@ namespace Cloudy.CMS.ContentTypeSupport
                     continue;
                 }
 
-                var container = type.GetTypeInfo().GetCustomAttribute<ContainerAttribute>()?.Id ?? ContainerConstants.Content;
-
-                result.Add(new ContentTypeDescriptor(contentTypeAttribute.Id, type, container));
+                result.Add(new ContentTypeDescriptor(contentTypeAttribute.Id, type));
             }
 
             return result;

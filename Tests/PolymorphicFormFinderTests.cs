@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void ThrowsOnContentTypes()
         {
-            var contentTypeA = new ContentTypeDescriptor("lorem", typeof(ContentTypeA), "container");
+            var contentTypeA = new ContentTypeDescriptor("lorem", typeof(ContentTypeA));
             var contentTypeProvider = Mock.Of<IContentTypeProvider>();
             Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { contentTypeA });
 

@@ -13,8 +13,8 @@ namespace Tests
         [Fact]
         public void FindsContentTypes()
         {
-            var typeA = new ContentTypeDescriptor("ipsum", typeof(ContentTypeA), "dolor");
-            var typeB = new ContentTypeDescriptor("sit", typeof(ContentTypeB), "amet");
+            var typeA = new ContentTypeDescriptor("ipsum", typeof(ContentTypeA));
+            var typeB = new ContentTypeDescriptor("sit", typeof(ContentTypeB));
             var typeProvider = Mock.Of<IContentTypeProvider>();
             Mock.Get(typeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { typeA, typeB });
 
@@ -33,7 +33,7 @@ namespace Tests
         [Fact]
         public void FindsContentTypeGroups()
         {
-            var contentTypeA = new ContentTypeDescriptor("ipsum", typeof(ContentTypeA), "dolor");
+            var contentTypeA = new ContentTypeDescriptor("ipsum", typeof(ContentTypeA));
             var contentTypeProvider = Mock.Of<IContentTypeProvider>();
             Mock.Get(contentTypeProvider).Setup(p => p.Get("ipsum")).Returns(contentTypeA);
 

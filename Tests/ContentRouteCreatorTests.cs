@@ -23,8 +23,8 @@ namespace Tests
         [InlineData("lorem/{route:contentroute(expandToDol)}", "lorem/{contentroute}", "dol")]
         public void CreatesRoutes(string pattern, string resultingTemplate, string resultingTypes)
         {
-            var contentTypeA = new ContentTypeDescriptor("sit", typeof(ContentTypeA), "container");
-            var contentTypeB = new ContentTypeDescriptor("dol", typeof(ContentTypeB), "container");
+            var contentTypeA = new ContentTypeDescriptor("sit", typeof(ContentTypeA));
+            var contentTypeB = new ContentTypeDescriptor("dol", typeof(ContentTypeB));
 
             var contentTypeProvider = Mock.Of<IContentTypeProvider>();
             Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { contentTypeA, contentTypeB });

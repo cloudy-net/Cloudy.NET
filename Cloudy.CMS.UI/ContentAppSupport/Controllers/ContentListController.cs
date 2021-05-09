@@ -46,17 +46,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 throw new NotImplementedException("Multi type queries are not yet implemented");
             }
 
-            var containers = contentTypes.Select(t => t.Container).Distinct().ToList();
-
-            if(containers.Count > 1)
-            {
-                throw new ContentTypesSpanSeveralContainersException(contentTypes);
-            }
-
             var items = new List<object>();
             var itemChildrenCounts = new Dictionary<string, int>();
-
-
 
             var documentsQuery = ContentFinder.Find(contentTypes.Single().Type);
 
@@ -79,7 +70,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 {
                     var id = PrimaryKeyGetter.Get(content);
 
-                    itemChildrenCounts[string.Join(",", id)] = await ContentChildrenCounter.CountChildrenForAsync(containers.Single(), content).ConfigureAwait(false);
+                    itemChildrenCounts[string.Join(",", id)] = await ContentChildrenCounter.CountChildrenForAsync(id).ConfigureAwait(false);
                 }
             }
 
