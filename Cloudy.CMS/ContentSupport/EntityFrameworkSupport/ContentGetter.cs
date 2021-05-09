@@ -1,11 +1,11 @@
-﻿using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport
+namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
 {
     public class ContentGetter : IContentGetter
     {
