@@ -11,6 +11,7 @@ class Nav {
         this.element = document.createElement('cloudy-ui-portal-nav');
         document.body.append(this.element);
         this.toggle = document.createElement('cloudy-ui-portal-nav-toggle');
+        this.toggle.style.display = 'none';
         this.element.appendChild(this.toggle);
 
         this.toggle.tabIndex = 0;
@@ -53,10 +54,6 @@ class Nav {
         this.menuList = new List();
         this.menuList.appendTo(this.menu);
 
-        this.menuFade = document.createElement('cloudy-ui-portal-nav-menu-fade');
-        this.menuFade.classList.add('cloudy-ui-hidden');
-        this.element.appendChild(this.menuFade);
-
         this.menuList.addSubHeader('Apps');
         for (var appDescriptor of apps) {
             var listItem = new ListItem();
@@ -70,7 +67,7 @@ class Nav {
         this.title.innerText = title;
         this.element.append(this.title);
 
-        new Button('No pending changes').setPrimary().setDisabled().appendTo(this.element);
+        new Button('No pending changes').setDisabled().appendTo(this.element);
 
         //var user = document.createElement('cloudy-ui-nav-user');
         //var userMenu = new ContextMenu();
@@ -78,6 +75,10 @@ class Nav {
         //userMenu.button.classList.add('cloudy-ui-nav-user-button');
         //userMenu.appendTo(user);
         //this.element.append(user);
+
+        this.menuFade = document.createElement('cloudy-ui-portal-nav-menu-fade');
+        this.menuFade.classList.add('cloudy-ui-hidden');
+        this.element.appendChild(this.menuFade);
 
         window.addEventListener("hashchange", () => this.update());
         this.update();

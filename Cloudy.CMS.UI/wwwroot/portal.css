@@ -114,10 +114,6 @@ cloudy-ui-portal-nav-menu-fade {
     visibility: hidden;
     opacity: 0; }
 
-@media (min-width: 576px) {
-  cloudy-ui-portal-nav-menu-fade {
-    top: 64px; } }
-
 cloudy-ui-portal-nav-menu {
   position: fixed;
   top: 0;

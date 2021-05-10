@@ -156,12 +156,6 @@ cloudy-ui-portal-nav-menu-fade {
     }
 }
 
-@media(min-width: $screen-tn) {
-    cloudy-ui-portal-nav-menu-fade {
-        top: 64px;
-    }
-}
-
 cloudy-ui-portal-nav-menu {
     position: fixed;
     top: 0;
