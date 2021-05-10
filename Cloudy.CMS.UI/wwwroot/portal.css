@@ -69,7 +69,7 @@ cloudy-ui-portal-nav {
     align-items: center;
     height: 64px;
     padding: 0 12px;
-    background: #1976d2; } }
+    background: #888; } }
 
 cloudy-ui-portal-nav-toggle {
   display: block;
@@ -320,14 +320,9 @@ cloudy-ui-button,
     background-color: #b5b5b5; }
   cloudy-ui-button[disabled],
   .cloudy-ui-button[disabled] {
-    filter: grayscale(100%);
     cursor: default;
-    color: rgba(0, 0, 0, 0.26);
     box-shadow: none;
-    background-color: rgba(0, 0, 0, 0.12); }
-    cloudy-ui-button[disabled]:hover,
-    .cloudy-ui-button[disabled]:hover {
-      background-color: rgba(0, 0, 0, 0.12); }
+    opacity: 0.4; }
   cloudy-ui-button.primary,
   .cloudy-ui-button.primary {
     color: #fff;
@@ -338,16 +333,6 @@ cloudy-ui-button,
     cloudy-ui-button.primary:focus,
     .cloudy-ui-button.primary:focus {
       background-color: #378fe7; }
-    cloudy-ui-button.primary[disabled],
-    .cloudy-ui-button.primary[disabled] {
-      filter: grayscale(100%);
-      cursor: default;
-      color: rgba(255, 255, 255, 0.26);
-      box-shadow: none;
-      background-color: rgba(0, 0, 0, 0.12); }
-      cloudy-ui-button.primary[disabled]:hover,
-      .cloudy-ui-button.primary[disabled]:hover {
-        background-color: rgba(0, 0, 0, 0.18); }
   cloudy-ui-button.inherit,
   .cloudy-ui-button.inherit {
     color: inherit;

@@ -97,7 +97,7 @@ cloudy-ui-portal-nav {
         align-items: center;
         height: 64px;
         padding: 0 12px;
-        background: #1976d2;
+        background: #888;
     }
 }
 
@@ -449,14 +449,11 @@ cloudy-ui-button,
     }
 
     &[disabled] {
-        filter: grayscale(100%);
         cursor: default;
-        color: rgba(0, 0, 0, 0.26);
         box-shadow: none;
-        background-color: rgba(0, 0, 0, 0.12);
+        opacity: 0.4;
 
         &:hover {
-            background-color: rgba(0, 0, 0, 0.12);
         }
     }
 
@@ -470,18 +467,6 @@ cloudy-ui-button,
 
         &:focus {
             background-color: lighten(#1976d2, 10%);
-        }
-
-        &[disabled] {
-            filter: grayscale(100%);
-            cursor: default;
-            color: rgba(#fff, 0.26);
-            box-shadow: none;
-            background-color: rgba(0, 0, 0, 0.12);
-
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.18);
-            }
         }
     }
 
