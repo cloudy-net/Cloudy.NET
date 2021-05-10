@@ -1,6 +1,7 @@
 ﻿import List from './ListSupport/list.js';
 import ListItem from './ListSupport/list-item.js';
 import ContextMenu from './ContextMenuSupport/context-menu.js';
+import Button from './button.js';
 
 class Nav {
     constructor(portal, title, apps) {
@@ -69,12 +70,14 @@ class Nav {
         this.title.innerText = title;
         this.element.append(this.title);
 
-        var user = document.createElement('cloudy-ui-nav-user');
-        var userMenu = new ContextMenu();
-        userMenu.addItem(item => item.setText('Log out').onClick(() => location.href = 'Logout'));
-        userMenu.button.classList.add('cloudy-ui-nav-user-button');
-        userMenu.appendTo(user);
-        this.element.append(user);
+        new Button('No pending changes').setPrimary().setDisabled().appendTo(this.element);
+
+        //var user = document.createElement('cloudy-ui-nav-user');
+        //var userMenu = new ContextMenu();
+        //userMenu.addItem(item => item.setText('Log out').onClick(() => location.href = 'Logout'));
+        //userMenu.button.classList.add('cloudy-ui-nav-user-button');
+        //userMenu.appendTo(user);
+        //this.element.append(user);
 
         window.addEventListener("hashchange", () => this.update());
         this.update();

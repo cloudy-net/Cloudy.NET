@@ -68,7 +68,7 @@ cloudy-ui-portal-nav {
     display: flex;
     align-items: center;
     height: 64px;
-    padding-left: 12px;
+    padding: 0 12px;
     background: #1976d2; } }
 
 cloudy-ui-portal-nav-toggle {
@@ -308,7 +308,6 @@ cloudy-ui-button,
   color: rgba(0, 0, 0, 0.87);
   line-height: 1.75;
   letter-spacing: 0.02857em;
-  text-transform: uppercase;
   text-align: center;
   cursor: pointer;
   user-select: none; }
@@ -339,6 +338,16 @@ cloudy-ui-button,
     cloudy-ui-button.primary:focus,
     .cloudy-ui-button.primary:focus {
       background-color: #378fe7; }
+    cloudy-ui-button.primary[disabled],
+    .cloudy-ui-button.primary[disabled] {
+      filter: grayscale(100%);
+      cursor: default;
+      color: rgba(255, 255, 255, 0.26);
+      box-shadow: none;
+      background-color: rgba(0, 0, 0, 0.12); }
+      cloudy-ui-button.primary[disabled]:hover,
+      .cloudy-ui-button.primary[disabled]:hover {
+        background-color: rgba(0, 0, 0, 0.18); }
   cloudy-ui-button.inherit,
   .cloudy-ui-button.inherit {
     color: inherit;

@@ -44,9 +44,7 @@ class ChangeTracker {
             type: 'save',
             contentId,
             contentTypeId,
-            parameters: {
-                contentAsJson
-            }
+            contentAsJson
         });
 
         this.updateCount();
@@ -65,14 +63,12 @@ class ChangeTracker {
         for (var change of this.changeTracker.pendingChanges) {
             var result;
             switch (change.type) {
-                case 'save': result = await contentSaver.save(change.parameters); break;
+                case 'save': result = await contentSaver.save(change); break;
                 default: notificationManager.addNotification(new Notification(`Unknown change type ${change.type}`)); break;
             }
             if (result.success) {
                 continue;
             }
-
-            //if(result.)
         }
     }
 }
