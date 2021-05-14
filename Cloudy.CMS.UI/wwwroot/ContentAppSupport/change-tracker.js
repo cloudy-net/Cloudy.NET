@@ -18,15 +18,13 @@ class ChangeTracker {
     };
 
     constructor(app, parentBlade) {
-        this.text = document.createElement('cloudy-ui-change-tracker-text');
-        this.element.append(this.text);
-        this.button = new Button('View').appendTo(this.element);
+        this.button = new Button('No changes').setDisabled().appendTo(this.element);
 
         this.button.onClick(() => {
             app.addBladeAfter(new PendingChangesBlade(app, this), parentBlade);
         });
 
-        this.updateCount();
+        this.update();
     }
 
     save(contentId, contentTypeId, contentAsJson) {
@@ -47,15 +45,18 @@ class ChangeTracker {
             contentAsJson
         });
 
-        this.updateCount();
+        this.update();
     }
 
-    updateCount() {
+    update() {
         switch (this.pendingChanges.length) {
-            case 0: this.text.innerHTML = 'No changes'; break;
-            case 1: this.text.innerHTML = '1 change'; break;
-            default: this.text.innerHTML = `${this.pendingChanges.length} changes`; break;
+            case 0: this.button.setText('No changes'); break;
+            case 1: this.button.setText('1 change'); break;
+            default: this.button.setText(`${this.pendingChanges.length} changes`); break;
         }
+
+        this.button.setDisabled(this.pendingChanges.length == 0);
+
         this.button.setPrimary(this.pendingChanges.length > 0);
     }
 

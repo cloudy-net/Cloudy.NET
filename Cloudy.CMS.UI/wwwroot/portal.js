@@ -1,4 +1,4 @@
-import Nav from "./nav.js";
+import nav from "./nav.js";
 import notificationManager from "./NotificationSupport/notification-manager.js";
 
 
@@ -13,7 +13,9 @@ class Portal {
     constructor(title, appDescriptors) {
         this.appDescriptors = appDescriptors;
         this.element = document.createElement('cloudy-ui-portal');
-        this.nav = new Nav(this, title, appDescriptors);
+        this.nav = nav;
+        this.nav.setTitle(title);
+        this.nav.setApps(appDescriptors);
         window.addEventListener("hashchange", () => { this.stateUpdate(); });
         this.stateUpdate();
     }

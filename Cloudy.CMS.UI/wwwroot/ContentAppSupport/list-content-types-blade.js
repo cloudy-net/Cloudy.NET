@@ -38,7 +38,6 @@ class ListContentTypesBlade extends Blade {
 
         const list = new List();
         this.setContent(list);
-        this.setFooter(this.app.changeTracker);
 
         const [contentTypes, contentTypeGroups] = await Promise.all([
             ContentTypeProvider.getAll(),

@@ -4,9 +4,7 @@ import ContextMenu from './ContextMenuSupport/context-menu.js';
 import Button from './button.js';
 
 class Nav {
-    constructor(portal, title, apps) {
-        this.portal = portal;
-        this.apps = apps;
+    constructor(title, apps) {
 
         this.element = document.createElement('cloudy-ui-portal-nav');
         document.body.append(this.element);
@@ -54,20 +52,11 @@ class Nav {
         this.menuList = new List();
         this.menuList.appendTo(this.menu);
 
-        this.menuList.addSubHeader('Apps');
-        for (var appDescriptor of apps) {
-            var listItem = new ListItem();
-            listItem.setText(appDescriptor.name);
-            listItem.element.setAttribute('cloudy-ui-app-id', appDescriptor.id);
-            listItem.onClick(() => location.hash = '#' + appDescriptor.id);
-            this.menuList.addItem(listItem);
-        }
-
         this.title = document.createElement('cloudy-ui-portal-nav-title');
-        this.title.innerText = title;
         this.element.append(this.title);
 
-        new Button('No pending changes').setDisabled().appendTo(this.element);
+        this.action = document.createElement('div');
+        this.element.append(this.action);
 
         //var user = document.createElement('cloudy-ui-nav-user');
         //var userMenu = new ContextMenu();
@@ -84,6 +73,32 @@ class Nav {
         this.update();
     }
 
+    setTitle(title) {
+        this.title.innerText = title;
+    }
+
+    setApps(apps) {
+        this.apps = apps;
+
+        if (apps.length > 1) {
+            this.toggle.style.display = '';
+        }
+
+        this.menuList.addSubHeader('Apps');
+        for (var appDescriptor of apps) {
+            var listItem = new ListItem();
+            listItem.setText(appDescriptor.name);
+            listItem.element.setAttribute('cloudy-ui-app-id', appDescriptor.id);
+            listItem.onClick(() => location.hash = '#' + appDescriptor.id);
+            this.menuList.addItem(listItem);
+        }
+    }
+
+    setAction(...items) {
+        [...this.action.childNodes].forEach(c => this.action.removeChild(c));
+        items.forEach(item => this.action.append(item.element || item));
+    }
+
     update() {
         var appId = location.hash.substr(1).split('/')[0];
 
@@ -98,4 +113,4 @@ class Nav {
     }
 }
 
-export default Nav;
+export default new Nav();

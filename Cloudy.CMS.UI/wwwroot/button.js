@@ -43,6 +43,10 @@ class Button {
         return this;
     }
 
+    setText(text) {
+        this.element.innerText = text;
+    }
+
     setDisabled(test = true) {
         if (test) {
             this.element.setAttribute('disabled', '');

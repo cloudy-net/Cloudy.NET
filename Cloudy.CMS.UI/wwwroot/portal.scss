@@ -10,7 +10,7 @@
 /* GLOBAL ELEMENTS */
 
 html {
-    background: #f5f5f5;
+    background: #eeeef5;
 }
 
 body {
@@ -97,7 +97,6 @@ cloudy-ui-portal-nav {
         align-items: center;
         height: 64px;
         padding: 0 12px;
-        background: #888;
     }
 }
 
@@ -134,7 +133,6 @@ cloudy-ui-portal-nav-title {
     font-size: 1.25rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 500;
-    color: white;
     line-height: 1.6;
     letter-spacing: 0.0075em;
 }
@@ -456,7 +454,7 @@ cloudy-ui-button,
         background-color: #1976d2;
 
         &:hover {
-            background-color: rgb(17, 82, 147);
+            background-color: #115293;
         }
 
         &:focus {
@@ -565,9 +563,4 @@ cloudy-ui-nav-user {
 cloudy-ui-change-tracker {
     display: flex;
     flex-grow: 1;
-}
-
-cloudy-ui-change-tracker-text {
-    flex-grow: 1;
-    align-self: center;
 }

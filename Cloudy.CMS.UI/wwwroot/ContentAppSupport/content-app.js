@@ -2,6 +2,7 @@
 import ListContentTypesBlade from './list-content-types-blade.js';
 import state from '../state.js';
 import ChangeTracker from './change-tracker.js';
+import nav from '../nav.js';
 
 
 
@@ -15,6 +16,7 @@ class ContentApp extends App {
         super();
         this.listContentTypesBlade = new ListContentTypesBlade(this);
         this.changeTracker = new ChangeTracker(this, this.listContentTypesBlade);
+        nav.setAction(this.changeTracker);
 
         this.stateUpdate = async () => {
             state.update();
