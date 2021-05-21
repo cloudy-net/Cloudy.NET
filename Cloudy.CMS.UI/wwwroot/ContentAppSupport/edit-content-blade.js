@@ -90,46 +90,6 @@ class EditContentBlade extends Blade {
         }
 
         this.buildForm();
-
-        this.saveButton = new Button('Save').setPrimary().onClick(this.save.bind(this));
-
-        var cancelButton = new Button('Cancel').onClick(() => this.app.removeBlade(this));
-        var moreButton = new ContextMenu()
-            .addItem(item => item.setText('Copy').onClick(() => navigator.clipboard.writeText(JSON.stringify(this.content, null, '  '))))
-            .addItem(item => item.setText('Paste').onClick(() => { this.app.removeBladesAfter(this); navigator.clipboard.readText().then(this.paste.bind(this)); }));
-
-        this.setFooter(this.saveButton, cancelButton, moreButton);
-    }
-
-    async save(){
-        this.app.changeTracker.save(this.content.id, this.contentType.id, JSON.stringify(this.content));
-    }
-
-    paste(text){
-        const value = JSON.parse(text);
-
-        for (let [propertyKey, propertyValue] of Object.entries(this.content)) {
-            if (propertyKey == 'id') {
-                continue;
-            }
-
-            if (!(propertyKey in value)) {
-                delete this.content[propertyKey];
-            }
-        }
-        for (let [propertyKey, propertyValue] of Object.entries(value)) {
-            if (propertyKey == 'id') {
-                continue;
-            }
-
-            if (propertyKey == 'contentTypeId') {
-                continue;
-            }
-
-            this.content[propertyKey] = propertyValue;
-        }
-
-        this.buildForm();
     }
 
     async buildForm() {
