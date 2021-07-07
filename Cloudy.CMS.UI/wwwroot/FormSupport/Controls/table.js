@@ -9,7 +9,7 @@ import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
 class SortableTableControl extends Sortable {
     constructor(fieldModel, target, app, blade) {
-        super(fieldModel, target, index => {
+        super(fieldModel, target.length, index => {
             if (!(index in target)) {
                 target[index] = {};
             }

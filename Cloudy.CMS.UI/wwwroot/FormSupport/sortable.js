@@ -8,7 +8,7 @@ class SortableField {
     };
     items = [];
 
-    constructor(fieldModel, target, createItem) {
+    constructor(fieldModel, size, createItem) {
         this.fieldModel = fieldModel;
         this.fields = document.createElement('cloudy-ui-sortable-items');
         this.element = document.createElement('cloudy-ui-sortable');
@@ -17,7 +17,9 @@ class SortableField {
         this.target = target;
         this.createItem = createItem;
 
-        target.forEach((_, index) => this.addItem(this.createItem(index)));
+        for (var index = 0; index < size; index++) {
+            this.addItem(this.createItem(index));
+        }
 
         this.onMove((index, newIndex) => {
             if (newIndex < index) {
@@ -29,7 +31,6 @@ class SortableField {
                     this.fields.appendChild(this.fields.children[index]);
                 }
             }
-            this.target.splice(newIndex, 0, this.target.splice(index, 1)[0]);
             this.items.splice(newIndex, 0, this.items.splice(index, 1)[0]);
         });
 
@@ -104,7 +105,6 @@ class SortableField {
                 .onClick(() => {
                     var index = [...this.fields.children].indexOf(field);
                     this.fields.children[index].remove();
-                    this.target.splice(index, 1);
                     this.items.splice(index, 1);
                 });
         });

@@ -72,8 +72,6 @@ class FormBuilder {
 
         var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade);
 
-        control.onChange(value => target[fieldModel.descriptor.camelCaseId] = value);
-
         element.appendChild(control.element);
 
         return new Field(fieldModel, element, { control });
@@ -117,7 +115,7 @@ class FormBuilder {
                 return new SortableItem(container, { form, actionContainer: container });
             };
 
-        var sortable = new Sortable(fieldModel, target, createItem);
+        var sortable = new Sortable(fieldModel, target.length, createItem);
 
         sortable.element.classList.add('cloudy-ui-sortable-form');
 
@@ -137,8 +135,6 @@ class FormBuilder {
 
                 var control = new fieldModel.controlType(fieldModel, target[index], this.app, this.blade);
 
-                control.onChange(value => target[index] = value);
-
                 fieldControlElement.appendChild(control.element);
 
                 var field = new Field(fieldModel, fieldElement, { control });
@@ -146,7 +142,7 @@ class FormBuilder {
                 return new SortableItem(fieldElement, { field });
             };
 
-        var sortable = new Sortable(fieldModel, target, createItem);
+        var sortable = new Sortable(fieldModel, target.length, createItem);
 
         sortable.element.classList.add('cloudy-ui-sortable-field');
 

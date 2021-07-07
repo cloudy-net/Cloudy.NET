@@ -27,15 +27,21 @@ namespace Website.AspNetCore
 {
     public class Startup
     {
+        IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
             services.AddCloudy(cloudy => cloudy
-                //.WithMongoDatabaseConnectionStringNamed("mongo")
                 .AddAdmin(admin => admin.Unprotect())
                 .AddContext<PageContext>()
             );
-            services.AddDbContext<PageContext>(options => options.UseInMemoryDatabase("website"));
+            services.AddDbContext<PageContext>(options => options.UseSqlServer(Configuration.GetConnectionString("sqlserver") ?? throw new Exception("No sqlserver connection string found in appsettings/env")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
