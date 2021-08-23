@@ -10,8 +10,8 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<ISaveListenerCreator, SaveListenerCreator>();
-            services.AddSingleton<ISaveListenerProvider, SaveListenerProvider>();
+            services.AddScoped<ISaveListenerCreator, SaveListenerCreator>();
+            services.AddScoped<ISaveListenerProvider, SaveListenerProvider>();
         }
     }
 }
