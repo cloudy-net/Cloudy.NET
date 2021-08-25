@@ -21,6 +21,9 @@ body {
     color: rgba(0, 0, 0, 0.87);
     line-height: 1.5;
     letter-spacing: 0.00938em;
+    &.disabled {
+        pointer-events: none;
+    }
 }
 
 a {
