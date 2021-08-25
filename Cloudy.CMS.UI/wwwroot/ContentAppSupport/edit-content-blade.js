@@ -90,6 +90,10 @@ class EditContentBlade extends Blade {
         }
 
         this.buildForm();
+
+        this.saveButton = new Button('Save').setPrimary().onClick(() => console.log('TODO: save edit content'));
+
+        this.setFooter(this.saveButton)
     }
 
     async buildForm() {
