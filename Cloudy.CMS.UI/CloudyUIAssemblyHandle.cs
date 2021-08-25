@@ -11,6 +11,7 @@ namespace Cloudy.CMS.UI
     [Style("DataTableSupport/data-table.css")]
     [Style("FormSupport/form-elements.css")]
     [Style("NotificationSupport/notification-manager.css")]
+    [Style("LoadingSupport/loading.css")]
     public class CloudyUIAssemblyHandle
     {
     }

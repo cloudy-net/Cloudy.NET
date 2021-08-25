@@ -7,7 +7,7 @@ import EditContentBlade from './edit-content-blade.js';
 import RemoveContentBlade from './remove-content-blade.js';
 import ListItem from '../ListSupport/list-item.js';
 import state from '../state.js';
-
+import { Loading } from '../LoadingSupport/loading.js';
 
 
 /* LIST CONTENT BLADE */
@@ -69,8 +69,8 @@ class ListContentBlade extends Blade {
             if (parents.length) {
                 url += `&parent=${parents[parents.length - 1].id}`;
             }
-
-            var response = await fetch(url, { credentials: 'include' });
+            Loading.turnOn(3000);
+            var response = await fetch(url, { credentials: 'include' }).finally(_ => Loading.turnOf());
 
             if (!response.ok) {
                 var text = await response.text();
