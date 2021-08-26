@@ -58,10 +58,12 @@ namespace Tests
 
             var body = new SaveContentController.SaveContentRequestBody
             {
-                KeyValues = id,
-                ContentTypeId = contentTypeId,
-                Content = JsonConvert.SerializeObject(b),
+                //KeyValues = id,
+                //ContentTypeId = contentTypeId,
+                //Content = JsonConvert.SerializeObject(b),
             };
+
+            throw new NotImplementedException();
 
             var containerSpecificContentUpdater = Mock.Of<IContentUpdater>();
 

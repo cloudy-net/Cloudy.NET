@@ -50,70 +50,78 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 return ContentResponseMessage.CreateFrom(ModelState);
             }
 
-            var contentType = ContentTypeProvider.Get(data.ContentTypeId);
+            return new ContentResponseMessage(true, "This functionality is not done yet, but this is the data sent in: \n\n" + JsonConvert.SerializeObject(data));
 
-            var b = JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
+            //var contentType = ContentTypeProvider.Get(data.ContentTypeId);
+
+            //var b = JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
             
-            if (!TryValidateModel(b))
-            {
-                return ContentResponseMessage.CreateFrom(ModelState);
-            }
+            //if (!TryValidateModel(b))
+            //{
+            //    return ContentResponseMessage.CreateFrom(ModelState);
+            //}
 
-            if (PrimaryKeyGetter.Get(b).All(id => id != null))
-            {
-                var a = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(data.KeyValues, contentType.Id)).ConfigureAwait(false);
+            //if (PrimaryKeyGetter.Get(b).All(id => id != null))
+            //{
+            //    var a = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(data.KeyValues, contentType.Id)).ConfigureAwait(false);
 
-                foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
-                {
-                    foreach(var propertyDefinition in coreInterface.PropertyDefinitions)
-                    {
-                        var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
+            //    foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
+            //    {
+            //        foreach(var propertyDefinition in coreInterface.PropertyDefinitions)
+            //        {
+            //            var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 
-                        if (display != null && display.GetAutoGenerateField() == false)
-                        {
-                            continue;
-                        }
+            //            if (display != null && display.GetAutoGenerateField() == false)
+            //            {
+            //                continue;
+            //            }
 
-                        propertyDefinition.Setter(a, propertyDefinition.Getter(b));
-                    }
-                }
+            //            propertyDefinition.Setter(a, propertyDefinition.Getter(b));
+            //        }
+            //    }
 
-                foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType.Id))
-                {
-                    var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
+            //    foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType.Id))
+            //    {
+            //        var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 
-                    if (display != null && display.GetAutoGenerateField() == false)
-                    {
-                        continue;
-                    }
+            //        if (display != null && display.GetAutoGenerateField() == false)
+            //        {
+            //            continue;
+            //        }
 
-                    propertyDefinition.Setter(a, propertyDefinition.Getter(b));
-                }
+            //        propertyDefinition.Setter(a, propertyDefinition.Getter(b));
+            //    }
 
-                if (!TryValidateModel(b))
-                {
-                    throw new Exception("a was valid but b was not.");
-                }
+            //    if (!TryValidateModel(b))
+            //    {
+            //        throw new Exception("a was valid but b was not.");
+            //    }
 
-                await ContentUpdater.UpdateAsync(a).ConfigureAwait(false);
+            //    await ContentUpdater.UpdateAsync(a).ConfigureAwait(false);
 
-                return new ContentResponseMessage(true, "Updated");
-            }
-            else
-            {
-                await ContentCreator.CreateAsync(b).ConfigureAwait(false);
+            //    return new ContentResponseMessage(true, "Updated");
+            //}
+            //else
+            //{
+            //    await ContentCreator.CreateAsync(b).ConfigureAwait(false);
 
-                return new ContentResponseMessage(true, "Created");
-            }
+            //    return new ContentResponseMessage(true, "Created");
+            //}
         }
 
         public class SaveContentRequestBody
         {
+            public IEnumerable<SaveContentRequestBodyChange> Changes { get; set; }
+        }
+        public class SaveContentRequestBodyChange
+        {
+            [Required]
             public string[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
             [Required]
-            public string Content { get; set; }
+            public string Path { get; set; }
+            public string Value { get; set; }
         }
 
         public class ContentResponseMessage
