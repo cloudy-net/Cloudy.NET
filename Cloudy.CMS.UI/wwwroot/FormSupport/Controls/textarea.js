@@ -5,6 +5,13 @@ class TextareaControl extends FieldControl {
         var container = document.createElement('div');
         super(container);
 
+        this.contentId = blade?.content?.id;
+        this.contentTypeId = blade?.contentType?.id;
+        this.changeTracker = app.changeTracker;
+        this.path = fieldModel.descriptor.camelCaseId;
+        this.name = this.changeTracker?.buildControlName(this.contentTypeId, this.contentId, fieldModel.descriptor.camelCaseId);
+        this.backupValue = originalValue || value;
+        
         var input = document.createElement('textarea');
         input.classList.add('cloudy-ui-form-input');
         input.rows = fieldModel.descriptor.control.parameters.options && fieldModel.descriptor.control.parameters.options.rows ? fieldModel.descriptor.control.parameters.options.rows.value : 8;

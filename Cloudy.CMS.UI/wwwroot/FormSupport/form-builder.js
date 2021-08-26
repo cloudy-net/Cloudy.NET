@@ -69,8 +69,9 @@ class FormBuilder {
 
     buildSimpleField(fieldModel, target, element) {
         element.classList.add('cloudy-ui-simple');
-
-        var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade);
+        
+        const fieldValue = this._getFieldValue(target, fieldModel.descriptor.camelCaseId);
+        var control = new fieldModel.controlType(fieldModel, fieldValue, this.app, this.blade, target[fieldModel.descriptor.camelCaseId]);
 
         element.appendChild(control.element);
 
@@ -161,6 +162,17 @@ class FormBuilder {
         form.element.classList.add('cloudy-ui-embedded-form');
 
         return form;
+    }
+
+    _getFieldValue(target, fieldId) {
+        const contentId = this.blade?.content?.id;
+        const contentTypeId = this.blade?.contentType?.id;
+        const fieldName = this.app?.changeTracker?.buildControlName(contentTypeId, contentId, fieldId);
+        const pendingChangeContentFieldIndex = this.app?.changeTracker?.pendingChanges.findIndex(item => item.name === fieldName);
+        if (pendingChangeContentFieldIndex !== -1) {
+            return this.app?.changeTracker?.pendingChanges[pendingChangeContentFieldIndex].contentAsJson.value;
+        }
+        return target[fieldId];
     }
 }
 

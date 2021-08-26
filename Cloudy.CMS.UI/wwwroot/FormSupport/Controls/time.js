@@ -9,6 +9,13 @@ class TimeControl extends FieldControl {
 
         super(input);
         
+        this.contentId = blade?.content?.id;
+        this.contentTypeId = blade?.contentType?.id;
+        this.changeTracker = app.changeTracker;
+        this.path = fieldModel.descriptor.camelCaseId;
+        this.name = this.changeTracker?.buildControlName(this.contentTypeId, this.contentId, fieldModel.descriptor.camelCaseId);
+        this.backupValue = originalValue || value;
+
         input.addEventListener('change', () => this.triggerChange(input.value || null));
         input.addEventListener('keyup', () => this.triggerChange(input.value || null));
 
