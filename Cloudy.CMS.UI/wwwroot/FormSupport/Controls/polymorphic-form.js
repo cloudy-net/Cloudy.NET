@@ -15,6 +15,13 @@ class PolymorphicForm extends FieldControl {
     constructor(fieldModel, value, app, blade) {
         super(document.createElement('div'));
 
+        this.contentId = blade?.content?.id;
+        this.contentTypeId = blade?.contentType?.id;
+        this.changeTracker = app.changeTracker;
+        this.path = fieldModel.descriptor.camelCaseId;
+        this.name = this.changeTracker?.buildControlName(this.contentTypeId, this.contentId, fieldModel.descriptor.camelCaseId);
+        this.backupValue = originalValue || value;
+        
         if (!value) {
             value = {};
         }

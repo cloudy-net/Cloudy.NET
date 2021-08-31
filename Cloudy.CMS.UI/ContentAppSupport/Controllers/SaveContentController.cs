@@ -55,7 +55,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             //var contentType = ContentTypeProvider.Get(data.ContentTypeId);
 
             //var b = JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
-            
+
             //if (!TryValidateModel(b))
             //{
             //    return ContentResponseMessage.CreateFrom(ModelState);
@@ -64,6 +64,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             //if (PrimaryKeyGetter.Get(b).All(id => id != null))
             //{
             //    var a = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(data.KeyValues, contentType.Id)).ConfigureAwait(false);
+            //}
 
             //    foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
             //    {
@@ -75,10 +76,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             //            {
             //                continue;
             //            }
+            //            var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 
             //            propertyDefinition.Setter(a, propertyDefinition.Getter(b));
             //        }
             //    }
+            //            }
 
             //    foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType.Id))
             //    {
@@ -91,6 +94,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             //        propertyDefinition.Setter(a, propertyDefinition.Getter(b));
             //    }
+            //            continue;
+            //        }
 
             //    if (!TryValidateModel(b))
             //    {
@@ -98,8 +103,17 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             //    }
 
             //    await ContentUpdater.UpdateAsync(a).ConfigureAwait(false);
+            //    {
+            //        throw new Exception("a was valid but b was not.");
+            //    }
 
             //    return new ContentResponseMessage(true, "Updated");
+            //}
+            //else
+            //{
+            //    await ContentCreator.CreateAsync(b).ConfigureAwait(false);
+
+            //    return new ContentResponseMessage(true, "Created");
             //}
             //else
             //{
@@ -113,13 +127,20 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             public IEnumerable<SaveContentRequestBodyChange> Changes { get; set; }
         }
+
         public class SaveContentRequestBodyChange
         {
-            [Required]
             public string[] KeyValues { get; set; }
+            [Required]
+            public string ContentId { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
             [Required]
+            public SaveContentMappingChange[] ChangedFields { get; set; }
+        }
+
+        public class SaveContentMappingChange
+        {
             public string Path { get; set; }
             public string Value { get; set; }
         }

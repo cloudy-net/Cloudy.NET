@@ -27,6 +27,13 @@ class SelectControl extends FieldControl {
         this.app = app;
         this.blade = blade;
 
+        this.contentId = blade?.content?.id;
+        this.contentTypeId = blade?.contentType?.id;
+        this.changeTracker = app.changeTracker;
+        this.path = fieldModel.descriptor.camelCaseId;
+        this.name = this.changeTracker?.buildControlName(this.contentTypeId, this.contentId, fieldModel.descriptor.camelCaseId);
+        this.backupValue = originalValue || value;
+        
         this.empty = document.createElement('cloudy-ui-select-empty');
         var emptyText = document.createElement('cloudy-ui-select-empty-text');
         emptyText.innerText = '(none)';

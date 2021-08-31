@@ -318,7 +318,8 @@ cloudy-ui-button,
   .cloudy-ui-button[disabled] {
     cursor: default;
     box-shadow: none;
-    opacity: 0.4; }
+    opacity: 0.4;
+    pointer-events: none; }
   cloudy-ui-button.primary,
   .cloudy-ui-button.primary {
     color: #fff;
