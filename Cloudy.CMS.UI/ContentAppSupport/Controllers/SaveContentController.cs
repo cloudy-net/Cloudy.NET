@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -28,8 +29,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentUpdater ContentUpdater { get; }
         IContentCreator ContentCreator { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
+        IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyGetter primaryKeyGetter, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyGetter primaryKeyGetter, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
         {
             ContentTypeProvider = contentTypeProvider;
             PrimaryKeyGetter = primaryKeyGetter;
@@ -40,6 +42,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentUpdater = contentUpdater;
             ContentCreator = contentCreator;
             PolymorphicFormConverter = polymorphicFormConverter;
+            PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
         }
 
         [HttpPost]
@@ -50,77 +53,43 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 return ContentResponseMessage.CreateFrom(ModelState);
             }
 
-            return new ContentResponseMessage(true, "This functionality is not done yet, but this is the data sent in: \n\n" + JsonConvert.SerializeObject(data));
+            foreach (var change in data.Changes)
+            {
+                var contentType = ContentTypeProvider.Get(change.ContentTypeId);
 
-            //var contentType = ContentTypeProvider.Get(data.ContentTypeId);
+                var content = await ContentGetter.GetAsync(contentType.Id, change.KeyValues).ConfigureAwait(false);
 
-            //var b = JsonConvert.DeserializeObject(data.Content, contentType.Type, PolymorphicFormConverter);
+                var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id);
+                var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
 
-            //if (!TryValidateModel(b))
-            //{
-            //    return ContentResponseMessage.CreateFrom(ModelState);
-            //}
+                foreach (var changedField in change.ChangedFields)
+                {
+                    var propertyDefinition = propertyDefinitions.Single(p => p.Name == changedField.Path);
 
-            //if (PrimaryKeyGetter.Get(b).All(id => id != null))
-            //{
-            //    var a = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(data.KeyValues, contentType.Id)).ConfigureAwait(false);
-            //}
+                    if(idProperties.Any(p => p.Name == propertyDefinition.Name))
+                    {
+                        throw new Exception("Tried to change primary key!");
+                    }
 
-            //    foreach(var coreInterface in ContentTypeCoreInterfaceProvider.GetFor(contentType.Id))
-            //    {
-            //        foreach(var propertyDefinition in coreInterface.PropertyDefinitions)
-            //        {
-            //            var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
+                    var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 
-            //            if (display != null && display.GetAutoGenerateField() == false)
-            //            {
-            //                continue;
-            //            }
-            //            var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
+                    if (display != null && display.GetAutoGenerateField() == false)
+                    {
+                        continue;
+                    }
 
-            //            propertyDefinition.Setter(a, propertyDefinition.Getter(b));
-            //        }
-            //    }
-            //            }
+                    propertyDefinition.Setter(content, changedField.Value);
+                }
 
-            //    foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType.Id))
-            //    {
-            //        var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
+                if (!TryValidateModel(content))
+                {
+                    return ContentResponseMessage.CreateFrom(ModelState);
+                }
 
-            //        if (display != null && display.GetAutoGenerateField() == false)
-            //        {
-            //            continue;
-            //        }
+                await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
+            }
 
-            //        propertyDefinition.Setter(a, propertyDefinition.Getter(b));
-            //    }
-            //            continue;
-            //        }
-
-            //    if (!TryValidateModel(b))
-            //    {
-            //        throw new Exception("a was valid but b was not.");
-            //    }
-
-            //    await ContentUpdater.UpdateAsync(a).ConfigureAwait(false);
-            //    {
-            //        throw new Exception("a was valid but b was not.");
-            //    }
-
-            //    return new ContentResponseMessage(true, "Updated");
-            //}
-            //else
-            //{
-            //    await ContentCreator.CreateAsync(b).ConfigureAwait(false);
-
-            //    return new ContentResponseMessage(true, "Created");
-            //}
-            //else
-            //{
-            //    await ContentCreator.CreateAsync(b).ConfigureAwait(false);
-
-            //    return new ContentResponseMessage(true, "Created");
-            //}
+            return new ContentResponseMessage(true, "Updated");
         }
 
         public class SaveContentRequestBody
@@ -130,9 +99,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentRequestBodyChange
         {
-            public string[] KeyValues { get; set; }
             [Required]
-            public string ContentId { get; set; }
+            public string[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
             [Required]

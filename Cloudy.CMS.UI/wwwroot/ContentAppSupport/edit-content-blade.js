@@ -34,7 +34,8 @@ class EditContentBlade extends Blade {
     }
 
     async open() {
-        this.fieldModels = await fieldModelBuilder.getFieldModels(this.formId);
+        this.fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.id));
+
         this.formBuilder = new FormBuilder(this.app, this);
 
         if (this.content.id) {

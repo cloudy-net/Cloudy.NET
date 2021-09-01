@@ -8,7 +8,7 @@ class TextControl extends FieldControl {
         this.contentId = blade?.content?.id;
         this.contentTypeId = blade?.contentType?.id;
         this.changeTracker = app.changeTracker;
-        this.path = fieldModel.descriptor.camelCaseId;
+        this.path = fieldModel.descriptor.id;
         this.name = this.changeTracker?.buildControlName(this.contentTypeId, this.contentId, fieldModel.descriptor.camelCaseId);
         this.backupValue = originalValue || value;
       
