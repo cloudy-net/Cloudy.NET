@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.GroupSupport;
 using Cloudy.CMS.SingletonSupport;
@@ -30,8 +31,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IImageExpressionParser ImageExpressionParser { get; }
         IListActionModuleProvider ListActionModuleProvider { get; }
         IContentTypeGroupMatcher ContentTypeGroupMatcher { get; }
+        IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
 
-        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher)
+        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
         {
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
@@ -42,6 +44,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ImageExpressionParser = imageExpressionParser;
             ListActionModuleProvider = listActionModuleProvider;
             ContentTypeGroupMatcher = contentTypeGroupMatcher;
+            PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
         }
 
         public IEnumerable<ContentTypeResponseItem> GetAll()
@@ -79,6 +82,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             var item = new ContentTypeResponseItem
             {
                 Id = contentType.Id,
+                PrimaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => k.Name).ToList().AsReadOnly(),
                 Name = name,
                 LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
                 PluralName = pluralName,
@@ -100,6 +104,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         public class ContentTypeResponseItem
         {
             public string Id { get; set; }
+            public IEnumerable<string> PrimaryKeys { get; set; }
             public string Name { get; set; }
             public string LowerCaseName { get; set; }
             public string PluralName { get; set; }
