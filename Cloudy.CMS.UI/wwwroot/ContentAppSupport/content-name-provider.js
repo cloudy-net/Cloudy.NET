@@ -46,7 +46,11 @@ class ContentNameProvider {
             }
         }
         if (!name) {
-            name = contentType.name;
+            if (content.id) {
+                name = `${contentType.name} ${content.id}`;
+            } else {
+                name = contentType.name;
+            }
         }
 
         return name;
