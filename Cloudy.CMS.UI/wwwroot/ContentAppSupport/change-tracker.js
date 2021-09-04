@@ -13,7 +13,6 @@ import state from '../state.js';
 class ChangeTracker {
     element = document.createElement('cloudy-ui-change-tracker');
     pendingChanges = [];
-    changedFieldsModel = [];
     changeExecutors = {
         save: contentSaver
     };
@@ -59,11 +58,10 @@ class ChangeTracker {
 
         this.button.setDisabled(this.pendingChanges.length == 0);
         this.button.setPrimary(this.pendingChanges.length > 0);
-
-        this.buildChangedModel();
     }
 
     reset(name) {
+        console.log('Resetting');
         const index = this.pendingChanges.findIndex(item => item.name === name);
         if (index !== -1) {
             this.pendingChanges.splice(index, 1);
@@ -73,48 +71,19 @@ class ChangeTracker {
 
     resetAll() {
         this.pendingChanges = [];
-        this.changedFieldsModel = [];
         this.update();
     }
 
-    async apply(callback) {
-        await contentSaver.save(this.changedFieldsModel);
+    async apply() {
+        if (await contentSaver.save(this.pendingChanges) == false) {
+            return false; // fail
+        }
         state.set(this.changedFieldsModel[0].contentTypeId);
         this.resetAll();
-        callback && callback();
     }
 
     buildControlName(contentTypeId, contentId, fieldId) {
         return `${contentTypeId}__${contentId}__${fieldId}`;
-    }
-
-    buildChangedModel() {
-        this.pendingChanges.forEach(item => {
-            //add group by contentTypeId contentTypeId and contentId
-            if (!this.changedFieldsModel.some(e => e.contentTypeId === item.contentTypeId && e.contentId === item.contentId)) {
-                this.changedFieldsModel.push({
-                    contentTypeId: item.contentTypeId,
-                    contentId: item.contentId,
-                    keyValues: [item.contentId]
-                });
-            }
-            // add changed fields group by contentTypeId and contentId
-            const index = this.changedFieldsModel.findIndex(e => e.contentTypeId === item.contentTypeId && e.contentId === item.contentId);
-            if (typeof this.changedFieldsModel[index].changedFields === "undefined") {
-                this.changedFieldsModel[index].changedFields = [];
-            }
-            // Add or update path & value for changed fields
-            if (!this.changedFieldsModel[index].changedFields.some(c => c.path === item.contentAsJson.path)) {
-                this.changedFieldsModel[index].changedFields.push({
-                    path: item.contentAsJson.path,
-                    value: item.contentAsJson.value
-                });
-            } else {
-                const pathIndex = this.changedFieldsModel[index].changedFields.findIndex(c => c.path === item.contentAsJson.path);
-                this.changedFieldsModel[index].changedFields[pathIndex].value = item.contentAsJson.value;
-            }
-        });
-        return this.changedFieldsModel;
     }
 }
 
@@ -131,18 +100,26 @@ class PendingChangesBlade extends Blade {
 
         this.setTitle('Pending changes');
         this.saveButton = new Button('Save');
-        this.setFooter(this.saveButton.setPrimary().setStyle({ marginLeft: 'auto' }).onClick(() => this.changeTracker.apply(() => {
-            this.saveButton.setDisabled();
-            var list = new List();
-            list.addItem(new ListItem().setText('Content has been saved.'))
-            this.setContent(list);
-        })));
+        this.setFooter(
+            this.saveButton
+                .setPrimary()
+                .setStyle({ marginLeft: 'auto' })
+                .onClick(async () => {
+                    this.saveButton.setDisabled();
+                    if (await this.changeTracker.apply()) {
+                        var list = new List();
+                        list.addItem(new ListItem().setText('Content has been saved.'))
+                        this.setContent(list);
+                    }
+                    this.saveButton.setDisabled(false);
+                })
+        );
     }
 
     async open() {
         var list = new List();
 
-        for (let change of this.changeTracker.changedFieldsModel) {
+        for (let change of this.changeTracker.pendingChanges) {
             const name = await contentNameProvider.getNameOf(change.contentId, change.contentTypeId);
             const contentName = `${name} <br/> Content id: ${change.contentId}`;
             let contentText = '';

@@ -13,29 +13,29 @@ class FormBuilder {
         this.blade = blade;
     }
 
-    async build(target, fieldModels) {
+    build(target, fieldModels, onChange) {
         if (!target) {
             target = {};
         }
 
-        var form = this.buildForm(fieldModels, target);
+        var form = this.buildForm(fieldModels, target, onChange);
 
         form.element.classList.add('cloudy-ui-form');
 
         return form;
     }
 
-    buildForm(fieldModels, target) {
+    buildForm(fieldModels, target, onChange) {
         var element = document.createElement('div');
 
-        var fields = fieldModels.map(fieldModel => this.buildField(fieldModel, target));
+        var fields = fieldModels.map(fieldModel => this.buildField(fieldModel, target, onChange));
 
         fields.forEach(field => element.appendChild(field.element));
 
         return new Form(this.app, element, target, fields);
     }
 
-    buildField(fieldModel, target) {
+    buildField(fieldModel, target, onChange) {
         var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
         element.classList.add('cloudy-ui-form-field');
 
@@ -48,10 +48,10 @@ class FormBuilder {
             return this.buildSortableField(fieldModel, target, element);
         }
 
-        return this.buildSingularField(fieldModel, target, element);
+        return this.buildSingularField(fieldModel, target, element, onChange);
     }
 
-    buildSingularField(fieldModel, target, element) {
+    buildSingularField(fieldModel, target, element, onChange) {
         if (fieldModel.descriptor.embeddedFormId) {
             if (!target[fieldModel.descriptor.camelCaseId]) {
                 target[fieldModel.descriptor.camelCaseId] = {};
@@ -64,14 +64,15 @@ class FormBuilder {
             return new Field(fieldModel, element, { form });
         }
 
-        return this.buildSimpleField(fieldModel, target, element);
+        return this.buildSimpleField(fieldModel, target, element, onChange);
     }
 
-    buildSimpleField(fieldModel, target, element) {
+    buildSimpleField(fieldModel, target, element, onChange) {
         element.classList.add('cloudy-ui-simple');
         
-        const fieldValue = this._getFieldValue(target, fieldModel.descriptor.camelCaseId);
-        var control = new fieldModel.controlType(fieldModel, fieldValue, this.app, this.blade, target[fieldModel.descriptor.camelCaseId]);
+        var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade, target[fieldModel.descriptor.camelCaseId]);
+
+        control.onChange(value => onChange(fieldModel.descriptor.id, value));
 
         element.appendChild(control.element);
 
@@ -162,17 +163,6 @@ class FormBuilder {
         form.element.classList.add('cloudy-ui-embedded-form');
 
         return form;
-    }
-
-    _getFieldValue(target, fieldId) {
-        const contentId = this.blade?.content?.id;
-        const contentTypeId = this.blade?.contentType?.id;
-        const fieldName = this.app?.changeTracker?.buildControlName(contentTypeId, contentId, fieldId);
-        const pendingChangeContentFieldIndex = this.app?.changeTracker?.pendingChanges.findIndex(item => item.name === fieldName);
-        if (pendingChangeContentFieldIndex !== -1) {
-            return this.app?.changeTracker?.pendingChanges[pendingChangeContentFieldIndex].contentAsJson.value;
-        }
-        return target[fieldId];
     }
 }
 

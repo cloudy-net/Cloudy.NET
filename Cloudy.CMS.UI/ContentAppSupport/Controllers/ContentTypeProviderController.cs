@@ -82,7 +82,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             var item = new ContentTypeResponseItem
             {
                 Id = contentType.Id,
-                PrimaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => k.Name).ToList().AsReadOnly(),
+                PrimaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => CamelCaseNamingStrategy.GetPropertyName(k.Name, false)).ToList().AsReadOnly(),
                 Name = name,
                 LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
                 PluralName = pluralName,

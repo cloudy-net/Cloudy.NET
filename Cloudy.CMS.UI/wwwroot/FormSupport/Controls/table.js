@@ -111,10 +111,10 @@ class EditRow extends Blade {
             this.setTitle('Add');
         }
 
-        formBuilder.build(item).then(form => {
-            this.setContent(form);
-            this.setFooter(new Button('Ok').setPrimary().onClick(() => app.removeBlade(this, 'saved', form.getValues())), new Button('Cancel').onClick(() => app.removeBlade(this)));
-        });
+        var form = formBuilder.build(item);
 
+        this.setContent(form);
+        this.setFooter(new Button('Ok').setPrimary().onClick(() => app.removeBlade(this, 'saved', form.getValues())), new Button('Cancel').onClick(() => app.removeBlade(this)));
+        
     }
 }

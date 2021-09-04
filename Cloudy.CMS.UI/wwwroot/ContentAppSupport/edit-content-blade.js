@@ -7,6 +7,9 @@ import notificationManager from '../NotificationSupport/notification-manager.js'
 import FormBuilder from '../FormSupport/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
+import primaryKeyProvider from './primary-key-provider.js';
+import contentNameProvider from './content-name-provider.js';
+import urlFetcher from '../url-fetcher.js';
 
 
 
@@ -17,10 +20,11 @@ class EditContentBlade extends Blade {
 
     constructor(app, contentType, content) {
         super();
-
+        
         this.app = app;
         this.contentType = contentType;
         this.content = content;
+        this.contentId = primaryKeyProvider.getFor(this.content, this.contentType);
         this.formId = `Cloudy.CMS.Content[type=${this.contentType.id}]`;
 
         this.element.addEventListener("keydown", (event) => {
@@ -34,54 +38,26 @@ class EditContentBlade extends Blade {
     }
 
     async open() {
-        this.fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.id));
+        this.fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
 
         this.formBuilder = new FormBuilder(this.app, this);
 
-        if (this.content.id) {
-            var name = '';
-
-            if (!this.contentType.isSingleton) {
-                if (this.contentType.isNameable) {
-                    name = this.contentType.nameablePropertyName ? this.content[this.contentType.nameablePropertyName] : this.content.name;
-                }
-            }
-            if (!name) {
-                name = this.contentType.name;
-            }
-
-            this.setTitle(`Edit ${name}`);
+        if (this.contentId) {
+            this.setTitle(`Edit ${await contentNameProvider.getNameOf(this.contentId, this.contentType.id)}`);
         } else {
             this.setTitle(`New ${this.contentType.name}`);
         }
 
-        if (this.content.id && this.contentType.isRoutable) {
-            var response;
-
-            try {
-                response = await fetch(`GetUrl/GetUrl?id=${encodeURIComponent(this.content.id)}&contentTypeId=${encodeURIComponent(this.content.contentTypeId)}`, {
-                    credentials: 'include',
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (!response.ok) {
-                    var text = await response.text();
-
-                    if (text) {
-                        throw new Error(text.split('\n')[0]);
-                    } else {
-                        text = response.statusText;
-                    }
-
-                    throw new Error(`${response.status} (${text})`);
-                }
-
-                var urls = await response.json();
-            } catch (error) {
-                notificationManager.addNotification(item => item.setText(`Could not get URL --- ${error.message}`));
-                throw error;
-            }
+        if (this.contentId && this.contentType.isRoutable) {
+            var urls = await urlFetcher.fetch(
+                    `GetUrl/GetUrl?id=${encodeURIComponent(JSON.stringify(this.contentId))}&contentTypeId=${encodeURIComponent(this.contentType.id)}`,
+                    {
+                        credentials: 'include',
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    },
+                    'Could not get URL'
+                );
 
             if (!urls.length) {
                 return;
@@ -102,7 +78,14 @@ class EditContentBlade extends Blade {
             var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
             if (groups.length == 1) {
-                var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]));
+                var form = this.formBuilder.build(
+                    this.content,
+                    this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]),
+                    (path, value) => this.app.changeTracker.save(this.contentId, this.contentType.id, this.name, {
+                        path,
+                        value
+                    })
+                )
                 
                 this.setContent(form);
             } else {
@@ -111,7 +94,7 @@ class EditContentBlade extends Blade {
                 if (groups.indexOf(null) != -1) {
                     tabSystem.addTab('General', async () => {
                         var element = document.createElement('div');
-                        var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null));
+                        var form = this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null));
                         form.appendTo(element);
                         return element;
                     });
@@ -119,7 +102,7 @@ class EditContentBlade extends Blade {
 
                 groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                     var element = document.createElement('div');
-                    var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group));
+                    var form = this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group));
                     form.appendTo(element);
                     return element;
                 }));

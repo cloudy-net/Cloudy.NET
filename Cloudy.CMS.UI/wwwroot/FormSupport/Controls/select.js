@@ -356,7 +356,7 @@ class CreateItemBlade extends Blade {
             var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
             if (groups.length == 1) {
-                var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]));
+                var form = this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]));
 
                 this.setContent(form);
             } else {
@@ -365,7 +365,7 @@ class CreateItemBlade extends Blade {
                 if (groups.indexOf(null) != -1) {
                     tabSystem.addTab('General', async () => {
                         var element = document.createElement('div');
-                        var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null));
+                        var form = this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null));
                         form.appendTo(element);
                         return element;
                     });
@@ -373,7 +373,7 @@ class CreateItemBlade extends Blade {
 
                 groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                     var element = document.createElement('div');
-                    var form = await this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group));
+                    var form = this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group));
                     form.appendTo(element);
                     return element;
                 }));

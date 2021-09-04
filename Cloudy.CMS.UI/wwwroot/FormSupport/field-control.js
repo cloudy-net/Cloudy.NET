@@ -9,24 +9,9 @@
       focus: [],
       blur: [],
     };
-    this.backupValue = null;
-    this.contentId = null;
-    this.contentTypeId = null;
-    this.name = null;
-    this.changeTracker = null;
-    this.path = null;
   }
 
-  triggerChange(value, callback) {
-    if (value !== this.backupValue || (typeof value instanceof Object && JSON.stringify(value) === JSON.stringify(this.backupValue))) {
-      callback && callback();
-      this.changeTracker?.save(this.contentId, this.contentTypeId, this.name, {
-          path: this.path,
-          value
-      });
-    } else {
-        this.changeTracker?.reset(this.name);
-    }
+  triggerChange(value) {
     this.callbacks.change.forEach((callback) => callback(value));
   }
 

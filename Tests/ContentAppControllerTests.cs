@@ -81,7 +81,7 @@ namespace Tests
             var formProvider = Mock.Of<IPolymorphicCandidateProvider>();
             Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<PolymorphicCandidateDescriptor> { });
 
-            await new SaveContentController(contentTypeRepository, null, null, contentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>())).SaveContent(body);
+            await new SaveContentController(contentTypeRepository, null, null, contentGetter, contentTypeCoreInterfaceProvider, propertyDefinitionProvider, containerSpecificContentUpdater, null, new PolymorphicFormConverter(Mock.Of<ILogger<PolymorphicFormConverter>>(), formProvider, Mock.Of<IHumanizer>()), null).SaveContent(body);
 
             Mock.Get(containerSpecificContentUpdater).Verify(u => u.UpdateAsync(It.IsAny<MyContent>()));
         }

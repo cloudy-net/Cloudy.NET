@@ -14,20 +14,29 @@ class ContentNameProvider {
      * @param {string} contentTypeId
      */
     async getNameOf(contentId, contentTypeId) {
+        if (!contentId) {
+            throw new Error('No content id was supplied');
+        }
+        if (!contentTypeId) {
+            throw new Error('No content type id was supplied');
+        }
+
         if (!this.contentNames[contentTypeId]) {
             this.contentNames[contentTypeId] = {};
         }
 
-        if (this.contentNames[contentTypeId][contentId]) {
-            return this.contentNames[contentTypeId][contentId];
+        var cacheKey = contentId instanceof Array ? JSON.stringify(contentId) : contentId;
+
+        if (this.contentNames[contentTypeId][cacheKey]) {
+            return this.contentNames[contentTypeId][cacheKey];
         }
 
         var content = await contentGetter.get(contentId, contentTypeId);
         var contentType = await contentTypeProvider.get(contentTypeId);
 
-        var name = this.generateNameOf(content, contentType);
+        var name = this.generateNameOf(content, contentId, contentType);
 
-        this.contentNames[contentTypeId][contentId] = name;
+        this.contentNames[contentTypeId][cacheKey] = name;
 
         return name;
     }
@@ -37,7 +46,7 @@ class ContentNameProvider {
      * @param {object} content
      * @param {object} contentType
      */
-    generateNameOf(content, contentType) {
+    generateNameOf(content, contentId, contentType) {
         var name = '';
 
         if (!contentType.isSingleton) {
@@ -46,8 +55,8 @@ class ContentNameProvider {
             }
         }
         if (!name) {
-            if (content.id) {
-                name = `${contentType.name} ${content.id}`;
+            if (contentId) {
+                name = `${contentType.name} ${(contentId instanceof Array ? JSON.stringify(contentId) : contentId)}`;
             } else {
                 name = contentType.name;
             }
