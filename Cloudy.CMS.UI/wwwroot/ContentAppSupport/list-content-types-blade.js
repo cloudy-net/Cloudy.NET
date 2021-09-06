@@ -7,9 +7,6 @@ import ContentTypeProvider from './content-type-provider.js';
 import ContentTypeGroupProvider from './content-type-group-provider.js';
 import SingletonGetter from './singleton-getter.js';
 import ListItem from '../ListSupport/list-item.js';
-import state from '../state.js';
-import notificationManager from '../NotificationSupport/notification-manager.js';
-
 
 
 /* LIST CONTENT TYPES BLADE */
@@ -54,22 +51,19 @@ class ListContentTypesBlade extends Blade {
         items.forEach(item => {
             const listItem = new ListItem();
             list.addItem(listItem);
-
+            
             if (item.type == 'contentTypeGroup') {
                 var contentTypeGroup = item.value;
                 var groupContentTypes = contentTypes.filter(t => contentTypeGroup.contentTypes.includes(t.id));
                 listItem.setText(contentTypeGroup.pluralName);
-                listItem.onClick(() => state.set(contentTypeGroup.id, this));
-
-                this.actions[item.id] = async () => {
+                listItem.onClick(async () => {
                     listItem.setActive();
                     var blade = new ListContentBlade(this.app, groupContentTypes, contentTypeGroup)
                         .onClose(() => {
                             listItem.setActive(false);
                         });
                     await this.app.addBladeAfter(blade, this);
-                    blade.stateUpdate();
-                };
+                });
 
                 return;
             }
@@ -83,9 +77,7 @@ class ListContentTypesBlade extends Blade {
             if (contentType.isSingleton) {
                 listItem.setText(contentType.name);
 
-                listItem.onClick(() => state.set(contentType.id, this));
-
-                this.actions[item.id] = async () => {
+                listItem.onClick(async () => {
                     listItem.setActive();
                     var content = await SingletonGetter.get(contentType.id);
                     var blade = new EditContentBlade(this.app, contentType, content)
@@ -93,21 +85,18 @@ class ListContentTypesBlade extends Blade {
                             listItem.setActive(false);
                         });
                     await this.app.addBladeAfter(blade, this);
-                };
+                });
             } else {
                 listItem.setText(contentType.pluralName);
 
-                listItem.onClick(() => state.set(contentType.id, this));
-
-                this.actions[item.id] = async () => {
+                listItem.onClick(async () => {
                     listItem.setActive();
                     var blade = new ListContentBlade(this.app, [contentType], contentType)
                         .onClose(() => {
                             listItem.setActive(false);
                         });
                     await this.app.addBladeAfter(blade, this);
-                    blade.stateUpdate();
-                };
+                });
             }
 
             if (contentType.contentTypeActionModules.length) {
@@ -121,33 +110,6 @@ class ListContentTypesBlade extends Blade {
         if (this.actions[this.action]) {
             this.actions[this.action]();
         }
-    }
-
-    async stateUpdate() {
-        var action = state.getFor(this);
-
-        if (this.action == action) {
-            return;
-        }
-
-        this.action = action;
-
-        await this.app.removeBladesAfter(this);
-
-        if (!this.action) {
-            return;
-        }
-
-        if (!this.actions) {
-            return;
-        }
-
-        if (!this.actions[this.action]) {
-            notificationManager.addNotification(item => item.setText(`Unknown action: \`${this.action}\``));
-            return;
-        }
-
-        await this.actions[this.action]();
     }
 }
 

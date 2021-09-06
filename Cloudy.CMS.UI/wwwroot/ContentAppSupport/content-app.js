@@ -1,6 +1,5 @@
 ﻿import App from '../app.js';
 import ListContentTypesBlade from './list-content-types-blade.js';
-import state from '../state.js';
 import ChangeTracker from './change-tracker.js';
 import nav from '../nav.js';
 
@@ -19,7 +18,6 @@ class ContentApp extends App {
         nav.setAction(this.changeTracker);
 
         this.stateUpdate = async () => {
-            state.update();
             for (var i = 0; i < this.blades.length; i++) {
                 var blade = this.blades[i];
 
@@ -42,7 +40,7 @@ class ContentApp extends App {
     }
 
     close() {
-        window.removeEventListener("hashchange", this.stateUpdate);
+       window.removeEventListener("hashchange", this.stateUpdate);
     }
 };
 

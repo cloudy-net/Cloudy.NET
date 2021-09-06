@@ -6,7 +6,6 @@ import notificationManager from '../NotificationSupport/notification-manager.js'
 import EditContentBlade from './edit-content-blade.js';
 import RemoveContentBlade from './remove-content-blade.js';
 import ListItem from '../ListSupport/list-item.js';
-import state from '../state.js';
 import Loading  from '../LoadingSupport/loading.js';
 
 
@@ -29,8 +28,6 @@ class ListContentBlade extends Blade {
         }
 
         this.setTitle(`${taxonomy.pluralName}`);
-
-        this.onClose(() => state.pop());
 
         this._loading = new Loading(this.element);
     }
@@ -141,9 +138,7 @@ class ListContentBlade extends Blade {
                 listItem.element.append(folder);
             }
 
-            listItem.onClick(() => state.set(content.id, this));
-
-            this.actions[content.id] = async () => {
+            listItem.onClick(async () => {
                 listItem.setActive();
                 var blade = new EditContentBlade(this.app, contentType, content)
                     .onComplete(() => updateListItem(listItem, content, contentType))
@@ -151,7 +146,8 @@ class ListContentBlade extends Blade {
                         listItem.setActive(false);
                     });
                 await this.app.addBladeAfter(blade, this);
-            };
+            });
+          
 
             var menu = new ContextMenu();
             this.contentTypeActions[contentType.id].forEach(module => module.default(menu, content, this, this.app));
@@ -212,33 +208,6 @@ class ListContentBlade extends Blade {
             breadcrumb.classList.add('cloudy-ui-clickable');
             breadcrumb.addEventListener('click', () => this.listItems(parents.slice(0, i)));
         });
-    }
-
-    async stateUpdate() {
-        var action = state.getFor(this);
-
-        if (this.action == action) {
-            return;
-        }
-
-        this.action = action;
-
-        await this.app.removeBladesAfter(this);
-
-        if (!this.action) {
-            return;
-        }
-
-        if (!this.actions) {
-            return;
-        }
-
-        if (!this.actions[this.action]) {
-            notificationManager.addNotification(item => item.setText(`Unknown action: \`${this.action}\``));
-            return;
-        }
-
-        await this.actions[this.action]();
     }
 }
 
