@@ -2,7 +2,8 @@
 /* TAB SYSTEM */
 cloudy-ui-tab-system {
   display: block;
-  padding: 8px 0; }
+  padding: 8px 0;
+}
 
 cloudy-ui-tab {
   display: inline-block;
@@ -21,15 +22,21 @@ cloudy-ui-tab {
   text-transform: uppercase;
   text-align: center;
   cursor: pointer;
-  user-select: none; }
-  cloudy-ui-tab:hover {
-    background-color: rgba(0, 0, 0, 0.04); }
-  cloudy-ui-tab:focus {
-    background-color: rgba(0, 0, 0, 0.1); }
-  cloudy-ui-tab:focus {
-    outline: none; }
-  cloudy-ui-tab.cloudy-ui-active {
-    border-bottom-color: #1976d2; }
+  user-select: none;
+}
+cloudy-ui-tab:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+cloudy-ui-tab:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+cloudy-ui-tab:focus {
+  outline: none;
+}
+cloudy-ui-tab.cloudy-ui-active {
+  border-bottom-color: #1976d2;
+}
 
 cloudy-ui-tab-panel {
-  display: block; }
+  display: block;
+}

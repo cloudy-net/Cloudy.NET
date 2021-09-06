@@ -267,7 +267,7 @@ cloudy-ui-blade-header {
     background: white;
 
     > * {
-        margin-left: ($padding-base / 2);
+        margin-left: ($padding-base * 0.5);
 
         &:first-child {
             margin-left: 0;
