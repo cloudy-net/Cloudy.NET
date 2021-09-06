@@ -1,7 +1,8 @@
 /* VARIABLES */
 /* CONTROL MESSAGE */
 .cloudy-ui-has-control-message {
-  box-shadow: 0 0 0 0.25rem rgba(25, 118, 210, 0.25); }
+  box-shadow: 0 0 0 0.25rem rgba(25, 118, 210, 0.25);
+}
 
 cloudy-ui-control-message {
   margin-top: 10px;
@@ -11,12 +12,14 @@ cloudy-ui-control-message {
   display: block;
   border: solid 2px #ccc;
   background: white;
-  box-shadow: 0 0 0 2px white; }
-  cloudy-ui-control-message.cloudy-ui-control-message-right {
-    margin-left: 0;
-    margin-right: -10px;
-    left: auto;
-    right: 0; }
+  box-shadow: 0 0 0 2px white;
+}
+cloudy-ui-control-message.cloudy-ui-control-message-right {
+  margin-left: 0;
+  margin-right: -10px;
+  left: auto;
+  right: 0;
+}
 
 cloudy-ui-control-message-arrow-outer {
   position: absolute;
@@ -25,10 +28,12 @@ cloudy-ui-control-message-arrow-outer {
   overflow: hidden;
   display: block;
   width: 30px;
-  height: 10px; }
-  .cloudy-ui-control-message-right cloudy-ui-control-message-arrow-outer {
-    left: auto;
-    right: 3px; }
+  height: 10px;
+}
+.cloudy-ui-control-message-right cloudy-ui-control-message-arrow-outer {
+  left: auto;
+  right: 3px;
+}
 
 cloudy-ui-control-message-arrow-1 {
   position: absolute;
@@ -41,7 +46,8 @@ cloudy-ui-control-message-arrow-1 {
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-bottom: 10px solid #ccc; }
+  border-bottom: 10px solid #ccc;
+}
 
 cloudy-ui-control-message-arrow-2 {
   position: absolute;
@@ -54,15 +60,19 @@ cloudy-ui-control-message-arrow-2 {
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-bottom: 10px solid white; }
+  border-bottom: 10px solid white;
+}
 
 cloudy-ui-control-message-text {
   display: block;
   padding: 5px;
   font-size: 0.8rem;
   white-space: nowrap;
-  cursor: pointer; }
-  cloudy-ui-control-message-text:hover {
-    background: #f1f1f1; }
-  cloudy-ui-control-message-text + cloudy-ui-control-message-text {
-    border-top: #eee; }
+  cursor: pointer;
+}
+cloudy-ui-control-message-text:hover {
+  background: #f1f1f1;
+}
+cloudy-ui-control-message-text + cloudy-ui-control-message-text {
+  border-top: #eee;
+}

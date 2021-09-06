@@ -12,6 +12,8 @@ cloudy-ui-loading {
   z-index: 999;
   color: #ffffff;
   pointer-events: none;
-  display: none; }
-  cloudy-ui-loading.visible {
-    display: flex; }
+  display: none;
+}
+cloudy-ui-loading.visible {
+  display: flex;
+}

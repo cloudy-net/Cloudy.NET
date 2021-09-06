@@ -10,8 +10,9 @@
   "author": "",
   "license": "GPL",
   "devDependencies": {
-    "del": "^6.0.0",
-    "gulp": "^4.0.2",
-    "gulp-sass": "^4.1.0"
+    "del": "6.0.0",
+    "gulp": "4.0.2",
+    "gulp-sass": "5.0.0",
+    "sass": "1.39.0"
   }
 }
