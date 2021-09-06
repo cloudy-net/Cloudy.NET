@@ -1,24 +1,33 @@
 ﻿/* Loading Component */
 export const ILoadingType = {
-    Normal: 'normal',
-}
+  Normal: "normal",
+};
 
+const LoadingOptions = {
+  loadingText: "Loading",
+  loadingType: ILoadingType.Normal,
+  closeAble: false,
+};
 class LoadingComponent {
-  constructor(loadingText = 'Loading...', loadingType = ILoadingType.Normal) {
-      
+  constructor(container = null, options = LoadingOptions) {
     this.element = document.createElement("cloudy-ui-loading");
-    
+    const { loadingText, loadingType, closeAble } = options;
+
     switch (loadingType) {
-        case ILoadingType.Normal:
-            this._createNormalLoading(loadingText);
-            break;
-        default:
-            this._createNormalLoading(loadingText);
-            break;
+      case ILoadingType.Normal:
+        this._createNormalLoading(loadingText, closeAble);
+        break;
+      default:
+        this._createNormalLoading(loadingText, closeAble);
+        break;
     }
 
     var bootstrap = () => {
-      document.body.appendChild(this.element);
+      if (container) {
+        container.appendChild(this.element);
+      } else {
+        document.body.appendChild(this.element);
+      }
     };
 
     if (document.readyState != "loading") {
@@ -47,11 +56,21 @@ class LoadingComponent {
     document.body.classList.remove("disabled");
   }
 
-  _createNormalLoading(loadingText) {
+  _createNormalLoading(loadingText, closeAble) {
     this.element.classList.add(ILoadingType.Normal);
     const loadingTextElm = document.createElement("span");
     loadingTextElm.innerHTML = loadingText;
     this.element.appendChild(loadingTextElm);
+    
+    if (closeAble) {
+      const closeButton = document.createElement("button");
+      closeButton.classList.add("loading-close");
+      closeButton.innerText = "x";
+      this.element.appendChild(closeButton);
+      setTimeout(() => {
+        closeButton.addEventListener("click", this.turnOf.bind(this));
+      }, 0);
+    }
   }
 }
-export const Loading = new LoadingComponent();
+export default LoadingComponent;
