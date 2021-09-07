@@ -17,3 +17,14 @@ cloudy-ui-loading {
 cloudy-ui-loading.visible {
   display: flex;
 }
+cloudy-ui-loading .loading-close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  z-index: 9999;
+  cursor: pointer;
+  pointer-events: all;
+  border: none;
+  width: 20px;
+  height: 20px;
+}
