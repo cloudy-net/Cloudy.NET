@@ -27,37 +27,42 @@ class ChangeTracker {
         this.update();
     }
 
-    save(contentId, contentTypeId, name, contentAsJson) {
-        var index = this.pendingChanges.findIndex(c =>
-            c.type == 'save' &&
-            c.contentId == contentId &&
-            c.contentTypeId == contentTypeId
-            && c.name == name
-        );
+    save(contentIdFormatted, contentAsJson) {
+        const index = this.pendingChanges.findIndex(c => c.type === 'save' && c.contentIdFormatted === contentIdFormatted);
 
-        if (index != -1) {
-            this.pendingChanges.splice(index, 1);
+        if (index !== -1) {
+            const {path, value, originalValue} = contentAsJson;
+            const changeFieldIndex = this.pendingChanges[index].changedFields.findIndex(f => f.path === path);
+            if (changeFieldIndex === -1) {
+                this.pendingChanges[index].changedFields.push(contentAsJson);
+            } else {
+                if (value === originalValue) {
+                    this.pendingChanges[index].changedFields.splice(changeFieldIndex, 1);
+                } else {
+                    this.pendingChanges[index].changedFields[changeFieldIndex].value = value;
+                }
+            }
+        } else {
+            this.pendingChanges.push({
+                type: 'save',
+                contentIdFormatted,
+                changedFields: [{...contentAsJson}]
+            });
         }
-
-        this.pendingChanges.push({
-            type: 'save',
-            contentId,
-            contentTypeId,
-            name,
-            contentAsJson
-        });
+        
         this.update();
     }
 
     update() {
-        switch (this.pendingChanges.length) {
-            case 0: this.button.setText('No changes'); break;
-            case 1: this.button.setText('1 change'); break;
-            default: this.button.setText(`${this.pendingChanges.length} changes`); break;
-        }
+        let changeCount = 0;
+        this.pendingChanges.forEach(c => {
+            changeCount = changeCount + c.changedFields.length;
+        });
+        const changeText = changeCount <= 0 ? 'No changes': (changeCount > 1 ? `${changeCount} changes` : '1 change');
+        this.button.setText(changeText);
 
-        this.button.setDisabled(this.pendingChanges.length == 0);
-        this.button.setPrimary(this.pendingChanges.length > 0);
+        this.button.setDisabled(changeCount <= 0);
+        this.button.setPrimary(changeCount > 0);
     }
 
     reset(name) {
@@ -69,21 +74,38 @@ class ChangeTracker {
         }
     }
 
-    resetAll() {
+    resetAll(callback) {
         this.pendingChanges = [];
         this.update();
+        callback && callback();
     }
 
     async apply() {
-        if (await contentSaver.save(this.pendingChanges) == false) {
+        const contentToSave = this.pendingChanges.map(c => {
+            const contentIdFormattedToArray = c.contentIdFormatted.split('|');
+            const changedArray = c.changedFields.map(f => {
+                const { originalValue, ...changedObj } = f;
+                return changedObj;
+            });
+            return {
+                keyValues: [contentIdFormattedToArray[0]],
+                contentTypeId: contentIdFormattedToArray[1],
+                changedFields: changedArray
+            }
+        })
+        if (await contentSaver.save(contentToSave) == false) {
             return false; // fail
         }
-        state.set(this.changedFieldsModel[0].contentTypeId);
-        this.resetAll();
+        this.resetAll(() => window.location.reload());
     }
 
-    buildControlName(contentTypeId, contentId, fieldId) {
-        return `${contentTypeId}__${contentId}__${fieldId}`;
+    getCurrentValueOfPath(contentIdFormatted, path) {
+        const currentContentIndex = this.pendingChanges.findIndex(c => c.contentIdFormatted === contentIdFormatted);
+        if (currentContentIndex !== -1) {
+            const currentFieldIndex = this.pendingChanges[currentContentIndex].changedFields.findIndex(f => f.path === path);
+            return currentFieldIndex !== -1 ? this.pendingChanges[currentContentIndex].changedFields[currentFieldIndex].value : '';
+        }
+        return '';
     }
 }
 
@@ -120,13 +142,12 @@ class PendingChangesBlade extends Blade {
         var list = new List();
 
         for (let change of this.changeTracker.pendingChanges) {
-            const name = await contentNameProvider.getNameOf(change.contentId, change.contentTypeId);
-            const contentName = `${name} <br/> Content id: ${change.contentId}`;
-            let contentText = '';
-            change.changedFields.forEach(item => {
-                contentText += `${item.path}: ${item.value} <br/>`; 
-            });
-            list.addItem(new ListItem().setText(contentName).setSubText(contentText).onClick(() => console.log(change)));
+            const contentIdFormattedToArray = change.contentIdFormatted.split('|');
+            const name = await contentNameProvider.getNameOf(contentIdFormattedToArray[0], contentIdFormattedToArray[1]);
+            const changedCount = change.changedFields.length;
+            const subText = changedCount > 1 ? `Changes: ${changedCount}` : `Change: ${changedCount}`;
+         
+            list.addSubHeader(name).addItem(new ListItem().setSubText(subText).onClick(() => console.log(change)));
         }
 
         this.setContent(list);
