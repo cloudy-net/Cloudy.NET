@@ -2,6 +2,7 @@ import Form from './form.js';
 import Field from './field.js';
 import Sortable from './sortable.js';
 import SortableItem from './sortable-item.js';
+import contentNameProvider from '../ContentAppSupport/content-name-provider.js';
 
 
 
@@ -13,9 +14,19 @@ class FormBuilder {
         this.blade = blade;
     }
 
-    build(target, fieldModels, onChange) {
+    build(target, fieldModels, contentObj) {
         if (!target) {
             target = {};
+        }
+
+        const { contentId, contentTypeId } = contentObj;
+        this.contentIdFormatted = contentNameProvider.getContentIdFormatted(contentId, contentTypeId);
+        const onChange = (path, value, originalValue) => {
+            this.app.changeTracker.save(this.contentIdFormatted, {
+                path,
+                value,
+                originalValue
+            });
         }
 
         var form = this.buildForm(fieldModels, target, onChange);
@@ -27,8 +38,10 @@ class FormBuilder {
 
     buildForm(fieldModels, target, onChange) {
         var element = document.createElement('div');
-
-        var fields = fieldModels.map(fieldModel => this.buildField(fieldModel, target, onChange));
+        
+        var fields = fieldModels.map(fieldModel => {
+           return this.buildField(fieldModel, target, onChange)
+        });
 
         fields.forEach(field => element.appendChild(field.element));
 
@@ -70,9 +83,10 @@ class FormBuilder {
     buildSimpleField(fieldModel, target, element, onChange) {
         element.classList.add('cloudy-ui-simple');
         
-        var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade, target[fieldModel.descriptor.camelCaseId]);
+        const currentFieldValue = this.app.changeTracker.getCurrentValueOfPath(this.contentIdFormatted, fieldModel.descriptor.id);
+        var control = new fieldModel.controlType(fieldModel, currentFieldValue || target[fieldModel.descriptor.camelCaseId], this.app, this.blade, target[fieldModel.descriptor.camelCaseId]);
 
-        control.onChange(value => onChange(fieldModel.descriptor.id, value));
+        control.onChange(value => onChange(fieldModel.descriptor.id, value, target[fieldModel.descriptor.camelCaseId]));
 
         element.appendChild(control.element);
 

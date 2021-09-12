@@ -64,6 +64,10 @@ class ContentNameProvider {
 
         return name;
     }
+
+    getContentIdFormatted(contentId, contentTypeId) {
+        return `${contentId}|${contentTypeId}`;
+    }
 }
 
 export default new ContentNameProvider();

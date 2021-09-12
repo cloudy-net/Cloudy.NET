@@ -9,13 +9,6 @@ class DropdownControl extends FieldControl {
 
         super(select);
 
-        this.contentId = blade?.content?.id;
-        this.contentTypeId = blade?.contentType?.id;
-        this.changeTracker = app.changeTracker;
-        this.path = fieldModel.descriptor.camelCaseId;
-        this.name = this.changeTracker?.buildControlName(this.contentTypeId, this.contentId, fieldModel.descriptor.camelCaseId);
-        this.backupValue = originalValue || value;
-        
         select.addEventListener('change', () => this.triggerChange(select.value || null));
 
         this.onSet(v => value = select.value = v || null);

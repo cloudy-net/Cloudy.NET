@@ -1,7 +1,6 @@
 ﻿import Blade from '../blade.js';
 import Button from '../button.js';
 import LinkButton from '../link-button.js';
-import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import TabSystem from '../TabSupport/tab-system.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import FormBuilder from '../FormSupport/form-builder.js';
@@ -26,7 +25,6 @@ class EditContentBlade extends Blade {
         this.content = content;
         this.contentId = primaryKeyProvider.getFor(this.content, this.contentType);
         this.formId = `Cloudy.CMS.Content[type=${this.contentType.id}]`;
-
         this.element.addEventListener("keydown", (event) => {
             if ((String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) || event.which == 19) { // 19 for Mac:s "Command+S"
                 if (this.saveButton) {
@@ -39,7 +37,6 @@ class EditContentBlade extends Blade {
 
     async open() {
         this.fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
-
         this.formBuilder = new FormBuilder(this.app, this);
 
         if (this.contentId) {
@@ -81,10 +78,10 @@ class EditContentBlade extends Blade {
                 var form = this.formBuilder.build(
                     this.content,
                     this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]),
-                    (path, value) => this.app.changeTracker.save(this.contentId, this.contentType.id, this.name, {
-                        path,
-                        value
-                    })
+                    {
+                        contentId: this.contentId, 
+                        contentTypeId: this.contentType.id
+                    }
                 )
                 
                 this.setContent(form);
