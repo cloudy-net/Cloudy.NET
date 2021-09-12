@@ -76,14 +76,15 @@ class EditContentBlade extends Blade {
 
             if (groups.length == 1) {
                 var form = this.formBuilder.build(
-                    this.content,
+                    this.app.changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content),
                     this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]),
-                    {
-                        contentId: this.contentId, 
-                        contentTypeId: this.contentType.id
-                    }
+                    (name, value, originalValue) => this.app.changeTracker.save(this.contentId, this.contentType.id, {
+                        name,
+                        value,
+                        originalValue
+                    })
                 )
-                
+
                 this.setContent(form);
             } else {
                 var tabSystem = new TabSystem();

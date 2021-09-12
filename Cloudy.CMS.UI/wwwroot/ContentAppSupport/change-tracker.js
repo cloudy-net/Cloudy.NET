@@ -27,12 +27,17 @@ class ChangeTracker {
         this.update();
     }
 
-    save(contentIdFormatted, contentAsJson) {
+    getContentIdFormatted(contentId, contentTypeId) {
+        return `${contentId}|${contentTypeId}`;
+    }
+
+    save(contentId, contentTypeId, contentAsJson) {
+        const contentIdFormatted = this.getContentIdFormatted(contentId, contentTypeId);
         const index = this.pendingChanges.findIndex(c => c.type === 'save' && c.contentIdFormatted === contentIdFormatted);
 
         if (index !== -1) {
-            const {path, value, originalValue} = contentAsJson;
-            const changeFieldIndex = this.pendingChanges[index].changedFields.findIndex(f => f.path === path);
+            const {name, value, originalValue} = contentAsJson;
+            const changeFieldIndex = this.pendingChanges[index].changedFields.findIndex(f => f.name === name);
             if (changeFieldIndex === -1) {
                 this.pendingChanges[index].changedFields.push(contentAsJson);
             } else {
@@ -99,13 +104,21 @@ class ChangeTracker {
         this.resetAll(() => window.location.reload());
     }
 
-    getCurrentValueOfPath(contentIdFormatted, path) {
-        const currentContentIndex = this.pendingChanges.findIndex(c => c.contentIdFormatted === contentIdFormatted);
-        if (currentContentIndex !== -1) {
-            const currentFieldIndex = this.pendingChanges[currentContentIndex].changedFields.findIndex(f => f.path === path);
-            return currentFieldIndex !== -1 ? this.pendingChanges[currentContentIndex].changedFields[currentFieldIndex].value : '';
+    mergeWithPendingChanges(contentId, contentTypeId, content) {
+        const contentIdFormatted = this.getContentIdFormatted(contentId, contentTypeId);
+        const changesForContent = this.pendingChanges.find(c => c.contentIdFormatted === contentIdFormatted);
+
+        if (!changesForContent) {
+            return content;
         }
-        return '';
+
+        var content = { ...content };
+
+        changesForContent.changedFields.forEach(changedField => {
+            content[changedField.name] = changedField.value;
+        });
+
+        return content;
     }
 }
 

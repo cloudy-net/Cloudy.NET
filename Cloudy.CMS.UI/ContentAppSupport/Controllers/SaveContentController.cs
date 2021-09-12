@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
+using Newtonsoft.Json.Serialization;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -30,6 +31,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentCreator ContentCreator { get; }
         PolymorphicFormConverter PolymorphicFormConverter { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
+        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
 
         public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyGetter primaryKeyGetter, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
         {
@@ -59,12 +61,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                 var content = await ContentGetter.GetAsync(contentType.Id, change.KeyValues).ConfigureAwait(false);
 
-                var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id);
+                var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => CamelCaseNamingStrategy.GetPropertyName(p.Name, false), p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
 
                 foreach (var changedField in change.ChangedFields)
                 {
-                    var propertyDefinition = propertyDefinitions.Single(p => p.Name == changedField.Path);
+                    var propertyDefinition = propertyDefinitions[changedField.Name];
 
                     if(idProperties.Any(p => p.Name == propertyDefinition.Name))
                     {
@@ -109,7 +111,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentMappingChange
         {
-            public string Path { get; set; }
+            public string Name { get; set; }
             public string Value { get; set; }
         }
 
