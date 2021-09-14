@@ -2,10 +2,8 @@ import Blade from "../blade.js";
 import Button from "../button.js";
 import ListItem from "../ListSupport/list-item.js";
 import List from "../ListSupport/list.js";
-import notificationManager from "../NotificationSupport/notification-manager.js";
 import contentNameProvider from "./content-name-provider.js";
 import contentSaver from "./content-saver.js";
-import state from '../state.js';
 
 
 /* CHANGE TRACKER */
