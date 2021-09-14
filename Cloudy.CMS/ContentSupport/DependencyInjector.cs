@@ -15,8 +15,8 @@ namespace Cloudy.CMS.ContentSupport
         {
             services.AddSingleton<IIdGenerator, IdGenerator>();
 
-            services.AddSingleton<IPolymorphicDeserializer, PolymorphicDeserializer>();
-            services.AddSingleton<IPolymorphicSerializer, PolymorphicSerializer>();
+            services.AddScoped<IPolymorphicDeserializer, PolymorphicDeserializer>();
+            services.AddScoped<IPolymorphicSerializer, PolymorphicSerializer>();
             services.AddScoped<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
 
             services.AddScoped<IContentInstanceCreator, ContentInstanceCreator>();
