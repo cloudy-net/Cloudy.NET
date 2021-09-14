@@ -10,9 +10,9 @@ namespace Cloudy.CMS.Routing
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IContentRouter, ContentRouter>();
-            services.AddSingleton<IRootContentRouter, RootContentRouter>();
-            services.AddSingleton<IRoutableRootContentProvider, RoutableRootContentProvider>();
+            services.AddScoped<IContentRouter, ContentRouter>();
+            services.AddScoped<IRootContentRouter, RootContentRouter>();
+            services.AddScoped<IRoutableRootContentProvider, RoutableRootContentProvider>();
             services.AddSingleton<IContentRouteCreator, ContentRouteCreator>();
             services.AddSingleton<IContentRouteProvider, ContentRouteProvider>();
             services.AddSingleton<IContentRouteMatcher, ContentRouteMatcher>();
