@@ -10,8 +10,8 @@ In Startup.cs, under ConfigureServices, do:
 
     services.AddMvc();
     services.AddCloudy(cloudy => cloudy
-        .AddFileBasedDocuments()              // Uses physical JSON files. Otherwise - inmemory.
-        .AddAdmin(admin => admin.Unprotect()) // NOTE: Admin UI will be publicly available!
+        .AddAdmin(admin => admin.Unprotect())   // NOTE: Admin UI will be publicly available!
+        .AddContext<MyContext>()              // Adds EF Core context with content types
     );
 
 And in the Configure method, do:
