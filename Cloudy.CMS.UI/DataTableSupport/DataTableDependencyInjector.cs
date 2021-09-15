@@ -11,8 +11,8 @@ namespace Cloudy.CMS.UI.DataTableSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IBackendCreator, BackendCreator>();
-            services.AddSingleton<IBackendProvider, BackendProvider>();
+            services.AddScoped<IBackendCreator, BackendCreator>();
+            services.AddScoped<IBackendProvider, BackendProvider>();
         }
     }
 }

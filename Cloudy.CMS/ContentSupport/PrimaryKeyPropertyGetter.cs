@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
+namespace Cloudy.CMS.ContentSupport
 {
     public class PrimaryKeyPropertyGetter : IPrimaryKeyPropertyGetter
     {

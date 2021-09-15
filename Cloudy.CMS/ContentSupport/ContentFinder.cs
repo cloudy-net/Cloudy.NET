@@ -1,7 +1,7 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using System;
 
-namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
+namespace Cloudy.CMS.ContentSupport
 {
     public class ContentFinder : IContentFinder
     {

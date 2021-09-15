@@ -13,6 +13,7 @@ namespace Cloudy.CMS.Routing
             services.AddScoped<IContentRouter, ContentRouter>();
             services.AddScoped<IRootContentRouter, RootContentRouter>();
             services.AddScoped<IRoutableRootContentProvider, RoutableRootContentProvider>();
+            services.AddScoped<IContentSegmentRouter, ContentSegmentRouter>();
             services.AddSingleton<IContentRouteCreator, ContentRouteCreator>();
             services.AddSingleton<IContentRouteProvider, ContentRouteProvider>();
             services.AddSingleton<IContentRouteMatcher, ContentRouteMatcher>();

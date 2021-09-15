@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
+namespace Cloudy.CMS.ContentSupport
 {
     public class ContentFinderQuery : IContentFinderQuery
     {

@@ -20,9 +20,9 @@ namespace Cloudy.CMS.SingletonSupport
 
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<ISingletonCreator, SingletonCreator>();
-            services.AddSingleton<ISingletonGetter, SingletonGetter>();
-            services.AddSingleton<ISingletonProvider, SingletonProvider>();
+            services.AddScoped<ISingletonCreator, SingletonCreator>();
+            services.AddScoped<ISingletonGetter, SingletonGetter>();
+            services.AddScoped<ISingletonProvider, SingletonProvider>();
 
             foreach (var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
             {

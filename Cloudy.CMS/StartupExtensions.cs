@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
-using Cloudy.CMS.ContentSupport.EntityFrameworkSupport;
+using Cloudy.CMS.ContentSupport;
 
 namespace Microsoft.AspNetCore.Builder
 {

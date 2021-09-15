@@ -20,6 +20,21 @@ namespace Cloudy.CMS.ContentSupport
             services.AddScoped<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
 
             services.AddScoped<IContentInstanceCreator, ContentInstanceCreator>();
+
+            services.AddScoped<IPrimaryKeyConverter, PrimaryKeyConverter>();
+            services.AddScoped<IPrimaryKeyPropertyGetter, PrimaryKeyPropertyGetter>();
+            services.AddScoped<IPrimaryKeyGetter, PrimaryKeyGetter>();
+            services.AddScoped<IPrimaryKeySetter, PrimaryKeySetter>();
+
+            services.AddScoped<IContentGetter, ContentGetter>();
+            services.AddScoped<IContentInserter, ContentInserter>();
+            services.AddScoped<IContentFinder, ContentFinder>();
+            services.AddScoped<IContentUpdater, ContentUpdater>();
+            services.AddScoped<IContentCreator, ContentCreator>();
+
+            services.AddScoped<IDbSetProvider, DbSetProvider>();
+            services.AddScoped<IContextProvider, ContextProvider>();
+            services.AddScoped<IContextCreator, ContextCreator>();
         }
     }
 }

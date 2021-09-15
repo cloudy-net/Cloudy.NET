@@ -1,13 +1,14 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
+using System;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
+namespace Cloudy.CMS.ContentSupport
 {
     public class ContentChildrenCounter : IContentChildrenCounter
     {
         public async Task<int> CountChildrenForAsync(params object[] keyValues)
         {
-            return 0;
+            throw new NotImplementedException();
         }
     }
 }

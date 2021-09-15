@@ -30,7 +30,7 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<IStyleCreator, StyleCreator>();
             services.AddSingleton<IAppProvider, AppProvider>();
             services.AddSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
-            services.AddSingleton<IUrlProvider, UrlProvider>();
+            services.AddScoped<IUrlProvider, UrlProvider>();
             services.AddSingleton<ITitleProvider, TitleProvider>();
             services.AddSingleton<IFaviconProvider, FaviconProvider>();
             services.AddSingleton<IContentFormIdGenerator, ContentFormIdGenerator>();

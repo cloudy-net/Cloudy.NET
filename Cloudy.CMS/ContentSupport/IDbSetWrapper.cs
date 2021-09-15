@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.EntityFrameworkSupport
+namespace Cloudy.CMS.ContentSupport
 {
     public interface IDbSetWrapper
     {
