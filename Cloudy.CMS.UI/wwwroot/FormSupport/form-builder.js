@@ -75,7 +75,7 @@ class FormBuilder {
         
         var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade, target[fieldModel.descriptor.camelCaseId]);
 
-        control.onChange(value => onChange(fieldModel.descriptor.camelCaseId, value, target[fieldModel.descriptor.camelCaseId]));
+        control.onChange(value => onChange(fieldModel.descriptor.camelCaseId, value, target[`${fieldModel.descriptor.camelCaseId}_original`]));
 
         element.appendChild(control.element);
 

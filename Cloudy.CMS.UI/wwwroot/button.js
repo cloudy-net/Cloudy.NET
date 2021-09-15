@@ -10,7 +10,8 @@ class Button {
         this.element = document.createElement('cloudy-ui-button');
         this.element.tabIndex = 0;
         this.element.innerText = text;
-
+        this.initText = text;
+        this.id = text && text.trim().toLocaleLowerCase().replace(' ', '_');
         this.element.addEventListener("keyup", event => {
             if (event.keyCode != 13) {
                 return;
