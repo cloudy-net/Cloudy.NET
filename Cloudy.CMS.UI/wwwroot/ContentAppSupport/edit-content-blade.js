@@ -65,9 +65,10 @@ class EditContentBlade extends Blade {
 
         this.buildForm();
 
-        this.saveButton = new Button('Save').setPrimary().onClick(() => console.log('TODO: save edit content'));
-
-        this.setFooter(this.saveButton)
+        this.saveButton = new Button('Save').setPrimary().onClick(() => this.app.changeTracker.saveChange());
+        this.app.changeTracker.setReferenceEvents(this.saveButton);
+        this.app.changeTracker.update();
+        this.setFooter(this.saveButton);
     }
 
     async buildForm() {

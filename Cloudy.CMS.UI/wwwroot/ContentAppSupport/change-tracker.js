@@ -14,15 +14,27 @@ class ChangeTracker {
     changeExecutors = {
         save: contentSaver
     };
+    referenceEvents = [];
 
     constructor(app, parentBlade) {
         this.button = new Button('No changes').setDisabled().appendTo(this.element);
-
-        this.button.onClick(() => {
-            app.addBladeAfter(new PendingChangesBlade(app, this), parentBlade);
-        });
-       
+        this.app = app;
+        this.parentBlade = parentBlade;
+        this.button.onClick(() => this.saveChange());
+        this.setReferenceEvents(this.button);
         this.update();
+    }
+    
+    setReferenceEvents(element) {
+        const index = this.referenceEvents.findIndex(e => e.id === element.id);
+        if (index !== -1) {
+            this.referenceEvents.splice(index, 1);
+        }
+        this.referenceEvents.push(element);
+    }
+
+    saveChange() {
+        this.app.addBladeAfter(new PendingChangesBlade(this.app, this), this.parentBlade);
     }
 
     getContentIdFormatted(contentId, contentTypeId) {
@@ -30,29 +42,33 @@ class ChangeTracker {
     }
 
     save(contentId, contentTypeId, contentAsJson) {
+        const { name, value, originalValue } = contentAsJson;
         const contentIdFormatted = this.getContentIdFormatted(contentId, contentTypeId);
         const index = this.pendingChanges.findIndex(c => c.type === 'save' && c.contentIdFormatted === contentIdFormatted);
-
-        if (index !== -1) {
-            const {name, value, originalValue} = contentAsJson;
-            const changeFieldIndex = this.pendingChanges[index].changedFields.findIndex(f => f.name === name);
-            if (changeFieldIndex === -1) {
-                this.pendingChanges[index].changedFields.push(contentAsJson);
-            } else {
-                if (value === originalValue) {
-                    this.pendingChanges[index].changedFields.splice(changeFieldIndex, 1);
-                } else {
-                    this.pendingChanges[index].changedFields[changeFieldIndex].value = value;
-                }
-            }
-        } else {
+        if (index === -1) {
             this.pendingChanges.push({
                 type: 'save',
                 contentIdFormatted,
-                changedFields: [{...contentAsJson}]
+                changedFields: value !== originalValue ? [{...contentAsJson}]: []
             });
+            this.update();
+            return;
         }
-        
+
+        const changeFieldIndex = this.pendingChanges[index].changedFields.findIndex(f => f.name === name);
+        if (changeFieldIndex === -1 && value !== originalValue) {
+            this.pendingChanges[index].changedFields.push(contentAsJson);
+            this.update();
+            return;
+        }
+
+        if (changeFieldIndex !== -1) {
+            if ( value === originalValue) {
+                this.pendingChanges[index].changedFields.splice(changeFieldIndex, 1);
+            } else {
+                this.pendingChanges[index].changedFields[changeFieldIndex].value = value;
+            }
+        }
         this.update();
     }
 
@@ -62,15 +78,15 @@ class ChangeTracker {
             changeCount = changeCount + c.changedFields.length;
         });
         const changeText = changeCount <= 0 ? 'No changes': (changeCount > 1 ? `${changeCount} changes` : '1 change');
-        this.button.setText(changeText);
-
-        this.button.setDisabled(changeCount <= 0);
-        this.button.setPrimary(changeCount > 0);
+        this.referenceEvents.forEach(element => {
+            element.setText(changeCount <= 0 ? (element.initText || changeText) : changeText);
+            element.setDisabled(changeCount <= 0);
+            element.setPrimary(changeCount > 0);
+        })
     }
 
-    reset(name) {
-        console.log('Resetting');
-        const index = this.pendingChanges.findIndex(item => item.name === name);
+    reset(contentIdFormatted) {
+        const index = this.pendingChanges.findIndex(item => item.contentIdFormatted === contentIdFormatted);
         if (index !== -1) {
             this.pendingChanges.splice(index, 1);
             this.update();
@@ -106,17 +122,21 @@ class ChangeTracker {
         const contentIdFormatted = this.getContentIdFormatted(contentId, contentTypeId);
         const changesForContent = this.pendingChanges.find(c => c.contentIdFormatted === contentIdFormatted);
 
+        const contentOriginal = {};
+        Object.keys(content).forEach(k => {
+            contentOriginal[`${k}_original`] = content[k];
+        })
+
+        const contentMapping = { ...contentOriginal, ...content };
         if (!changesForContent) {
-            return content;
+            return contentMapping;
         }
 
-        var content = { ...content };
-
         changesForContent.changedFields.forEach(changedField => {
-            content[changedField.name] = changedField.value;
+            contentMapping[changedField.name] = changedField.value;
         });
 
-        return content;
+        return contentMapping;
     }
 }
 
