@@ -46,11 +46,7 @@ The UI works well with OAuth aka external login providers. Just follow the guide
 
 # Database
 
-Uses inmemory database by default.
-
-To use a physical folder with JSON documents, do: `.WithStaticFiles()` under AddCloudy.
-
-To use MongoDB, do: `.WithMongoDatabaseConnectionStringNamed("mongo")` under AddCloudy.
+Cloudy.CMS is made to align completely with Entity Framework Core.
 
 # Usage for large corporations
 
