@@ -11,11 +11,13 @@ In Startup.cs, under ConfigureServices, do:
     services.AddMvc();
     services.AddCloudy(cloudy => cloudy
         .AddAdmin(admin => admin.Unprotect())   // NOTE: Admin UI will be publicly available!
-        .AddContext<MyContext>()              // Adds EF Core context with your content types
+        .AddContext<MyContext>()                // Adds EF Core context with your content types
     );
 
 And in the Configure method, do:
 
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.UseCloudyAdminStaticFiles();
 
 In the endpoints configuration:
