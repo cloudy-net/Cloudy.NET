@@ -73,18 +73,17 @@ class EditContentBlade extends Blade {
 
     async buildForm() {
         try {
+            var pendingContent = this.app.changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
+            var onChangeCallback = (name, value, originalValue) => this.app.changeTracker.save(this.contentId, this.contentType.id, {
+                name,
+                value,
+                originalValue
+            });
+
             var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
             if (groups.length == 1) {
-                var form = this.formBuilder.build(
-                    this.app.changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content),
-                    this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]),
-                    (name, value, originalValue) => this.app.changeTracker.save(this.contentId, this.contentType.id, {
-                        name,
-                        value,
-                        originalValue
-                    })
-                )
+                var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]), onChangeCallback)
 
                 this.setContent(form);
             } else {
@@ -93,7 +92,7 @@ class EditContentBlade extends Blade {
                 if (groups.indexOf(null) != -1) {
                     tabSystem.addTab('General', async () => {
                         var element = document.createElement('div');
-                        var form = this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null));
+                        var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null), onChangeCallback);
                         form.appendTo(element);
                         return element;
                     });
@@ -101,7 +100,7 @@ class EditContentBlade extends Blade {
 
                 groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                     var element = document.createElement('div');
-                    var form = this.formBuilder.build(this.content, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group));
+                    var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group), onChangeCallback);
                     form.appendTo(element);
                     return element;
                 }));
