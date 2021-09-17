@@ -38,7 +38,7 @@ class ChangeTracker {
     }
 
     getContentIdFormatted(contentId, contentTypeId) {
-        return `${contentId}|${contentTypeId}`;
+        return contentId ? `${contentId}|${contentTypeId}` : `|${contentTypeId}`;
     }
 
     save(contentId, contentTypeId, contentAsJson) {
@@ -107,7 +107,7 @@ class ChangeTracker {
                 return changedObj;
             });
             return {
-                keyValues: [contentIdFormattedToArray[0]],
+                keyValues: contentIdFormattedToArray[0] ? [contentIdFormattedToArray[0]] : null,
                 contentTypeId: contentIdFormattedToArray[1],
                 changedFields: changedArray
             }
@@ -124,7 +124,7 @@ class ChangeTracker {
 
         const contentOriginal = {};
         Object.keys(content).forEach(k => {
-            contentOriginal[`${k}_original`] = content[k];
+            contentOriginal[`${k}_original`] = content[k] || null;
         })
 
         const contentMapping = { ...contentOriginal, ...content };
@@ -174,11 +174,14 @@ class PendingChangesBlade extends Blade {
 
         for (let change of this.changeTracker.pendingChanges) {
             const contentIdFormattedToArray = change.contentIdFormatted.split('|');
-            const name = await contentNameProvider.getNameOf(contentIdFormattedToArray[0], contentIdFormattedToArray[1]);
+            let name = '';
+            if (contentIdFormattedToArray[0] && contentIdFormattedToArray[1]) {
+                name = await contentNameProvider.getNameOf(contentIdFormattedToArray[0], contentIdFormattedToArray[1]);
+            }
             const changedCount = change.changedFields.length;
             const subText = changedCount > 1 ? `Changes: ${changedCount}` : `Change: ${changedCount}`;
          
-            list.addSubHeader(name).addItem(new ListItem().setSubText(subText).onClick(() => console.log(change)));
+            list.addSubHeader(name || 'New Items').addItem(new ListItem().setSubText(subText).onClick(() => console.log(change)));
         }
 
         this.setContent(list);
