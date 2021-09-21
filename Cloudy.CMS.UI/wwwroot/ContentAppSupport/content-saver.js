@@ -1,40 +1,19 @@
 import "./content-type-provider.js";
 import notificationManager from "../NotificationSupport/notification-manager.js";
-import contentTypeProvider from "../ContentAppSupport/content-type-provider.js";
+import urlFetcher from "../url-fetcher.js";
 
 /* CONTENT SAVER */
 
 class ContentSaver {
     async save(changes) {
-        try {
-            var response = await fetch("SaveContent/SaveContent", {
-                credentials: "include",
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    changes
-                }),
-            });
-
-            if (!response.ok) {
-                var text = await response.text();
-
-                if (text) {
-                    throw new Error(text.split("\n")[0]);
-                } else {
-                    text = response.statusText;
-                }
-
-                throw new Error(`${response.status} (${text})`);
-            }
-
-            var result = await response.json();
-        } catch (error) {
-            notificationManager.addNotification((item) =>
-                item.setText(`Could not save content --- ${error.message}`)
-            );
-            throw error;
-        }
+        var result = await urlFetcher.fetch("SaveContent/SaveContent", {
+            credentials: "include",
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                changes
+            }),
+        }, 'Could not save content');
 
         if (!result.success) {
             var errors = document.createElement("ul");

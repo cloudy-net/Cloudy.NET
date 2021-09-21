@@ -48,7 +48,7 @@ namespace Cloudy.CMS.Mvc.Routing
 
             var segments = allContent.Cast<IRoutable>().Select(c => c.UrlSegment).ToList();
 
-            if(segments.Any() && segments.First() == null)
+            if(segments.Any() && segments.First() == null) // root content is allowed to have an empty segment
             {
                 segments = segments.Skip(1).ToList();
             }

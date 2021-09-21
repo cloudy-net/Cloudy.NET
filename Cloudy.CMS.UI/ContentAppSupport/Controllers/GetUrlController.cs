@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -31,11 +33,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentRouteMatcher = contentRouteMatcher;
         }
 
-        public async Task<IEnumerable<string>> GetUrl(string[] id, string contentTypeId)
+        public async Task<IEnumerable<string>> GetUrl(string[] keyValues, string contentTypeId)
         {
             var contentType = ContentTypeProvider.Get(contentTypeId);
 
-            var content = await ContentGetter.GetAsync(contentTypeId, PrimaryKeyConverter.Convert(id, contentTypeId)).ConfigureAwait(false);
+            var content = await ContentGetter.GetAsync(contentTypeId, PrimaryKeyConverter.Convert(keyValues.Select(JsonConvert.DeserializeObject), contentTypeId)).ConfigureAwait(false);
 
             var contentRouteSegment = await UrlProvider.GetAsync(content).ConfigureAwait(false);
 
