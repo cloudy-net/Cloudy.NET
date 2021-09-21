@@ -26,7 +26,9 @@ namespace Cloudy.CMS.ContentSupport
 
         public async Task AddAsync(object entity)
         {
-            var task = (Task)DbSet.GetType().GetMethod(nameof(DbSet<object>.AddAsync)).Invoke(DbSet, new object[] { entity });
+            var genericValueTask = DbSet.GetType().GetMethod(nameof(DbSet<object>.AddAsync)).Invoke(DbSet, new object[] { entity, null });
+
+            var task = (Task)genericValueTask.GetType().GetMethod(nameof(ValueTask<object>.AsTask)).Invoke(genericValueTask, new object[] { });
 
             await task.ConfigureAwait(false);
         }
