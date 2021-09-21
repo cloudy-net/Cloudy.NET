@@ -119,7 +119,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentRequestBodyChange
         {
-            [Required]
             public string[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
