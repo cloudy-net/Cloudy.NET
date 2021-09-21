@@ -1,4 +1,6 @@
-﻿class UrlFetcher {
+﻿import notificationManager from "../NotificationSupport/notification-manager.js";
+
+class UrlFetcher {
     async fetch(url, parameters, errorMessage) {
         try {
             var response = await fetch(url, parameters);

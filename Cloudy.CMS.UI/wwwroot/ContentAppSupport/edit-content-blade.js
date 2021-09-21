@@ -8,7 +8,7 @@ import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import primaryKeyProvider from './primary-key-provider.js';
 import contentNameProvider from './content-name-provider.js';
-import urlFetcher from '../url-fetcher.js';
+import urlFetcher from './url-fetcher.js';
 
 
 
@@ -46,21 +46,21 @@ class EditContentBlade extends Blade {
         }
 
         if (this.contentId && this.contentType.isRoutable) {
-            var urls = await urlFetcher.fetch(
-                    `GetUrl/GetUrl?id=${encodeURIComponent(JSON.stringify(this.contentId))}&contentTypeId=${encodeURIComponent(this.contentType.id)}`,
-                    {
-                        credentials: 'include',
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    },
-                    'Could not get URL'
-                );
+            //var urls = await urlFetcher.fetch(
+            //        `GetUrl/GetUrl?id=${encodeURIComponent(JSON.stringify(this.contentId))}&contentTypeId=${encodeURIComponent(this.contentType.id)}`,
+            //        {
+            //            credentials: 'include',
+            //            method: 'GET',
+            //            headers: { 'Content-Type': 'application/json' }
+            //        },
+            //        'Could not get URL'
+            //    );
 
-            if (!urls.length) {
-                return;
-            }
+            //if (!urls.length) {
+            //    return;
+            //}
 
-            this.setToolbar(new LinkButton('View', `${location.origin}/${urls[0]}`, '_blank').setInherit());
+            //this.setToolbar(new LinkButton('View', `${location.origin}/${urls[0]}`, '_blank').setInherit());
         }
 
         this.buildForm();
