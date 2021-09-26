@@ -24,11 +24,6 @@ namespace Cloudy.CMS.ContentTypeSupport
                         continue;
                     }
 
-                    if (mapping.PropertyMappingType == PropertyMappingType.CoreInterface)
-                    {
-                        continue;
-                    }
-
                     if (mapping.PropertyMappingType == PropertyMappingType.Incomplete)
                     {
                         continue;
