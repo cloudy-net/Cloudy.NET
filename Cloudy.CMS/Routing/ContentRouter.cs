@@ -11,17 +11,36 @@ namespace Cloudy.CMS.Routing
 {
     public class ContentRouter : IContentRouter
     {
+        IContextProvider ContextProvider { get; }
         IRootContentRouter RootContentRouter { get; }
         IRoutableRootContentProvider RoutableRootContentProvider { get; }
 
-        public ContentRouter(IRootContentRouter rootContentRouter, IRoutableRootContentProvider routableRootContentProvider)
+        public ContentRouter(IContextProvider contextProvider, IRootContentRouter rootContentRouter, IRoutableRootContentProvider routableRootContentProvider)
         {
+            ContextProvider = contextProvider;
             RootContentRouter = rootContentRouter;
             RoutableRootContentProvider = routableRootContentProvider;
         }
 
-        public object RouteContent(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
+        public async Task<object> RouteContentAsync(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
         {
+            if(segments.Count() == 1)
+            {
+                var segment = segments.Single();
+
+                foreach(var type in types)
+                {
+                    var dbSet = ContextProvider.GetFor(type.Type).GetDbSet(type.Type);
+
+                    var result = ((IQueryable)dbSet.DbSet).Cast<IRoutable>().Where(r => r.UrlSegment == segment).FirstOrDefault();
+
+                    if(result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+
             foreach(var root in RoutableRootContentProvider.GetAll())
             {
                 if(types.Any() && !types.Any(t => t.Type == root.GetType()))

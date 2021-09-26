@@ -5,21 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.Routing
 {
     public class ContentRouteConstraint : IRouteConstraint
     {
-        IContentRouter ContentRouter { get; }
         IContentTypeExpander ContentTypeExpander { get; }
         IEnumerable<ContentTypeDescriptor> Types { get; }
 
-        public ContentRouteConstraint(IContentRouter contentRouter, IContentTypeExpander contentTypeExpander, string contentTypeorGroupIdOrTypeName = null)
+        public ContentRouteConstraint(IContentTypeExpander contentTypeExpander, IContentTypeProvider contentTypeProvider, string contentTypeorGroupIdOrTypeName = null)
         {
-            ContentRouter = contentRouter;
             ContentTypeExpander = contentTypeExpander;
 
-            Types = contentTypeorGroupIdOrTypeName != null ? ContentTypeExpander.Expand(contentTypeorGroupIdOrTypeName) : Enumerable.Empty<ContentTypeDescriptor>();
+            Types = contentTypeorGroupIdOrTypeName != null ? ContentTypeExpander.Expand(contentTypeorGroupIdOrTypeName) : contentTypeProvider.GetAll();
 
             if(Types == null)
             {
@@ -29,7 +28,10 @@ namespace Cloudy.CMS.Routing
 
         public bool Match(HttpContext httpContext, IRouter route, string routeKey, RouteValueDictionary values, RouteDirection routeDirection)
         {
-            var content = ContentRouter.RouteContent(values[routeKey]?.ToString().Split('/') ?? Enumerable.Empty<string>(), Types);
+            var contentRouter = (IContentRouter)httpContext.RequestServices.GetService(typeof(IContentRouter));
+
+            var task = Task.Run(async () => await contentRouter.RouteContentAsync(values[routeKey]?.ToString().Split('/') ?? Enumerable.Empty<string>(), Types).ConfigureAwait(false));
+            var content = task.WaitAndUnwrapException();
 
             values["contentFromContentRoute"] = content;
 
