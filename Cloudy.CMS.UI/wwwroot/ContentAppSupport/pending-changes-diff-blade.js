@@ -1,9 +1,5 @@
 ﻿import Blade from "../blade.js";
 import Button from "../button.js";
-import ListItem from "../ListSupport/list-item.js";
-import List from "../ListSupport/list.js";
-import contentNameProvider from "./content-name-provider.js";
-import contentTypeProvider from "./content-type-provider.js";
 
 
 
@@ -14,9 +10,9 @@ class PendingChangesDiffBlade extends Blade {
     constructor(app, change) {
         super();
         this.app = app;
-        this.changeTracker = changeTracker;
+        this.change = change;
 
-        this.setTitle('Pending changes');
+        this.setTitle(`Pending changes (${change.changedFields.length})`);
         this.saveButton = new Button('Undo changes');
         this.setFooter(
             this.saveButton
