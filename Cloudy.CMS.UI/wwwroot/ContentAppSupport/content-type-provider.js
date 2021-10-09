@@ -1,4 +1,4 @@
-﻿import notificationManager from '../NotificationSupport/notification-manager.js';
+﻿import urlFetcher from '../url-fetcher.js';
 
 
 
@@ -8,30 +8,11 @@ class ContentTypeProvider {
     all;
 
     async getAll() {
-        try {
-            if (!this.all) {
-                this.all = (async () => {
-                    var response = await fetch('ContentTypeProvider/GetAll', { credentials: 'include' });
-                    if (!response.ok) {
-                        var text = await response.text();
-                        if (text) {
-                            throw new Error(text.split('\n')[0]);
-                        } else {
-                            text = response.statusText;
-                        }
-
-                        throw new Error(`${response.status} (${text})`);
-                    }
-
-                    return response.json();
-                })();
-            }
-
-            return await this.all;
-        } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get content types --- ${error.message}`));
-            throw error;
+        if (!this.all) {
+            this.all = urlFetcher.fetch('ContentTypeProvider/GetAll', { credentials: 'include' }, 'Could not get content types');
         }
+
+        return await this.all;
     }
 
     async get(id) {
