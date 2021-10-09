@@ -35,7 +35,7 @@ class FormBuilder {
 
         fields.forEach(field => element.appendChild(field.element));
 
-        return new Form(this.app, element, target, fields);
+        return new Form(element, fieldModels, fields);
     }
 
     buildField(fieldModel, target, onChange) {

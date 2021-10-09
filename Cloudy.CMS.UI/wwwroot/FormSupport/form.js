@@ -1,8 +1,7 @@
 ﻿class Form {
-    constructor(app, element, target, fields) {
-        this.app = app;
+    constructor(element, fieldModels, fields) {
         this.element = element;
-        this.target = target;
+        this.fieldModels = fieldModels;
         this.fields = fields;
         this.callbacks = {
             change: [],
