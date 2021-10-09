@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using Website.AspNetCore.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Cloudy.CMS.Routing;
 
 namespace Website.AspNetCore
 {
@@ -50,8 +52,8 @@ namespace Website.AspNetCore
             {
                 endpoints.MapCloudyAdminRoutes();
                 endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
-                //endpoints.MapGet("/test/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute()?.Id}"));
-                //endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
+                endpoints.MapGet("/pages/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute<Page>().Name}"));
+                endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
             });
         }
     }
