@@ -6,6 +6,8 @@ import notificationManager from "../NotificationSupport/notification-manager.js"
 import contentNameProvider from "./content-name-provider.js";
 import contentSaver from "./content-saver.js";
 import contentTypeProvider from "./content-type-provider.js";
+import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
+
 
 
 /* CHANGE TRACKER */
@@ -192,7 +194,9 @@ class PendingChangesBlade extends Blade {
             const changedCount = change.changedFields.length;
             const subText = changedCount > 1 ? `Changes: ${changedCount}` : `Change: ${changedCount}`;
          
-            list.addItem(new ListItem().setText(name).setSubText(subText).onClick(() => console.log(change)));
+            list.addItem(new ListItem().setText(name).setSubText(subText).onClick(() =>
+                this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, change), this.parentBlade)
+            ));
         }
 
         this.setContent(list);
