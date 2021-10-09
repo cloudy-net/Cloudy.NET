@@ -112,7 +112,6 @@ class ChangeTracker {
         }
         this.pendingChanges = [];
         this.update();
-        this.resetAll();
     }
 
     mergeWithPendingChanges(contentId, contentTypeId, content) {
