@@ -5,6 +5,7 @@ import List from "../ListSupport/list.js";
 import notificationManager from "../NotificationSupport/notification-manager.js";
 import contentNameProvider from "./content-name-provider.js";
 import contentSaver from "./content-saver.js";
+import contentTypeProvider from "./content-type-provider.js";
 
 
 /* CHANGE TRACKER */
@@ -44,7 +45,7 @@ class ChangeTracker {
         }
 
         const { name, value, originalValue } = contentAsJson;
-        const index = this.pendingChanges.findIndex(c => c.type === 'save' && c.contentId === contentId && c.contentTypeId === contentTypeId);
+        const index = this.pendingChanges.findIndex(c => c.type === 'save' && (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
         if (index === -1) {
             this.pendingChanges.push({
                 type: 'save',
@@ -87,7 +88,7 @@ class ChangeTracker {
     }
 
     reset(contentId, contentTypeId) {
-        const index = this.pendingChanges.findIndex(c => c.contentId === contentId && c.contentTypeId === contentTypeId);
+        const index = this.pendingChanges.findIndex(c => (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
         if (index !== -1) {
             this.pendingChanges.splice(index, 1);
             this.update();
@@ -119,7 +120,7 @@ class ChangeTracker {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
-        const changesForContent = this.pendingChanges.find(c => c.contentId === contentId && c.contentTypeId === contentTypeId);
+        const changesForContent = this.pendingChanges.find(c => (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
 
         const contentOriginal = {};
         Object.keys(content).forEach(k => {
@@ -170,6 +171,20 @@ class PendingChangesBlade extends Blade {
     async open() {
         var list = new List();
 
+        var changesByContentType = {};
+
+        for (const change of this.changeTracker.pendingChanges) {
+            changesByContentType[change.contentTypeId] = change;
+        }
+
+        var allContentTypes = await contentTypeProvider.getAll();
+
+        var contentTypes = Object.keys(changesByContentType).map(contentTypeId => allContentTypes.find(contentType => contentType.id == contentTypeId)).sort(a => a.name, b => b.name);
+
+        for (const contentType of contentTypes) {
+            list.addSubHeader(contentType.pluralName);
+        }
+
         for (let change of this.changeTracker.pendingChanges) {
             let name = '';
             if (change.contentId) {
@@ -178,7 +193,7 @@ class PendingChangesBlade extends Blade {
             const changedCount = change.changedFields.length;
             const subText = changedCount > 1 ? `Changes: ${changedCount}` : `Change: ${changedCount}`;
          
-            list.addSubHeader(name || 'New Items').addItem(new ListItem().setSubText(subText).onClick(() => console.log(change)));
+            list.addItem(new ListItem().setText(name).setSubText(subText).onClick(() => console.log(change)));
         }
 
         this.setContent(list);
