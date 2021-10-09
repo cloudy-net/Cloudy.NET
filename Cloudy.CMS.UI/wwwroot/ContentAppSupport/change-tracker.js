@@ -2,6 +2,7 @@ import Blade from "../blade.js";
 import Button from "../button.js";
 import ListItem from "../ListSupport/list-item.js";
 import List from "../ListSupport/list.js";
+import notificationManager from "../NotificationSupport/notification-manager.js";
 import contentNameProvider from "./content-name-provider.js";
 import contentSaver from "./content-saver.js";
 
@@ -37,18 +38,18 @@ class ChangeTracker {
         this.app.addBladeAfter(new PendingChangesBlade(this.app, this), this.parentBlade);
     }
 
-    getContentIdFormatted(contentId, contentTypeId) {
-        return contentId ? `${contentId}|${contentTypeId}` : `|${contentTypeId}`;
-    }
-
     save(contentId, contentTypeId, contentAsJson) {
+        if (!contentId && contentId !== null) {
+            throw new Error('ContentId must be null or a valid value (string, number, ...)')
+        }
+
         const { name, value, originalValue } = contentAsJson;
-        const contentIdFormatted = this.getContentIdFormatted(contentId, contentTypeId);
-        const index = this.pendingChanges.findIndex(c => c.type === 'save' && c.contentIdFormatted === contentIdFormatted);
+        const index = this.pendingChanges.findIndex(c => c.type === 'save' && c.contentId === contentId && c.contentTypeId === contentTypeId);
         if (index === -1) {
             this.pendingChanges.push({
                 type: 'save',
-                contentIdFormatted,
+                contentId,
+                contentTypeId,
                 changedFields: value !== originalValue ? [{...contentAsJson}]: []
             });
             this.update();
@@ -85,42 +86,40 @@ class ChangeTracker {
         })
     }
 
-    reset(contentIdFormatted) {
-        const index = this.pendingChanges.findIndex(item => item.contentIdFormatted === contentIdFormatted);
+    reset(contentId, contentTypeId) {
+        const index = this.pendingChanges.findIndex(c => c.contentId === contentId && c.contentTypeId === contentTypeId);
         if (index !== -1) {
             this.pendingChanges.splice(index, 1);
             this.update();
         }
     }
 
-    resetAll(callback) {
-        this.pendingChanges = [];
-        this.update();
-        callback && callback();
-    }
-
     async apply() {
         const contentToSave = this.pendingChanges.map(c => {
-            const contentIdFormattedToArray = c.contentIdFormatted.split('|');
             const changedArray = c.changedFields.map(f => {
                 const { originalValue, ...changedObj } = f;
                 return changedObj;
             });
             return {
-                keyValues: contentIdFormattedToArray[0] ? [contentIdFormattedToArray[0]] : null,
-                contentTypeId: contentIdFormattedToArray[1],
+                keyValues: c.contentId,
+                contentTypeId: c.contentTypeId,
                 changedFields: changedArray
             }
         })
         if (await contentSaver.save(contentToSave) == false) {
             return false; // fail
         }
-        this.resetAll(() => window.location.reload());
+        this.pendingChanges = [];
+        this.update();
+        this.resetAll();
     }
 
     mergeWithPendingChanges(contentId, contentTypeId, content) {
-        const contentIdFormatted = this.getContentIdFormatted(contentId, contentTypeId);
-        const changesForContent = this.pendingChanges.find(c => c.contentIdFormatted === contentIdFormatted);
+        if (!contentId && contentId !== null) {
+            throw new Error('ContentId must be null or a valid value (string, number, ...)')
+        }
+
+        const changesForContent = this.pendingChanges.find(c => c.contentId === contentId && c.contentTypeId === contentTypeId);
 
         const contentOriginal = {};
         Object.keys(content).forEach(k => {
@@ -160,9 +159,8 @@ class PendingChangesBlade extends Blade {
                 .onClick(async () => {
                     this.saveButton.setDisabled();
                     if (await this.changeTracker.apply()) {
-                        var list = new List();
-                        list.addItem(new ListItem().setText('Content has been saved.'))
-                        this.setContent(list);
+                        this.setContent();
+                        notificationManager.addNotification(n => n.setText('Content has been saved.'));
                     }
                     this.saveButton.setDisabled(false);
                 })
@@ -173,10 +171,9 @@ class PendingChangesBlade extends Blade {
         var list = new List();
 
         for (let change of this.changeTracker.pendingChanges) {
-            const contentIdFormattedToArray = change.contentIdFormatted.split('|');
             let name = '';
-            if (contentIdFormattedToArray[0] && contentIdFormattedToArray[1]) {
-                name = await contentNameProvider.getNameOf(contentIdFormattedToArray[0], contentIdFormattedToArray[1]);
+            if (change.contentId) {
+                name = await contentNameProvider.getNameOf(change.contentId, change.contentTypeId);
             }
             const changedCount = change.changedFields.length;
             const subText = changedCount > 1 ? `Changes: ${changedCount}` : `Change: ${changedCount}`;
