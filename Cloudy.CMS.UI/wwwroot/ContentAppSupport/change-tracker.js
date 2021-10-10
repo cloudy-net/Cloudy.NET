@@ -2,13 +2,12 @@ import Button from "../button.js";
 import contentSaver from "./content-saver.js";
 import PendingChangesBlade from "./pending-changes-blade.js";
 
-
-
 /* CHANGE TRACKER */
 
 class ChangeTracker {
     element = document.createElement('cloudy-ui-change-tracker');
-    pendingChanges = [];
+    _pendingChanges;
+    _pendingChangesKey = '_pendingChangesKey';
     changeExecutors = {
         save: contentSaver
     };
@@ -23,12 +22,12 @@ class ChangeTracker {
         this.update();
     }
     
-    setReferenceEvents(element) {
-        const index = this.referenceEvents.findIndex(e => e.id === element.id);
+    setReferenceEvents(element, type = 'primary') {
+        const index = this.referenceEvents.findIndex(e => e.target.id === element.id);
         if (index !== -1) {
             this.referenceEvents.splice(index, 1);
         }
-        this.referenceEvents.push(element);
+        this.referenceEvents.push({ target: element, type });
     }
 
     saveChange() {
@@ -41,57 +40,65 @@ class ChangeTracker {
         }
 
         const { name, value, originalValue } = contentAsJson;
-        const index = this.pendingChanges.findIndex(c => c.type === 'save' && (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
+        const _pendingChangeToSave = this.pendingChanges;
+        const index = _pendingChangeToSave.findIndex(c => c.type === 'save' && (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
         if (index === -1) {
-            this.pendingChanges.push({
+            _pendingChangeToSave.push({
                 type: 'save',
                 contentId,
                 contentTypeId,
                 changedFields: value !== originalValue ? [{...contentAsJson}]: []
             });
-            this.update();
+            this.update(_pendingChangeToSave);
             return;
         }
 
-        const changeFieldIndex = this.pendingChanges[index].changedFields.findIndex(f => f.name === name);
+        const changeFieldIndex = _pendingChangeToSave[index].changedFields.findIndex(f => f.name === name);
         if (changeFieldIndex === -1 && value !== originalValue) {
-            this.pendingChanges[index].changedFields.push(contentAsJson);
-            this.update();
+            _pendingChangeToSave[index].changedFields.push(contentAsJson);
+            this.update(_pendingChangeToSave);
             return;
         }
 
         if (changeFieldIndex !== -1) {
             if ( value === originalValue) {
-                this.pendingChanges[index].changedFields.splice(changeFieldIndex, 1);
+                _pendingChangeToSave[index].changedFields.splice(changeFieldIndex, 1);
             } else {
-                this.pendingChanges[index].changedFields[changeFieldIndex].value = value;
+                _pendingChangeToSave[index].changedFields[changeFieldIndex].value = value;
             }
         }
-        this.update();
+        this.update(_pendingChangeToSave);
     }
 
-    update() {
+    update(pendingChanges = this.pendingChanges) {
         let changeCount = 0;
-        this.pendingChanges.forEach(c => {
+        pendingChanges.forEach(c => {
             changeCount = changeCount + c.changedFields.length;
         });
         const changeText = changeCount <= 0 ? 'No changes': (changeCount > 1 ? `${changeCount} changes` : '1 change');
         this.referenceEvents.forEach(element => {
-            element.setText(changeCount <= 0 ? (element.initText || changeText) : changeText);
-            element.setDisabled(changeCount <= 0);
-            element.setPrimary(changeCount > 0);
-        })
+            if (element.type === 'primary') {
+                element.target.setText(changeCount <= 0 ? (element.target.initText || changeText) : changeText);
+                element.target.setPrimary(changeCount > 0);
+            }
+            element.target.setDisabled(changeCount <= 0);
+        });
+        this.pendingChanges = pendingChanges;
     }
 
     reset(contentId, contentTypeId) {
-        const index = this.pendingChanges.findIndex(c => (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
+        const _pendingChanges = this.pendingChanges;
+        const index = _pendingChanges.findIndex(c => (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
         if (index !== -1) {
-            this.pendingChanges.splice(index, 1);
-            this.update();
+            _pendingChanges.splice(index, 1);
+            this.update(_pendingChanges);
         }
     }
 
     async apply() {
+        if (!this.pendingChanges || !this.pendingChanges.length) {
+            return;
+        }
         const contentToSave = this.pendingChanges.map(c => {
             const changedArray = c.changedFields.map(f => {
                 const { originalValue, ...changedObj } = f;
@@ -132,6 +139,15 @@ class ChangeTracker {
         });
 
         return contentMapping;
+    }
+
+    set pendingChanges(value) {
+        this._pendingChanges = value;
+        localStorage.setItem(this._pendingChangesKey, JSON.stringify(value));
+    }
+
+    get pendingChanges() {
+        return this._pendingChanges || JSON.parse(localStorage.getItem(this._pendingChangesKey)) || [];
     }
 }
 
