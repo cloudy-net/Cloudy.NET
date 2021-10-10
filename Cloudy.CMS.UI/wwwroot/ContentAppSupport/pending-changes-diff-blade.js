@@ -1,6 +1,7 @@
 ﻿import Blade from "../blade.js";
 import Button from "../button.js";
 import Diff from './lib/diff.js'
+import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 
 
 
@@ -27,14 +28,18 @@ class PendingChangesDiffBlade extends Blade {
     async open() {
         var form = document.createElement('div');
         form.classList.add('cloudy-ui-form');
+        const formId = `Cloudy.CMS.Content[type=${this.change.contentTypeId}]`;
+        var fields = await fieldDescriptorProvider.getFor(formId);
 
         for (const changedField of this.change.changedFields) {
             var element = document.createElement('div');
             element.classList.add('cloudy-ui-form-field');
 
+            var field = fields.find(f => f.camelCaseId == changedField.name);
+
             var heading = document.createElement('div');
             heading.classList.add('cloudy-ui-form-field-label');
-            heading.innerText = changedField.name;
+            heading.innerText = field.label;
             element.appendChild(heading);
 
             var input = document.createElement('div');
