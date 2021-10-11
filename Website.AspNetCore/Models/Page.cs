@@ -21,6 +21,6 @@ namespace Website.AspNetCore.Models
         [UIHint("textarea({rows:2})")]
         public string Description { get; set; }
         [UIHint("html")]
-        //public string MainBody { get; set; }
+        public string MainBody { get; set; }
     }
 }
