@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Website.AspNetCore.Models.Blocks;
 
 namespace Website.AspNetCore.Models
 {
@@ -22,5 +23,6 @@ namespace Website.AspNetCore.Models
         public string Description { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
+        public IEnumerable<ISidebarBlock> SidebarBlocks { get; set; }
     }
 }

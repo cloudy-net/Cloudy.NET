@@ -86,7 +86,7 @@ class ListItemsBlade extends Blade {
 
 
         try {
-            var response = await fetch(`PolymorphicFormControl/GetOptions?${this.types.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
+            var response = await fetch(`PolymorphicForm/GetOptions?${this.types.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'

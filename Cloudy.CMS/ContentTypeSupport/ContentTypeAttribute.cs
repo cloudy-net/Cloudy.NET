@@ -6,6 +6,9 @@ namespace Cloudy.CMS.ContentTypeSupport
     {
         public string Id { get; }
 
+        [Obsolete("You need to supply an Id - use the parameterless constructor only to get a suggestion")]
+        public ContentTypeAttribute() : this(null) { }
+
         public ContentTypeAttribute(string id)
         {
             if (string.IsNullOrEmpty(id))

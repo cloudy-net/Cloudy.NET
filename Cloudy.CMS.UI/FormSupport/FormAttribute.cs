@@ -8,6 +8,9 @@ namespace Cloudy.CMS.UI.FormSupport
     {
         public string Id { get; }
 
+        [Obsolete("You need to supply an Id - use the parameterless constructor only to get a suggestion")]
+        public FormAttribute() : this(null) { }
+
         public FormAttribute(string id)
         {
             if (string.IsNullOrEmpty(id))

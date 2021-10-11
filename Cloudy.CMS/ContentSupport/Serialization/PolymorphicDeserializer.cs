@@ -10,6 +10,8 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 {
     public class PolymorphicDeserializer : IPolymorphicDeserializer
     {
+        public static IPolymorphicDeserializer UglyInstance { get; internal set; }
+
         ILogger Logger { get; }
         IPolymorphicCandidateProvider PolymorphicCandidateProvider { get; }
 

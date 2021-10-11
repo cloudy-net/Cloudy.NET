@@ -15,13 +15,13 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
 {
     [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
-    public class PolymorphicFormApiController
+    public class PolymorphicFormController
     {
         IFormProvider FormProvider { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IHumanizer Humanizer { get; }
 
-        public PolymorphicFormApiController(IFormProvider formProvider, IContentTypeProvider contentTypeProvider, IHumanizer humanizer)
+        public PolymorphicFormController(IFormProvider formProvider, IContentTypeProvider contentTypeProvider, IHumanizer humanizer)
         {
             FormProvider = formProvider;
             ContentTypeProvider = contentTypeProvider;

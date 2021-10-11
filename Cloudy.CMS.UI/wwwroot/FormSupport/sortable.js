@@ -14,7 +14,6 @@ class SortableField {
         this.element = document.createElement('cloudy-ui-sortable');
         this.element.appendChild(this.fields);
 
-        this.target = target;
         this.createItem = createItem;
 
         for (var index = 0; index < size; index++) {
@@ -39,7 +38,7 @@ class SortableField {
 
         var addButton = new Button('Add')
             .onClick(() => {
-                var item = this.createItem(this.target.length);
+                var item = this.createItem(-1);
                 this.addItem(item);
                 this.triggerAdd(item);
             })
