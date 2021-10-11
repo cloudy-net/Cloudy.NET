@@ -27,8 +27,8 @@ class EditContentBlade extends Blade {
         this.formId = `Cloudy.CMS.Content[type=${this.contentType.id}]`;
         this.element.addEventListener("keydown", (event) => {
             if ((String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) || event.which == 19) { // 19 for Mac:s "Command+S"
-                if (this.saveButton) {
-                    this.saveButton.triggerClick();
+                if (this.viewChangeButton) {
+                    this.viewChangeButton.triggerClick();
                 }
                 event.preventDefault();
             }
@@ -63,10 +63,11 @@ class EditContentBlade extends Blade {
 
         this.buildForm();
 
-        this.saveButton = new Button('Save').setPrimary().onClick(() => this.app.changeTracker.saveChange());
-        this.app.changeTracker.setReferenceEvents(this.saveButton);
+        this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).onClick(() => this.app.changeTracker.apply());
+        this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.saveChange());
+        this.app.changeTracker.setReferenceEvents(this.viewChangeButton, 'secondary');
         this.app.changeTracker.update();
-        this.setFooter(this.saveButton);
+        this.setFooter(this.viewChangeButton, this.saveButton);
     }
 
     async buildForm() {
