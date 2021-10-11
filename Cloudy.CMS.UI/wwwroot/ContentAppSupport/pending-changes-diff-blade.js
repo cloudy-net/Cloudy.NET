@@ -47,7 +47,7 @@ class PendingChangesDiffBlade extends Blade {
 
             var textarea = document.createElement('textarea');
             var value = '';
-            for (const [state, segment] of Diff(changedField.originalValue, changedField.value, 0)) {
+            for (const [state, segment] of Diff(changedField.originalValue || '', changedField.value, 0)) {
                 textarea.innerHTML = segment
 
                 switch (state) {
