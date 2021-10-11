@@ -20,7 +20,7 @@ namespace Website.AspNetCore.Models
         public string UrlSegment { get; set; }
         [UIHint("textarea({rows:2})")]
         public string Description { get; set; }
-        //[UIHint("html")]
+        [UIHint("html")]
         //public string MainBody { get; set; }
     }
 }

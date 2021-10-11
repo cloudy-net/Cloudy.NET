@@ -45,16 +45,19 @@ class PendingChangesDiffBlade extends Blade {
             var input = document.createElement('div');
             input.classList.add('cloudy-ui-form-input');
 
+            var textarea = document.createElement('textarea');
             var value = '';
             for (const [state, segment] of Diff(changedField.originalValue, changedField.value, 0)) {
+                textarea.innerHTML = segment
+
                 switch (state) {
-                    case Diff.DELETE: value += `<span class="cloudy-ui-diff-delete" style="background-color: #ffebe9; padding: 0 1px;">${segment}</span>`; break;
-                    case Diff.EQUAL: value += `<span>${segment}</span>`; break;
-                    case Diff.INSERT: value += `<span class="cloudy-ui-diff-insert" style="background-color: #e6ffec; padding: 0 1px;">${segment}</span>`; break;
+                    case Diff.DELETE: value += `<span class="" style="background-color: #ffebe9; padding: 0 1px;">${textarea.innerHTML}</span>`; break;
+                    case Diff.EQUAL: value += `<span>${textarea.innerHTML}</span>`; break;
+                    case Diff.INSERT: value += `<span class="cloudy-ui-diff-insert" style="background-color: #e6ffec; padding: 0 1px;">${textarea.innerHTML}</span>`; break;
                 }
             }
             input.innerHTML = value;
-                
+            
             element.append(input);
 
             form.append(element);
