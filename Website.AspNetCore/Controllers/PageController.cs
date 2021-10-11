@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport;
+using Website.AspNetCore.Models;
 
 namespace Website.AspNetCore.Controllers
 {
     public class PageController : Controller
     {
-        public ActionResult Index([FromContentRoute] object page)
+        public ActionResult Index([FromContentRoute] Page page)
         {
-            return Content(page.ToString());
+            return View(page);
         }
     }
 }
