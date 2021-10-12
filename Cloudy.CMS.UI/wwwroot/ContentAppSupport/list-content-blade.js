@@ -7,7 +7,7 @@ import EditContentBlade from './edit-content-blade.js';
 import RemoveContentBlade from './remove-content-blade.js';
 import ListItem from '../ListSupport/list-item.js';
 import Loading  from '../LoadingSupport/loading.js';
-
+import urlFetcher from '../url-fetcher.js';
 
 /* LIST CONTENT BLADE */
 
@@ -59,36 +59,15 @@ class ListContentBlade extends Blade {
 
         this.list.element.style.opacity = 0.5;
 
-        var contentList;
-        try {
-            var url = 'ContentList/Get?';
+        var url = 'ContentList/Get?';
 
-            url += this.contentTypes.map((t, i) => `contentTypeIds[${i}]=${t.id}`).join('&');
+        url += this.contentTypes.map((t, i) => `contentTypeIds[${i}]=${t.id}`).join('&');
 
-            if (parents.length) {
-                url += `&parent=${parents[parents.length - 1].id}`;
-            }
-            this._loading.turnOn(3000);
-            var response = await fetch(url, { credentials: 'include' }).finally(_ => this._loading.turnOf());
-
-            if (!response.ok) {
-                var text = await response.text();
-
-                if (text) {
-                    throw new Error(text.split('\n')[0]);
-                } else {
-                    text = response.statusText;
-                }
-
-                throw new Error(`${response.status} (${text})`);
-            }
-
-            contentList = await response.json();
-        } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get content list --- ${error.message}`));
-            throw error;
+        if (parents.length) {
+            url += `&parent=${parents[parents.length - 1].id}`;
         }
-
+        this._loading.turnOn(3000);
+        var contentList = await urlFetcher.fetch(url, { credentials: 'include' }, 'Could not load content list').finally(_ => this._loading.turnOf());
         this.updateBreadcrumbs(parents);
         this.list.element.style.opacity = 1;
         this.list.clear();

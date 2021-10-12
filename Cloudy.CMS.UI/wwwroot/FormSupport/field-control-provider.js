@@ -1,19 +1,11 @@
 ﻿import notificationManager from "../NotificationSupport/notification-manager.js";
-
+import urlFetcher from "../url-fetcher.js";
 class FieldControlProvider {
     constructor() {
-        this.modulePathsPromise = fetch('Control/ModulePaths', {
+        this.modulePathsPromise = urlFetcher.fetch('Control/ModulePaths', {
             credentials: 'include'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`${response.status} (${response.statusText})`);
-                }
-
-                return response.json();
-            })
-            .catch(error => notificationManager.addNotification(item => item.setText(`Could not get module paths for form field controls --- ${error.message}`)));
-
+        }, 'Could not get module paths for form field controls');
+        
         this.typeModulesPromises = {};
     }
     

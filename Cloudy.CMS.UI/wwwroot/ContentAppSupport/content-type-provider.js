@@ -1,7 +1,5 @@
 ﻿import urlFetcher from '../url-fetcher.js';
 
-
-
 /* CONTENT TYPE PROVIDER */
 
 class ContentTypeProvider {

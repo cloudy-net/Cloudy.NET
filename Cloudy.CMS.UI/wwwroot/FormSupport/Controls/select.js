@@ -11,8 +11,7 @@ import TabSystem from '../../TabSupport/tab-system.js';
 import FormBuilder from '../form-builder.js';
 import fieldDescriptorProvider from '../field-descriptor-provider.js';
 import fieldModelBuilder from '../field-model-builder.js';
-
-
+import urlFetcher from '../../url-fetcher.js';
 
 /* SELECT CONTROL */
 
@@ -293,34 +292,15 @@ class CreateItemBlade extends Blade {
         this.saveButton = new Button('Save')
             .setPrimary()
             .onClick(async () => {
-                try {
-                    var response = await fetch('SelectControl/CreateItem', {
-                        credentials: 'include',
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            provider: this.provider,
-                            item: JSON.stringify(this.item),
-                        })
-                    });
-
-                    if (!response.ok) {
-                        var text = await response.text();
-
-                        if (text) {
-                            throw new Error(text.split('\n')[0]);
-                        } else {
-                            text = response.statusText;
-                        }
-
-                        throw new Error(`${response.status} (${text})`);
-                    }
-
-                    var result = await response.json();
-                } catch (error) {
-                    notificationManager.addNotification(item => item.setText(`Could not save item --- ${error.message}`));
-                    throw error;
-                }
+                var result = await urlFetcher.fetch('SelectControl/CreateItem', {
+                    credentials: 'include',
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        provider: this.provider,
+                        item: JSON.stringify(this.item),
+                    })
+                }, 'Could not save item');
 
                 if (!result.success) {
                     var errors = document.createElement('ul');

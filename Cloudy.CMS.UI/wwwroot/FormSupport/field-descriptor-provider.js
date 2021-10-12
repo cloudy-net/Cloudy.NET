@@ -1,6 +1,4 @@
-﻿import notificationManager from "../NotificationSupport/notification-manager.js";
-
-
+﻿import urlFetcher from "../url-fetcher.js";
 
 /* FORM FIELD DESCRIPTOR PROVIDER */
 
@@ -9,30 +7,9 @@ class FormFieldDescriptorProvider {
 
     async getFor(formId) {
         if (!this.promises[formId]) {
-            this.promises[formId] = (async () => {
-                var response = await fetch(`Field/GetAllForForm?id=${formId}`, { credentials: 'include' });
-
-                if (!response.ok) {
-                    var text = await response.text();
-
-                    if (text) {
-                        throw new Error(text.split('\n')[0]);
-                    } else {
-                        text = response.statusText;
-                    }
-
-                    throw new Error(`${response.status} (${text})`);
-                }
-
-                return await response.json();
-            })();
+            this.promises[formId] = await urlFetcher.fetch(`Field/GetAllForForm?id=${formId}`, { credentials: 'include' }, `Could not get field descriptors for form \`${formId}\``);
         }
-        try {
-            return await this.promises[formId];
-        } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get field descriptors for form \`${formId}\` --- ${error.message}`));
-            throw error;
-        }
+        return this.promises[formId];
     }
 }
 

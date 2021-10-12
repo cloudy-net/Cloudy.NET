@@ -1,6 +1,4 @@
-﻿import notificationManager from '../NotificationSupport/notification-manager.js';
-
-
+﻿import urlFetcher from '../url-fetcher.js';
 
 /* CONTENT GETTER */
 
@@ -20,30 +18,9 @@ class ContentGetter {
         if (this.contentByContentTypeAndId[contentTypeId][contentId]) {
             return this.contentByContentTypeAndId[contentTypeId][contentId];
         }
-
-        try {
-            const url = `ContentGetter/Get?contentId=${contentId}&contentTypeId=${contentTypeId}`;
-            const response = await fetch(url, { credentials: 'include' });
-
-            if (!response.ok) {
-                var text = await response.text();
-
-                if (text) {
-                    throw new Error(text.split('\n')[0]);
-                } else {
-                    text = response.statusText;
-                }
-
-                throw new Error(`${response.status} (${text})`);
-            }
-
-            var content = await response.json();
-            this.contentByContentTypeAndId[contentTypeId][contentId] = content;
-        } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get content ${contentId} (${contentTypeId}) --- ${error.message}`));
-            throw error;
-        }
-
+        const url = `ContentGetter/Get?contentId=${contentId}&contentTypeId=${contentTypeId}`;
+        var content = await urlFetcher.fetch(url, { credentials: 'include' }, `Could not get content ${contentId} (${contentTypeId})`);
+        this.contentByContentTypeAndId[contentTypeId][contentId] = content;
         return content;
     }
 

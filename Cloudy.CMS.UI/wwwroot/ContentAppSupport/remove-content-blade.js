@@ -1,8 +1,7 @@
 ﻿import Blade from '../blade.js';
 import Button from '../button.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
-
-
+import urlFetcher from '../url-fetcher.js';
 
 /* REMOVE CONTENT */
 
@@ -31,8 +30,8 @@ class RemoveContentBlade extends Blade {
 
         var saveButton = new Button('Remove')
             .setPrimary()
-            .onClick(() =>
-                fetch('RemoveContent/RemoveContent', {
+            .onClick(async () => {
+                await urlFetcher.fetch('RemoveContent/RemoveContent', {
                     credentials: 'include',
                     method: 'POST',
                     headers: {
@@ -42,25 +41,22 @@ class RemoveContentBlade extends Blade {
                         id: content.id,
                         contentTypeId: contentType.id
                     })
-                })
-                    .catch(error => notificationManager.addNotification(item => item.setText(`Could not remove content (${error.name}: ${error.message})`)))
-                    .then(() => {
-                        var name = null;
+                }, 'Could not remove content');
 
-                        if (!contentType.isSingleton) {
-                            if (contentType.isNameable) {
-                                name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
-                            }
-                            if (!name) {
-                                name = content.id;
-                            }
-                        }
+                var name = null;
+                if (!contentType.isSingleton) {
+                    if (contentType.isNameable) {
+                        name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+                    }
+                    if (!name) {
+                        name = content.id;
+                    }
+                }
 
-                        notificationManager.addNotification(item => item.setText(`Removed ${contentType.name} ${name || ''}`));
-                        this.onCompleteCallbacks.forEach(callback => callback(content));
-                        app.removeBlade(this);
-                    })
-            );
+                notificationManager.addNotification(item => item.setText(`Removed ${contentType.name} ${name || ''}`));
+                this.onCompleteCallbacks.forEach(callback => callback(content));
+                app.removeBlade(this);
+            });
         var cancelButton = new Button('Cancel').onClick(() => app.removeBlade(this));
 
         this.setFooter(saveButton, cancelButton);
