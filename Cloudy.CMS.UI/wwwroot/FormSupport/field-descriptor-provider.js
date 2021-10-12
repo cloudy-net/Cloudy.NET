@@ -7,9 +7,9 @@ class FormFieldDescriptorProvider {
 
     async getFor(formId) {
         if (!this.promises[formId]) {
-            this.promises[formId] = await urlFetcher.fetch(`Field/GetAllForForm?id=${formId}`, { credentials: 'include' }, `Could not get field descriptors for form \`${formId}\``);
+            this.promises[formId] = urlFetcher.fetch(`Field/GetAllForForm?id=${formId}`, { credentials: 'include' }, `Could not get field descriptors for form \`${formId}\``);
         }
-        return this.promises[formId];
+        return await this.promises[formId];
     }
 }
 
