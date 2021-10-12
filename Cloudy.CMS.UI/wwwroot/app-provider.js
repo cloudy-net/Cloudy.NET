@@ -1,6 +1,4 @@
-﻿import NotificationManager from './NotificationSupport/notification-manager.js';
-
-
+﻿import urlFetcher from './url-fetcher.js';
 
 /* APP PROVIDER */
 
@@ -10,28 +8,9 @@ class AppProvider {
     }
 
     async init() {
-        try {
-            var response = await fetch(`App/GetAll`, { credentials: 'include' });
-
-            if (!response.ok) {
-                var text = await response.text();
-
-                if (text) {
-                    throw new Error(text.split('\n')[0]);
-                } else {
-                    text = response.statusText;
-                }
-
-                throw new Error(`${response.status} (${text})`);
-            }
-
-            this.apps = await response.json();
-            this.appsById = {};
-            this.apps.forEach(app => this.appsById[app.id] = app);
-        } catch (error) {
-            NotificationManager.addNotification(item => item.setText(`Could not get apps (${error.message})`));
-            throw error;
-        }
+        this.apps = await urlFetcher.fetch(`App/GetAll`, { credentials: 'include' }, 'Could not get apps');
+        this.appsById = {};
+        this.apps.forEach(app => this.appsById[app.id] = app);
     }
 
     async getAll() {

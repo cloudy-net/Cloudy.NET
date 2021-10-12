@@ -4,8 +4,7 @@ import List from '../../ListSupport/list.js';
 import ListItem from '../../ListSupport/list-item.js';
 import FormBuilder from '../form-builder.js';
 import fieldModelBuilder from '../field-model-builder.js';
-
-
+import urlFetcher from '../../url-fetcher.js';
 
 /* SELECT CONTROL */
 
@@ -83,33 +82,13 @@ class ListItemsBlade extends Blade {
 
         var list = new List();
         this.setContent(list);
-
-
-        try {
-            var response = await fetch(`PolymorphicForm/GetOptions?${this.types.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                var text = await response.text();
-
-                if (text) {
-                    throw new Error(text.split('\n')[0]);
-                } else {
-                    text = response.statusText;
-                }
-
-                throw new Error(`${response.status} (${text})`);
+        var items = await urlFetcher.fetch(`PolymorphicForm/GetOptions?${this.types.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
             }
-
-            var items = await response.json();
-        } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not get item ${value} of type ${type} for select control ${provider} (${error.message})`));
-        }
-
+        }, `Could not get item ${value} of type ${type} for select control ${provider}`);
+        
         if (!items.length) {    
             var listItem = new ListItem();
             listItem.setDisabled();

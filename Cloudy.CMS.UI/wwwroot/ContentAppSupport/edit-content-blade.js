@@ -10,8 +10,6 @@ import primaryKeyProvider from './primary-key-provider.js';
 import contentNameProvider from './content-name-provider.js';
 import urlFetcher from '../url-fetcher.js';
 
-
-
 /* EDIT CONTENT */
 
 class EditContentBlade extends Blade {
