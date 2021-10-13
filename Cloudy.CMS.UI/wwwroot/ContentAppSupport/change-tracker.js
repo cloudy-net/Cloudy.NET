@@ -95,11 +95,12 @@ class ChangeTracker {
         }
     }
 
-    async apply() {
-        if (!this.pendingChanges || !this.pendingChanges.length) {
+    async apply(pendingChanges, callBack) {
+        const _pendingChanges = pendingChanges || this.pendingChanges;
+        if (!_pendingChanges.length) {
             return;
         }
-        const contentToSave = this.pendingChanges.map(c => {
+        const contentToSave = _pendingChanges.map(c => {
             const changedArray = c.changedFields.map(f => {
                 const { originalValue, ...changedObj } = f;
                 return changedObj;
@@ -113,8 +114,15 @@ class ChangeTracker {
         if (await contentSaver.save(contentToSave) == false) {
             return false; // fail
         }
-        this.pendingChanges = [];
+        const _remainingPendingChanges = [];
+        this.pendingChanges.forEach(c => {
+            if (!_pendingChanges.some(d => (d.contentId === null || c.contentId.every(function (id, i) { return id === d.contentId[i] })) && d.contentTypeId === c.contentTypeId)) {
+                _remainingPendingChanges.push(c);
+            }
+        })
+        this.pendingChanges = _remainingPendingChanges;
         this.update();
+        callBack && callBack();
     }
 
     mergeWithPendingChanges(contentId, contentTypeId, content) {

@@ -28,7 +28,7 @@ class ContentSaver {
             return;
         }
 
-        notificationManager.addNotification((item) => item.setText(result.message));
+        notificationManager.addNotification((item) => item.setText('Content has been saved.'));
 
         // var name = null;
 
