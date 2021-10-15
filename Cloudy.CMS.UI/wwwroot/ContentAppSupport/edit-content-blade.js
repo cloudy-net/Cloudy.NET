@@ -60,10 +60,16 @@ class EditContentBlade extends Blade {
         }
 
         this.buildForm();
-
-        this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).onClick(() => this.app.changeTracker.apply());
+        
+        const pendingChanges = this.app.changeTracker.pendingChanges.find(c => c.contentId[0] == this.contentId && c.contentTypeId == this.contentType.id);
+        this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).setDisabled(!pendingChanges).onClick(() => {
+            if (pendingChanges) {
+                this.app.changeTracker.apply([pendingChanges]);    
+            }
+        });
         this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.saveChange());
-        this.app.changeTracker.setReferenceEvents(this.viewChangeButton, 'secondary');
+        this.app.changeTracker.setReferenceEvents(this.viewChangeButton, 'secondary', this.contentId, this.contentType.id);
+        this.app.changeTracker.setReferenceEvents(this.saveButton, 'secondary', this.contentId, this.contentType.id);
         this.app.changeTracker.update();
         this.setFooter(this.viewChangeButton, this.saveButton);
     }

@@ -9,19 +9,36 @@ import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js
 
 class PendingChangesDiffBlade extends Blade {
     changeTracker;
-    constructor(app, change) {
+    constructor(app, changeTracker, parentBlade, change) {
         super();
         this.app = app;
+        this.changeTracker = changeTracker;
+        this.parentBlade = parentBlade;
         this.change = change;
 
         this.setTitle(`Pending changes (${change.changedFields.length})`);
-        this.saveButton = new Button('Undo changes');
+        this.undoChangesButton = new Button('Undo changes');
+        this.saveButton = new Button('Save');
         this.setFooter(
-            this.saveButton
+            this.undoChangesButton
                 .setStyle({ marginLeft: 'auto' })
                 .onClick(async () => {
-                    confirm('Undo changes? This is not reversible');
-                })
+                    if (confirm('Undo changes? This is not reversible')) {
+                        this.changeTracker.reset(this.change.contentId, this.change.contentTypeId);
+                        this.app.removeBladesAfter(this.parentBlade);
+                        this.parentBlade.open();
+                    }
+                }),
+            this.saveButton
+                .setPrimary()
+                .setStyle({ marginLeft: '10px' })
+                .onClick(async () => {
+                    this.changeTracker.apply([this.change], () => {
+                        this.changeTracker.reset(this.change.contentId, this.change.contentTypeId);
+                        this.app.removeBladesAfter(this.parentBlade);
+                        this.parentBlade.open();
+                    })
+                }),
         );
     }
 
