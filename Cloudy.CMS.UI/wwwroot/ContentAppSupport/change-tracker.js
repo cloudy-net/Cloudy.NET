@@ -22,12 +22,12 @@ class ChangeTracker {
         this.update();
     }
     
-    setReferenceEvents(element, type = 'primary') {
+    setReferenceEvents(element, type = 'primary', contentId, contentTypeId) {
         const index = this.referenceEvents.findIndex(e => e.target.id === element.id);
         if (index !== -1) {
             this.referenceEvents.splice(index, 1);
         }
-        this.referenceEvents.push({ target: element, type });
+        this.referenceEvents.push({ target: element, type, contentId, contentTypeId });
     }
 
     saveChange() {
@@ -80,8 +80,11 @@ class ChangeTracker {
             if (element.type === 'primary') {
                 element.target.setText(changeCount <= 0 ? (element.target.initText || changeText) : changeText);
                 element.target.setPrimary(changeCount > 0);
+                element.target.setDisabled(changeCount <= 0);
+            } else {
+                const existingPendingChanges = this.pendingChanges.find(p => p.contentId[0] == element.contentId && p.contentTypeId == element.contentTypeId);
+                element.target.setDisabled(existingPendingChanges && !existingPendingChanges.changedFields.length);
             }
-            element.target.setDisabled(changeCount <= 0);
         });
         this.pendingChanges = pendingChanges;
     }
