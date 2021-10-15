@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Cloudy.CMS.ContentSupport.Serialization
@@ -21,6 +22,11 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 
         public JObject Serialize(object @object, Type type)
         {
+            if(@object is IEnumerable<object> && !((IEnumerable<object>)@object).Any())
+            {
+                return null;
+            }
+
             var candidate = PolymorphicCandidateProvider.Get(@object.GetType());
 
             if (candidate == null)
