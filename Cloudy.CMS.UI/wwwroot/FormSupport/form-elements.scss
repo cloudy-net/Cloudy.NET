@@ -301,3 +301,40 @@ cloudy-ui-select-preview-sub-text {
     line-height: 16px;
     letter-spacing: 0.01071em;
 }
+
+
+
+/* HTML */
+
+.cloudy-ui-form-field .ql-toolbar.ql-snow {
+    margin-top: 8px;
+    display: inline-block;
+    padding: 4px;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+}
+
+.cloudy-ui-form-field .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 5px;
+}
+
+.cloudy-ui-form-field .ql-snow .ql-picker-label {
+    padding-left: 0;
+}
+
+.cloudy-ui-form-field .ql-container.ql-snow {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.cloudy-ui-form-field .ql-container.ql-snow {
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+}
+
+.cloudy-ui-form-field .ql-editor {
+    padding: 0;
+    line-height: inherit;
+}
