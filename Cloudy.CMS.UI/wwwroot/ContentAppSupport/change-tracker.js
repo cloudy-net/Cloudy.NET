@@ -1,5 +1,6 @@
 import Button from "../button.js";
 import contentSaver from "./content-saver.js";
+import idEquals from "./id-equals.js";
 import PendingChangesBlade from "./pending-changes-blade.js";
 
 /* CHANGE TRACKER */
@@ -41,7 +42,7 @@ class ChangeTracker {
 
         const { name, value, originalValue } = contentAsJson;
         const _pendingChangeToSave = this.pendingChanges;
-        const index = _pendingChangeToSave.findIndex(c => c.type === 'save' && (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
+        const index = _pendingChangeToSave.findIndex(c => c.type === 'save' && idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
         if (index === -1) {
             _pendingChangeToSave.push({
                 type: 'save',
@@ -70,6 +71,10 @@ class ChangeTracker {
         this.update(_pendingChangeToSave);
     }
 
+    getFor(contentId, contentTypeId) {
+        return this.pendingChanges.find(p => idEquals(p.contentId, contentId) && p.contentTypeId == contentTypeId);
+    }
+
     update(pendingChanges = this.pendingChanges) {
         let changeCount = 0;
         pendingChanges.forEach(c => {
@@ -82,7 +87,7 @@ class ChangeTracker {
                 element.target.setPrimary(changeCount > 0);
                 element.target.setDisabled(changeCount <= 0);
             } else {
-                const existingPendingChanges = this.pendingChanges.find(p => p.contentId[0] == element.contentId && p.contentTypeId == element.contentTypeId);
+                const existingPendingChanges = this.pendingChanges.find(p => idEquals(p.contentId, element.contentId) && p.contentTypeId == element.contentTypeId);
                 element.target.setDisabled(existingPendingChanges && !existingPendingChanges.changedFields.length);
             }
         });
@@ -91,11 +96,15 @@ class ChangeTracker {
 
     reset(contentId, contentTypeId) {
         const _pendingChanges = this.pendingChanges;
-        const index = _pendingChanges.findIndex(c => (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
+        const index = _pendingChanges.findIndex(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
         if (index !== -1) {
             _pendingChanges.splice(index, 1);
             this.update(_pendingChanges);
         }
+    }
+
+    async applyFor(contentId, contentTypeId) {
+        await this.apply([getFor(contentId, contentTypeId)]);
     }
 
     async apply(pendingChanges, callBack) {
@@ -119,7 +128,7 @@ class ChangeTracker {
         }
         const _remainingPendingChanges = [];
         this.pendingChanges.forEach(c => {
-            if (!_pendingChanges.some(d => (d.contentId === null || c.contentId.every(function (id, i) { return id === d.contentId[i] })) && d.contentTypeId === c.contentTypeId)) {
+            if (!_pendingChanges.some(d => idEquals(d.contentId, c.contentId) && d.contentTypeId === c.contentTypeId)) {
                 _remainingPendingChanges.push(c);
             }
         })
@@ -133,7 +142,7 @@ class ChangeTracker {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
-        const changesForContent = this.pendingChanges.find(c => (contentId === null || c.contentId.every(function (id, i) { return id === contentId[i] })) && c.contentTypeId === contentTypeId);
+        const changesForContent = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         const contentOriginal = {};
         Object.keys(content).forEach(k => {

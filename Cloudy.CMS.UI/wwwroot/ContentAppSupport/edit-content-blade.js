@@ -60,11 +60,11 @@ class EditContentBlade extends Blade {
         }
 
         this.buildForm();
-        
-        const pendingChanges = this.app.changeTracker.pendingChanges.find(c => c.contentId[0] == this.contentId && c.contentTypeId == this.contentType.id);
+
+        const pendingChanges = this.app.changeTracker.getFor(this.contentId, this.contentType.id);
         this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).setDisabled(!pendingChanges).onClick(() => {
             if (pendingChanges) {
-                this.app.changeTracker.apply([pendingChanges]);    
+                this.app.changeTracker.applyFor(this.contentId, this.contentType.id);
             }
         });
         this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.saveChange());
