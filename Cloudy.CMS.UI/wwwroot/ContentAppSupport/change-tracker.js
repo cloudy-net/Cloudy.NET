@@ -104,7 +104,7 @@ class ChangeTracker {
     }
 
     async applyFor(contentId, contentTypeId) {
-        await this.apply([getFor(contentId, contentTypeId)]);
+        await this.apply([this.getFor(contentId, contentTypeId)]);
     }
 
     async apply(pendingChanges, callBack) {
