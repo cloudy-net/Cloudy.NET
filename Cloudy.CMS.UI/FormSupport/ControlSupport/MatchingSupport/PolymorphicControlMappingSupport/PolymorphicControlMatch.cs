@@ -7,13 +7,6 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicCo
 {
     public class PolymorphicControlMatch : IControlMatch
     {
-        public string Id { get; }
-        public IEnumerable<string> Types { get; }
-        
-        public PolymorphicControlMatch(string id, IEnumerable<string> types)
-        {
-            Id = id;
-            Types = types.ToList().AsReadOnly();
-        }
+        public string Id { get; } = "polymorphic-form";
     }
 }

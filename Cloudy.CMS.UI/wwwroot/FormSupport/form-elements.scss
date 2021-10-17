@@ -187,6 +187,10 @@ cloudy-ui-sortable-buttons {
     display: block;
     font-size: $small-font;
     text-align: right;
+    
+    .cloudy-ui-context-menu-outer {
+        display: inline-block;
+    }
 }
 
 
