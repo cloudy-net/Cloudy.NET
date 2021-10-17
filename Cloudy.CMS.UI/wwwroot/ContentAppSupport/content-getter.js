@@ -7,7 +7,7 @@ class ContentGetter {
 
     /**
      * Gets content of the specified type.
-     * @param {string} contentId
+     * @param {Array} contentId
      * @param {string} contentTypeId
      */
     async get(contentId, contentTypeId) {
