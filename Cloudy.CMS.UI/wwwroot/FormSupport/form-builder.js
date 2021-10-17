@@ -2,7 +2,6 @@ import Form from './form.js';
 import Field from './field.js';
 import Sortable from './sortable.js';
 import SortableItem from './sortable-item.js';
-import contentNameProvider from '../ContentAppSupport/content-name-provider.js';
 
 
 
