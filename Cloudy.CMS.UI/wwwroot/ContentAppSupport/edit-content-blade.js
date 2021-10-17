@@ -38,7 +38,7 @@ class EditContentBlade extends Blade {
         this.formBuilder = new FormBuilder(this.app, this);
 
         if (this.contentId) {
-            this.setTitle(`Edit ${await nameProvider.getNameOf(this.contentId, this.contentType.id)}`);
+            this.setTitle(`Edit ${await nameProvider.getNameOf(this.content, this.contentType.id)}`);
         } else {
             this.setTitle(`New ${this.contentType.name}`);
         }
