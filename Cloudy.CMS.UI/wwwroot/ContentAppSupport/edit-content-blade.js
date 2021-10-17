@@ -63,9 +63,8 @@ class EditContentBlade extends Blade {
 
         const pendingChanges = this.app.changeTracker.getFor(this.contentId, this.contentType.id);
         this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).setDisabled(!pendingChanges).onClick(() => {
-            if (pendingChanges) {
-                this.app.changeTracker.applyFor(this.contentId, this.contentType.id);
-            }
+            this.app.changeTracker.applyFor(this.contentId, this.contentType.id);
+            this.onCompleteCallbacks.forEach(callback => callback());
         });
         this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.saveChange());
         this.app.changeTracker.setReferenceEvents(this.viewChangeButton, 'secondary', this.contentId, this.contentType.id);
