@@ -8,17 +8,10 @@ class SortableField {
     };
     items = [];
 
-    constructor(fieldModel, size, createItem) {
-        this.fieldModel = fieldModel;
+    constructor() {
         this.fields = document.createElement('cloudy-ui-sortable-items');
         this.element = document.createElement('cloudy-ui-sortable');
         this.element.appendChild(this.fields);
-
-        this.createItem = createItem;
-
-        for (var index = 0; index < size; index++) {
-            this.addItem(this.createItem(index));
-        }
 
         this.onMove((index, newIndex) => {
             if (newIndex < index) {
@@ -32,21 +25,15 @@ class SortableField {
             }
             this.items.splice(newIndex, 0, this.items.splice(index, 1)[0]);
         });
+    }
 
-        var buttonContainer = document.createElement('cloudy-ui-sortable-buttons');
-        this.element.appendChild(buttonContainer);
+    setHorizontal() {
+        this.horizontal = true;
+        return this;
+    }
 
-        var addButton = new Button('Add')
-            .onClick(() => {
-                var item = this.createItem(-1);
-                this.addItem(item);
-                this.triggerAdd(item);
-            })
-            .appendTo(buttonContainer);
-
-        if (!fieldModel.descriptor.embeddedFormId) {
-            addButton.element.style.marginTop = '8px';
-        }
+    addFooter(element) {
+        this.element.appendChild(element);
     }
 
     addItem(item) {
@@ -68,47 +55,35 @@ class SortableField {
             var menu = new ContextMenu().appendTo(fieldAction);
         }
 
-        menu.addItem(item => {
-            item
-                .setText('Move up')
-                .onClick(() => {
-                    var index = [...this.fields.children].indexOf(field);
+        menu.addItem(item => item.setText('Move up').onClick(() => {
+            var index = [...this.fields.children].indexOf(field);
 
-                    if (index == 0) {
-                        return;
-                    }
+            if (index == 0) {
+                return;
+            }
 
-                    var newIndex = index - 1;
+            var newIndex = index - 1;
 
-                    this.triggerMove(index, newIndex);
-                });
-        });
-        menu.addItem(item => {
-            item
-                .setText('Move down')
-                .onClick(() => {
-                    var index = [...this.fields.children].indexOf(field);
+            this.triggerMove(index, newIndex);
+        }));
+        menu.addItem(item => item.setText('Move down').onClick(() => {
+            var index = [...this.fields.children].indexOf(field);
 
-                    if (index == this.fields.children.length - 1) {
-                        return;
-                    }
+            if (index == this.fields.children.length - 1) {
+                return;
+            }
 
-                    var newIndex = index + 1;
+            var newIndex = index + 1;
 
-                    this.triggerMove(index, newIndex);
-                });
-        });
-        menu.addItem(item => {
-            item
-                .setText('Delete')
-                .onClick(() => {
-                    var index = [...this.fields.children].indexOf(field);
-                    this.fields.children[index].remove();
-                    this.items.splice(index, 1);
-                });
-        });
+            this.triggerMove(index, newIndex);
+        }));
+        menu.addItem(item => item.setText('Delete').onClick(() => {
+            var index = [...this.fields.children].indexOf(field);
+            this.fields.children[index].remove();
+            this.items.splice(index, 1);
+        }));
 
-        if (this.fieldModel.descriptor.embeddedFormId || this.fieldModel.descriptor.control.id == 'polymorphic-form') {
+        if (this.horizontal) {
             menu.setHorizontal();
             field.append(fieldAction);
         } else {

@@ -156,6 +156,9 @@ cloudy-ui-sortable-buttons {
   font-size: 0.8rem;
   text-align: right;
 }
+cloudy-ui-sortable-buttons .cloudy-ui-context-menu-outer {
+  display: inline-block;
+}
 
 /* EMBEDDED FORM */
 .cloudy-ui-embedded-form-label {

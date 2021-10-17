@@ -17,15 +17,13 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport
         ILogger<ControlMatcher> Logger { get; }
         IUIHintControlMatcher UIHintControlMatcher { get; }
         ITypeControlMatcher TypeControlMatcher { get; }
-        IPolymorphicFormFinder PolymorphicFormFinder { get; }
         IDictionary<string, ControlDescriptor> Controls { get; }
 
-        public ControlMatcher(ILogger<ControlMatcher> logger, IUIHintControlMatcher uiHintControlMatcher, ITypeControlMatcher typeControlMatcher, IPolymorphicFormFinder polymorphicFormFinder, IControlProvider controlProvider)
+        public ControlMatcher(ILogger<ControlMatcher> logger, IUIHintControlMatcher uiHintControlMatcher, ITypeControlMatcher typeControlMatcher, IControlProvider controlProvider)
         {
             Logger = logger;
             TypeControlMatcher = typeControlMatcher;
             UIHintControlMatcher = uiHintControlMatcher;
-            PolymorphicFormFinder = polymorphicFormFinder;
             Controls = controlProvider.GetAll().ToDictionary(c => c.Id, c => c);
         }
 
@@ -69,7 +67,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport
 
             if (type.IsInterface)
             {
-                return new PolymorphicControlMatch("polymorphic-form", PolymorphicFormFinder.FindFor(type).ToList().AsReadOnly());
+                return new PolymorphicControlMatch();
             }
 
             return null;

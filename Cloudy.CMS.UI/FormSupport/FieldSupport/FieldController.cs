@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicControlMappingSupport;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
@@ -25,8 +26,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         IHumanizer Humanizer { get; }
         IPluralizer Pluralizer { get; }
         ISingularizer Singularizer { get; }
+        IPolymorphicFormFinder PolymorphicFormFinder { get; }
 
-        public FieldController(ILogger<FieldController> logger, IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer)
+        public FieldController(ILogger<FieldController> logger, IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer, IPolymorphicFormFinder polymorphicFormFinder)
         {
             Logger = logger;
             FormProvider = formProvider;
@@ -35,6 +37,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             Humanizer = humanizer;
             Pluralizer = pluralizer;
             Singularizer = singularizer;
+            PolymorphicFormFinder = polymorphicFormFinder;
         }
 
         public IEnumerable<FieldResponse> GetAllForForm(string id)
@@ -50,8 +53,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 var control = ControlMatcher.GetFor(field.Type, field.UIHints);
                 var embeddedFormId = FormProvider.GetAll().FirstOrDefault(f => f.Type == field.Type);
+                var polymorphicCandidates = field.Type.IsInterface ? PolymorphicFormFinder.FindFor(field.Type).ToList().AsReadOnly() : new List<string>().AsReadOnly();
 
-                if(control == null && embeddedFormId == null)
+                if (control == null && embeddedFormId == null && !polymorphicCandidates.Any())
                 {
                     Logger.LogInformation($"Could not find control for {id} {field.Id}");
                     continue;
@@ -87,6 +91,8 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     EmbeddedFormId = embeddedFormId?.Id,
                     IsSortable = field.IsSortable,
                     Group = field.Group,
+                    IsPolymorphic = true,
+                    PolymorphicCandidates = polymorphicCandidates,
                 });
             }
 
@@ -103,6 +109,8 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             public string EmbeddedFormId { get; set; }
             public bool IsSortable { get; set; }
             public string Group { get; set; }
+            public bool IsPolymorphic { get; set; }
+            public IEnumerable<string> PolymorphicCandidates { get; set; }
         }
     }
 }

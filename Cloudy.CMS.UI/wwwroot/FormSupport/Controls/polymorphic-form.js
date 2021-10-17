@@ -14,12 +14,6 @@ class PolymorphicForm extends FieldControl {
     constructor(fieldModel, value, app, blade) {
         super(document.createElement('div'));
 
-        if (!value) {
-            value = {};
-        }
-
-        this.form = null;
-
         var element = document.createElement('fieldset');
         element.classList.add('cloudy-ui-form-field');
         element.style.marginTop = '8px';
@@ -28,90 +22,17 @@ class PolymorphicForm extends FieldControl {
         heading.classList.add('cloudy-ui-form-field-label');
         element.appendChild(heading);
 
-        var update = async () => {
+        (async () => {
             this.element.append(element);
             heading.innerText = value.name;
 
-            this.form = new FormBuilder(await fieldModelBuilder.getFieldModels(value.type), app, blade).build(value.value, {});
+            const fieldModels = await fieldModelBuilder.getFieldModels(value.type);
+            var onChangeCallback = (name, value, originalValue) => console.log(name, value, originalValue);
+            this.form = new FormBuilder(app, blade).build({}, fieldModels, onChangeCallback);
             this.form.element.classList.remove('cloudy-ui-form');
             this.form.element.classList.add('cloudy-ui-embedded-form');
             this.form.appendTo(element);
-        };
-
-        if (value.type) {
-            update();
-        }
-
-        this.open = () => {
-            var list = new ListItemsBlade(app, fieldModel)
-                .onSelect(item => {
-                    value.type = item.type;
-                    value.name = item.name;
-                    value.value = {};
-                    update();
-                    this.triggerChange(value);
-                    app.removeBlade(list);
-                });
-
-            app.addBladeAfter(list, blade);
-        };
-
-        this.onSet(value => {
-            update(value);
-        });
-    }
-}
-
-
-
-/* LIST  BLADE */
-
-class ListItemsBlade extends Blade {
-    onSelectCallbacks = [];
-
-    constructor(app, fieldModel) {
-        super();
-
-        this.app = app;
-        this.name = fieldModel.descriptor.singularLabel;
-        this.types = fieldModel.descriptor.control.types;
-    }
-
-    async open() {
-        this.setTitle(`Add ${this.name.substr(0, 1).toLowerCase()}${this.name.substr(1)}`);
-
-        var list = new List();
-        this.setContent(list);
-        var items = await urlFetcher.fetch(`PolymorphicForm/GetOptions?${this.types.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }, `Could not get form types ${this.types.join(', ')}`);
-        
-        if (!items.length) {    
-            var listItem = new ListItem();
-            listItem.setDisabled();
-            listItem.setText('(no items)');
-            list.addItem(listItem);
-            return;
-        }
-
-        items.forEach(item =>
-            list.addItem(listItem => {
-                listItem.setText(item.name);
-                listItem.onClick(() => {
-                    listItem.setActive();
-                    this.onSelectCallbacks.forEach(callback => callback.apply(this, [item]));
-                });
-            })
-        );
-    }
-
-    onSelect(callback) {
-        this.onSelectCallbacks.push(callback);
-
-        return this;
+        })();
     }
 }
 
