@@ -87,7 +87,7 @@ class ListItemsBlade extends Blade {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }, `Could not get item ${value} of type ${type} for select control ${provider}`);
+        }, `Could not get form types ${this.types.join(', ')}`);
         
         if (!items.length) {    
             var listItem = new ListItem();
