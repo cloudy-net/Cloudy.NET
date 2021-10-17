@@ -7,7 +7,7 @@ import FormBuilder from '../FormSupport/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import primaryKeyProvider from './primary-key-provider.js';
-import contentNameProvider from './content-name-provider.js';
+import nameProvider from './name-provider.js';
 import urlFetcher from '../url-fetcher.js';
 
 /* EDIT CONTENT */
@@ -38,7 +38,7 @@ class EditContentBlade extends Blade {
         this.formBuilder = new FormBuilder(this.app, this);
 
         if (this.contentId) {
-            this.setTitle(`Edit ${await contentNameProvider.getNameOf(this.contentId, this.contentType.id)}`);
+            this.setTitle(`Edit ${await nameProvider.getNameOf(this.content, this.contentType.id)}`);
         } else {
             this.setTitle(`New ${this.contentType.name}`);
         }

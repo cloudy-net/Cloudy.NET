@@ -2,9 +2,10 @@
 import Button from "../button.js";
 import ListItem from "../ListSupport/list-item.js";
 import List from "../ListSupport/list.js";
-import contentNameProvider from "./content-name-provider.js";
+import nameProvider from "./name-provider.js";
 import contentTypeProvider from "./content-type-provider.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
+import contentGetter from './content-getter.js';
 
 
 
@@ -54,10 +55,14 @@ class PendingChangesBlade extends Blade {
         for (let change of this.changeTracker.pendingChanges) {
             let name = '';
             if (change.contentId) {
-                name = await contentNameProvider.getNameOf(change.contentId, change.contentTypeId);
+                const content = await contentGetter.get(change.contentId, change.contentTypeId);
+                name = await nameProvider.getNameOf(content, change.contentTypeId);
+            } else {
+                const content = this.changeTracker.mergeWithPendingChanges(null, change.contentTypeId, {});
+                name = await nameProvider.getNameOf(content, change.contentTypeId);
             }
             const changedCount = change.changedFields.length;
-            const subText = changedCount > 1 ? `Changes: ${changedCount}` : `Change: ${changedCount}`;
+            const subText = change.contentId ? `Changed fields: ${changedCount}` : `New ${(await contentTypeProvider.get(change.contentTypeId)).lowerCaseName}`;
 
             list.addItem(new ListItem().setText(name).setSubText(subText).onClick(() => {
                 this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, this.changeTracker, this, change), this);
