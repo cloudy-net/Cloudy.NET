@@ -18,6 +18,7 @@ namespace Website.AspNetCore.Models
         public string Id { get; set; }
         public string Name { get; set; }
         [Display]
+        [RegularExpression(@"^[-_a-zA-Z0-9]*$", ErrorMessage = "Invalid URL")]
         public string UrlSegment { get; set; }
         [UIHint("textarea({rows:2})")]
         public string Description { get; set; }
