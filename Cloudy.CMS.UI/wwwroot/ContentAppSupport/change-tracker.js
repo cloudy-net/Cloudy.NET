@@ -1,6 +1,6 @@
 import Button from "../button.js";
 import contentSaver from "./content-saver.js";
-import idEquals from "./id-equals.js";
+import idEquals from "./utils/id-equals.js";
 import PendingChangesBlade from "./pending-changes-blade.js";
 
 /* CHANGE TRACKER */

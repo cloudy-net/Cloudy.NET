@@ -1,6 +1,5 @@
 ﻿import Blade from '../blade.js';
 import Button from '../button.js';
-import LinkButton from '../link-button.js';
 import TabSystem from '../TabSupport/tab-system.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import FormBuilder from '../FormSupport/form-builder.js';
@@ -9,6 +8,7 @@ import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import primaryKeyProvider from './primary-key-provider.js';
 import nameProvider from './name-provider.js';
 import urlFetcher from '../url-fetcher.js';
+import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 
 /* EDIT CONTENT */
 
@@ -54,9 +54,23 @@ class EditContentBlade extends Blade {
                     'Could not get URL'
                 );
 
+            const button = new Button('View').setInherit().onClick(() => menu.toggle());
+            const menu = new PopupMenu(button.element);
+                    
             if (urls.length) {
-                this.setToolbar(new LinkButton('View', `${location.origin}/${urls[0]}`, '_blank').setInherit());
+                urls.forEach(item =>
+                    menu.addItem(listItem => {
+                        listItem.setText(item);
+                        listItem.onClick(() => {
+                            window.open(`${location.origin}/${item}`, '_blank');
+                        });
+                    })
+                );
+            } else {
+                menu.addItem(item => item.setDisabled().setText('(no items)'));
             }
+
+            this.setToolbar(menu);
         }
 
         this.buildForm();
