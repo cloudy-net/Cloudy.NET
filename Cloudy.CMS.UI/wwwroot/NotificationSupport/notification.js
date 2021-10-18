@@ -64,8 +64,9 @@ class Notification {
         this.element.style.display = '';
         [...this.element.children].forEach(c => this.element.removeChild(c));
         items.forEach(item => {
-            if (typeof item == 'string' && (item.indexOf('`') != -1 || item.indexOf('---') != -1)) {
-                item = item.replace(/`([^`]*)`/g, '<code>$1</code>');
+            if (typeof item == 'string') {
+                item = item.replace(/ `([^`]*)`/g, ' <code>$1</code>');
+                item = item.replace(/ '([^']*)'/g, ' <code>$1</code>');
                 item = item.replace(/---/g, '<hr>');
                 var element = document.createElement('div');
                 element.innerHTML = item;
