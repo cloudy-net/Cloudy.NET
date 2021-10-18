@@ -5,8 +5,8 @@ import notificationManager from '../NotificationSupport/notification-manager.js'
 import FormBuilder from '../FormSupport/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
-import primaryKeyProvider from './primary-key-provider.js';
-import nameProvider from './name-provider.js';
+import primaryKeyProvider from './utils/primary-key-provider.js';
+import nameProvider from './utils/name-provider.js';
 import urlFetcher from '../url-fetcher.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 
