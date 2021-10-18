@@ -54,7 +54,7 @@ class EditContentBlade extends Blade {
                     'Could not get URL'
                 );
 
-            const button = new Button('View').onClick(() => menu.toggle());
+            const button = new Button('View').setInherit().onClick(() => menu.toggle());
             const menu = new PopupMenu(button.element);
                     
             if (urls.length) {
