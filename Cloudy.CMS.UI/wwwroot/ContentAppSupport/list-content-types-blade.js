@@ -3,9 +3,9 @@ import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
 import ListContentBlade from './list-content-blade.js';
 import EditContentBlade from './edit-content-blade.js';
-import ContentTypeProvider from './content-type-provider.js';
-import ContentTypeGroupProvider from './content-type-group-provider.js';
-import SingletonGetter from './singleton-getter.js';
+import ContentTypeProvider from './utils/content-type-provider.js';
+import ContentTypeGroupProvider from './utils/content-type-group-provider.js';
+import SingletonGetter from './utils/singleton-getter.js';
 import ListItem from '../ListSupport/list-item.js';
 
 

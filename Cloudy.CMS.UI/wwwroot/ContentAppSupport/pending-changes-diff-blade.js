@@ -2,8 +2,8 @@
 import Button from "../button.js";
 import Diff from './lib/diff.js'
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
-import contentTypeProvider from "./content-type-provider.js";
-import contentGetter from "./content-getter.js";
+import contentTypeProvider from "./utils/content-type-provider.js";
+import contentGetter from "./utils/content-getter.js";
 import EditContentBlade from './edit-content-blade.js';
 
 /* PENDING CHANGES DIFF BLADE */

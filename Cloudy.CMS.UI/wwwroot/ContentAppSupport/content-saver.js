@@ -1,4 +1,4 @@
-import "./content-type-provider.js";
+import "./utils/content-type-provider.js";
 import notificationManager from "../NotificationSupport/notification-manager.js";
 import urlFetcher from "../url-fetcher.js";
 

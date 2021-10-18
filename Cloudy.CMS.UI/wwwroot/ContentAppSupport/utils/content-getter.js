@@ -1,4 +1,4 @@
-﻿import urlFetcher from '../url-fetcher.js';
+﻿import urlFetcher from '../../url-fetcher.js';
 
 /* CONTENT GETTER */
 

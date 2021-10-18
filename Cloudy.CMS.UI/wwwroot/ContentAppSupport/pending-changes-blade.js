@@ -2,10 +2,10 @@
 import Button from "../button.js";
 import ListItem from "../ListSupport/list-item.js";
 import List from "../ListSupport/list.js";
-import nameProvider from "./name-provider.js";
-import contentTypeProvider from "./content-type-provider.js";
+import nameProvider from "./utils/name-provider.js";
+import contentTypeProvider from "./utils/content-type-provider.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
-import contentGetter from './content-getter.js';
+import contentGetter from './utils/content-getter.js';
 
 
 
