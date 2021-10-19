@@ -25,7 +25,7 @@ namespace Cloudy.CMS.ContentSupport
 
             //typeof(Enumerable).GetMethod(nameof(Enumerable.Where)).Invoke(DbSet, Filters.)
             //IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-            var task = (Task)typeof(EntityFrameworkQueryableExtensions).GetMethod(nameof(EntityFrameworkQueryableExtensions.ToListAsync)).MakeGenericMethod(Type).Invoke(null, new object[] { DbSet.DbSet, null });
+            var task = (Task)typeof(EntityFrameworkQueryableExtensions).GetMethod(nameof(EntityFrameworkQueryableExtensions.ToListAsync)).MakeGenericMethod(DbSet.Type).Invoke(null, new object[] { DbSet.DbSet, null });
 
             await task.ConfigureAwait(false);
 

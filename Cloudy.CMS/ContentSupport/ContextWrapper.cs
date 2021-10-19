@@ -24,14 +24,14 @@ namespace Cloudy.CMS.ContentSupport
         {
             if (DbSetsByType.ContainsKey(type))
             {
-                return new DbSetWrapper(DbSetsByType[type].GetValue(Context));
+                return new DbSetWrapper(DbSetsByType[type].GetValue(Context), type);
             }
 
             foreach (var pair in DbSetsByType)
             {
                 if (pair.Key.IsAssignableFrom(type))
                 {
-                    return new DbSetWrapper(pair.Value.GetValue(Context));
+                    return new DbSetWrapper(pair.Value.GetValue(Context), pair.Key);
                 }
             }
 

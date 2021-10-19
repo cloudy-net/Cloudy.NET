@@ -7,10 +7,12 @@ namespace Cloudy.CMS.ContentSupport
     public class DbSetWrapper : IDbSetWrapper
     {
         public object DbSet { get; }
+        public Type Type { get; }
 
-        public DbSetWrapper(object dbSet)
+        public DbSetWrapper(object dbSet, Type type)
         {
             DbSet = dbSet;
+            Type = type;
         }
 
         public async Task<object> FindAsync(params object[] keyValues)
