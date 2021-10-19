@@ -24,9 +24,9 @@ namespace Cloudy.CMS.Routing
 
         public async Task<object> RouteContentAsync(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
         {
-            if(segments.Count() == 1)
+            if(segments.Count() == 1 || segments.Count() == 0)
             {
-                var segment = segments.Single();
+                var segment = segments.SingleOrDefault();
 
                 foreach(var type in types)
                 {
