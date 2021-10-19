@@ -18,7 +18,20 @@ namespace Cloudy.CMS.ContentSupport
 
         public ContextDescriptor GetFor(Type type)
         {
-            return ContextDescriptorsByDbSetType[type];
+            if (ContextDescriptorsByDbSetType.ContainsKey(type))
+            {
+                return ContextDescriptorsByDbSetType[type];
+            }
+
+            foreach(var pair in ContextDescriptorsByDbSetType)
+            {
+                if (pair.Key.IsAssignableFrom(type))
+                {
+                    return pair.Value;
+                }
+            }
+
+            throw new CouldNotFindAnyDbContextWithDbSetForTypeException(type);
         }
     }
 }

@@ -22,7 +22,20 @@ namespace Cloudy.CMS.ContentSupport
 
         public IDbSetWrapper GetDbSet(Type type)
         {
-            return new DbSetWrapper(DbSetsByType[type].GetValue(Context));
+            if (DbSetsByType.ContainsKey(type))
+            {
+                return new DbSetWrapper(DbSetsByType[type].GetValue(Context));
+            }
+
+            foreach (var pair in DbSetsByType)
+            {
+                if (pair.Key.IsAssignableFrom(type))
+                {
+                    return new DbSetWrapper(pair.Value.GetValue(Context));
+                }
+            }
+
+            throw new CouldNotFindAnyDbSetForTypeInsideContextException(type, Context.GetType());
         }
     }
 }
