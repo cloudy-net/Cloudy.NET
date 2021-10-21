@@ -13,7 +13,7 @@ namespace Cloudy.CMS.SingletonSupport
         {
             if (keyValues.Length == 0)
             {
-                throw new Exception($"Id must be provided when using [Singleton(...)]. How about `{Guid.NewGuid()}` ?");
+                throw new Exception($"Primary key must be provided when using [Singleton(...)]");
             }
 
             KeyValues = keyValues.ToList().AsReadOnly();
