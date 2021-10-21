@@ -3,6 +3,7 @@ using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +29,7 @@ namespace Cloudy.CMS.SingletonSupport
                 return null;
             }
 
-            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues).ConfigureAwait(false);
+            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues.ToArray()).ConfigureAwait(false);
         }
 
         public async Task<T> GetAsync<T>() where T : class

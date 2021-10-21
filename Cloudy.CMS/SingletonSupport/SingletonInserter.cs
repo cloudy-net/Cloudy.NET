@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport.RuntimeSupport;
+using System.Linq;
 
 namespace Cloudy.CMS.SingletonSupport
 {
@@ -34,7 +35,7 @@ namespace Cloudy.CMS.SingletonSupport
         {
             foreach(var singleton in SingletonProvider.GetAll())
             {
-                var content = await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues);
+                var content = await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues.ToArray());
                 var contentType = ContentTypeProvider.Get(singleton.ContentTypeId);
 
                 if (content != null)
