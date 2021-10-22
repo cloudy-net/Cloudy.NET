@@ -24,6 +24,8 @@ namespace Cloudy.CMS.Routing
 
         public async Task<object> RouteContentAsync(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
         {
+            segments = segments.Where(s => !string.IsNullOrEmpty(s)).ToList().AsReadOnly();
+
             if(segments.Count() == 1 || segments.Count() == 0)
             {
                 var segment = segments.SingleOrDefault();
@@ -39,6 +41,8 @@ namespace Cloudy.CMS.Routing
                         return result;
                     }
                 }
+
+                return null;
             }
 
             foreach(var root in RoutableRootContentProvider.GetAll())
