@@ -84,7 +84,7 @@ class EditContentBlade extends Blade {
             this.app.changeTracker.applyFor(this.contentId, this.contentType.id);
             this.onCompleteCallbacks.forEach(callback => callback());
         });
-        this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.saveChange());
+        this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.showPendingChanges());
         this.app.changeTracker.setReferenceEvents(this.viewChangeButton, 'secondary', this.contentId, this.contentType.id);
         this.app.changeTracker.setReferenceEvents(this.saveButton, 'secondary', this.contentId, this.contentType.id);
         this.app.changeTracker.update();

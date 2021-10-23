@@ -18,7 +18,7 @@ class ChangeTracker {
         this.button = new Button('No changes').setDisabled().appendTo(this.element);
         this.app = app;
         this.parentBlade = parentBlade;
-        this.button.onClick(() => this.saveChange());
+        this.button.onClick(() => this.showPendingChanges());
         this.setReferenceEvents(this.button);
         this.update();
     }
@@ -31,7 +31,7 @@ class ChangeTracker {
         this.referenceEvents.push({ target: element, type, contentId, contentTypeId });
     }
 
-    saveChange() {
+    showPendingChanges() {
         this.app.addBladeAfter(new PendingChangesBlade(this.app, this), this.parentBlade);
     }
 
