@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 using Cloudy.CMS.ContentSupport.RuntimeSupport;
+using System.Text.Json;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -22,21 +23,25 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class SaveContentController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
+        IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentGetter ContentGetter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        IContentSaver ContentSaver { get; }
+        IContentUpdater ContentUpdater { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentInstanceCreator ContentInstanceCreator { get; }
+        IContentCreator ContentCreator { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IContentSaver contentSaver, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentInstanceCreator contentInstanceCreator)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentInstanceCreator contentInstanceCreator, IContentCreator contentCreator)
         {
             ContentTypeProvider = contentTypeProvider;
+            PrimaryKeyConverter = primaryKeyConverter;
             ContentGetter = contentGetter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            ContentSaver = contentSaver;
+            ContentUpdater = contentUpdater;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             ContentInstanceCreator = contentInstanceCreator;
+            ContentCreator = contentCreator;
         }
 
         [HttpPost]
@@ -59,7 +64,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
                 else
                 {
-                    content = await ContentGetter.GetAsync(contentType.Id, change.KeyValues).ConfigureAwait(false);
+                    content = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id)).ConfigureAwait(false);
                 }
 
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => CamelCaseNamingStrategy.GetPropertyName(p.Name, false), p => p);
@@ -89,7 +94,14 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     return ContentResponseMessage.CreateFrom(ModelState);
                 }
 
-                await ContentSaver.SaveAsync(content).ConfigureAwait(false);
+                if (change.KeyValues == null)
+                {
+                    await ContentCreator.CreateAsync(content).ConfigureAwait(false);
+                }
+                else
+                {
+                    await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
+                }
             }
 
             return new ContentResponseMessage(true, "Updated");
@@ -102,7 +114,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentRequestBodyChange
         {
-            public string[] KeyValues { get; set; }
+            public JsonElement[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
             [Required]

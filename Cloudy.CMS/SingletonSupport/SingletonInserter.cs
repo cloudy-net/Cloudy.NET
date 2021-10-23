@@ -19,16 +19,16 @@ namespace Cloudy.CMS.SingletonSupport
         IContentTypeProvider ContentTypeProvider { get; }
         IContentGetter ContentGetter { get; }
         IContentInstanceCreator ContentInstanceCreator { get; }
-        IContentSaver ContentSaver { get; }
+        IContentCreator ContentCreator { get; }
 
-        public SingletonInserter(ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInstanceCreator contentInstanceCreator, IContentSaver contentSaver)
+        public SingletonInserter(ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInstanceCreator contentInstanceCreator, IContentCreator contentCreator)
         {
             SingletonProvider = singletonProvider;
             SingletonGetter = singletonGetter;
             ContentTypeProvider = contentTypeProvider;
             ContentGetter = contentGetter;
             ContentInstanceCreator = contentInstanceCreator;
-            ContentSaver = contentSaver;
+            ContentCreator = contentCreator;
         }
 
         public async Task InitializeAsync()
@@ -45,7 +45,7 @@ namespace Cloudy.CMS.SingletonSupport
 
                 content = ContentInstanceCreator.Create(contentType);
 
-                await ContentSaver.SaveAsync(content).ConfigureAwait(false);
+                await ContentCreator.CreateAsync(content).ConfigureAwait(false);
             }
         }
     }

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Text.Json;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -33,11 +34,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentRouteMatcher = contentRouteMatcher;
         }
 
-        public async Task<IEnumerable<string>> GetUrl(string[] keyValues, string contentTypeId)
+        [HttpPost]
+        public async Task<IEnumerable<string>> GetUrl([FromBody] GetUrlRequestBody data)
         {
-            var contentType = ContentTypeProvider.Get(contentTypeId);
+            var contentType = ContentTypeProvider.Get(data.ContentTypeId);
 
-            var content = await ContentGetter.GetAsync(contentTypeId, PrimaryKeyConverter.Convert(keyValues.Select(JsonConvert.DeserializeObject), contentTypeId)).ConfigureAwait(false);
+            var content = await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false);
 
             var contentRouteSegment = await UrlProvider.GetAsync(content).ConfigureAwait(false);
 
@@ -51,6 +53,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             }
 
             return result.AsReadOnly();
+        }
+
+        public class GetUrlRequestBody
+        {
+            public JsonElement[] KeyValues { get; set; }
+            public string ContentTypeId { get; set; }
         }
     }
 }

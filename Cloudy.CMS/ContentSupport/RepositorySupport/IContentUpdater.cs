@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
-    public interface IContentSaver
+    public interface IContentUpdater
     {
-        Task SaveAsync(object content);
+        Task UpdateAsync(object content);
     }
 }

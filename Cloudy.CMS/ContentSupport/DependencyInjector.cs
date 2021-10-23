@@ -28,7 +28,8 @@ namespace Cloudy.CMS.ContentSupport
 
             services.AddScoped<IContentGetter, ContentGetter>();
             services.AddScoped<IContentFinder, ContentFinder>();
-            services.AddScoped<IContentSaver, ContentSaver>();
+            services.AddScoped<IContentCreator, ContentCreator>();
+            services.AddScoped<IContentUpdater, ContentUpdater>();
 
             services.AddScoped<IDbSetProvider, DbSetProvider>();
             services.AddScoped<IContextProvider, ContextProvider>();

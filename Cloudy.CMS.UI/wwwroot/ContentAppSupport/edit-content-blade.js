@@ -45,11 +45,15 @@ class EditContentBlade extends Blade {
 
         if (this.contentId && this.contentType.isRoutable) {
             var urls = await urlFetcher.fetch(
-                    `GetUrl/GetUrl?${this.contentId.map(key => `keyValues=${encodeURIComponent(JSON.stringify(key))}`).join('&')}&contentTypeId=${encodeURIComponent(this.contentType.id)}`,
+                    `GetUrl/GetUrl`,
                     {
                         credentials: 'include',
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            keyValues: this.contentId,
+                            contentTypeId: this.contentType.id
+                        })
                     },
                     'Could not get URL'
                 );

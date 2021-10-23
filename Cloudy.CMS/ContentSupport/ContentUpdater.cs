@@ -3,22 +3,18 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport
 {
-    public class ContentSaver : IContentSaver
+    public class ContentUpdater : IContentUpdater
     {
         IContextProvider ContextProvider { get; }
 
-        public ContentSaver(IContextProvider contextProvider)
+        public ContentUpdater(IContextProvider contextProvider)
         {
             ContextProvider = contextProvider;
         }
 
-        public async Task SaveAsync(object content)
+        public async Task UpdateAsync(object content)
         {
             var context = ContextProvider.GetFor(content.GetType());
-
-            var dbSet = context.GetDbSet(content.GetType());
-
-            await dbSet.AddAsync(content).ConfigureAwait(false);
 
             await context.Context.SaveChangesAsync().ConfigureAwait(false);
         }

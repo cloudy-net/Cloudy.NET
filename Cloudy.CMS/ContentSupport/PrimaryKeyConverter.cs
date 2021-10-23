@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace Cloudy.CMS.ContentSupport
 {
@@ -16,7 +17,7 @@ namespace Cloudy.CMS.ContentSupport
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
         }
 
-        public object[] Convert(IEnumerable<object> keyValues, string contentTypeId)
+        public object[] Convert(IEnumerable<JsonElement> keyValues, string contentTypeId)
         {
             var result = new List<object>();
 
@@ -27,14 +28,17 @@ namespace Cloudy.CMS.ContentSupport
             {
                 var value = values[i];
                 var type = types[i];
-
-                if (type != value.GetType() && typeof(IConvertible).IsAssignableFrom(type))
+                if(value.ValueKind == JsonValueKind.String)
                 {
-                    result.Add(System.Convert.ChangeType(value, type));
+                    result.Add(value.GetString());
+                }
+                else if(value.ValueKind == JsonValueKind.Number)
+                {
+                    result.Add(value.GetInt32());
                 }
                 else
                 {
-                    result.Add(value);
+                    throw new Exception($"JsonElement {value.ValueKind} is not currently supported");
                 }
             }
 

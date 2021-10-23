@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -52,7 +53,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         public class RemoveContentInput
         {
             [Required]
-            public string[] KeyValues { get; set; }
+            public JsonElement[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
         }
