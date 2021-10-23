@@ -10,13 +10,13 @@ namespace Cloudy.CMS.SingletonSupport
     {
         IEnumerable<SingletonDescriptor> Singletons { get; }
         IDictionary<Type, SingletonDescriptor> SingletonsByType { get; }
-        IDictionary<string, SingletonDescriptor> SingletonsById { get; }
+        IDictionary<string, SingletonDescriptor> SingletonsByContentTypeId { get; }
 
         public SingletonProvider(ISingletonCreator singletonCreator)
         {
             Singletons = singletonCreator.Create().ToList().AsReadOnly();
             SingletonsByType = Singletons.ToDictionary(s => s.Type, s => s);
-            SingletonsById = Singletons.ToDictionary(s => s.ContentTypeId, s => s);
+            SingletonsByContentTypeId = Singletons.ToDictionary(s => s.ContentTypeId, s => s);
         }
 
         public SingletonDescriptor Get<T>() where T : class
@@ -31,12 +31,12 @@ namespace Cloudy.CMS.SingletonSupport
 
         public SingletonDescriptor Get(string contentTypeId)
         {
-            if (!SingletonsById.ContainsKey(contentTypeId))
+            if (!SingletonsByContentTypeId.ContainsKey(contentTypeId))
             {
                 return null;
             }
 
-            return SingletonsById[contentTypeId];
+            return SingletonsByContentTypeId[contentTypeId];
         }
 
         public IEnumerable<SingletonDescriptor> GetAll()

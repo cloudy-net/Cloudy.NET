@@ -15,27 +15,27 @@ namespace Cloudy.CMS.SingletonSupport
     public class SingletonInserter : IInitializer
     {
         ISingletonProvider SingletonProvider { get; }
+        ISingletonGetter SingletonGetter { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IContentGetter ContentGetter { get; }
-        IContentInserter ContentInserter { get; }
         IContentInstanceCreator ContentInstanceCreator { get; }
-        IPrimaryKeySetter PrimaryKeySetter { get; }
+        IContentSaver ContentSaver { get; }
 
-        public SingletonInserter(ISingletonProvider singletonProvider, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInserter contentInserter, IContentInstanceCreator contentInstanceCreator, IPrimaryKeySetter primaryKeySetter)
+        public SingletonInserter(ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInstanceCreator contentInstanceCreator, IContentSaver contentSaver)
         {
-            PrimaryKeySetter = primaryKeySetter;
             SingletonProvider = singletonProvider;
+            SingletonGetter = singletonGetter;
             ContentTypeProvider = contentTypeProvider;
             ContentGetter = contentGetter;
-            ContentInserter = contentInserter;
             ContentInstanceCreator = contentInstanceCreator;
+            ContentSaver = contentSaver;
         }
 
         public async Task InitializeAsync()
         {
-            foreach(var singleton in SingletonProvider.GetAll())
+            foreach (var singleton in SingletonProvider.GetAll())
             {
-                var content = await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues.ToArray());
+                var content = await SingletonGetter.GetAsync(singleton.ContentTypeId).ConfigureAwait(false);
                 var contentType = ContentTypeProvider.Get(singleton.ContentTypeId);
 
                 if (content != null)
@@ -45,9 +45,7 @@ namespace Cloudy.CMS.SingletonSupport
 
                 content = ContentInstanceCreator.Create(contentType);
 
-                PrimaryKeySetter.Set(singleton.KeyValues, content);
-
-                await ContentInserter.InsertAsync(content).ConfigureAwait(false);
+                await ContentSaver.SaveAsync(content).ConfigureAwait(false);
             }
         }
     }

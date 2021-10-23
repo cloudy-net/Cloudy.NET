@@ -22,29 +22,19 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class SaveContentController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
-        IPrimaryKeyGetter PrimaryKeyGetter { get; }
-        IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentGetter ContentGetter { get; }
-        IContentTypeCoreInterfaceProvider ContentTypeCoreInterfaceProvider { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        IContentUpdater ContentUpdater { get; }
-        IContentCreator ContentCreator { get; }
-        PolymorphicFormConverter PolymorphicFormConverter { get; }
+        IContentSaver ContentSaver { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentInstanceCreator ContentInstanceCreator { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyGetter primaryKeyGetter, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IContentTypeCoreInterfaceProvider contentTypeCoreInterfaceProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IContentCreator contentCreator, PolymorphicFormConverter polymorphicFormConverter, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentInstanceCreator contentInstanceCreator)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IContentSaver contentSaver, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentInstanceCreator contentInstanceCreator)
         {
             ContentTypeProvider = contentTypeProvider;
-            PrimaryKeyGetter = primaryKeyGetter;
-            PrimaryKeyConverter = primaryKeyConverter;
             ContentGetter = contentGetter;
-            ContentTypeCoreInterfaceProvider = contentTypeCoreInterfaceProvider;
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            ContentUpdater = contentUpdater;
-            ContentCreator = contentCreator;
-            PolymorphicFormConverter = polymorphicFormConverter;
+            ContentSaver = contentSaver;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             ContentInstanceCreator = contentInstanceCreator;
         }
@@ -99,14 +89,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     return ContentResponseMessage.CreateFrom(ModelState);
                 }
 
-                if(change.KeyValues == null)
-                {
-                    await ContentCreator.CreateAsync(content).ConfigureAwait(false);
-                }
-                else
-                {
-                    await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
-                }
+                await ContentSaver.SaveAsync(content).ConfigureAwait(false);
             }
 
             return new ContentResponseMessage(true, "Updated");

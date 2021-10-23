@@ -11,37 +11,24 @@ namespace Cloudy.CMS.SingletonSupport
 {
     public class SingletonGetter : ISingletonGetter
     {
-        ISingletonProvider SingletonProvider { get; }
-        IContentGetter ContentGetter { get; }
+        IContentTypeProvider ContentTypeProvider { get; }
+        IContentFinder ContentFinder { get; }
 
-        public SingletonGetter(ISingletonProvider singletonProvider, IContentGetter contentGetter)
+        public SingletonGetter(IContentTypeProvider contentTypeProvider, IContentFinder contentFinder)
         {
-            SingletonProvider = singletonProvider;
-            ContentGetter = contentGetter;
+            ContentTypeProvider = contentTypeProvider;
+            ContentFinder = contentFinder;
         }
 
         public async Task<object> GetAsync(string contentTypeId)
         {
-            var singleton = SingletonProvider.Get(contentTypeId);
-
-            if (singleton == null)
-            {
-                return null;
-            }
-
-            return await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues.ToArray()).ConfigureAwait(false);
+            var contentType = ContentTypeProvider.Get(contentTypeId);
+            return (await ContentFinder.Find(contentType.Type).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
         }
 
         public async Task<T> GetAsync<T>() where T : class
         {
-            var singleton = SingletonProvider.Get<T>();
-
-            if (singleton == null)
-            {
-                return null;
-            }
-
-            return (T)await ContentGetter.GetAsync(singleton.ContentTypeId, singleton.KeyValues).ConfigureAwait(false);
+            return (T)(await ContentFinder.Find(typeof(T)).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
         }
     }
 }
