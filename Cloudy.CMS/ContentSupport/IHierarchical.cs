@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport
 {
-    [CoreInterface("IHierarchical")]
     public interface IHierarchical
     {
         [Display(GroupName = "Settings")]

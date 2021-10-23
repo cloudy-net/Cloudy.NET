@@ -18,13 +18,6 @@ namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
 
             foreach (var interfaceType in property.DeclaringType.GetInterfaces())
             {
-                var coreInterfaceAttribute = interfaceType.GetCustomAttribute<CoreInterfaceAttribute>();
-
-                if (coreInterfaceAttribute == null)
-                {
-                    continue;
-                }
-
                 var interfaceProperty = interfaceType.GetProperty(property.Name);
 
                 if(interfaceProperty == null)
@@ -49,7 +42,7 @@ namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
 
                 if (!isExplicit)
                 {
-                    return new PropertyMapping(PropertyMappingType.CoreInterface, coreInterfaceAttribute.Id);
+                    return new PropertyMapping(PropertyMappingType.CoreInterface);
                 }
             }
 

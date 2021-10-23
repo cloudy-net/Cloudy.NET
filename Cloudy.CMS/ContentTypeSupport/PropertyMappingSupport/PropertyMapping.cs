@@ -8,11 +8,9 @@ namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
     public class PropertyMapping
     {
         public PropertyMappingType PropertyMappingType { get; }
-        public string CoreInterfaceId { get; }
         
-        public PropertyMapping(PropertyMappingType propertyMappingType, string coreInterfaceId = null)
+        public PropertyMapping(PropertyMappingType propertyMappingType)
         {
-            CoreInterfaceId = coreInterfaceId;
             PropertyMappingType = propertyMappingType;
         }
     }

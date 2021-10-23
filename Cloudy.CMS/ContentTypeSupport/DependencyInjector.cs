@@ -13,8 +13,6 @@ namespace Cloudy.CMS.ContentTypeSupport
         public void InjectDependencies(IServiceCollection services)
         {
             services.AddSingleton<IPropertyDefinitionCreator, PropertyDefinitionCreator>();
-            services.AddSingleton<ICoreInterfaceCreator, CoreInterfaceCreator>();
-            services.AddSingleton<ICoreInterfaceProvider, CoreInterfaceProvider>();
             services.AddSingleton<IPropertyMappingCreator, PropertyMappingCreator>();
             services.AddSingleton<IPropertyMappingProvider, PropertyMappingProvider>();
 
@@ -23,7 +21,6 @@ namespace Cloudy.CMS.ContentTypeSupport
             services.AddSingleton<IContentTypeGroupCreator, ContentTypeGroupCreator>();
             services.AddSingleton<IContentTypeGroupProvider, ContentTypeGroupProvider>();
             services.AddSingleton<IContentTypeGroupMatcher, ContentTypeGroupMatcher>();
-            services.AddSingleton<IContentTypeCoreInterfaceProvider, ContentTypeCoreInterfaceProvider>();
             services.AddSingleton<IPropertyDefinitionProvider, PropertyDefinitionProvider>();
             services.AddSingleton<IContentTypeExpander, ContentTypeExpander>();
         }

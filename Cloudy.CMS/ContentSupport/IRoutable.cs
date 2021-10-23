@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport
 {
-    [CoreInterface("IRoutable")]
     public interface IRoutable
     {
         [Display(GroupName = "Settings")]
