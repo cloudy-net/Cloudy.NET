@@ -12,22 +12,34 @@ class ChangeTracker {
     changeExecutors = {
         save: contentSaver
     };
-    referenceEvents = [];
+    onUpdateCallbacks = [];
 
     constructor(app, parentBlade) {
         this.button = new Button('No changes').setDisabled().onClick(() => this.showPendingChanges()).appendTo(this.element);
         this.app = app;
         this.parentBlade = parentBlade;
-        this.setReferenceEvents(this.button);
+        this.onUpdate(pendingChanges => {
+            let changeCount = 0;
+            pendingChanges.forEach(c => changeCount += c.changedFields.length);
+            this.button.setText(changeCount == 0 ? 'No changes' : (changeCount > 1 ? `${changeCount} changes` : '1 change'));
+            this.button.setPrimary(changeCount > 0);
+            this.button.setDisabled(changeCount <= 0);
+        });
         this.update();
     }
-    
-    setReferenceEvents(element, type = 'primary', contentId, contentTypeId) {
-        const index = this.referenceEvents.findIndex(e => e.target.id === element.id);
-        if (index !== -1) {
-            this.referenceEvents.splice(index, 1);
+
+    onUpdate(callback) {
+        this.onUpdateCallbacks.push(callback);
+    }
+
+    removeOnUpdate(callback) {
+        const index = this.onUpdateCallbacks.indexOf(callback);
+
+        if (index == -1) {
+            return;
         }
-        this.referenceEvents.push({ target: element, type, contentId, contentTypeId });
+
+        this.onUpdateCallbacks.splice(index, 1);
     }
 
     showPendingChanges() {
@@ -74,22 +86,8 @@ class ChangeTracker {
     }
 
     update(pendingChanges = this.pendingChanges) {
-        let changeCount = 0;
-        pendingChanges.forEach(c => {
-            changeCount = changeCount + c.changedFields.length;
-        });
-        const changeText = changeCount <= 0 ? 'No changes': (changeCount > 1 ? `${changeCount} changes` : '1 change');
-        this.referenceEvents.forEach(element => {
-            if (element.type === 'primary') {
-                element.target.setText(changeCount <= 0 ? (element.target.initText || changeText) : changeText);
-                element.target.setPrimary(changeCount > 0);
-                element.target.setDisabled(changeCount <= 0);
-            } else {
-                const existingPendingChanges = this.pendingChanges.find(p => idEquals(p.contentId, element.contentId) && p.contentTypeId == element.contentTypeId);
-                element.target.setDisabled(existingPendingChanges && !existingPendingChanges.changedFields.length);
-            }
-        });
         this.pendingChanges = pendingChanges;
+        this.onUpdateCallbacks.forEach(callback => callback(pendingChanges));
     }
 
     reset(contentId, contentTypeId) {

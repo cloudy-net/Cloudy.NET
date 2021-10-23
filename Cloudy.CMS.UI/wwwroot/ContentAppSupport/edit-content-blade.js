@@ -79,15 +79,20 @@ class EditContentBlade extends Blade {
 
         this.buildForm();
 
-        const pendingChanges = this.app.changeTracker.getFor(this.contentId, this.contentType.id);
-        this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).setDisabled(!pendingChanges).onClick(() => {
+        this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).onClick(() => {
             this.app.changeTracker.applyFor(this.contentId, this.contentType.id);
             this.onCompleteCallbacks.forEach(callback => callback());
         });
         this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.showPendingChanges());
-        this.app.changeTracker.setReferenceEvents(this.viewChangeButton, 'secondary', this.contentId, this.contentType.id);
-        this.app.changeTracker.setReferenceEvents(this.saveButton, 'secondary', this.contentId, this.contentType.id);
-        this.app.changeTracker.update();
+        this.pendingChangesUpdateCallback = () => {
+            const pendingChanges = this.app.changeTracker.getFor(this.contentId, this.contentType.id);
+
+            this.viewChangeButton.setDisabled(pendingChanges && !pendingChanges.changedFields.length);
+            this.saveButton.setDisabled(pendingChanges && !pendingChanges.changedFields.length);
+        };
+        this.app.changeTracker.onUpdate(this.pendingChangesUpdateCallback);
+        this.onClose(() => this.app.changeTracker.removeOnUpdate(this.pendingChangesUpdateCallback));
+        this.pendingChangesUpdateCallback();
         this.setFooter(this.viewChangeButton, this.saveButton);
     }
 
