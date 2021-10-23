@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
@@ -16,15 +17,24 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     public class ContentGetterController
     {
         IContentGetter ContentGetter { get; }
+        IPrimaryKeyConverter PrimaryKeyConverter { get; }
 
-        public ContentGetterController(IContentGetter contentGetter)
+        public ContentGetterController(IContentGetter contentGetter, IPrimaryKeyConverter primaryKeyConverter)
         {
             ContentGetter = contentGetter;
+            PrimaryKeyConverter = primaryKeyConverter;
         }
 
-        public async Task<object> Get(string contentId, string contentTypeId)
+        [HttpPost]
+        public async Task<object> Get([FromBody] GetContentRequestBody data)
         {
-            return await ContentGetter.GetAsync(contentTypeId, contentId).ConfigureAwait(false);
+            return await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false);
+        }
+
+        public class GetContentRequestBody
+        {
+            public JsonElement[] KeyValues { get; set; }
+            public string ContentTypeId { get; set; }
         }
     }
 }

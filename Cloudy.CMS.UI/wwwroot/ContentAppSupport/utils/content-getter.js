@@ -18,8 +18,19 @@ class ContentGetter {
         if (this.contentByContentTypeAndId[contentTypeId][contentId]) {
             return this.contentByContentTypeAndId[contentTypeId][contentId];
         }
-        const url = `ContentGetter/Get?contentId=${contentId}&contentTypeId=${contentTypeId}`;
-        var content = await urlFetcher.fetch(url, { credentials: 'include' }, `Could not get content ${contentId} (${contentTypeId})`);
+        var content = await urlFetcher.fetch(
+            `ContentGetter/Get`,
+            {
+                credentials: 'include',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    keyValues: contentId,
+                    contentTypeId: contentTypeId
+                })
+            },
+            `Could not get content ${contentId} (${contentTypeId})`
+        );
         this.contentByContentTypeAndId[contentTypeId][contentId] = content;
         return content;
     }
