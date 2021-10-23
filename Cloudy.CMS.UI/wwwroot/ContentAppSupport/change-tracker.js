@@ -42,10 +42,9 @@ class ChangeTracker {
 
         const { name, value, originalValue } = contentAsJson;
         const _pendingChangeToSave = this.pendingChanges;
-        const index = _pendingChangeToSave.findIndex(c => c.type === 'save' && idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+        const index = _pendingChangeToSave.findIndex(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
         if (index === -1) {
             _pendingChangeToSave.push({
-                type: 'save',
                 contentId,
                 contentTypeId,
                 changedFields: value !== originalValue ? [{...contentAsJson}]: []
