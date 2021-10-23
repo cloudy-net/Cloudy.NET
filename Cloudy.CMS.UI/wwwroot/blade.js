@@ -5,6 +5,8 @@
 /* BLADE */
 
 class Blade {
+    onCloseCallbacks = [];
+
     constructor() {
         this.element = document.createElement('cloudy-ui-blade');
         this.element.addEventListener('cloudy-ui-close-blade', event => {
@@ -81,17 +83,13 @@ class Blade {
     }
 
     onClose(callback) {
-        this.onCloseCallback = callback;
+        this.onCloseCallbacks.push(callback);
 
         return this;
     }
 
     triggerOnClose(...parameters) {
-        if (!this.onCloseCallback) {
-            return;
-        }
-
-        this.onCloseCallback(...parameters);
+        this.onCloseCallbacks.forEach(callback => callback(...parameters));
     }
 
     getIndex() {
