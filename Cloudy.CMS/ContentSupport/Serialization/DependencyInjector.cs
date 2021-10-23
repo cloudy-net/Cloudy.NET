@@ -6,14 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.ContentSupport
+namespace Cloudy.CMS.ContentSupport.Serialization
 {
     public class DependencyInjector : IDependencyInjector
     {
         public void InjectDependencies(IServiceCollection services)
         {
-
-            services.AddScoped<IContentInstanceCreator, ContentInstanceCreator>();
+            services.AddScoped<IPolymorphicDeserializer, PolymorphicDeserializer>();
+            services.AddScoped<IPolymorphicSerializer, PolymorphicSerializer>();
+            services.AddScoped<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
         }
     }
 }

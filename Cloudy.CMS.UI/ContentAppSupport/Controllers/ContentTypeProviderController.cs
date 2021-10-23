@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.GroupSupport;
 using Cloudy.CMS.SingletonSupport;

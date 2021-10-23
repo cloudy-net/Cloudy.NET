@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 
 namespace Microsoft.AspNetCore.Builder
 {

@@ -13,6 +13,20 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             services.AddScoped<IAncestorProvider, AncestorProvider>();
             services.AddScoped<IContentChildrenCounter, ContentChildrenCounter>();
             services.AddScoped<IChildrenGetter, ChildrenGetter>();
+
+            services.AddScoped<IPrimaryKeyConverter, PrimaryKeyConverter>();
+            services.AddScoped<IPrimaryKeyPropertyGetter, PrimaryKeyPropertyGetter>();
+            services.AddScoped<IPrimaryKeyGetter, PrimaryKeyGetter>();
+            services.AddScoped<IPrimaryKeySetter, PrimaryKeySetter>();
+
+            services.AddScoped<IContentGetter, ContentGetter>();
+            services.AddScoped<IContentFinder, ContentFinder>();
+            services.AddScoped<IContentCreator, ContentCreator>();
+            services.AddScoped<IContentUpdater, ContentUpdater>();
+
+            services.AddScoped<IDbSetProvider, DbSetProvider>();
+            services.AddScoped<IContextProvider, ContextProvider>();
+            services.AddScoped<IContextCreator, ContextCreator>();
         }
     }
 }

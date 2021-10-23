@@ -1,7 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
-using Cloudy.CMS.Core;
-using Cloudy.CMS.Core.ContentSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;

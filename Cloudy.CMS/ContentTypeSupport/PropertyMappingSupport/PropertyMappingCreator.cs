@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.Core.ContentSupport;
+﻿using Cloudy.CMS.ContentSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport
+namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentChildrenCounter : IContentChildrenCounter
     {
