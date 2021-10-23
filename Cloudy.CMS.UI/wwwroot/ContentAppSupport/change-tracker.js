@@ -15,10 +15,9 @@ class ChangeTracker {
     referenceEvents = [];
 
     constructor(app, parentBlade) {
-        this.button = new Button('No changes').setDisabled().appendTo(this.element);
+        this.button = new Button('No changes').setDisabled().onClick(() => this.showPendingChanges()).appendTo(this.element);
         this.app = app;
         this.parentBlade = parentBlade;
-        this.button.onClick(() => this.showPendingChanges());
         this.setReferenceEvents(this.button);
         this.update();
     }
