@@ -10,7 +10,7 @@ import nameProvider from './utils/name-provider.js';
 import urlFetcher from '../url-fetcher.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 import changeTracker from './change-tracker.js';
-import PendingChangesBlade from './pending-changes-blade.js';
+import PendingChangesDiffBlade from './pending-changes-diff-blade.js';
 
 
 
@@ -87,7 +87,8 @@ class EditContentBlade extends Blade {
             changeTracker.applyFor(this.contentId, this.contentType.id);
             this.onCompleteCallbacks.forEach(callback => callback());
         });
-        this.viewChangeButton = new Button('Review changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.addBladeAfter(new PendingChangesBlade(this.app), this.app.listContentTypesBlade));
+
+        this.viewChangeButton = new Button('Review changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, changeTracker.getFor(this.contentId, this.contentType.id)).onUndo(() => this.buildForm()), this));
         this.pendingChangesUpdateCallback = () => {
             const pendingChanges = changeTracker.getFor(this.contentId, this.contentType.id);
 

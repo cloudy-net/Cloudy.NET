@@ -10,10 +10,11 @@ import changeTracker from "./change-tracker.js";
 /* PENDING CHANGES DIFF BLADE */
 
 class PendingChangesDiffBlade extends Blade {
-    constructor(app, parentBlade, change) {
+    undoCallbacks = [];
+
+    constructor(app, change) {
         super();
         this.app = app;
-        this.parentBlade = parentBlade;
         this.change = change;
         this.setTitle(`Pending changes (${change.changedFields.length})`);
         this.setToolbar(new Button('Edit').setInherit().onClick(async () => {
@@ -26,6 +27,7 @@ class PendingChangesDiffBlade extends Blade {
                 if (confirm('Undo changes? This is not reversible')) {
                     changeTracker.reset(this.change.contentId, this.change.contentTypeId);
                     await this.app.removeBlade(this);
+                    this.undoCallbacks.forEach(callback => callback());
                 }
             });
         this.saveButton = new Button('Save')
@@ -85,7 +87,10 @@ class PendingChangesDiffBlade extends Blade {
         this.setContent(form);
     }
 
-
+    onUndo(callback) {
+        this.undoCallbacks.push(callback);
+        return this;
+    }
 }
 
 export default PendingChangesDiffBlade;

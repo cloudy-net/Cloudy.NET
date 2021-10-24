@@ -55,7 +55,7 @@ class PendingChangesBlade extends Blade {
             const subText = change.contentId ? `Changed fields: ${changedCount}` : `New ${(await contentTypeProvider.get(change.contentTypeId)).lowerCaseName}`;
 
             list.addItem(new ListItem().setText(name).setSubText(subText).onClick(() => {
-                this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, this, change), this);
+                this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, change), this);
             }));
         }
 
