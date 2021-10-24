@@ -5,22 +5,21 @@ import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js
 import contentTypeProvider from "./utils/content-type-provider.js";
 import contentGetter from "./utils/content-getter.js";
 import EditContentBlade from './edit-content-blade.js';
+import changeTracker from "./change-tracker.js";
 
 /* PENDING CHANGES DIFF BLADE */
 
 class PendingChangesDiffBlade extends Blade {
-    changeTracker;
-    constructor(app, changeTracker, parentBlade, change) {
+    constructor(app, parentBlade, change) {
         super();
         this.app = app;
-        this.changeTracker = changeTracker;
         this.parentBlade = parentBlade;
         this.change = change;
         this.setTitle(`Pending changes (${change.changedFields.length})`);
         this.setToolbar(new Button('Edit').onClick(async () => {
             const blade = new EditContentBlade(this.app, this.contentType, this.content)
                 .onComplete(() => {
-                    this.changeTracker.reset(this.change.contentId, this.change.contentTypeId);
+                    changeTracker.reset(this.change.contentId, this.change.contentTypeId);
                     this.app.removeBladesAfter(this.parentBlade);
                     this.parentBlade.open();
                 });
@@ -33,7 +32,7 @@ class PendingChangesDiffBlade extends Blade {
                 .setStyle({ marginLeft: 'auto' })
                 .onClick(async () => {
                     if (confirm('Undo changes? This is not reversible')) {
-                        this.changeTracker.reset(this.change.contentId, this.change.contentTypeId);
+                        changeTracker.reset(this.change.contentId, this.change.contentTypeId);
                         this.app.removeBladesAfter(this.parentBlade);
                         this.parentBlade.open();
                     }
@@ -42,8 +41,8 @@ class PendingChangesDiffBlade extends Blade {
                 .setPrimary()
                 .setStyle({ marginLeft: '10px' })
                 .onClick(async () => {
-                    this.changeTracker.apply([this.change], () => {
-                        this.changeTracker.reset(this.change.contentId, this.change.contentTypeId);
+                    changeTracker.apply([this.change], () => {
+                        changeTracker.reset(this.change.contentId, this.change.contentTypeId);
                         this.app.removeBladesAfter(this.parentBlade);
                         this.parentBlade.open();
                     })

@@ -6,18 +6,17 @@ import nameProvider from "./utils/name-provider.js";
 import contentTypeProvider from "./utils/content-type-provider.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
 import contentGetter from './utils/content-getter.js';
+import changeTracker from "./change-tracker.js";
 
 
 
 /* PENDING CHANGES BLADE */
 
 class PendingChangesBlade extends Blade {
-    changeTracker;
-    constructor(app, changeTracker) {
+    constructor(app) {
         super();
         this.app = app;
-        this.changeTracker = changeTracker;
-
+        
         this.setTitle('Pending changes');
         this.saveButton = new Button('Save all');
         this.setFooter(
@@ -26,7 +25,7 @@ class PendingChangesBlade extends Blade {
                 .setStyle({ marginLeft: 'auto' })
                 .onClick(async () => {
                     this.saveButton.setDisabled();
-                    this.changeTracker.apply(null, () => {
+                    changeTracker.apply(null, () => {
                         this.setContent();
                         this.app.removeBladesAfter(this);
                     });
@@ -40,7 +39,7 @@ class PendingChangesBlade extends Blade {
 
         var changesByContentType = {};
 
-        for (const change of this.changeTracker.pendingChanges) {
+        for (const change of changeTracker.pendingChanges) {
             changesByContentType[change.contentTypeId] = change;
         }
 
@@ -52,20 +51,20 @@ class PendingChangesBlade extends Blade {
             list.addSubHeader(contentType.pluralName);
         }
 
-        for (let change of this.changeTracker.pendingChanges) {
+        for (let change of changeTracker.pendingChanges) {
             let name = '';
             if (change.contentId) {
                 const content = await contentGetter.get(change.contentId, change.contentTypeId);
                 name = await nameProvider.getNameOf(content, change.contentTypeId);
             } else {
-                const content = this.changeTracker.mergeWithPendingChanges(null, change.contentTypeId, {});
+                const content = changeTracker.mergeWithPendingChanges(null, change.contentTypeId, {});
                 name = await nameProvider.getNameOf(content, change.contentTypeId);
             }
             const changedCount = change.changedFields.length;
             const subText = change.contentId ? `Changed fields: ${changedCount}` : `New ${(await contentTypeProvider.get(change.contentTypeId)).lowerCaseName}`;
 
             list.addItem(new ListItem().setText(name).setSubText(subText).onClick(() => {
-                this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, this.changeTracker, this, change), this);
+                this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, this, change), this);
             }));
         }
 

@@ -14,22 +14,13 @@ class ChangeTracker {
     };
     onUpdateCallbacks = [];
 
-    constructor(app, parentBlade) {
-        this.button = new Button('No changes').setDisabled().onClick(() => this.showPendingChanges()).appendTo(this.element);
-        this.app = app;
-        this.parentBlade = parentBlade;
-        this.onUpdate(pendingChanges => {
-            let changeCount = 0;
-            pendingChanges.forEach(c => changeCount += c.changedFields.length);
-            this.button.setText(changeCount == 0 ? 'No changes' : (changeCount > 1 ? `${changeCount} changes` : '1 change'));
-            this.button.setPrimary(changeCount > 0);
-            this.button.setDisabled(changeCount <= 0);
-        });
+    constructor() {
         this.update();
     }
 
     onUpdate(callback) {
         this.onUpdateCallbacks.push(callback);
+        callback();
     }
 
     removeOnUpdate(callback) {
@@ -40,10 +31,6 @@ class ChangeTracker {
         }
 
         this.onUpdateCallbacks.splice(index, 1);
-    }
-
-    showPendingChanges() {
-        this.app.addBladeAfter(new PendingChangesBlade(this.app, this), this.parentBlade);
     }
 
     save(contentId, contentTypeId, contentAsJson) {
@@ -87,7 +74,7 @@ class ChangeTracker {
 
     update(pendingChanges = this.pendingChanges) {
         this.pendingChanges = pendingChanges;
-        this.onUpdateCallbacks.forEach(callback => callback(pendingChanges));
+        this.onUpdateCallbacks.forEach(callback => callback());
     }
 
     reset(contentId, contentTypeId) {
@@ -167,4 +154,4 @@ class ChangeTracker {
     }
 }
 
-export default ChangeTracker;
+export default new ChangeTracker();

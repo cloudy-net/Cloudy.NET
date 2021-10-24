@@ -9,6 +9,8 @@ import primaryKeyProvider from './utils/primary-key-provider.js';
 import nameProvider from './utils/name-provider.js';
 import urlFetcher from '../url-fetcher.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
+import changeTracker from './change-tracker.js';
+import PendingChangesBlade from './pending-changes-blade.js';
 
 
 
@@ -82,26 +84,26 @@ class EditContentBlade extends Blade {
         this.buildForm();
 
         this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).onClick(() => {
-            this.app.changeTracker.applyFor(this.contentId, this.contentType.id);
+            changeTracker.applyFor(this.contentId, this.contentType.id);
             this.onCompleteCallbacks.forEach(callback => callback());
         });
-        this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.changeTracker.showPendingChanges());
+        this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.addBladeAfter(new PendingChangesBlade(this.app), this.app.listContentTypesBlade));
         this.pendingChangesUpdateCallback = () => {
-            const pendingChanges = this.app.changeTracker.getFor(this.contentId, this.contentType.id);
+            const pendingChanges = changeTracker.getFor(this.contentId, this.contentType.id);
 
             this.viewChangeButton.setDisabled(pendingChanges && !pendingChanges.changedFields.length);
             this.saveButton.setDisabled(pendingChanges && !pendingChanges.changedFields.length);
         };
-        this.app.changeTracker.onUpdate(this.pendingChangesUpdateCallback);
-        this.onClose(() => this.app.changeTracker.removeOnUpdate(this.pendingChangesUpdateCallback));
+        changeTracker.onUpdate(this.pendingChangesUpdateCallback);
+        this.onClose(() => changeTracker.removeOnUpdate(this.pendingChangesUpdateCallback));
         this.pendingChangesUpdateCallback();
         this.setFooter(this.viewChangeButton, this.saveButton);
     }
 
     async buildForm() {
         try {
-            var pendingContent = this.app.changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
-            var onChangeCallback = (name, value, originalValue) => this.app.changeTracker.save(this.contentId, this.contentType.id, {
+            var pendingContent = changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
+            var onChangeCallback = (name, value, originalValue) => changeTracker.save(this.contentId, this.contentType.id, {
                 name,
                 value,
                 originalValue
