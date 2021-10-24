@@ -83,11 +83,11 @@ class EditContentBlade extends Blade {
 
         this.buildForm();
 
-        this.saveButton = new Button('Save').setPrimary().setStyle({ marginLeft: '10px' }).onClick(() => {
+        this.saveButton = new Button('Save now').setPrimary().setStyle({ marginLeft: '10px' }).onClick(() => {
             changeTracker.applyFor(this.contentId, this.contentType.id);
             this.onCompleteCallbacks.forEach(callback => callback());
         });
-        this.viewChangeButton = new Button('View changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.addBladeAfter(new PendingChangesBlade(this.app), this.app.listContentTypesBlade));
+        this.viewChangeButton = new Button('Review changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.addBladeAfter(new PendingChangesBlade(this.app), this.app.listContentTypesBlade));
         this.pendingChangesUpdateCallback = () => {
             const pendingChanges = changeTracker.getFor(this.contentId, this.contentType.id);
 
