@@ -59,6 +59,10 @@ class PendingChangesBlade extends Blade {
             }));
         }
 
+        if (changeTracker.pendingChanges.length == 0) {
+            list.addItem(new ListItem().setDisabled().setText('No more pending changes'));
+        }
+
         this.setContent(list);
 
         this.setFooter(
