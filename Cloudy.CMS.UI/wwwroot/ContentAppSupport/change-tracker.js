@@ -8,9 +8,6 @@ import PendingChangesBlade from "./pending-changes-blade.js";
 class ChangeTracker {
     _pendingChanges;
     _pendingChangesKey = '_pendingChangesKey';
-    changeExecutors = {
-        save: contentSaver
-    };
     onUpdateCallbacks = [];
 
     constructor() {
