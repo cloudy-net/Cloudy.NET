@@ -17,36 +17,28 @@ class PendingChangesDiffBlade extends Blade {
         this.change = change;
         this.setTitle(`Pending changes (${change.changedFields.length})`);
         this.setToolbar(new Button('Edit').setInherit().onClick(async () => {
-            const blade = new EditContentBlade(this.app, this.contentType, this.content)
-                .onComplete(() => {
-                    changeTracker.reset(this.change.contentId, this.change.contentTypeId);
-                    this.app.removeBladesAfter(this.parentBlade);
-                    this.parentBlade.open();
-                });
-            await this.app.addBladeAfter(blade, this.parentBlade);
+            const blade = new EditContentBlade(this.app, this.contentType, this.content);
+            await this.app.addBladeAfter(blade, this.app.listContentTypesBlade);
         }));
-        this.undoChangesButton = new Button('Undo changes');
-        this.saveButton = new Button('Save');
+        this.undoChangesButton = new Button('Undo changes')
+            .setStyle({ marginLeft: 'auto' })
+            .onClick(async () => {
+                if (confirm('Undo changes? This is not reversible')) {
+                    changeTracker.reset(this.change.contentId, this.change.contentTypeId);
+                    await this.app.removeBlade(this);
+                }
+            });
+        this.saveButton = new Button('Save')
+            .setPrimary()
+            .setStyle({ marginLeft: '10px' })
+            .onClick(async () => {
+                changeTracker.apply([this.change], () => {
+                    changeTracker.reset(this.change.contentId, this.change.contentTypeId);
+                })
+            });
         this.setFooter(
-            this.undoChangesButton
-                .setStyle({ marginLeft: 'auto' })
-                .onClick(async () => {
-                    if (confirm('Undo changes? This is not reversible')) {
-                        changeTracker.reset(this.change.contentId, this.change.contentTypeId);
-                        this.app.removeBladesAfter(this.parentBlade);
-                        this.parentBlade.open();
-                    }
-                }),
-            this.saveButton
-                .setPrimary()
-                .setStyle({ marginLeft: '10px' })
-                .onClick(async () => {
-                    changeTracker.apply([this.change], () => {
-                        changeTracker.reset(this.change.contentId, this.change.contentTypeId);
-                        this.app.removeBladesAfter(this.parentBlade);
-                        this.parentBlade.open();
-                    })
-                }),
+            this.undoChangesButton,
+            this.saveButton,
         );
     }
 
