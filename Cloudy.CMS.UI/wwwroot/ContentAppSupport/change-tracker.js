@@ -4,17 +4,8 @@ import idEquals from "./utils/id-equals.js";
 /* CHANGE TRACKER */
 
 class ChangeTracker {
-    _pendingChanges;
-    _pendingChangesKey = '_pendingChangesKey';
-
-    set pendingChanges(value) {
-        this._pendingChanges = value;
-        localStorage.setItem(this._pendingChangesKey, JSON.stringify(value));
-    }
-
-    get pendingChanges() {
-        return this._pendingChanges || JSON.parse(localStorage.getItem(this._pendingChangesKey)) || [];
-    }
+    set pendingChanges(value) { localStorage.setItem('_pendingChanges', JSON.stringify(this._pendingChanges = value)); }
+    get pendingChanges() { return this._pendingChanges || JSON.parse(localStorage.getItem('_pendingChanges')) || []; }
 
     onUpdateCallbacks = [];
 
