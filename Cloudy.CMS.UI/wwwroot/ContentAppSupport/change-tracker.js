@@ -22,19 +22,19 @@ class ChangeTracker {
         this.onUpdateCallbacks.splice(index, 1);
     }
 
-    save(contentId, contentTypeId, contentAsJson) {
+    save(contentId, contentTypeId, changedField) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
-        const { name, value, originalValue } = contentAsJson;
+        const { name, value, originalValue } = changedField;
         const _pendingChangeToSave = this.pendingChanges;
         const index = _pendingChangeToSave.findIndex(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
         if (index === -1) {
             _pendingChangeToSave.push({
                 contentId,
                 contentTypeId,
-                changedFields: value !== originalValue ? [{...contentAsJson}]: []
+                changedFields: value !== originalValue ? [{ ...changedField }]: []
             });
             this.update(_pendingChangeToSave);
             return;
