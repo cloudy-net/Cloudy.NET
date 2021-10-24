@@ -33,10 +33,10 @@ class ChangeTracker {
         }
 
         const { name, value, originalValue } = changedField;
-        const _pendingChangeToSave = this.pendingChanges;
-        const index = _pendingChangeToSave.findIndex(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+        const index = this.pendingChanges.findIndex(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+
         if (index === -1) {
-            _pendingChangeToSave.push({
+            this.pendingChanges.push({
                 contentId,
                 contentTypeId,
                 changedFields: value !== originalValue ? [{ ...changedField }]: []
@@ -46,9 +46,9 @@ class ChangeTracker {
             return;
         }
 
-        const changeFieldIndex = _pendingChangeToSave[index].changedFields.findIndex(f => f.name === name);
+        const changeFieldIndex = this.pendingChanges[index].changedFields.findIndex(f => f.name === name);
         if (changeFieldIndex === -1 && value !== originalValue) {
-            _pendingChangeToSave[index].changedFields.push(changedField);
+            this.pendingChanges[index].changedFields.push(changedField);
             this.persistPendingChanges();
             this.triggerUpdate();
             return;
@@ -56,9 +56,9 @@ class ChangeTracker {
 
         if (changeFieldIndex !== -1) {
             if ( value === originalValue) {
-                _pendingChangeToSave[index].changedFields.splice(changeFieldIndex, 1);
+                this.pendingChanges[index].changedFields.splice(changeFieldIndex, 1);
             } else {
-                _pendingChangeToSave[index].changedFields[changeFieldIndex].value = value;
+                this.pendingChanges[index].changedFields[changeFieldIndex].value = value;
             }
         }
         this.persistPendingChanges();
