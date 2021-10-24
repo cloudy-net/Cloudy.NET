@@ -4,13 +4,18 @@ import idEquals from "./utils/id-equals.js";
 /* CHANGE TRACKER */
 
 class ChangeTracker {
-    set pendingChanges(value) { localStorage.setItem('_pendingChanges', JSON.stringify(this._pendingChanges = value)); }
-    get pendingChanges() { return this._pendingChanges || JSON.parse(localStorage.getItem('_pendingChanges')) || []; }
+    pendingChanges = JSON.parse(localStorage.getItem('_pendingChanges')) || [];
+    persistPendingChanges() {
+        localStorage.setItem('_pendingChanges', JSON.stringify(this.pendingChanges));
+    }
 
     onUpdateCallbacks = [];
     onUpdate(callback) {
         this.onUpdateCallbacks.push(callback);
         callback();
+    }
+    triggerUpdate() {
+        this.onUpdateCallbacks.forEach(callback => callback());
     }
     removeOnUpdate(callback) {
         const index = this.onUpdateCallbacks.indexOf(callback);
@@ -36,14 +41,16 @@ class ChangeTracker {
                 contentTypeId,
                 changedFields: value !== originalValue ? [{ ...changedField }]: []
             });
-            this.update(_pendingChangeToSave);
+            this.persistPendingChanges();
+            this.triggerUpdate();
             return;
         }
 
         const changeFieldIndex = _pendingChangeToSave[index].changedFields.findIndex(f => f.name === name);
         if (changeFieldIndex === -1 && value !== originalValue) {
-            _pendingChangeToSave[index].changedFields.push(contentAsJson);
-            this.update(_pendingChangeToSave);
+            _pendingChangeToSave[index].changedFields.push(changedField);
+            this.persistPendingChanges();
+            this.triggerUpdate();
             return;
         }
 
@@ -54,16 +61,12 @@ class ChangeTracker {
                 _pendingChangeToSave[index].changedFields[changeFieldIndex].value = value;
             }
         }
-        this.update(_pendingChangeToSave);
+        this.persistPendingChanges();
+        this.triggerUpdate();
     }
 
     getFor(contentId, contentTypeId) {
         return this.pendingChanges.find(p => idEquals(p.contentId, contentId) && p.contentTypeId == contentTypeId);
-    }
-
-    update(pendingChanges = this.pendingChanges) {
-        this.pendingChanges = pendingChanges;
-        this.onUpdateCallbacks.forEach(callback => callback());
     }
 
     reset(contentId, contentTypeId) {
@@ -71,7 +74,8 @@ class ChangeTracker {
         const index = _pendingChanges.findIndex(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
         if (index !== -1) {
             _pendingChanges.splice(index, 1);
-            this.update(_pendingChanges);
+            this.persistPendingChanges();
+            this.triggerUpdate();
         }
     }
 
@@ -105,7 +109,8 @@ class ChangeTracker {
             }
         })
         this.pendingChanges = _remainingPendingChanges;
-        this.update();
+        this.persistPendingChanges();
+        this.triggerUpdate();
         callBack && callBack();
     }
 
