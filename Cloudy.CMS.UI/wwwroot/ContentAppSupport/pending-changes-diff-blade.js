@@ -16,7 +16,7 @@ class PendingChangesDiffBlade extends Blade {
         this.parentBlade = parentBlade;
         this.change = change;
         this.setTitle(`Pending changes (${change.changedFields.length})`);
-        this.setToolbar(new Button('Edit').onClick(async () => {
+        this.setToolbar(new Button('Edit').setInherit().onClick(async () => {
             const blade = new EditContentBlade(this.app, this.contentType, this.content)
                 .onComplete(() => {
                     changeTracker.reset(this.change.contentId, this.change.contentTypeId);
