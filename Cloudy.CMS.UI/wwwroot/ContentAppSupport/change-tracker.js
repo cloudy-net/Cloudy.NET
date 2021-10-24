@@ -4,8 +4,6 @@ import idEquals from "./utils/id-equals.js";
 /* CHANGE TRACKER */
 
 class ChangeTracker {
-    onUpdateCallbacks = [];
-
     _pendingChanges;
     _pendingChangesKey = '_pendingChangesKey';
 
@@ -18,9 +16,7 @@ class ChangeTracker {
         return this._pendingChanges || JSON.parse(localStorage.getItem(this._pendingChangesKey)) || [];
     }
 
-    constructor() {
-        this.update();
-    }
+    onUpdateCallbacks = [];
 
     onUpdate(callback) {
         this.onUpdateCallbacks.push(callback);
