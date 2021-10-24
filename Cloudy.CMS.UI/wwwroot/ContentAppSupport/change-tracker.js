@@ -8,12 +8,10 @@ class ChangeTracker {
     get pendingChanges() { return this._pendingChanges || JSON.parse(localStorage.getItem('_pendingChanges')) || []; }
 
     onUpdateCallbacks = [];
-
     onUpdate(callback) {
         this.onUpdateCallbacks.push(callback);
         callback();
     }
-
     removeOnUpdate(callback) {
         const index = this.onUpdateCallbacks.indexOf(callback);
 
