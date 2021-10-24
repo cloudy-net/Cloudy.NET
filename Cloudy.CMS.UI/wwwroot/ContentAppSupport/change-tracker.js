@@ -6,7 +6,6 @@ import PendingChangesBlade from "./pending-changes-blade.js";
 /* CHANGE TRACKER */
 
 class ChangeTracker {
-    element = document.createElement('cloudy-ui-change-tracker');
     _pendingChanges;
     _pendingChangesKey = '_pendingChangesKey';
     changeExecutors = {
