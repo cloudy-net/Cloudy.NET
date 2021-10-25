@@ -25,7 +25,7 @@ class ContentNameProvider {
         }
         if (!name) {
             const contentId = await primaryKeyProvider.getFor(content, contentType);
-            if (contentId) {
+            if (contentId && !contentType.isSingleton) {
                 name = `${contentType.name} ${JSON.stringify(contentId)}`;
             } else {
                 name = contentType.name;
