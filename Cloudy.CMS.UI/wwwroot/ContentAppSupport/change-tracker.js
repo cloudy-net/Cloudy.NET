@@ -44,15 +44,14 @@ class ChangeTracker {
             this.pendingChanges.push(pendingChange);
         }
 
-        const changedField = pendingChange.changedFields.find(f => f.name === name);
-        if (changedField === -1 && value !== originalValue) {
+        let changedField = pendingChange.changedFields.find(f => f.name === name);
+
+        if (!changedField) {
+            changedField = { name, value, originalValue };
             pendingChange.changedFields.push(changedField);
-            this.persistPendingChanges();
-            this.triggerUpdate();
-            return;
         }
 
-        if (changedField !== -1) {
+        if (changedField) {
             if ( value === originalValue) {
                 pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1);
             } else {
