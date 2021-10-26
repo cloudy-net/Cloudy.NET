@@ -37,9 +37,6 @@ class EditContentBlade extends Blade {
     }
 
     async open() {
-        this.fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
-        this.formBuilder = new FormBuilder(this.app, this);
-
         if (this.contentId) {
             this.setTitle(`Edit ${await nameProvider.getNameOf(this.content, this.contentType.id)}`);
         } else {
@@ -101,6 +98,9 @@ class EditContentBlade extends Blade {
     }
 
     async buildForm() {
+        const fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
+        const formBuilder = new FormBuilder(this.app, this);
+
         var pendingContent = changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
         var onChangeCallback = (name, value, originalValue) => changeTracker.save(this.contentId, this.contentType.id, {
             name,
@@ -111,7 +111,7 @@ class EditContentBlade extends Blade {
         var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
         if (groups.length == 1) {
-            var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]), onChangeCallback)
+            var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]), onChangeCallback)
 
             this.setContent(form);
         } else {
@@ -120,7 +120,7 @@ class EditContentBlade extends Blade {
             if (groups.indexOf(null) != -1) {
                 tabSystem.addTab('General', async () => {
                     var element = document.createElement('div');
-                    var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null), onChangeCallback);
+                    var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == null), onChangeCallback);
                     form.appendTo(element);
                     return element;
                 });
@@ -128,7 +128,7 @@ class EditContentBlade extends Blade {
 
             groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                 var element = document.createElement('div');
-                var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group), onChangeCallback);
+                var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == group), onChangeCallback);
                 form.appendTo(element);
                 return element;
             }));
