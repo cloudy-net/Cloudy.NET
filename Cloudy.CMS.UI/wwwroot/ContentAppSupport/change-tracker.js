@@ -52,12 +52,17 @@ class ChangeTracker {
         }
 
         if (changedField) {
-            if ( value === originalValue) {
-                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1);
+            if (value === originalValue) {
+                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
             } else {
                 changedField.value = value;
             }
         }
+
+        if (pendingChange.changedFields.length == 0) {
+            this.pendingChanges.splice(this.pendingChanges.indexOf(pendingChange), 1); // delete empty change object
+        }
+
         this.persistPendingChanges();
         this.triggerUpdate();
     }
