@@ -102,11 +102,7 @@ class EditContentBlade extends Blade {
         const formBuilder = new FormBuilder(this.app, this);
 
         var pendingContent = changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
-        var onChangeCallback = (name, value, originalValue) => changeTracker.save(this.contentId, this.contentType.id, {
-            name,
-            value,
-            originalValue
-        });
+        var onChangeCallback = (name, value, originalValue) => changeTracker.addChange(this.contentId, this.contentType.id, name, value, originalValue);
 
         var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 

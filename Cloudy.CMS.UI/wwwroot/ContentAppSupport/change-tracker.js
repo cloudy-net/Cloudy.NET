@@ -27,12 +27,11 @@ class ChangeTracker {
         this.onUpdateCallbacks.splice(index, 1);
     }
 
-    save(contentId, contentTypeId, changedField) {
+    addChange(contentId, contentTypeId, name, value, originalValue) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
-        const { name, value, originalValue } = changedField;
         let pendingChange = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         if (!pendingChange) {
@@ -45,19 +44,19 @@ class ChangeTracker {
             this.pendingChanges.push(pendingChange);
         }
 
-        const changeFieldIndex = pendingChange.changedFields.findIndex(f => f.name === name);
-        if (changeFieldIndex === -1 && value !== originalValue) {
+        const changedField = pendingChange.changedFields.find(f => f.name === name);
+        if (changedField === -1 && value !== originalValue) {
             pendingChange.changedFields.push(changedField);
             this.persistPendingChanges();
             this.triggerUpdate();
             return;
         }
 
-        if (changeFieldIndex !== -1) {
+        if (changedField !== -1) {
             if ( value === originalValue) {
-                pendingChange.changedFields.splice(changeFieldIndex, 1);
+                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1);
             } else {
-                pendingChange.changedFields[changeFieldIndex].value = value;
+                changedField.value = value;
             }
         }
         this.persistPendingChanges();
