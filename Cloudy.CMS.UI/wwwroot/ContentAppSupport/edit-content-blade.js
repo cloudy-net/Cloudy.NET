@@ -1,7 +1,6 @@
 ﻿import Blade from '../blade.js';
 import Button from '../button.js';
 import TabSystem from '../TabSupport/tab-system.js';
-import notificationManager from '../NotificationSupport/notification-manager.js';
 import FormBuilder from '../FormSupport/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
@@ -102,44 +101,39 @@ class EditContentBlade extends Blade {
     }
 
     async buildForm() {
-        try {
-            var pendingContent = changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
-            var onChangeCallback = (name, value, originalValue) => changeTracker.save(this.contentId, this.contentType.id, {
-                name,
-                value,
-                originalValue
-            });
+        var pendingContent = changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
+        var onChangeCallback = (name, value, originalValue) => changeTracker.save(this.contentId, this.contentType.id, {
+            name,
+            value,
+            originalValue
+        });
 
-            var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
+        var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
-            if (groups.length == 1) {
-                var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]), onChangeCallback)
+        if (groups.length == 1) {
+            var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]), onChangeCallback)
 
-                this.setContent(form);
-            } else {
-                var tabSystem = new TabSystem();
+            this.setContent(form);
+        } else {
+            var tabSystem = new TabSystem();
 
-                if (groups.indexOf(null) != -1) {
-                    tabSystem.addTab('General', async () => {
-                        var element = document.createElement('div');
-                        var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null), onChangeCallback);
-                        form.appendTo(element);
-                        return element;
-                    });
-                }
-
-                groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
+            if (groups.indexOf(null) != -1) {
+                tabSystem.addTab('General', async () => {
                     var element = document.createElement('div');
-                    var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group), onChangeCallback);
+                    var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == null), onChangeCallback);
                     form.appendTo(element);
                     return element;
-                }));
-
-                this.setContent(tabSystem);
+                });
             }
-        } catch (error) {
-            notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
-            throw error;
+
+            groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
+                var element = document.createElement('div');
+                var form = this.formBuilder.build(pendingContent, this.fieldModels.filter(fieldModel => fieldModel.descriptor.group == group), onChangeCallback);
+                form.appendTo(element);
+                return element;
+            }));
+
+            this.setContent(tabSystem);
         }
     }
 

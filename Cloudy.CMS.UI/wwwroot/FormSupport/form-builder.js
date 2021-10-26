@@ -5,6 +5,7 @@ import SortableItem from './sortable-item.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 import Button from '../button.js';
 import urlFetcher from '../url-fetcher.js';
+import notificationManager from '../NotificationSupport/notification-manager.js';
 
 
 
@@ -29,15 +30,20 @@ class FormBuilder {
     }
 
     buildForm(fieldModels, target, onChange) {
-        var element = document.createElement('div');
-        
-        var fields = fieldModels.map(fieldModel => {
-           return this.buildField(fieldModel, target, onChange)
-        });
+        try {
+            var element = document.createElement('div');
 
-        fields.forEach(field => element.appendChild(field.element));
+            var fields = fieldModels.map(fieldModel => {
+                return this.buildField(fieldModel, target, onChange)
+            });
 
-        return new Form(element, fieldModels, fields);
+            fields.forEach(field => element.appendChild(field.element));
+
+            return new Form(element, fieldModels, fields);
+        } catch (error) {
+            notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
+            throw error;
+        }
     }
 
     buildField(fieldModel, target, onChange) {
