@@ -98,11 +98,12 @@ class EditContentBlade extends Blade {
     }
 
     async buildForm() {
+        changeTracker.setReferenceObject({ ...this.content }, this.contentId, this.contentType.id);
         const fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
         const formBuilder = new FormBuilder(this.app, this);
-
+        
         var pendingContent = changeTracker.mergeWithPendingChanges(this.contentId, this.contentType.id, this.content);
-        var onChangeCallback = (name, value, originalValue) => changeTracker.addChange(this.contentId, this.contentType.id, name, value, originalValue);
+        var onChangeCallback = (name, value) => changeTracker.addChange(this.contentId, this.contentType.id, name, value);
 
         var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 

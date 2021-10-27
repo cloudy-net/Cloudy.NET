@@ -27,11 +27,32 @@ class ChangeTracker {
         this.onUpdateCallbacks.splice(index, 1);
     }
 
-    addChange(contentId, contentTypeId, name, value, originalValue) {
+    referenceObjects = [];
+    getReferenceObject(contentId, contentTypeId) {
+        const value = this.referenceObjects.find(r => idEquals(r.contentId, contentId) && contentTypeId == r.contentTypeId);
+
+        if (!value) {
+            return; // returns undefined
+        }
+
+        return value.content;
+    }
+    setReferenceObject(content, contentId, contentTypeId) {
+        var referenceObject = this.getReferenceObject(contentId, contentTypeId);
+
+        if (referenceObject) {
+            this.referenceObjects.splice(this.referenceObjects.indexOf(referenceObject), 1); // delete reference object
+        }
+
+        this.referenceObjects.push({ content, contentId, contentTypeId });
+    }
+
+    addChange(contentId, contentTypeId, name, value) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
+        const referenceObject = this.getReferenceObject(contentId, contentTypeId);
         let pendingChange = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         if (!pendingChange) {
@@ -47,12 +68,12 @@ class ChangeTracker {
         let changedField = pendingChange.changedFields.find(f => f.name === name);
 
         if (!changedField) {
-            changedField = { name, value, originalValue };
+            changedField = { name, value };
             pendingChange.changedFields.push(changedField);
         }
 
         if (changedField) {
-            if (value === originalValue) {
+            if (value === referenceObject[name]) {
                 pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
             } else {
                 changedField.value = value;
@@ -91,14 +112,10 @@ class ChangeTracker {
             return;
         }
         const contentToSave = _pendingChanges.map(c => {
-            const changedArray = c.changedFields.map(f => {
-                const { originalValue, ...changedObj } = f;
-                return changedObj;
-            });
             return {
                 keyValues: c.contentId,
                 contentTypeId: c.contentTypeId,
-                changedFields: changedArray
+                changedFields: c.changedFields
             }
         })
         if (await contentSaver.save(contentToSave) == false) {
@@ -123,12 +140,8 @@ class ChangeTracker {
 
         const changesForContent = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
-        const contentOriginal = {};
-        Object.keys(content).forEach(k => {
-            contentOriginal[`${k}_original`] = content[k] || null;
-        })
+        const contentMapping = { ...content };
 
-        const contentMapping = { ...contentOriginal, ...content };
         if (!changesForContent) {
             return contentMapping;
         }
