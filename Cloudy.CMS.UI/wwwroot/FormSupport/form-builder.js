@@ -17,36 +17,44 @@ class FormBuilder {
         this.blade = blade;
     }
 
-    build(target, fieldModels, onChange) {
+    build(target, fieldModels) {
         if (!target) {
             target = {};
         }
 
-        var form = this.buildForm(fieldModels, target, onChange);
+        var form = this.buildForm(fieldModels, target);
 
         form.element.classList.add('cloudy-ui-form');
 
         return form;
     }
 
-    buildForm(fieldModels, target, onChange) {
+    buildForm(fieldModels, target) {
         try {
             var element = document.createElement('div');
 
-            var fields = fieldModels.map(fieldModel => {
-                return this.buildField(fieldModel, target, onChange)
-            });
+            var fields = fieldModels.map(fieldModel => this.buildField(fieldModel, target));
 
             fields.forEach(field => element.appendChild(field.element));
 
-            return new Form(element, fieldModels, fields);
+            const form = new Form(element, fieldModels, fields);
+
+            fields
+                .filter(field => field.data.control)
+                .forEach(field =>
+                    field.data.control.onChange(value =>
+                        form.triggerChange(field.model.descriptor.camelCaseId, value)
+                    )
+                );
+
+            return form;
         } catch (error) {
             notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
             throw error;
         }
     }
 
-    buildField(fieldModel, target, onChange) {
+    buildField(fieldModel, target) {
         var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
         element.classList.add('cloudy-ui-form-field');
 
@@ -59,10 +67,10 @@ class FormBuilder {
             return this.buildSortableField(fieldModel, target, element);
         }
 
-        return this.buildSingularField(fieldModel, target, element, onChange);
+        return this.buildSingularField(fieldModel, target, element);
     }
 
-    buildSingularField(fieldModel, target, element, onChange) {
+    buildSingularField(fieldModel, target, element) {
         if (fieldModel.descriptor.embeddedFormId) {
             if (!target[fieldModel.descriptor.camelCaseId]) {
                 target[fieldModel.descriptor.camelCaseId] = {};
@@ -75,15 +83,13 @@ class FormBuilder {
             return new Field(fieldModel, element, { form });
         }
 
-        return this.buildSimpleField(fieldModel, target, element, onChange);
+        return this.buildSimpleField(fieldModel, target, element);
     }
 
-    buildSimpleField(fieldModel, target, element, onChange) {
+    buildSimpleField(fieldModel, target, element) {
         element.classList.add('cloudy-ui-simple');
         
         var control = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], this.app, this.blade, target[fieldModel.descriptor.camelCaseId]);
-
-        control.onChange(value => onChange(fieldModel.descriptor.camelCaseId, value));
 
         element.appendChild(control.element);
 

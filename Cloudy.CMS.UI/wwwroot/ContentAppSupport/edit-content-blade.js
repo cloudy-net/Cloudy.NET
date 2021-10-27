@@ -108,7 +108,7 @@ class EditContentBlade extends Blade {
         var groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
         if (groups.length == 1) {
-            var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0]), onChangeCallback)
+            var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0])).onChange(onChangeCallback)
 
             this.setContent(form);
         } else {
@@ -117,7 +117,7 @@ class EditContentBlade extends Blade {
             if (groups.indexOf(null) != -1) {
                 tabSystem.addTab('General', async () => {
                     var element = document.createElement('div');
-                    var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == null), onChangeCallback);
+                    var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == null)).onChange(onChangeCallback);
                     form.appendTo(element);
                     return element;
                 });
@@ -125,7 +125,7 @@ class EditContentBlade extends Blade {
 
             groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                 var element = document.createElement('div');
-                var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == group), onChangeCallback);
+                var form = formBuilder.build(pendingContent, fieldModels.filter(fieldModel => fieldModel.descriptor.group == group)).onChange(onChangeCallback);
                 form.appendTo(element);
                 return element;
             }));
