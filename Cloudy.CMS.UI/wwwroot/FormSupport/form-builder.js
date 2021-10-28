@@ -66,6 +66,7 @@ class FormBuilder {
                     return;
                 } else {
                     // sortable simple field
+                    field.data.sortable.onAdd(value => form.triggerChange(field.model.descriptor, 'add', field.model.descriptor.camelCaseId, value));
                     return;
                 }
             }
@@ -78,10 +79,6 @@ class FormBuilder {
 
         // singular
         field.data.control.onChange(value => form.triggerChange(field.model.descriptor, 'change', field.model.descriptor.camelCaseId, value));
-
-        //if (field.data.sortable) {
-        //    field.data.sortable.onAdd(value => form.triggerChange(field.model.descriptor, 'add', field.model.descriptor.camelCaseId, value));
-        //}
     }
 
     buildField(fieldModel, target) {
