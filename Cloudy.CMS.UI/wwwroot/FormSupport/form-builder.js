@@ -39,13 +39,14 @@ class FormBuilder {
 
             const form = new Form(element, fieldModels, fields);
 
-            fields
-                .filter(field => field.data.control)
-                .forEach(field =>
-                    field.data.control.onChange(value =>
-                        form.triggerChange(field.model.descriptor.camelCaseId, value)
-                    )
-                );
+            for (let field of fields) {
+                if (field.data.control) {
+                    field.data.control.onChange(value => form.triggerChange('change', field.model.descriptor.camelCaseId, value));
+                }
+                if (field.data.sortable) {
+                    field.data.sortable.onAdd(value => form.triggerChange('add', field.model.descriptor.camelCaseId, value));
+                }
+            }
 
             return form;
         } catch (error) {
@@ -181,9 +182,9 @@ class FormBuilder {
         var buttonContainer = document.createElement('cloudy-ui-sortable-buttons');
         new Button('Add')
             .onClick(() => {
-                var item = this.createItem(-1);
-                this.addItem(item);
-                this.triggerAdd(item);
+                var item = createItem(-1);
+                sortable.addItem(item);
+                sortable.triggerAdd(item);
             })
             .appendTo(buttonContainer);
         sortable.addFooter(buttonContainer);

@@ -91,7 +91,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     EmbeddedFormId = embeddedFormId?.Id,
                     IsSortable = field.IsSortable,
                     Group = field.Group,
-                    IsPolymorphic = true,
+                    IsPolymorphic = polymorphicCandidates.Any(),
                     PolymorphicCandidates = polymorphicCandidates,
                 });
             }
