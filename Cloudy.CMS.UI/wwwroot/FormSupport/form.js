@@ -7,8 +7,8 @@
         this.fields = fields;
     }
 
-    triggerChange(type, path, value) {
-        this.onChangeCallbacks.forEach(callback => callback(type, path, value));
+    triggerChange() {
+        this.onChangeCallbacks.forEach(callback => callback(...arguments));
     }
     onChange(callback) {
         this.onChangeCallbacks.push(callback);
