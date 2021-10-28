@@ -47,8 +47,7 @@ class ChangeTracker {
         this.referenceObjects.push({ content, contentId, contentTypeId });
     }
 
-    addChange(contentId, contentTypeId, type, name, value) {
-        console.log(arguments);
+    addChange(contentId, contentTypeId, type, operation, name, value) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }

@@ -40,12 +40,7 @@ class FormBuilder {
             const form = new Form(element, fieldModels, fields);
 
             for (let field of fields) {
-                if (field.data.control) {
-                    field.data.control.onChange(value => form.triggerChange('change', field.model.descriptor.camelCaseId, value));
-                }
-                if (field.data.sortable) {
-                    field.data.sortable.onAdd(value => form.triggerChange('add', field.model.descriptor.camelCaseId, value));
-                }
+                this.setupEvents(form, field);
             }
 
             return form;
@@ -53,6 +48,40 @@ class FormBuilder {
             notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
             throw error;
         }
+    }
+
+    setupEvents(form, field) {
+        if (field.model.descriptor.isSortable) {
+            if (field.model.descriptor.embeddedFormId) {
+                if (field.model.descriptor.control) {
+                    // sortable embedded form, but control is overridden by UIHint
+                    return;
+                } else {
+                    // sortable embedded form
+                    return;
+                }
+            } else {
+                if (field.model.descriptor.isPolymorphic) {
+                    // sortable polymorphic form
+                    return;
+                } else {
+                    // sortable simple field
+                    return;
+                }
+            }
+        }
+
+        if (field.model.descriptor.embeddedFormId) {
+            // embedded form
+            return;
+        }
+
+        // singular
+        field.data.control.onChange(value => form.triggerChange(field.model.descriptor, 'change', field.model.descriptor.camelCaseId, value));
+
+        //if (field.data.sortable) {
+        //    field.data.sortable.onAdd(value => form.triggerChange(field.model.descriptor, 'add', field.model.descriptor.camelCaseId, value));
+        //}
     }
 
     buildField(fieldModel, target) {
