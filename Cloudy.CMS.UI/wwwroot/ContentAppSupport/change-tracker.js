@@ -73,12 +73,10 @@ class ChangeTracker {
             pendingChange.changedFields.push(changedField);
         }
 
-        if (changedField) {
-            if (value === referenceObject[name]) {
-                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
-            } else {
-                changedField.value = value;
-            }
+        if (value === referenceObject[name]) {
+            pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
+        } else {
+            changedField.value = value;
         }
 
         if (pendingChange.changedFields.length == 0) {
