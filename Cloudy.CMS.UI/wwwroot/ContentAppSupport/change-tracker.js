@@ -47,7 +47,7 @@ class ChangeTracker {
         this.referenceObjects.push({ content, contentId, contentTypeId });
     }
 
-    addChange(contentId, contentTypeId, type, operation, name, value) {
+    addChange(contentId, contentTypeId, field, name, change) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
@@ -68,14 +68,31 @@ class ChangeTracker {
         let changedField = pendingChange.changedFields.find(f => f.name === name);
 
         if (!changedField) {
-            changedField = { name, value };
+            if (field.isSortable) {
+                changedField = {
+                    name,
+                    value: {
+                        added: []
+                    }
+                };
+            } else {
+                changedField = { name, value: change };
+            }
             pendingChange.changedFields.push(changedField);
         }
 
-        if (value === referenceObject[name]) {
-            pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
+        if (field.isSortable) {
+            if (change.operation == 'add') {
+                if (change.value.data.field) {
+                    changedField.value.added.push(null);
+                }
+            }
         } else {
-            changedField.value = value;
+            if (change === referenceObject[name]) {
+                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
+            } else {
+                changedField.value = change;
+            }
         }
 
         if (pendingChange.changedFields.length == 0) {
