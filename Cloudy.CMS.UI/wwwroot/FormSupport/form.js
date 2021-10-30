@@ -1,17 +1,16 @@
 ﻿class Form {
-    onChangeCallbacks = [];
-
-    constructor(element, fieldModels, fields) {
+    constructor(element, fieldModels, fields, eventDispatcher) {
         this.element = element;
         this.fieldModels = fieldModels;
         this.fields = fields;
+        this.eventDispatcher = eventDispatcher;
     }
 
     triggerChange() {
-        this.onChangeCallbacks.forEach(callback => callback(...arguments));
+        this.eventDispatcher.triggerChange(...arguments);
     }
     onChange(callback) {
-        this.onChangeCallbacks.push(callback);
+        this.eventDispatcher.onChange(callback);
 
         return this;
     }

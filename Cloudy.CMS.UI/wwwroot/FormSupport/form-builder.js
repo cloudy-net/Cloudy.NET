@@ -1,12 +1,8 @@
 import Form from './form.js';
 import Field from './field.js';
-import Sortable from './sortable.js';
-import SortableItem from './sortable-item.js';
-import PopupMenu from '../PopupMenuSupport/popup-menu.js';
-import Button from '../button.js';
-import urlFetcher from '../url-fetcher.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import sortableBuilder from './sortable-builder.js';
+import FormEventDispatcher from './form-event-dispatcher.js';
 
 
 
@@ -32,20 +28,26 @@ class FormBuilder {
 
     buildForm(fieldModels, target) {
         try {
-            var element = document.createElement('div');
+            const element = document.createElement('div');
+            const eventDispatcher = new FormEventDispatcher();
+            const fields = [];
 
-            var fields = fieldModels.map(fieldModel => this.buildField(fieldModel, target));
+            for (const fieldModel of fieldModels) {
+                const field = this.buildField(fieldModel, target, eventDispatcher);
 
-            fields.forEach(field => element.appendChild(field.element));
+                element.appendChild(field.element);
 
-            return new Form(element, fieldModels, fields);
+                fields.push(field);
+            }
+
+            return new Form(element, fieldModels, fields, eventDispatcher);
         } catch (error) {
             notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
             throw error;
         }
     }
 
-    buildField(fieldModel, target) {
+    buildField(fieldModel, target, eventDispatcher) {
         var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
         element.classList.add('cloudy-ui-form-field');
 
@@ -62,15 +64,15 @@ class FormBuilder {
             return this.buildEmbeddedForm(fieldModel, target[fieldModel.descriptor.camelCaseId], element);
         }
 
-        return this.buildSimpleField(fieldModel, target[fieldModel.descriptor.camelCaseId], element);
+        return this.buildSimpleField(fieldModel, target[fieldModel.descriptor.camelCaseId], element, eventDispatcher);
     }
 
-    buildSimpleField(fieldModel, value, element) {
+    buildSimpleField(fieldModel, value, element, eventDispatcher) {
         element.classList.add('cloudy-ui-simple');
 
         var control = new fieldModel.controlType(fieldModel, value, this.app, this.blade).appendTo(element);
 
-        control.onChange(value => form.triggerChange(fieldModel.descriptor, fieldModel.descriptor.camelCaseId, value));
+        control.onChange(value => eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'change', value }));
 
         return new Field(fieldModel, element, { control });
     }
