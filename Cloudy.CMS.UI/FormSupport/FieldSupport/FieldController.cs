@@ -53,7 +53,8 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 var control = ControlMatcher.GetFor(field.Type, field.UIHints);
                 var embeddedFormId = FormProvider.GetAll().FirstOrDefault(f => f.Type == field.Type);
-                var polymorphicCandidates = field.Type.IsInterface ? PolymorphicFormFinder.FindFor(field.Type).ToList().AsReadOnly() : new List<string>().AsReadOnly();
+                var isPolymorphic = field.Type.IsInterface;
+                var polymorphicCandidates = isPolymorphic ? PolymorphicFormFinder.FindFor(field.Type).ToList().AsReadOnly() : new List<string>().AsReadOnly();
 
                 if (control == null && embeddedFormId == null && !polymorphicCandidates.Any())
                 {
@@ -91,7 +92,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     EmbeddedFormId = embeddedFormId?.Id,
                     IsSortable = field.IsSortable,
                     Group = field.Group,
-                    IsPolymorphic = polymorphicCandidates.Any(),
+                    IsPolymorphic = isPolymorphic,
                     PolymorphicCandidates = polymorphicCandidates,
                 });
             }
