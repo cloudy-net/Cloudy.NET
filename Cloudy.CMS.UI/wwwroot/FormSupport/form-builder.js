@@ -15,18 +15,6 @@ class FormBuilder {
     }
 
     build(target, fieldModels) {
-        if (!target) {
-            target = {};
-        }
-
-        var form = this.buildForm(fieldModels, target);
-
-        form.element.classList.add('cloudy-ui-form');
-
-        return form;
-    }
-
-    buildForm(fieldModels, target) {
         try {
             const element = document.createElement('div');
             const eventDispatcher = new FormEventDispatcher();
@@ -39,6 +27,8 @@ class FormBuilder {
 
                 fields.push(field);
             }
+
+            element.classList.add('cloudy-ui-form');
 
             return new Form(element, fieldModels, fields, eventDispatcher);
         } catch (error) {
@@ -78,8 +68,9 @@ class FormBuilder {
     }
 
     buildEmbeddedForm(fieldModel, value, element) {
-        var form = this.buildForm(fieldModel.fields, value).appendTo(element);
+        var form = this.build(fieldModel.fields, value).appendTo(element);
 
+        form.element.classList.remove('cloudy-ui-form');
         form.element.classList.add('cloudy-ui-embedded-form');
 
         return new Field(fieldModel, element, { form });
