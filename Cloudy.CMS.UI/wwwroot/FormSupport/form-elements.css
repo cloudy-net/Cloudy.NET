@@ -152,6 +152,7 @@ cloudy-ui-sortable-item-form .cloudy-ui-embedded-form {
 }
 
 cloudy-ui-sortable-buttons {
+  margin-top: 8px;
   display: block;
   font-size: 0.8rem;
   text-align: right;

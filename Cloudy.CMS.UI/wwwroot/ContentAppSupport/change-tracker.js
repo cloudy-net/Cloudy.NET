@@ -73,20 +73,31 @@ class ChangeTracker {
             }
         }
 
-        // TODO: additions, removals, moves, changes, deep changes
-        if (change.type == 'add') {
+        // TODO: additions, removals, moves, changes
+        if (change.type.indexOf('array.') == 0) {
             if (!changedField) {
-                changedField = {
-                    name,
-                    value: {
-                        added: []
-                    }
-                };
-            }
-            if (change.value.data.field) {
-                changedField.value.added.push(null);
+                pendingChange.changedFields.push(changedField = { name, changes: [] });
             }
         }
+        if (change.type == 'array.add') {
+            changedField.changes.push(change);
+        }
+        if (change.type == 'array.update') {
+            const item = changedField.changes.find(i => i.index == change.index);
+            item.value = change.value;
+        }
+        if (change.type == 'array.delete') {
+            var item = changedField.changes.find(i => i.index == change.index);
+
+            if (item.type == 'array.add') {
+                changedField.changes.splice(changedField.changes.indexOf(item), 1); // delete change
+            } else {
+                item.type = 'array.delete';
+                delete item.value;
+            }
+        }
+
+        // TODO: deep changes (embedded forms)
 
         if (pendingChange.changedFields.length == 0) {
             this.pendingChanges.splice(this.pendingChanges.indexOf(pendingChange), 1); // delete empty change object
@@ -154,9 +165,19 @@ class ChangeTracker {
             return contentMapping;
         }
 
-        changesForContent.changedFields.forEach(changedField => {
-            contentMapping[changedField.name] = changedField.value;
-        });
+        for (const changedField of changesForContent.changedFields) {
+            if (changedField.value) {
+                contentMapping[changedField.name] = changedField.value;
+            }
+            if (changedField.changes) {
+                if (!Array.isArray(contentMapping[changedField.name])) {
+                    contentMapping[changedField.name] = [];
+                }
+                for (const change of changedField.changes.filter(c => c.type == 'array.add')) {
+                    contentMapping[changedField.name].push(change.value);
+                }
+            }
+        }
 
         return contentMapping;
     }

@@ -4,10 +4,6 @@ import notificationManager from '../NotificationSupport/notification-manager.js'
 import sortableBuilder from './sortable-builder.js';
 import FormEventDispatcher from './form-event-dispatcher.js';
 
-
-
-/* FORM BUILDER */
-
 class FormBuilder {
     constructor(app, blade) {
         this.app = app;
@@ -47,7 +43,7 @@ class FormBuilder {
         element.appendChild(heading);
 
         if (fieldModel.descriptor.isSortable) {
-            return sortableBuilder.build(this.app, this.blade, target, fieldModel);
+            return sortableBuilder.build(this.app, this.blade, target, fieldModel, eventDispatcher);
         }
 
         if (fieldModel.descriptor.embeddedFormId) {

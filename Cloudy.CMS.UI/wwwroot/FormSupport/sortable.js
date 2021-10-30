@@ -1,10 +1,11 @@
-﻿import Button from '../button.js';
+import Button from '../button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 
 class SortableField {
     callbacks = {
         add: [],
         move: [],
+        delete: [],
     };
     items = [];
 
@@ -33,7 +34,9 @@ class SortableField {
     }
 
     addFooter(element) {
-        this.element.appendChild(element);
+        var buttonContainer = document.createElement('cloudy-ui-sortable-buttons');
+        buttonContainer.appendChild(element.element || element);
+        this.element.appendChild(buttonContainer);
     }
 
     addItem(item) {
@@ -81,6 +84,7 @@ class SortableField {
             var index = [...this.fields.children].indexOf(field);
             this.fields.children[index].remove();
             this.items.splice(index, 1);
+            this.triggerDelete(index);
         }));
 
         if (this.horizontal) {
@@ -94,8 +98,8 @@ class SortableField {
         field.appendChild(item.element);
     }
 
-    triggerAdd(value) {
-        this.callbacks.add.forEach(callback => callback(value));
+    triggerAdd(item) {
+        this.callbacks.add.forEach(callback => callback(item));
     }
 
     onAdd(callback) {
@@ -110,6 +114,16 @@ class SortableField {
 
     onMove(callback) {
         this.callbacks.move.push(callback);
+
+        return this;
+    }
+
+    triggerDelete(index) {
+        this.callbacks.delete.forEach(callback => callback(index));
+    }
+
+    onDelete(callback) {
+        this.callbacks.delete.push(callback);
 
         return this;
     }
