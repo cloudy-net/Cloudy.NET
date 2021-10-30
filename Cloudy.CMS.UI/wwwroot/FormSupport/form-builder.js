@@ -39,19 +39,46 @@ class FormBuilder {
 
             const form = new Form(element, fieldModels, fields);
 
-            fields
-                .filter(field => field.data.control)
-                .forEach(field =>
-                    field.data.control.onChange(value =>
-                        form.triggerChange(field.model.descriptor.camelCaseId, value)
-                    )
-                );
+            for (let field of fields) {
+                this.setupEvents(form, field);
+            }
 
             return form;
         } catch (error) {
             notificationManager.addNotification(item => item.setText(`Could not build form --- ${error.message}`));
             throw error;
         }
+    }
+
+    setupEvents(form, field) {
+        if (field.model.descriptor.isSortable) {
+            if (field.model.descriptor.embeddedFormId) {
+                if (field.model.descriptor.control) {
+                    // sortable embedded form, but control is overridden by UIHint
+                    return;
+                } else {
+                    // sortable embedded form
+                    return;
+                }
+            } else {
+                if (field.model.descriptor.isPolymorphic) {
+                    // sortable polymorphic form
+                    return;
+                } else {
+                    // sortable simple field
+                    field.data.sortable.onAdd(value => form.triggerChange(field.model.descriptor, field.model.descriptor.camelCaseId, { operation: 'add', value }));
+                    return;
+                }
+            }
+        }
+
+        if (field.model.descriptor.embeddedFormId) {
+            // embedded form
+            return;
+        }
+
+        // singular
+        field.data.control.onChange(value => form.triggerChange(field.model.descriptor, field.model.descriptor.camelCaseId, value));
     }
 
     buildField(fieldModel, target) {
@@ -181,9 +208,9 @@ class FormBuilder {
         var buttonContainer = document.createElement('cloudy-ui-sortable-buttons');
         new Button('Add')
             .onClick(() => {
-                var item = this.createItem(-1);
-                this.addItem(item);
-                this.triggerAdd(item);
+                var item = createItem(-1);
+                sortable.addItem(item);
+                sortable.triggerAdd(item);
             })
             .appendTo(buttonContainer);
         sortable.addFooter(buttonContainer);
