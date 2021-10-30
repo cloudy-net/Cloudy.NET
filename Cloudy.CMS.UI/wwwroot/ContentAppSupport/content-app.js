@@ -1,6 +1,6 @@
 ﻿import App from '../app.js';
 import ListContentTypesBlade from './list-content-types-blade.js';
-import changeTracker from './change-tracker.js';
+import changeTracker from './utils/change-tracker.js';
 import nav from '../nav.js';
 import Button from '../button.js';
 import PendingChangesBlade from './pending-changes-blade.js';

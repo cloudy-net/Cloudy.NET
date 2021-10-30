@@ -6,7 +6,7 @@ import nameProvider from "./utils/name-provider.js";
 import contentTypeProvider from "./utils/content-type-provider.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
 import contentGetter from './utils/content-getter.js';
-import changeTracker from "./change-tracker.js";
+import changeTracker from "./utils/change-tracker.js";
 
 
 

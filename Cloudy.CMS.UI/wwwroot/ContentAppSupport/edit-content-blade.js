@@ -8,7 +8,7 @@ import primaryKeyProvider from './utils/primary-key-provider.js';
 import nameProvider from './utils/name-provider.js';
 import urlFetcher from '../url-fetcher.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
-import changeTracker from './change-tracker.js';
+import changeTracker from './utils/change-tracker.js';
 import PendingChangesDiffBlade from './pending-changes-diff-blade.js';
 
 
