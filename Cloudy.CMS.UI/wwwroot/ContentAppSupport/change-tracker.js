@@ -56,19 +56,26 @@ class ChangeTracker {
         let pendingChange = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         if (!pendingChange) {
-            pendingChange = {
-                contentId,
-                contentTypeId,
-                changedFields: []
-            };
-
-            this.pendingChanges.push(pendingChange);
+            this.pendingChanges.push(pendingChange = { contentId, contentTypeId, changedFields: [] });
         }
 
         let changedField = pendingChange.changedFields.find(f => f.name === name);
 
-        if (!changedField) {
-            if (change.type == 'add') {
+        if (change.type == 'change') {
+            if (!changedField) {
+                pendingChange.changedFields.push(changedField = { name, value: change.value });
+            }
+
+            if (referenceObject[name] === change.value) {
+                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
+            } else {
+                changedField.value = change.value;
+            }
+        }
+
+        // TODO: additions, removals, moves, changes, deep changes
+        if (change.type == 'add') {
+            if (!changedField) {
                 changedField = {
                     name,
                     value: {
@@ -76,22 +83,8 @@ class ChangeTracker {
                     }
                 };
             }
-            if(change.type == 'change') {
-                changedField = { name, value: change.value };
-            }
-            pendingChange.changedFields.push(changedField);
-        }
-
-        if (change.type == 'add') {
             if (change.value.data.field) {
                 changedField.value.added.push(null);
-            }
-        }
-        if (change.type == 'change') {
-            if (referenceObject[name] === change.value) {
-                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
-            } else {
-                changedField.value = change.value;
             }
         }
 
