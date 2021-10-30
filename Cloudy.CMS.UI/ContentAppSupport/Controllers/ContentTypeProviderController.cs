@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -25,6 +26,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IHumanizer Humanizer { get; }
         IPluralizer Pluralizer { get; }
         ISingletonProvider SingletonProvider { get; }
+        ISingletonGetter SingletonGetter { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentTypeActionModuleProvider ContentTypeActionModuleProvider { get; }
         INameExpressionParser NameExpressionParser { get; }
@@ -32,34 +34,37 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IListActionModuleProvider ListActionModuleProvider { get; }
         IContentTypeGroupMatcher ContentTypeGroupMatcher { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
+        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IPrimaryKeyGetter primaryKeyGetter)
         {
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
             Pluralizer = pluralizer;
             SingletonProvider = singletonProvider;
+            SingletonGetter = singletonGetter;
             ContentTypeActionModuleProvider = contentTypeActionModuleProvider;
             NameExpressionParser = nameExpressionParser;
             ImageExpressionParser = imageExpressionParser;
             ListActionModuleProvider = listActionModuleProvider;
             ContentTypeGroupMatcher = contentTypeGroupMatcher;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
+            PrimaryKeyGetter = primaryKeyGetter;
         }
 
-        public IEnumerable<ContentTypeResponseItem> GetAll()
+        public async Task<IEnumerable<ContentTypeResponseItem>> GetAll()
         {
             var result = new List<ContentTypeResponseItem>();
 
             foreach (var contentType in ContentTypeProvider.GetAll())
             {
-                result.Add(GetItem(contentType));
+                result.Add(await GetItem(contentType).ConfigureAwait(false));
             }
 
             return result.AsReadOnly();
         }
 
-        ContentTypeResponseItem GetItem(ContentTypeDescriptor contentType)
+        async Task<ContentTypeResponseItem> GetItem(ContentTypeDescriptor contentType)
         {
             var name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Type.Name;
             string pluralName;
@@ -78,6 +83,13 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             }
 
             var singleton = SingletonProvider.Get(contentType.Id);
+            object[] singletonId = null;
+
+            if(singleton != null)
+            {
+                var singletonInstance = await SingletonGetter.GetAsync(singleton.ContentTypeId).ConfigureAwait(false);
+                singletonId = PrimaryKeyGetter.Get(singletonInstance);
+            }
 
             var item = new ContentTypeResponseItem
             {
@@ -93,6 +105,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 ImageablePropertyName = typeof(IImageable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(ImageExpressionParser.Parse(contentType.Type), false) : null,
                 IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
+                SingletonId = singletonId,
                 Count = -1,
                 ContentTypeActionModules = ContentTypeActionModuleProvider.GetContentTypeActionModulesFor(contentType.Id),
                 ListActionModules = ListActionModuleProvider.GetListActionModulesFor(contentType.Id),
@@ -115,7 +128,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public string ImageablePropertyName { get; set; }
             public bool IsRoutable { get; set; }
             public bool IsSingleton { get; set; }
-            public string SingletonId { get; set; }
+            public object[] SingletonId { get; set; }
             public int Count { get; set; }
             public IEnumerable<string> ContentTypeActionModules { get; set; }
             public IEnumerable<string> ListActionModules { get; set; }
