@@ -80,7 +80,6 @@ class SortableBuilder {
             sortable.triggerAdd(item);
         }));
 
-
         target.forEach((value, index) => {
             const item = createItem(value);
             sortable.addItem(item);
