@@ -1,5 +1,4 @@
-import Button from '../button.js';
-import ContextMenu from '../ContextMenuSupport/context-menu.js';
+import SortableMenu from './sortable-menu.js';
 
 class SortableField {
     callbacks = {
@@ -39,54 +38,17 @@ class SortableField {
         this.element.appendChild(buttonContainer);
     }
 
-    addItem(item) {
+    add(item, triggerEvent = true) {
         this.items.push(item);
 
         var field = document.createElement('cloudy-ui-sortable-item');
         this.fields.appendChild(field);
 
         var fieldAction = document.createElement('cloudy-ui-sortable-item-action');
-        (item.data.actionContainer || field).appendChild(fieldAction);
+        field.appendChild(fieldAction);
 
-        if (item.data.field && item.data.field.data.control.menu) {
-            var menu = item.data.field.data.control.menu;
-
-            if (menu.generators.length) {
-                menu.addSeparator();
-            }
-        } else {
-            var menu = new ContextMenu().appendTo(fieldAction);
-        }
-
-        menu.addItem(item => item.setText('Move up').onClick(() => {
-            var index = [...this.fields.children].indexOf(field);
-
-            if (index == 0) {
-                return;
-            }
-
-            var newIndex = index - 1;
-
-            this.triggerMove(index, newIndex);
-        }));
-        menu.addItem(item => item.setText('Move down').onClick(() => {
-            var index = [...this.fields.children].indexOf(field);
-
-            if (index == this.fields.children.length - 1) {
-                return;
-            }
-
-            var newIndex = index + 1;
-
-            this.triggerMove(index, newIndex);
-        }));
-        menu.addItem(item => item.setText('Delete').onClick(() => {
-            var index = [...this.fields.children].indexOf(field);
-            this.fields.children[index].remove();
-            this.items.splice(index, 1);
-            this.triggerDelete(index);
-        }));
-
+        const menu = new SortableMenu(this, item).appendTo(fieldAction);
+        
         if (this.horizontal) {
             menu.setHorizontal();
             field.append(fieldAction);
@@ -96,6 +58,10 @@ class SortableField {
         }
 
         field.appendChild(item.element);
+
+        if (triggerEvent) {
+            this.triggerAdd(item);
+        }
     }
 
     triggerAdd(item) {

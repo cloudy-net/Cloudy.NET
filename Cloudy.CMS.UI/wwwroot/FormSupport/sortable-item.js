@@ -1,6 +1,7 @@
 ﻿class SortableItem {
-    constructor(element, data) {
+    constructor(element, id, data) {
         this.element = element;
+        this.id = id;
         this.data = data;
     }
 }

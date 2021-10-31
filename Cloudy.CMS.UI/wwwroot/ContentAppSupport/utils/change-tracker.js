@@ -83,11 +83,11 @@ class ChangeTracker {
             changedField.changes.push(change);
         }
         if (change.type == 'array.update') {
-            const item = changedField.changes.find(i => i.index == change.index);
+            const item = changedField.changes.find(i => i.id == change.id);
             item.value = change.value;
         }
         if (change.type == 'array.delete') {
-            var item = changedField.changes.find(i => i.index == change.index);
+            var item = changedField.changes.find(i => i.id == change.id);
 
             if (item.type == 'array.add') {
                 changedField.changes.splice(changedField.changes.indexOf(item), 1); // delete change
