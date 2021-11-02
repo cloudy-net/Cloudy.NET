@@ -1,8 +1,8 @@
-import Form from './form.js';
-import Field from './field.js';
-import notificationManager from '../NotificationSupport/notification-manager.js';
+import Form from '../../FormSupport/form.js';
+import Field from '../../FormSupport/field.js';
+import notificationManager from '../../NotificationSupport/notification-manager.js';
 import sortableBuilder from './sortable-builder.js';
-import FormEventDispatcher from './form-event-dispatcher.js';
+import FormEventDispatcher from '../../FormSupport/form-event-dispatcher.js';
 
 class FormBuilder {
     constructor(app, blade) {

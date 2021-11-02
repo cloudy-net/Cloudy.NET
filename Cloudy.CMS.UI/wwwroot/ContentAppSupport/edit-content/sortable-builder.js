@@ -1,10 +1,10 @@
-import Form from './form.js';
-import Field from './field.js';
-import Sortable from './sortable.js';
-import SortableItem from './sortable-item.js';
-import PopupMenu from '../PopupMenuSupport/popup-menu.js';
-import Button from '../button.js';
-import urlFetcher from '../url-fetcher.js';
+import Form from '../../FormSupport/form.js';
+import Field from '../../FormSupport/field.js';
+import Sortable from '../../FormSupport/sortable.js';
+import SortableItem from '../../FormSupport/sortable-item.js';
+import PopupMenu from '../../PopupMenuSupport/popup-menu.js';
+import Button from '../../button.js';
+import urlFetcher from '../../url-fetcher.js';
 
 class SortableBuilder {
     build(app, blade, target, fieldModel, eventDispatcher) {
@@ -101,7 +101,7 @@ class SortableBuilder {
 
         const button = new Button('Add').onClick(() => menu.toggle());
         const menu = new PopupMenu(button.element);
-
+sortable.addFooter(menu);
         let index = 0;
         (async () => {
             const types = await urlFetcher.fetch(`PolymorphicForm/GetOptions?${fieldModel.descriptor.polymorphicCandidates.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
@@ -116,7 +116,7 @@ class SortableBuilder {
                     menu.addItem(listItem => {
                         listItem.setText(item.name);
                         listItem.onClick(() => {
-                            sortable.addItem(createItem(item, `new-${index++}`));
+                            sortable.add(createItem(item, `new-${index++}`));
                         });
                     })
                 );

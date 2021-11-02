@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("polymorphic-form", "FormSupport/Controls/polymorphic-form.js")]
+    [Control("polymorphic-form", "ContentAppSupport/edit-content/polymorphic-form.js")]
     public class PolymorphicFormControl
     {
     }
