@@ -152,9 +152,29 @@ class ChangeTracker {
         callBack && callBack();
     }
 
-    mergeWithPendingChanges(contentId, contentTypeId, content) {
+    getPendingValue(contentId, contentTypeId, path, name, value) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
+        }
+
+        const changesForContent = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+
+        if (!changesForContent) {
+            return value;
+        }
+
+        const changedField = changesForContent.changedFields.find(c => c.name == name);
+
+        if (!changedField) {
+            return value;
+        }
+
+        return changedField.value;
+    }
+
+    mergeWithPendingChanges(contentId, contentTypeId, content) {
+        if (!contentId && contentId !== null) {
+            throw new Error('ContentId must be null or a valid value (string, number, ...)');
         }
 
         const changesForContent = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);

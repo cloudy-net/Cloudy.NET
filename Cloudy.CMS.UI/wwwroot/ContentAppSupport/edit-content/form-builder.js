@@ -3,6 +3,7 @@ import Field from '../../FormSupport/field.js';
 import notificationManager from '../../NotificationSupport/notification-manager.js';
 import sortableBuilder from './sortable-builder.js';
 import FormEventDispatcher from '../../FormSupport/form-event-dispatcher.js';
+import changeTracker from '../utils/change-tracker.js';
 
 class FormBuilder {
     constructor(app, blade) {
@@ -10,14 +11,14 @@ class FormBuilder {
         this.blade = blade;
     }
 
-    build(target, fieldModels) {
+    build(contentId, contentTypeId, content, path, fieldModels) {
         try {
             const element = document.createElement('div');
             const eventDispatcher = new FormEventDispatcher();
             const fields = [];
 
             for (const fieldModel of fieldModels) {
-                const field = this.buildField(fieldModel, target, eventDispatcher);
+                const field = this.buildField(contentId, contentTypeId, content, path, fieldModel, eventDispatcher);
 
                 element.appendChild(field.element);
 
@@ -33,7 +34,7 @@ class FormBuilder {
         }
     }
 
-    buildField(fieldModel, target, eventDispatcher) {
+    buildField(contentId, contentTypeId, content, path, fieldModel, eventDispatcher) {
         var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
         element.classList.add('cloudy-ui-form-field');
 
@@ -43,22 +44,24 @@ class FormBuilder {
         element.appendChild(heading);
 
         if (fieldModel.descriptor.isSortable) {
-            return sortableBuilder.build(this.app, this.blade, target, fieldModel, eventDispatcher);
+            return sortableBuilder.build(this.app, this.blade, content, fieldModel, eventDispatcher);
         }
 
         if (fieldModel.descriptor.embeddedFormId) {
-            return this.buildEmbeddedForm(fieldModel, target[fieldModel.descriptor.camelCaseId], element);
+            return this.buildEmbeddedForm(fieldModel, content[fieldModel.descriptor.camelCaseId], element);
         }
 
-        return this.buildSimpleField(fieldModel, target[fieldModel.descriptor.camelCaseId], element, eventDispatcher);
+        return this.buildSimpleField(contentId, contentTypeId, path, fieldModel, content[fieldModel.descriptor.camelCaseId], element, eventDispatcher);
     }
 
-    buildSimpleField(fieldModel, value, element, eventDispatcher) {
+    buildSimpleField(contentId, contentTypeId, path, fieldModel, value, element, eventDispatcher) {
         element.classList.add('cloudy-ui-simple');
 
-        var control = new fieldModel.controlType(fieldModel, value, this.app, this.blade).appendTo(element);
+        const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, fieldModel.descriptor.camelCaseId, value);
 
-        control.onChange(value => eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'change', value }));
+        const control = new fieldModel.controlType(fieldModel, pendingValue, this.app, this.blade)
+            .appendTo(element)
+            .onChange(value => eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'change', value }));
 
         return new Field(fieldModel, element, { control });
     }
