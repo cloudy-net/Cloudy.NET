@@ -13,12 +13,16 @@ class FormBuilder {
 
     build(contentId, contentTypeId, content, path, fieldModels) {
         try {
+            if (!path) {
+                path = [];
+            }
+
             const element = document.createElement('div');
             const eventDispatcher = new FormEventDispatcher();
             const fields = [];
 
             for (const fieldModel of fieldModels) {
-                const field = this.buildField(contentId, contentTypeId, content, path, fieldModel, eventDispatcher);
+                const field = this.buildField(contentId, contentTypeId, path, fieldModel, content[fieldModel.descriptor.camelCaseId], eventDispatcher);
 
                 element.appendChild(field.element);
 
@@ -34,7 +38,9 @@ class FormBuilder {
         }
     }
 
-    buildField(contentId, contentTypeId, content, path, fieldModel, eventDispatcher) {
+    buildField(contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
+        path = [...path, fieldModel.descriptor.camelCaseId];
+
         var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
         element.classList.add('cloudy-ui-form-field');
 
@@ -44,14 +50,14 @@ class FormBuilder {
         element.appendChild(heading);
 
         if (fieldModel.descriptor.isSortable) {
-            return sortableBuilder.build(this.app, this.blade, content, fieldModel, eventDispatcher);
+            return sortableBuilder.build(this.app, this.blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
         }
 
         if (fieldModel.descriptor.embeddedFormId) {
-            return this.buildEmbeddedForm(fieldModel, content[fieldModel.descriptor.camelCaseId], element);
+            return this.buildEmbeddedForm(fieldModel, value, element);
         }
 
-        return this.buildSimpleField(contentId, contentTypeId, path, fieldModel, content[fieldModel.descriptor.camelCaseId], element, eventDispatcher);
+        return this.buildSimpleField(contentId, contentTypeId, path, fieldModel, value, element, eventDispatcher);
     }
 
     buildSimpleField(contentId, contentTypeId, path, fieldModel, value, element, eventDispatcher) {

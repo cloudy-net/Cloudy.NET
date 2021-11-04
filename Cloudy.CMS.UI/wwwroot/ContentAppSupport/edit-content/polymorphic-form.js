@@ -7,7 +7,7 @@ import fieldModelBuilder from '../../FormSupport/field-model-builder.js';
 class PolymorphicForm extends FieldControl {
     open = null;
 
-    constructor(fieldModel, value, app, blade) {
+    constructor(fieldModel, value, app, blade, contentId, contentTypeId, path) {
         super(document.createElement('div'));
 
         var element = document.createElement('fieldset');
@@ -23,8 +23,9 @@ class PolymorphicForm extends FieldControl {
             heading.innerText = value.name;
 
             const fieldModels = await fieldModelBuilder.getFieldModels(value.type);
-            var onChangeCallback = (name, value, originalValue) => console.log(name, value, originalValue);
-            this.form = new FormBuilder(app, blade).build({}, fieldModels, onChangeCallback);
+            this.form = new FormBuilder(app, blade)
+                .build(contentId, contentTypeId, value, path, fieldModels)
+                .onChange((name, value) => console.log(name, contentId, contentTypeId, value, path));
             this.form.element.classList.remove('cloudy-ui-form');
             this.form.element.classList.add('cloudy-ui-embedded-form');
             this.form.appendTo(element);

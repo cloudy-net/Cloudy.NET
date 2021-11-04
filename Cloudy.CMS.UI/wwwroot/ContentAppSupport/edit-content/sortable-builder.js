@@ -1,4 +1,3 @@
-import Form from '../../FormSupport/form.js';
 import Field from '../../FormSupport/field.js';
 import Sortable from '../../FormSupport/sortable.js';
 import SortableItem from '../../FormSupport/sortable-item.js';
@@ -7,31 +6,31 @@ import Button from '../../button.js';
 import urlFetcher from '../../url-fetcher.js';
 
 class SortableBuilder {
-    build(app, blade, target, fieldModel, eventDispatcher) {
-        if (!target[fieldModel.descriptor.camelCaseId]) {
-            target[fieldModel.descriptor.camelCaseId] = [];
+    build(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
+        if (!value) {
+            value = [];
         }
 
         var sortable;
 
         if (fieldModel.descriptor.embeddedFormId) {
             if (fieldModel.descriptor.control) {
-                sortable = new fieldModel.controlType(fieldModel, target[fieldModel.descriptor.camelCaseId], app, blade);
+                sortable = new fieldModel.controlType(app, blade, contentId, contentTypeId, path, fieldModel, value);
             } else {
-                sortable = this.buildSortableEmbeddedForm(fieldModel, target[fieldModel.descriptor.camelCaseId], app, blade);
+                sortable = this.buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value);
             }
         } else {
             if (fieldModel.descriptor.isPolymorphic) {
-                sortable = this.buildSortablePolymorphicField(fieldModel, target[fieldModel.descriptor.camelCaseId], app, blade);
+                sortable = this.buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value);
             } else {
-                sortable = this.buildSortableSimpleField(fieldModel, target[fieldModel.descriptor.camelCaseId], app, blade, eventDispatcher);
+                sortable = this.buildSortableSimpleField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             }
         }
 
         return sortable;
     }
 
-    buildSortableEmbeddedForm(fieldModel, target, app, blade) {
+    buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value) {
         var createItem = (value, id) => {
             const container = document.createElement('cloudy-ui-sortable-item-form');
             const form = this.buildEmbeddedForm(fieldModel, value).appendTo(container);
@@ -46,7 +45,7 @@ class SortableBuilder {
         return sortable;
     }
 
-    buildSortableSimpleField(fieldModel, target, app, blade, eventDispatcher) {
+    buildSortableSimpleField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
         var createItem = (value, id) => {
             var fieldElement = document.createElement('cloudy-ui-sortable-item-field');
             var fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
@@ -63,7 +62,7 @@ class SortableBuilder {
         let index = 0;
         sortable.addFooter(new Button('Add').onClick(() => sortable.add(createItem(null, `new-${index++}`))));
 
-        target.forEach((value, index) => {
+        value.forEach((value, index) => {
             var id = `original-${index}`;
             const item = createItem(value, id);
             sortable.add(item, false);
@@ -81,13 +80,13 @@ class SortableBuilder {
         return sortable;
     }
 
-    buildSortablePolymorphicField(fieldModel, target, app, blade) {
+    buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value) {
         const createItem = (value, id) => {
             var fieldElement = document.createElement('cloudy-ui-sortable-item-field');
             var fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
             fieldElement.appendChild(fieldControlElement);
 
-            var control = new fieldModel.controlType(fieldModel, value, app, blade).appendTo(fieldControlElement);
+            var control = new fieldModel.controlType(fieldModel, value, app, blade, contentId, contentTypeId, path).appendTo(fieldControlElement);
             var field = new Field(fieldModel, fieldElement, { control });
             return new SortableItem(fieldElement, id, { field });
         };
@@ -95,8 +94,8 @@ class SortableBuilder {
         const sortable = new Sortable(true).setHorizontal();
         sortable.element.classList.add('cloudy-ui-sortable-field');
 
-        for (let index = 0; index < target.length; index++) {
-            sortable.add(createItem(target[index], `original-${index}`), false);
+        for (let index = 0; index < value.length; index++) {
+            sortable.add(createItem(value[index], `original-${index}`), false);
         }
 
         const button = new Button('Add').onClick(() => menu.toggle());
