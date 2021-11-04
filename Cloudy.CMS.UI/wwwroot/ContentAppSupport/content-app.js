@@ -18,11 +18,10 @@ class ContentApp extends App {
 
         const changeTrackerButton = new Button('No changes').setDisabled().onClick(() => this.addBladeAfter(new PendingChangesBlade(this), this.listContentTypesBlade));
         changeTracker.onUpdate(() => {
-            let changeCount = 0;
-            changeTracker.pendingChanges.forEach(c => changeCount += c.changedFields.length);
-            changeTrackerButton.setText(changeCount == 0 ? 'No changes' : (changeCount > 1 ? `${changeCount} changes` : '1 change'));
-            changeTrackerButton.setPrimary(changeCount > 0);
-            changeTrackerButton.setDisabled(changeCount <= 0);
+            const changesCount = changeTracker?.pendingChanges?.length;
+            changeTrackerButton.setText(!changesCount ? 'No changes' : (changesCount > 1 ? `${changesCount} changes` : '1 change'));
+            changeTrackerButton.setPrimary(changesCount > 0);
+            changeTrackerButton.setDisabled(changesCount <= 0);
         });
         nav.setAction(changeTrackerButton);
 

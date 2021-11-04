@@ -84,11 +84,12 @@ class EditContentBlade extends Blade {
             this.onCompleteCallbacks.forEach(callback => callback());
         });
 
-        this.viewChangeButton = new Button('Review changes').setStyle({ marginLeft: 'auto' }).onClick(() => this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, changeTracker.getFor(this.contentId, this.contentType.id)).onUndo(() => this.buildForm()), this));
+        const viewChangeButtonText = 'Review changes';
+        this.viewChangeButton = new Button(viewChangeButtonText).setStyle({ marginLeft: 'auto' }).onClick(() => this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, changeTracker.getFor(this.contentId, this.contentType.id)).onUndo(() => this.buildForm()), this));
         this.pendingChangesUpdateCallback = () => {
             const pendingChanges = changeTracker.getFor(this.contentId, this.contentType.id);
-
             this.viewChangeButton.setDisabled(pendingChanges && !pendingChanges.changedFields.length);
+            this.viewChangeButton.setText(pendingChanges?.changedFields?.length ? `${viewChangeButtonText} (${pendingChanges.changedFields.length})` : viewChangeButtonText);
             this.saveButton.setDisabled(pendingChanges && !pendingChanges.changedFields.length);
         };
         changeTracker.onUpdate(this.pendingChangesUpdateCallback);
