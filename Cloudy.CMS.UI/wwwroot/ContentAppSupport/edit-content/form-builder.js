@@ -11,14 +11,14 @@ class FormBuilder {
         this.blade = blade;
     }
 
-    build(contentId, contentTypeId, content, path, fieldModels) {
+    async build(contentId, contentTypeId, content, path, fieldModels) {
         try {
             const element = document.createElement('div');
             const eventDispatcher = new FormEventDispatcher();
             const fields = [];
 
             for (const fieldModel of fieldModels) {
-                const field = this.buildField(contentId, contentTypeId, path, fieldModel, content[fieldModel.descriptor.camelCaseId], eventDispatcher);
+                const field = await this.buildField(contentId, contentTypeId, path, fieldModel, content[fieldModel.descriptor.camelCaseId], eventDispatcher);
 
                 element.appendChild(field.element);
 
@@ -34,7 +34,7 @@ class FormBuilder {
         }
     }
 
-    buildField(contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
+    async buildField(contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
         path = [...path, fieldModel.descriptor.camelCaseId];
 
         var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
@@ -46,7 +46,7 @@ class FormBuilder {
         element.appendChild(heading);
 
         if (fieldModel.descriptor.isSortable) {
-            return sortableBuilder.build(this.app, this.blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
+            return await sortableBuilder.build(this.app, this.blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
         }
 
         if (fieldModel.descriptor.embeddedFormId) {

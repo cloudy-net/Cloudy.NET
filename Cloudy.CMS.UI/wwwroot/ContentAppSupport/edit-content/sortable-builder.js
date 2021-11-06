@@ -10,7 +10,7 @@ import fieldModelBuilder from '../../FormSupport/field-model-builder.js';
 import FormBuilder from './form-builder.js';
 
 class SortableBuilder {
-    build(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
+    async build(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
         if (!value) {
             value = [];
         }
@@ -25,7 +25,7 @@ class SortableBuilder {
             }
         } else {
             if (fieldModel.descriptor.isPolymorphic) {
-                sortable = this.buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
+                sortable = await this.buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             } else {
                 sortable = this.buildSortableSimpleField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             }
@@ -84,7 +84,7 @@ class SortableBuilder {
         return sortable;
     }
 
-    buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
+    async buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
         const createItem = async (type, value, id) => {
             const fieldElement = document.createElement('cloudy-ui-sortable-item-field');
             const fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
@@ -104,9 +104,8 @@ class SortableBuilder {
 
             const fieldModels = await fieldModelBuilder.getFieldModels(type);
 
-            const form = new FormBuilder(app, blade)
-                .build(contentId, contentTypeId, value, path, fieldModels)
-                .onChange((name, value) => console.log(name, contentId, contentTypeId, value, path));
+            const form = (await new FormBuilder(app, blade).build(contentId, contentTypeId, value, [...path, id], fieldModels))
+                .onChange((path, change) => eventDispatcher.triggerChange(path, change));
             form.element.classList.remove('cloudy-ui-form');
             form.element.classList.add('cloudy-ui-embedded-form');
             form.appendTo(fieldset);
@@ -120,8 +119,7 @@ class SortableBuilder {
         sortable.element.classList.add('cloudy-ui-sortable-field');
 
         for (let index = 0; index < value.length; index++) {
-            createItem(value[index].type, value[index].value, `original-${index}`)
-                .then(item => sortable.add(item, false));
+            sortable.add(await createItem(value[index].type, value[index].value, `original-${index}`), false);
         }
 
         const changesForContent = changeTracker.getFor(contentId, contentTypeId);
@@ -139,8 +137,7 @@ class SortableBuilder {
 
                 newItemIndex = Math.max(index + 1, newItemIndex);
 
-                createItem(addition.value.type, addition.value.value, `new-${index}`)
-                    .then(item => sortable.add(item, false));
+                sortable.add(await createItem(addition.value.type, addition.value.value, `new-${index}`), false);
             }
         }
 
