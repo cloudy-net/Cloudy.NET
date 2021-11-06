@@ -37,27 +37,42 @@ class FormBuilder {
     async buildField(contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
         path = [...path, fieldModel.descriptor.camelCaseId];
 
-        var element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
+        if (fieldModel.descriptor.isSortable) {
+            return await this.buildSortable(contentId, contentTypeId, path, fieldModel, value, eventDispatcher)
+        }
+
+        if (fieldModel.descriptor.embeddedFormId) {
+            return this.buildEmbeddedForm(fieldModel, value);
+        }
+
+        return this.buildSimpleField(contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
+    }
+
+    async buildSortable(contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
+        const element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
         element.classList.add('cloudy-ui-form-field');
 
-        var heading = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
+        const heading = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
         heading.classList.add('cloudy-ui-form-field-label');
         heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
         element.appendChild(heading);
 
-        if (fieldModel.descriptor.isSortable) {
-            return await sortableBuilder.build(this.app, this.blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
-        }
+        const sortable = await sortableBuilder.build(this.app, this.blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
 
-        if (fieldModel.descriptor.embeddedFormId) {
-            return this.buildEmbeddedForm(fieldModel, value, element);
-        }
+        element.appendChild(sortable.element);
 
-        return this.buildSimpleField(contentId, contentTypeId, path, fieldModel, value, element, eventDispatcher);
+        return new Field(fieldModel, element, { sortable });
     }
 
-    buildSimpleField(contentId, contentTypeId, path, fieldModel, initialValue, element, eventDispatcher) {
+    buildSimpleField(contentId, contentTypeId, path, fieldModel, initialValue, eventDispatcher) {
+        const element = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'fieldset' : 'div');
+        element.classList.add('cloudy-ui-form-field');
         element.classList.add('cloudy-ui-simple');
+
+        const heading = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
+        heading.classList.add('cloudy-ui-form-field-label');
+        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        element.appendChild(heading);
 
         const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, initialValue);
 
@@ -68,8 +83,16 @@ class FormBuilder {
         return new Field(fieldModel, element, { control });
     }
 
-    buildEmbeddedForm(fieldModel, value, element) {
-        var form = this.build(fieldModel.fields, value).appendTo(element);
+    buildEmbeddedForm(fieldModel, value) {
+        const element = document.createElement('fieldset');
+        element.classList.add('cloudy-ui-form-field');
+
+        const heading = document.createElement('legend');
+        heading.classList.add('cloudy-ui-form-field-label');
+        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        element.appendChild(heading);
+
+        const form = this.build(fieldModel.fields, value).appendTo(element);
 
         form.element.classList.remove('cloudy-ui-form');
         form.element.classList.add('cloudy-ui-embedded-form');
