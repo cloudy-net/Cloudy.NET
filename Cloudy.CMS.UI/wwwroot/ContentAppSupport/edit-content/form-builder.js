@@ -13,10 +13,6 @@ class FormBuilder {
 
     build(contentId, contentTypeId, content, path, fieldModels) {
         try {
-            if (!path) {
-                path = [];
-            }
-
             const element = document.createElement('div');
             const eventDispatcher = new FormEventDispatcher();
             const fields = [];
@@ -60,15 +56,15 @@ class FormBuilder {
         return this.buildSimpleField(contentId, contentTypeId, path, fieldModel, value, element, eventDispatcher);
     }
 
-    buildSimpleField(contentId, contentTypeId, path, fieldModel, value, element, eventDispatcher) {
+    buildSimpleField(contentId, contentTypeId, path, fieldModel, initialValue, element, eventDispatcher) {
         element.classList.add('cloudy-ui-simple');
 
-        const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, fieldModel.descriptor.camelCaseId, value);
+        const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, initialValue);
 
         const control = new fieldModel.controlType(fieldModel, pendingValue, this.app, this.blade)
             .appendTo(element)
-            .onChange(value => eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'change', value }));
-
+            .onChange(value => eventDispatcher.triggerChange(path, { type: 'change', initialValue, value }));
+            
         return new Field(fieldModel, element, { control });
     }
 

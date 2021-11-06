@@ -1,5 +1,5 @@
 import contentSaver from "./content-saver.js";
-import idEquals from "./id-equals.js";
+import arrayEquals from "./array-equals.js";
 
 /* CHANGE TRACKER */
 
@@ -29,7 +29,7 @@ class ChangeTracker {
 
     referenceObjects = [];
     getReferenceObject(contentId, contentTypeId) {
-        const value = this.referenceObjects.find(r => idEquals(r.contentId, contentId) && contentTypeId == r.contentTypeId);
+        const value = this.referenceObjects.find(r => arrayEquals(r.contentId, contentId) && contentTypeId == r.contentTypeId);
 
         if (!value) {
             return; // returns undefined
@@ -47,36 +47,36 @@ class ChangeTracker {
         this.referenceObjects.push({ content, contentId, contentTypeId });
     }
 
-    addChange(contentId, contentTypeId, name, change) {
+    addChange(contentId, contentTypeId, path, change) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
-        const referenceObject = this.getReferenceObject(contentId, contentTypeId);
-        let pendingChange = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+        //const referenceObject = this.getReferenceObject(contentId, contentTypeId);
+        let pendingChange = this.pendingChanges.find(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         if (!pendingChange) {
             this.pendingChanges.push(pendingChange = { contentId, contentTypeId, changedFields: [] });
         }
 
-        let changedField = pendingChange.changedFields.find(f => f.name === name);
+        let changedField = pendingChange.changedFields.find(f => arrayEquals(path, f.path));
 
         if (change.type == 'change') {
             if (!changedField) {
-                pendingChange.changedFields.push(changedField = { name, value: change.value });
+                pendingChange.changedFields.push(changedField = { path, initialValue: change.initialValue, value: change.value });
             }
 
-            if (referenceObject[name] === change.value) {
+            if (change.initialValue === change.value) {
                 pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
             } else {
                 changedField.value = change.value;
             }
         }
-
+        
         // TODO: additions, removals, moves, changes
         if (change.type.indexOf('array.') == 0) {
             if (!changedField) {
-                pendingChange.changedFields.push(changedField = { name, changes: [] });
+                pendingChange.changedFields.push(changedField = { path, changes: [] });
             }
         }
         if (change.type == 'array.add') {
@@ -108,12 +108,12 @@ class ChangeTracker {
     }
 
     getFor(contentId, contentTypeId) {
-        return this.pendingChanges.find(p => idEquals(p.contentId, contentId) && p.contentTypeId == contentTypeId);
+        return this.pendingChanges.find(p => arrayEquals(p.contentId, contentId) && p.contentTypeId == contentTypeId);
     }
 
     reset(contentId, contentTypeId) {
         const _pendingChanges = this.pendingChanges;
-        const index = _pendingChanges.findIndex(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+        const index = _pendingChanges.findIndex(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
         if (index !== -1) {
             _pendingChanges.splice(index, 1);
             this.persistPendingChanges();
@@ -142,7 +142,7 @@ class ChangeTracker {
         }
         const _remainingPendingChanges = [];
         this.pendingChanges.forEach(c => {
-            if (!_pendingChanges.some(d => idEquals(d.contentId, c.contentId) && d.contentTypeId === c.contentTypeId)) {
+            if (!_pendingChanges.some(d => arrayEquals(d.contentId, c.contentId) && d.contentTypeId === c.contentTypeId)) {
                 _remainingPendingChanges.push(c);
             }
         })
@@ -152,18 +152,18 @@ class ChangeTracker {
         callBack && callBack();
     }
 
-    getPendingValue(contentId, contentTypeId, path, name, value) {
+    getPendingValue(contentId, contentTypeId, path, value) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
-        const changesForContent = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+        const changesForContent = this.pendingChanges.find(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         if (!changesForContent) {
             return value;
         }
 
-        const changedField = changesForContent.changedFields.find(c => c.name == name);
+        const changedField = changesForContent.changedFields.find(c => arrayEquals(path, c.path));
 
         if (!changedField) {
             return value;
@@ -177,7 +177,7 @@ class ChangeTracker {
             throw new Error('ContentId must be null or a valid value (string, number, ...)');
         }
 
-        const changesForContent = this.pendingChanges.find(c => idEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+        const changesForContent = this.pendingChanges.find(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         const contentMapping = { ...content };
 

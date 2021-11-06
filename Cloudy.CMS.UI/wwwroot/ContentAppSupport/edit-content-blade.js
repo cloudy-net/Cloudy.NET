@@ -1,4 +1,4 @@
-﻿import Blade from '../blade.js';
+import Blade from '../blade.js';
 import Button from '../button.js';
 import TabSystem from '../TabSupport/tab-system.js';
 import FormBuilder from './edit-content/form-builder.js';
@@ -103,12 +103,12 @@ class EditContentBlade extends Blade {
         const fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
         const formBuilder = new FormBuilder(this.app, this);
         
-        const onChangeCallback = (name, change) => changeTracker.addChange(this.contentId, this.contentType.id, name, change);
+        const onChangeCallback = (path, change) => changeTracker.addChange(this.contentId, this.contentType.id, path, change);
 
         const groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
         if (groups.length == 1) {
-            const form = formBuilder.build(this.contentId, this.contentType.id, this.content, null, fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0])).onChange(onChangeCallback)
+            const form = formBuilder.build(this.contentId, this.contentType.id, this.content, [], fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0])).onChange(onChangeCallback)
 
             this.setContent(form);
         } else {
@@ -117,14 +117,14 @@ class EditContentBlade extends Blade {
             if (groups.indexOf(null) != -1) {
                 tabSystem.addTab('General', async () => {
                     const element = document.createElement('div');
-                    formBuilder.build(this.contentId, this.contentType.id, this.content, null, fieldModels.filter(fieldModel => fieldModel.descriptor.group == null)).onChange(onChangeCallback).appendTo(element);
+                    formBuilder.build(this.contentId, this.contentType.id, this.content, [], fieldModels.filter(fieldModel => fieldModel.descriptor.group == null)).onChange(onChangeCallback).appendTo(element);
                     return element;
                 });
             }
 
             groups.filter(g => g != null).forEach(group => tabSystem.addTab(group, async () => {
                 const element = document.createElement('div');
-                formBuilder.build(this.contentId, this.contentType.id, this.content, null, fieldModels.filter(fieldModel => fieldModel.descriptor.group == group)).onChange(onChangeCallback).appendTo(element);
+                formBuilder.build(this.contentId, this.contentType.id, this.content, [], fieldModels.filter(fieldModel => fieldModel.descriptor.group == group)).onChange(onChangeCallback).appendTo(element);
                 return element;
             }));
 

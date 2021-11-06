@@ -15,13 +15,13 @@ class SortableBuilder {
 
         if (fieldModel.descriptor.embeddedFormId) {
             if (fieldModel.descriptor.control) {
-                sortable = new fieldModel.controlType(app, blade, contentId, contentTypeId, path, fieldModel, value);
+                sortable = new fieldModel.controlType(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             } else {
-                sortable = this.buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value);
+                sortable = this.buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             }
         } else {
             if (fieldModel.descriptor.isPolymorphic) {
-                sortable = this.buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value);
+                sortable = this.buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             } else {
                 sortable = this.buildSortableSimpleField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             }
@@ -30,7 +30,7 @@ class SortableBuilder {
         return sortable;
     }
 
-    buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value) {
+    buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
         var createItem = (value, id) => {
             const container = document.createElement('cloudy-ui-sortable-item-form');
             const form = this.buildEmbeddedForm(fieldModel, value).appendTo(container);
@@ -80,7 +80,7 @@ class SortableBuilder {
         return sortable;
     }
 
-    buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value) {
+    buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
         const createItem = (value, id) => {
             var fieldElement = document.createElement('cloudy-ui-sortable-item-field');
             var fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
@@ -91,12 +91,16 @@ class SortableBuilder {
             return new SortableItem(fieldElement, id, { field });
         };
 
-        const sortable = new Sortable(true).setHorizontal();
+        const sortable = new Sortable().setHorizontal();
         sortable.element.classList.add('cloudy-ui-sortable-field');
 
         for (let index = 0; index < value.length; index++) {
             sortable.add(createItem(value[index], `original-${index}`), false);
         }
+
+        sortable.onAdd(item => {
+            eventDispatcher.triggerChange(path, fieldModel.descriptor.camelCaseId, { type: 'array.add', value: null, id: item.id });
+        });
 
         const button = new Button('Add').onClick(() => menu.toggle());
         const menu = new PopupMenu(button.element);

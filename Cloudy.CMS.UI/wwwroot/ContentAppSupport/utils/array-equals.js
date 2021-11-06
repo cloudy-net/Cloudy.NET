@@ -1,4 +1,4 @@
-function idEquals(a, b) {
+function arrayEquals(a, b) {
     if (a == null && b == null) {
         return true;
     }
@@ -14,4 +14,4 @@ function idEquals(a, b) {
     return a.every((ai, i) => ai === b[i]);
 }
 
-export default idEquals;
+export default arrayEquals;

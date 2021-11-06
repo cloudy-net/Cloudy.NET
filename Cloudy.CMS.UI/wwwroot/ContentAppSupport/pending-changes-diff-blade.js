@@ -1,4 +1,4 @@
-﻿import Blade from "../blade.js";
+import Blade from "../blade.js";
 import Button from "../button.js";
 import Diff from './lib/diff.js'
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
@@ -18,7 +18,9 @@ class PendingChangesDiffBlade extends Blade {
         this.change = change;
         this.setTitle(`Pending changes (${change.changedFields.length})`);
         this.setToolbar(new Button('Edit').setInherit().onClick(async () => {
-            const blade = new EditContentBlade(this.app, this.contentType, this.content);
+            const content = await contentGetter.get(this.change.contentId, this.change.contentTypeId);
+            const contentType = await contentTypeProvider.get(this.change.contentTypeId);
+            const blade = new EditContentBlade(this.app, contentType, content);
             await this.app.addBladeAfter(blade, this.app.listContentTypesBlade);
         }));
         this.undoChangesButton = new Button('Undo changes')
@@ -49,14 +51,13 @@ class PendingChangesDiffBlade extends Blade {
         form.classList.add('cloudy-ui-form');
         const formId = `Cloudy.CMS.Content[type=${this.change.contentTypeId}]`;
         var fields = await fieldDescriptorProvider.getFor(formId);
-        this.content = await contentGetter.get(this.change.contentId, this.change.contentTypeId);
-        this.contentType = await contentTypeProvider.get(this.change.contentTypeId);
 
         for (const changedField of this.change.changedFields) {
             var element = document.createElement('div');
             element.classList.add('cloudy-ui-form-field');
 
-            var field = fields.find(f => f.camelCaseId == changedField.name);
+            const name = changedField.path[changedField.path.length - 1];
+            var field = fields.find(f => f.camelCaseId == name);
 
             var heading = document.createElement('div');
             heading.classList.add('cloudy-ui-form-field-label');
@@ -68,7 +69,7 @@ class PendingChangesDiffBlade extends Blade {
 
             var textarea = document.createElement('textarea');
             var value = '';
-            for (const [state, segment] of Diff(this.content[changedField.name] || '', changedField.value, 0)) {
+            for (const [state, segment] of Diff(changedField.initialValue || '', changedField.value, 0)) {
                 textarea.innerHTML = segment
 
                 switch (state) {
