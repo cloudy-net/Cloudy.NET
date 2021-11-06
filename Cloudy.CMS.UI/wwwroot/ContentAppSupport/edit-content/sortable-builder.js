@@ -104,7 +104,8 @@ class SortableBuilder {
 
         const button = new Button('Add').onClick(() => menu.toggle());
         const menu = new PopupMenu(button.element);
-sortable.addFooter(menu);
+        sortable.addFooter(menu);
+
         let index = 0;
         (async () => {
             const types = await urlFetcher.fetch(`PolymorphicForm/GetOptions?${fieldModel.descriptor.polymorphicCandidates.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
