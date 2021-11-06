@@ -12,21 +12,19 @@ namespace Cloudy.CMS.UI.ContentAppSupport
     public class ContentFormCreator : IFormCreator
     {
         IContentTypeProvider ContentTypeRepository { get; }
-        IContentFormIdGenerator ContentFormIdGenerator { get; }
 
-        public ContentFormCreator(IContentTypeProvider contentTypeRepository, IContentFormIdGenerator contentFormIdGenerator)
+        public ContentFormCreator(IContentTypeProvider contentTypeRepository)
         {
             ContentTypeRepository = contentTypeRepository;
-            ContentFormIdGenerator = contentFormIdGenerator;
         }
 
         public IEnumerable<FormDescriptor> CreateAll()
         {
             var result = new List<FormDescriptor>();
 
-            foreach (var type in ContentTypeRepository.GetAll())
+            foreach (var contentType in ContentTypeRepository.GetAll())
             {
-                result.Add(new FormDescriptor(ContentFormIdGenerator.Generate(type), type.Type));
+                result.Add(new FormDescriptor(contentType.Id, contentType.Type));
             }
 
             return result.AsReadOnly();

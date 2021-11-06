@@ -52,53 +52,55 @@ class ChangeTracker {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
 
-        //const referenceObject = this.getReferenceObject(contentId, contentTypeId);
-        let pendingChange = this.pendingChanges.find(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
+        let changesForContent = this.pendingChanges.find(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
-        if (!pendingChange) {
-            this.pendingChanges.push(pendingChange = { contentId, contentTypeId, changedFields: [] });
+        if (!changesForContent) {
+            changesForContent = { contentId, contentTypeId, changedFields: [] };
+            this.pendingChanges.push(changesForContent);
         }
 
-        let changedField = pendingChange.changedFields.find(f => arrayEquals(path, f.path));
+        let changedField = changesForContent.changedFields.find(f => arrayEquals(path, f.path));
 
-        if (change.type == 'change') {
+        if (change.fieldType == 'simple') {
             if (!changedField) {
-                pendingChange.changedFields.push(changedField = { path, initialValue: change.initialValue, value: change.value });
+                changesForContent.changedFields.push(changedField = { path, initialValue: change.initialValue, value: change.value });
             }
 
-            if (change.initialValue === change.value) {
-                pendingChange.changedFields.splice(pendingChange.changedFields.indexOf(changedField), 1); // delete unchanged field
-            } else {
-                changedField.value = change.value;
+            if (change.type == 'set') {
+                if (change.initialValue === change.value) {
+                    changesForContent.changedFields.splice(changesForContent.changedFields.indexOf(changedField), 1); // delete unchanged field
+                } else {
+                    changedField.value = change.value;
+                }
             }
         }
         
-        // TODO: additions, removals, moves, changes
-        if (change.type.indexOf('array.') == 0) {
+        if (change.fieldType == 'array') {
             if (!changedField) {
-                pendingChange.changedFields.push(changedField = { path, changes: [] });
+                changesForContent.changedFields.push(changedField = { path, type: 'array', changes: [] });
+            }
+
+            if (change.type == 'add') {
+                changedField.changes.push(change);
+            }
+            if (change.type == 'update') {
+                const item = changedField.changes.find(i => i.id == change.id);
+                item.value = change.value;
+            }
+            if (change.type == 'delete') {
+                var item = changedField.changes.find(i => i.id == change.id);
+
+                if (item.type == 'add') {
+                    changedField.changes.splice(changedField.changes.indexOf(item), 1); // delete addition completely
+                } else {
+                    item.type = 'delete';
+                    delete item.value;
+                }
             }
         }
-        if (change.type == 'array.add') {
-            changedField.changes.push(change);
-        }
-        if (change.type == 'array.update') {
-            const item = changedField.changes.find(i => i.id == change.id);
-            item.value = change.value;
-        }
-        if (change.type == 'array.delete') {
-            var item = changedField.changes.find(i => i.id == change.id);
 
-            if (item.type == 'array.add') {
-                changedField.changes.splice(changedField.changes.indexOf(item), 1); // delete change
-            } else {
-                item.type = 'array.delete';
-                delete item.value;
-            }
-        }
-
-        if (pendingChange.changedFields.length == 0) {
-            this.pendingChanges.splice(this.pendingChanges.indexOf(pendingChange), 1); // delete empty change object
+        if (changesForContent.changedFields.length == 0) {
+            this.pendingChanges.splice(this.pendingChanges.indexOf(changesForContent), 1); // delete empty change object
         }
 
         this.persistPendingChanges();

@@ -49,8 +49,7 @@ class PendingChangesDiffBlade extends Blade {
     async open() {
         var form = document.createElement('div');
         form.classList.add('cloudy-ui-form');
-        const formId = `Cloudy.CMS.Content[type=${this.change.contentTypeId}]`;
-        var fields = await fieldDescriptorProvider.getFor(formId);
+        var fields = await fieldDescriptorProvider.getFor(this.change.contentTypeId);
 
         for (const changedField of this.change.changedFields) {
             var element = document.createElement('div');

@@ -63,7 +63,7 @@ class FormBuilder {
 
         const control = new fieldModel.controlType(fieldModel, pendingValue, this.app, this.blade)
             .appendTo(element)
-            .onChange(value => eventDispatcher.triggerChange(path, { type: 'change', initialValue, value }));
+            .onChange(value => eventDispatcher.triggerChange(path, { fieldType: 'simple', type: 'set', initialValue, value }));
             
         return new Field(fieldModel, element, { control });
     }

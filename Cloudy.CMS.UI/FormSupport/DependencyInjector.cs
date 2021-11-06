@@ -11,7 +11,6 @@ using Cloudy.CMS.UI.FormSupport.UIHintSupport;
 using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
 using Microsoft.Extensions.DependencyInjection;
 using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicControlMappingSupport;
-using Cloudy.CMS.UI.FormSupport.RuntimeSupport;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
@@ -38,7 +37,6 @@ namespace Cloudy.CMS.UI.FormSupport
             services.AddScoped<IPolymorphicFormFinder, PolymorphicFormFinder>();
             services.AddSingleton<IInterfacePropertyMapper, InterfacePropertyMapper>();
             services.AddSingleton<IPropertyAttributeInheritor, PropertyAttributeInheritor>();
-            services.AddScoped<IFormInstanceInitializer, FormInstanceInitializer>();
         }
     }
 }

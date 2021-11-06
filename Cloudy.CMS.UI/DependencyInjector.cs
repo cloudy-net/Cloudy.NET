@@ -33,7 +33,6 @@ namespace Cloudy.CMS.UI
             services.AddScoped<IUrlProvider, UrlProvider>();
             services.AddSingleton<ITitleProvider, TitleProvider>();
             services.AddSingleton<IFaviconProvider, FaviconProvider>();
-            services.AddSingleton<IContentFormIdGenerator, ContentFormIdGenerator>();
             services.AddSingleton<IPluralizer, Pluralizer>();
             services.AddSingleton<ISingularizer, Singularizer>();
             services.AddSingleton<IHumanizer, Humanizer>();

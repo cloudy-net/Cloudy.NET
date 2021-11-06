@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Cloudy.CMS.ComposableSupport;
 
 namespace Cloudy.CMS.SingletonSupport
 {
@@ -16,17 +17,13 @@ namespace Cloudy.CMS.SingletonSupport
         ISingletonProvider SingletonProvider { get; }
         ISingletonGetter SingletonGetter { get; }
         IContentTypeProvider ContentTypeProvider { get; }
-        IContentGetter ContentGetter { get; }
-        IContentInstanceCreator ContentInstanceCreator { get; }
         IContentCreator ContentCreator { get; }
 
-        public SingletonInserter(ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter, IContentInstanceCreator contentInstanceCreator, IContentCreator contentCreator)
+        public SingletonInserter(ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeProvider contentTypeProvider, IContentCreator contentCreator)
         {
             SingletonProvider = singletonProvider;
             SingletonGetter = singletonGetter;
             ContentTypeProvider = contentTypeProvider;
-            ContentGetter = contentGetter;
-            ContentInstanceCreator = contentInstanceCreator;
             ContentCreator = contentCreator;
         }
 
@@ -42,7 +39,7 @@ namespace Cloudy.CMS.SingletonSupport
                     continue;
                 }
 
-                content = ContentInstanceCreator.Create(contentType);
+                content = Activator.CreateInstance(contentType.Type);
 
                 await ContentCreator.CreateAsync(content).ConfigureAwait(false);
             }

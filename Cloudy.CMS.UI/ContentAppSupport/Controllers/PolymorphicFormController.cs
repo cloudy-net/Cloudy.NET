@@ -2,6 +2,7 @@
 using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.UI.ContentAppSupport;
+using Cloudy.CMS.UI.FormSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.UI.FormSupport.Controls
+namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
     [Authorize("Cloudy.CMS.UI")]
     [Area("Cloudy.CMS")]
@@ -36,7 +37,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls
             {
                 if (ContentTypeProvider.Get(form.Type) != null)
                 {
-                    continue;
+                    continue; // content types are not allowed as embedded forms (is this an unnecessary constraint?)
                 }
 
                 if (!types.Contains(form.Id))

@@ -25,7 +25,6 @@ class EditContentBlade extends Blade {
         this.contentType = contentType;
         this.content = content;
         this.contentId = primaryKeyProvider.getFor(this.content, this.contentType);
-        this.formId = `Cloudy.CMS.Content[type=${this.contentType.id}]`;
         this.element.addEventListener("keydown", (event) => {
             if ((String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) || event.which == 19) { // 19 for Mac:s "Command+S"
                 if (this.viewChangeButton) {
@@ -103,12 +102,12 @@ class EditContentBlade extends Blade {
 
         // TODO: Check that initialValue is same as pendingChanges.initialValue - otherwise trigger reconciliation
 
-        const fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
+        const fieldModels = (await fieldModelBuilder.getFieldModels(this.contentType.id)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
         const formBuilder = new FormBuilder(this.app, this);
         
         const onChangeCallback = (path, change) => changeTracker.addChange(this.contentId, this.contentType.id, path, change);
 
-        const groups = [...new Set((await fieldDescriptorProvider.getFor(this.formId)).map(fieldDescriptor => fieldDescriptor.group))].sort();
+        const groups = [...new Set((await fieldDescriptorProvider.getFor(this.contentType.id)).map(fieldDescriptor => fieldDescriptor.group))].sort();
 
         if (groups.length == 1) {
             const form = formBuilder.build(this.contentId, this.contentType.id, this.content, [], fieldModels.filter(fieldModel => fieldModel.descriptor.group == groups[0])).onChange(onChangeCallback)

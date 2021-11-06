@@ -1,7 +1,7 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport
+namespace Cloudy.CMS.ContentSupport.RepositorySupport
 {
     public class ContentCreator : IContentCreator
     {

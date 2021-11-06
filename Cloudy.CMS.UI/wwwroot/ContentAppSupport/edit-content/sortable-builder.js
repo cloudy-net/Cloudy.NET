@@ -4,6 +4,10 @@ import SortableItem from '../../FormSupport/sortable-item.js';
 import PopupMenu from '../../PopupMenuSupport/popup-menu.js';
 import Button from '../../button.js';
 import urlFetcher from '../../url-fetcher.js';
+import changeTracker from '../utils/change-tracker.js';
+import arrayEquals from '../utils/array-equals.js';
+import fieldModelBuilder from '../../FormSupport/field-model-builder.js';
+import FormBuilder from './form-builder.js';
 
 class SortableBuilder {
     build(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
@@ -81,53 +85,88 @@ class SortableBuilder {
     }
 
     buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
-        const createItem = (value, id) => {
-            var fieldElement = document.createElement('cloudy-ui-sortable-item-field');
-            var fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
+        const createItem = async (type, value, id) => {
+            const fieldElement = document.createElement('cloudy-ui-sortable-item-field');
+            const fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
             fieldElement.appendChild(fieldControlElement);
 
-            var control = new fieldModel.controlType(fieldModel, value, app, blade, contentId, contentTypeId, path).appendTo(fieldControlElement);
-            var field = new Field(fieldModel, fieldElement, { control });
-            return new SortableItem(fieldElement, id, { field });
+            const fieldset = document.createElement('fieldset');
+            fieldset.classList.add('cloudy-ui-form-field');
+            fieldset.style.marginTop = '8px';
+            fieldControlElement.appendChild(fieldset);
+
+            const legend = document.createElement('legend');
+            legend.classList.add('cloudy-ui-form-field-label');
+            legend.innerText = type;
+            fieldset.appendChild(legend);
+
+            const data = { type };
+
+            const fieldModels = await fieldModelBuilder.getFieldModels(type);
+
+            const form = new FormBuilder(app, blade)
+                .build(contentId, contentTypeId, value, path, fieldModels)
+                .onChange((name, value) => console.log(name, contentId, contentTypeId, value, path));
+            form.element.classList.remove('cloudy-ui-form');
+            form.element.classList.add('cloudy-ui-embedded-form');
+            form.appendTo(fieldset);
+
+            data.form = form;
+
+            return new SortableItem(fieldElement, id, { type });
         };
 
         const sortable = new Sortable().setHorizontal();
         sortable.element.classList.add('cloudy-ui-sortable-field');
 
         for (let index = 0; index < value.length; index++) {
-            sortable.add(createItem(value[index], `original-${index}`), false);
+            createItem(value[index].type, value[index].value, `original-${index}`)
+                .then(item => sortable.add(item, false));
+        }
+
+        const changesForContent = changeTracker.getFor(contentId, contentTypeId);
+        const changesForField = changesForContent && changesForContent.changedFields.find(c => arrayEquals(path, c.path));
+
+        if (changesForField && changesForField.type != 'array') {
+            throw new Error(`Could not apply pending changes for content ${JSON.stringify(contentId)} of type ${contentTypeId} with path ${JSON.stringify(path)} as its pending change assume a type of '${changesForField.type}' but is now defined as 'array'`);
+        }
+
+        let newItemIndex = 0;
+
+        if (changesForField && changesForField.changes) {
+            for (const addition of changesForField.changes.filter(c => c.type == 'add')) {
+                const index = +addition.id.substr('new-'.length);
+
+                newItemIndex = Math.max(index + 1, newItemIndex);
+
+                createItem(addition.value.type, addition.value.value, `new-${index}`)
+                    .then(item => sortable.add(item, false));
+            }
         }
 
         sortable.onAdd(item => {
-            eventDispatcher.triggerChange(path, { type: 'array.add', value: null, id: item.id });
+            eventDispatcher.triggerChange(path, { fieldType: 'array', type: 'add', value: { type: item.data.type, value: {} }, id: item.id }); // deep changes to value will be separate changes, denoted by id
         });
 
         const button = new Button('Add').onClick(() => menu.toggle());
         const menu = new PopupMenu(button.element);
         sortable.addFooter(menu);
 
-        let index = 0;
-        (async () => {
-            const types = await urlFetcher.fetch(`PolymorphicForm/GetOptions?${fieldModel.descriptor.polymorphicCandidates.map((t, i) => `types[${i}]=${t}`).join('&')}`, {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }, `Could not get form types for ${fieldModel.descriptor.polymorphicCandidates.join(', ')}`);
-
-            if (types.length) {
-                types.forEach(item =>
-                    menu.addItem(listItem => {
+        urlFetcher
+            .fetch(
+                `PolymorphicForm/GetOptions?${fieldModel.descriptor.polymorphicCandidates.map((t, i) => `types[${i}]=${t}`).join('&')}`,
+                { credentials: 'include', headers: { 'Content-Type': 'application/json' } },
+                `Could not get form types for ${fieldModel.descriptor.polymorphicCandidates.join(', ')}`
+            ).then(types => {
+                if (types.length) {
+                    types.forEach(item => menu.addItem(listItem => {
                         listItem.setText(item.name);
-                        listItem.onClick(() => {
-                            sortable.add(createItem(item, `new-${index++}`));
-                        });
-                    })
-                );
-            } else {
-                menu.addItem(item => item.setDisabled().setText('(no items)'));
-            }
-        })();
+                        listItem.onClick(async () => sortable.add(await createItem(item.type, {}, `new-${newItemIndex++}`)));
+                    }));
+                } else {
+                    menu.addItem(item => item.setDisabled().setText('(no items)'));
+                }
+            });
 
         return sortable;
     }

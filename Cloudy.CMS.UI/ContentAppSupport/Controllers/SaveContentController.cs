@@ -28,10 +28,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentUpdater ContentUpdater { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
-        IContentInstanceCreator ContentInstanceCreator { get; }
         IContentCreator ContentCreator { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentInstanceCreator contentInstanceCreator, IContentCreator contentCreator)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator)
         {
             ContentTypeProvider = contentTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
@@ -39,7 +38,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContentUpdater = contentUpdater;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
-            ContentInstanceCreator = contentInstanceCreator;
             ContentCreator = contentCreator;
         }
 
@@ -59,7 +57,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                 if(change.KeyValues == null)
                 {
-                    content = ContentInstanceCreator.Create(contentType);
+                    content = Activator.CreateInstance(contentType.Type);
                 }
                 else
                 {
