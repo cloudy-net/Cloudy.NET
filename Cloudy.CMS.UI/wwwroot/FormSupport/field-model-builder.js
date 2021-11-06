@@ -1,4 +1,4 @@
-﻿import fieldDescriptorProvider from './field-descriptor-provider.js';
+import fieldDescriptorProvider from './field-descriptor-provider.js';
 import fieldControlProvider from './field-control-provider.js';
 import FieldModel from './field-model.js';
 
@@ -16,6 +16,10 @@ class FieldModelBuilder {
     }
 
     async getFieldModel(fieldDescriptor) {
+        if(fieldDescriptor.isPolymorphic){
+            return new FieldModel(fieldDescriptor, null, null);
+        }
+
         if (fieldDescriptor.embeddedFormId) {
             var fieldModels = await this.getFieldModels(fieldDescriptor.embeddedFormId);
 
