@@ -100,6 +100,9 @@ class EditContentBlade extends Blade {
 
     async buildForm() {
         changeTracker.setReferenceObject({ ...this.content }, this.contentId, this.contentType.id);
+
+        // TODO: Check that initialValue is same as pendingChanges.initialValue - otherwise trigger reconciliation
+
         const fieldModels = (await fieldModelBuilder.getFieldModels(this.formId)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
         const formBuilder = new FormBuilder(this.app, this);
         
