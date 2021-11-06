@@ -81,6 +81,12 @@ class SortableBuilder {
     }
 
     async buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
+        const types = await urlFetcher.fetch(
+            `PolymorphicForm/GetOptions?${fieldModel.descriptor.polymorphicCandidates.map((t, i) => `types[${i}]=${t}`).join('&')}`,
+            { credentials: 'include', headers: { 'Content-Type': 'application/json' } },
+            `Could not get form types for ${fieldModel.descriptor.polymorphicCandidates.join(', ')}`
+        );
+
         const createItem = async (type, value, id) => {
             const fieldElement = document.createElement('cloudy-ui-sortable-item-field');
             const fieldControlElement = document.createElement('cloudy-ui-sortable-item-field-control');
@@ -93,7 +99,7 @@ class SortableBuilder {
 
             const legend = document.createElement('legend');
             legend.classList.add('cloudy-ui-form-field-label');
-            legend.innerText = type;
+            legend.innerText = types.find(t => t.type == type).name;
             fieldset.appendChild(legend);
 
             const data = { type };
@@ -145,21 +151,14 @@ class SortableBuilder {
         const menu = new PopupMenu(button.element);
         sortable.addFooter(menu);
 
-        urlFetcher
-            .fetch(
-                `PolymorphicForm/GetOptions?${fieldModel.descriptor.polymorphicCandidates.map((t, i) => `types[${i}]=${t}`).join('&')}`,
-                { credentials: 'include', headers: { 'Content-Type': 'application/json' } },
-                `Could not get form types for ${fieldModel.descriptor.polymorphicCandidates.join(', ')}`
-            ).then(types => {
-                if (types.length) {
-                    types.forEach(item => menu.addItem(listItem => {
-                        listItem.setText(item.name);
-                        listItem.onClick(async () => sortable.add(await createItem(item.type, {}, `new-${newItemIndex++}`)));
-                    }));
-                } else {
-                    menu.addItem(item => item.setDisabled().setText('(no items)'));
-                }
-            });
+        if (types.length) {
+            types.forEach(item => menu.addItem(listItem => {
+                listItem.setText(item.name);
+                listItem.onClick(async () => sortable.add(await createItem(item.type, {}, `new-${newItemIndex++}`)));
+            }));
+        } else {
+            menu.addItem(item => item.setDisabled().setText('(no items)'));
+        }
 
         return sortable;
     }
