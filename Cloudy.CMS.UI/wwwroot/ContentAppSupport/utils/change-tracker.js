@@ -97,8 +97,6 @@ class ChangeTracker {
             }
         }
 
-        // TODO: deep changes (embedded forms)
-
         if (pendingChange.changedFields.length == 0) {
             this.pendingChanges.splice(this.pendingChanges.indexOf(pendingChange), 1); // delete empty change object
         }
