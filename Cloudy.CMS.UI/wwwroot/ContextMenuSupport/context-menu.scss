@@ -6,11 +6,6 @@
 
 .cloudy-ui-context-menu-outer {
     position: relative;
-
-    &.cloudy-ui-horizontal {
-        margin: 0 auto -8px;
-        width: 36px;
-    }
 }
 
 cloudy-ui-context-menu-button {
@@ -37,7 +32,8 @@ cloudy-ui-context-menu-button {
     }
 
     &.cloudy-ui-horizontal {
-        width: 36px;
+        margin-left: 4px;
+        width: 24px;
         height: 18px;
         border-radius: 4px;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='6' cy='12' r='2' fill-opacity='0.54' /%3E%3Ccircle cx='12' cy='12' r='2' fill-opacity='0.54' /%3E%3Ccircle cx='18' cy='12' r='2' fill-opacity='0.54' /%3E%3C/svg%3E");

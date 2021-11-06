@@ -46,6 +46,11 @@ fieldset.cloudy-ui-form-field > .cloudy-ui-form-field-label {
   padding: 0 8px;
 }
 
+.cloudy-ui-form-field-label .cloudy-ui-context-menu-outer {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* INPUT */
 .cloudy-ui-form-input {
   box-sizing: content-box;

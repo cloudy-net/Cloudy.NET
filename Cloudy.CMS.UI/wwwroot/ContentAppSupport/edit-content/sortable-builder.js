@@ -8,6 +8,7 @@ import changeTracker from '../utils/change-tracker.js';
 import arrayEquals from '../utils/array-equals.js';
 import fieldModelBuilder from '../../FormSupport/field-model-builder.js';
 import FormBuilder from './form-builder.js';
+import SortableMenu from '../../FormSupport/sortable-menu.js';
 
 class SortableBuilder {
     async build(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
@@ -37,7 +38,7 @@ class SortableBuilder {
             return new SortableItem(container, id, { form });
         };
 
-        var sortable = new Sortable().setHorizontal();
+        var sortable = new Sortable();
         sortable.element.classList.add('cloudy-ui-sortable-form');
         let index = 0;
         sortable.addFooter(new Button('Add').onClick(() => sortable.addItem(createItem({}, `new-${index++}`))));
@@ -114,10 +115,12 @@ class SortableBuilder {
 
             data.form = form;
 
-            return new SortableItem(fieldElement, id, { type });
+            const item = new SortableItem(fieldElement, id, { type });
+            new SortableMenu(this, item).setHorizontal().appendTo(legend);
+            return item;
         };
 
-        const sortable = new Sortable().setHorizontal();
+        const sortable = new Sortable();
         sortable.element.classList.add('cloudy-ui-sortable-field');
 
         for (let index = 0; index < value.length; index++) {

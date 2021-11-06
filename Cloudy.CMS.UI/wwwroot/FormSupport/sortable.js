@@ -27,11 +27,6 @@ class SortableField {
         });
     }
 
-    setHorizontal() {
-        this.horizontal = true;
-        return this;
-    }
-
     addFooter(element) {
         var buttonContainer = document.createElement('cloudy-ui-sortable-buttons');
         buttonContainer.appendChild(element.element || element);
@@ -43,20 +38,6 @@ class SortableField {
 
         var field = document.createElement('cloudy-ui-sortable-item');
         this.fields.appendChild(field);
-
-        var fieldAction = document.createElement('cloudy-ui-sortable-item-action');
-        field.appendChild(fieldAction);
-
-        const menu = new SortableMenu(this, item).appendTo(fieldAction);
-        
-        if (this.horizontal) {
-            menu.setHorizontal();
-            field.append(fieldAction);
-        } else {
-            menu.setCompact();
-            item.element.append(fieldAction);
-        }
-
         field.appendChild(item.element);
 
         if (triggerEvent) {
