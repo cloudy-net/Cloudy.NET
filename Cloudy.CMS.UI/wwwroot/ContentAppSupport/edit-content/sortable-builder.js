@@ -99,7 +99,7 @@ class SortableBuilder {
         }
 
         sortable.onAdd(item => {
-            eventDispatcher.triggerChange(path, fieldModel.descriptor.camelCaseId, { type: 'array.add', value: null, id: item.id });
+            eventDispatcher.triggerChange(path, { type: 'array.add', value: null, id: item.id });
         });
 
         const button = new Button('Add').onClick(() => menu.toggle());
