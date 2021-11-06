@@ -15,23 +15,19 @@ class SortableBuilder {
             value = [];
         }
 
-        var sortable;
-
         if (fieldModel.descriptor.embeddedFormId) {
             if (fieldModel.descriptor.control) {
-                sortable = new fieldModel.controlType(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
+                return new fieldModel.controlType(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             } else {
-                sortable = this.buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
+                return this.buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             }
         } else {
             if (fieldModel.descriptor.isPolymorphic) {
-                sortable = await this.buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
+                return await this.buildSortablePolymorphicField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             } else {
-                sortable = this.buildSortableSimpleField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
+                return this.buildSortableSimpleField(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
             }
         }
-
-        return sortable;
     }
 
     buildSortableEmbeddedForm(app, blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
