@@ -14,6 +14,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 using System.Text.Json;
+using Cloudy.CMS.UI.FormSupport.FieldSupport;
+using System.Collections;
+using Cloudy.CMS.UI.FormSupport;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -25,17 +28,21 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentGetter ContentGetter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
+        IFormProvider FormProvider { get; }
+        IFieldProvider FieldProvider { get; }
         IContentUpdater ContentUpdater { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentCreator ContentCreator { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFormProvider formProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator)
         {
             ContentTypeProvider = contentTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
             ContentGetter = contentGetter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
+            FormProvider = formProvider;
+            FieldProvider = fieldProvider;
             ContentUpdater = contentUpdater;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             ContentCreator = contentCreator;
@@ -67,23 +74,44 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => CamelCaseNamingStrategy.GetPropertyName(p.Name, false), p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
 
-                foreach (var changedField in change.ChangedFields)
+                if (change.ChangedFields.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
-                    var propertyDefinition = propertyDefinitions[changedField.Name];
+                    throw new Exception($"Tried to change primary key of content {string.Join(", ", change.KeyValues)} with type {change.ContentTypeId}!");
+                }
 
-                    if(idProperties.Any(p => p.Name == propertyDefinition.Name))
+                var fields = FieldProvider.GetAllFor(change.ContentTypeId).ToDictionary(f => f.Id, f => f);
+
+                var changedSimpleFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Simple).ToList();
+
+                foreach (var changedField in changedSimpleFields)
+                {
+                    var name = changedField.Path.Single();
+                    var field = fields[name.Substring(0, 1).ToUpper() + name.Substring(1)];
+                    var property = contentType.Type.GetProperty(field.Id);
+
+                    property.GetSetMethod().Invoke(content, new object[] { Convert.ChangeType(changedField.Value, property.PropertyType) });
+                }
+
+                var changedArrayFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Array).ToList();
+
+                foreach (var changedField in changedArrayFields)
+                {
+                    var name = changedField.Path.Single();
+                    var field = fields[name.Substring(0, 1).ToUpper() + name.Substring(1)];
+                    var property = contentType.Type.GetProperty(name);
+                    var array = (IList)property.GetGetMethod().Invoke(content, null);
+
+                    
+
+                    if (field.Type.IsInterface)
                     {
-                        throw new Exception("Tried to change primary key!");
+                        foreach (var arrayChange in changedField.Changes) {
+                            var polymorphicValue = System.Text.Json.JsonSerializer.Deserialize<PolymorphicValue>(arrayChange.Value.GetRawText());
+                            var form = FormProvider.Get(polymorphicValue.Type);
+                            var value = System.Text.Json.JsonSerializer.Deserialize(polymorphicValue.Value.GetRawText(), form.Type);
+                            array.Add(value);
+                        }
                     }
-
-                    var display = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
-
-                    if (display != null && display.GetAutoGenerateField() == false)
-                    {
-                        continue;
-                    }
-
-                    propertyDefinition.Setter(content, changedField.Value);
                 }
 
                 if (!TryValidateModel(content))
@@ -106,22 +134,51 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentRequestBody
         {
-            public IEnumerable<SaveContentRequestBodyChange> Changes { get; set; }
+            public IEnumerable<ChangedContent> Changes { get; set; }
         }
 
-        public class SaveContentRequestBodyChange
+        public class ChangedContent
         {
             public JsonElement[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
             [Required]
-            public SaveContentMappingChange[] ChangedFields { get; set; }
+            public ChangedField[] ChangedFields { get; set; }
         }
 
-        public class SaveContentMappingChange
+        public static class ChangedFieldType
         {
-            public string Name { get; set; }
+            public static string Simple => "simple";
+            public static string Array => "array";
+        }
+
+        public class ChangedField
+        {
+            public string[] Path { get; set; }
+            public string Type { get; set; }
+            public ArrayChange[] Changes { get; set; }
+            public string InitialValue { get; set; }
             public string Value { get; set; }
+        }
+
+        public enum ArrayChangeType
+        {
+            Add,
+            Update,
+            Delete,
+        }
+
+        public class ArrayChange
+        {
+            public string Id { get; set; }
+            public ArrayChangeType Type { get; set; }
+            public JsonElement Value { get; set; }
+        }
+
+        public class PolymorphicValue
+        {
+            public string Type { get; set; }
+            public JsonElement Value { get; set; }
         }
 
         public class ContentResponseMessage

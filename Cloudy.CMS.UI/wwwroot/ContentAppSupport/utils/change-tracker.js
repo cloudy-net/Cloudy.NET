@@ -63,7 +63,7 @@ class ChangeTracker {
 
         if (change.fieldType == 'simple') {
             if (!changedField) {
-                changesForContent.changedFields.push(changedField = { path, initialValue: change.initialValue, value: change.value });
+                changesForContent.changedFields.push(changedField = { path, type: 'simple', initialValue: change.initialValue, value: change.value });
             }
 
             if (change.type == 'set') {
@@ -81,7 +81,7 @@ class ChangeTracker {
             }
 
             if (change.type == 'add') {
-                changedField.changes.push(change);
+                changedField.changes.push({ id: change.id, type: change.add, value: change.value });
             }
             if (change.type == 'update') {
                 const item = changedField.changes.find(i => i.id == change.id);
