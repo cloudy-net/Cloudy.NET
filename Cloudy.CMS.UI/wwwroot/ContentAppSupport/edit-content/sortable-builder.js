@@ -147,7 +147,7 @@ class SortableBuilder {
         }
 
         sortable.onAdd(item => {
-            eventDispatcher.triggerChange(path, { fieldType: 'array', type: 'add', value: { type: item.data.type, value: {} }, id: item.id }); // deep changes to value will be separate changes, denoted by id
+            eventDispatcher.triggerChange(path, { fieldType: 'array', type: 'add', value: { type: item.data.type, value: JSON.stringify({}) }, id: item.id }); // deep changes to value will be separate changes, denoted by id
         });
 
         const button = new Button('Add').onClick(() => menu.toggle());

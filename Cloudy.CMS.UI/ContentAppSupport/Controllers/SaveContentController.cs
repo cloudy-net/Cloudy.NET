@@ -34,7 +34,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentCreator ContentCreator { get; }
-
+        
         public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFormProvider formProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator)
         {
             ContentTypeProvider = contentTypeProvider;
@@ -98,17 +98,21 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 {
                     var name = changedField.Path.Single();
                     var field = fields[name.Substring(0, 1).ToUpper() + name.Substring(1)];
-                    var property = contentType.Type.GetProperty(name);
+                    var property = contentType.Type.GetProperty(field.Id);
                     var array = (IList)property.GetGetMethod().Invoke(content, null);
 
-                    
+                    if(array == null)
+                    {
+                        array = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(field.Type));
+                        property.GetSetMethod().Invoke(content, new object[] { array });
+                    }
 
                     if (field.Type.IsInterface)
                     {
                         foreach (var arrayChange in changedField.Changes) {
-                            var polymorphicValue = System.Text.Json.JsonSerializer.Deserialize<PolymorphicValue>(arrayChange.Value.GetRawText());
+                            var polymorphicValue = JsonConvert.DeserializeObject<PolymorphicValue>(arrayChange.Value);
                             var form = FormProvider.Get(polymorphicValue.Type);
-                            var value = System.Text.Json.JsonSerializer.Deserialize(polymorphicValue.Value.GetRawText(), form.Type);
+                            var value = JsonConvert.DeserializeObject(polymorphicValue.Value, form.Type);
                             array.Add(value);
                         }
                     }
@@ -172,13 +176,13 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             public string Id { get; set; }
             public ArrayChangeType Type { get; set; }
-            public JsonElement Value { get; set; }
+            public string Value { get; set; }
         }
 
         public class PolymorphicValue
         {
             public string Type { get; set; }
-            public JsonElement Value { get; set; }
+            public string Value { get; set; }
         }
 
         public class ContentResponseMessage

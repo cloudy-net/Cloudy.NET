@@ -81,7 +81,7 @@ class ChangeTracker {
             }
 
             if (change.type == 'add') {
-                changedField.changes.push({ id: change.id, type: change.add, value: change.value });
+                changedField.changes.push({ id: change.id, type: change.add, value: JSON.stringify(change.value) });
             }
             if (change.type == 'update') {
                 const item = changedField.changes.find(i => i.id == change.id);
