@@ -88,7 +88,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             if(singleton != null)
             {
                 var singletonInstance = await SingletonGetter.GetAsync(singleton.ContentTypeId).ConfigureAwait(false);
-                singletonId = PrimaryKeyGetter.Get(singletonInstance);
+                if (singletonInstance != null)
+                {
+                    singletonId = PrimaryKeyGetter.Get(singletonInstance);
+                }
             }
 
             var item = new ContentTypeResponseItem
