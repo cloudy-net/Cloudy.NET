@@ -30,7 +30,14 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
                 var type = types[i];
                 if(value.ValueKind == JsonValueKind.String)
                 {
-                    result.Add(value.GetString());
+                    if(type == typeof(Guid))
+                    {
+                        result.Add(Guid.Parse(value.GetString()));
+                    }
+                    else
+                    {
+                        result.Add(value.GetString());
+                    }
                 }
                 else if(value.ValueKind == JsonValueKind.Number)
                 {
