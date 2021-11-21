@@ -9,12 +9,10 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public class PolymorphicFormDeserializationCandidateCreator : IPolymorphicCandidateCreator
     {
-        IFormProvider FormProvider { get; }
         IContentTypeProvider ContentTypeProvider { get; }
 
-        public PolymorphicFormDeserializationCandidateCreator(IFormProvider formProvider, IContentTypeProvider contentTypeProvider)
+        public PolymorphicFormDeserializationCandidateCreator(IContentTypeProvider contentTypeProvider)
         {
-            FormProvider = formProvider;
             ContentTypeProvider = contentTypeProvider;
         }
 
@@ -22,14 +20,9 @@ namespace Cloudy.CMS.UI.FormSupport
         {
             var result = new List<PolymorphicCandidateDescriptor>();
 
-            foreach(var form in FormProvider.GetAll())
+            foreach(var contentType in ContentTypeProvider.GetAll())
             {
-                if (ContentTypeProvider.Get(form.Type) != null)
-                {
-                    continue;
-                }
-
-                result.Add(new PolymorphicCandidateDescriptor(form.Id, form.Type));
+                result.Add(new PolymorphicCandidateDescriptor(contentType.Id, contentType.Type));
             }
 
             return result.AsReadOnly();

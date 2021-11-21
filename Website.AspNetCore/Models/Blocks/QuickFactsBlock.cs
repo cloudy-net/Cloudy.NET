@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.UI.FormSupport;
+﻿using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.UI.FormSupport;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Website.AspNetCore.Models.Blocks
 {
-    [Form("a3525ad9-920d-4793-8a58-0d3a3a70c829")]
+    [ContentType("a3525ad9-920d-4793-8a58-0d3a3a70c829")]
     public class QuickFactsBlock : ISidebarBlock
     {
         public string Heading { get; set; }

@@ -98,7 +98,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             if(candidate == null)
             {
-                throw new Exception($"Value (of type {value.GetType()}) must be a [Form] when saving to an interface type property for polymorphic serialization to work");
+                throw new Exception($"Value (of type {value.GetType()}) must be a [ContentType] when saving to an interface type property for polymorphic serialization to work");
             }
 
             o["type"] = candidate.Id;

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Cloudy.CMS.ContentTypeSupport;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
@@ -50,11 +51,11 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                 return null;
             }
 
-            var attribute = model.GetCustomAttribute<FormAttribute>();
+            var attribute = model.GetCustomAttribute<ContentTypeAttribute>();
 
             if(attribute == null)
             {
-                throw new Exception("Type parameter IItemCreator<T> must have the attribute [Form(...)]");
+                throw new Exception("Type parameter IItemCreator<T> must have the attribute [ContentType(...)]");
             }
 
             return attribute.Id;

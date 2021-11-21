@@ -18,13 +18,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     [Area("Cloudy.CMS")]
     public class PolymorphicFormController
     {
-        IFormProvider FormProvider { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IHumanizer Humanizer { get; }
 
-        public PolymorphicFormController(IFormProvider formProvider, IContentTypeProvider contentTypeProvider, IHumanizer humanizer)
+        public PolymorphicFormController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer)
         {
-            FormProvider = formProvider;
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
         }
@@ -33,22 +31,17 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             var result = new List<FormResponseItem>();
 
-            foreach (var form in FormProvider.GetAll())
+            foreach (var contentType in ContentTypeProvider.GetAll())
             {
-                if (ContentTypeProvider.Get(form.Type) != null)
-                {
-                    continue; // content types are not allowed as embedded forms (is this an unnecessary constraint?)
-                }
-
-                if (!types.Contains(form.Id))
+                if (!types.Contains(contentType.Id))
                 {
                     continue;
                 }
 
                 result.Add(new FormResponseItem
                 {
-                    Type = form.Id,
-                    Name = form.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(form.Type.Name),
+                    Type = contentType.Id,
+                    Name = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(contentType.Type.Name),
                 });
             }
                 
