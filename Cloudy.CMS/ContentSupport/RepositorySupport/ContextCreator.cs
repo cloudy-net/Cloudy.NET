@@ -19,7 +19,14 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
         public IContextWrapper CreateFor(Type type)
         {
-            return new ContextWrapper((DbContext)ServiceProvider.GetRequiredService(ContextDescriptorProvider.GetFor(type).Type));
+            var contextDescriptor = ContextDescriptorProvider.GetFor(type);
+
+            if(contextDescriptor == null)
+            {
+                throw new CouldNotFindAnyDbContextWithDbSetForTypeException(type);
+            }
+
+            return new ContextWrapper((DbContext)ServiceProvider.GetRequiredService(contextDescriptor.Type));
         }
     }
 }

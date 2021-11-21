@@ -31,7 +31,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
                 }
             }
 
-            throw new CouldNotFindAnyDbContextWithDbSetForTypeException(type);
+            return null;
         }
     }
 }
