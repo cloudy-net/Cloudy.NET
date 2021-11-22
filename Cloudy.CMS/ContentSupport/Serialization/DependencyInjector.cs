@@ -12,9 +12,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddScoped<IPolymorphicDeserializer, PolymorphicDeserializer>();
-            services.AddScoped<IPolymorphicSerializer, PolymorphicSerializer>();
-            services.AddScoped<IPolymorphicCandidateProvider, PolymorphicCandidateProvider>();
+            services.AddScoped<ContentJsonConverter, ContentJsonConverter>();
         }
     }
 }

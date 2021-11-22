@@ -42,7 +42,6 @@ namespace Cloudy.CMS.UI
             services.AddSingleton<IListActionModuleProvider, ListActionModuleProvider>();
             services.AddSingleton<IContentTypeActionModuleCreator, ContentTypeActionModuleCreator>();
             services.AddSingleton<IContentTypeActionModuleProvider, ContentTypeActionModuleProvider>();
-            services.AddScoped<PolymorphicFormConverter, PolymorphicFormConverter>();
         }
     }
 }

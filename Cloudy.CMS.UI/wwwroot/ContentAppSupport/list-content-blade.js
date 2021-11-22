@@ -81,22 +81,11 @@ class ListContentBlade extends Blade {
             return;
         }
 
-        var updateListItem = (listItem, content, contentType) => {
-            if (contentType.isNameable) {
-                var name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
-
-                if (!name) {
-                    name = `${contentType.name} ${content.id}`;
-                }
-            } else {
-                var name = content.id;
-            }
-
-            listItem.setText(name);
+        var updateListItem = (listItem, item, contentType) => {
+            listItem.setText(item.name);
 
             if (contentType.isImageable) {
-                var image = contentType.imageablePropertyName ? content[contentType.imageablePropertyName] : content.image;
-                listItem.setImage(image || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
+                listItem.setImage(item.image || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
             }
 
             if (this.contentTypes.length > 1) {
@@ -104,23 +93,23 @@ class ListContentBlade extends Blade {
             }
         };
 
-        contentList.items.forEach(content => {
+        contentList.items.forEach(item => {
             var contentType = this.contentTypes[0];
             var listItem = new ListItem();
             this.list.addItem(listItem);
 
-            updateListItem(listItem, content, contentType);
+            updateListItem(listItem, item, contentType);
 
-            if (contentList.itemChildrenCounts[content.id]) {
+            if (contentList.itemChildrenCounts[JSON.stringify(item.keys)]) {
                 var folder = document.createElement('cloudy-ui-list-item-folder');
-                folder.addEventListener('click', event => this.listItems([...parents, content]));
+                folder.addEventListener('click', event => this.listItems([...parents, item]));
                 listItem.element.append(folder);
             }
 
             listItem.onClick(async () => {
                 listItem.setActive();
-                var blade = new EditContentBlade(this.app, contentType, content)
-                    .onComplete(() => updateListItem(listItem, content, contentType))
+                var blade = new EditContentBlade(this.app, contentType, item.keys)
+                    .onComplete(() => updateListItem(listItem, item, contentType))
                     .onClose(() => {
                         listItem.setActive(false);
                     });
@@ -129,14 +118,14 @@ class ListContentBlade extends Blade {
           
 
             var menu = new ContextMenu();
-            this.contentTypeActions[contentType.id].forEach(module => module.default(menu, content, this, this.app));
+            this.contentTypeActions[contentType.id].forEach(module => module.default(menu, item.keys, this, this.app));
             menu.addItem(item => {
                 item.setText('Remove');
 
                 if (contentType.isSingleton) {
                     item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
                 } else {
-                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, content).onComplete(() => this.listItems(parents)), this))
+                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, item.keys).onComplete(() => this.listItems(parents)), this))
                 }
             });
             listItem.setMenu(menu);

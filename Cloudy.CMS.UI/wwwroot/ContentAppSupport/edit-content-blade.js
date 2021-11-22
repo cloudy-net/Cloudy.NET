@@ -10,6 +10,7 @@ import urlFetcher from '../url-fetcher.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 import changeTracker from './utils/change-tracker.js';
 import PendingChangesDiffBlade from './pending-changes-diff-blade.js';
+import contentGetter from './utils/content-getter.js';
 
 
 
@@ -18,13 +19,12 @@ import PendingChangesDiffBlade from './pending-changes-diff-blade.js';
 class EditContentBlade extends Blade {
     onCompleteCallbacks = [];
 
-    constructor(app, contentType, content) {
+    constructor(app, contentType, contentId) {
         super();
         
         this.app = app;
         this.contentType = contentType;
-        this.content = content;
-        this.contentId = primaryKeyProvider.getFor(this.content, this.contentType);
+        this.contentId = contentId;
         this.element.addEventListener("keydown", (event) => {
             if ((String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) || event.which == 19) { // 19 for Mac:s "Command+S"
                 if (this.viewChangeButton) {
@@ -36,6 +36,8 @@ class EditContentBlade extends Blade {
     }
 
     async open() {
+        this.content = await contentGetter.get(this.contentId, this.contentType.id);
+
         if (this.contentId) {
             this.setTitle(`Edit ${await nameProvider.getNameOf(this.content, this.contentType.id)}`);
         } else {

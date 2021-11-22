@@ -2,16 +2,17 @@
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.SingletonSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
@@ -25,19 +26,21 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IContentChildrenCounter ContentChildrenCounter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        PolymorphicFormConverter PolymorphicFormConverter { get; }
+        ISingletonProvider SingletonProvider { get; }
+        IHumanizer Humanizer { get; }
 
-        public ContentListController(IContentTypeProvider contentTypeRepository, IContentFinder contentFinder, IPrimaryKeyGetter primaryKeyGetter, IContentChildrenCounter contentChildrenCounter, IPropertyDefinitionProvider propertyDefinitionProvider, PolymorphicFormConverter polymorphicFormConverter)
+        public ContentListController(IContentTypeProvider contentTypeRepository, IContentFinder contentFinder, IPrimaryKeyGetter primaryKeyGetter, IContentChildrenCounter contentChildrenCounter, IPropertyDefinitionProvider propertyDefinitionProvider, ISingletonProvider singletonProvider, IHumanizer humanizer)
         {
             ContentTypeProvider = contentTypeRepository;
             ContentFinder = contentFinder;
             PrimaryKeyGetter = primaryKeyGetter;
             ContentChildrenCounter = contentChildrenCounter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            PolymorphicFormConverter = polymorphicFormConverter;
+            SingletonProvider = singletonProvider;
+            Humanizer = humanizer;
         }
 
-        public async Task Get(string[] contentTypeIds, string parent)
+        public async Task<ActionResult> Get(string[] contentTypeIds, string parent)
         {
             var contentTypes = contentTypeIds.Select(t => ContentTypeProvider.Get(t)).ToList().AsReadOnly();
 
@@ -46,31 +49,69 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 throw new NotImplementedException("Multi type queries are not yet implemented");
             }
 
-            var items = new List<object>();
+            var items = new List<ContentListResultItem>();
             var itemChildrenCounts = new Dictionary<string, int>();
 
-            var documentsQuery = ContentFinder.Find(contentTypes.Single().Type);
+            var query = ContentFinder.Find(contentTypes.Single().Type);
 
             if(parent != null)
             {
-                documentsQuery.WhereParent(parent);
+                query.WhereParent(parent);
             }
             else
             {
-                documentsQuery.WhereHasNoParent();
+                query.WhereHasNoParent();
             }
 
-            var documents = (await documentsQuery.GetResultAsync().ConfigureAwait(false)).ToList();
+            var result = (await query.GetResultAsync().ConfigureAwait(false)).ToList();
 
-            foreach (var content in documents)
+            foreach (var content in result)
             {
-                items.Add(content);
+                var contentType = ContentTypeProvider.Get(content.GetType());
+                var item = new ContentListResultItem
+                {
+                    ContentTypeId = contentType.Id,
+                    Keys = PrimaryKeyGetter.Get(content).ToList().AsReadOnly(),
+                };
+
+                var singleton = SingletonProvider.Get(contentType.Id);
+
+                if (singleton == null)
+                {
+                    if (content is INameable)
+                    {
+                        item.Name = ((INameable)content).Name;
+                    }
+                }
+
+                if (item.Name == null)
+                {
+                    var contentTypeName = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? contentType.Type.Name;
+                    
+                    if (contentTypeName.Contains(':') && !contentType.Id.Contains(':'))
+                    {
+                        contentTypeName = contentTypeName.Split(':').First();
+                    }
+                    else
+                    {
+                        contentTypeName = Humanizer.Humanize(contentTypeName);
+                    }
+
+                    if (singleton == null)
+                    {
+                        item.Name = $"{contentTypeName} {JsonSerializer.Serialize(item.Keys)}";
+                    }
+                    else
+                    {
+                        item.Name = contentTypeName;
+                    }
+                }
+
+                items.Add(item);
 
                 if (content is IHierarchical)
                 {
-                    var id = PrimaryKeyGetter.Get(content);
-
-                    itemChildrenCounts[string.Join(",", id)] = await ContentChildrenCounter.CountChildrenForAsync(id).ConfigureAwait(false);
+                    itemChildrenCounts[JsonSerializer.Serialize(item.Keys)] = await ContentChildrenCounter.CountChildrenForAsync(item.Keys).ConfigureAwait(false);
                 }
             }
 
@@ -82,15 +123,29 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             //    result = result.OrderBy(i => sortByProperty.Getter(i)).ToList();
             //}
 
-            Response.ContentType = "application/json";
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new ContentJsonConverter(ContentTypeProvider) },
+            };
 
-            await Response.WriteAsync(JsonConvert.SerializeObject(new ContentListResult { Items = items, ItemChildrenCounts = itemChildrenCounts }, new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver(), Converters = new List<JsonConverter> { PolymorphicFormConverter } }));
+            return Content(JsonSerializer.Serialize(new ContentListResult
+            {
+                Items = items,
+                ItemChildrenCounts = itemChildrenCounts
+            }, options));
         }
 
         public class ContentListResult
         {
             public IDictionary<string, int> ItemChildrenCounts { get; set; }
-            public IEnumerable<object> Items { get; set; }
+            public IEnumerable<ContentListResultItem> Items { get; set; }
+
+        }
+        public class ContentListResultItem
+        {
+            public string ContentTypeId { get; set; }
+            public IEnumerable<object> Keys { get; set; }
+            public string Name { get; set; }
         }
     }
 }
