@@ -22,49 +22,55 @@ namespace Cloudy.CMS.ContentSupport.Serialization
         {
             if (reader.TokenType != JsonTokenType.StartObject)
             {
-                return null;
+                throw new JsonException("Start object of content container expected");
             }
 
             reader.Read();
             if (reader.TokenType != JsonTokenType.PropertyName)
             {
-                return null;
+                throw new JsonException("Property name of type discriminator of content container expected");
             }
             var typePropertyName = reader.GetString();
             if (typePropertyName != "Type")
             {
-                return null;
+                throw new JsonException("Property name `Name` of type discriminator of content container expected");
             }
 
             reader.Read();
             if (reader.TokenType != JsonTokenType.String)
             {
-                return null;
+                throw new JsonException("Type discriminator of content container expected");
             }
 
             var contentTypeId = reader.GetString();
             var contentType = ContentTypeProvider.Get(contentTypeId);
 
-            if (contentType == null)
-            {
-                return null;
-            }
-
             reader.Read();
             if (reader.TokenType != JsonTokenType.PropertyName)
             {
-                return null;
+                throw new JsonException("Property name of content value of content container expected");
             }
             var valuePropertyName = reader.GetString();
             if (valuePropertyName != "Value")
             {
+                throw new JsonException("Property name `Value` of content value of content container expected");
+            }
+
+            if (contentType == null)
+            {
+                reader.Skip();
+                reader.Read();
+                if (reader.TokenType != JsonTokenType.EndObject)
+                {
+                    throw new JsonException("End object of content value of content container expected");
+                }
                 return null;
             }
 
             reader.Read();
             if (reader.TokenType != JsonTokenType.StartObject)
             {
-                return null;
+                throw new JsonException("Start object of content value of content container expected");
             }
 
             var content = (T)Activator.CreateInstance(contentType.Type);
@@ -80,7 +86,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
                     reader.Read();
                     if (reader.TokenType != JsonTokenType.EndObject)
                     {
-                        return null;
+                        throw new JsonException("End object of content value of content container expected");
                     }
 
                     return content;
@@ -88,22 +94,20 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 
                 if (reader.TokenType != JsonTokenType.PropertyName)
                 {
-                    return null;
+                    throw new JsonException("Property name inside content value of content container expected");
                 }
 
                 var propertyName = reader.GetString();
 
-                if (string.IsNullOrWhiteSpace(propertyName))
-                {
-                    return null;
-                }
-
-                reader.Read();
-
                 if(properties.TryGetValue(propertyName, out var property))
                 {
+                    reader.Read();
                     var value = JsonSerializer.Deserialize(ref reader, property.PropertyType, options);
                     property.SetValue(content, value);
+                }
+                else
+                {
+                    reader.Skip();
                 }
             }
 
