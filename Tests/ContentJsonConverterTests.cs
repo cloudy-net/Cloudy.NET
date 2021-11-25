@@ -81,14 +81,14 @@ namespace Tests
         public void DeserializesEmptyIListWithInterface()
         {
             var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(c => c.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)) });
-            Mock.Get(contentTypeProvider).Setup(c => c.Get("contentTypeA")).Returns(new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)));
+            Mock.Get(contentTypeProvider).Setup(c => c.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)) });
+            Mock.Get(contentTypeProvider).Setup(c => c.Get("contentTypeB")).Returns(new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)));
 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = false,
                 Converters = {
-                    new ContentJsonConverter<ContentTypeA>(contentTypeProvider),
+                    new ContentJsonConverter<ContentTypeB>(contentTypeProvider),
                 }
             };
 
