@@ -10,7 +10,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
     {
         static JsonSerializerOptions JsonSerializerOptions { get; } = new JsonSerializerOptions
         {
-            Converters = { ContentJsonConverter.UglyInstance }
+            //Converters = { ContentJsonConverter.UglyInstance }
         };
 
         public JsonValueConverter() : base(

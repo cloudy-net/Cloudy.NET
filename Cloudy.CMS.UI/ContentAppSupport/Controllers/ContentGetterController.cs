@@ -34,7 +34,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             var options = new JsonSerializerOptions
             {
-                Converters = { new ContentJsonConverter(ContentTypeProvider) },
+                //Converters = { new ContentJsonConverter(ContentTypeProvider) },
             };
             return Json(await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false), options);
         }

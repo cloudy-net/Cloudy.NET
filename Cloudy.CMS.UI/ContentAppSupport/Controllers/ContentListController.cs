@@ -125,7 +125,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             var options = new JsonSerializerOptions
             {
-                Converters = { new ContentJsonConverter(ContentTypeProvider) },
+                //Converters = { new ContentJsonConverter(ContentTypeProvider) },
             };
 
             return Content(JsonSerializer.Serialize(new ContentListResult

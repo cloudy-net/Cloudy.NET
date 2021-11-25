@@ -9,10 +9,8 @@ using System.Text.Json.Serialization;
 
 namespace Cloudy.CMS.ContentSupport.Serialization
 {
-    public class ContentJsonConverter : JsonConverter<object>
+    public class ContentJsonConverter<T> : JsonConverter<T> where T : class
     {
-        public static ContentJsonConverter UglyInstance { get; set; }
-
         IContentTypeProvider ContentTypeProvider { get; }
 
         public ContentJsonConverter(IContentTypeProvider contentTypeProvider)
@@ -20,12 +18,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
             ContentTypeProvider = contentTypeProvider;
         }
 
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return ContentTypeProvider.Get(typeToConvert) != null || ContentTypeProvider.GetAll().Any(t => typeToConvert.IsAssignableFrom(t.Type));
-        }
-
-        public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject)
             {
@@ -37,9 +30,8 @@ namespace Cloudy.CMS.ContentSupport.Serialization
             {
                 return null;
             }
-
-            string propertyName = reader.GetString();
-            if (propertyName != "__Cloudy_ContentType")
+            var typePropertyName = reader.GetString();
+            if (typePropertyName != "Type")
             {
                 return null;
             }
@@ -58,10 +50,67 @@ namespace Cloudy.CMS.ContentSupport.Serialization
                 return null;
             }
 
-            return JsonSerializer.Deserialize(ref reader, contentType.Type, options);
+            reader.Read();
+            if (reader.TokenType != JsonTokenType.PropertyName)
+            {
+                return null;
+            }
+            var valuePropertyName = reader.GetString();
+            if (valuePropertyName != "Value")
+            {
+                return null;
+            }
+
+            reader.Read();
+            if (reader.TokenType != JsonTokenType.StartObject)
+            {
+                return null;
+            }
+
+            var content = (T)Activator.CreateInstance(contentType.Type);
+            var properties = contentType.Type
+                .GetProperties()
+                .Where(p => !p.GetIndexParameters().Any() && p.GetGetMethod() != null && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute)))
+                .ToDictionary(p => p.Name, p => p);
+            
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.EndObject)
+                    {
+                        return null;
+                    }
+
+                    return content;
+                }
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    return null;
+                }
+
+                var propertyName = reader.GetString();
+
+                if (string.IsNullOrWhiteSpace(propertyName))
+                {
+                    return null;
+                }
+
+                reader.Read();
+
+                if(properties.TryGetValue(propertyName, out var property))
+                {
+                    var value = JsonSerializer.Deserialize(ref reader, property.PropertyType, options);
+                    property.SetValue(content, value);
+                }
+            }
+
+            return content;
         }
 
-        public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
             var contentType = ContentTypeProvider.Get(value.GetType());
 
@@ -74,15 +123,15 @@ namespace Cloudy.CMS.ContentSupport.Serialization
             writer.WriteStartObject();
             writer.WriteString("Type", contentType.Id);
             writer.WritePropertyName("Value");
-
             writer.WriteStartObject();
+
             var properties = contentType.Type.GetProperties().Where(p => !p.GetIndexParameters().Any() && p.GetGetMethod() != null && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute)));
             foreach (var property in properties)
             {
+                writer.WritePropertyName(property.Name);
                 JsonSerializer.Serialize(writer, property.GetValue(value), property.PropertyType, options);
             }
             writer.WriteEndObject();
-
             writer.WriteEndObject();
         }
     }

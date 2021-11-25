@@ -8,9 +8,8 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 {
     public class Initializer : IInitializer
     {
-        public Initializer(ContentJsonConverter contentJsonConverter)
+        public Initializer()
         {
-            ContentJsonConverter.UglyInstance = contentJsonConverter;
         }
 
         public async Task InitializeAsync() { }
