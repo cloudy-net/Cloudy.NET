@@ -1,5 +1,6 @@
 import contentSaver from "./content-saver.js";
 import arrayEquals from "./array-equals.js";
+import contentGetter from "./content-getter.js";
 
 /* CHANGE TRACKER */
 
@@ -136,10 +137,11 @@ class ChangeTracker {
                 contentTypeId: c.contentTypeId,
                 changedFields: c.changedFields
             }
-        })
+        });
         if (await contentSaver.save(contentToSave) == false) {
             return false; // fail
         }
+        _pendingChanges.forEach(c => contentGetter.clearCacheFor(c.contentId, c.contentTypeId));
         const _remainingPendingChanges = [];
         this.pendingChanges.forEach(c => {
             if (!_pendingChanges.some(d => arrayEquals(d.contentId, c.contentId) && d.contentTypeId === c.contentTypeId)) {
