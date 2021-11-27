@@ -8,10 +8,9 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 {
     public class Initializer : IInitializer
     {
-        public Initializer(IPolymorphicSerializer polymorphicSerializer, IPolymorphicDeserializer polymorphicDeserializer)
+        public Initializer(IContentJsonConverterProvider contentJsonConverterProvider)
         {
-            PolymorphicSerializer.UglyInstance = polymorphicSerializer;
-            PolymorphicDeserializer.UglyInstance = polymorphicDeserializer;
+            ContentJsonConverterProvider.UglyInstance = contentJsonConverterProvider;
         }
 
         public async Task InitializeAsync() { }

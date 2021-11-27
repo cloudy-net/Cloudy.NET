@@ -14,7 +14,7 @@ class TextControl extends FieldControl {
             input.type = 'text';
         }
         input.value = value || null;
-        input.name = fieldModel.descriptor.camelCaseId;
+        input.name = fieldModel.descriptor.id;
         container.append(input);
         input.addEventListener('change', () => this.triggerChange(input.value || null));
         input.addEventListener('keyup', () => this.triggerChange(input.value || null));

@@ -28,20 +28,17 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentGetter ContentGetter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        IFormProvider FormProvider { get; }
         IFieldProvider FieldProvider { get; }
         IContentUpdater ContentUpdater { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
-        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentCreator ContentCreator { get; }
         
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFormProvider formProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator)
         {
             ContentTypeProvider = contentTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
             ContentGetter = contentGetter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            FormProvider = formProvider;
             FieldProvider = fieldProvider;
             ContentUpdater = contentUpdater;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
@@ -71,7 +68,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     content = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id)).ConfigureAwait(false);
                 }
 
-                var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => CamelCaseNamingStrategy.GetPropertyName(p.Name, false), p => p);
+                var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => p.Name, p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
 
                 if (change.ChangedFields.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
@@ -111,7 +108,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     {
                         foreach (var arrayChange in changedField.Changes) {
                             var polymorphicValue = JsonConvert.DeserializeObject<PolymorphicValue>(arrayChange.Value);
-                            var form = FormProvider.Get(polymorphicValue.Type);
+                            var form = ContentTypeProvider.Get(polymorphicValue.Type);
                             var value = JsonConvert.DeserializeObject(polymorphicValue.Value, form.Type);
                             array.Add(value);
                         }

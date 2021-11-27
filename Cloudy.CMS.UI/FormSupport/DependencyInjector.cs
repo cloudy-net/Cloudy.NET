@@ -20,8 +20,6 @@ namespace Cloudy.CMS.UI.FormSupport
         {
             services.AddScoped<IFieldCreator, FieldCreator>();
             services.AddScoped<IFieldProvider, FieldProvider>();
-            services.AddSingleton<IFormCreator, FormCreator>();
-            services.AddScoped<IFormProvider, FormProvider>();
             services.AddSingleton<IControlProvider, ControlProvider>();
             services.AddSingleton<IControlCreator, ControlCreator>();
             services.AddScoped<IControlMatcher, ControlMatcher>();

@@ -63,7 +63,7 @@ class SortableTableControl extends Sortable {
             for (const columnFieldModel of fieldModel.fields) {
                 dataTable.addColumn(c => c
                     .setHeader(() => columnFieldModel.descriptor.label)
-                    .setContent(item => item[columnFieldModel.descriptor.camelCaseId])
+                    .setContent(item => item[columnFieldModel.descriptor.id])
                 )
             }
         }

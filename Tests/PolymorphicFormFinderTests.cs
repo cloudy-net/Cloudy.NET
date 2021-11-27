@@ -12,20 +12,10 @@ namespace Tests
 {
     public class PolymorphicFormFinderTests
     {
-        [Fact]
-        public void ThrowsOnContentTypes()
-        {
-            var contentTypeA = new ContentTypeDescriptor("lorem", typeof(ContentTypeA));
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { contentTypeA });
-
-            var formProvider = Mock.Of<IFormProvider>();
-            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<FormDescriptor> { });
-
-            Assert.Throws<CannotInlineContentTypesException>(() => new PolymorphicFormFinder(contentTypeProvider, formProvider).FindFor(typeof(ContentTypeInterface)));
-        }
-
         class ContentTypeA : ContentTypeInterface
+        {
+        }
+        class ContentTypeB
         {
         }
 
@@ -34,32 +24,16 @@ namespace Tests
         }
 
         [Fact]
-        public void FindsForms()
+        public void FindsContentTypeByInterface()
         {
             var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { });
+            var a = new ContentTypeDescriptor("lorem", typeof(ContentTypeA));
+            var b = new ContentTypeDescriptor("ipsum", typeof(ContentTypeB));
+            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { a, b });
 
-            var formA = new FormDescriptor("lorem", typeof(FormA));
-            var formB = new FormDescriptor("ipsum", typeof(FormB));
-            var formProvider = Mock.Of<IFormProvider>();
-            Mock.Get(formProvider).Setup(p => p.GetAll()).Returns(new List<FormDescriptor> { formA, formB });
-
-            var result = new PolymorphicFormFinder(contentTypeProvider, formProvider).FindFor(typeof(FormInterface));
+            var result = new PolymorphicFormFinder(contentTypeProvider).FindFor(typeof(ContentTypeInterface));
 
             Assert.Equal(new List<string> { "lorem" }, result);
-        }
-
-        class FormA : FormInterface
-        {
-
-        }
-
-        interface FormInterface
-        {
-        }
-
-        class FormB
-        {
         }
     }
 }

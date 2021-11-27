@@ -9,12 +9,10 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicCo
     public class PolymorphicFormFinder : IPolymorphicFormFinder
     {
         IContentTypeProvider ContentTypeProvider { get; }
-        IFormProvider FormProvider { get; }
 
-        public PolymorphicFormFinder(IContentTypeProvider contentTypeProvider, IFormProvider formProvider)
+        public PolymorphicFormFinder(IContentTypeProvider contentTypeProvider)
         {
             ContentTypeProvider = contentTypeProvider;
-            FormProvider = formProvider;
         }
 
         public IEnumerable<string> FindFor(Type type)
@@ -25,15 +23,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicCo
             {
                 if (type.IsAssignableFrom(contentType.Type))
                 {
-                    throw new CannotInlineContentTypesException(type, contentType);
-                }
-            }
-
-            foreach (var form in FormProvider.GetAll())
-            {
-                if (type.IsAssignableFrom(form.Type))
-                {
-                    result.Add(form.Id);
+                    result.Add(contentType.Id);
                 }
             }
 

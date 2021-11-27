@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cloudy.CMS.ContentTypeSupport;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     {
         IDictionary<string, IEnumerable<FieldDescriptor>> FieldsByFormId { get; }
 
-        public FieldProvider(IFormProvider formProvider, IFieldCreator fieldCreator)
+        public FieldProvider(IContentTypeProvider contentTypeProvider, IFieldCreator fieldCreator)
         {
-            FieldsByFormId = formProvider.GetAll().ToDictionary(
+            FieldsByFormId = contentTypeProvider.GetAll().ToDictionary(
                 f => f.Id,
                 f => f.Type
                     .GetProperties()

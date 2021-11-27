@@ -27,7 +27,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPluralizer Pluralizer { get; }
         ISingletonProvider SingletonProvider { get; }
         ISingletonGetter SingletonGetter { get; }
-        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentTypeActionModuleProvider ContentTypeActionModuleProvider { get; }
         INameExpressionParser NameExpressionParser { get; }
         IImageExpressionParser ImageExpressionParser { get; }
@@ -35,8 +34,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentTypeGroupMatcher ContentTypeGroupMatcher { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
+        IContextDescriptorProvider ContextDescriptorProvider { get; }
 
-        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IPrimaryKeyGetter primaryKeyGetter)
+        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IPrimaryKeyGetter primaryKeyGetter, IContextDescriptorProvider contextDescriptorProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
@@ -50,6 +50,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentTypeGroupMatcher = contentTypeGroupMatcher;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             PrimaryKeyGetter = primaryKeyGetter;
+            ContextDescriptorProvider = contextDescriptorProvider;
         }
 
         public async Task<IEnumerable<ContentTypeResponseItem>> GetAll()
@@ -58,6 +59,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             foreach (var contentType in ContentTypeProvider.GetAll())
             {
+                if(ContextDescriptorProvider.GetFor(contentType.Type) == null)
+                {
+                    continue;
+                }
+
                 result.Add(await GetItem(contentType).ConfigureAwait(false));
             }
 
@@ -94,18 +100,20 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
             }
 
+            var primaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => k.Name).ToList().AsReadOnly();
+
             var item = new ContentTypeResponseItem
             {
                 Id = contentType.Id,
-                PrimaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => CamelCaseNamingStrategy.GetPropertyName(k.Name, false)).ToList().AsReadOnly(),
+                PrimaryKeys = primaryKeys,
                 Name = name,
                 LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
                 PluralName = pluralName,
                 LowerCasePluralName = pluralName.Substring(0, 1).ToLower() + pluralName.Substring(1),
                 IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
-                NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
+                NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? NameExpressionParser.Parse(contentType.Type) : null,
                 IsImageable = typeof(IImageable).IsAssignableFrom(contentType.Type),
-                ImageablePropertyName = typeof(IImageable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(ImageExpressionParser.Parse(contentType.Type), false) : null,
+                ImageablePropertyName = typeof(IImageable).IsAssignableFrom(contentType.Type) ? ImageExpressionParser.Parse(contentType.Type) : null,
                 IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
                 SingletonId = singletonId,

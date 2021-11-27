@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicControlMappingSupport;
+using Cloudy.CMS.ContentTypeSupport;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
@@ -19,19 +20,18 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     public class FieldController
     {
         ILogger Logger { get; }
-        IFormProvider FormProvider { get; }
+        IContentTypeProvider ContentTypeProvider { get; }
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
-        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IHumanizer Humanizer { get; }
         IPluralizer Pluralizer { get; }
         ISingularizer Singularizer { get; }
         IPolymorphicFormFinder PolymorphicFormFinder { get; }
 
-        public FieldController(ILogger<FieldController> logger, IFormProvider formProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer, IPolymorphicFormFinder polymorphicFormFinder)
+        public FieldController(ILogger<FieldController> logger, IContentTypeProvider contentTypeProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer, IPolymorphicFormFinder polymorphicFormFinder)
         {
             Logger = logger;
-            FormProvider = formProvider;
+            ContentTypeProvider = contentTypeProvider;
             FieldProvider = fieldProvider;
             ControlMatcher = controlMatcher;
             Humanizer = humanizer;
@@ -52,7 +52,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 }
 
                 var control = ControlMatcher.GetFor(field.Type, field.UIHints);
-                var embeddedFormId = FormProvider.GetAll().FirstOrDefault(f => f.Type == field.Type);
+                var embeddedFormId = ContentTypeProvider.GetAll().FirstOrDefault(f => f.Type == field.Type);
                 var isPolymorphic = field.Type.IsInterface;
                 var polymorphicCandidates = isPolymorphic ? PolymorphicFormFinder.FindFor(field.Type).ToList().AsReadOnly() : new List<string>().AsReadOnly();
 
@@ -87,7 +87,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     Id = field.Id,
                     Label = label,
                     SingularLabel = singularLabel,
-                    CamelCaseId = CamelCaseNamingStrategy.GetPropertyName(field.Id, false),
                     Control = control,
                     EmbeddedFormId = embeddedFormId?.Id,
                     IsSortable = field.IsSortable,
@@ -105,7 +104,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             public string Id { get; set; }
             public string Label { get; set; }
             public string SingularLabel { get; set; }
-            public string CamelCaseId { get; set; }
             public object Control { get; set; }
             public string EmbeddedFormId { get; set; }
             public bool IsSortable { get; set; }

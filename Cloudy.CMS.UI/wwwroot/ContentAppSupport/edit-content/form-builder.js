@@ -18,7 +18,7 @@ class FormBuilder {
             const fields = [];
 
             for (const fieldModel of fieldModels) {
-                const field = await this.buildField(contentId, contentTypeId, path, fieldModel, content[fieldModel.descriptor.camelCaseId], eventDispatcher);
+                const field = await this.buildField(contentId, contentTypeId, path, fieldModel, content[fieldModel.descriptor.id], eventDispatcher);
 
                 element.appendChild(field.element);
 
@@ -35,7 +35,7 @@ class FormBuilder {
     }
 
     async buildField(contentId, contentTypeId, path, fieldModel, value, eventDispatcher) {
-        path = [...path, fieldModel.descriptor.camelCaseId];
+        path = [...path, fieldModel.descriptor.id];
 
         if (fieldModel.descriptor.isSortable) {
             return await this.buildSortable(contentId, contentTypeId, path, fieldModel, value, eventDispatcher)
@@ -54,7 +54,7 @@ class FormBuilder {
 
         const heading = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
         heading.classList.add('cloudy-ui-form-field-label');
-        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.id;
         element.appendChild(heading);
 
         const sortable = await sortableBuilder.build(this.app, this.blade, contentId, contentTypeId, path, fieldModel, value, eventDispatcher);
@@ -71,7 +71,7 @@ class FormBuilder {
 
         const heading = document.createElement(!fieldModel.descriptor.isSortable && fieldModel.descriptor.embeddedFormId ? 'legend' : 'div');
         heading.classList.add('cloudy-ui-form-field-label');
-        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.id;
         element.appendChild(heading);
 
         const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, initialValue);
@@ -89,7 +89,7 @@ class FormBuilder {
 
         const heading = document.createElement('legend');
         heading.classList.add('cloudy-ui-form-field-label');
-        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        heading.innerText = fieldModel.descriptor.label || fieldModel.descriptor.id;
         element.appendChild(heading);
 
         const form = this.build(fieldModel.fields, value).appendTo(element);

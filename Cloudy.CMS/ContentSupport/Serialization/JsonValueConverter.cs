@@ -1,17 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace Cloudy.CMS.ContentSupport.Serialization
 {
     public class JsonValueConverter<T> : ValueConverter<T, string> where T: class
     {
+        static Lazy<JsonSerializerOptions> JsonSerializerOptions { get; } = new Lazy<JsonSerializerOptions>(() => {
+            var options = new JsonSerializerOptions();
+            ContentJsonConverterProvider.UglyInstance.GetAll().ToList().ForEach(c => options.Converters.Add(c));
+            return options;
+        });
+
         public JsonValueConverter() : base(
-            v => JsonConvert.SerializeObject(v),
-            v => (T)JsonConvert.DeserializeObject(v, typeof(T))
+            v => JsonSerializer.Serialize(v, JsonSerializerOptions.Value),
+            v => (T)JsonSerializer.Deserialize(v, typeof(T), JsonSerializerOptions.Value)
         ) { }
     }
 }

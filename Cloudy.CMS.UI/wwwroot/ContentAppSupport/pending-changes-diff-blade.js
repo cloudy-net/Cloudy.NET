@@ -56,7 +56,7 @@ class PendingChangesDiffBlade extends Blade {
             element.classList.add('cloudy-ui-form-field');
 
             const name = changedField.path[changedField.path.length - 1];
-            var field = fields.find(f => f.camelCaseId == name);
+            var field = fields.find(f => f.id == name);
 
             var heading = document.createElement('div');
             heading.classList.add('cloudy-ui-form-field-label');
