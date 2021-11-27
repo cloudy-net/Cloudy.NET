@@ -21,21 +21,22 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentGetter ContentGetter { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentTypeProvider ContentTypeProvider { get; }
+        IContentJsonConverterProvider ContentJsonConverterProvider { get; }
 
-        public ContentGetterController(IContentGetter contentGetter, IPrimaryKeyConverter primaryKeyConverter, IContentTypeProvider contentTypeProvider)
+        public ContentGetterController(IContentGetter contentGetter, IPrimaryKeyConverter primaryKeyConverter, IContentTypeProvider contentTypeProvider, IContentJsonConverterProvider contentJsonConverterProvider)
         {
             ContentGetter = contentGetter;
             PrimaryKeyConverter = primaryKeyConverter;
             ContentTypeProvider = contentTypeProvider;
+            ContentJsonConverterProvider = contentJsonConverterProvider;
         }
 
         [HttpPost]
         public async Task<ActionResult> Get([FromBody] GetContentRequestBody data)
         {
-            var options = new JsonSerializerOptions
-            {
-                //Converters = { new ContentJsonConverter(ContentTypeProvider) },
-            };
+            var options = new JsonSerializerOptions();
+            ContentJsonConverterProvider.GetAll().ToList().ForEach(c => options.Converters.Add(c));
+
             return Json(await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false), options);
         }
 

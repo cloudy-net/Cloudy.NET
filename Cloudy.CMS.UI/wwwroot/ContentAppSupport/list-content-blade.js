@@ -1,4 +1,4 @@
-﻿import Blade from '../blade.js';
+import Blade from '../blade.js';
 import Button from '../button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
@@ -72,7 +72,7 @@ class ListContentBlade extends Blade {
         this.list.element.style.opacity = 1;
         this.list.clear();
 
-        if (!contentList.items.length) {
+        if (!contentList.Items.length) {
             var listItem = new ListItem();
             listItem.setText(`(no ${this.taxonomy.lowerCasePluralName})`);
             listItem.setDisabled();
@@ -93,14 +93,14 @@ class ListContentBlade extends Blade {
             }
         };
 
-        contentList.items.forEach(item => {
+        contentList.Items.forEach(item => {
             var contentType = this.contentTypes[0];
             var listItem = new ListItem();
             this.list.addItem(listItem);
 
             updateListItem(listItem, item, contentType);
 
-            if (contentList.itemChildrenCounts[JSON.stringify(item.keys)]) {
+            if (contentList.ItemChildrenCounts[JSON.stringify(item.keys)]) {
                 var folder = document.createElement('cloudy-ui-list-item-folder');
                 folder.addEventListener('click', event => this.listItems([...parents, item]));
                 listItem.element.append(folder);

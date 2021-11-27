@@ -28,8 +28,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         ISingletonProvider SingletonProvider { get; }
         IHumanizer Humanizer { get; }
+        IContentJsonConverterProvider ContentJsonConverterProvider { get; }
 
-        public ContentListController(IContentTypeProvider contentTypeRepository, IContentFinder contentFinder, IPrimaryKeyGetter primaryKeyGetter, IContentChildrenCounter contentChildrenCounter, IPropertyDefinitionProvider propertyDefinitionProvider, ISingletonProvider singletonProvider, IHumanizer humanizer)
+        public ContentListController(IContentTypeProvider contentTypeRepository, IContentFinder contentFinder, IPrimaryKeyGetter primaryKeyGetter, IContentChildrenCounter contentChildrenCounter, IPropertyDefinitionProvider propertyDefinitionProvider, ISingletonProvider singletonProvider, IHumanizer humanizer, IContentJsonConverterProvider contentJsonConverterProvider)
         {
             ContentTypeProvider = contentTypeRepository;
             ContentFinder = contentFinder;
@@ -38,6 +39,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             PropertyDefinitionProvider = propertyDefinitionProvider;
             SingletonProvider = singletonProvider;
             Humanizer = humanizer;
+            ContentJsonConverterProvider = contentJsonConverterProvider;
         }
 
         public async Task<ActionResult> Get(string[] contentTypeIds, string parent)
@@ -123,10 +125,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             //    result = result.OrderBy(i => sortByProperty.Getter(i)).ToList();
             //}
 
-            var options = new JsonSerializerOptions
-            {
-                //Converters = { new ContentJsonConverter(ContentTypeProvider) },
-            };
+            var options = new JsonSerializerOptions();
+            ContentJsonConverterProvider.GetAll().ToList().ForEach(c => options.Converters.Add(c));
 
             return Content(JsonSerializer.Serialize(new ContentListResult
             {
