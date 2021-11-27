@@ -1,4 +1,4 @@
-﻿import urlFetcher from '../../url-fetcher.js';
+import urlFetcher from '../../url-fetcher.js';
 
 /* CONTENT GETTER */
 
@@ -31,6 +31,7 @@ class ContentGetter {
             },
             `Could not get content ${contentId} (${contentTypeId})`
         );
+        content = content.Value;
         this.contentByContentTypeAndId[contentTypeId][contentId] = content;
         return content;
     }

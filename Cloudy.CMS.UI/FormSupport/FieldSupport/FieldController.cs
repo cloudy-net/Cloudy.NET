@@ -23,7 +23,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         IContentTypeProvider ContentTypeProvider { get; }
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
-        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IHumanizer Humanizer { get; }
         IPluralizer Pluralizer { get; }
         ISingularizer Singularizer { get; }
@@ -88,7 +87,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     Id = field.Id,
                     Label = label,
                     SingularLabel = singularLabel,
-                    CamelCaseId = CamelCaseNamingStrategy.GetPropertyName(field.Id, false),
                     Control = control,
                     EmbeddedFormId = embeddedFormId?.Id,
                     IsSortable = field.IsSortable,
@@ -106,7 +104,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             public string Id { get; set; }
             public string Label { get; set; }
             public string SingularLabel { get; set; }
-            public string CamelCaseId { get; set; }
             public object Control { get; set; }
             public string EmbeddedFormId { get; set; }
             public bool IsSortable { get; set; }

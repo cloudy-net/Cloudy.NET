@@ -16,7 +16,7 @@ class CheckboxControl extends FieldControl {
         container.append(graphicalCheckbox);
 
         var label = document.createElement('cloudy-ui-checkbox-label');
-        label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.camelCaseId;
+        label.innerText = fieldModel.descriptor.label || fieldModel.descriptor.id;
         container.append(label);
 
         input.addEventListener('change', () => this.triggerChange(input.checked));

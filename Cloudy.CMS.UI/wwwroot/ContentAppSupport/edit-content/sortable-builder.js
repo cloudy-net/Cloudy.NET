@@ -67,16 +67,16 @@ class SortableBuilder {
             var id = `original-${index}`;
             const item = createItem(value, id);
             sortable.add(item, false);
-            item.data.field.data.control.onChange(value => eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'array.update', value, id }));
+            item.data.field.data.control.onChange(value => eventDispatcher.triggerChange(fieldModel.descriptor.id, { type: 'array.update', value, id }));
         });
 
         sortable.onAdd(item => {
             item.data.field.data.control.onChange(value =>
-                eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'array.update', value, id: item.id })
+                eventDispatcher.triggerChange(fieldModel.descriptor.id, { type: 'array.update', value, id: item.id })
             );
-            eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'array.add', value: null, id: item.id });
+            eventDispatcher.triggerChange(fieldModel.descriptor.id, { type: 'array.add', value: null, id: item.id });
         });
-        sortable.onDelete(index => eventDispatcher.triggerChange(fieldModel.descriptor.camelCaseId, { type: 'array.delete', index }));
+        sortable.onDelete(index => eventDispatcher.triggerChange(fieldModel.descriptor.id, { type: 'array.delete', index }));
 
         return sortable;
     }
@@ -124,7 +124,7 @@ class SortableBuilder {
         sortable.element.classList.add('cloudy-ui-sortable-field');
 
         for (let index = 0; index < value.length; index++) {
-            sortable.add(await createItem(value[index].type, value[index].value, `original-${index}`), false);
+            sortable.add(await createItem(value[index].Type, value[index].Value, `original-${index}`), false);
         }
 
         const changesForContent = changeTracker.getFor(contentId, contentTypeId);

@@ -104,7 +104,7 @@ class EditContentBlade extends Blade {
 
         // TODO: Check that initialValue is same as pendingChanges.initialValue - otherwise trigger reconciliation
 
-        const fieldModels = (await fieldModelBuilder.getFieldModels(this.contentType.id)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.camelCaseId));
+        const fieldModels = (await fieldModelBuilder.getFieldModels(this.contentType.id)).filter(f => !this.contentType.primaryKeys.includes(f.descriptor.id));
         const formBuilder = new FormBuilder(this.app, this);
         
         const groups = [...new Set((await fieldDescriptorProvider.getFor(this.contentType.id)).map(fieldDescriptor => fieldDescriptor.group))].sort();

@@ -27,7 +27,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IPluralizer Pluralizer { get; }
         ISingletonProvider SingletonProvider { get; }
         ISingletonGetter SingletonGetter { get; }
-        CamelCaseNamingStrategy CamelCaseNamingStrategy { get; } = new CamelCaseNamingStrategy();
         IContentTypeActionModuleProvider ContentTypeActionModuleProvider { get; }
         INameExpressionParser NameExpressionParser { get; }
         IImageExpressionParser ImageExpressionParser { get; }
@@ -101,7 +100,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
             }
 
-            var primaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => CamelCaseNamingStrategy.GetPropertyName(k.Name, false)).ToList().AsReadOnly();
+            var primaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => k.Name).ToList().AsReadOnly();
 
             var item = new ContentTypeResponseItem
             {
@@ -112,9 +111,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 PluralName = pluralName,
                 LowerCasePluralName = pluralName.Substring(0, 1).ToLower() + pluralName.Substring(1),
                 IsNameable = typeof(INameable).IsAssignableFrom(contentType.Type),
-                NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(NameExpressionParser.Parse(contentType.Type), false) : null,
+                NameablePropertyName = typeof(INameable).IsAssignableFrom(contentType.Type) ? NameExpressionParser.Parse(contentType.Type) : null,
                 IsImageable = typeof(IImageable).IsAssignableFrom(contentType.Type),
-                ImageablePropertyName = typeof(IImageable).IsAssignableFrom(contentType.Type) ? CamelCaseNamingStrategy.GetPropertyName(ImageExpressionParser.Parse(contentType.Type), false) : null,
+                ImageablePropertyName = typeof(IImageable).IsAssignableFrom(contentType.Type) ? ImageExpressionParser.Parse(contentType.Type) : null,
                 IsRoutable = typeof(IRoutable).IsAssignableFrom(contentType.Type),
                 IsSingleton = singleton != null,
                 SingletonId = singletonId,

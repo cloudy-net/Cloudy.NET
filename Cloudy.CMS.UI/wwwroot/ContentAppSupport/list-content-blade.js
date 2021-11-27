@@ -82,7 +82,7 @@ class ListContentBlade extends Blade {
         }
 
         var updateListItem = (listItem, item, contentType) => {
-            listItem.setText(item.name);
+            listItem.setText(item.Name);
 
             if (contentType.isImageable) {
                 listItem.setImage(item.image || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
@@ -100,7 +100,7 @@ class ListContentBlade extends Blade {
 
             updateListItem(listItem, item, contentType);
 
-            if (contentList.ItemChildrenCounts[JSON.stringify(item.keys)]) {
+            if (contentList.ItemChildrenCounts[JSON.stringify(item.Keys)]) {
                 var folder = document.createElement('cloudy-ui-list-item-folder');
                 folder.addEventListener('click', event => this.listItems([...parents, item]));
                 listItem.element.append(folder);
@@ -108,7 +108,7 @@ class ListContentBlade extends Blade {
 
             listItem.onClick(async () => {
                 listItem.setActive();
-                var blade = new EditContentBlade(this.app, contentType, item.keys)
+                var blade = new EditContentBlade(this.app, contentType, item.Keys)
                     .onComplete(() => updateListItem(listItem, item, contentType))
                     .onClose(() => {
                         listItem.setActive(false);
@@ -118,14 +118,14 @@ class ListContentBlade extends Blade {
           
 
             var menu = new ContextMenu();
-            this.contentTypeActions[contentType.id].forEach(module => module.default(menu, item.keys, this, this.app));
+            this.contentTypeActions[contentType.id].forEach(module => module.default(menu, item.Keys, this, this.app));
             menu.addItem(item => {
                 item.setText('Remove');
 
                 if (contentType.isSingleton) {
                     item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
                 } else {
-                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, item.keys).onComplete(() => this.listItems(parents)), this))
+                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, item.Keys).onComplete(() => this.listItems(parents)), this))
                 }
             });
             listItem.setMenu(menu);
@@ -152,7 +152,7 @@ class ListContentBlade extends Blade {
             var contentType = this.contentTypes[0];
 
             if (contentType.isNameable) {
-                var name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+                var name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.Name;
 
                 if (!name) {
                     name = `${contentType.name} ${content.id}`;
