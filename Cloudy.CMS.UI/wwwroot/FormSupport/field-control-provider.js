@@ -15,7 +15,7 @@ class FieldControlProvider {
 
         try {
             if (!modulePath) {
-                throw new Error(`Control \`${field.control.id}\` not found, used on field \`${field.id}\``);
+                throw new Error(`Control \`${field.control.id}\` not found, used on field \`${field.name}\``);
             }
 
             if (!this.typeModulesPromises[field.control.id]) {

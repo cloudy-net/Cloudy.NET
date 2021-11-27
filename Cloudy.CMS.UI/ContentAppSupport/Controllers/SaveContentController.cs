@@ -17,6 +17,7 @@ using System.Text.Json;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using System.Collections;
 using Cloudy.CMS.UI.FormSupport;
+using System.Reflection;
 
 namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 {
@@ -76,17 +77,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     throw new Exception($"Tried to change primary key of content {string.Join(", ", change.KeyValues)} with type {change.ContentTypeId}!");
                 }
 
-                var fields = FieldProvider.GetAllFor(change.ContentTypeId).ToDictionary(f => f.Id, f => f);
-
                 var changedSimpleFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Simple).ToList();
 
                 foreach (var changedField in changedSimpleFields)
                 {
-                    var name = changedField.Path.Single();
-                    var field = fields[name.Substring(0, 1).ToUpper() + name.Substring(1)];
-                    var property = contentType.Type.GetProperty(field.Id);
-
-                    property.GetSetMethod().Invoke(content, new object[] { Convert.ChangeType(changedField.Value, property.PropertyType) });
+                    UpdateSimpleField(content, changedField.Path, changedField.InitialValue, changedField.Value);
                 }
 
                 var changedArrayFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Array).ToList();
@@ -94,8 +89,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 foreach (var changedField in changedArrayFields)
                 {
                     var name = changedField.Path.Single();
-                    var field = fields[name.Substring(0, 1).ToUpper() + name.Substring(1)];
-                    var property = contentType.Type.GetProperty(field.Id);
+                    var field = FieldProvider.GetFor(contentType.Id, name);
+                    var property = contentType.Type.GetProperty(field.Name);
                     var array = (IList)property.GetGetMethod().Invoke(content, null);
 
                     if(array == null)
@@ -131,6 +126,45 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             }
 
             return new ContentResponseMessage(true, "Updated");
+        }
+
+        private void UpdateSimpleField(object instance, IEnumerable<string> path, string initialValue, string value)
+        {
+            var contentType = ContentTypeProvider.Get(instance.GetType());
+
+            var name = path.First();
+            var field = FieldProvider.GetFor(contentType.Id, name);
+            var property = contentType.Type.GetProperty(field.Name);
+
+            if (path.Count() == 1)
+            {
+                property.GetSetMethod().Invoke(instance, new object[] { Convert.ChangeType(value, property.PropertyType) });
+                return;
+            }
+
+            var instanceValue = property.GetValue(instance);
+            
+            if (field.IsSortable)
+            {
+                var indexString = path.ElementAt(1);
+
+                if (!indexString.StartsWith("original-"))
+                {
+                    throw new Exception("Simple updates to non-persisted array elements not supported");
+                }
+
+                var index = int.Parse(indexString.Substring("original-".Length));
+
+                var elementAtMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ElementAt), BindingFlags.Static | BindingFlags.Public);
+                var genericElementAtMethod = elementAtMethod.MakeGenericMethod(field.Type);
+                var element = genericElementAtMethod.Invoke(null, new object[] { instanceValue, index });
+
+                UpdateSimpleField(element, path.Skip(2), initialValue, value);
+            }
+            else
+            {
+                throw new NotImplementedException("Nested types not implemented (yet!)");
+            }
         }
 
         public class SaveContentRequestBody

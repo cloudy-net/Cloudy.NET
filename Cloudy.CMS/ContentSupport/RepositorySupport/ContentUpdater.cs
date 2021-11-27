@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport
@@ -15,7 +16,9 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
         public async Task UpdateAsync(object content)
         {
             var context = ContextProvider.GetFor(content.GetType());
-
+            
+            context.Context.Entry(content).State = EntityState.Modified;
+            
             await context.Context.SaveChangesAsync().ConfigureAwait(false);
         }
     }

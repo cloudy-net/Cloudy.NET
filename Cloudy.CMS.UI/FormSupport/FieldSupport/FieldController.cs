@@ -58,7 +58,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 if (control == null && embeddedFormId == null && !polymorphicCandidates.Any())
                 {
-                    Logger.LogInformation($"Could not find control for {id} {field.Id}");
+                    Logger.LogInformation($"Could not find control for {id} {field.Name}");
                     continue;
                 }
 
@@ -66,8 +66,8 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 if(label == null)
                 {
-                    label = field.Id;
-                    label = Humanizer.Humanize(field.Id);
+                    label = field.Name;
+                    label = Humanizer.Humanize(field.Name);
 
                     if (label.EndsWith(" ids"))
                     {
@@ -84,7 +84,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 result.Add(new FieldResponse
                 {
-                    Id = field.Id,
+                    Id = field.Name,
                     Label = label,
                     SingularLabel = singularLabel,
                     Control = control,

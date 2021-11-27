@@ -10,10 +10,10 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
-    [DebuggerDisplay("{Id}")]
+    [DebuggerDisplay("{Name}")]
     public class FieldDescriptor
     {
-        public string Id { get; }
+        public string Name { get; }
         public Type Type { get; }
         public IEnumerable<UIHint> UIHints { get; }
         public string Label { get; }
@@ -21,9 +21,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         public bool AutoGenerate { get; }
         public string Group { get; }
 
-        public FieldDescriptor(string id, Type type, IEnumerable<UIHint> uiHints, string label, bool isSortable, bool autoGenerate, string group)
+        public FieldDescriptor(string name, Type type, IEnumerable<UIHint> uiHints, string label, bool isSortable, bool autoGenerate, string group)
         {
-            Id = id;
+            Name = name;
             Type = type;
             UIHints = uiHints.ToList().AsReadOnly();
             Label = label;
