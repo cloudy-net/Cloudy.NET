@@ -30,7 +30,7 @@ namespace Cloudy.CMS.Routing
             {
                 var segment = segments.SingleOrDefault();
 
-                foreach(var type in types.Where(t => typeof(IRoutable).IsAssignableFrom(t.Type)))
+                foreach(var type in types.Where(t => typeof(IRoutable).IsAssignableFrom(t.Type) && !typeof(IHierarchical).IsAssignableFrom(t.Type)))
                 {
                     var dbSet = ContextProvider.GetFor(type.Type).GetDbSet(type.Type);
 

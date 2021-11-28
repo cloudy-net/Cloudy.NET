@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.Routing;
 using Moq;
@@ -28,7 +29,7 @@ namespace Tests
                 segments.Add(pathSegment);
             }
 
-            var result = new RootContentRouter(null, Mock.Of<IContentSegmentRouter>())
+            var result = new RootContentRouter(Mock.Of<IPrimaryKeyGetter>(), Mock.Of<IContentSegmentRouter>())
                 .Route(root, segments, Enumerable.Empty<ContentTypeDescriptor>());
 
             if (shouldMatch)
