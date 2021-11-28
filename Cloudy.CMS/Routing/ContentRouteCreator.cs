@@ -35,78 +35,75 @@ namespace Cloudy.CMS.Routing
 
             var result = new Dictionary<string, ContentRouteDescriptor>();
 
-            foreach(var dataSource in endpointDataSource.DataSources)
+            foreach (var endpoint in endpointDataSource.Endpoints)
             {
-                foreach(var endpoint in dataSource.Endpoints)
+                var routeEndpoint = endpoint as RouteEndpoint;
+
+                if (routeEndpoint == null)
                 {
-                    var routeEndpoint = endpoint as RouteEndpoint;
-
-                    if(routeEndpoint == null)
-                    {
-                        continue;
-                    }
-
-                    if (result.ContainsKey(routeEndpoint.RoutePattern.RawText))
-                    {
-                        continue;
-                    }
-
-                    if (routeEndpoint.RoutePattern.PathSegments.Any(s => s.Parts.Count == 0 || s.Parts.Count > 1 || !s.IsSimple)) // ignore complex segments (combining several parts between slashes)
-                    {
-                        continue;
-                    }
-
-                    if (routeEndpoint.RoutePattern.Parameters.OfType<RoutePatternParameterPart>().SelectMany(s => s.ParameterPolicies).Count(p => p.Content == "contentroute" || p.Content.StartsWith("contentroute(")) != 1) // ignore non-content routes AND multi-content routes
-                    {
-                        continue;
-                    }
-
-                    if (routeEndpoint.RoutePattern.Parameters.OfType<RoutePatternParameterPart>().Any(s => s.ParameterPolicies.Any(p => p.Content != "contentroute" && !p.Content.StartsWith("contentroute(")))) // ignore routes with non-content parameters
-                    {
-                        continue;
-                    }
-
-                    IEnumerable<ContentTypeDescriptor> contentTypes = null;
-
-                    var path = new List<string>();
-
-                    foreach(var segment in routeEndpoint.RoutePattern.PathSegments)
-                    {
-                        var part = segment.Parts.Single();
-
-                        var literal = part as RoutePatternLiteralPart;
-                        if (literal != null)
-                        {
-                            path.Add(literal.Content);
-                        }
-
-                        var parameter = part as RoutePatternParameterPart;
-                        if (parameter != null)
-                        {
-                            var content = parameter.ParameterPolicies[0].Content;
-
-                            var startParenthesisIndex = content.IndexOf('(');
-                            var endParenthesisIndex = content.IndexOf(')');
-                            var name = startParenthesisIndex == -1 ? content : content.Substring(0, startParenthesisIndex);
-
-                            var contentTypeOrGroupIdOrTypeName = startParenthesisIndex == -1 ? null : content.Substring(startParenthesisIndex + 1, endParenthesisIndex - (startParenthesisIndex + 1));
-
-                            if(contentTypeOrGroupIdOrTypeName != null)
-                            {
-                                contentTypes = ContentTypeExpander.Expand(contentTypeOrGroupIdOrTypeName).ToList().AsReadOnly();
-                            }
-
-                            path.Add($"{{{name}}}");
-                        }
-                    }
-
-                    if(contentTypes == null)
-                    {
-                        contentTypes = ContentTypeProvider.GetAll().ToList().AsReadOnly();
-                    }
-
-                    result[routeEndpoint.RoutePattern.RawText] = new ContentRouteDescriptor(string.Join("/", path), contentTypes);
+                    continue;
                 }
+
+                if (result.ContainsKey(routeEndpoint.RoutePattern.RawText))
+                {
+                    continue;
+                }
+
+                if (routeEndpoint.RoutePattern.PathSegments.Any(s => s.Parts.Count == 0 || s.Parts.Count > 1 || !s.IsSimple)) // ignore complex segments (combining several parts between slashes)
+                {
+                    continue;
+                }
+
+                if (routeEndpoint.RoutePattern.Parameters.OfType<RoutePatternParameterPart>().SelectMany(s => s.ParameterPolicies).Count(p => p.Content == "contentroute" || p.Content.StartsWith("contentroute(")) != 1) // ignore non-content routes AND multi-content routes
+                {
+                    continue;
+                }
+
+                if (routeEndpoint.RoutePattern.Parameters.OfType<RoutePatternParameterPart>().Any(s => s.ParameterPolicies.Any(p => p.Content != "contentroute" && !p.Content.StartsWith("contentroute(")))) // ignore routes with non-content parameters
+                {
+                    continue;
+                }
+
+                IEnumerable<ContentTypeDescriptor> contentTypes = null;
+
+                var path = new List<string>();
+
+                foreach (var segment in routeEndpoint.RoutePattern.PathSegments)
+                {
+                    var part = segment.Parts.Single();
+
+                    var literal = part as RoutePatternLiteralPart;
+                    if (literal != null)
+                    {
+                        path.Add(literal.Content);
+                    }
+
+                    var parameter = part as RoutePatternParameterPart;
+                    if (parameter != null)
+                    {
+                        var content = parameter.ParameterPolicies[0].Content;
+
+                        var startParenthesisIndex = content.IndexOf('(');
+                        var endParenthesisIndex = content.IndexOf(')');
+                        var name = startParenthesisIndex == -1 ? content : content.Substring(0, startParenthesisIndex);
+
+                        var contentTypeOrGroupIdOrTypeName = startParenthesisIndex == -1 ? null : content.Substring(startParenthesisIndex + 1, endParenthesisIndex - (startParenthesisIndex + 1));
+
+                        if (contentTypeOrGroupIdOrTypeName != null)
+                        {
+                            contentTypes = ContentTypeExpander.Expand(contentTypeOrGroupIdOrTypeName).ToList().AsReadOnly();
+                        }
+
+                        path.Add($"{{{name}}}");
+                    }
+                }
+
+                if (contentTypes == null)
+                {
+                    contentTypes = ContentTypeProvider.GetAll().ToList().AsReadOnly();
+                }
+
+                result[routeEndpoint.RoutePattern.RawText] = new ContentRouteDescriptor(string.Join("/", path), contentTypes);
             }
 
             return result.Values.ToList().AsReadOnly();

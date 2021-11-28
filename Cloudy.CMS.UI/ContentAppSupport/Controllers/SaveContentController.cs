@@ -4,7 +4,6 @@ using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +11,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Serialization;
 using System.Text.Json;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using System.Collections;
@@ -102,9 +100,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     if (field.Type.IsInterface)
                     {
                         foreach (var arrayChange in changedField.Changes) {
-                            var polymorphicValue = JsonConvert.DeserializeObject<PolymorphicValue>(arrayChange.Value);
+                            var polymorphicValue = JsonSerializer.Deserialize<PolymorphicValue>(arrayChange.Value);
                             var form = ContentTypeProvider.Get(polymorphicValue.Type);
-                            var value = JsonConvert.DeserializeObject(polymorphicValue.Value, form.Type);
+                            var value = JsonSerializer.Deserialize(polymorphicValue.Value, form.Type);
                             array.Add(value);
                         }
                     }

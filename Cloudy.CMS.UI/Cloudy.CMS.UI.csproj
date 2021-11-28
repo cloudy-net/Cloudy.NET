@@ -1,14 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TargetFramework>net6.0</TargetFramework>
     <Authors>Björn Ali Göransson</Authors>
     <Description>Cloudy CMS UI package</Description>
     <Copyright>2018 Björn Ali Göransson</Copyright>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NoWarn>CS1998</NoWarn>
@@ -16,9 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
   </ItemGroup>
 

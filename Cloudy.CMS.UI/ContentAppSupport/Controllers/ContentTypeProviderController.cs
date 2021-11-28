@@ -7,7 +7,6 @@ using Cloudy.CMS.UI.ContentAppSupport.ContentTypeActionSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ListActionSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
