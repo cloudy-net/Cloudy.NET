@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TargetFramework>net6.0</TargetFramework>
     <Authors>Björn Ali Göransson</Authors>
     <Description>Cloudy CMS UI package</Description>
     <Copyright>2018 Björn Ali Göransson</Copyright>
@@ -15,7 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
   </ItemGroup>
 
