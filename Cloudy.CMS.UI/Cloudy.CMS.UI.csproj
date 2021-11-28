@@ -4,6 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Björn Ali Göransson</Authors>
 		<Description>Cloudy CMS UI package</Description>
+		<Version>1.51.0</Version>
 		<Copyright>2018 Björn Ali Göransson</Copyright>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/cloudy-cms/Cloudy.CMS.git</RepositoryUrl>
