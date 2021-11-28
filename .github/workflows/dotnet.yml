@@ -23,3 +23,8 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Pack
       run: dotnet pack
+
+    - name: Publish
+      env:
+        NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+      run: dotnet nuget push **.nupkg --skip-duplicate
