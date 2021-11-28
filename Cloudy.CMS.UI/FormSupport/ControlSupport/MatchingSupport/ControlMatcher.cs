@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicControlMappingSupport;
+using System.Text.Json;
 
 namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport
 {
@@ -35,7 +35,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport
 
                 if (Logger.IsEnabled(LogLevel.Information))
                 {
-                    Logger.LogInformation($"Match for {JsonConvert.SerializeObject(uiHint, Formatting.None)}: {JsonConvert.SerializeObject(match, Formatting.None)}");
+                    Logger.LogInformation($"Match for {JsonSerializer.Serialize(uiHint, new JsonSerializerOptions { WriteIndented = false })}: {JsonSerializer.Serialize(match, new JsonSerializerOptions { WriteIndented = false })}");
                 }
 
                 if(match != null)

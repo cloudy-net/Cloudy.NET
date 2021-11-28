@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

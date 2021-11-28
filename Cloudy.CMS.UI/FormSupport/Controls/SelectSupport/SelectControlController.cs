@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
 using Cloudy.CMS.ContentTypeSupport;
+using System.Text.Json;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
@@ -34,7 +34,7 @@ namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
                 return null;
             }
 
-            var item = JsonConvert.DeserializeObject(model.Item, @interface.GetGenericArguments()[0]);
+            var item = JsonSerializer.Deserialize(model.Item, @interface.GetGenericArguments()[0]);
 
             @interface.GetMethod(nameof(IItemCreator<object>.CreateAsync)).Invoke(provider, new object[] { item });
 
