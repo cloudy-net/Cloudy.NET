@@ -27,4 +27,4 @@ jobs:
     - name: Publish
       env:
         NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
-      run: dotnet nuget push --source ./**/*.nupkg --api-key $NUGET_APIKEY --skip-duplicate
+      run: dotnet nuget push --source **/*.nupkg --api-key $NUGET_APIKEY --skip-duplicate
