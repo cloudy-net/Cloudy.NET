@@ -7,6 +7,7 @@ import ContentTypeProvider from './utils/content-type-provider.js';
 import ContentTypeGroupProvider from './utils/content-type-group-provider.js';
 import SingletonGetter from './utils/singleton-getter.js';
 import ListItem from '../ListSupport/list-item.js';
+import primaryKeyProvider from './utils/primary-key-provider.js';
 
 
 /* LIST CONTENT TYPES BLADE */
@@ -71,7 +72,8 @@ class ListContentTypesBlade extends Blade {
                 listItem.onClick(async () => {
                     listItem.setActive();
                     var content = await SingletonGetter.get(contentType.id);
-                    var blade = new EditContentBlade(this.app, contentType, content)
+                    var keys = primaryKeyProvider.getFor(content, contentType);
+                    var blade = new EditContentBlade(this.app, contentType, keys)
                         .onClose(() => {
                             listItem.setActive(false);
                         });

@@ -2,7 +2,15 @@
 
 class SingletonGetter {
     async get(contentTypeId) {
-        return await urlFetcher.fetch(`Singleton/Get?id=${contentTypeId}`, { credentials: 'include' }, 'Could not get singleton');
+        let content = await urlFetcher.fetch(
+            `Singleton/Get?id=${contentTypeId}`,
+            { credentials: 'include' },
+            'Could not get singleton'
+        );
+
+        content = content.Value;
+
+        return content;
     }
 }
 
