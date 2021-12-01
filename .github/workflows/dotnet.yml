@@ -27,3 +27,8 @@ jobs:
       env:
         NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
       run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
+    - name: Az Login
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.CLOUDYUIBLOBPUSHSECRET }}
+        
