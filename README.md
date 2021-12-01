@@ -6,29 +6,33 @@ Create a new, empty ASP.NET Core web application.
 
 Install Cloudy.CMS and Cloudy.CMS.UI from NuGet.
 
-In Startup.cs, under ConfigureServices, do:
+```
+var builder = WebApplication.CreateBuilder(args);
 
-    services.AddMvc();
-    services.AddCloudy(cloudy => cloudy
-        .AddAdmin(admin => admin.Unprotect())   // NOTE: Admin UI will be publicly available!
-        .AddContext<MyContext>()                // Adds EF Core context with your content types
-    );
+builder.Services.AddMvc();
+builder.Services.AddCloudy(cloudy => cloudy
+    .AddAdmin(admin => admin.Unprotect())   // NOTE: Admin UI will be publicly available!
+    .AddContext<MyContext>()                // Adds EF Core context with your content types
+);
 
-And in the Configure method, do:
+var app = builder.Build();
 
-    app.UseAuthentication();
-    app.UseAuthorization();
-    app.UseCloudyAdminStaticFiles();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCloudyAdminStaticFiles();
 
-In the endpoints configuration:
-
+app.UseEndpoints(endpoints => {
     endpoints.MapCloudyAdminRoutes();
+});
+
+app.Run();
+```
 
 Then visit `/Admin` for the royal tour.
 
 To route INavigatable content (will work on /pages/MyUrlSegment etc), do:
 
-    app.UseRouting();
     app.UseEndpoints(endpoints => {
         endpoints.MapGet("/pages/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute().Id}"));
         endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Blog" });
@@ -37,8 +41,6 @@ To route INavigatable content (will work on /pages/MyUrlSegment etc), do:
 In the controller, do:
 
     public ActionResult Index([FromContentRoute] IContent page)
-
-To use IHierarchical content (nested pages), you need to use a `**` wildcard like `{**route:....`
 
 # Authentication
 
