@@ -12,33 +12,34 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-#    - name: Setup .NET
-#      uses: actions/setup-dotnet@v1
-#      with:
-#        dotnet-version: 6.0.x
-#    - name: Restore dependencies
-#      run: dotnet restore
-#    - name: Build
-#      run: dotnet build --no-restore
-#    - name: Test
-#      run: dotnet test --no-build --verbosity normal
-#    - name: Pack
-#      run: dotnet pack --no-build
-#    - name: Publish
-#      env:
-#        NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
-#      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Pack
+      run: dotnet pack --no-build
+    - name: Publish
+      env:
+        NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.CLOUDYUIBLOBPUSHSECRET }}
     - name: Upload to blob storage
       uses: azure/CLI@v1
+      continue-on-error: true
       with:
         inlineScript: |
             CONTAINER_NAME=v-$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/' | tr . -)
             
             az storage container create -n $CONTAINER_NAME --account-name cloudycmsui --public-access blob --auth-mode login
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.css
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.svg
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js --auth-mode login
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.css --auth-mode login
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.svg --auth-mode login
 
