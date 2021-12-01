@@ -36,15 +36,15 @@ jobs:
       with:
         inlineScript: |
             CONTAINER_NAME=v-$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/' | tr . -)
-            if [ $(az storage container exists --name $CONTAINER_NAME --account-name cloudycmsui --auth-mode login | jq .exists) == "true" ]; then
+            if [ $(az storage container exists --name $CONTAINER_NAME --account-name cloudycmsui --auth-mode key | jq .exists) == "true" ]; then
               exit
             fi
             echo "Creating container"
-            az storage container create -n $CONTAINER_NAME --account-name cloudycmsui --public-access blob --auth-mode login
+            az storage container create -n $CONTAINER_NAME --account-name cloudycmsui --public-access blob --auth-mode key
             echo "Uploading JavaScript"
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js --auth-mode login
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js --auth-mode key
             echo "Uploading CSS"
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.css --auth-mode login
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.css --auth-mode key
             echo "Uploading SVGs"
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.svg --auth-mode login
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.svg --auth-mode key
 
