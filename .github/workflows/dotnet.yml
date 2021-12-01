@@ -35,7 +35,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            CONTAINER_NAME=v$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/')
+            CONTAINER_NAME=v-$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/' | tr . -)
             
             az storage container create -n $CONTAINER_NAME --account-name cloudycmsui --public-access blob --auth-mode login
             az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js
