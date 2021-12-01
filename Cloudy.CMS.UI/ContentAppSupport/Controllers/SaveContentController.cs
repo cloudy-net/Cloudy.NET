@@ -152,9 +152,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
 
                 var index = int.Parse(indexString.Substring("original-".Length));
-
-                var elementAtMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ElementAt), BindingFlags.Static | BindingFlags.Public);
-                var genericElementAtMethod = elementAtMethod.MakeGenericMethod(field.Type);
+                
+                var elementAtMethod = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(m => m.Name == nameof(Enumerable.ElementAt) && m.GetParameters()[1].ParameterType == typeof(int));
+                var genericElementAtMethod = elementAtMethod.Single().MakeGenericMethod(field.Type);
                 var element = genericElementAtMethod.Invoke(null, new object[] { instanceValue, index });
 
                 UpdateSimpleField(element, path.Skip(2), initialValue, value);
