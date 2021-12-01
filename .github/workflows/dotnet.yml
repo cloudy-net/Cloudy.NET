@@ -11,22 +11,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Pack
-      run: dotnet pack --no-build
-    - name: Publish
-      env:
-        NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
-      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
+    
+#    - name: Setup .NET
+#      uses: actions/setup-dotnet@v1
+#      with:
+#        dotnet-version: 6.0.x
+#    - name: Restore dependencies
+#      run: dotnet restore
+#    - name: Build
+#      run: dotnet build --no-restore
+#    - name: Test
+#      run: dotnet test --no-build --verbosity normal
+#    - name: Pack
+#      run: dotnet pack --no-build
+#    - name: Publish
+#      env:
+#        NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+#      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.CLOUDYUIBLOBPUSHSECRET }}
@@ -38,7 +39,7 @@ jobs:
             ls Cloudy.CMS
             grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj
             echo '<Version>1.51.3</Version>' | sed 's/<Version>/hej/')
-            grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/'
+#            grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/'
 #            CONTAINER_NAME=$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/')
 #            az storage container create -n $(CONTAINER_NAME) --account-name cloudycmsui --public-access blob
 #            az storage blob upload-batch -d $(CONTAINER_NAME) --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js
