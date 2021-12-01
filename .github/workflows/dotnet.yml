@@ -33,7 +33,6 @@ jobs:
         creds: ${{ secrets.CLOUDYUIBLOBPUSHSECRET }}
     - name: Upload to blob storage
       uses: azure/CLI@v1
-      continue-on-error: true
       with:
         inlineScript: |
             CONTAINER_NAME=v-$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/' | tr . -)
