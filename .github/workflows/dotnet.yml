@@ -39,7 +39,7 @@ jobs:
             ls Cloudy.CMS
             grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj
             echo '  <Version>1.51.3</Version>' | sed 's/.*<Version>\(.*\)<.*/\1/'
-#            grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/'
+            grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<.*/\1/'
 #            CONTAINER_NAME=$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/')
 #            az storage container create -n $(CONTAINER_NAME) --account-name cloudycmsui --public-access blob
 #            az storage blob upload-batch -d $(CONTAINER_NAME) --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js
