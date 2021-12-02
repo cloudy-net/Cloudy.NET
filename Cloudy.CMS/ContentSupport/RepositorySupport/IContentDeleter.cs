@@ -9,6 +9,5 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
     public interface IContentDeleter
     {
         Task DeleteAsync(string contentTypeId, params object[] keyValues);
-        Task DeleteAsync<T>(params object[] keyValues) where T : class;
     }
 }

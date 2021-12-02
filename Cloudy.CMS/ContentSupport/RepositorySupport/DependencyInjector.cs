@@ -23,6 +23,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             services.AddScoped<IContentFinder, ContentFinder>();
             services.AddScoped<IContentCreator, ContentCreator>();
             services.AddScoped<IContentUpdater, ContentUpdater>();
+            services.AddScoped<IContentDeleter, ContentDeleter>();
 
             services.AddScoped<IDbSetProvider, DbSetProvider>();
             services.AddScoped<IContextProvider, ContextProvider>();

@@ -19,15 +19,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     {
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentDeleter ContentDeleter { get; }
-        IContentTypeProvider ContentTypeProvider { get; }
-        IContentGetter ContentGetter { get; }
 
-        public RemoveContentController(IPrimaryKeyConverter primaryKeyConverter, IContentDeleter contentDeleter, IContentTypeProvider contentTypeProvider, IContentGetter contentGetter)
+        public RemoveContentController(IPrimaryKeyConverter primaryKeyConverter, IContentDeleter contentDeleter)
         {
             PrimaryKeyConverter = primaryKeyConverter;
             ContentDeleter = contentDeleter;
-            ContentTypeProvider = contentTypeProvider;
-            ContentGetter = contentGetter;
         }
 
         [HttpPost]

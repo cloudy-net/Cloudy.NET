@@ -1,24 +1,23 @@
-﻿import Blade from '../blade.js';
+import Blade from '../blade.js';
 import Button from '../button.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import urlFetcher from '../url-fetcher.js';
-
-/* REMOVE CONTENT */
+import nameGetter from './utils/name-getter.js';
+import contentGetter from './utils/content-getter.js';
+import primaryKeyProvider from './utils/primary-key-provider.js';
 
 class RemoveContentBlade extends Blade {
     onCompleteCallbacks = [];
 
-    constructor(app, contentType, content) {
+    constructor(app, contentType, contentId) {
         super();
+        this.contentType = contentType;
+        this.contentId = contentId;
+    }
 
-        var name = null;
-
-        if (contentType.isNameable) {
-            name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
-        }
-        if (!name) {
-            name = `${contentType.name} ${content.id}`;
-        }
+    async open() {
+        const content = await contentGetter.get(this.contentId, this.contentType.id);
+        const name = nameGetter.getNameOf(content, this.contentType);
 
         this.setTitle(`Remove ${name}`);
 
@@ -38,22 +37,22 @@ class RemoveContentBlade extends Blade {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        id: content.id,
-                        contentTypeId: contentType.id
+                        keyValues: primaryKeyProvider.getFor(content, this.contentType),
+                        contentTypeId: this.contentType.id
                     })
                 }, 'Could not remove content');
 
                 var name = null;
-                if (!contentType.isSingleton) {
-                    if (contentType.isNameable) {
-                        name = contentType.nameablePropertyName ? content[contentType.nameablePropertyName] : content.name;
+                if (!this.contentType.isSingleton) {
+                    if (this.contentType.isNameable) {
+                        name = this.contentType.nameablePropertyName ? content[this.contentType.nameablePropertyName] : content.name;
                     }
                     if (!name) {
                         name = content.id;
                     }
                 }
 
-                notificationManager.addNotification(item => item.setText(`Removed ${contentType.name} ${name || ''}`));
+                notificationManager.addNotification(item => item.setText(`Removed ${this.contentType.name} ${name || ''}`));
                 this.onCompleteCallbacks.forEach(callback => callback(content));
                 app.removeBlade(this);
             });

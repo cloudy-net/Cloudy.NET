@@ -119,13 +119,13 @@ class ListContentBlade extends Blade {
 
             var menu = new ContextMenu();
             this.contentTypeActions[contentType.id].forEach(module => module.default(menu, item.Keys, this, this.app));
-            menu.addItem(item => {
-                item.setText('Remove');
+            menu.addItem(i => {
+                i.setText('Remove');
 
                 if (contentType.isSingleton) {
-                    item.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
+                    i.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
                 } else {
-                    item.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, item.Keys).onComplete(() => this.listItems(parents)), this))
+                    i.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, item.Keys).onComplete(() => this.listItems(parents)), this))
                 }
             });
             listItem.setMenu(menu);

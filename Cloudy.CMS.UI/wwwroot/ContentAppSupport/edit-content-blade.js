@@ -4,8 +4,7 @@ import TabSystem from '../TabSupport/tab-system.js';
 import FormBuilder from './edit-content/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
-import primaryKeyProvider from './utils/primary-key-provider.js';
-import nameProvider from './utils/name-provider.js';
+import nameGetter from './utils/name-getter.js';
 import urlFetcher from '../url-fetcher.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 import changeTracker from './utils/change-tracker.js';
@@ -43,7 +42,7 @@ class EditContentBlade extends Blade {
         }
 
         if (this.contentId) {
-            this.setTitle(`Edit ${await nameProvider.getNameOf(this.content, this.contentType.id)}`);
+            this.setTitle(`Edit ${nameGetter.getNameOf(this.content, this.contentType)}`);
         } else {
             this.setTitle(`New ${this.contentType.name}`);
         }

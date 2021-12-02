@@ -34,5 +34,10 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
             await task.ConfigureAwait(false);
         }
+
+        public void Remove(object entity)
+        {
+            DbSet.GetType().GetMethod(nameof(DbSet<object>.Remove)).Invoke(DbSet, new object[] { entity });
+        }
     }
 }

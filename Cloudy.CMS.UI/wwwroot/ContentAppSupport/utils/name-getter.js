@@ -1,22 +1,15 @@
 ﻿import primaryKeyProvider from "./primary-key-provider.js";
-import contentTypeProvider from "./content-type-provider.js";
 
-
-
-/* CONTENT NAME PROVIDER */
-
-class ContentNameProvider {
-    async getNameOf(content, contentTypeId) {
+class NameGetter {
+    getNameOf(content, contentType) {
         if (!content) {
             throw new Error('No content was supplied');
         }
-        if (!contentTypeId) {
-            throw new Error('No content type id was supplied');
+        if (!contentType) {
+            throw new Error('No content type was supplied');
         }
 
-        var contentType = await contentTypeProvider.get(contentTypeId);
-
-        var name = '';
+        let name = null;
 
         if (!contentType.isSingleton) {
             if (contentType.isNameable) {
@@ -24,7 +17,7 @@ class ContentNameProvider {
             }
         }
         if (!name) {
-            const contentId = await primaryKeyProvider.getFor(content, contentType);
+            const contentId = primaryKeyProvider.getFor(content, contentType);
             if (contentId && !contentType.isSingleton) {
                 name = `${contentType.name} ${JSON.stringify(contentId)}`;
             } else {
@@ -36,4 +29,4 @@ class ContentNameProvider {
     }
 }
 
-export default new ContentNameProvider();
+export default new NameGetter();

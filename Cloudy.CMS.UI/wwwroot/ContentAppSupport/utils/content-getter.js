@@ -11,6 +11,13 @@ class ContentGetter {
      * @param {string} contentTypeId
      */
     async get(contentId, contentTypeId) {
+        if (!contentId) {
+            throw new Error('No content id was supplied');
+        }
+        if (!contentTypeId) {
+            throw new Error('No content type id was supplied');
+        }
+
         const contentIdCacheKey = JSON.stringify(contentId);
 
         if (!this.contentByContentTypeAndId[contentTypeId]) {
