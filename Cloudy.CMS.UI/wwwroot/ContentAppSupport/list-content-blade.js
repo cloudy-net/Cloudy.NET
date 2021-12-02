@@ -54,7 +54,7 @@ class ListContentBlade extends Blade {
 
     async listItems(parents) {
         var creatableContentTypes = this.contentTypes.filter(t => !t.isSingleton);
-        this.createNew = () => this.app.addBladeAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0], { parentId: parents.length ? parents[parents.length - 1].id : null }) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => this.listItems(parents)), this);
+        this.createNew = () => this.app.addBladeAfter((this.contentTypes.length == 1 ? new EditContentBlade(this.app, this.contentTypes[0], null, { parentId: parents.length ? parents[parents.length - 1].id : null }) : new ChooseContentTypeBlade(this.app, creatableContentTypes)).onComplete(() => this.listItems(parents)), this);
         this.setToolbar(new Button('New').setInherit().onClick(this.createNew));
 
         this.list.element.style.opacity = 0.5;
@@ -203,7 +203,7 @@ class ChooseContentTypeBlade extends Blade {
             listItem.onClick(() => {
                 listItem.setActive();
 
-                var blade = new EditContentBlade(this.app, contentType)
+                var blade = new EditContentBlade(this.app, contentType, null)
                     .onComplete(() => {
                         this.onCompleteCallbacks.forEach(callback => callback());
                         this.app.removeBlade(this);

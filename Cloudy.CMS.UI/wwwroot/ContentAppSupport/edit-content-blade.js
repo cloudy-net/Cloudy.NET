@@ -36,7 +36,11 @@ class EditContentBlade extends Blade {
     }
 
     async open() {
-        this.content = await contentGetter.get(this.contentId, this.contentType.id);
+        if (this.contentId) {
+            this.content = await contentGetter.get(this.contentId, this.contentType.id);
+        } else {
+            this.content = {};
+        }
 
         if (this.contentId) {
             this.setTitle(`Edit ${await nameProvider.getNameOf(this.content, this.contentType.id)}`);
