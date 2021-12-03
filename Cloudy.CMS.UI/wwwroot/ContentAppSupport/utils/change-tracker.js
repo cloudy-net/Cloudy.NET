@@ -60,6 +60,13 @@ class ChangeTracker {
             this.pendingChanges.push(changesForContent);
         }
 
+        if (change.remove === true) {
+            changesForContent.remove = true;
+        }
+        if (change.remove === false) {
+            changesForContent.remove = false;
+        }
+
         let changedField = changesForContent.changedFields.find(f => arrayEquals(path, f.path));
 
         if (change.fieldType == 'simple') {
@@ -135,6 +142,7 @@ class ChangeTracker {
             return {
                 keyValues: c.contentId,
                 contentTypeId: c.contentTypeId,
+                remove: c.remove,
                 changedFields: c.changedFields
             }
         });

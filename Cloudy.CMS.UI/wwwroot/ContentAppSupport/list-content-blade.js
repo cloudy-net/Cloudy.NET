@@ -4,10 +4,10 @@ import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../ListSupport/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import EditContentBlade from './edit-content-blade.js';
-import RemoveContentBlade from './remove-content-blade.js';
 import ListItem from '../ListSupport/list-item.js';
 import Loading  from '../LoadingSupport/loading.js';
 import urlFetcher from '../url-fetcher.js';
+import changeTracker from './utils/change-tracker.js';
 
 /* LIST CONTENT BLADE */
 
@@ -125,7 +125,7 @@ class ListContentBlade extends Blade {
                 if (contentType.isSingleton) {
                     i.setDisabled(true).onDisabledClick(() => notificationManager.addNotification(item => item.setText(`${name} can't be removed because it is a singleton - one (and only one) ${contentType.lowerCaseName} must always exist.`)));
                 } else {
-                    i.onClick(() => this.app.addBladeAfter(new RemoveContentBlade(this.app, contentType, item.Keys).onComplete(() => this.listItems(parents)), this))
+                    i.onClick(() => changeTracker.addChange(item.Keys, contentType.id, [], { remove: true }));
                 }
             });
             listItem.setMenu(menu);

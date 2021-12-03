@@ -31,8 +31,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentUpdater ContentUpdater { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IContentCreator ContentCreator { get; }
-        
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator)
+        IContentDeleter ContentDeleter { get; }
+
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator, IContentDeleter contentDeleter)
         {
             ContentTypeProvider = contentTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
@@ -42,6 +43,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             ContentUpdater = contentUpdater;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             ContentCreator = contentCreator;
+            ContentDeleter = contentDeleter;
         }
 
         [HttpPost]
@@ -64,6 +66,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
                 else
                 {
+                    if (change.Remove)
+                    {
+                        await ContentDeleter.DeleteAsync(contentType.Id, PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id)).ConfigureAwait(false);
+
+                        return new ContentResponseMessage(true, "Removed");
+                    }
                     content = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id)).ConfigureAwait(false);
                 }
 
@@ -175,6 +183,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public JsonElement[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
+            public bool Remove { get; set; }
             [Required]
             public ChangedField[] ChangedFields { get; set; }
         }
