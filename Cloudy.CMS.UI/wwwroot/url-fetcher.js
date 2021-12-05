@@ -1,9 +1,16 @@
 ﻿import notificationManager from "./NotificationSupport/notification-manager.js";
 
 class UrlFetcher {
-    async fetch(url, parameters, errorMessage) {
+    async fetch(url, parameters, errorMessage, errorCodes) {
+        let shouldDisplay = true;
+
         try {
             var response = await fetch(url, parameters);
+
+            if (errorCodes && errorCodes[response.status]) {
+                shouldDisplay = false;
+                throw errorCodes[response.status](response);
+            }
 
             if (!response.ok) {
                 var text = await response.text();
@@ -32,7 +39,9 @@ class UrlFetcher {
 
             return await response.json();
         } catch (error) {
-            notificationManager.addNotification(item => item.setText(`${errorMessage} --- ${error.message}`));
+            if (shouldDisplay) {
+                notificationManager.addNotification(item => item.setText(`${errorMessage} --- ${error.message}`));
+            }
             throw error;
         }
     }

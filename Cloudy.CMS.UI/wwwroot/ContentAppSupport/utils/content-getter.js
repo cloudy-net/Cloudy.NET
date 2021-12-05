@@ -1,4 +1,5 @@
 import urlFetcher from '../../url-fetcher.js';
+import ContentNotFound from './content-not-found.js';
 
 /* CONTENT GETTER */
 
@@ -39,7 +40,10 @@ class ContentGetter {
                     contentTypeId: contentTypeId
                 })
             },
-            `Could not get content ${contentId} (${contentTypeId})`
+            `Could not get content ${contentId} (${contentTypeId})`,
+            {
+                410: () => new ContentNotFound(contentId, contentTypeId)
+            }
         );
         content = content.Value;
         this.contentByContentTypeAndId[contentTypeId][contentIdCacheKey] = content;

@@ -36,8 +36,15 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             var options = new JsonSerializerOptions();
             ContentJsonConverterProvider.GetAll().ToList().ForEach(c => options.Converters.Add(c));
+            var content = await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false);
 
-            return Json(await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false), options);
+            if(content == null)
+            {
+                Response.StatusCode = 410;
+                return Content("Content not found");
+            }
+
+            return Json(content, options);
         }
 
         public class GetContentRequestBody

@@ -60,6 +60,13 @@ class ChangeTracker {
             this.pendingChanges.push(changesForContent);
         }
 
+        if (change.remove === true) {
+            changesForContent.remove = true;
+        }
+        if (change.remove === false) {
+            delete changesForContent.remove;
+        }
+
         let changedField = changesForContent.changedFields.find(f => arrayEquals(path, f.path));
 
         if (change.fieldType == 'simple') {
@@ -100,7 +107,7 @@ class ChangeTracker {
             }
         }
 
-        if (changesForContent.changedFields.length == 0) {
+        if (changesForContent.changedFields.length == 0 && !changesForContent.remove) {
             this.pendingChanges.splice(this.pendingChanges.indexOf(changesForContent), 1); // delete empty change object
         }
 
@@ -135,6 +142,7 @@ class ChangeTracker {
             return {
                 keyValues: c.contentId,
                 contentTypeId: c.contentTypeId,
+                remove: c.remove,
                 changedFields: c.changedFields
             }
         });

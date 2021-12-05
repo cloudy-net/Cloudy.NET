@@ -1,4 +1,4 @@
-﻿import Blade from "../blade.js";
+import Blade from "../blade.js";
 import Button from "../button.js";
 import ListItem from "../ListSupport/list-item.js";
 import List from "../ListSupport/list.js";
@@ -7,6 +7,7 @@ import contentTypeProvider from "./utils/content-type-provider.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
 import contentGetter from './utils/content-getter.js';
 import changeTracker from "./utils/change-tracker.js";
+import ContentNotFound from "./utils/content-not-found.js";
 
 
 
@@ -44,19 +45,27 @@ class PendingChangesBlade extends Blade {
 
         for (let change of changeTracker.pendingChanges) {
             let contentType = await contentTypeProvider.get(change.contentTypeId);
-            let name = '';
+            let content;
             if (change.contentId) {
-                const content = await contentGetter.get(change.contentId, change.contentTypeId);
-                name = nameGetter.getNameOf(content, contentType);
+                try{
+                    content = await contentGetter.get(change.contentId, change.contentTypeId);
+                }
+                catch(exception){
+                    if (exception instanceof ContentNotFound) {
+                        list.addItem(new ListItem().setText(`Deleted ${contentType.lowerCaseName}`).setSubText(`${contentType.name} has been deleted`));
+                        continue;
+                    }
+                }
             } else {
-                const content = changeTracker.mergeWithPendingChanges(null, change.contentTypeId, {});
-                name = nameGetter.getNameOf(content, contentType);
+                content = changeTracker.mergeWithPendingChanges(null, change.contentTypeId, {});
             }
+            const name = nameGetter.getNameOf(content, contentType);
             const changedCount = change.changedFields.length;
-            const subText = change.contentId ? `Changed fields: ${changedCount}` : `New ${contentType.lowerCaseName}`;
+            const subText = change.remove ? 'Removed' : change.contentId ? `Changed fields: ${changedCount}` : `New ${contentType.lowerCaseName}`;
 
-            list.addItem(new ListItem().setText(name).setSubText(subText).onClick(() => {
-                this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, change), this);
+            list.addItem(new ListItem().setText(name).setSubText(subText).onClick(async () => {
+                const contentType = await contentTypeProvider.get(change.contentTypeId);
+                this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, change, contentType), this);
             }));
         }
 
