@@ -63,7 +63,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                 object content;
 
-                if(change.KeyValues == null)
+                if(keyValues == null)
                 {
                     content = Activator.CreateInstance(contentType.Type);
                 }
@@ -83,7 +83,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                 if (change.ChangedFields.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
-                    throw new Exception($"Tried to change primary key of content {string.Join(", ", change.KeyValues)} with type {change.ContentTypeId}!");
+                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {change.ContentTypeId}!");
                 }
 
                 var changedSimpleFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Simple).ToList();
@@ -122,9 +122,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 if (!TryValidateModel(content))
                 {
                     result.Add(SaveContentResult.ValidationFailureResult(contentType.Id, keyValues, ModelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage))));
+                    continue;
                 }
 
-                if (change.KeyValues == null)
+                if (keyValues == null)
                 {
                     await ContentCreator.CreateAsync(content).ConfigureAwait(false);
                 }
@@ -132,14 +133,21 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 {
                     await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
                 }
+
+                result.Add(SaveContentResult.SuccessResult(contentType.Id, keyValues));
             }
 
-            return new SaveContentResponse();
+            return new SaveContentResponse(result);
         }
 
         public class SaveContentResponse
         {
+            public IEnumerable<SaveContentResult> Result { get; }
 
+            public SaveContentResponse(IEnumerable<SaveContentResult> result)
+            {
+                Result = result.ToList().AsReadOnly();
+            }
         }
 
         public class SaveContentResult
@@ -155,7 +163,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 {
                     Success = true,
                     ContentTypeId = contentTypeId,
-                    KeyValues = keyValues.ToList().AsReadOnly(),
+                    KeyValues = keyValues?.ToList().AsReadOnly(),
                 };
             }
 

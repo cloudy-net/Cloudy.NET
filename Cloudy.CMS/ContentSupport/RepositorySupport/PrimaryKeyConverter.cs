@@ -19,6 +19,11 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
 
         public object[] Convert(IEnumerable<JsonElement> keyValues, string contentTypeId)
         {
+            if(keyValues == null)
+            {
+                return null;
+            }
+
             var result = new List<object>();
 
             var values = keyValues.ToList();
