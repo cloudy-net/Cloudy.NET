@@ -58,7 +58,7 @@ class PendingChangesBlade extends Blade {
             }
             const name = nameGetter.getNameOf(content, contentType);
             const changedCount = change.changedFields.length;
-            const subText = change.remove ? 'Removed' : change.contentId ? `Changed fields: ${changedCount}` : `New ${contentType.lowerCaseName}`;
+            const subText = change.remove ? 'Slated for removal' : change.contentId ? `Changed fields: ${changedCount}` : `New ${contentType.lowerCaseName}`;
 
             list.addItem(new ListItem().setText(name).setSubText(subText).onClick(async () => {
                 const contentType = await contentTypeProvider.get(change.contentTypeId);
