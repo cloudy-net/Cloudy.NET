@@ -142,11 +142,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentResponse
         {
-            public IEnumerable<SaveContentResult> Result { get; }
+            public IEnumerable<SaveContentResult> Results { get; }
 
             public SaveContentResponse(IEnumerable<SaveContentResult> result)
             {
-                Result = result.ToList().AsReadOnly();
+                Results = result.ToList().AsReadOnly();
             }
         }
 
