@@ -47,16 +47,19 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         }
 
         [HttpPost]
-        public async Task<ContentResponseMessage> SaveContent([FromBody] SaveContentRequestBody data)
+        public async Task<SaveContentResponse> SaveContent([FromBody] SaveContentRequestBody data)
         {
             if (!ModelState.IsValid)
             {
-                return ContentResponseMessage.CreateFrom(ModelState);
+                throw new Exception("Invalid state");
             }
+
+            var result = new List<SaveContentResult>();
 
             foreach (var change in data.Changes)
             {
                 var contentType = ContentTypeProvider.Get(change.ContentTypeId);
+                var keyValues = PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id);
 
                 object content;
 
@@ -68,11 +71,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 {
                     if (change.Remove)
                     {
-                        await ContentDeleter.DeleteAsync(contentType.Id, PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id)).ConfigureAwait(false);
-
-                        return new ContentResponseMessage(true, "Removed");
+                        await ContentDeleter.DeleteAsync(contentType.Id, keyValues).ConfigureAwait(false);
+                        result.Add(SaveContentResult.SuccessResult(contentType.Id, keyValues));
+                        continue;
                     }
-                    content = await ContentGetter.GetAsync(contentType.Id, PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id)).ConfigureAwait(false);
+                    content = await ContentGetter.GetAsync(contentType.Id, keyValues).ConfigureAwait(false);
                 }
 
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => p.Name, p => p);
@@ -118,7 +121,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                 if (!TryValidateModel(content))
                 {
-                    return ContentResponseMessage.CreateFrom(ModelState);
+                    result.Add(SaveContentResult.ValidationFailureResult(contentType.Id, keyValues, ModelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage))));
                 }
 
                 if (change.KeyValues == null)
@@ -131,7 +134,41 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
             }
 
-            return new ContentResponseMessage(true, "Updated");
+            return new SaveContentResponse();
+        }
+
+        public class SaveContentResponse
+        {
+
+        }
+
+        public class SaveContentResult
+        {
+            public bool Success { get; private set; }
+            public string ContentTypeId { get; private set; }
+            public IEnumerable<object> KeyValues { get; private set; }
+            public IDictionary<string, IEnumerable<string>> ValidationErrors { get; private set; }
+
+            public static SaveContentResult SuccessResult(string contentTypeId, IEnumerable<object> keyValues)
+            {
+                return new SaveContentResult
+                {
+                    Success = true,
+                    ContentTypeId = contentTypeId,
+                    KeyValues = keyValues.ToList().AsReadOnly(),
+                };
+            }
+
+            public static SaveContentResult ValidationFailureResult(string contentTypeId, IEnumerable<object> keyValues, IDictionary<string, IEnumerable<string>> validationErrors)
+            {
+                return new SaveContentResult
+                {
+                    Success = false,
+                    ContentTypeId = contentTypeId,
+                    KeyValues = keyValues.ToList().AsReadOnly(),
+                    ValidationErrors = validationErrors.ToDictionary(e => e.Key, e => (IEnumerable<string>)e.Value.ToList().AsReadOnly()),
+                };
+            }
         }
 
         private void UpdateSimpleField(object instance, IEnumerable<string> path, string initialValue, string value)
@@ -221,38 +258,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         {
             public string Type { get; set; }
             public string Value { get; set; }
-        }
-
-        public class ContentResponseMessage
-        {
-            public bool Success { get; }
-            public string Message { get; }
-            public IDictionary<string, IEnumerable<string>> ValidationErrors { get; }
-
-            public ContentResponseMessage(bool success)
-            {
-                Success = success;
-                ValidationErrors = new ReadOnlyDictionary<string, IEnumerable<string>>(new Dictionary<string, IEnumerable<string>>());
-            }
-
-            public ContentResponseMessage(bool success, string message)
-            {
-                Success = success;
-                Message = message;
-                ValidationErrors = new ReadOnlyDictionary<string, IEnumerable<string>>(new Dictionary<string, IEnumerable<string>>());
-            }
-
-            public ContentResponseMessage(IDictionary<string, IEnumerable<string>> validationErrors)
-            {
-                Success = false;
-                Message = "Validation failed";
-                ValidationErrors = new ReadOnlyDictionary<string, IEnumerable<string>>(new Dictionary<string, IEnumerable<string>>(validationErrors));
-            }
-
-            public static ContentResponseMessage CreateFrom(ModelStateDictionary modelState)
-            {
-                return new ContentResponseMessage(modelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage)));
-            }
         }
     }
 }

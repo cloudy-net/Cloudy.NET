@@ -12,15 +12,15 @@ import changeTracker from "./utils/change-tracker.js";
 class PendingChangesDiffBlade extends Blade {
     undoCallbacks = [];
 
-    constructor(app, change) {
+    constructor(app, change, contentType) {
         super();
         this.app = app;
         this.change = change;
-        this.setTitle(`Pending changes (${change.changedFields.length})`);
+        this.contentType = contentType;
+        this.setTitle('Pending changes' + (change.changedFields.length ? ` (${change.changedFields.length})` : ''));
         this.setToolbar(new Button('Edit').setInherit().onClick(async () => {
             const content = await contentGetter.get(this.change.contentId, this.change.contentTypeId);
-            const contentType = await contentTypeProvider.get(this.change.contentTypeId);
-            const blade = new EditContentBlade(this.app, contentType, content);
+            const blade = new EditContentBlade(this.app, this.contentType, content);
             await this.app.addBladeAfter(blade, this.app.listContentTypesBlade);
         }));
         this.undoChangesButton = new Button('Undo changes')
@@ -47,6 +47,14 @@ class PendingChangesDiffBlade extends Blade {
     }
 
     async open() {
+        if (this.change.remove) {
+            var div = document.createElement('div');
+            div.innerText = `${this.contentType.name} will be deleted`;
+            div.style.padding = '16px';
+            this.setContent(div);
+            return;
+        }
+
         var form = document.createElement('div');
         form.classList.add('cloudy-ui-form');
         var fields = await fieldDescriptorProvider.getFor(this.change.contentTypeId);

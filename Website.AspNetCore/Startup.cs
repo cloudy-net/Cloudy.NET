@@ -33,6 +33,7 @@ namespace Website.AspNetCore
                     Configuration.GetConnectionString("sqlserver") ?? throw new Exception("No sqlserver connection string found in appsettings/env"),
                     options => options.EnableRetryOnFailure()
                 )
+                .EnableSensitiveDataLogging()
             );
         }
 

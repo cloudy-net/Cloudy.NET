@@ -64,7 +64,7 @@ class ChangeTracker {
             changesForContent.remove = true;
         }
         if (change.remove === false) {
-            changesForContent.remove = false;
+            delete changesForContent.remove;
         }
 
         let changedField = changesForContent.changedFields.find(f => arrayEquals(path, f.path));
@@ -107,7 +107,7 @@ class ChangeTracker {
             }
         }
 
-        if (changesForContent.changedFields.length == 0) {
+        if (changesForContent.changedFields.length == 0 && !changesForContent.remove) {
             this.pendingChanges.splice(this.pendingChanges.indexOf(changesForContent), 1); // delete empty change object
         }
 
