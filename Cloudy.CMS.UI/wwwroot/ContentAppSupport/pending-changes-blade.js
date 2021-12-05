@@ -19,10 +19,7 @@ class PendingChangesBlade extends Blade {
         this.app = app;
         
         this.setTitle('Pending changes');
-        this.saveButton = new Button('Save all');
 
-        this.pendingChangesUpdateCallback = () => this.open();
-        changeTracker.onUpdate(this.pendingChangesUpdateCallback);
         this.onClose(() => changeTracker.removeOnUpdate(this.pendingChangesUpdateCallback));
     }
 
@@ -75,18 +72,19 @@ class PendingChangesBlade extends Blade {
 
         this.setContent(list);
 
+        const saveButton = new Button('Save all');
         this.setFooter(
-            this.saveButton
+            saveButton
                 .setPrimary()
                 .setDisabled(changeTracker.pendingChanges.length == 0)
                 .setStyle({ marginLeft: 'auto' })
                 .onClick(async () => {
-                    this.saveButton.setDisabled();
+                    saveButton.setDisabled();
                     changeTracker.apply(null, () => {
                         this.setContent();
                         this.app.removeBladesAfter(this);
                     });
-                    this.saveButton.setDisabled(false);
+                    saveButton.setDisabled(false);
                 })
         );
     }
