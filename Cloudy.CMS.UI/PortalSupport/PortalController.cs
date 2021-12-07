@@ -64,9 +64,10 @@ namespace Cloudy.CMS.UI.PortalSupport
             await Response.WriteAsync($"</head>\n");
             await Response.WriteAsync($"<body>\n");
             await Response.WriteAsync($"    <script type=\"module\">\n");
-            await Response.WriteAsync($"        import Portal from '{Path.Combine(basePath, "portal.js").Replace('\\', '/')}';\n");
-            await Response.WriteAsync($"        import appProvider from '{Path.Combine(basePath, "app-provider.js").Replace('\\', '/')}';\n");
-            await Response.WriteAsync($"        appProvider.getAll().then(apps => new Portal('{TitleProvider.Title}', apps).appendTo(document.body));\n");
+            await Response.WriteAsync($"        import {{ h, render }} from '{Path.Combine(basePath, "lib/preact.module.js").Replace('\\', '/')}';\n");
+            await Response.WriteAsync($"        import html from '{Path.Combine(basePath, "html.js").Replace('\\', '/')}';\n");
+            await Response.WriteAsync($"        import App from '{Path.Combine(basePath, "app.js").Replace('\\', '/')}';\n");
+            await Response.WriteAsync($"        render(html`<${{App}} name=World />`, document.body);\n");
             await Response.WriteAsync($"    </script>\n");
             await Response.WriteAsync($"</body>\n");
             await Response.WriteAsync($"</html>\n");
