@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace Cloudy.CMS.UI.PortalSupport
 {
@@ -67,7 +68,8 @@ namespace Cloudy.CMS.UI.PortalSupport
             await Response.WriteAsync($"        import {{ h, render }} from '{Path.Combine(basePath, "lib/preact.module.js").Replace('\\', '/')}';\n");
             await Response.WriteAsync($"        import html from '{Path.Combine(basePath, "html.js").Replace('\\', '/')}';\n");
             await Response.WriteAsync($"        import App from '{Path.Combine(basePath, "app.js").Replace('\\', '/')}';\n");
-            await Response.WriteAsync($"        render(html`<${{App}} name=World />`, document.body);\n");
+            await Response.WriteAsync($"        const title = {JsonSerializer.Serialize(TitleProvider.Title)};\n");
+            await Response.WriteAsync($"        render(html`<${{App}} title=${{title}} />`, document.body);\n");
             await Response.WriteAsync($"    </script>\n");
             await Response.WriteAsync($"</body>\n");
             await Response.WriteAsync($"</html>\n");
