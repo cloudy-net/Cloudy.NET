@@ -5,7 +5,7 @@ import List from '../ListSupport/list.js';
 import ListItem from '../ListSupport/list-item.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 
-function ListContentTypes(props) {
+function ListContentTypes() {
     const [listContentType, setListContentType] = useContext(listContentTypeContext);
     const [items, setItems] = useState([]);
 

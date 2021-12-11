@@ -5,15 +5,16 @@ import ListItem from '../ListSupport/list-item.js';
 import urlFetcher from '../url-fetcher.js';
 import nameGetter from '../ContentAppSupport/utils/name-getter.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
+import editContentContext from '../edit-content/edit-content-context.js';
 
-function ListContent(props) {
+function ListContent() {
     const [contentType, setContentType] = useContext(listContentTypeContext);
+    const [editingContent, editContent] = useContext(editContentContext);
 
     if (!contentType) {
         return null;
     }
 
-    const [editingContent, editContent] = useState(null);
     const [items, setItems] = useState([]);
 
     useEffect(() => {
