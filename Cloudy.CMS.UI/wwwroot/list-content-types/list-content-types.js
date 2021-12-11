@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect, useContext } from '../lib/preact.hooks.module.js';
 import html from '../html.js';
-import ContentTypeProvider from './content-type-provider.js';
+import ContentTypeProvider from './content-type-getter.js';
 import List from '../ListSupport/list.js';
 import ListItem from '../ListSupport/list-item.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';

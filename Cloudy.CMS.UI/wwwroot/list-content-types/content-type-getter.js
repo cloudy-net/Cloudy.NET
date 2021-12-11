@@ -1,8 +1,6 @@
 ﻿import urlFetcher from '../url-fetcher.js';
 
-/* CONTENT TYPE PROVIDER */
-
-class ContentTypeProvider {
+class ContentTypeGetter {
     all;
 
     async getAll() {
@@ -20,4 +18,4 @@ class ContentTypeProvider {
     }
 }
 
-export default new ContentTypeProvider();
+export default new ContentTypeGetter();
