@@ -1,4 +1,4 @@
-﻿import html from '../html.js';
+﻿import html from '../util/html.js';
 import ListContentTypeContext from './list-content-type-context.js';
 import { useState } from '../lib/preact.hooks.module.js';
 

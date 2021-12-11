@@ -1,5 +1,5 @@
 ﻿import notificationManager from "../NotificationSupport/notification-manager.js";
-import urlFetcher from "../url-fetcher.js";
+import urlFetcher from "../util/url-fetcher.js";
 class FieldControlProvider {
     constructor() {
         this.modulePathsPromise = urlFetcher.fetch('Control/ModulePaths', {

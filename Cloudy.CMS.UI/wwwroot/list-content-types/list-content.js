@@ -1,8 +1,8 @@
 ﻿import { useState, useEffect, useContext } from '../lib/preact.hooks.module.js';
-import html from '../html.js';
-import List from '../ListSupport/list.js';
-import ListItem from '../ListSupport/list-item.js';
-import urlFetcher from '../url-fetcher.js';
+import html from '../util/html.js';
+import List from '../components/list/list.js';
+import ListItem from '../components/list/list-item.js';
+import urlFetcher from '../util/url-fetcher.js';
 import nameGetter from '../edit-content/name-getter.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 import editContentContext from '../edit-content/edit-content-context.js';
@@ -38,7 +38,7 @@ function ListContent() {
                         <${ListItem}
                             active=${item == editingContent}
                             text=${nameGetter.getNameOf(item, contentType)}
-                            onclick=${() => editContent(item)}
+                            onclick=${() => editContent({ keys: item.Keys })}
                         />
                     `)}
                 <//>

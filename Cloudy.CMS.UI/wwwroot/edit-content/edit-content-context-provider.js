@@ -1,4 +1,4 @@
-﻿import html from '../html.js';
+﻿import html from '../util/html.js';
 import EditContentContext from './edit-content-context.js';
 import { useState } from '../lib/preact.hooks.module.js';
 

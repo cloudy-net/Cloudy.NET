@@ -1,4 +1,4 @@
-﻿import html from '../html.js';
+﻿import html from '../../util/html.js';
 
 const List = props => html`
     <cloudy-ui-list>${props.children}<//>

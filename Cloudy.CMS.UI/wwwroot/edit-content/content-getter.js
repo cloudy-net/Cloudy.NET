@@ -1,4 +1,4 @@
-import urlFetcher from '../url-fetcher.js';
+import urlFetcher from '../util/url-fetcher.js';
 import ContentNotFound from '../ContentAppSupport/utils/content-not-found.js';
 
 /* CONTENT GETTER */

@@ -1,12 +1,12 @@
 import Blade from '../blade.js';
 import Button from '../button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
-import List from '../ListSupport/list.js';
+import List from '../components/list/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';
 import EditContentBlade from './edit-content-blade.js';
-import ListItem from '../ListSupport/list-item.js';
+import ListItem from '../components/list/list-item.js';
 import Loading  from '../LoadingSupport/loading.js';
-import urlFetcher from '../url-fetcher.js';
+import urlFetcher from '../util/url-fetcher.js';
 import changeTracker from './utils/change-tracker.js';
 
 /* LIST CONTENT BLADE */

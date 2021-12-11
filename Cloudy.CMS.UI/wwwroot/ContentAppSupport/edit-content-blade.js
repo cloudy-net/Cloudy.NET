@@ -4,82 +4,15 @@ import TabSystem from '../TabSupport/tab-system.js';
 import FormBuilder from './edit-content/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
-import nameGetter from '../edit-content/name-getter.js';
-import urlFetcher from '../url-fetcher.js';
-import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 import changeTracker from './utils/change-tracker.js';
 import PendingChangesDiffBlade from './pending-changes-diff-blade.js';
-import contentGetter from '../edit-content/content-getter.js';
 
 
 
 /* EDIT CONTENT */
 
 class EditContentBlade extends Blade {
-    onCompleteCallbacks = [];
-
-    constructor(app, contentType, contentId) {
-        super();
-        
-        this.app = app;
-        this.contentType = contentType;
-        this.contentId = contentId;
-        this.element.addEventListener("keydown", (event) => {
-            if ((String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) || event.which == 19) { // 19 for Mac:s "Command+S"
-                if (this.viewChangeButton) {
-                    this.viewChangeButton.triggerClick();
-                }
-                event.preventDefault();
-            }
-        });
-    }
-
     async open() {
-        if (this.contentId) {
-            this.content = await contentGetter.get(this.contentId, this.contentType.id);
-        } else {
-            this.content = {};
-        }
-
-        if (this.contentId) {
-            this.setTitle(`Edit ${nameGetter.getNameOf(this.content, this.contentType)}`);
-        } else {
-            this.setTitle(`New ${this.contentType.name}`);
-        }
-
-        if (this.contentId && this.contentType.isRoutable) {
-            var urls = await urlFetcher.fetch(
-                    `GetUrl/GetUrl`,
-                    {
-                        credentials: 'include',
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            keyValues: this.contentId,
-                            contentTypeId: this.contentType.id
-                        })
-                    },
-                    'Could not get URL'
-                );
-
-            const button = new Button('View').setInherit().onClick(() => menu.toggle());
-            const menu = new PopupMenu(button.element);
-                    
-            if (urls.length) {
-                urls.forEach(item =>
-                    menu.addItem(listItem => {
-                        listItem.setText(item);
-                        listItem.onClick(() => {
-                            window.open(`${location.origin}/${item}`, '_blank');
-                        });
-                    })
-                );
-            } else {
-                menu.addItem(item => item.setDisabled().setText('(no items)'));
-            }
-
-            this.setToolbar(menu);
-        }
 
         this.buildForm();
 

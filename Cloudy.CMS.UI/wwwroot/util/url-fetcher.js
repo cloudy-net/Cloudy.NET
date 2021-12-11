@@ -1,4 +1,4 @@
-﻿import notificationManager from "./NotificationSupport/notification-manager.js";
+﻿import notificationManager from "../NotificationSupport/notification-manager.js";
 
 class UrlFetcher {
     async fetch(url, parameters, errorMessage, errorCodes) {

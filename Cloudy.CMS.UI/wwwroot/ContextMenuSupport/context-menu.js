@@ -1,4 +1,4 @@
-﻿import PopupMenu from '../PopupMenuSupport/popup-menu.js';
+﻿import PopupMenu from '../components/popup-menu/popup-menu.js';
 
 
 

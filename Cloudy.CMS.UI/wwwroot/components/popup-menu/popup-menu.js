@@ -1,11 +1,15 @@
-﻿import List from '../ListSupport/list.js';
-import DocumentActivityEvent from '../DocumentActivityEvent.js';
+﻿import html from '../../util/html.js';
+import List from '../list/list.js';
+
+function PopupMenu() {
 
 
 
-/* POPUP MENU */
+}
 
-class PopupMenu {
+export default PopupMenu;
+
+class PopupMenu2 {
     generators = [];
 
     constructor(button) {
@@ -71,41 +75,4 @@ class PopupMenu {
 
         this.menu.style.left = `${left}px`;
     }
-
-    remove() {
-        this.button.classList.remove('cloudy-ui-active');
-        if (this.menu) {
-            this.menu.remove();
-            this.menu = null;
-        }
-        this.list = null;
-    }
-
-    addItem(configurator) {
-        this.generators.push(() => this.list.addItem(item => {
-            configurator(item);
-            item.onClick(() => {
-                this.button.classList.remove('cloudy-ui-active');
-                this.remove();
-            });
-        }));
-        return this;
-    }
-
-    addSubHeader(text) {
-        this.generators.push(() => this.list.addSubHeader(text));
-        return this;
-    }
-
-    addSeparator() {
-        this.generators.push(() => this.list.addSeparator());
-        return this;
-    }
-
-    appendTo(element) {
-        element.appendChild(this.element);
-        return this;
-    }
 }
-
-export default PopupMenu;
