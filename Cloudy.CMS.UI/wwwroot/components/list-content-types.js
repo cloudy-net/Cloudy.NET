@@ -16,8 +16,10 @@ function ListContentTypes(props) {
     return html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title><cloudy-ui-blade-title-text>What to edit<//><//>
-            <${List}>
-				${items.map(item => html`<${ListItem} active=${item == listContentType} text=${item.name} onclick=${() => setListContentType(item)} />`)}
+            <cloudy-ui-blade-content>
+                <${List}>
+				    ${items.map(item => html`<${ListItem} active=${item == listContentType} text=${item.name} onclick=${() => setListContentType(item)} />`)}
+                <//>
             <//>
         <//>
     `;

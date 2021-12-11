@@ -28,14 +28,16 @@ function ListContent(props) {
     return html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title><cloudy-ui-blade-title-text>${contentType.pluralName}<//><//>
-            <${List}>
-			    ${items.map(item => html`
-                    <${ListItem}
-                        active=${item == editingContent}
-                        text=${nameGetter.getNameOf(item, contentType)}
-                        onclick=${() => editContent(item)}
-                    />
-                `)}
+            <cloudy-ui-blade-content>
+                <${List}>
+			        ${items.map(item => html`
+                        <${ListItem}
+                            active=${item == editingContent}
+                            text=${nameGetter.getNameOf(item, contentType)}
+                            onclick=${() => editContent(item)}
+                        />
+                    `)}
+                <//>
             <//>
         <//>
     `;
