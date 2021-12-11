@@ -1,6 +1,6 @@
 ﻿import html from './html.js';
-import ListContentTypes from './components/list-content-types.js';
-import ListContentTypeContextProvider from './list-content-type-context-provider.js';
+import ListContentTypes from './list-content-types/list-content-types.js';
+import ListContentTypeContextProvider from './list-content-types/list-content-type-context-provider.js';
 import ListContent from './components/list-content.js';
 
 function App(props) {

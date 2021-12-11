@@ -3,7 +3,7 @@ import Button from "../button.js";
 import ListItem from "../ListSupport/list-item.js";
 import List from "../ListSupport/list.js";
 import nameGetter from "./utils/name-getter.js";
-import contentTypeProvider from "./utils/content-type-provider.js";
+import contentTypeProvider from "../list-content-types/content-type-provider.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
 import contentGetter from './utils/content-getter.js';
 import changeTracker from "./utils/change-tracker.js";

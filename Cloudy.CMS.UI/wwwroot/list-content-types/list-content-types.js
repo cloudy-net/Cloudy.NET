@@ -1,9 +1,9 @@
 ﻿import { useState, useEffect, useContext } from '../lib/preact.hooks.module.js';
 import html from '../html.js';
-import ContentTypeProvider from '../ContentAppSupport/utils/content-type-provider.js';
+import ContentTypeProvider from './content-type-provider.js';
 import List from '../ListSupport/list.js';
 import ListItem from '../ListSupport/list-item.js';
-import listContentTypeContext from '../list-content-type-context.js';
+import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 
 function ListContentTypes(props) {
     const [listContentType, setListContentType] = useContext(listContentTypeContext);

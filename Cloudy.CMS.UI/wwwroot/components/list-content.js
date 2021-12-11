@@ -4,7 +4,7 @@ import List from '../ListSupport/list.js';
 import ListItem from '../ListSupport/list-item.js';
 import urlFetcher from '../url-fetcher.js';
 import nameGetter from '../ContentAppSupport/utils/name-getter.js';
-import listContentTypeContext from '../list-content-type-context.js';
+import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 
 function ListContent(props) {
     const [contentType, setContentType] = useContext(listContentTypeContext);
