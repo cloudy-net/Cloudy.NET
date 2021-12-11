@@ -7,7 +7,7 @@ import nameGetter from '../ContentAppSupport/utils/name-getter.js';
 import listContentTypeContext from '../list-content-type-context.js';
 
 function ListContent(props) {
-    const [contentType] = useContext(listContentTypeContext);
+    const [contentType, setContentType] = useContext(listContentTypeContext);
 
     if (!contentType) {
         return null;
@@ -27,7 +27,10 @@ function ListContent(props) {
 
     return html`
         <cloudy-ui-blade>
-            <cloudy-ui-blade-title><cloudy-ui-blade-title-text>${contentType.pluralName}<//><//>
+            <cloudy-ui-blade-title>
+                <cloudy-ui-blade-title-text>${contentType.pluralName}<//>
+                <cloudy-ui-blade-close onclick=${() => setContentType(null)}><//>
+            <//>
             <cloudy-ui-blade-content>
                 <${List}>
 			        ${items.map(item => html`
