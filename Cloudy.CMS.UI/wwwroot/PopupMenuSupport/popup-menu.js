@@ -15,7 +15,7 @@ class PopupMenu {
         this.button = button;
         this.element.appendChild(button);
 
-        DocumentActivityEvent.addCallback(event => {
+        const callback = event => {
             if (!this.button.classList.contains('cloudy-ui-active')) {
                 return;
             }
@@ -31,7 +31,10 @@ class PopupMenu {
             if (!found) {
                 this.remove();
             }
-        });
+        };
+
+        document.addEventListener('click', event => callback(event));
+        document.addEventListener('keyup', event => callback(event));
     }
 
     toggle() {
