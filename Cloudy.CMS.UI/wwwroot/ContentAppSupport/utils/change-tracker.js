@@ -1,6 +1,6 @@
 import contentSaver from "./content-saver.js";
 import arrayEquals from "./array-equals.js";
-import contentGetter from "./content-getter.js";
+import contentGetter from "../../edit-content/content-getter.js";
 
 /* CHANGE TRACKER */
 

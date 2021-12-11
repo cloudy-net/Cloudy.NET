@@ -2,7 +2,7 @@ import Blade from "../blade.js";
 import Button from "../button.js";
 import Diff from './lib/diff.js'
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
-import contentGetter from "./utils/content-getter.js";
+import contentGetter from "../edit-content/content-getter.js";
 import EditContentBlade from './edit-content-blade.js';
 import changeTracker from "./utils/change-tracker.js";
 

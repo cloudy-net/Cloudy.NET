@@ -4,12 +4,12 @@ import TabSystem from '../TabSupport/tab-system.js';
 import FormBuilder from './edit-content/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
-import nameGetter from './utils/name-getter.js';
+import nameGetter from '../edit-content/name-getter.js';
 import urlFetcher from '../url-fetcher.js';
 import PopupMenu from '../PopupMenuSupport/popup-menu.js';
 import changeTracker from './utils/change-tracker.js';
 import PendingChangesDiffBlade from './pending-changes-diff-blade.js';
-import contentGetter from './utils/content-getter.js';
+import contentGetter from '../edit-content/content-getter.js';
 
 
 

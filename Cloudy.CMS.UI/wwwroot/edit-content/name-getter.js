@@ -1,4 +1,4 @@
-﻿import primaryKeyProvider from "./primary-key-provider.js";
+﻿import primaryKeyProvider from "../ContentAppSupport/utils/primary-key-provider.js";
 
 class NameGetter {
     getNameOf(content, contentType) {
