@@ -10,8 +10,12 @@ function ListContentTypes() {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        ContentTypeProvider.getAll().then(items => setItems(items));
+        ContentTypeProvider.getAll().then(items => { setItems(items); setListContentType(items[0]); });
     }, []);
+
+    if (listContentType) {
+        return null;
+    }
 
     return html`
         <cloudy-ui-blade>
