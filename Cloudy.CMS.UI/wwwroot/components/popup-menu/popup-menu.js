@@ -18,7 +18,7 @@ function PopupMenu(props) {
 
     return html`
         <cloudy-ui-context-menu-outer>
-            <${Button} text=${props.text} onclick=${() => setVisible(!visible)}/>
+            <${Button} class=${visible ? 'cloudy-ui-active' : null} text=${props.text} onclick=${() => setVisible(!visible)}/>
             ${visible && html`<${ContextMenu} children=${props.children}/>`}
         <//>
     `;
@@ -52,13 +52,6 @@ class PopupMenu2 {
     }
 
     toggle() {
-        if (this.button.classList.contains('cloudy-ui-active')) {
-            this.remove();
-            return;
-        }
-
-        this.button.classList.add('cloudy-ui-active');
-
         this.menu = document.createElement('cloudy-ui-context-menu');
         this.menu.style.opacity = 'none';
         this.list = new List();
