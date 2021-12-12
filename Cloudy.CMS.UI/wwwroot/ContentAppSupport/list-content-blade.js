@@ -1,5 +1,5 @@
 import Blade from '../blade.js';
-import Button from '../button.js';
+import Button from '../components/button/button.js';
 import ContextMenu from '../ContextMenuSupport/context-menu.js';
 import List from '../components/list/list.js';
 import notificationManager from '../NotificationSupport/notification-manager.js';

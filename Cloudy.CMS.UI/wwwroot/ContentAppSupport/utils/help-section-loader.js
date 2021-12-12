@@ -1,4 +1,4 @@
-﻿import Button from "../../button.js";
+﻿import Button from "../../components/button/button.js";
 import urlFetcher from "../../util/url-fetcher.js";
 
 /* HELP SECTION LOADER */

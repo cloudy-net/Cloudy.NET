@@ -1,9 +1,16 @@
-﻿
+﻿import html from '../../util/html.js';
 
+function Button(props) {
+    return html`
+        <cloudy-ui-button>
+            ${props.text}
+        <//>
+    `;
+}
 
-/* BUTTON */
+export default Button;
 
-class Button {
+class Button2 {
     onClickCallbacks = [];
 
     constructor(text) {
@@ -94,5 +101,3 @@ class Button {
         return this;
     }
 }
-
-export default Button;

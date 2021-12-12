@@ -57,12 +57,12 @@ function EditContent() {
                     `Edit ${nameGetter.getNameOf(content, contentType)}`:
                     `New ${contentType.name}`
                 )}<//>
-                <cloudy-ui-blade-close onclick=${() => editContent(null)}><//>
-            <//>
-            <cloudy-ui-blade-toolbar>
-                <${PopupMenu}>
-                    <${ListItem}/>
+                <cloudy-ui-blade-toolbar>
+                    <${PopupMenu} text='View'>
+                        <${ListItem}/>
+                    <//>
                 <//>
+                <cloudy-ui-blade-close onclick=${() => editContent(null)}><//>
             <//>
             <cloudy-ui-blade-content>
 

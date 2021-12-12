@@ -1,10 +1,13 @@
 ﻿import html from '../../util/html.js';
+import Button from '../button/button.js';
 import List from '../list/list.js';
 
-function PopupMenu() {
-
-
-
+function PopupMenu(props) {
+    return html`
+        <cloudy-ui-context-menu-outer>
+            <${Button} text=${props.text}/>
+        <//>
+    `;
 }
 
 export default PopupMenu;
@@ -13,11 +16,6 @@ class PopupMenu2 {
     generators = [];
 
     constructor(button) {
-        this.element = document.createElement('div');
-        this.element.classList.add('cloudy-ui-context-menu-outer');
-
-        this.button = button;
-        this.element.appendChild(button);
 
         const callback = event => {
             if (!this.button.classList.contains('cloudy-ui-active')) {

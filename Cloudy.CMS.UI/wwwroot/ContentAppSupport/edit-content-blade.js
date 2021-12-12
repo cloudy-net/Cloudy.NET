@@ -1,5 +1,5 @@
 import Blade from '../blade.js';
-import Button from '../button.js';
+import Button from '../components/button/button.js';
 import TabSystem from '../TabSupport/tab-system.js';
 import FormBuilder from './edit-content/form-builder.js';
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';

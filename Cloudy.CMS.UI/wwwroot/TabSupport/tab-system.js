@@ -1,4 +1,4 @@
-﻿import Button from '../button.js';
+﻿import Button from '../components/button/button.js';
 
 class TabSystem {
     constructor() {

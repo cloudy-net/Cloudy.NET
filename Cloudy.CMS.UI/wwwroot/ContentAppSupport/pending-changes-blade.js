@@ -1,5 +1,5 @@
 import Blade from "../blade.js";
-import Button from "../button.js";
+import Button from "../components/button/button.js";
 import ListItem from "../components/list/list-item.js";
 import List from "../components/list/list.js";
 import nameGetter from "../edit-content/name-getter.js";

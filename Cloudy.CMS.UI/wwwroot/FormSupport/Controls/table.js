@@ -4,7 +4,7 @@ import FormBuilder from '../form-builder.js';
 import DataTable from '../../DataTableSupport/data-table.js';
 import Backend from '../../DataTableSupport/backend.js';
 import Blade from '../../blade.js';
-import Button from '../../button.js';
+import Button from '../../components/button/button.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 
 class SortableTableControl extends Sortable {

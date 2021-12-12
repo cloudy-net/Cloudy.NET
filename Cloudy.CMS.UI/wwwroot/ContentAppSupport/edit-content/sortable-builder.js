@@ -2,7 +2,7 @@ import Field from '../../FormSupport/field.js';
 import Sortable from '../../FormSupport/sortable.js';
 import SortableItem from '../../FormSupport/sortable-item.js';
 import PopupMenu from '../../components/popup-menu/popup-menu.js';
-import Button from '../../button.js';
+import Button from '../../components/button/button.js';
 import urlFetcher from '../../util/url-fetcher.js';
 import changeTracker from '../utils/change-tracker.js';
 import arrayEquals from '../utils/array-equals.js';

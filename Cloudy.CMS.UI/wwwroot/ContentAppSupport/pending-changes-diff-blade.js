@@ -1,5 +1,5 @@
 import Blade from "../blade.js";
-import Button from "../button.js";
+import Button from "../components/button/button.js";
 import Diff from './lib/diff.js'
 import fieldDescriptorProvider from '../FormSupport/field-descriptor-provider.js';
 import contentGetter from "../edit-content/content-getter.js";
