@@ -4,9 +4,7 @@ import listContentTypeContext from '../list-content-types/list-content-type-cont
 import editContentContext from '../edit-content/edit-content-context.js';
 import contentGetter from './content-getter.js';
 import nameGetter from './name-getter.js';
-import urlFetcher from '../util/url-fetcher.js';
-import ListItem from '../components/list/list-item.js';
-import PopupMenu from '../components/popup-menu/popup-menu.js';
+import Urls from './urls.js';
 
 function EditContent() {
     const [contentType] = useContext(listContentTypeContext);
@@ -26,29 +24,6 @@ function EditContent() {
         return null;
     }
 
-    const [urls, setUrls] = useState();
-
-    useEffect(() => {
-        if (!editingContent.keys || !contentType.isRoutable) {
-            return;
-        }
-
-        urlFetcher.fetch(
-            `GetUrl/GetUrl`,
-            {
-                credentials: 'include',
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    keyValues: editingContent.keys,
-                    contentTypeId: contentType.id
-                })
-            },
-            'Could not get URL'
-        )
-            .then(urls => setUrls(urls));
-    }, [editingContent.keys]);
-
     return html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
@@ -58,9 +33,7 @@ function EditContent() {
                     `New ${contentType.name}`
                 )}<//>
                 <cloudy-ui-blade-toolbar>
-                    <${PopupMenu} text='View'>
-                        ${urls && urls.map(url => html`<${ListItem} text=${url}/>`)}
-                    <//>
+                    <${Urls}/>
                 <//>
                 <cloudy-ui-blade-close onclick=${() => editContent(null)}><//>
             <//>
