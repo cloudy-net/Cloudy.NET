@@ -1,11 +1,25 @@
-﻿import html from '../../util/html.js';
+﻿import { useState } from '../../lib/preact.hooks.module.js';
+import html from '../../util/html.js';
 import Button from '../button/button.js';
 import List from '../list/list.js';
 
+function ContextMenu(props) {
+    return html`
+        <cloudy-ui-context-menu>
+            <${List}>
+                ${props.children}
+            <//>
+        <//>
+    `;
+}
+
 function PopupMenu(props) {
+    const [visible, setVisible] = useState(false);
+
     return html`
         <cloudy-ui-context-menu-outer>
-            <${Button} text=${props.text}/>
+            <${Button} text=${props.text} onclick=${() => setVisible(!visible)}/>
+            ${visible && html`<${ContextMenu} children=${props.children}/>`}
         <//>
     `;
 }
@@ -13,8 +27,6 @@ function PopupMenu(props) {
 export default PopupMenu;
 
 class PopupMenu2 {
-    generators = [];
-
     constructor(button) {
 
         const callback = event => {

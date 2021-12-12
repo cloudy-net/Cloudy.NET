@@ -59,7 +59,7 @@ function EditContent() {
                 )}<//>
                 <cloudy-ui-blade-toolbar>
                     <${PopupMenu} text='View'>
-                        <${ListItem}/>
+                        ${urls && urls.map(url => html`<${ListItem} text=${url}/>`)}
                     <//>
                 <//>
                 <cloudy-ui-blade-close onclick=${() => editContent(null)}><//>

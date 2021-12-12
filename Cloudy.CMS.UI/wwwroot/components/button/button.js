@@ -2,7 +2,7 @@
 
 function Button(props) {
     return html`
-        <cloudy-ui-button>
+        <cloudy-ui-button onclick=${props.onclick}>
             ${props.text}
         <//>
     `;
