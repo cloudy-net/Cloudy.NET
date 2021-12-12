@@ -23,7 +23,7 @@ function ListContent() {
             { credentials: 'include' },
             'Could not load content list'
         )
-            .then(items => setItems(items.Items));
+            .then(items => { setItems(items.Items); editContent({ keys: items.Items[0].Keys }); });
     }, []);
 
     return html`
