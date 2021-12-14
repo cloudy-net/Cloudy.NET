@@ -61,7 +61,7 @@ class ChangeTracker {
         this.referenceObjects.push({ content, contentId, contentTypeId });
     }
 
-    addChange(contentId, contentTypeId, path, change) {
+    addChange(contentId, contentTypeId, change) {
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')
         }
@@ -80,11 +80,11 @@ class ChangeTracker {
             delete changesForContent.remove;
         }
 
-        let changedField = changesForContent.changedFields.find(f => arrayEquals(path, f.path));
+        let changedField = changesForContent.changedFields.find(f => arrayEquals(change.path, f.path));
 
         if (change.fieldType == 'simple') {
             if (!changedField) {
-                changesForContent.changedFields.push(changedField = { path, type: 'simple', initialValue: change.initialValue, value: change.value });
+                changesForContent.changedFields.push(changedField = { path: change.path, type: 'simple', initialValue: change.initialValue, value: change.value });
             }
 
             if (change.type == 'set') {
@@ -98,23 +98,23 @@ class ChangeTracker {
         
         if (change.fieldType == 'array') {
             if (!changedField) {
-                changesForContent.changedFields.push(changedField = { path, type: 'array', changes: [] });
+                changesForContent.changedFields.push(changedField = { path: change.path, type: 'array', changes: [] });
             }
 
-            if (change.type == 'add') {
+            if (change.operation == 'add') {
                 changedField.changes.push({ id: change.id, type: change.add, value: JSON.stringify(change.value) });
             }
-            if (change.type == 'update') {
+            if (change.operation == 'update') {
                 const item = changedField.changes.find(i => i.id == change.id);
                 item.value = change.value;
             }
-            if (change.type == 'delete') {
+            if (change.operation == 'delete') {
                 var item = changedField.changes.find(i => i.id == change.id);
 
-                if (item.type == 'add') {
+                if (item.operation == 'add') {
                     changedField.changes.splice(changedField.changes.indexOf(item), 1); // delete addition completely
                 } else {
-                    item.type = 'delete';
+                    item.operation = 'delete';
                     delete item.value;
                 }
             }

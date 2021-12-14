@@ -8,8 +8,6 @@ function SimpleField(props) {
 
     const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, initialValue);
 
-//        .onChange(value => eventDispatcher.triggerChange(path, { fieldType: 'simple', type: 'set', initialValue, value }));
-
     let wrapperTag = 'div';
     let labelTag = 'div';
 
@@ -18,12 +16,12 @@ function SimpleField(props) {
         labelTag = 'legend';
     }
 
-    const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { fieldType: 'simple', type: 'set', initialValue, value } }))
+    const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { path, change: { type: 'simple', operation: 'set', initialValue, value } } }))
 
     return html`
         <${wrapperTag} class="cloudy-ui-form-field cloudy-ui-simple">
             <${labelTag} class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
-            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${initialValue}/>
+            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${pendingValue}/>
         <//>
     `;
 }

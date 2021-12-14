@@ -4,6 +4,7 @@ import editContentContext from '../edit-content/edit-content-context.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
+import changeTracker from './change-tracker.js';
 
 function Form(props) {
     const [editingContent] = useContext(editContentContext);
@@ -26,8 +27,9 @@ function Form(props) {
     const ref = createRef();
 
     useEffect(() => {
-        ref.current.addEventListener('cloudy-ui-form-change', function (event) {
-            console.log(event);
+        ref.current.addEventListener('cloudy-ui-form-change', (event) => {
+            const { path, change } = event.detail;
+            changeTracker.addChange(editingContent.keys, editingContent, path, change);
         });
 
         return () => {
