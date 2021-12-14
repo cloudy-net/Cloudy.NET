@@ -2,9 +2,10 @@
 import html from '../util/html.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 import editContentContext from '../edit-content/edit-content-context.js';
-import contentGetter from './content-getter.js';
+import contentGetter from '../data/content-getter.js';
 import nameGetter from './name-getter.js';
 import Urls from './urls.js';
+import Form from './form.js';
 
 function EditContent() {
     const [contentType] = useContext(listContentTypeContext);
@@ -17,7 +18,7 @@ function EditContent() {
     const [content, setContent] = useState();
 
     useEffect(() => {
-        editingContent.keys && contentGetter.get(editingContent.keys, contentType.id).then(content => setContent(content));
+        editingContent.keys && contentGetter.get(editingContent.keys, editingContent.contentTypeId).then(content => setContent(content));
     }, null);
 
     if (!content) {
@@ -38,7 +39,7 @@ function EditContent() {
                 <cloudy-ui-blade-close onclick=${() => editContent(null)}><//>
             <//>
             <cloudy-ui-blade-content>
-
+                <${Form} content=${content}/>
             <//>
         <//>
     `;

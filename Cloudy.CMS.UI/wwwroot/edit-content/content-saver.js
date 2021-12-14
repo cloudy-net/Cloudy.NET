@@ -1,8 +1,6 @@
-import "../../list-content-types/content-type-getter.js";
-import notificationManager from "../../NotificationSupport/notification-manager.js";
-import urlFetcher from "../../util/url-fetcher.js";
-
-/* CONTENT SAVER */
+import "../data/content-type-getter.js";
+import notificationManager from "../NotificationSupport/notification-manager.js";
+import urlFetcher from "../util/url-fetcher.js";
 
 class ContentSaver {
     async save(changes) {

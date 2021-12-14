@@ -17,10 +17,10 @@ namespace Website.AspNetCore.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .Entity<Page>()
-                .Property(e => e.SidebarBlocks)
-                .HasConversion(new JsonValueConverter<IEnumerable<ISidebarBlock>>());
+            //modelBuilder
+            //    .Entity<Page>()
+            //    .Property(e => e.SidebarBlocks)
+            //    .HasConversion(new JsonValueConverter<IEnumerable<ISidebarBlock>>());
             base.OnModelCreating(modelBuilder);
         }
     }

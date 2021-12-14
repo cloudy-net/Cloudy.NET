@@ -23,7 +23,7 @@ function ListContent() {
             { credentials: 'include' },
             'Could not load content list'
         )
-            .then(items => { setItems(items.Items); editContent({ keys: items.Items[0].Keys }); });
+            .then(items => { setItems(items.Items); editContent({ keys: items.Items[0].Keys, contentTypeId: items.Items[0].ContentTypeId }); });
     }, []);
 
     return html`
@@ -38,7 +38,7 @@ function ListContent() {
                         <${ListItem}
                             active=${item == editingContent}
                             text=${nameGetter.getNameOf(item, contentType)}
-                            onclick=${() => editContent({ keys: item.Keys })}
+                            onclick=${() => editContent({ keys: item.Keys, contentTypeId: item.ContentTypeId })}
                         />
                     `)}
                 <//>

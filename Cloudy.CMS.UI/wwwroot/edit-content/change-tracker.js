@@ -1,8 +1,21 @@
 import contentSaver from "./content-saver.js";
-import arrayEquals from "./array-equals.js";
-import contentGetter from "../../edit-content/content-getter.js";
+import contentGetter from '../data/content-getter.js';
 
-/* CHANGE TRACKER */
+function arrayEquals(a, b) {
+    if (a == null && b == null) {
+        return true;
+    }
+
+    if (a == null) {
+        return false;
+    }
+
+    if (b == null) {
+        return false;
+    }
+
+    return a.every((ai, i) => ai === b[i]);
+}
 
 class ChangeTracker {
     pendingChanges = JSON.parse(localStorage.getItem('_pendingChanges')) || [];
