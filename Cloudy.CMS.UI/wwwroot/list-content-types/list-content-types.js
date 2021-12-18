@@ -10,7 +10,7 @@ function ListContentTypes() {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        ContentTypeProvider.getAll().then(items => { setItems(items); setListContentType(items[0]); });
+        ContentTypeProvider.getAll().then(items => setItems(items));
     }, []);
 
     if (listContentType) {
