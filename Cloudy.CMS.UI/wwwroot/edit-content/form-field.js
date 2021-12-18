@@ -16,7 +16,7 @@ function SimpleField(props) {
         labelTag = 'legend';
     }
 
-    const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { path, change: { type: 'simple', operation: 'set', initialValue, value } } }))
+    const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'simple', operation: 'set', initialValue, value } } }))
 
     return html`
         <${wrapperTag} class="cloudy-ui-form-field cloudy-ui-simple">

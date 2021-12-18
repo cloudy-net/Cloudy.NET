@@ -82,21 +82,17 @@ class ChangeTracker {
 
         let changedField = changesForContent.changedFields.find(f => arrayEquals(change.path, f.path));
 
-        if (change.fieldType == 'simple') {
+        if (change.type == 'simple') {
             if (!changedField) {
-                changesForContent.changedFields.push(changedField = { path: change.path, type: 'simple', initialValue: change.initialValue, value: change.value });
+                changesForContent.changedFields.push(changedField = change);
             }
 
-            if (change.type == 'set') {
-                if (change.initialValue === change.value) {
-                    changesForContent.changedFields.splice(changesForContent.changedFields.indexOf(changedField), 1); // delete unchanged field
-                } else {
-                    changedField.value = change.value;
-                }
+            if (change.operation == 'set') {
+                changedField.value = change.value;
             }
         }
         
-        if (change.fieldType == 'array') {
+        if (change.type == 'array') {
             if (!changedField) {
                 changesForContent.changedFields.push(changedField = { path: change.path, type: 'array', changes: [] });
             }

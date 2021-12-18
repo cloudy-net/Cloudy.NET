@@ -27,10 +27,7 @@ function Form(props) {
     const ref = createRef();
 
     useEffect(() => {
-        ref.current.addEventListener('cloudy-ui-form-change', (event) => {
-            const { path, change } = event.detail;
-            changeTracker.addChange(editingContent.keys, editingContent, path, change);
-        });
+        ref.current.addEventListener('cloudy-ui-form-change', (event) => changeTracker.addChange(editingContent.keys, editingContent.contentTypeId, event.detail.change));
 
         return () => {
 
