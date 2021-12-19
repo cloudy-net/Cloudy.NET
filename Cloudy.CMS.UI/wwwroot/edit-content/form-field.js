@@ -3,7 +3,7 @@ import html from '../util/html.js';
 import changeTracker from './change-tracker.js';
 
 function SimpleField(props) {
-    const { contentId, contentTypeId, path, fieldModel } = props;
+    const { contentId, contentTypeId, path, fieldModel, readonly } = props;
     const initialValue = props.value;
 
     const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, initialValue);
@@ -21,7 +21,7 @@ function SimpleField(props) {
     return html`
         <${wrapperTag} class="cloudy-ui-form-field cloudy-ui-simple">
             <${labelTag} class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
-            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${pendingValue}/>
+            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${pendingValue} readonly=${readonly}/>
         <//>
     `;
 }
@@ -37,6 +37,7 @@ function FormField(props) {
             value=${value}
             path=${path}
             fieldModel=${fieldModel}
+            readonly=${props.readonly}
         />`;
     }
 
@@ -47,6 +48,7 @@ function FormField(props) {
             value=${value}
             path=${path}
             fieldModel=${fieldModel}
+            readonly=${props.readonly}
         />`;
     }
 
@@ -56,6 +58,7 @@ function FormField(props) {
         value=${value}
         path=${path}
         fieldModel=${fieldModel}
+        readonly=${props.readonly}
     />`;
 }
 
