@@ -8,15 +8,25 @@ import Diff from './lib/diff.js';
 import changeTracker from '../edit-content/change-tracker.js';
 
 function DiffField(props) {
-    if (props.fieldModel.descriptor.control && (props.fieldModel.descriptor.control.id == 'text' || props.fieldModel.descriptor.control.id == 'textarea')) {
+    const { fieldModel, change, initialValue, value } = props;
+
+    if (change && fieldModel.descriptor.control && (fieldModel.descriptor.control.id == 'text' || fieldModel.descriptor.control.id == 'textarea')) {
         return html`
-            <div class=cloudy-ui-form-input>
-                ${Diff(props.initialValue || '', props.value || '', 0).map(([state, segment]) => html`<span class=${state == Diff.INSERT ? 'cloudy-ui-diff-insert' : state == Diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`)}
+            <div class="cloudy-ui-form-field cloudy-ui-simple">
+                <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
+                <div class=cloudy-ui-form-input>
+                    ${Diff(initialValue || '', value || '', 0).map(([state, segment]) => html`<span class=${state == Diff.INSERT ? 'cloudy-ui-diff-insert' : state == Diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`)}
+                <//>
             <//>
         `;
     }
 
-    //return html`<${FormField} ...${props}/>`;
+    return html`
+        <div class="cloudy-ui-form-field cloudy-ui-simple">
+            <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
+            <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${value} readonly />
+        <//>
+    `;
 }
 
 function ShowDiff() {
@@ -29,8 +39,7 @@ function ShowDiff() {
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
-        fieldModelBuilder.getFieldModels(showingDiff.contentTypeId)
-            .then(fieldModels => setFieldModels(fieldModels));
+        fieldModelBuilder.getFieldModels(showingDiff.contentTypeId).then(fieldModels => setFieldModels(fieldModels));
     }, [showingDiff.contentTypeId]);
 
     if (!fieldModels) {
@@ -57,7 +66,6 @@ function ShowDiff() {
                     initialValue=${content[fieldModel.descriptor.id]}
                     value=${changeTracker.getPendingValue(showingDiff.contentId, showingDiff.contentTypeId, [fieldModel.descriptor.id], content[fieldModel.descriptor.id])}
                     fieldModel=${fieldModel}
-                    readonly
                 />`)}
             <//>
         <//>
