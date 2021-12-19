@@ -3,7 +3,7 @@ import html from '../util/html.js';
 import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
 import urlFetcher from '../util/url-fetcher.js';
-import nameGetter from '../edit-content/name-getter.js';
+import nameGetter from '../data/name-getter.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 import editContentContext from '../edit-content/edit-content-context.js';
 

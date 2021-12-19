@@ -1,35 +1,37 @@
-﻿import html from '../util/html.js';
+import html from '../util/html.js';
 import Blade from '../components/blade/blade.js';
-import { useEffect, useState } from '../lib/preact.hooks.module.js';
+import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import changeTracker from '../edit-content/change-tracker.js';
 import ListItem from '../components/list/list-item.js';
-
-function Item(props) {
-    return html`
-        <${ListItem} text=${props.change.contentId}/>
-    `;
-}
+import contentGetter from '../data/content-getter.js';
+import contentTypeGetter from '../data/content-type-getter.js';
+import nameGetter from '../data/name-getter.js';
+import showDiffContext from './show-diff-context.js';
 
 function ShowDiff() {
     const [items, setItems] = useState();
 
     useEffect(() => {
-        setItems(changeTracker.pendingChanges.map(change => {
-            return change;
-            //    const name = nameGetter.getNameOf(content, contentType);
-            //    const changedCount = change.changedFields.length;
-            //    const subText = change.remove ? 'Slated for removal' : change.contentId ? `Changed fields: ${changedCount}` : `New ${contentType.lowerCaseName}`;
+        Promise.all(changeTracker.pendingChanges.map(async change => {
+            const contentType = await contentTypeGetter.get(change.contentTypeId);
+            const content = await contentGetter.get(change.contentId, change.contentTypeId);
 
-            //    list.addItem(new ListItem().setText(name).setSubText(subText).onClick(async () => {
-            //        const contentType = await contentTypeProvider.get(change.contentTypeId);
-            //        this.app.addBladeAfter(new PendingChangesDiffBlade(this.app, change, contentType), this);
-            //    }));
-        }));
-    });
+            return { change, name: nameGetter.getNameOf(content, contentType), contentType };
+        }))
+            .then(items => setItems(items));
+    }, []);
+
+    const [showingDiff, showDiff] = useContext(showDiffContext);
 
     return html`
         <${Blade} title='Pending changes'>
-            ${items ? items.length ? items.map(item => html`<${Item} change=${item}/>`) : 'No more pending changes' : null}
+            ${items && !items.length ? 'No more pending changes' : null}
+            ${items && items.length ? items.map(item => html`
+                <${ListItem}
+                    text=${item.name}
+                    subtext=${item.change.remove ? 'Slated for removal' : item.change.contentId ? `Changed fields: ${item.change.changedFields.length}` : `New ${item.contentType.lowerCaseName}`}
+                    onclick=${() => showDiff(item.change)}
+                />`) : null}
         <//>
     `;
 }

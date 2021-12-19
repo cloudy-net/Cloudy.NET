@@ -2,7 +2,7 @@ import Blade from "../blade.js";
 import Button from "../components/button/button.js";
 import ListItem from "../components/list/list-item.js";
 import List from "../components/list/list.js";
-import nameGetter from "../edit-content/name-getter.js";
+import nameGetter from "../data/name-getter.js";
 import contentTypeProvider from "../list-content-types/content-type-getter.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
 import contentGetter from '../edit-content/content-getter.js';
