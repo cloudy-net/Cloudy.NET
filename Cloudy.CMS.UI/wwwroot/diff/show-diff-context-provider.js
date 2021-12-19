@@ -3,7 +3,7 @@ import ShowDiffContext from './show-diff-context.js';
 import { useState } from '../lib/preact.hooks.module.js';
 
 function ShowDiffContextProvider(props) {
-    const state = useState(true);
+    const state = useState();
     return html`
         <${ShowDiffContext.Provider} value=${state}>
             ${props.children}

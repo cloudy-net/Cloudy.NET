@@ -7,8 +7,15 @@ import contentGetter from '../data/content-getter.js';
 import contentTypeGetter from '../data/content-type-getter.js';
 import nameGetter from '../data/name-getter.js';
 import showDiffContext from './show-diff-context.js';
+import pendingChangesContext from './pending-changes-context.js';
 
-function ShowDiff() {
+function PendingChanges() {
+    const [showingPendingChanges] = useContext(pendingChangesContext);
+
+    if (!showingPendingChanges) {
+        return null;
+    }
+
     const [items, setItems] = useState();
 
     useEffect(() => {
@@ -36,4 +43,4 @@ function ShowDiff() {
     `;
 }
 
-export default ShowDiff;
+export default PendingChanges;
