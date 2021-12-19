@@ -28,10 +28,6 @@ function Form(props) {
 
     useEffect(() => {
         ref.current.addEventListener('cloudy-ui-form-change', (event) => changeTracker.addChange(editingContent.keys, editingContent.contentTypeId, event.detail.change));
-
-        return () => {
-
-        };
     });
 
     return html`
