@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
 import editContentContext from '../edit-content/edit-content-context.js';
+import pendingChangesContext from '../diff/pending-changes-context.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
-import changeTracker from './change-tracker.js';
 
 function Form(props) {
     const [editingContent] = useContext(editContentContext);
+    const [pendingChanges, updatePendingChanges] = useContext(pendingChangesContext);
 
     if (!editingContent) {
         return null;
@@ -24,19 +25,25 @@ function Form(props) {
         return null;
     }
 
-    const ref = createRef();
+    const ref = createRef(null);
 
     useEffect(() => {
-        ref.current.addEventListener('cloudy-ui-form-change', (event) => changeTracker.addChange(editingContent.keys, editingContent.contentTypeId, event.detail.change));
+        ref.current.addEventListener('cloudy-ui-form-change', (event) => {
+            updatePendingChanges({
+                keys: editingContent.keys,
+                contentTypeId: editingContent.contentTypeId,
+                change: event.detail.change,
+            });
+        });
     });
 
     return html`
-        <div class=cloudy-ui-form ref=${ref}>
-            ${fieldModels.map(fieldModel => html`<${FormField}
+        <div class='cloudy-ui-form' ref=${ref}>
+            ${fieldModels.map(fieldModel => html`
+            <${FormField}
                 contentId=${editingContent.keys}
                 contentTypeId=${editingContent.contentTypeId}
                 value=${props.content[fieldModel.descriptor.id]}
-                path=${[]}
                 fieldModel=${fieldModel}
             />`)}
         <//>

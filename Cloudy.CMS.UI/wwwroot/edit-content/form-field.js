@@ -1,34 +1,33 @@
 ﻿import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import changeTracker from './change-tracker.js';
+import pendingChangesContext from '../diff/pending-changes-context.js';
 
-function SimpleField(props) {
-    const { contentId, contentTypeId, path, fieldModel, readonly } = props;
-    const initialValue = props.value;
+function SimpleField({ contentId, contentTypeId, path, fieldModel, readonly, value: initialValue }) {
+    const [, , , getPendingValue] = useContext(pendingChangesContext);
+    const [pendingValue, setPendingValue] = useState();
 
-    const pendingValue = changeTracker.getPendingValue(contentId, contentTypeId, path, initialValue);
-
-    let wrapperTag = 'div';
-    let labelTag = 'div';
+    useEffect(() => {
+        setPendingValue(getPendingValue(contentId, contentTypeId, path, initialValue));
+    }, [contentId, contentTypeId, path, initialValue]);
 
     if (fieldModel.descriptor.embeddedFormId && !fieldModel.descriptor.isSortable) {
         wrapperTag = 'fieldset';
         labelTag = 'legend';
     }
 
-    const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'simple', operation: 'set', initialValue, value } } }))
+    const emitEvent = (element, val) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'simple', operation: 'set', initialValue, value: val } } }))
 
     return html`
-        <${wrapperTag} class="cloudy-ui-form-field cloudy-ui-simple">
-            <${labelTag} class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
+        <div class="cloudy-ui-form-field cloudy-ui-simple">
+            <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}</div>
             <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${pendingValue} readonly=${readonly}/>
-        <//>
+        </div>
     `;
 }
 
 function FormField(props) {
     const { contentId, contentTypeId, value, fieldModel } = props;
-    const path = [...props.path, fieldModel.descriptor.id];
+    const path = [fieldModel.descriptor.id];
 
     if (fieldModel.descriptor.isSortable) {
         return html`<${SortableField}

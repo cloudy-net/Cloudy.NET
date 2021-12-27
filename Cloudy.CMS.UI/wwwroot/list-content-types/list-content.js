@@ -9,7 +9,7 @@ import editContentContext from '../edit-content/edit-content-context.js';
 
 function ListContent() {
     const [contentType, setContentType] = useContext(listContentTypeContext);
-    const [editingContent, editContent] = useContext(editContentContext);
+    const [editingContent, setEditingContent] = useContext(editContentContext);
 
     if (!contentType) {
         return null;
@@ -23,7 +23,10 @@ function ListContent() {
             { credentials: 'include' },
             'Could not load content list'
         )
-            .then(items => { setItems(items.Items); editContent({ keys: items.Items[0].Keys, contentTypeId: items.Items[0].ContentTypeId }); });
+            .then(item => {
+                setItems(item.Items);
+                setEditingContent({ keys: item.Items[0].Keys, contentTypeId: item.Items[0].ContentTypeId });
+            });
     }, []);
 
     return html`
@@ -36,9 +39,9 @@ function ListContent() {
                 <${List}>
 			        ${items.map(item => html`
                         <${ListItem}
-                            active=${item == editingContent}
+                            active=${item.Keys[0] == editingContent.keys[0]}
                             text=${nameGetter.getNameOf(item, contentType)}
-                            onclick=${() => editContent({ keys: item.Keys, contentTypeId: item.ContentTypeId })}
+                            onclick=${() => setEditingContent({ keys: item.Keys, contentTypeId: item.ContentTypeId })}
                         />
                     `)}
                 <//>

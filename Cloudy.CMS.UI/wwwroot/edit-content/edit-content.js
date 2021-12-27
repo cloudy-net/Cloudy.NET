@@ -9,7 +9,7 @@ import Form from './form.js';
 
 function EditContent() {
     const [contentType] = useContext(listContentTypeContext);
-    const [editingContent, editContent] = useContext(editContentContext);
+    const [editingContent, setEditingContent] = useContext(editContentContext);
 
     if (!contentType || !editingContent) {
         return null;
@@ -18,31 +18,29 @@ function EditContent() {
     const [content, setContent] = useState();
 
     useEffect(() => {
-        editingContent.keys && contentGetter.get(editingContent.keys, editingContent.contentTypeId).then(content => setContent(content));
-    }, null);
+        editingContent.keys && contentGetter.get(editingContent.keys, editingContent.contentTypeId).then(content => {
+            setContent(content);
+        });
+    }, [editingContent]);
 
-    if (!content) {
-        return null;
-    }
-
-    return html`
+    return content ? html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
                 <cloudy-ui-blade-title-text>${(
-                    editingContent.keys ?
-                    `Edit ${nameGetter.getNameOf(content, contentType)}`:
-                    `New ${contentType.name}`
-                )}<//>
+            editingContent.keys ?
+                `Edit ${nameGetter.getNameOf(content, contentType)}` :
+                `New ${contentType.name}`
+        )}<//>
                 <cloudy-ui-blade-toolbar>
                     <${Urls}/>
                 <//>
-                <cloudy-ui-blade-close onclick=${() => editContent(null)}><//>
+                <cloudy-ui-blade-close onclick=${() => setEditingContent(null)}><//>
             <//>
             <cloudy-ui-blade-content>
                 <${Form} content=${content}/>
             <//>
         <//>
-    `;
+    `: null;
 }
 
 export default EditContent;

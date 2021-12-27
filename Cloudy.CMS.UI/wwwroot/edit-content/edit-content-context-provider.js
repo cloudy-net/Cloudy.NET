@@ -1,12 +1,13 @@
 ﻿import html from '../util/html.js';
 import EditContentContext from './edit-content-context.js';
-import { useState } from '../lib/preact.hooks.module.js';
+import { useEffect, useState } from '../lib/preact.hooks.module.js';
 
-function EditContentContextProvider(props) {
-    const state = useState(null);
+function EditContentContextProvider({ children }) {
+    const [editingContent, setEditingContent] = useState();
+
     return html`
-        <${EditContentContext.Provider} value=${state}>
-            ${props.children}
+        <${EditContentContext.Provider} value=${[editingContent, setEditingContent]}>
+            ${children}
         <//>
     `;
 }
