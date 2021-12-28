@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -34,14 +35,18 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         [HttpPost]
         public async Task<ActionResult> Get([FromBody] GetContentRequestBody data)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             var options = new JsonSerializerOptions();
             ContentJsonConverterProvider.GetAll().ToList().ForEach(c => options.Converters.Add(c));
             var content = await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false);
 
             if(content == null)
             {
-                Response.StatusCode = 410;
-                return Content("Content not found");
+                return Json(new { NotFound = true });
             }
 
             return Json(content, options);
@@ -49,7 +54,9 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class GetContentRequestBody
         {
+            [Required]
             public JsonElement[] KeyValues { get; set; }
+            [Required]
             public string ContentTypeId { get; set; }
         }
     }
