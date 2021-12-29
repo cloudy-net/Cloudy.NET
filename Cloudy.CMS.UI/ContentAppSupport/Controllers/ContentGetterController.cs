@@ -42,7 +42,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             var options = new JsonSerializerOptions();
             ContentJsonConverterProvider.GetAll().ToList().ForEach(c => options.Converters.Add(c));
-            var content = await ContentGetter.GetAsync(data.ContentTypeId, PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId)).ConfigureAwait(false);
+            var keys = PrimaryKeyConverter.Convert(data.KeyValues, data.ContentTypeId);
+            var content = await ContentGetter.GetAsync(data.ContentTypeId, keys).ConfigureAwait(false);
 
             if(content == null)
             {
