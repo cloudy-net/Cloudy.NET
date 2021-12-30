@@ -11,20 +11,20 @@ import pendingChangesContext from './pending-changes-context.js';
 function PendingChanges() {
     const [pendingChanges] = useContext(pendingChangesContext);
     const [items, setItems] = useState([]);
+    const [diffData, setDiffData] = useContext(showDiffContext);
 
     useEffect(() => {
         if (pendingChanges && pendingChanges.length) {
             Promise.all(pendingChanges.map(async (change) => {
                 const contentType = await contentTypeGetter.get(change.contentTypeId);
                 const content = await contentGetter.get(change.contentId, change.contentTypeId);
-                return { change, name: ' nameGetter.getNameOf(content, contentType)', contentType };
+                return { change, name: nameGetter.getNameOf(content, contentType), contentType };
             })).then(items => {
                 setItems(items);
             })
         }
     }, [pendingChanges])
 
-    const [showingDiff, showDiff] = useContext(showDiffContext);
 
     return html`
         <${Blade} title='Pending changes'>
@@ -33,7 +33,7 @@ function PendingChanges() {
                 <${ListItem}
                     text=${item.name}
                     subtext=${item.change.remove ? 'Slated for removal' : item.change.contentId ? `Changed fields: ${item.change.changedFields.length}` : `New ${item.contentType.lowerCaseName}`}
-                    onclick=${() => showDiff(item.change)}
+                    onclick=${() => setDiffData(item.change)}
                 />`) : null}
         <//>
     `;

@@ -124,8 +124,12 @@ function PendingChangesContextProvider({ children }) {
         return changedField.value;
     }, [pendingChanges]);
 
+    const getFor = useCallback((contentId, contentTypeId) => {
+        return pendingChanges.find(p => arrayEquals(p.contentId, contentId) && p.contentTypeId == contentTypeId);
+    }, []);
+
     return html`
-        <${PendingChangesContext.Provider} value=${[pendingChanges, updatePendingChanges, resetChange, getPendingValue]}>
+        <${PendingChangesContext.Provider} value=${[pendingChanges, updatePendingChanges, resetChange, getPendingValue, getFor]}>
             ${children}
         <//>
     `;
