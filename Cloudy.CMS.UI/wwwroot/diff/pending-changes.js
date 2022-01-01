@@ -17,7 +17,7 @@ function PendingChanges() {
         if (pendingChanges && pendingChanges.length) {
             Promise.all(pendingChanges.map(async (change) => {
                 const contentType = await contentTypeGetter.get(change.contentTypeId);
-                const content = await contentGetter.get(change.contentId, change.contentTypeId);
+                const content = await contentGetter.get([change.contentId], change.contentTypeId);
                 return { change, name: nameGetter.getNameOf(content, contentType), contentType };
             })).then(items => {
                 setItems(items);
