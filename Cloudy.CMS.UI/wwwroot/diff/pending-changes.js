@@ -1,6 +1,6 @@
 import html from '../util/html.js';
 import Blade from '../components/blade/blade.js';
-import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
+import { useContext, useEffect, useState, useCallback } from '../lib/preact.hooks.module.js';
 import ListItem from '../components/list/list-item.js';
 import contentGetter from '../data/content-getter.js';
 import contentTypeGetter from '../data/content-type-getter.js';
@@ -9,7 +9,7 @@ import showDiffContext from './show-diff-context.js';
 import pendingChangesContext from './pending-changes-context.js';
 
 function PendingChanges() {
-    const [pendingChanges] = useContext(pendingChangesContext);
+    const [pendingChanges, , , , , , applyAll] = useContext(pendingChangesContext);
     const [items, setItems] = useState([]);
     const [, showDiffBlade, setDiffData, setShowDiffBlade] = useContext(showDiffContext);
 
@@ -22,22 +22,35 @@ function PendingChanges() {
             })).then(items => {
                 setItems(items);
             })
+        } else {
+            setItems([]);
         }
-    }, [pendingChanges])
+    }, [pendingChanges]);
 
     if (!showDiffBlade) {
         return;
     }
 
+    const saveChanges = useCallback(() => {
+        applyAll(pendingChanges, () => {
+            // setShowDiffBlade(false);
+        });
+    }, [pendingChanges, applyAll]);
+
     return html`
         <${Blade} title='Pending changes' onclose=${() => setShowDiffBlade(false)}>
-            ${items && !items.length ? 'No more pending changes' : null}
-            ${items && items.length ? items.map(item => html`
+            <cloudy-ui-blade-content>
+                ${items && !items.length ? html`<cloudy-ui-list-sub-header>No more pending changes<//>` : null}
+                ${items && items.length ? items.map(item => html`
                 <${ListItem}
                     text=${item.name}
                     subtext=${item.change.remove ? 'Slated for removal' : item.change.contentId ? `Changed fields: ${item.change.changedFields.length}` : `New ${item.contentType.lowerCaseName}`}
                     onclick=${() => setDiffData(item.change)}
                 />`) : null}
+            <//>
+            <cloudy-ui-blade-footer>
+                <cloudy-ui-button tabindex="0" class="primary" style="margin-left: auto;" disabled=${!pendingChanges.length} onclick=${() => saveChanges()}>Save</cloudy-ui-button>
+            </cloudy-ui-blade-footer>
         <//>
     `;
 }

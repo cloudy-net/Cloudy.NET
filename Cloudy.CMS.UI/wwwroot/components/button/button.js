@@ -2,7 +2,7 @@
 
 function Button(props) {
     return html`
-        <cloudy-ui-button class=${props.class} onclick=${props.onclick}>
+        <cloudy-ui-button class=${props.class} onclick=${props.onclick} disabled=${props.disabled}>
             ${props.text}
         <//>
     `;

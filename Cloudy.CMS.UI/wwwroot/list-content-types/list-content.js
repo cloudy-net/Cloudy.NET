@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useContext } from '../lib/preact.hooks.module.js';
+﻿import { useState, useEffect, useContext, useCallback } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
 import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
@@ -15,6 +15,10 @@ function ListContent() {
         return null;
     }
 
+    useEffect(() => {
+
+    }, [])
+
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -29,6 +33,7 @@ function ListContent() {
             });
     }, []);
 
+
     return html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
@@ -39,7 +44,7 @@ function ListContent() {
                 <${List}>
 			        ${items.map(item => html`
                         <${ListItem}
-                            active=${item.Keys[0] == editingContent.keys[0]}
+                            active=${item?.Keys[0] == editingContent?.keys[0]}
                             text=${nameGetter.getNameOf(item, contentType)}
                             onclick=${() => setEditingContent({ keys: item.Keys, contentTypeId: item.ContentTypeId })}
                         />

@@ -1,5 +1,5 @@
 ﻿import html from '../util/html.js';
-import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
+import { useContext, useEffect, useState, useCallback } from '../lib/preact.hooks.module.js';
 import showDiffContext from './show-diff-context.js';
 import Blade from '../components/blade/blade.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
@@ -29,10 +29,10 @@ function DiffField({ fieldModel, change, initialValue, value }) {
 }
 
 function ShowDiff() {
-    const [diffData] = useContext(showDiffContext);
+    const [diffData, , setDiffData] = useContext(showDiffContext);
+    const [, , resetChange, getPendingValue, getFor, applyFor] = useContext(pendingChangesContext);
     const [content, setContent] = useState();
     const [fieldModels, setFieldModels] = useState();
-    const [, , , getPendingValue, getFor] = useContext(pendingChangesContext);
     const [changes, setChanges] = useState();
 
     if (!diffData) {
@@ -56,16 +56,35 @@ function ShowDiff() {
         return null;
     }
 
+    const undoChanges = useCallback(() => {
+        if (confirm('Undo changes? This is not reversible')) {
+            resetChange(diffData.contentId, diffData.contentTypeId);
+            setDiffData(null);
+        }
+    }, [diffData]);
+
+    const saveChange = useCallback(() => {
+        applyFor(diffData.contentId, diffData.contentTypeId, () => {
+            setDiffData(null);
+        });
+    }, [diffData, applyFor]);
+
     return html`
-        <${Blade} title=${'Pending changes' + (diffData?.changedFields?.length ? `(${diffData.changedFields.length})` : '')}>
-            <div class=cloudy-ui-form>
-                ${fieldModels.map(fieldModel => html`<${DiffField}
-                    change=${changes.changedFields.find(f => f.path[f.path.length - 1] == fieldModel.descriptor.id)}
-                    initialValue=${content[fieldModel.descriptor.id]}
-                    value=${getPendingValue(diffData.contentId, diffData.contentTypeId, [fieldModel.descriptor.id], content[fieldModel.descriptor.id])}
-                    fieldModel=${fieldModel}
-                />`)}
-            <//>
+        <${Blade} title=${'Pending changes' + (diffData?.changedFields?.length ? `(${diffData.changedFields.length})` : '')} onclose=${() => setDiffData(null)}>
+            <cloudy-ui-blade-content>
+                <div class="cloudy-ui-form">
+                    ${fieldModels.map(fieldModel => html`<${DiffField}
+                        change=${changes?.changedFields?.find(f => f.path[f.path.length - 1] == fieldModel.descriptor.id)}
+                        initialValue=${content[fieldModel.descriptor.id]}
+                        value=${getPendingValue(diffData.contentId, diffData.contentTypeId, [fieldModel.descriptor.id], content[fieldModel.descriptor.id])}
+                        fieldModel=${fieldModel}
+                    />`)}
+                <//>         
+            <//>    
+            <cloudy-ui-blade-footer>
+                <cloudy-ui-button tabindex="0" style="margin-left: auto;" onclick=${() => undoChanges()}>Undo changes</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" class="primary" style="margin-left: 10px;" onclick=${() => saveChange()}>Save</cloudy-ui-button>
+            </cloudy-ui-blade-footer>
         <//>
     `;
 }

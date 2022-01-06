@@ -1,5 +1,7 @@
 ﻿import html from '../util/html.js';
 import PendingChangesContext from './pending-changes-context.js';
+import contentSaver from "../edit-content/content-saver.js";
+import contentGetter from '../data/content-getter.js';
 import { useState, useCallback, useEffect } from '../lib/preact.hooks.module.js';
 const _pendingChangesKey = '_pendingChanges';
 
@@ -27,12 +29,13 @@ function PendingChangesContextProvider({ children }) {
         return a === b;
     }
 
-    const resetChange = useCallback((contentId, contentTypeId) => {
+    const resetChange = useCallback((contentId, contentTypeId, callBack) => {
         const _pendingChanges = [...pendingChanges];
         const index = _pendingChanges.findIndex(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
         if (index !== -1) {
             _pendingChanges.splice(index, 1);
-            setPendingChanges(pendingChanges)
+            setPendingChanges(_pendingChanges);
+            callBack && callBack();
         }
     }, [pendingChanges])
 
@@ -126,10 +129,41 @@ function PendingChangesContextProvider({ children }) {
 
     const getFor = useCallback((contentId, contentTypeId) => {
         return pendingChanges.find(p => arrayEquals(p.contentId, contentId) && p.contentTypeId == contentTypeId);
-    }, []);
+    }, [pendingChanges]);
+
+    const applyAll = useCallback(async (submitChanges, callBack) => {
+        const _pendingChanges = submitChanges || pendingChanges;
+        if (!_pendingChanges.length) {
+            return;
+        }
+        const contentToSave = _pendingChanges.map(c => {
+            return {
+                keyValues: [c.contentId],
+                contentTypeId: c.contentTypeId,
+                remove: c.remove,
+                changedFields: c.changedFields
+            }
+        });
+        if (await contentSaver.save(contentToSave) == false) {
+            return false; // fail
+        }
+        _pendingChanges.forEach(c => contentGetter.clearCacheFor(c.contentId, c.contentTypeId));
+        const _remainingPendingChanges = [];
+        pendingChanges.forEach(c => {
+            if (!_pendingChanges.some(d => arrayEquals(d.contentId, c.contentId) && d.contentTypeId === c.contentTypeId)) {
+                _remainingPendingChanges.push(c);
+            }
+        })
+        setPendingChanges(_remainingPendingChanges);
+        callBack && callBack();
+    }, [pendingChanges]);
+
+    const applyFor = useCallback(async (contentId, contentTypeId, callBack) => {
+        await applyAll([getFor(contentId, contentTypeId)], callBack);
+    }, [applyAll, getFor])
 
     return html`
-        <${PendingChangesContext.Provider} value=${[pendingChanges, updatePendingChanges, resetChange, getPendingValue, getFor]}>
+        <${PendingChangesContext.Provider} value=${[pendingChanges, updatePendingChanges, resetChange, getPendingValue, getFor, applyFor, applyAll]}>
             ${children}
         <//>
     `;
