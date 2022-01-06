@@ -23,7 +23,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-simple">
             <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
-            <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${initialValue} readonly />
+            <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${initialValue} />
         <//>
     `;
 }
@@ -32,7 +32,7 @@ function ShowDiff() {
     const [diffData] = useContext(showDiffContext);
     const [content, setContent] = useState();
     const [fieldModels, setFieldModels] = useState();
-    const [, , , , getPendingValue, getFor] = useContext(pendingChangesContext);
+    const [, , , getPendingValue, getFor] = useContext(pendingChangesContext);
     const [changes, setChanges] = useState();
 
     if (!diffData) {
@@ -48,9 +48,8 @@ function ShowDiff() {
     }
 
     useEffect(() => {
-        console.log('diffData', diffData)
         setChanges(getFor(diffData.contentId, diffData.contentTypeId));
-        diffData.contentId && contentGetter.get(diffData.contentId, diffData.contentTypeId).then(content => setContent(content));
+        diffData.contentId && contentGetter.get([diffData.contentId], diffData.contentTypeId).then(content => setContent(content));
     }, [diffData.contentId, diffData.contentTypeId]);
 
     if (!content) {
@@ -58,7 +57,7 @@ function ShowDiff() {
     }
 
     return html`
-        <${Blade} title=${'Pending changes' + (diffData.changedFields.length ? `(${diffData.changedFields.length})` : '')}>
+        <${Blade} title=${'Pending changes' + (diffData?.changedFields?.length ? `(${diffData.changedFields.length})` : '')}>
             <div class=cloudy-ui-form>
                 ${fieldModels.map(fieldModel => html`<${DiffField}
                     change=${changes.changedFields.find(f => f.path[f.path.length - 1] == fieldModel.descriptor.id)}

@@ -11,7 +11,7 @@ import pendingChangesContext from './pending-changes-context.js';
 function PendingChanges() {
     const [pendingChanges] = useContext(pendingChangesContext);
     const [items, setItems] = useState([]);
-    const [diffData, setDiffData] = useContext(showDiffContext);
+    const [, showDiffBlade, setDiffData, setShowDiffBlade] = useContext(showDiffContext);
 
     useEffect(() => {
         if (pendingChanges && pendingChanges.length) {
@@ -25,9 +25,12 @@ function PendingChanges() {
         }
     }, [pendingChanges])
 
+    if (!showDiffBlade) {
+        return;
+    }
 
     return html`
-        <${Blade} title='Pending changes'>
+        <${Blade} title='Pending changes' onclose=${() => setShowDiffBlade(false)}>
             ${items && !items.length ? 'No more pending changes' : null}
             ${items && items.length ? items.map(item => html`
                 <${ListItem}
