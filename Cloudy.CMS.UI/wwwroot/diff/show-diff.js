@@ -75,7 +75,7 @@ function ShowDiff() {
                 <div class="cloudy-ui-form">
                     ${fieldModels.map(fieldModel => html`<${DiffField}
                         change=${changes?.changedFields?.find(f => f.path[f.path.length - 1] == fieldModel.descriptor.id)}
-                        initialValue=${content[fieldModel.descriptor.id]}
+                        initialValue=${getPendingValue(diffData.contentId, diffData.contentTypeId, [fieldModel.descriptor.id], content[fieldModel.descriptor.id])}
                         value=${getPendingValue(diffData.contentId, diffData.contentTypeId, [fieldModel.descriptor.id], content[fieldModel.descriptor.id])}
                         fieldModel=${fieldModel}
                     />`)}
