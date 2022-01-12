@@ -1,6 +1,6 @@
 ﻿import FieldControl from '../field-control.js';
 import ItemProvider from './select-item-provider.js';
-import Button from '../../button.js';
+import Button from '../../components/button/button.js';
 import SelectItemPreview from './select-item-preview.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 import notificationManager from '../../NotificationSupport/notification-manager.js';

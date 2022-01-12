@@ -1,5 +1,5 @@
 ﻿import FieldControl from '../field-control.js';
-import urlFetcher from '../../url-fetcher.js';
+import urlFetcher from '../../util/url-fetcher.js';
 
 class DropdownControl extends FieldControl {
     constructor(fieldModel, value, app, blade) {

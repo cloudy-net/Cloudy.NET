@@ -1,9 +1,9 @@
 import Field from '../../FormSupport/field.js';
 import Sortable from '../../FormSupport/sortable.js';
 import SortableItem from '../../FormSupport/sortable-item.js';
-import PopupMenu from '../../PopupMenuSupport/popup-menu.js';
-import Button from '../../button.js';
-import urlFetcher from '../../url-fetcher.js';
+import PopupMenu from '../../components/popup-menu/popup-menu.js';
+import Button from '../../components/button/button.js';
+import urlFetcher from '../../util/url-fetcher.js';
 import changeTracker from '../utils/change-tracker.js';
 import arrayEquals from '../utils/array-equals.js';
 import fieldModelBuilder from '../../FormSupport/field-model-builder.js';
@@ -147,7 +147,7 @@ class SortableBuilder {
         }
 
         sortable.onAdd(item => {
-            eventDispatcher.triggerChange(path, { fieldType: 'array', type: 'add', value: { Type: item.data.type, Value: JSON.stringify({}) }, id: item.id }); // deep changes to value will be separate changes, denoted by id
+            eventDispatcher.triggerChange(path, { type: 'array', operation: 'add', value: { Type: item.data.type, Value: JSON.stringify({}) }, id: item.id }); // deep changes to value will be separate changes, denoted by id
         });
 
         const button = new Button('Add').onClick(() => menu.toggle());

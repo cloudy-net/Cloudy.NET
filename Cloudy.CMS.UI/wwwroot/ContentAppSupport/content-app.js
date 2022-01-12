@@ -2,7 +2,7 @@
 import ListContentTypesBlade from './list-content-types-blade.js';
 import changeTracker from './utils/change-tracker.js';
 import nav from '../nav.js';
-import Button from '../button.js';
+import Button from '../components/button/button.js';
 import PendingChangesBlade from './pending-changes-blade.js';
 
 

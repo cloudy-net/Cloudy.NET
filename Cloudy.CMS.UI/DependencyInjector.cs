@@ -5,7 +5,6 @@ using Cloudy.CMS.UI.ContentAppSupport.ContentTypeActionSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ListActionSupport;
 using Cloudy.CMS.UI.PortalSupport;
 using Cloudy.CMS.DependencyInjectionSupport;
-using Cloudy.CMS.UI.AppSupport;
 using Cloudy.CMS.UI.ScriptSupport;
 using Cloudy.CMS.UI.StyleSupport;
 using System;
@@ -22,13 +21,10 @@ namespace Cloudy.CMS.UI
         {
             services.AddSingleton<IFaviconProvider, FaviconProvider>();
             services.AddSingleton<ITitleProvider, TitleProvider>();
-            services.AddSingleton<IAppCreator, AppCreator>();
-            services.AddSingleton<IAppProvider, AppProvider>();
             services.AddScoped<IScriptProvider, ScriptProvider>();
             services.AddSingleton<IScriptCreator, ScriptCreator>();
             services.AddScoped<IStyleProvider, StyleProvider>();
             services.AddSingleton<IStyleCreator, StyleCreator>();
-            services.AddSingleton<IAppProvider, AppProvider>();
             services.AddSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
             services.AddScoped<IUrlProvider, UrlProvider>();
             services.AddSingleton<ITitleProvider, TitleProvider>();

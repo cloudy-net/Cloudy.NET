@@ -1,4 +1,4 @@
-﻿import urlFetcher from "../url-fetcher";
+﻿import urlFetcher from "../util/url-fetcher";
 
 /* BACKEND */
 

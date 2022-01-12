@@ -1,9 +1,9 @@
 ﻿import FieldControl from '../field-control.js';
 import ItemProvider from './select-item-provider.js';
 import Blade from '../../blade.js';
-import Button from '../../button.js';
-import List from '../../ListSupport/list.js';
-import ListItem from '../../ListSupport/list-item.js';
+import Button from '../../components/button/button.js';
+import List from '../../components/list/list.js';
+import ListItem from '../../components/list/list-item.js';
 import SelectItemPreview from './select-item-preview.js';
 import ContextMenu from '../../ContextMenuSupport/context-menu.js';
 import notificationManager from '../../NotificationSupport/notification-manager.js';
@@ -11,7 +11,7 @@ import TabSystem from '../../TabSupport/tab-system.js';
 import FormBuilder from '../form-builder.js';
 import fieldDescriptorProvider from '../field-descriptor-provider.js';
 import fieldModelBuilder from '../field-model-builder.js';
-import urlFetcher from '../../url-fetcher.js';
+import urlFetcher from '../../util/url-fetcher.js';
 
 /* SELECT CONTROL */
 

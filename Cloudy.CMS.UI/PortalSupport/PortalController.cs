@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace Cloudy.CMS.UI.PortalSupport
 {
@@ -64,9 +65,11 @@ namespace Cloudy.CMS.UI.PortalSupport
             await Response.WriteAsync($"</head>\n");
             await Response.WriteAsync($"<body>\n");
             await Response.WriteAsync($"    <script type=\"module\">\n");
-            await Response.WriteAsync($"        import Portal from '{Path.Combine(basePath, "portal.js").Replace('\\', '/')}';\n");
-            await Response.WriteAsync($"        import appProvider from '{Path.Combine(basePath, "app-provider.js").Replace('\\', '/')}';\n");
-            await Response.WriteAsync($"        appProvider.getAll().then(apps => new Portal('{TitleProvider.Title}', apps).appendTo(document.body));\n");
+            await Response.WriteAsync($"        import {{ h, render }} from '{Path.Combine(basePath, "lib/preact.module.js").Replace('\\', '/')}';\n");
+            await Response.WriteAsync($"        import html from '{Path.Combine(basePath, "util/html.js").Replace('\\', '/')}';\n");
+            await Response.WriteAsync($"        import App from '{Path.Combine(basePath, "app.js").Replace('\\', '/')}';\n");
+            await Response.WriteAsync($"        const title = {JsonSerializer.Serialize(TitleProvider.Title)};\n");
+            await Response.WriteAsync($"        render(html`<${{App}} title=${{title}} />`, document.body);\n");
             await Response.WriteAsync($"    </script>\n");
             await Response.WriteAsync($"</body>\n");
             await Response.WriteAsync($"</html>\n");

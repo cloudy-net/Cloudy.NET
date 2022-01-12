@@ -1,5 +1,5 @@
-﻿import Button from "../../button.js";
-import urlFetcher from "../../url-fetcher.js";
+﻿import Button from "../../components/button/button.js";
+import urlFetcher from "../../util/url-fetcher.js";
 
 /* HELP SECTION LOADER */
 

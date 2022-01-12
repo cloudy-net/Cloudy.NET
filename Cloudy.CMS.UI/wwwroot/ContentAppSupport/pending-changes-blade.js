@@ -1,11 +1,11 @@
 import Blade from "../blade.js";
-import Button from "../button.js";
-import ListItem from "../ListSupport/list-item.js";
-import List from "../ListSupport/list.js";
-import nameGetter from "./utils/name-getter.js";
-import contentTypeProvider from "./utils/content-type-provider.js";
+import Button from "../components/button/button.js";
+import ListItem from "../components/list/list-item.js";
+import List from "../components/list/list.js";
+import nameGetter from "../data/name-getter.js";
+import contentTypeProvider from "../list-content-types/content-type-getter.js";
 import PendingChangesDiffBlade from "./pending-changes-diff-blade.js";
-import contentGetter from './utils/content-getter.js';
+import contentGetter from '../edit-content/content-getter.js';
 import changeTracker from "./utils/change-tracker.js";
 import ContentNotFound from "./utils/content-not-found.js";
 
