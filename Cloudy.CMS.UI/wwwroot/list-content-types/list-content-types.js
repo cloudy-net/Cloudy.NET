@@ -6,11 +6,19 @@ import ListItem from '../components/list/list-item.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 
 function ListContentTypes() {
-    const [listContentType, setListContentType] = useContext(listContentTypeContext);
+    const [listContentType, setListContentType, , setSingleton] = useContext(listContentTypeContext);
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        ContentTypeProvider.getAll().then(items => setItems(items));
+        ContentTypeProvider.getAll().then(items => {
+            if (items?.length === 1) {
+                setListContentType(items[0]);
+                setSingleton(true);
+            } else {
+                setItems(items);
+                setSingleton(false);
+            }
+        });
     }, []);
 
     if (listContentType) {
