@@ -3,8 +3,7 @@ import html from '../util/html.js';
 import SimpleField from './simple-field.js';
 import SortableField from './sortable-field.js';
 
-function FormField(props) {
-    const { contentId, contentTypeId, value, fieldModel } = props;
+function FormField({ contentId, contentTypeId, value, fieldModel, readonly }) {
     const path = [fieldModel.descriptor.id];
 
     if (fieldModel.descriptor.isSortable) {
@@ -14,7 +13,7 @@ function FormField(props) {
             value=${value}
             path=${path}
             fieldModel=${fieldModel}
-            readonly=${props.readonly}
+            readonly=${readonly}
         />`;
     }
 
@@ -25,7 +24,7 @@ function FormField(props) {
             value=${value}
             path=${path}
             fieldModel=${fieldModel}
-            readonly=${props.readonly}
+            readonly=${readonly}
         />`;
     }
 
@@ -35,7 +34,7 @@ function FormField(props) {
         value=${value}
         path=${path}
         fieldModel=${fieldModel}
-        readonly=${props.readonly}
+        readonly=${readonly}
     />`;
 }
 
