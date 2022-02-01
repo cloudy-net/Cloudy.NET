@@ -22,6 +22,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="wwwroot\PopupMenuSupport\**" />
+	  <EmbeddedResource Remove="wwwroot\PopupMenuSupport\**" />
+	  <None Remove="wwwroot\PopupMenuSupport\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
@@ -34,10 +40,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="wwwroot\PopupMenuSupport\" />
 	</ItemGroup>
 
 </Project>
