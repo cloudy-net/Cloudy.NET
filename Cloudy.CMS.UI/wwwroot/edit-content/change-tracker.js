@@ -1,7 +1,7 @@
 import contentSaver from "./content-saver.js";
 import contentGetter from '../data/content-getter.js';
 
-function arrayEquals(a, b) {
+const arrayEquals = (a, b) => {
     if (a == null && b == null) {
         return true;
     }
