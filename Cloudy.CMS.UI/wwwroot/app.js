@@ -1,4 +1,5 @@
-﻿import html from './util/html.js';
+﻿import { } from './lib/preact.debug.module.js';
+import html from './util/html.js';
 import ListContentTypes from './list-content-types/list-content-types.js';
 import ListContentTypeContextProvider from './list-content-types/list-content-type-context-provider.js';
 import EditContentContextProvider from './edit-content/edit-content-context-provider.js';
