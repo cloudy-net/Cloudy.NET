@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import pendingChangesContext from '../diff/pending-changes-context.js';
 import html from '../util/html.js';
 
-export default function SortableField({ contentId, contentTypeId, path, fieldModel, readonly, value: initialValue }) {
+export default function SortableField({ contentId, contentTypeId, path, fieldModel, readonly, initialValue }) {
     const [, , , getPendingValue] = useContext(pendingChangesContext);
     const [pendingValue, setPendingValue] = useState();
 
@@ -21,7 +21,7 @@ export default function SortableField({ contentId, contentTypeId, path, fieldMod
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-sortable">
             <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}</div>
-            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${pendingValue} readonly=${readonly}/>
+            
         </div>
     `;
 }

@@ -8,7 +8,7 @@ import { createRef } from '../lib/preact.module.js';
 
 function Form(props) {
     const [editingContent] = useContext(editContentContext);
-    const [pendingChanges, updatePendingChanges] = useContext(pendingChangesContext);
+    const [pendingChanges, updatePendingChanges, , getPendingValue] = useContext(pendingChangesContext);
 
     if (!editingContent) {
         return null;
@@ -43,7 +43,7 @@ function Form(props) {
             <${FormField}
                 contentId=${editingContent.keys}
                 contentTypeId=${editingContent.contentTypeId}
-                value=${props.content[fieldModel.descriptor.id]}
+                initialValue=${getPendingValue(editingContent.keys, editingContent.contentTypeId, [fieldModel.descriptor.id], props.content[fieldModel.descriptor.id])}
                 fieldModel=${fieldModel}
             />`)}
         <//>
