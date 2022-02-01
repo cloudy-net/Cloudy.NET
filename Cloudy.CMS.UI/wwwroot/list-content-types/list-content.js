@@ -8,7 +8,7 @@ import listContentTypeContext from '../list-content-types/list-content-type-cont
 import editContentContext from '../edit-content/edit-content-context.js';
 
 function ListContent() {
-    const [contentType, setContentType] = useContext(listContentTypeContext);
+    const [contentType, setContentType, singleton] = useContext(listContentTypeContext);
     const [editingContent, setEditingContent] = useContext(editContentContext);
 
     if (!contentType) {
@@ -38,7 +38,7 @@ function ListContent() {
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
                 <cloudy-ui-blade-title-text>${contentType.pluralName}<//>
-                <cloudy-ui-blade-close onclick=${() => setContentType(null)}><//>
+                ${!singleton ? html`<cloudy-ui-blade-close onclick=${() => setContentType(null)}><//>` : null}
             <//>
             <cloudy-ui-blade-content>
                 <${List}>
