@@ -5,11 +5,6 @@ import html from '../util/html.js';
 
 export default function SimpleField({ contentId, contentTypeId, path, fieldModel, readonly, value: initialValue }) {
     const [, , , getPendingValue] = useContext(pendingChangesContext);
-    const [pendingValue, setPendingValue] = useState();
-
-    useEffect(() => {
-        setPendingValue(getPendingValue(contentId, contentTypeId, path, initialValue));
-    }, [contentId, contentTypeId, path, initialValue]);
 
     if (fieldModel.descriptor.embeddedFormId && !fieldModel.descriptor.isSortable) {
         wrapperTag = 'fieldset';
@@ -21,7 +16,7 @@ export default function SimpleField({ contentId, contentTypeId, path, fieldModel
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-simple">
             <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}</div>
-            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${pendingValue} readonly=${readonly}/>
+            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${getPendingValue(contentId, contentTypeId, path, initialValue)} readonly=${readonly}/>
         </div>
     `;
 }
