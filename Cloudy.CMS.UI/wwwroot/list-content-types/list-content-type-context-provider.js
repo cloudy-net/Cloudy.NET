@@ -4,10 +4,9 @@ import { useState } from '../lib/preact.hooks.module.js';
 
 function ListContentTypeContextProvider(props) {
     const [listContentType, setListContentType] = useState(null);
-    const [singleton, setSingleton] = useState(false);
 
     return html`
-        <${ListContentTypeContext.Provider} value=${[listContentType, setListContentType, singleton, setSingleton]}>
+        <${ListContentTypeContext.Provider} value=${[listContentType, setListContentType]}>
             ${props.children}
         <//>
     `;

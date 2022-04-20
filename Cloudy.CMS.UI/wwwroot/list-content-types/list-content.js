@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useContext, useCallback } from '../lib/preact.hooks.module.js';
+import { useState, useEffect, useContext, useCallback } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
 import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
@@ -8,16 +8,12 @@ import listContentTypeContext from '../list-content-types/list-content-type-cont
 import editContentContext from '../edit-content/edit-content-context.js';
 
 function ListContent() {
-    const [contentType, setContentType, singleton] = useContext(listContentTypeContext);
+    const [contentType, setContentType] = useContext(listContentTypeContext);
     const [editingContent, setEditingContent] = useContext(editContentContext);
 
     if (!contentType) {
         return null;
     }
-
-    useEffect(() => {
-
-    }, [])
 
     const [items, setItems] = useState([]);
 
@@ -29,7 +25,7 @@ function ListContent() {
         )
             .then(item => {
                 setItems(item.Items);
-                setEditingContent({ keys: item.Items[0].Keys, contentTypeId: item.Items[0].ContentTypeId });
+                //setEditingContent({ keys: item.Items[0].Keys, contentTypeId: item.Items[0].ContentTypeId });
             });
     }, []);
 
@@ -38,7 +34,7 @@ function ListContent() {
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
                 <cloudy-ui-blade-title-text>${contentType.pluralName}<//>
-                ${!singleton ? html`<cloudy-ui-blade-close onclick=${() => setContentType(null)}><//>` : null}
+                ${html`<cloudy-ui-blade-close onclick=${() => setContentType(null)}><//>`}
             <//>
             <cloudy-ui-blade-content>
                 <${List}>
