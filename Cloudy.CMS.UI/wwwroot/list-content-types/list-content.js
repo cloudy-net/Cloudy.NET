@@ -5,13 +5,14 @@ import ListItem from '../components/list/list-item.js';
 import urlFetcher from '../util/url-fetcher.js';
 import nameGetter from '../data/name-getter.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
-import editContentContext from '../edit-content/edit-content-context.js';
+import editContentReferenceContext from '../edit-content/edit-content-reference-context.js';
 import Button from '../components/button/button.js';
 import Blade from '../components/blade/blade.js';
+import createEditingContentReference from '../edit-content/create-editing-content-reference.js';
 
 function ListContent() {
     const [contentType, setContentType] = useContext(listContentTypeContext);
-    const [editingContent, setEditingContent] = useContext(editContentContext);
+    const [editingContentReference, setEditingContentReference] = useContext(editContentReferenceContext);
 
     if (!contentType) {
         return null;
@@ -27,11 +28,13 @@ function ListContent() {
         )
             .then(item => {
                 setItems(item.Items);
-                //setEditingContent({ keys: item.Items[0].Keys, contentTypeId: item.Items[0].ContentTypeId });
             });
     }, []);
 
-    const toolbar = html`<${Button} text="New"><//>`;
+    const newContent = () => {
+        setEditingContentReference(createEditingContentReference(contentType));
+    };
+    const toolbar = html`<${Button} text="New" onclick=${() => newContent()}><//>`;
 
     return html`
         <${Blade} title=${contentType.pluralName} toolbar=${toolbar} onclose=${() => setContentType(null)}>
@@ -39,9 +42,9 @@ function ListContent() {
                 <${List}>
 			        ${items.map(item => html`
                         <${ListItem}
-                            active=${item?.Keys[0] == editingContent?.keys[0]}
+                            active=${item?.Keys[0] == editingContentReference?.keys[0]}
                             text=${nameGetter.getNameOf(item, contentType)}
-                            onclick=${() => setEditingContent({ keys: item.Keys, contentTypeId: item.ContentTypeId })}
+                            onclick=${() => setEditingContentReference({ keys: item.Keys, contentTypeId: item.ContentTypeId })}
                         />
                     `)}
                 <//>

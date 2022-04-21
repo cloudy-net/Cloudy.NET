@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import editContentContext from '../edit-content/edit-content-context.js';
+import editContentContext from './edit-content-reference-context.js';
 import pendingChangesContext from '../diff/pending-changes-context.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
@@ -29,11 +29,11 @@ function Form(props) {
 
     useEffect(() => {
         ref.current.addEventListener('cloudy-ui-form-change', (event) => {
-            updatePendingChanges({
-                keys: editingContent.keys,
-                contentTypeId: editingContent.contentTypeId,
-                change: event.detail.change,
-            });
+            //updatePendingChanges({
+            //    keys: editingContent.keys,
+            //    contentTypeId: editingContent.contentTypeId,
+            //    change: event.detail.change,
+            //});
         });
     });
 
@@ -43,7 +43,7 @@ function Form(props) {
             <${FormField}
                 contentId=${editingContent.keys}
                 contentTypeId=${editingContent.contentTypeId}
-                initialValue=${getPendingValue(editingContent.keys, editingContent.contentTypeId, [fieldModel.descriptor.id], props.content[fieldModel.descriptor.id])}
+                initialValue=${props.editingContentState.values[fieldModel.descriptor.id]}
                 fieldModel=${fieldModel}
             />`)}
         <//>

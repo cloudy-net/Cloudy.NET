@@ -1,5 +1,5 @@
 ﻿import html from '../util/html.js';
-import EditContentContext from './edit-content-context.js';
+import EditContentContext from './edit-content-reference-context.js';
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
 
 function EditContentContextProvider({ children }) {
