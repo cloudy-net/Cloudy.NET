@@ -6,6 +6,8 @@ import urlFetcher from '../util/url-fetcher.js';
 import nameGetter from '../data/name-getter.js';
 import listContentTypeContext from '../list-content-types/list-content-type-context.js';
 import editContentContext from '../edit-content/edit-content-context.js';
+import Button from '../components/button/button.js';
+import Blade from '../components/blade/blade.js';
 
 function ListContent() {
     const [contentType, setContentType] = useContext(listContentTypeContext);
@@ -31,11 +33,7 @@ function ListContent() {
 
 
     return html`
-        <cloudy-ui-blade>
-            <cloudy-ui-blade-title>
-                <cloudy-ui-blade-title-text>${contentType.pluralName}<//>
-                ${html`<cloudy-ui-blade-close onclick=${() => setContentType(null)}><//>`}
-            <//>
+        <${Blade} title=${contentType.pluralName} toolbar=${html`<${Button} text="New"><//>`} onclose=${() => setContentType(null)}>
             <cloudy-ui-blade-content>
                 <${List}>
 			        ${items.map(item => html`
