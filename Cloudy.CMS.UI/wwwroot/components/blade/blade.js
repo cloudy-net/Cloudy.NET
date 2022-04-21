@@ -13,9 +13,7 @@ function Blade(props) {
                 <cloudy-ui-blade-toolbar>${props.toolbar}<//>
                 <cloudy-ui-blade-close onclick=${() => onClose()}><//>
             <//>
-           
-                    ${props.children}
-                  
+            ${props.children}
         <//>
     `;
 }
