@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from '../lib/preact.hooks.module.js';
+import { useState, useEffect, useContext } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
 import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
@@ -31,9 +31,10 @@ function ListContent() {
             });
     }, []);
 
+    const toolbar = html`<${Button} text="New"><//>`;
 
     return html`
-        <${Blade} title=${contentType.pluralName} toolbar=${html`<${Button} text="New"><//>`} onclose=${() => setContentType(null)}>
+        <${Blade} title=${contentType.pluralName} toolbar=${toolbar} onclose=${() => setContentType(null)}>
             <cloudy-ui-blade-content>
                 <${List}>
 			        ${items.map(item => html`
