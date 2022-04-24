@@ -36,7 +36,7 @@ function EditContent() {
                 <cloudy-ui-blade-toolbar>
                     <${Urls}/>
                 <//>
-                <cloudy-ui-blade-close onclick=${() => setEditingContent(null)}><//>
+                <cloudy-ui-blade-close onclick=${() => setEditingContentReference(null)}><//>
             <//>
             <cloudy-ui-blade-content>
                 <${Form} editingContentState=${editingContentState}/>
