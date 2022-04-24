@@ -4,6 +4,7 @@ import pendingChangesContext from '../diff/pending-changes-context.js';
 import html from '../util/html.js';
 
 export default function SortableField({ contentId, contentTypeId, path, fieldModel, readonly, initialValue }) {
+    return null;
     const [, , , getPendingValue] = useContext(pendingChangesContext);
     const [pendingValue, setPendingValue] = useState();
 
