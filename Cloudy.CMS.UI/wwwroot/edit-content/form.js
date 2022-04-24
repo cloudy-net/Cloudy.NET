@@ -1,25 +1,25 @@
 import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import editContentContext from './edit-content-reference-context.js';
+import editContentReferenceContext from './edit-content-reference-context.js';
 import pendingChangesContext from '../diff/pending-changes-context.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
 
-function Form(props) {
-    const [editingContent] = useContext(editContentContext);
+function Form({ editingContentState }) {
+    const [editingContentReference] = useContext(editContentReferenceContext);
     const [pendingChanges, updatePendingChanges, , getPendingValue] = useContext(pendingChangesContext);
 
-    if (!editingContent) {
+    if (!editingContentReference) {
         return null;
     }
 
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
-        fieldModelBuilder.getFieldModels(editingContent.contentTypeId)
+        fieldModelBuilder.getFieldModels(editingContentReference.contentTypeId)
             .then(fieldModels => setFieldModels(fieldModels));
-    }, [editingContent.contentTypeId]);
+    }, [editingContentReference.contentTypeId]);
 
     if (!fieldModels) {
         return null;
@@ -29,11 +29,10 @@ function Form(props) {
 
     useEffect(() => {
         ref.current.addEventListener('cloudy-ui-form-change', (event) => {
-            //updatePendingChanges({
-            //    keys: editingContent.keys,
-            //    contentTypeId: editingContent.contentTypeId,
-            //    change: event.detail.change,
-            //});
+            console.log({
+                ...editingContentReference,
+                change: event.detail.change,
+            });
         });
     });
 
@@ -41,9 +40,9 @@ function Form(props) {
         <div class='cloudy-ui-form' ref=${ref}>
             ${fieldModels.map(fieldModel => html`
             <${FormField}
-                contentId=${editingContent.keys}
-                contentTypeId=${editingContent.contentTypeId}
-                initialValue=${props.editingContentState.values[fieldModel.descriptor.id]}
+                contentId=${editingContentReference.keys}
+                contentTypeId=${editingContentReference.contentTypeId}
+                initialValue=${editingContentState.values[fieldModel.descriptor.id]}
                 fieldModel=${fieldModel}
             />`)}
         <//>
