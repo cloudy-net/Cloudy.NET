@@ -5,8 +5,9 @@ import pendingChangesContext from '../diff/pending-changes-context.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
+import contentStateManager from './content-state-manager.js';
 
-function Form({ editingContentState }) {
+function Form({ contentReference }) {
     const [editingContentReference] = useContext(editContentReferenceContext);
     const [pendingChanges, updatePendingChanges, , getPendingValue] = useContext(pendingChangesContext);
 
@@ -29,7 +30,7 @@ function Form({ editingContentState }) {
 
     useEffect(() => {
         const callback = (event) => {
-            console.log({
+            contentStateManager.registerChange({
                 ...editingContentReference,
                 change: event.detail.change,
             });

@@ -1,14 +1,28 @@
 ﻿import { useState, useContext, useEffect } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import listContentTypeContext from '../list-content-types/list-content-type-context.js';
+import contentTypesContext from '../list-content-types/content-types-context.js';
 import editContentReferenceContext from './edit-content-reference-context.js';
 import nameGetter from '../data/name-getter.js';
 import Urls from './urls.js';
 import Form from './form.js';
-import createEditingContentState from './create-editing-content-state.js';
+import contentStateManager from './content-state-manager.js';
 
-function EditContent() {
-    const [contentType] = useContext(listContentTypeContext);
+function EditContent({ contentReference }) {
+    const [contentTypes] = useContext(contentTypesContext);
+    let contentType;
+
+    useEffect(() => {
+        if (!contentTypes) {
+            return;
+        }
+
+        contentType = contentTypes.find(t => t.id == contentReference.contentTypeId);
+    }, [contentReference, contentType]);
+
+    if (!contentType) {
+        return;
+    }
+
     const [editingContentReference, setEditingContentReference] = useContext(editContentReferenceContext);
 
     if (!contentType || !editingContentReference) {
@@ -19,7 +33,7 @@ function EditContent() {
 
     useEffect(() => {
         if (editingContentReference.newContentKey) {
-            setEditingContentState(createEditingContentState(editingContentReference));
+            setEditingContentState(contentStateManager.createEditingContentState(editingContentReference));
         }
     }, [editingContentReference]);
 
@@ -34,12 +48,12 @@ function EditContent() {
                 `New ${contentType.name}`
         )}<//>
                 <cloudy-ui-blade-toolbar>
-                    <${Urls}/>
+                    <${Urls} contentReference=${contentReference}/>
                 <//>
                 <cloudy-ui-blade-close onclick=${() => setEditingContentReference(null)}><//>
             <//>
             <cloudy-ui-blade-content>
-                <${Form} editingContentState=${editingContentState}/>
+                <${Form}/>
             <//>
             <cloudy-ui-blade-footer style="">
                 <cloudy-ui-button disabled=${!hasChanges} style="margin-left: auto;" onclick=${() => reviewChanges()}>Review changes</cloudy-ui-button>
