@@ -1,9 +1,7 @@
 
-import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
-import pendingChangesContext from '../diff/pending-changes-context.js';
 import html from '../util/html.js';
 
-export default function SimpleField({ contentId, contentTypeId, path, fieldModel, readonly, initialValue }) {
+export default function SimpleField({ path, fieldModel, readonly, initialValue }) {
     if (fieldModel.descriptor.embeddedFormId && !fieldModel.descriptor.isSortable) {
         wrapperTag = 'fieldset';
         labelTag = 'legend';
