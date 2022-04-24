@@ -28,12 +28,18 @@ function Form({ editingContentState }) {
     const ref = createRef(null);
 
     useEffect(() => {
-        ref.current.addEventListener('cloudy-ui-form-change', (event) => {
+        const callback = (event) => {
             console.log({
                 ...editingContentReference,
                 change: event.detail.change,
             });
-        });
+        };
+
+        ref.current.addEventListener('cloudy-ui-form-change', callback);
+
+        return () => {
+            ref.current.removeEventListener('cloudy-ui-form-change', callback);
+        };
     });
 
     return html`
