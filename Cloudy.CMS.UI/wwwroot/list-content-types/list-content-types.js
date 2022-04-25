@@ -1,6 +1,6 @@
-﻿import { useState, useEffect, useContext } from '../lib/preact.hooks.module.js';
+﻿import { useState, useEffect } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import ContentTypeProvider from '../data/content-type-getter.js';
+import contentTypeProvider from '../data/content-type-provider.js';
 import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
 
@@ -8,7 +8,7 @@ function ListContentTypes({ activeContentType, onSelectContentType }) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        ContentTypeProvider.getAll().then(items => {
+        contentTypeProvider.getAll().then(items => {
             setItems(items);
 
             if (items?.length === 1) {

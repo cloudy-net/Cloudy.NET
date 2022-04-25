@@ -1,41 +1,17 @@
-﻿import { useState, useContext, useEffect } from '../lib/preact.hooks.module.js';
+﻿import { useState, useEffect } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import contentTypesContext from '../list-content-types/content-types-context.js';
-import editContentReferenceContext from './edit-content-reference-context.js';
 import nameGetter from '../data/name-getter.js';
 import Urls from './urls.js';
 import Form from './form.js';
 import contentStateManager from './content-state-manager.js';
+import contentTypeProvider from '../data/content-type-provider.js';
 
 function EditContent({ contentReference }) {
-    const [contentTypes] = useContext(contentTypesContext);
-    let contentType;
-
-    useEffect(() => {
-        if (!contentTypes) {
-            return;
-        }
-
-        contentType = contentTypes.find(t => t.id == contentReference.contentTypeId);
-    }, [contentReference, contentType]);
-
-    if (!contentType) {
+    if (!contentReference) {
         return;
     }
 
-    const [editingContentReference, setEditingContentReference] = useContext(editContentReferenceContext);
-
-    if (!contentType || !editingContentReference) {
-        return null;
-    }
-
-    const [editingContentState, setEditingContentState] = useState();
-
-    useEffect(() => {
-        if (editingContentReference.newContentKey) {
-            setEditingContentState(contentStateManager.createEditingContentState(editingContentReference));
-        }
-    }, [editingContentReference]);
+    const contentType = contentTypeProvider.get(contentReference.contentTypeId);
 
     var hasChanges = false;
 
@@ -43,17 +19,17 @@ function EditContent({ contentReference }) {
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
                 <cloudy-ui-blade-title-text>${(
-            editingContentReference.keys ?
+            contentReference.keys ?
                 `Edit ${nameGetter.getNameOf(content, contentType)}` :
                 `New ${contentType.name}`
         )}<//>
                 <cloudy-ui-blade-toolbar>
                     <${Urls} contentReference=${contentReference}/>
                 <//>
-                <cloudy-ui-blade-close onclick=${() => setEditingContentReference(null)}><//>
+                <cloudy-ui-blade-close onclick=${() => setcontentReference(null)}><//>
             <//>
             <cloudy-ui-blade-content>
-                <${Form}/>
+                <${Form} contentReference=${contentReference}/>
             <//>
             <cloudy-ui-blade-footer style="">
                 <cloudy-ui-button disabled=${!hasChanges} style="margin-left: auto;" onclick=${() => reviewChanges()}>Review changes</cloudy-ui-button>

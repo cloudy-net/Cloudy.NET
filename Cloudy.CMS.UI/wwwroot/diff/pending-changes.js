@@ -3,7 +3,7 @@ import Blade from '../components/blade/blade.js';
 import { useContext, useEffect, useState, useCallback } from '../lib/preact.hooks.module.js';
 import ListItem from '../components/list/list-item.js';
 import contentGetter from '../data/content-getter.js';
-import contentTypeGetter from '../data/content-type-getter.js';
+import contentTypeGetter from '../data/content-type-provider.js';
 import nameGetter from '../data/name-getter.js';
 import showDiffContext from './show-diff-context.js';
 import pendingChangesContext from './pending-changes-context.js';

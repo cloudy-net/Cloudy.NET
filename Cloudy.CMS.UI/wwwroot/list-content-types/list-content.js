@@ -8,6 +8,10 @@ import Button from '../components/button/button.js';
 import Blade from '../components/blade/blade.js';
 
 function ListContent({ contentType, onEditContent, onNewContent, onClose }) {
+    if (!contentType) {
+        return;
+    }
+
     const [items, setItems] = useState([]);
 
     useEffect(() => {

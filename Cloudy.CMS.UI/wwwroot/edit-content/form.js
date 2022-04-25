@@ -1,26 +1,17 @@
-import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
+import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import editContentReferenceContext from './edit-content-reference-context.js';
-import pendingChangesContext from '../diff/pending-changes-context.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
 import contentStateManager from './content-state-manager.js';
 
 function Form({ contentReference }) {
-    const [editingContentReference] = useContext(editContentReferenceContext);
-    const [pendingChanges, updatePendingChanges, , getPendingValue] = useContext(pendingChangesContext);
-
-    if (!editingContentReference) {
-        return null;
-    }
-
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
-        fieldModelBuilder.getFieldModels(editingContentReference.contentTypeId)
+        fieldModelBuilder.getFieldModels(contentReference.contentTypeId)
             .then(fieldModels => setFieldModels(fieldModels));
-    }, [editingContentReference.contentTypeId]);
+    }, [contentReference.contentTypeId]);
 
     if (!fieldModels) {
         return null;
@@ -31,7 +22,7 @@ function Form({ contentReference }) {
     useEffect(() => {
         const callback = (event) => {
             contentStateManager.registerChange({
-                ...editingContentReference,
+                ...contentReference,
                 change: event.detail.change,
             });
         };
@@ -47,8 +38,8 @@ function Form({ contentReference }) {
         <div class='cloudy-ui-form' ref=${ref}>
             ${fieldModels.map(fieldModel => html`
             <${FormField}
-                contentId=${editingContentReference.keys}
-                contentTypeId=${editingContentReference.contentTypeId}
+                contentId=${contentReference.keys}
+                contentTypeId=${contentReference.contentTypeId}
                 initialValue=${editingContentState.values[fieldModel.descriptor.id]}
                 fieldModel=${fieldModel}
             />`)}
