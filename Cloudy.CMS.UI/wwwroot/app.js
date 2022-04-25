@@ -6,7 +6,7 @@ import EditContent from './edit-content/edit-content.js';
 import PopupMenuContextProvider from './components/popup-menu/popup-menu-context-provider.js';
 import TotalChangesButton from './diff/total-changes-button.js';
 import { useState } from './lib/preact.hooks.module.js';
-import contentStateManager from './edit-content/content-state-manager.js';
+import contentStateManager from './edit-content/state-manager.js';
 
 function App({ title }) {
     const [listingContent, listContent] = useState(null);

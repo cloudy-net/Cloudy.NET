@@ -3,7 +3,7 @@ import html from '../util/html.js';
 import nameGetter from '../data/name-getter.js';
 import Urls from './urls.js';
 import Form from './form.js';
-import contentStateManager from './content-state-manager.js';
+import stateManager from './state-manager.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 
 function EditContent({ contentReference }) {
@@ -12,6 +12,8 @@ function EditContent({ contentReference }) {
     }
 
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
+
+    const state = stateManager.getState(contentReference);
 
     var hasChanges = false;
 
@@ -29,7 +31,7 @@ function EditContent({ contentReference }) {
                 <cloudy-ui-blade-close onclick=${() => setcontentReference(null)}><//>
             <//>
             <cloudy-ui-blade-content>
-                <${Form} contentReference=${contentReference}/>
+                <${Form} contentReference=${contentReference} state=${state}/>
             <//>
             <cloudy-ui-blade-footer style="">
                 <cloudy-ui-button disabled=${!hasChanges} style="margin-left: auto;" onclick=${() => reviewChanges()}>Review changes</cloudy-ui-button>

@@ -3,9 +3,9 @@ import html from '../util/html.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
-import contentStateManager from './content-state-manager.js';
+import stateManager from './state-manager.js';
 
-function Form({ contentReference }) {
+function Form({ contentReference, state }) {
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
@@ -21,10 +21,7 @@ function Form({ contentReference }) {
 
     useEffect(() => {
         const callback = (event) => {
-            contentStateManager.registerChange({
-                ...contentReference,
-                change: event.detail.change,
-            });
+            stateManager.registerChange(contentReference, event.detail.change);
         };
 
         ref.current.addEventListener('cloudy-ui-form-change', callback);
@@ -38,10 +35,8 @@ function Form({ contentReference }) {
         <div class='cloudy-ui-form' ref=${ref}>
             ${fieldModels.map(fieldModel => html`
             <${FormField}
-                contentId=${contentReference.keys}
-                contentTypeId=${contentReference.contentTypeId}
-                initialValue=${editingContentState.values[fieldModel.descriptor.id]}
                 fieldModel=${fieldModel}
+                state=${state}
             />`)}
         <//>
     `;
