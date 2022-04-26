@@ -84,10 +84,30 @@ class StateManager {
         }
 
         this.persist(state);
+
+        this._onChangeCallbacks.forEach(callback => callback());
     }
 
     persist(state) {
         localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
+    }
+
+    totalChanges() {
+        return this.states.reduce((accumulator, element, i) => accumulator + element.changedFields.length, 0);
+    }
+
+    _onChangeCallbacks = [];
+
+    onChange(callback) {
+        console.log('adding callback!');
+
+        this._onChangeCallbacks.push(callback);
+    }
+
+    offChange(callback) {
+        console.log('removing callback!');
+
+        this._onChangeCallbacks.splice(this._onChangeCallbacks.indexOf(callback), 1);
     }
 }
 

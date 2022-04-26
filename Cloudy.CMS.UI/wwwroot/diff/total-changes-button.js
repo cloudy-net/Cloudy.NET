@@ -3,10 +3,13 @@ import html from '../util/html.js';
 import showDiffContext from './show-diff-context.js';
 import pendingChangesContext from './pending-changes-context.js';
 import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
+import stateContext from '../edit-content/state-context.js';
 
-function TotalChangesButton({ changeCount }) {
+function TotalChangesButton() {
+    const totalChanges = useContext(stateContext);
+
     return html`
-        <${Button} text=${!changeCount ? 'Show changes' : changeCount == 1 ? `${changeCount} change` : `${changeCount} changes`} disabled=${!changeCount}/>
+        <${Button} text=${!totalChanges ? 'Show changes' : totalChanges == 1 ? `${totalChanges} change` : `${totalChanges} changes`} disabled=${!totalChanges}/>
     `;
 }
 
