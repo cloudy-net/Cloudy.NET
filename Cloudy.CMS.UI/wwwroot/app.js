@@ -19,15 +19,15 @@ function App({ title }) {
                     <cloudy-ui-portal-nav>
                         <cloudy-ui-portal-nav-title>${title}<//>
                         <div>
-            <${StateContextProvider}>
-                            <${TotalChangesButton}/>
-                    <//>
+                            <${StateContextProvider}>
+                                <${TotalChangesButton}/>
+                            <//>
                         </div>
                     <//>
                     <cloudy-ui-app>
                         <${ListContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
                         <${ListContent} contentType=${listingContent} onEditContent=${contentReference => editContent(contentReference)} onNewContent=${contentType => editContent(contentStateManager.createNewContent(contentType))} onClose=${() => listContent(null)}/>
-                        <${EditContent} contentReference=${editingContent}/>
+                        <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)}/>
                 <//>
             <//>
         <//>

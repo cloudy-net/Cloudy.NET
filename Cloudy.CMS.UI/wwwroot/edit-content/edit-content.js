@@ -6,7 +6,7 @@ import Form from './form.js';
 import stateManager from './state-manager.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 
-function EditContent({ contentReference }) {
+function EditContent({ contentReference, onClose }) {
     if (!contentReference) {
         return;
     }
@@ -28,7 +28,7 @@ function EditContent({ contentReference }) {
                 <cloudy-ui-blade-toolbar>
                     <${Urls} contentReference=${contentReference}/>
                 <//>
-                <cloudy-ui-blade-close onclick=${() => setcontentReference(null)}><//>
+                <cloudy-ui-blade-close onclick=${() => onClose()}><//>
             <//>
             <cloudy-ui-blade-content>
                 <${Form} contentReference=${contentReference} state=${state}/>
