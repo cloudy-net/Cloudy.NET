@@ -3,7 +3,7 @@ import html from './util/html.js';
 import ListContentTypes from './list-content-types/list-content-types.js';
 import ListContent from './list-content-types/list-content.js';
 import EditContent from './edit-content/edit-content.js';
-import StateContextProvider from './edit-content/state-context-provider.js';
+import TotalChangesContextProvider from './edit-content/total-changes-context-provider.js';
 import PopupMenuContextProvider from './components/popup-menu/popup-menu-context-provider.js';
 import TotalChangesButton from './diff/total-changes-button.js';
 import { useState } from './lib/preact.hooks.module.js';
@@ -19,7 +19,7 @@ function App({ title }) {
                     <cloudy-ui-portal-nav>
                         <cloudy-ui-portal-nav-title>${title}<//>
                         <div>
-                            <${StateContextProvider}>
+                            <${TotalChangesContextProvider}>
                                 <${TotalChangesButton}/>
                             <//>
                         </div>

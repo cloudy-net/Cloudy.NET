@@ -3,7 +3,7 @@ import html from '../util/html.js';
 import showDiffContext from './show-diff-context.js';
 import pendingChangesContext from './pending-changes-context.js';
 import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
-import stateContext from '../edit-content/state-context.js';
+import stateContext from '../edit-content/total-changes-context.js';
 
 function TotalChangesButton() {
     const totalChanges = useContext(stateContext);

@@ -1,9 +1,9 @@
 import html from '../util/html.js';
-import StateContext from './state-context.js';
+import StateContext from './total-changes-context.js';
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import stateManager from './state-manager.js';
 
-function StateContextProvider({ children }) {
+function TotalChangesContextProvider({ children }) {
     const [totalChanges, setTotalChanges] = useState(stateManager.totalChanges());
 
     useEffect(() => {
@@ -25,4 +25,4 @@ function StateContextProvider({ children }) {
     `;
 }
 
-export default StateContextProvider;
+export default TotalChangesContextProvider;
