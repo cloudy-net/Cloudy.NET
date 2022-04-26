@@ -15,19 +15,19 @@ function App({ title }) {
 
     return html`
         <${PopupMenuContextProvider}>
-                <cloudy-ui-portal>
-                    <cloudy-ui-portal-nav>
-                        <cloudy-ui-portal-nav-title>${title}<//>
-                        <div>
-                            <${TotalChangesContextProvider}>
-                                <${TotalChangesButton}/>
-                            <//>
-                        </div>
-                    <//>
-                    <cloudy-ui-app>
-                        <${ListContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
-                        <${ListContent} contentType=${listingContent} onEditContent=${contentReference => editContent(contentReference)} onNewContent=${contentType => editContent(contentStateManager.createNewContent(contentType))} onClose=${() => listContent(null)}/>
-                        <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)}/>
+            <cloudy-ui-portal>
+                <cloudy-ui-portal-nav>
+                    <cloudy-ui-portal-nav-title>${title}<//>
+                    <div>
+                        <${TotalChangesContextProvider}>
+                            <${TotalChangesButton}/>
+                        <//>
+                    </div>
+                <//>
+                <cloudy-ui-app>
+                    <${ListContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
+                    <${ListContent} contentType=${listingContent} onEditContent=${contentReference => editContent(contentReference)} onNewContent=${contentType => editContent(contentStateManager.createNewContent(contentType))} onClose=${() => listContent(null)}/>
+                    <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)}/>
                 <//>
             <//>
         <//>
