@@ -18,26 +18,51 @@ const arrayEquals = (a, b) => {
 
 const contentReferenceEquals = (a, b) => arrayEquals(a.keys, b.keys) && a.newContentKey == b.newContentKey && a.contentTypeId == b.contentTypeId;
 
+class StatesIndex {
+    _storageKey = "cloudy:statesIndex";
+    values = JSON.parse(localStorage.getItem(this._storageKey) || "[]");
+
+    add(contentReference) {
+        this.values.push(contentReference);
+        localStorage.setItem(this._storageKey, JSON.stringify(this.values));
+    }
+
+    loadStates() {
+        const result = [];
+
+        for (let contentReference of this.values) {
+            result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(contentReference)}`)));
+        }
+        
+        return result;
+    }
+}
+
 class StateManager {
-    states = [];
+    index = new StatesIndex();
+    states = this.index.loadStates();
 
     createNewContent(contentType) {
-        return { newContentKey: generateNewContentKey(), keys: null, contentTypeId: contentType.id };
+        const contentReference = { newContentKey: generateNewContentKey(), keys: null, contentTypeId: contentType.id };
+
+        this.index.add(contentReference);
+
+        const state = {
+            contentReference,
+            referenceValues: {},
+            referenceDate: null,
+            changedFields: [],
+        };
+        this.states.push(state);
+        this.persist(state);
+
+        return contentReference;
     };
 
     getState(contentReference) {
         let state = this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
 
-        if (!state && contentReference.newContentKey) {
-            state = {
-                contentReference,
-                referenceValues: {},
-                referenceDate: null,
-                changedFields: [],
-            };
 
-            this.states.push(state);
-        }
 
         return state;
     }
@@ -49,7 +74,8 @@ class StateManager {
 
         if (change.type == 'simple') {
             if (!changedField) {
-                state.changedFields.push(changedField = change);
+                state.changedFields.push(change);
+                changedField = change;
             }
 
             if (change.operation == 'set') {
@@ -57,8 +83,11 @@ class StateManager {
             }
         }
 
-        console.log(state.changedFields[0]);
+        this.persist(state);
+    }
 
+    persist(state) {
+        localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
     }
 }
 
