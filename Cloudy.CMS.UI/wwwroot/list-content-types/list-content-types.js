@@ -4,18 +4,16 @@ import contentTypeProvider from '../data/content-type-provider.js';
 import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
 
-function ListContentTypes({ activeContentType, onSelectContentType }) {
-    const [items, setItems] = useState([]);
+function ListContentTypes({ renderIf, activeContentType, onSelectContentType }) {
+    if (!renderIf) {
+        return;
+    }
 
-    useEffect(() => {
-        contentTypeProvider.getAll().then(items => {
-            setItems(items);
+    const items = contentTypeProvider.getAll();
 
-            if (items?.length === 1) {
-                onSelectContentType(items[0]);
-            }
-        });
-    }, []);
+    if (items?.length === 1) {
+        onSelectContentType(items[0]);
+    }
 
     if (activeContentType) {
         return null;

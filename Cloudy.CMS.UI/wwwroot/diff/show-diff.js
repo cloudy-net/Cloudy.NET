@@ -28,12 +28,12 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     `;
 }
 
-function ShowDiff() {
-    const [diffData, , setDiffData] = useContext(showDiffContext);
-    const [, , resetChange, getPendingValue, getFor, applyFor] = useContext(pendingChangesContext);
-    const [content, setContent] = useState();
+function ShowDiff({ renderIf }) {
+    if (!renderIf) {
+        return;
+    }
+
     const [fieldModels, setFieldModels] = useState();
-    const [changes, setChanges] = useState();
 
     if (!diffData) {
         return null;

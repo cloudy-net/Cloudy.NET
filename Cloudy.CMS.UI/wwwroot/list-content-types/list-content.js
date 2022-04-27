@@ -7,7 +7,11 @@ import nameGetter from '../data/name-getter.js';
 import Button from '../components/button/button.js';
 import Blade from '../components/blade/blade.js';
 
-function ListContent({ contentType, onEditContent, onNewContent, onClose }) {
+function ListContent({ renderIf, contentType, onEditContent, onNewContent, onClose }) {
+    if (!renderIf) {
+        return;
+    }
+
     if (!contentType) {
         return;
     }
@@ -25,10 +29,10 @@ function ListContent({ contentType, onEditContent, onNewContent, onClose }) {
             });
     }, []);
 
-    const toolbar = html`<${Button} text="New" onclick=${() => onNewContent(contentType)}><//>`;
+    const toolbar = html`<${Button} text="New" onClick=${() => onNewContent(contentType)}><//>`;
 
     return html`
-        <${Blade} title=${contentType.pluralName} toolbar=${toolbar} onclose=${() => onClose()}>
+        <${Blade} title=${contentType.pluralName} toolbar=${toolbar} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
                 <${List}>
 			        ${items.map(item => html`

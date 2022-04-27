@@ -3,7 +3,11 @@ import StateContext from './state-context.js';
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import stateManager from './state-manager.js';
 
-function StateContextProvider({ children, contentReference }) {
+function StateContextProvider({ renderIf, children, contentReference }) {
+    if (!renderIf) {
+        return;
+    }
+
     if (!contentReference) {
         return;
     }

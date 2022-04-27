@@ -1,9 +1,9 @@
 ﻿import html from '../../util/html.js';
 
-function Button(props) {
+function Button({ cssClass, onClick, disabled, text }) {
     return html`
-        <cloudy-ui-button class=${props.class} onclick=${props.onclick} disabled=${props.disabled}>
-            ${props.text}
+        <button type="button" class="cloudy-ui-button ${cssClass}" onclick=${onClick} disabled=${disabled}>
+            ${text}
         <//>
     `;
 }

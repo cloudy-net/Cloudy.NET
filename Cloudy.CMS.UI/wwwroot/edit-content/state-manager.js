@@ -31,7 +31,7 @@ class StatesIndex {
         const result = [];
 
         for (let contentReference of this.values) {
-            result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(contentReference)}`)));
+            result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(contentReference)}`), (key, value) => key == 'referenceDate' ? new Date(value) : value));
         }
         
         return result;
@@ -50,7 +50,7 @@ class StateManager {
         const state = {
             contentReference,
             referenceValues: {},
-            referenceDate: null,
+            referenceDate: new Date(),
             changedFields: [],
         };
         this.states.push(state);

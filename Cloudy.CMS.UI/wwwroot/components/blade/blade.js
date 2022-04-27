@@ -1,19 +1,14 @@
 ﻿import html from '../../util/html.js';
-import { useCallback } from '../../lib/preact.hooks.module.js';
 
-function Blade(props) {
-    const onClose =  useCallback(() => {
-        props.onclose && props.onclose();
-    }, []);
-
+function Blade({ onClose, title, toolbar, children }) {
     return html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
-                <cloudy-ui-blade-title-text>${props.title}<//>
-                <cloudy-ui-blade-toolbar>${props.toolbar}<//>
-                <cloudy-ui-blade-close onclick=${() => onClose()}><//>
+                <cloudy-ui-blade-title-text>${title}<//>
+                <cloudy-ui-blade-toolbar>${toolbar}<//>
+                <cloudy-ui-blade-close onclick=${() => onClose && onClose()}><//>
             <//>
-            ${props.children}
+            ${children}
         <//>
     `;
 }
