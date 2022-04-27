@@ -8,6 +8,7 @@ import PopupMenuContextProvider from './components/popup-menu/popup-menu-context
 import TotalChangesButton from './diff/total-changes-button.js';
 import { useState } from './lib/preact.hooks.module.js';
 import contentStateManager from './edit-content/state-manager.js';
+import StateContextProvider from './edit-content/state-context-provider.js';
 
 function App({ title }) {
     const [listingContent, listContent] = useState(null);
@@ -27,7 +28,10 @@ function App({ title }) {
                 <cloudy-ui-app>
                     <${ListContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
                     <${ListContent} contentType=${listingContent} onEditContent=${contentReference => editContent(contentReference)} onNewContent=${contentType => editContent(contentStateManager.createNewContent(contentType))} onClose=${() => listContent(null)}/>
-                    <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)}/>
+
+                    <${StateContextProvider} contentReference=${editingContent}>
+                        <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)}/>
+                    <//>
                 <//>
             <//>
         <//>

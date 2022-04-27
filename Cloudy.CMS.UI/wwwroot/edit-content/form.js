@@ -5,7 +5,7 @@ import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
 import stateManager from './state-manager.js';
 
-function Form({ contentReference, state }) {
+function Form({ contentReference }) {
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
@@ -29,14 +29,13 @@ function Form({ contentReference, state }) {
         return () => {
             ref.current.removeEventListener('cloudy-ui-form-change', callback);
         };
-    });
+    }, [contentReference]);
 
     return html`
         <div class='cloudy-ui-form' ref=${ref}>
             ${fieldModels.map(fieldModel => html`
             <${FormField}
                 fieldModel=${fieldModel}
-                state=${state}
             />`)}
         <//>
     `;

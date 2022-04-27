@@ -56,15 +56,14 @@ class StateManager {
         this.states.push(state);
         this.persist(state);
 
+        this.triggerAnyStateChange();
+        this.triggerStateChange(contentReference);
+
         return contentReference;
     };
 
     getState(contentReference) {
-        let state = this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
-
-
-
-        return state;
+        return this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
     }
 
     registerChange(contentReference, change) {
@@ -85,7 +84,8 @@ class StateManager {
 
         this.persist(state);
 
-        this._onChangeCallbacks.forEach(callback => callback());
+        this.triggerAnyStateChange();
+        this.triggerStateChange(contentReference);
     }
 
     persist(state) {
@@ -93,21 +93,53 @@ class StateManager {
     }
 
     totalChanges() {
-        return this.states.reduce((accumulator, element, i) => accumulator + element.changedFields.length, 0);
+        return this.states.filter(s => s.contentReference.newContentKey || s.changedFields.length > 0).length;
     }
 
-    _onChangeCallbacks = [];
+    _onAnyStateChangeCallbacks = [];
 
-    onChange(callback) {
-        console.log('adding callback!');
-
-        this._onChangeCallbacks.push(callback);
+    onAnyStateChange(callback) {
+        this._onAnyStateChangeCallbacks.push(callback);
     }
 
-    offChange(callback) {
-        console.log('removing callback!');
+    offAnyStateChange(callback) {
+        this._onAnyStateChangeCallbacks.splice(this._onAnyStateChangeCallbacks.indexOf(callback), 1);
+    }
 
-        this._onChangeCallbacks.splice(this._onChangeCallbacks.indexOf(callback), 1);
+    triggerAnyStateChange() {
+        this._onAnyStateChangeCallbacks.forEach(callback => callback());
+    }
+
+    _onStateChangeCallbacks = {};
+
+    onStateChange(contentReference, callback) {
+        const key = JSON.stringify(contentReference);
+
+        if (!this._onStateChangeCallbacks[key]) {
+            this._onStateChangeCallbacks[key] = [];
+        }
+
+        this._onStateChangeCallbacks[key].push(callback);
+    }
+
+    offStateChange(contentReference, callback) {
+        const key = JSON.stringify(contentReference);
+
+        if (!this._onStateChangeCallbacks[key]) {
+            this._onStateChangeCallbacks[key] = [];
+        }
+
+        this._onStateChangeCallbacks[key].splice(this._onStateChangeCallbacks[key].indexOf(callback), 1);
+    }
+
+    triggerStateChange(contentReference) {
+        const key = JSON.stringify(contentReference);
+
+        if (!this._onStateChangeCallbacks[key]) {
+            this._onStateChangeCallbacks[key] = [];
+        }
+
+        this._onStateChangeCallbacks[key].forEach(callback => callback());
     }
 }
 

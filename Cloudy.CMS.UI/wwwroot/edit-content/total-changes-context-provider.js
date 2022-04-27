@@ -8,13 +8,12 @@ function TotalChangesContextProvider({ children }) {
 
     useEffect(() => {
         const callback = () => {
-            console.log('change!');
             setTotalChanges(stateManager.totalChanges());
         };
-        stateManager.onChange(callback);
+        stateManager.onAnyStateChange(callback);
 
         return () => {
-            stateManager.offChange(callback);
+            stateManager.offAnyStateChange(callback);
         };
     }, []);
 
