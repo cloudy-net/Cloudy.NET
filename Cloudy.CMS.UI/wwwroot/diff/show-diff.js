@@ -1,11 +1,8 @@
 ﻿import html from '../util/html.js';
-import { useContext, useEffect, useState, useCallback } from '../lib/preact.hooks.module.js';
-import showDiffContext from './show-diff-context.js';
+import { useEffect, useState, useCallback } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
-import contentGetter from '../data/content-getter.js';
 import Diff from './lib/diff.js';
-import pendingChangesContext from './pending-changes-context.js';
 import stateManager from '../edit-content/state-manager.js';
 import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
@@ -82,7 +79,7 @@ function ShowDiff({ renderIf, contentReference, onClose }) {
                         fieldModel=${fieldModel}
                     />`)}
                 <//>         
-            <//>    
+            <//>
             <cloudy-ui-blade-footer>
                 <cloudy-ui-button tabindex="0" style="margin-left: auto;" onclick=${() => undoChanges()}>Undo changes</cloudy-ui-button>
                 <cloudy-ui-button tabindex="0" class="primary" style="margin-left: 10px;" onclick=${() => saveChange()}>Save</cloudy-ui-button>
