@@ -1,14 +1,28 @@
 ﻿import html from '../util/html.js';
 import ShowDiffContext from './show-diff-context.js';
-import { useState } from '../lib/preact.hooks.module.js';
+import { useEffect, useState } from '../lib/preact.hooks.module.js';
+import stateManager from '../edit-content/state-manager.js';
 
-function ShowDiffContextProvider(props) {
-    const [diffData, setDiffData] = useState();
-    const [showDiffBlade, setShowDiffBlade] = useState(false);
+function ShowDiffContextProvider({ renderIf, children, contentReference }) {
+    if (!renderIf) {
+        return;
+    }
+
+    const state = stateManager.getState(contentReference);
+    const [trigger, setTrigger] = useState(0);
+
+    useEffect(() => {
+        const callback = () => setTrigger(trigger + 1);
+        stateManager.onStateChange(state.contentReference, callback);
+
+        return () => {
+            stateManager.offStateChange(state.contentReference, callback);
+        };
+    }, [contentReference]);
 
     return html`
-        <${ShowDiffContext.Provider} value=${[diffData, showDiffBlade, setDiffData, setShowDiffBlade]}>
-            ${props.children}
+        <${ShowDiffContext.Provider} value=${[state, trigger]}>
+            ${children}
         <//>
     `;
 }

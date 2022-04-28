@@ -5,7 +5,7 @@ import stateManager from '../edit-content/state-manager.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import nameGetter from '../data/name-getter.js';
 
-function PendingChanges({ renderIf }) {
+function PendingChanges({ renderIf, onSelect }) {
     if (!renderIf) {
         return;
     }
@@ -17,7 +17,7 @@ function PendingChanges({ renderIf }) {
         .filter(g => g.changes.length);
 
     const getSubText = (state, contentType) => state.remove ? 'Slated for removal' : state.contentId ? `Changed fields: ${state.changedFields.length}` : `New ${contentType.lowerCaseName} (created ${state.referenceDate.toLocaleString()})`;
-    const renderItems = (states, contentType) => states.map(state => html`<${ListItem} text=${nameGetter.getNameOfState(state, contentType)} subtext=${getSubText(state, contentType)} onclick=${() => setDiffData(state.change)} />`)
+    const renderItems = (states, contentType) => states.map(state => html`<${ListItem} text=${nameGetter.getNameOfState(state, contentType)} subtext=${getSubText(state, contentType)} onclick=${() => onSelect(state.contentReference)} />`)
 
     return html`
         <${Blade} title='Pending changes' onClose=${() => setShowDiffBlade(false)}>

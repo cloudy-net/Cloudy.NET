@@ -11,6 +11,7 @@ import StateContextProvider from './edit-content/state-context-provider.js';
 import PendingChanges from './diff/pending-changes.js';
 import contentTypeProvider from './data/content-type-provider.js';
 import ShowDiff from './diff/show-diff.js';
+import ShowDiffContextProvider from './diff/show-diff-context-provider.js';
 
 function App({ title }) {
     const [contentTypesHasLoaded, setContentTypesHasLoaded] = useState(false);
@@ -47,7 +48,9 @@ function App({ title }) {
                     <//>
 
                     <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => setDiffContentReference(contentReference)}/>
-                    <${ShowDiff} renderIf=${diffContentReference}/>
+                    <${ShowDiffContextProvider} renderIf=${diffContentReference} contentReference=${diffContentReference}>
+                        <${ShowDiff} renderIf=${diffContentReference} contentReference=${diffContentReference}/>
+                    <//>
                 <//>
             <//>
         <//>

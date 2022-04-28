@@ -6,9 +6,11 @@ import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import contentGetter from '../data/content-getter.js';
 import Diff from './lib/diff.js';
 import pendingChangesContext from './pending-changes-context.js';
+import stateManager from '../edit-content/state-manager.js';
+import nameGetter from '../data/name-getter.js';
+import contentTypeProvider from '../data/content-type-provider.js';
 
 function DiffField({ fieldModel, change, initialValue, value }) {
-
     if (change && fieldModel.descriptor.control && (fieldModel.descriptor.control.id == 'text' || fieldModel.descriptor.control.id == 'textarea')) {
         return html`
             <div class="cloudy-ui-form-field cloudy-ui-simple">
@@ -28,55 +30,55 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     `;
 }
 
-function ShowDiff({ renderIf }) {
+function ShowDiff({ renderIf, contentReference, onClose }) {
     if (!renderIf) {
         return;
     }
 
     const [fieldModels, setFieldModels] = useState();
 
-    if (!diffData) {
-        return null;
-    }
-
     useEffect(() => {
-        fieldModelBuilder.getFieldModels(diffData.contentTypeId).then(fieldModels => setFieldModels(fieldModels));
-    }, [diffData.contentTypeId]);
+        fieldModelBuilder.getFieldModels(contentReference.contentTypeId).then(fieldModels => setFieldModels(fieldModels));
+    }, [contentReference]);
 
     if (!fieldModels) {
-        return null;
-    }
-
-    useEffect(() => {
-        setChanges(getFor(diffData.contentId, diffData.contentTypeId));
-        diffData.contentId && contentGetter.get([diffData.contentId], diffData.contentTypeId).then(content => setContent(content));
-    }, [diffData.contentId, diffData.contentTypeId]);
-
-    if (!content) {
-        return null;
+        return;
     }
 
     const undoChanges = useCallback(() => {
         if (confirm('Undo changes? This is not reversible')) {
             resetChange(diffData.contentId, diffData.contentTypeId);
-            setDiffData(null);
+            onClose();
         }
-    }, [diffData]);
+    }, []);
 
     const saveChange = useCallback(() => {
         applyFor(diffData.contentId, diffData.contentTypeId, () => {
-            setDiffData(null);
+            onClose();
         });
-    }, [diffData, applyFor]);
+    }, []);
+
+    const contentType = contentTypeProvider.get(contentReference.contentTypeId);
+    const state = stateManager.getState(contentReference);
+
+    const getPendingValue = key => {
+        const changedField = state.changedFields.find(f => f.path.length == 1 && f.path[0] == key && f.type == 'simple' && f.operation == 'set');
+
+        if (changedField) {
+            return changedField.value;
+        }
+
+        return state.referenceValues[key];
+    };
 
     return html`
-        <${Blade} title=${'Pending changes' + (diffData?.changedFields?.length ? `(${diffData.changedFields.length})` : '')} onclose=${() => setDiffData(null)}>
+        <${Blade} title=${nameGetter.getNameOfState(state, contentType)} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
                 <div class="cloudy-ui-form">
                     ${fieldModels.map(fieldModel => html`<${DiffField}
-                        change=${changes?.changedFields?.find(f => f.path[f.path.length - 1] == fieldModel.descriptor.id)}
-                        initialValue=${getPendingValue(diffData.contentId, diffData.contentTypeId, [fieldModel.descriptor.id], content[fieldModel.descriptor.id])}
-                        value=${getPendingValue(diffData.contentId, diffData.contentTypeId, [fieldModel.descriptor.id], content[fieldModel.descriptor.id])}
+                        change=${state.changedFields.find(f => f.path[f.path.length - 1] == fieldModel.descriptor.id)}
+                        initialValue=${state.referenceValues[fieldModel.descriptor.id]}
+                        value=${getPendingValue(fieldModel.descriptor.id)}
                         fieldModel=${fieldModel}
                     />`)}
                 <//>         
