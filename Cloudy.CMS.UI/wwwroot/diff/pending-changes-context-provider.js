@@ -40,8 +40,8 @@ function PendingChangesContextProvider({ children }) {
     }, [pendingChanges])
 
     const updatePendingChanges = useCallback((changes) => {
-        const { keys, contentTypeId, change } = changes;
-        const contentId = (keys && keys[0]) || null;
+        const { keyValues, contentTypeId, change } = changes;
+        const contentId = (keyValues && keyValues[0]) || null;
 
         if (!contentId && contentId !== null) {
             throw new Error('ContentId must be null or a valid value (string, number, ...)')

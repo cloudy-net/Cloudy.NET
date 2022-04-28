@@ -15,7 +15,7 @@ function Urls({ contentReference }) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    keyValues: contentReference.keys,
+                    keyValues: contentReference.keyValues,
                     contentTypeId: contentReference.contentTypeId
                 })
             },

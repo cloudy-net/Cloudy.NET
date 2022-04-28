@@ -7,7 +7,7 @@ import nameGetter from '../data/name-getter.js';
 import Button from '../components/button/button.js';
 import Blade from '../components/blade/blade.js';
 
-function ListContent({ renderIf, contentType, onEditContent, onNewContent, onClose }) {
+function ListContent({ renderIf, contentType, activeContentReference, onEditContent, onNewContent, onClose }) {
     if (!renderIf) {
         return;
     }
@@ -37,9 +37,9 @@ function ListContent({ renderIf, contentType, onEditContent, onNewContent, onClo
                 <${List}>
 			        ${items.map(item => html`
                         <${ListItem}
-                            active=${item?.Keys[0] == editingContentReference?.keys[0]}
+                            active=${item.Keys[0] == activeContentReference?.keyValues[0]}
                             text=${nameGetter.getNameOf(item, contentType)}
-                            onclick=${() => onEditContent({ keys: item.Keys, contentTypeId: item.ContentTypeId })}
+                            onclick=${() => onEditContent({ keyValues: item.Keys, contentTypeId: item.ContentTypeId })}
                         />
                     `)}
                 <//>

@@ -16,7 +16,7 @@ const arrayEquals = (a, b) => {
     return a.every((ai, i) => ai === b[i]);
 }
 
-const contentReferenceEquals = (a, b) => arrayEquals(a.keys, b.keys) && a.newContentKey == b.newContentKey && a.contentTypeId == b.contentTypeId;
+const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.contentTypeId == b.contentTypeId;
 
 class StatesIndex {
     _storageKey = "cloudy:statesIndex";
@@ -43,7 +43,7 @@ class StateManager {
     states = this.index.loadStates();
 
     createNewContent(contentType) {
-        const contentReference = { newContentKey: generateNewContentKey(), keys: null, contentTypeId: contentType.id };
+        const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, contentTypeId: contentType.id };
 
         this.index.add(contentReference);
 
@@ -62,8 +62,25 @@ class StateManager {
         return contentReference;
     };
 
+    remove(contentReference) {
+        this.index.remove(contentReference);
+
+        this.unpersist(contentReference);
+
+        this.triggerAnyStateChange();
+        this.triggerStateChange(contentReference);
+
+        return contentReference;
+    };
+
     getState(contentReference) {
-        return this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
+        let state = this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
+
+        if (!state) {
+            throw 'Creating state from existing content is not implemented';
+        }
+
+        return state;
     }
 
     registerChange(contentReference, change) {
@@ -90,6 +107,10 @@ class StateManager {
 
     persist(state) {
         localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
+    }
+
+    unpersist(contentReference) {
+        localStorage.removeItem(`cloudy:${JSON.stringify(contentReference)}`);
     }
 
     totalChanges() {

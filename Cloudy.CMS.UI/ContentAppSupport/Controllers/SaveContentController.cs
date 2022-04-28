@@ -58,8 +58,8 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             foreach (var change in data.Changes)
             {
-                var contentType = ContentTypeProvider.Get(change.ContentTypeId);
-                var keyValues = PrimaryKeyConverter.Convert(change.KeyValues, contentType.Id);
+                var contentType = ContentTypeProvider.Get(change.ContentReference.ContentTypeId);
+                var keyValues = PrimaryKeyConverter.Convert(change.ContentReference.KeyValues, contentType.Id);
 
                 object content;
 
@@ -83,7 +83,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                 if (change.ChangedFields.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
-                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {change.ContentTypeId}!");
+                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {change.ContentReference.ContentTypeId}!");
                 }
 
                 var changedSimpleFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Simple).ToList();
@@ -223,11 +223,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public IEnumerable<ChangedContent> Changes { get; set; }
         }
 
-        public class ChangedContent
+        public class ContentReference
         {
             public JsonElement[] KeyValues { get; set; }
             [Required]
             public string ContentTypeId { get; set; }
+        }
+
+        public class ChangedContent
+        {
+            public ContentReference ContentReference { get; set; }
             public bool Remove { get; set; }
             [Required]
             public ChangedField[] ChangedFields { get; set; }

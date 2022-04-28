@@ -1,4 +1,3 @@
-import "../data/content-type-provider.js";
 import notificationManager from "../NotificationSupport/notification-manager.js";
 import urlFetcher from "../util/url-fetcher.js";
 
@@ -30,7 +29,6 @@ class ContentSaver {
         }
 
         notificationManager.addNotification((item) => item.setText('Content has been saved.'));
-        //this.onCompleteCallbacks.forEach(callback => callback(this.content));
     }
 }
 

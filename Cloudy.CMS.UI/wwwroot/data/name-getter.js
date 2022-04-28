@@ -59,7 +59,7 @@ class NameGetter {
             } else if (state.contentReference.newContentKey) {
                 name = `${contentType.name} ${state.contentReference.newContentKey}`;
             } else {
-                name = `${contentType.name} ${JSON.stringify(state.contentReference.keys)}`;
+                name = `${contentType.name} ${JSON.stringify(state.contentReference.keyValues)}`;
             }
         }
 

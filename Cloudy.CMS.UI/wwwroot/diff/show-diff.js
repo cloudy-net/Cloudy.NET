@@ -6,6 +6,7 @@ import Diff from './lib/diff.js';
 import stateManager from '../edit-content/state-manager.js';
 import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
+import contentSaver from '../edit-content/content-saver.js';
 
 function DiffField({ fieldModel, change, initialValue, value }) {
     if (change && fieldModel.descriptor.control && (fieldModel.descriptor.control.id == 'text' || fieldModel.descriptor.control.id == 'textarea')) {
@@ -49,12 +50,6 @@ function ShowDiff({ renderIf, contentReference, onClose }) {
         }
     }, []);
 
-    const saveChange = useCallback(() => {
-        applyFor(diffData.contentId, diffData.contentTypeId, () => {
-            onClose();
-        });
-    }, []);
-
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = stateManager.getState(contentReference);
 
@@ -68,6 +63,12 @@ function ShowDiff({ renderIf, contentReference, onClose }) {
         return state.referenceValues[key];
     };
 
+    const save = async () => {
+        await contentSaver.save([state]);
+        //stateManager.remove(contentReference);
+        //onClose();
+    }
+
     return html`
         <${Blade} title=${nameGetter.getNameOfState(state, contentType)} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
@@ -78,11 +79,11 @@ function ShowDiff({ renderIf, contentReference, onClose }) {
                         value=${getPendingValue(fieldModel.descriptor.id)}
                         fieldModel=${fieldModel}
                     />`)}
-                <//>         
+                <//>
             <//>
             <cloudy-ui-blade-footer>
-                <cloudy-ui-button tabindex="0" style="margin-left: auto;" onclick=${() => undoChanges()}>Undo changes</cloudy-ui-button>
-                <cloudy-ui-button tabindex="0" class="primary" style="margin-left: 10px;" onclick=${() => saveChange()}>Save</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" style="margin-left: auto;" onclick=${() => undo()}>Undo changes</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" class="primary" style="margin-left: 10px;" onclick=${() => save()}>Save</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;

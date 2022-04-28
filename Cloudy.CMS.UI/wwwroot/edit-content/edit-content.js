@@ -20,7 +20,7 @@ function EditContent({ contentReference, onClose }) {
     return html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
-                <cloudy-ui-blade-title-text>${(contentReference.keys ? `Edit ${nameGetter.getNameOf(content, contentType)}` : `New ${contentType.name} ${state.changedFields.length}`)}<//>
+                <cloudy-ui-blade-title-text>${(contentReference.keyValues ? `Edit ${nameGetter.getNameOf(content, contentType)}` : `New ${contentType.name} ${state.changedFields.length}`)}<//>
                 <cloudy-ui-blade-toolbar>
                     <${Urls} contentReference=${contentReference}/>
                 <//>
