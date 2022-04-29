@@ -37,7 +37,7 @@ function ListContent({ renderIf, contentType, activeContentReference, onEditCont
                 <${List}>
 			        ${items.map(item => html`
                         <${ListItem}
-                            active=${item.Keys[0] == activeContentReference?.keyValues[0]}
+                            active=${!activeContentReference?.newContentKey && item.Keys[0] == activeContentReference?.keyValues[0]}
                             text=${nameGetter.getNameOf(item, contentType)}
                             onclick=${() => onEditContent({ keyValues: item.Keys, contentTypeId: item.ContentTypeId })}
                         />

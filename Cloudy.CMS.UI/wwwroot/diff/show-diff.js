@@ -65,8 +65,8 @@ function ShowDiff({ renderIf, contentReference, onClose }) {
 
     const save = async () => {
         await contentSaver.save([state]);
-        //stateManager.remove(contentReference);
-        //onClose();
+        stateManager.remove(contentReference);
+        onClose();
     }
 
     return html`

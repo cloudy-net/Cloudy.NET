@@ -49,7 +49,7 @@ function App({ title }) {
 
                     <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => setDiffContentReference(contentReference)}/>
                     <${ShowDiffContextProvider} renderIf=${diffContentReference} contentReference=${diffContentReference}>
-                        <${ShowDiff} renderIf=${diffContentReference} contentReference=${diffContentReference}/>
+                        <${ShowDiff} renderIf=${diffContentReference} contentReference=${diffContentReference} onClose=${() => setDiffContentReference(null)}/>
                     <//>
                 <//>
             <//>

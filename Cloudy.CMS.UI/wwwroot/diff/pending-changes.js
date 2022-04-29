@@ -4,13 +4,22 @@ import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import nameGetter from '../data/name-getter.js';
+import { useEffect, useState } from '../lib/preact.hooks.module.js';
 
 function PendingChanges({ renderIf, onSelect }) {
     if (!renderIf) {
         return;
     }
 
-    const states = stateManager.states;
+    const [states, setStates] = useState(stateManager.states);
+
+    useEffect(() => {
+        const callback = () => setStates([...stateManager.states]);
+        stateManager.onAnyStateChange(callback);
+
+        return () => { stateManager.offAnyStateChange(callback); };
+    }, []);
+
     const groups = contentTypeProvider
         .getAll()
         .map(c => ({ contentType: c, changes: states.filter(s => s.contentReference.contentTypeId == c.id) }))

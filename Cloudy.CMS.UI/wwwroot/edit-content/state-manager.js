@@ -27,6 +27,11 @@ class StatesIndex {
         localStorage.setItem(this._storageKey, JSON.stringify(this.values));
     }
 
+    remove(contentReference) {
+        this.values.splice(this.values.indexOf(contentReference), 1);
+        localStorage.setItem(this._storageKey, JSON.stringify(this.values));
+    }
+
     loadStates() {
         const result = [];
 
@@ -64,7 +69,7 @@ class StateManager {
 
     remove(contentReference) {
         this.index.remove(contentReference);
-
+        this.states.splice(this.states.findIndex(s => contentReferenceEquals(s.contentReference, contentReference)), 1);
         this.unpersist(contentReference);
 
         this.triggerAnyStateChange();
@@ -114,7 +119,7 @@ class StateManager {
     }
 
     totalChanges() {
-        return this.states.filter(s => s.contentReference.newContentKey || s.changedFields.length > 0).length;
+        return this.states.filter(s => s.contentReference?.newContentKey || s.changedFields.length > 0).length;
     }
 
     _onAnyStateChangeCallbacks = [];
