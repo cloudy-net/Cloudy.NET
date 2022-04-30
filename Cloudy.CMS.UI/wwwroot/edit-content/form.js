@@ -1,9 +1,10 @@
-import { useEffect, useState } from '../lib/preact.hooks.module.js';
+import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import FormField from './form-field.js';
 import { createRef } from '../lib/preact.module.js';
 import stateManager from './state-manager.js';
+import stateContext from './state-context.js';
 
 function Form({ contentReference }) {
     const [fieldModels, setFieldModels] = useState();
@@ -33,8 +34,10 @@ function Form({ contentReference }) {
         };
     }, [contentReference]);
 
+    const state = useContext(stateContext);
+
     return html`
-        <div class='cloudy-ui-form' ref=${ref}>
+        <div class='cloudy-ui-form ${state.loading ? 'cloudy-ui-loading' : null}' ref=${ref}>
             ${fieldModels.map(fieldModel => html`
             <${FormField}
                 fieldModel=${fieldModel}
