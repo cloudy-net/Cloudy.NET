@@ -8,25 +8,8 @@ function StateContextProvider({ renderIf, children, contentReference }) {
         return;
     }
 
-    if (!contentReference) {
-        return;
-    }
-
-    const [state, setState] = useState(stateManager.getState(contentReference));
-
-    useEffect(() => {
-        const callback = () => {
-            setState({ ...stateManager.getState(contentReference) });
-        };
-        stateManager.onStateChange(contentReference, callback);
-
-        return () => {
-            stateManager.offStateChange(contentReference, callback);
-        };
-    }, []);
-
     return html`
-        <${StateContext.Provider} value=${state}>
+        <${StateContext.Provider} value=${stateManager.getState(contentReference)}>
             ${children}
         <//>
     `;

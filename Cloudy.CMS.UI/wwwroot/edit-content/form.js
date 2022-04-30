@@ -20,14 +20,16 @@ function Form({ contentReference }) {
     const ref = createRef(null);
 
     useEffect(() => {
+        const instance = ref.current;
+
         const callback = (event) => {
             stateManager.registerChange(contentReference, event.detail.change);
         };
 
-        ref.current.addEventListener('cloudy-ui-form-change', callback);
+        instance.addEventListener('cloudy-ui-form-change', callback);
 
         return () => {
-            ref.current.removeEventListener('cloudy-ui-form-change', callback);
+            instance.removeEventListener('cloudy-ui-form-change', callback);
         };
     }, [contentReference]);
 

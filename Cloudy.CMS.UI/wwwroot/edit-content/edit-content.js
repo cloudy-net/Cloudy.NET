@@ -15,12 +15,19 @@ function EditContent({ contentReference, onClose }) {
 
     const state = useContext(stateContext);
 
-    var hasChanges = state.changedFields.length > 0;
+    var hasChanges = state.changedFields?.length > 0;
+
+    const getTitle = () =>
+        state.loading ?
+            `Edit ${state.nameHint}` :
+            contentReference.keyValues ?
+                `Edit ${nameGetter.getNameOf(content, contentType)}` :
+                `New ${contentType.name} ${state.changedFields.length}`;
 
     return html`
         <cloudy-ui-blade>
             <cloudy-ui-blade-title>
-                <cloudy-ui-blade-title-text>${(contentReference.keyValues ? `Edit ${nameGetter.getNameOf(content, contentType)}` : `New ${contentType.name} ${state.changedFields.length}`)}<//>
+                <cloudy-ui-blade-title-text>${getTitle()}<//>
                 <cloudy-ui-blade-toolbar>
                     <${Urls} contentReference=${contentReference}/>
                 <//>

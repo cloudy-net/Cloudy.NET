@@ -47,7 +47,7 @@ class StateManager {
     index = new StatesIndex();
     states = this.index.loadStates();
 
-    createNewContent(contentType) {
+    createStateForNewContent(contentType) {
         const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, contentTypeId: contentType.id };
 
         this.index.add(contentReference);
@@ -57,6 +57,26 @@ class StateManager {
             referenceValues: {},
             referenceDate: new Date(),
             changedFields: [],
+        };
+        this.states.push(state);
+        this.persist(state);
+
+        this.triggerAnyStateChange();
+        this.triggerStateChange(contentReference);
+
+        return contentReference;
+    };
+
+    createStateForExistingContent(contentReference, nameHint) {
+        this.index.add(contentReference);
+
+        const state = {
+            contentReference,
+            loading: true,
+            nameHint,
+            referenceValues: null,
+            referenceDate: null,
+            changedFields: null,
         };
         this.states.push(state);
         this.persist(state);
@@ -79,13 +99,7 @@ class StateManager {
     };
 
     getState(contentReference) {
-        let state = this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
-
-        if (!state) {
-            throw 'Creating state from existing content is not implemented';
-        }
-
-        return state;
+        return this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
     }
 
     registerChange(contentReference, change) {
@@ -119,7 +133,7 @@ class StateManager {
     }
 
     totalChanges() {
-        return this.states.filter(s => s.contentReference?.newContentKey || s.changedFields.length > 0).length;
+        return this.states.filter(s => s.contentReference?.newContentKey || (s.changedFields && s.changedFields.length > 0)).length;
     }
 
     _onAnyStateChangeCallbacks = [];
