@@ -21,7 +21,7 @@ function EditContent({ contentReference, onClose }) {
         state.loading ?
             `Edit ${state.nameHint}` :
             contentReference.keyValues ?
-                `Edit ${nameGetter.getNameOf(content, contentType)}` :
+                `Edit ${nameGetter.getNameOfState(state, contentType)}` :
                 `New ${contentType.name} ${state.changedFields.length}`;
 
     return html`

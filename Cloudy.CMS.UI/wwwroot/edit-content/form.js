@@ -38,10 +38,8 @@ function Form({ contentReference }) {
 
     return html`
         <div class='cloudy-ui-form ${state.loading ? 'cloudy-ui-loading' : null}' ref=${ref}>
-            ${fieldModels.map(fieldModel => html`
-            <${FormField}
-                fieldModel=${fieldModel}
-            />`)}
+            ${fieldModels.map(fieldModel => html`<${FormField} fieldModel=${fieldModel} state=${state} />`)}
+            ${JSON.stringify(state, null, 2)}
         <//>
     `;
 }

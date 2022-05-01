@@ -1,20 +1,7 @@
+import contentGetter from "../data/content-getter.js";
+import arrayEquals from "../util/array-equals.js";
+
 const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
-
-const arrayEquals = (a, b) => {
-    if (a == null && b == null) {
-        return true;
-    }
-
-    if (a == null) {
-        return false;
-    }
-
-    if (b == null) {
-        return false;
-    }
-
-    return a.every((ai, i) => ai === b[i]);
-}
 
 const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.contentTypeId == b.contentTypeId;
 
@@ -67,7 +54,11 @@ class StateManager {
         return contentReference;
     };
 
-    createStateForExistingContent(contentReference, nameHint) {
+    getOrCreateStateForExistingContent(contentReference, nameHint) {
+        if (this.getState(contentReference)) {
+            return contentReference;
+        }
+
         this.index.add(contentReference);
 
         const state = {
@@ -83,6 +74,22 @@ class StateManager {
 
         this.triggerAnyStateChange();
         this.triggerStateChange(contentReference);
+
+        contentGetter.get(contentReference).then(content => {
+            const newState = {
+                ...state,
+                loading: false,
+                nameHint: null,
+                referenceValues: content,
+                referenceDate: new Date(),
+                changedFields: [],
+            };
+            this.states[this.states.indexOf(state)] = newState;
+            this.persist(newState);
+
+            this.triggerAnyStateChange();
+            this.triggerStateChange(contentReference);
+        });
 
         return contentReference;
     };

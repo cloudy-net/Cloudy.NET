@@ -1,6 +1,6 @@
 ﻿class ContentNotFound extends Error {
-    constructor(keyValues, contentTypeId) {
-        super(`Content ${JSON.stringify(keyValues)} of type ${contentTypeId} not found`);
+    constructor(contentReference) {
+        super(`Content ${JSON.stringify(contentReference.keyValues)} of type ${contentReference.contentTypeId} not found`);
     }
 }
 

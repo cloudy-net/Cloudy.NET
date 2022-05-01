@@ -1,7 +1,8 @@
 
+import propertyGetter from '../data/property-getter.js';
 import html from '../util/html.js';
 
-export default function SimpleField({ path, fieldModel, readonly, initialValue }) {
+export default function SimpleField({ fieldModel, state, path }) {
     if (fieldModel.descriptor.embeddedFormId && !fieldModel.descriptor.isSortable) {
         wrapperTag = 'fieldset';
         labelTag = 'legend';
@@ -12,7 +13,7 @@ export default function SimpleField({ path, fieldModel, readonly, initialValue }
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-simple">
             <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}</div>
-            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${initialValue} readonly=${readonly}/>
+            <${fieldModel.controlType} onchange=${emitEvent} fieldModel=${fieldModel} initialValue=${propertyGetter.get(state, path)}/>
         </div>
     `;
 }
