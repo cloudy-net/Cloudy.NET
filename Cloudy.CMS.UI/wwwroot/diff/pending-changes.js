@@ -5,6 +5,7 @@ import stateManager from '../edit-content/state-manager.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import nameGetter from '../data/name-getter.js';
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
+import diff from './lib/diff.js';
 
 function PendingChanges({ renderIf, onSelect }) {
     if (!renderIf) {
@@ -26,7 +27,8 @@ function PendingChanges({ renderIf, onSelect }) {
         .filter(g => g.changes.length);
 
     const getSubText = (state, contentType) => state.remove ? 'Slated for removal' : state.contentId ? `Changed fields: ${state.changedFields.length}` : `New ${contentType.lowerCaseName} (created ${state.referenceDate.toLocaleString()})`;
-    const renderItems = (states, contentType) => states.map(state => html`<${ListItem} text=${nameGetter.getNameOfState(state, contentType)} subtext=${getSubText(state, contentType)} onclick=${() => onSelect(state.contentReference)} />`)
+    const getName = (state, contentType) => diff(nameGetter.getNameOf(state.referenceValues, contentType) || '', nameGetter.getNameOfState(state, contentType) || '', 0).map(([state, segment]) => html`<span class=${state == diff.INSERT ? 'cloudy-ui-diff-insert' : state == diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`);
+    const renderItems = (states, contentType) => states.map(state => html`<${ListItem} text=${getName(state, contentType)} subtext=${getSubText(state, contentType)} onclick=${() => onSelect(state.contentReference)} />`)
 
     return html`
         <${Blade} title='Pending changes' onClose=${() => setShowDiffBlade(false)}>

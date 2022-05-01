@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
-import Diff from './lib/diff.js';
+import diff from './lib/diff.js';
 import stateManager from '../edit-content/state-manager.js';
 import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
@@ -14,7 +14,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
             <div class="cloudy-ui-form-field cloudy-ui-simple">
                 <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
                 <div class=cloudy-ui-form-input>
-                    ${Diff(initialValue || '', value || '', 0).map(([state, segment]) => html`<span class=${state == Diff.INSERT ? 'cloudy-ui-diff-insert' : state == Diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`)}
+                    ${diff(initialValue || '', value || '', 0).map(([state, segment]) => html`<span class=${state == diff.INSERT ? 'cloudy-ui-diff-insert' : state == diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`)}
                 <//>
             <//>
         `;
@@ -23,7 +23,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-simple">
             <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
-            <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${initialValue} />
+            <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${initialValue} readonly="true" />
         <//>
     `;
 }
