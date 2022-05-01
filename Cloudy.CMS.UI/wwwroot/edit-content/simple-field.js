@@ -8,7 +8,7 @@ export default function SimpleField({ fieldModel, state, path }) {
         labelTag = 'legend';
     }
 
-    const emitEvent = (element, val) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'simple', operation: 'set', initialValue, value: val } } }))
+    const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'simple', operation: 'set', value } } }))
 
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-simple">
