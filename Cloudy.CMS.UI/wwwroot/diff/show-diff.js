@@ -9,23 +9,23 @@ import contentTypeProvider from '../data/content-type-provider.js';
 import contentSaver from '../edit-content/content-saver.js';
 
 function DiffField({ fieldModel, change, initialValue, value }) {
-    if (change && fieldModel.descriptor.control && (fieldModel.descriptor.control.id == 'text' || fieldModel.descriptor.control.id == 'textarea')) {
+    //if (change && fieldModel.descriptor.control && (fieldModel.descriptor.control.id == 'text' || fieldModel.descriptor.control.id == 'textarea')) {
         return html`
-            <div class="cloudy-ui-form-field cloudy-ui-simple">
+            <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
                 <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
                 <div class=cloudy-ui-form-input>
                     ${diff(initialValue || '', value || '', 0).map(([state, segment]) => html`<span class=${state == diff.INSERT ? 'cloudy-ui-diff-insert' : state == diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`)}
                 <//>
             <//>
         `;
-    }
+    //}
 
-    return html`
-        <div class="cloudy-ui-form-field cloudy-ui-simple">
-            <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
-            <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${initialValue} readonly="true" />
-        <//>
-    `;
+    //return html`
+    //    <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
+    //        <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
+    //        <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${initialValue} readonly="true" />
+    //    <//>
+    //`;
 }
 
 function ShowDiff({ renderIf, contentReference, onClose }) {

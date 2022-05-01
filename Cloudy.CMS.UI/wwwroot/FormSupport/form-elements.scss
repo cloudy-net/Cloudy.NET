@@ -52,6 +52,10 @@ fieldset.cloudy-ui-form-field {
         color: black;
     }
 
+    .cloudy-ui-form-field.cloudy-ui-readonly:hover > & {
+        color: rgba(0, 0, 0, 0.54);
+    }
+
     .cloudy-ui-form-field:focus-within > & {
         color: $bright-blue;
     }
@@ -87,6 +91,11 @@ fieldset.cloudy-ui-form-field {
     .cloudy-ui-form-field.cloudy-ui-simple:hover &,
     &:hover {
         border-bottom-color: black;
+    }
+
+    .cloudy-ui-form-field.cloudy-ui-simple.cloudy-ui-readonly:hover &,
+    .cloudy-ui-form-field.cloudy-ui-readonly &:hover {
+        border-bottom-color: rgba(0, 0, 0, 0.42);
     }
 
     &:focus,

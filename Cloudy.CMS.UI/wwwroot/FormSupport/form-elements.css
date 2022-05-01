@@ -39,6 +39,9 @@ fieldset.cloudy-ui-form-field {
 .cloudy-ui-form-field:hover > .cloudy-ui-form-field-label {
   color: black;
 }
+.cloudy-ui-form-field.cloudy-ui-readonly:hover > .cloudy-ui-form-field-label {
+  color: rgba(0, 0, 0, 0.54);
+}
 .cloudy-ui-form-field:focus-within > .cloudy-ui-form-field-label {
   color: #1976d2;
 }
@@ -68,6 +71,9 @@ fieldset.cloudy-ui-form-field > .cloudy-ui-form-field-label {
 }
 .cloudy-ui-form-field.cloudy-ui-simple:hover .cloudy-ui-form-input, .cloudy-ui-form-input:hover {
   border-bottom-color: black;
+}
+.cloudy-ui-form-field.cloudy-ui-simple.cloudy-ui-readonly:hover .cloudy-ui-form-input, .cloudy-ui-form-field.cloudy-ui-readonly .cloudy-ui-form-input:hover {
+  border-bottom-color: rgba(0, 0, 0, 0.42);
 }
 .cloudy-ui-form-input:focus, .cloudy-ui-form-field.cloudy-ui-simple:hover .cloudy-ui-form-input:focus {
   outline: none;
