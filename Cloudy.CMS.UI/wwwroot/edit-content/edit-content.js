@@ -5,6 +5,7 @@ import Urls from './urls.js';
 import Form from './form.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import stateContext from './state-context.js';
+import Blade from '../components/blade/blade.js';
 
 function EditContent({ contentReference, onClose }) {
     if (!contentReference) {
@@ -24,19 +25,14 @@ function EditContent({ contentReference, onClose }) {
                 `Edit ${nameGetter.getNameOfState(state, contentType)}` :
                 `New ${contentType.name} ${state.changedFields.length}`;
 
+    const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
+
     return html`
-        <cloudy-ui-blade>
-            <cloudy-ui-blade-title>
-                <cloudy-ui-blade-title-text>${getTitle()}<//>
-                <cloudy-ui-blade-toolbar>
-                    <${Urls} contentReference=${contentReference}/>
-                <//>
-                <cloudy-ui-blade-close onclick=${() => onClose()}><//>
-            <//>
+        <${Blade} title=${getTitle()} toolbar=${toolbar} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
                 <${Form} contentReference=${contentReference}/>
             <//>
-            <cloudy-ui-blade-footer style="">
+            <cloudy-ui-blade-footer>
                 <cloudy-ui-button disabled=${!hasChanges} style="margin-left: auto;" onclick=${() => reviewChanges()}>Review changes</cloudy-ui-button>
                 <cloudy-ui-button class="primary" disabled=${!hasChanges} style="margin-left: 10px;" onclick=${() => saveNow()}>Save now</cloudy-ui-button>
             </cloudy-ui-blade-footer>
