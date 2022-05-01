@@ -7,7 +7,7 @@ import nameGetter from '../data/name-getter.js';
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import diff from './lib/diff.js';
 
-function PendingChanges({ renderIf, onSelect }) {
+function PendingChanges({ renderIf, onSelect, onClose }) {
     if (!renderIf) {
         return;
     }
@@ -31,7 +31,7 @@ function PendingChanges({ renderIf, onSelect }) {
     const renderItems = (states, contentType) => states.map(state => html`<${ListItem} text=${getName(state, contentType)} subtext=${getSubText(state, contentType)} onclick=${() => onSelect(state.contentReference)} />`)
 
     return html`
-        <${Blade} title='Pending changes' onClose=${() => setShowDiffBlade(false)}>
+        <${Blade} title='Pending changes' onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
                 ${!groups.length ? html`<cloudy-ui-list-sub-header>No more pending changes<//>` : null}
                 ${groups.length ? groups.map(group => html`${groups.length > 1 ?
