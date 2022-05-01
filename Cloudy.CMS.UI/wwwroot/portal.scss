@@ -202,11 +202,6 @@ cloudy-ui-app {
 @media(min-width: $screen-tn) {
     cloudy-ui-app {
         top: 64px;
-        right: auto;
-        padding-top: 8px;
-        padding-right: 8px;
-        padding-bottom: 8px;
-        padding-left: 8px;
     }
 }
 
@@ -220,7 +215,6 @@ cloudy-ui-blade {
     position: relative;
     display: none;
     min-width: 0;
-    border-radius: 4px;
     background: white;
 
     &:last-child {
@@ -243,12 +237,8 @@ cloudy-ui-blade {
         transition-duration: 0.5s;
         box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
 
-        &.cloudy-ui-fullwidth {
-            width: 100vw;
-        }
-
-        & + & {
-            margin-left: 16px;
+        &.cloudy-ui-blade-grow {
+            flex-grow: 1;
         }
     }
 }

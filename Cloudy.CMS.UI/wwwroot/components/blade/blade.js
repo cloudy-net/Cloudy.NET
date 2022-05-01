@@ -1,8 +1,8 @@
 ﻿import html from '../../util/html.js';
 
-function Blade({ onClose, title, toolbar, children }) {
+function Blade({ cssClass, onClose, title, toolbar, children }) {
     return html`
-        <cloudy-ui-blade>
+        <cloudy-ui-blade class=${cssClass}>
             <cloudy-ui-blade-title>
                 <cloudy-ui-blade-title-text>${title}<//>
                 <cloudy-ui-blade-toolbar>${toolbar}<//>
