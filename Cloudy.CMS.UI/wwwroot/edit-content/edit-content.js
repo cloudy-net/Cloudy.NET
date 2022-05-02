@@ -22,7 +22,7 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
         state.loading ?
             `Edit ${state.nameHint}` :
             contentReference.keyValues ?
-                `Edit ${nameGetter.getNameOfState(state, contentType)}` :
+                `Edit ${nameGetter.getNameOf(state.referenceValues, contentType)}` :
                 `New ${contentType.name} ${state.changedFields.length}`;
 
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
