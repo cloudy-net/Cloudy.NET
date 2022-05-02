@@ -46,7 +46,7 @@ function App({ title }) {
         <${PopupMenuContextProvider}>
             <cloudy-ui-portal>
                 <cloudy-ui-portal-nav>
-                    <cloudy-ui-portal-nav-title>${title} (${JSON.stringify(listingChanges)})<//>
+                    <cloudy-ui-portal-nav-title>${title}<//>
                     <div>
                         <${TotalChangesContextProvider}>
                             <${TotalChangesButton} onClick=${() => { listContentTypes(false); listContent(null); editContent(null); listChanges(true); }}/>
