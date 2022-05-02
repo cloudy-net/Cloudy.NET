@@ -7,7 +7,7 @@ import contentTypeProvider from '../data/content-type-provider.js';
 import stateContext from './state-context.js';
 import Blade from '../components/blade/blade.js';
 
-function EditContent({ contentReference, onClose, onReviewChanges }) {
+function EditContent({ contentReference, onClose, canDiff, onDiff }) {
     if (!contentReference) {
         return;
     }
@@ -26,6 +26,7 @@ function EditContent({ contentReference, onClose, onReviewChanges }) {
                 `New ${contentType.name} ${state.changedFields.length}`;
 
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
+    const diffButton = canDiff ? html`<cloudy-ui-button disabled=${!hasChanges} onclick=${() => onDiff()}>Review changes</cloudy-ui-button>` : null
 
     return html`
         <${Blade} scrollIntoView=${contentReference} title=${getTitle()} toolbar=${toolbar} onClose=${() => onClose()}>
@@ -33,8 +34,8 @@ function EditContent({ contentReference, onClose, onReviewChanges }) {
                 <${Form} contentReference=${contentReference}/>
             <//>
             <cloudy-ui-blade-footer>
-                <cloudy-ui-button disabled=${!hasChanges} style="margin-left: auto;" onclick=${() => onReviewChanges()}>Review changes</cloudy-ui-button>
-                <cloudy-ui-button class="primary" disabled=${!hasChanges} style="margin-left: 10px;" onclick=${() => saveNow()}>Save now</cloudy-ui-button>
+                ${diffButton}
+                <cloudy-ui-button class="primary" disabled=${!hasChanges} onclick=${() => saveNow()}>Save now</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;

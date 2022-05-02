@@ -28,7 +28,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     //`;
 }
 
-function ShowDiff({ contentReference, onClose, onEdit }) {
+function ShowDiff({ contentReference, onClose, canEdit, onEdit }) {
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
@@ -65,6 +65,8 @@ function ShowDiff({ contentReference, onClose, onEdit }) {
         onClose();
     }
 
+    const editButton = canEdit ? html`<cloudy-ui-button tabindex="0" onclick=${() => onEdit()}>Edit</cloudy-ui-button>` : null;
+
     return html`
         <${Blade} scrollIntoView=${contentReference} title=${nameGetter.getNameOfState(state, contentType)} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
@@ -78,8 +80,8 @@ function ShowDiff({ contentReference, onClose, onEdit }) {
                 <//>
             <//>
             <cloudy-ui-blade-footer>
-                <cloudy-ui-button tabindex="0" style="margin-left: auto;" onclick=${() => onEdit()}>Edit</cloudy-ui-button>
-                <cloudy-ui-button tabindex="0" class="primary" style="margin-left: 10px;" onclick=${() => save()}>Save</cloudy-ui-button>
+                ${editButton}
+                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()}>Save</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;

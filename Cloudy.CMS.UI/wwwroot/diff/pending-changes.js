@@ -38,7 +38,7 @@ function PendingChanges({ renderIf, onSelect, onClose }) {
                     html`<cloudy-ui-list-sub-header>${group.contentType.name}<//>` : null}${renderItems(group.changes, group.contentType)}`) : null}
             <//>
             <cloudy-ui-blade-footer>
-                <cloudy-ui-button tabindex="0" class="primary" style="margin-left: auto;" disabled=${!groups.length} onclick=${() => saveAll()}>Save all</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" class="primary" disabled=${!groups.length} onclick=${() => saveAll()}>Save all</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;
