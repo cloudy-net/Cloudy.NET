@@ -99,7 +99,7 @@ cloudy-ui-portal-nav {
         display: flex;
         align-items: center;
         height: 64px;
-        padding: 0 12px;
+        padding: 0 16px;
     }
 }
 
@@ -132,10 +132,11 @@ cloudy-ui-portal-nav-toggle {
 
 cloudy-ui-portal-nav-title {
     flex-grow: 1;
-    margin-left: 16px;
+    margin-left: 8px;
     font-size: 1.25rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 500;
+    color: rgba(0, 0, 0, 0.5);
     line-height: 1.6;
     letter-spacing: 0.0075em;
 }
