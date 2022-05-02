@@ -7,7 +7,7 @@ import contentTypeProvider from '../data/content-type-provider.js';
 import stateContext from './state-context.js';
 import Blade from '../components/blade/blade.js';
 
-function EditContent({ contentReference, onClose }) {
+function EditContent({ contentReference, onClose, onReviewChanges }) {
     if (!contentReference) {
         return;
     }
@@ -33,7 +33,7 @@ function EditContent({ contentReference, onClose }) {
                 <${Form} contentReference=${contentReference}/>
             <//>
             <cloudy-ui-blade-footer>
-                <cloudy-ui-button disabled=${!hasChanges} style="margin-left: auto;" onclick=${() => reviewChanges()}>Review changes</cloudy-ui-button>
+                <cloudy-ui-button disabled=${!hasChanges} style="margin-left: auto;" onclick=${() => onReviewChanges()}>Review changes</cloudy-ui-button>
                 <cloudy-ui-button class="primary" disabled=${!hasChanges} style="margin-left: 10px;" onclick=${() => saveNow()}>Save now</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>

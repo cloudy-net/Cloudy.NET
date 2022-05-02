@@ -44,7 +44,7 @@ function App({ title }) {
                     <${ListContentTypes} renderIf=${!listingChanges} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
                     <${ListContent} renderIf=${!listingChanges} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(contentStateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(contentStateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
                     <${StateContextProvider} renderIf=${!listingChanges && editingContent} contentReference=${editingContent}>
-                        <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)}/>
+                        <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)} onReviewChanges=${() => setDiffContentReference(editingContent)}/>
                     <//>
 
                     <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => setDiffContentReference(contentReference)} onClose=${() => { listChanges(null); setDiffContentReference(null) }}/>
