@@ -8,11 +8,10 @@ function ShowDiffContextProvider({ renderIf, children, contentReference }) {
         return;
     }
 
-    const state = stateManager.getState(contentReference);
-    const [trigger, setTrigger] = useState(0);
+    const [state, setState] = useState(stateManager.getState(contentReference));
 
     useEffect(() => {
-        const callback = () => setTrigger(trigger + 1);
+        const callback = () => setState({ ...stateManager.getState(contentReference) });
         stateManager.onStateChange(state.contentReference, callback);
 
         return () => {
@@ -21,7 +20,7 @@ function ShowDiffContextProvider({ renderIf, children, contentReference }) {
     }, [contentReference]);
 
     return html`
-        <${ShowDiffContext.Provider} value=${[state, trigger]}>
+        <${ShowDiffContext.Provider} value=${state}>
             ${children}
         <//>
     `;

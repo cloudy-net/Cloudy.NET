@@ -1,5 +1,5 @@
 ﻿import html from '../util/html.js';
-import { useEffect, useState, useCallback } from '../lib/preact.hooks.module.js';
+import { useEffect, useState, useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import diff from './lib/diff.js';
@@ -7,6 +7,7 @@ import stateManager from '../edit-content/state-manager.js';
 import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import contentSaver from '../edit-content/content-saver.js';
+import showDiffContext from './show-diff-context.js';
 
 function DiffField({ fieldModel, change, initialValue, value }) {
     //if (change && fieldModel.descriptor.control && (fieldModel.descriptor.control.id == 'text' || fieldModel.descriptor.control.id == 'textarea')) {
@@ -47,7 +48,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit }) {
     }, []);
 
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
-    const state = stateManager.getState(contentReference);
+    const state = useContext(showDiffContext);
 
     const getPendingValue = key => {
         const changedField = state.changedFields.find(f => f.path.length == 1 && f.path[0] == key && f.type == 'simple' && f.operation == 'set');
