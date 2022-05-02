@@ -28,7 +28,19 @@ function App({ title }) {
     const [listingContent, listContent] = useState(null);
     const [editingContent, editContent] = useState(null);
     const [listingChanges, listChanges] = useState(false);
-    const [diffContentReference, setDiffContentReference] = useState(null);
+    const [showingDiff, showDiff] = useState(null);
+
+    const editContentBlade = html`
+        <${StateContextProvider} renderIf=${editingContent} contentReference=${editingContent}>
+            <${EditContent} contentReference=${editingContent} onClose=${() => { editContent(null); listingContent ? showDiff(null) : null; }} canDiff=${listingContent} onDiff=${() => showDiff(editingContent)}/>
+        <//>
+    `;
+
+    const showDiffBlade = html`
+        <${ShowDiffContextProvider} renderIf=${showingDiff} contentReference=${showingDiff}>
+            <${ShowDiff} contentReference=${showingDiff} onClose=${() => { showDiff(null); listingChanges ? editContent(null) : null }} canEdit=${listingChanges} onEdit=${() => editContent(showingDiff)}/>
+        <//>
+    `;
 
     return html`
         <${PopupMenuContextProvider}>
@@ -44,15 +56,9 @@ function App({ title }) {
                 <cloudy-ui-app>
                     <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
                     <${ListContent} renderIf=${listingContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(contentStateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(contentStateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
-                    <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => setDiffContentReference(contentReference)} onClose=${() => { listChanges(null); setDiffContentReference(null) }}/>
+                    <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => showDiff(contentReference)} onClose=${() => { listChanges(null); showDiff(null); editContent(null); listContentTypes(true); }}/>
 
-                    <${StateContextProvider} renderIf=${editingContent} contentReference=${editingContent}>
-                        <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)} onReviewChanges=${() => setDiffContentReference(editingContent)}/>
-                    <//>
-
-                    <${ShowDiffContextProvider} renderIf=${diffContentReference} contentReference=${diffContentReference}>
-                        <${ShowDiff} contentReference=${diffContentReference} onClose=${() => setDiffContentReference(null)} onEdit=${() => { editContent(diffContentReference); setDiffContentReference(null); }}/>
-                    <//>
+                    ${listingChanges ? html`${showDiffBlade}${editContentBlade}` : html`${editContentBlade}${showDiffBlade}`}
                 <//>
             <//>
         <//>
