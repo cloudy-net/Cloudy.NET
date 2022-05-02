@@ -40,11 +40,11 @@ jobs:
               exit
             fi
             echo "Creating container"
-            az storage container create -n $CONTAINER_NAME --account-name cloudycmsui --public-access blob --account-key $key
+            az storage container create -n $CONTAINER_NAME --account-name cloudyui --public-access blob --account-key $key
             echo "Uploading JavaScript"
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js --account-key $key
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudyui -s "Cloudy.CMS.UI/wwwroot" --pattern *.js --account-key $key
             echo "Uploading CSS"
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.css --account-key $key
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudyui -s "Cloudy.CMS.UI/wwwroot" --pattern *.css --account-key $key
             echo "Uploading SVGs"
-            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudycmsui -s "Cloudy.CMS.UI/wwwroot" --pattern *.svg --account-key $key
+            az storage blob upload-batch -d $CONTAINER_NAME --account-name cloudyui -s "Cloudy.CMS.UI/wwwroot" --pattern *.svg --account-key $key
 

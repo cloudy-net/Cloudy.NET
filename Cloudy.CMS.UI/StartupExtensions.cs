@@ -61,7 +61,7 @@ namespace Microsoft.AspNetCore.Builder
 
             var containerName = $"v-{version.Major}-{version.Minor}-{version.Build}";
 
-            app.UseCloudyAdminStaticFilesFromUrl($"https://cloudycmsui.blob.core.windows.net/{containerName}");
+            app.UseCloudyAdminStaticFilesFromUrl($"https://cloudyui.blob.core.windows.net/{containerName}");
         }
 
         public static void UseCloudyAdminStaticFilesFromUrl(this IApplicationBuilder app, string url)
