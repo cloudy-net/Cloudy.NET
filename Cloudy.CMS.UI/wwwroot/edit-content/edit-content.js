@@ -26,7 +26,7 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
                 `New ${contentType.name} ${state.changedFields.length}`;
 
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
-    const diffButton = canDiff ? html`<cloudy-ui-button disabled=${!hasChanges} onclick=${() => onDiff()}>Review changes</cloudy-ui-button>` : null
+    const diffButton = canDiff ? html`<cloudy-ui-button disabled=${!hasChanges} onclick=${() => onDiff()}>${hasChanges ? 'Review' : 'No'} changes</cloudy-ui-button>` : null
 
     return html`
         <${Blade} scrollIntoView=${contentReference} title=${getTitle()} toolbar=${toolbar} onClose=${() => onClose()}>
