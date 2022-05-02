@@ -1,4 +1,4 @@
-import { useContext } from '../lib/preact.hooks.module.js';
+import { useContext, useEffect } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
 import nameGetter from '../data/name-getter.js';
 import Urls from './urls.js';
@@ -28,7 +28,7 @@ function EditContent({ contentReference, onClose, onReviewChanges }) {
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
 
     return html`
-        <${Blade} title=${getTitle()} toolbar=${toolbar} onClose=${() => onClose()}>
+        <${Blade} scrollIntoView=${contentReference} title=${getTitle()} toolbar=${toolbar} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
                 <${Form} contentReference=${contentReference}/>
             <//>
