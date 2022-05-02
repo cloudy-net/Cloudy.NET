@@ -28,11 +28,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     //`;
 }
 
-function ShowDiff({ renderIf, contentReference, onClose }) {
-    if (!renderIf) {
-        return;
-    }
-
+function ShowDiff({ contentReference, onClose, onEdit }) {
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
@@ -82,7 +78,7 @@ function ShowDiff({ renderIf, contentReference, onClose }) {
                 <//>
             <//>
             <cloudy-ui-blade-footer>
-                <cloudy-ui-button tabindex="0" style="margin-left: auto;" onclick=${() => undo()}>Undo changes</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" style="margin-left: auto;" onclick=${() => onEdit()}>Edit</cloudy-ui-button>
                 <cloudy-ui-button tabindex="0" class="primary" style="margin-left: 10px;" onclick=${() => save()}>Save</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>

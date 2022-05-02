@@ -24,6 +24,7 @@ function App({ title }) {
         return;
     }
 
+    const [listingContentTypes, listContentTypes] = useState(true);
     const [listingContent, listContent] = useState(null);
     const [editingContent, editContent] = useState(null);
     const [listingChanges, listChanges] = useState(false);
@@ -33,23 +34,24 @@ function App({ title }) {
         <${PopupMenuContextProvider}>
             <cloudy-ui-portal>
                 <cloudy-ui-portal-nav>
-                    <cloudy-ui-portal-nav-title>${title}<//>
+                    <cloudy-ui-portal-nav-title>${title} (${JSON.stringify(listingChanges)})<//>
                     <div>
                         <${TotalChangesContextProvider}>
-                            <${TotalChangesButton} onClick=${() => listChanges(true)}/>
+                            <${TotalChangesButton} onClick=${() => { listContentTypes(false); listContent(null); editContent(null); listChanges(true); }}/>
                         <//>
                     </div>
                 <//>
                 <cloudy-ui-app>
-                    <${ListContentTypes} renderIf=${!listingChanges} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
-                    <${ListContent} renderIf=${!listingChanges} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(contentStateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(contentStateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
-                    <${StateContextProvider} renderIf=${!listingChanges && editingContent} contentReference=${editingContent}>
+                    <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
+                    <${ListContent} renderIf=${listingContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(contentStateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(contentStateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
+                    <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => setDiffContentReference(contentReference)} onClose=${() => { listChanges(null); setDiffContentReference(null) }}/>
+
+                    <${StateContextProvider} renderIf=${editingContent} contentReference=${editingContent}>
                         <${EditContent} contentReference=${editingContent} onClose=${() => editContent(null)} onReviewChanges=${() => setDiffContentReference(editingContent)}/>
                     <//>
 
-                    <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => setDiffContentReference(contentReference)} onClose=${() => { listChanges(null); setDiffContentReference(null) }}/>
                     <${ShowDiffContextProvider} renderIf=${diffContentReference} contentReference=${diffContentReference}>
-                        <${ShowDiff} renderIf=${diffContentReference} contentReference=${diffContentReference} onClose=${() => setDiffContentReference(null)}/>
+                        <${ShowDiff} contentReference=${diffContentReference} onClose=${() => setDiffContentReference(null)} onEdit=${() => { editContent(diffContentReference); setDiffContentReference(null); }}/>
                     <//>
                 <//>
             <//>

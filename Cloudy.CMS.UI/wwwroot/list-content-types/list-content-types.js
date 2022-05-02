@@ -1,11 +1,10 @@
-﻿import { useState, useEffect } from '../lib/preact.hooks.module.js';
-import html from '../util/html.js';
+﻿import html from '../util/html.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
 
 function ListContentTypes({ renderIf, activeContentType, onSelectContentType }) {
-    if (!renderIf) {
+    if (!renderIf && typeof renderIf != 'undefined') {
         return;
     }
 
@@ -16,7 +15,7 @@ function ListContentTypes({ renderIf, activeContentType, onSelectContentType }) 
     }
 
     if (activeContentType) {
-        return null;
+        return;
     }
 
     return html`

@@ -8,11 +8,7 @@ import Button from '../components/button/button.js';
 import Blade from '../components/blade/blade.js';
 
 function ListContent({ renderIf, contentType, activeContentReference, onEditContent, onNewContent, onClose }) {
-    if (!renderIf) {
-        return;
-    }
-
-    if (!contentType) {
+    if (!renderIf && typeof renderIf != 'undefined') {
         return;
     }
 
