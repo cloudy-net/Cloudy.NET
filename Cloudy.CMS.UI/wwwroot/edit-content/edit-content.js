@@ -35,7 +35,6 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
             <//>
             <cloudy-ui-blade-footer>
                 ${diffButton}
-                <cloudy-ui-button class="primary" disabled=${!hasChanges} onclick=${() => saveNow()}>Save now</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;
