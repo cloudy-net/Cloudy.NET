@@ -70,7 +70,7 @@ function ShowDiff({ renderIf, contentReference, onClose }) {
     }
 
     return html`
-        <${Blade} title=${nameGetter.getNameOfState(state, contentType)} onClose=${() => onClose()}>
+        <${Blade} scrollIntoView=${contentReference} title=${nameGetter.getNameOfState(state, contentType)} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
                 <div class="cloudy-ui-form">
                     ${fieldModels.map(fieldModel => html`<${DiffField}
