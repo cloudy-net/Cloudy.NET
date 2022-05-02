@@ -82,7 +82,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit }) {
             <//>
             <cloudy-ui-blade-footer>
                 ${editButton}
-                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()}>Save</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.changedFields.length}>Save</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;
