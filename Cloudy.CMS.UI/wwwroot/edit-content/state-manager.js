@@ -110,7 +110,7 @@ class StateManager {
     }
 
     registerChange(contentReference, change) {
-        const state = this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
+        const state = this.getState(contentReference);
 
         let changedField = state.changedFields.find(f => arrayEquals(change.path, f.path));
 
@@ -122,6 +122,10 @@ class StateManager {
 
             if (change.operation == 'set') {
                 changedField.value = change.value;
+            }
+
+            if (state.referenceValues && (state.referenceValues[change.path[0]] === null && change.value === '' || state.referenceValues[change.path[0]] == change.value)) {
+                state.changedFields.splice(state.changedFields.indexOf(changedField), 1);
             }
         }
 
