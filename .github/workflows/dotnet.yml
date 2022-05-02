@@ -35,7 +35,7 @@ jobs:
       with:
         inlineScript: |
             CONTAINER_NAME=v-$(grep '<Version>' < Cloudy.CMS/Cloudy.CMS.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/' | tr . -)
-            if [ $(az storage container exists --name $CONTAINER_NAME --account-name cloudycmsui --account-key $key | jq .exists) == "true" ]; then
+            if [ $(az storage container exists --name $CONTAINER_NAME --account-name cloudyui --account-key $key | jq .exists) == "true" ]; then
               echo "Container already exists"
               exit
             fi
