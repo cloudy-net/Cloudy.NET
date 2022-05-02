@@ -59,6 +59,7 @@ cloudy-ui-list-item:hover > cloudy-ui-list-item-content, cloudy-ui-list-item.clo
 
 cloudy-ui-list-item-text-container {
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   justify-content: center;
   padding: 12px 0;
@@ -76,6 +77,21 @@ cloudy-ui-list-item-sub-text {
   color: rgba(0, 0, 0, 0.54);
   line-height: 1.43;
   letter-spacing: 0.01071em;
+}
+
+cloudy-ui-list-item-badge {
+  flex-shrink: 0;
+  display: inline-block;
+  position: relative;
+  align-self: center;
+  justify-self: flex-end;
+  border-radius: 50%;
+}
+cloudy-ui-list-item-badge.cloudy-ui-modified {
+  color: #ff6600;
+}
+cloudy-ui-list-item-badge.cloudy-ui-modified:before {
+  content: "M";
 }
 
 cloudy-ui-list-item-folder {

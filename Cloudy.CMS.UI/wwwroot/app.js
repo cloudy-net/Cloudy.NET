@@ -12,6 +12,7 @@ import PendingChanges from './diff/pending-changes.js';
 import contentTypeProvider from './data/content-type-provider.js';
 import ShowDiff from './diff/show-diff.js';
 import ShowDiffContextProvider from './diff/show-diff-context-provider.js';
+import ListContentContextProvider from './list-content-types/list-content-context-provider.js';
 
 function App({ title }) {
     const [contentTypesHasLoaded, setContentTypesHasLoaded] = useState(false);
@@ -55,7 +56,9 @@ function App({ title }) {
                 <//>
                 <cloudy-ui-app>
                     <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
-                    <${ListContent} renderIf=${listingContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(contentStateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(contentStateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
+                    <${ListContentContextProvider} renderIf=${listingContent}>
+                        <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(contentStateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(contentStateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
+                    <//>
                     <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => showDiff(contentReference)} onClose=${() => { listChanges(null); showDiff(null); editContent(null); listContentTypes(true); }}/>
 
                     ${listingChanges ? html`${showDiffBlade}${editContentBlade}` : html`${editContentBlade}${showDiffBlade}`}
