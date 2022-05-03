@@ -14,10 +14,7 @@ function Urls({ contentReference }) {
                 credentials: 'include',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    keyValues: contentReference.keyValues,
-                    contentTypeId: contentReference.contentTypeId
-                })
+                body: JSON.stringify(contentReference)
             },
             'Could not get URL'
         )

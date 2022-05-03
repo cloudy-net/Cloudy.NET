@@ -27,6 +27,16 @@ function ListContent({ contentType, activeContentReference, onEditContent, onNew
 
     const states = useContext(listContentContext);
 
+    const getName = item => {
+        const state = states.find(s => arrayEquals(s.contentReference.keyValues, item.Keys));
+
+        if(!state || state.loading){
+            return item.Name;
+        }
+
+        return nameGetter.getNameOf(state.referenceValues, contentType);
+    };
+
     const getBadges = item => {
         const state = states.find(s => arrayEquals(s.contentReference.keyValues, item.Keys));
 
@@ -44,7 +54,7 @@ function ListContent({ contentType, activeContentReference, onEditContent, onNew
 			        ${items.map(item => html`
                         <${ListItem}
                             active=${!activeContentReference?.newContentKey && item.Keys[0] == activeContentReference?.keyValues[0]}
-                            text=${nameGetter.getNameOf(item, contentType)}
+                            text=${getName(item)}
                             badges=${getBadges(item)}
                             onclick=${() => onEditContent({ keyValues: item.Keys, contentTypeId: item.ContentTypeId }, nameGetter.getNameOf(item, contentType))}
                         />
