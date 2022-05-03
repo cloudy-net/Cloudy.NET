@@ -6,7 +6,7 @@ import TotalChangesContextProvider from './edit-content/total-changes-context-pr
 import PopupMenuContextProvider from './components/popup-menu/popup-menu-context-provider.js';
 import TotalChangesButton from './diff/total-changes-button.js';
 import { useEffect, useState } from './lib/preact.hooks.module.js';
-import contentStateManager from './edit-content/state-manager.js';
+import stateManager from './edit-content/state-manager.js';
 import StateContextProvider from './edit-content/state-context-provider.js';
 import PendingChanges from './diff/pending-changes.js';
 import contentTypeProvider from './data/content-type-provider.js';
@@ -39,7 +39,7 @@ function App({ title }) {
 
     const showDiffBlade = html`
         <${ShowDiffContextProvider} renderIf=${showingDiff} contentReference=${showingDiff}>
-            <${ShowDiff} contentReference=${showingDiff} onClose=${() => { showDiff(null); listingChanges ? editContent(null) : null }} canEdit=${listingChanges} onEdit=${() => editContent(showingDiff)}/>
+            <${ShowDiff} contentReference=${showingDiff} onClose=${() => { showDiff(null); listingChanges ? editContent(null) : null }} canEdit=${listingChanges} onEdit=${() => editContent(showingDiff)} onSave=${() => { stateManager.save([showingDiff]); }}/>
         <//>
     `;
 
@@ -57,7 +57,7 @@ function App({ title }) {
                 <cloudy-ui-app>
                     <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
                     <${ListContentContextProvider} renderIf=${listingContent}>
-                        <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(contentStateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(contentStateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
+                        <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(stateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(stateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
                     <//>
                     <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => showDiff(contentReference)} onClose=${() => { listChanges(null); showDiff(null); editContent(null); listContentTypes(true); }}/>
 

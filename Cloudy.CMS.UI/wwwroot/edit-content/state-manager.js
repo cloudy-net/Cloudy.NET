@@ -1,5 +1,6 @@
 import contentGetter from "../data/content-getter.js";
 import arrayEquals from "../util/array-equals.js";
+import contentSaver from "./content-saver.js";
 
 const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
@@ -75,7 +76,14 @@ class StateManager {
         this.triggerAnyStateChange();
         this.triggerStateChange(contentReference);
 
+        this.loadStateForContent(contentReference);
+
+        return contentReference;
+    };
+
+    loadStateForContent(contentReference){
         contentGetter.get(contentReference).then(content => {
+            const state = this.getState(contentReference);
             const newState = {
                 ...state,
                 loading: false,
@@ -90,9 +98,14 @@ class StateManager {
             this.triggerAnyStateChange();
             this.triggerStateChange(contentReference);
         });
+    }
 
-        return contentReference;
-    };
+    save(contentReferences){
+        contentSaver.save(contentReferences.map(c => this.getState(c)));
+        for(let contentReference of contentReferences){
+            this.loadStateForContent(contentReference);
+        }
+    }
 
     remove(contentReference) {
         this.index.remove(contentReference);

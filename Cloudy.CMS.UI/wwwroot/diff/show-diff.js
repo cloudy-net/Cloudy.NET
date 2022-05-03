@@ -29,7 +29,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     //`;
 }
 
-function ShowDiff({ contentReference, onClose, canEdit, onEdit }) {
+function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
     const [fieldModels, setFieldModels] = useState();
 
     useEffect(() => {
@@ -62,8 +62,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit }) {
 
     const save = async () => {
         await contentSaver.save([state]);
-        stateManager.remove(contentReference);
-        onClose();
+        onSave();
     }
 
     const editButton = canEdit ? html`<cloudy-ui-button tabindex="0" onclick=${() => onEdit()}>Edit</cloudy-ui-button>` : null;
