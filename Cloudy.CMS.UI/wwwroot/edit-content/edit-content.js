@@ -34,6 +34,7 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
                 <${Form} contentReference=${contentReference}/>
             <//>
             <cloudy-ui-blade-footer>
+                ${hasChanges ? html`<cloudy-ui-blade-footer-note>Draft saved locally.<//>` : null}
                 ${diffButton}
             </cloudy-ui-blade-footer>
         <//>

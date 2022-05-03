@@ -319,6 +319,11 @@ cloudy-ui-blade-content + cloudy-ui-blade-footer {
   border-bottom: none;
 }
 
+cloudy-ui-blade-footer-note {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
 /* LOADING STATE */
 .cloudy-ui-not-loading {
   transition: opacity 0.2s, filter 0.2s;
