@@ -1,4 +1,4 @@
-﻿import html from '../util/html.js';
+import html from '../util/html.js';
 import { useEffect, useState, useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
@@ -6,7 +6,6 @@ import diff from './lib/diff.js';
 import stateManager from '../edit-content/state-manager.js';
 import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
-import contentSaver from '../edit-content/content-saver.js';
 import showDiffContext from './show-diff-context.js';
 
 function DiffField({ fieldModel, change, initialValue, value }) {
@@ -61,7 +60,6 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
     };
 
     const save = async () => {
-        await contentSaver.save([state]);
         onSave();
     }
 

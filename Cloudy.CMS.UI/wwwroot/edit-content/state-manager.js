@@ -101,10 +101,13 @@ class StateManager {
     }
 
     save(contentReferences){
-        contentSaver.save(contentReferences.map(c => this.getState(c)));
-        for(let contentReference of contentReferences){
-            this.loadStateForContent(contentReference);
-        }
+        contentSaver
+            .save(contentReferences.map(c => this.getState(c)))
+            .then(() => {
+                for(let contentReference of contentReferences){
+                    this.loadStateForContent(contentReference);
+                }
+            });
     }
 
     remove(contentReference) {
