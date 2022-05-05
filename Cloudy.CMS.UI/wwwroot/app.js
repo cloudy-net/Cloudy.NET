@@ -57,7 +57,7 @@ function App({ title }) {
                 <cloudy-ui-app>
                     <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
                     <${ListContentContextProvider} renderIf=${listingContent}>
-                        <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => editContent(stateManager.getOrCreateStateForExistingContent(contentReference, nameHint))} onNewContent=${contentType => editContent(stateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
+                        <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => { editContent(stateManager.getOrCreateStateForExistingContent(contentReference, nameHint)); showDiff(null); }} onNewContent=${contentType => editContent(stateManager.createStateForNewContent(contentType))} onClose=${() => listContent(null)}/>
                     <//>
                     <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => showDiff(contentReference)} onClose=${() => { listChanges(null); showDiff(null); editContent(null); listContentTypes(true); }}/>
 
