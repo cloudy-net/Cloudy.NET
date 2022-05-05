@@ -13,9 +13,7 @@ function StateContextProvider({ renderIf, children, contentReference }) {
     useEffect(() => {
         setState(stateManager.getState(contentReference));
         
-        const callback = () => {
-            setState({ ...stateManager.getState(contentReference) });
-        };
+        const callback = () => setState({ ...stateManager.getState(contentReference) });
         stateManager.onStateChange(contentReference, callback);
 
         return () => {
