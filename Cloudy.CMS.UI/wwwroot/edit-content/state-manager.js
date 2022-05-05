@@ -103,9 +103,9 @@ class StateManager {
     save(contentReferences){
         contentSaver
             .save(contentReferences.map(c => this.getState(c)))
-            .then(() => {
-                for(let contentReference of contentReferences){
-                    this.loadStateForContent(contentReference);
+            .then(results => {
+                for(let result of results.filter(r => r.success)){
+                    this.loadStateForContent(result.contentReference);
                 }
             });
     }

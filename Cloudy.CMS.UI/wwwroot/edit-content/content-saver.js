@@ -25,10 +25,12 @@ class ContentSaver {
                 notificationManager.addNotification((item) => item.setText(`Error saving:`, errors));
             });
 
-            return;
+            return response.results;
         }
 
         notificationManager.addNotification((item) => item.setText('Content has been saved.'));
+
+        return response.results;
     }
 }
 

@@ -25,6 +25,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IContentGetter ContentGetter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IFieldProvider FieldProvider { get; }
@@ -33,10 +34,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         IContentCreator ContentCreator { get; }
         IContentDeleter ContentDeleter { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator, IContentDeleter contentDeleter)
+        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IPrimaryKeyGetter primaryKeyGetter, IContentGetter contentGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IContentUpdater contentUpdater, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentCreator contentCreator, IContentDeleter contentDeleter)
         {
             ContentTypeProvider = contentTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
+            PrimaryKeyGetter = primaryKeyGetter;
             ContentGetter = contentGetter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
             FieldProvider = fieldProvider;
@@ -134,7 +136,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                     await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
                 }
 
-                result.Add(SaveContentResult.SuccessResult(contentType.Id, keyValues));
+                result.Add(SaveContentResult.SuccessResult(contentType.Id, PrimaryKeyGetter.Get(content)));
             }
 
             return new SaveContentResponse(result);
@@ -153,8 +155,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         public class SaveContentResult
         {
             public bool Success { get; private set; }
-            public string ContentTypeId { get; private set; }
-            public IEnumerable<object> KeyValues { get; private set; }
+            public ContentReference ContentReference { get; private set; }
             public IDictionary<string, IEnumerable<string>> ValidationErrors { get; private set; }
 
             public static SaveContentResult SuccessResult(string contentTypeId, IEnumerable<object> keyValues)
@@ -162,8 +163,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 return new SaveContentResult
                 {
                     Success = true,
-                    ContentTypeId = contentTypeId,
-                    KeyValues = keyValues?.ToList().AsReadOnly(),
+                    ContentReference = new ContentReference
+                    {
+                        ContentTypeId = contentTypeId,
+                        KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
+                    },
                 };
             }
 
@@ -172,8 +176,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 return new SaveContentResult
                 {
                     Success = false,
-                    ContentTypeId = contentTypeId,
-                    KeyValues = keyValues.ToList().AsReadOnly(),
+                    ContentReference = new ContentReference
+                    {
+                        ContentTypeId = contentTypeId,
+                        KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
+                    },
                     ValidationErrors = validationErrors.ToDictionary(e => e.Key, e => (IEnumerable<string>)e.Value.ToList().AsReadOnly()),
                 };
             }
