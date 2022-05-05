@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicControlMappingSupport;
 using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
@@ -20,6 +21,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     {
         ILogger Logger { get; }
         IContentTypeProvider ContentTypeProvider { get; }
+        IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
         IHumanizer Humanizer { get; }
@@ -27,10 +29,11 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         ISingularizer Singularizer { get; }
         IPolymorphicFormFinder PolymorphicFormFinder { get; }
 
-        public FieldController(ILogger<FieldController> logger, IContentTypeProvider contentTypeProvider, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer, IPolymorphicFormFinder polymorphicFormFinder)
+        public FieldController(ILogger<FieldController> logger, IContentTypeProvider contentTypeProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer, IPolymorphicFormFinder polymorphicFormFinder)
         {
             Logger = logger;
             ContentTypeProvider = contentTypeProvider;
+            PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             FieldProvider = fieldProvider;
             ControlMatcher = controlMatcher;
             Humanizer = humanizer;
@@ -41,10 +44,18 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
         public IEnumerable<FieldResponse> GetAllForForm(string id)
         {
+            var contentType = ContentTypeProvider.Get(id);
+            var primaryKeys = new HashSet<string>(PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(p => p.Name));
+
             var result = new List<FieldResponse>();
 
             foreach(var field in FieldProvider.GetAllFor(id))
             {
+                if (primaryKeys.Contains(field.Name))
+                {
+                    continue;
+                }
+
                 if (!field.AutoGenerate)
                 {
                     continue;
