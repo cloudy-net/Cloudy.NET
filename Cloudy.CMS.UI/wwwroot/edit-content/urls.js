@@ -19,11 +19,11 @@ function Urls({ contentReference }) {
             'Could not get URL'
         )
             .then(urls => setUrls(urls));
-    }, []);
+    }, [contentReference]);
 
     return html`
         <${PopupMenu} text='View'>
-            ${urls && urls.map(url => html`<${ListItem} text=${url}/>`)}
+            ${urls && urls.map(url => html`<${ListItem} link="/${url}" target="blank" text=${url}/>`)}
         <//>
     `;
 }

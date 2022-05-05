@@ -13,13 +13,13 @@ function ContextMenu(props) {
     `;
 }
 
-function PopupMenu(props) {
+function PopupMenu({ text, children }) {
     const [visible, setVisible] = useState(false);
 
     return html`
         <cloudy-ui-context-menu-outer>
-            <${Button} class=${visible ? 'cloudy-ui-active' : null} text=${props.text} onclick=${() => setVisible(!visible)}/>
-            ${visible && html`<${ContextMenu} children=${props.children}/>`}
+            <${Button} class=${visible ? 'cloudy-ui-active' : null} text=${text} onClick=${() => setVisible(!visible)}/>
+            ${visible && html`<${ContextMenu} children=${children}/>`}
         <//>
     `;
 }
