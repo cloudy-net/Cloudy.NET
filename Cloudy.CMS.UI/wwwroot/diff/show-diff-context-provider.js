@@ -1,4 +1,4 @@
-﻿import html from '../util/html.js';
+import html from '../util/html.js';
 import ShowDiffContext from './show-diff-context.js';
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import stateManager from '../edit-content/state-manager.js';
@@ -11,11 +11,13 @@ function ShowDiffContextProvider({ renderIf, children, contentReference }) {
     const [state, setState] = useState(stateManager.getState(contentReference));
 
     useEffect(() => {
+        setState(stateManager.getState(contentReference));
+
         const callback = () => setState({ ...stateManager.getState(contentReference) });
-        stateManager.onStateChange(state.contentReference, callback);
+        stateManager.onStateChange(contentReference, callback);
 
         return () => {
-            stateManager.offStateChange(state.contentReference, callback);
+            stateManager.offStateChange(contentReference, callback);
         };
     }, [contentReference]);
 
