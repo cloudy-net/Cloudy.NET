@@ -4,11 +4,11 @@ import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import stateManager from './state-manager.js';
 
 function TotalChangesContextProvider({ children }) {
-    const [totalChanges, setTotalChanges] = useState(stateManager.totalChanges());
+    const [totalChanges, setTotalChanges] = useState(stateManager.getAll().length);
 
     useEffect(() => {
         const callback = () => {
-            setTotalChanges(stateManager.totalChanges());
+            setTotalChanges(stateManager.getAll().length);
         };
         stateManager.onAnyStateChange(callback);
 
