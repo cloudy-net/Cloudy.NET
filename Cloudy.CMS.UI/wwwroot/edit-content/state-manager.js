@@ -6,39 +6,28 @@ const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16)
 
 const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.contentTypeId == b.contentTypeId;
 
-class StatesIndex {
-    _storageKey = "cloudy:statesIndex";
-    values = JSON.parse(localStorage.getItem(this._storageKey) || "[]");
-
-    add(contentReference) {
-        this.values.push(contentReference);
-        localStorage.setItem(this._storageKey, JSON.stringify(this.values));
-    }
-
-    remove(contentReference) {
-        this.values.splice(this.values.indexOf(contentReference), 1);
-        localStorage.setItem(this._storageKey, JSON.stringify(this.values));
-    }
+class StateManager {
+    indexStorageKey = "cloudy:statesIndex";
+    states = this.loadStates();
 
     loadStates() {
+        const index = JSON.parse(localStorage.getItem(this.indexStorageKey) || "[]");
+
         const result = [];
 
-        for (let contentReference of this.values) {
-            result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(contentReference)}`), (key, value) => key == 'referenceDate' ? new Date(value) : value));
+        for (let contentReference of index) {
+            result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(contentReference)}`), (key, value) => key == 'referenceDate' && value ? new Date(value) : value));
         }
         
         return result;
     }
-}
 
-class StateManager {
-    index = new StatesIndex();
-    states = this.index.loadStates();
+    getAll(){
+        return this.states.filter(state => state.changedFields?.length);
+    }
 
     createStateForNewContent(contentType) {
         const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, contentTypeId: contentType.id };
-
-        this.index.add(contentReference);
 
         const state = {
             contentReference,
@@ -59,8 +48,6 @@ class StateManager {
         if (this.getState(contentReference)) {
             return contentReference;
         }
-
-        this.index.add(contentReference);
 
         const state = {
             contentReference,
@@ -111,7 +98,6 @@ class StateManager {
     }
 
     remove(contentReference) {
-        this.index.remove(contentReference);
         this.states.splice(this.states.findIndex(s => contentReferenceEquals(s.contentReference, contentReference)), 1);
         this.unpersist(contentReference);
 
@@ -151,12 +137,22 @@ class StateManager {
         this.triggerStateChange(contentReference);
     }
 
+    updateIndex(){
+        localStorage.setItem(this.indexStorageKey, JSON.stringify(this.states.filter(state => state.changedFields?.length).map(state => state.contentReference)));
+    }
+    
     persist(state) {
-        localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
+        if(state.changedFields?.length){
+            localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
+        } else {
+            localStorage.removeItem(`cloudy:${JSON.stringify(state.contentReference)}`);
+        }
+        this.updateIndex();
     }
 
     unpersist(contentReference) {
         localStorage.removeItem(`cloudy:${JSON.stringify(contentReference)}`);
+        this.updateIndex();
     }
 
     totalChanges() {

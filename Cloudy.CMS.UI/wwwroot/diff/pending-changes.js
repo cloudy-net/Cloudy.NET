@@ -12,10 +12,10 @@ function PendingChanges({ renderIf, onSelect, onClose }) {
         return;
     }
 
-    const [states, setStates] = useState(stateManager.states);
+    const [states, setStates] = useState(stateManager.getAll());
 
     useEffect(() => {
-        const callback = () => setStates([...stateManager.states]);
+        const callback = () => setStates(stateManager.getAll());
         stateManager.onAnyStateChange(callback);
 
         return () => { stateManager.offAnyStateChange(callback); };

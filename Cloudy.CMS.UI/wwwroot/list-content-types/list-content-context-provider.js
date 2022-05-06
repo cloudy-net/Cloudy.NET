@@ -8,11 +8,11 @@ function ListContentContextProvider({ renderIf, children }) {
         return;
     }
 
-    const [states, setStates] = useState(stateManager.states);
+    const [states, setStates] = useState(stateManager.getAll());
 
     useEffect(() => {
         const callback = () => {
-            setStates([...stateManager.states]);
+            setStates(stateManager.getAll());
         };
         stateManager.onAnyStateChange(callback);
 
