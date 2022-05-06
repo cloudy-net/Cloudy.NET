@@ -155,10 +155,6 @@ class StateManager {
         this.updateIndex();
     }
 
-    totalChanges() {
-        return this.states.filter(s => s.contentReference?.newContentKey || (s.changedFields && s.changedFields.length > 0)).length;
-    }
-
     _onAnyStateChangeCallbacks = [];
 
     onAnyStateChange(callback) {
