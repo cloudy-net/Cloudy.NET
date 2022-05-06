@@ -4,7 +4,7 @@ import List from '../components/list/list.js';
 import ListItem from '../components/list/list-item.js';
 
 function ListContentTypes({ renderIf, activeContentType, onSelectContentType }) {
-    if (!renderIf && typeof renderIf != 'undefined') {
+    if (!renderIf) {
         return;
     }
 

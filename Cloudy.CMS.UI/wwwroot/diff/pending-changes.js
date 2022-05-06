@@ -8,7 +8,7 @@ import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import diff from './lib/diff.js';
 
 function PendingChanges({ renderIf, onSelect, onClose }) {
-    if (!renderIf && typeof renderIf != 'undefined') {
+    if (!renderIf) {
         return;
     }
 

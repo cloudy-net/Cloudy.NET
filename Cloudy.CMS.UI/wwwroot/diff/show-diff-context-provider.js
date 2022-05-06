@@ -4,7 +4,7 @@ import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import stateManager from '../edit-content/state-manager.js';
 
 function ShowDiffContextProvider({ renderIf, children, contentReference }) {
-    if (!renderIf && typeof renderIf != 'undefined') {
+    if (!renderIf) {
         return;
     }
 

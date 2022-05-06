@@ -4,7 +4,7 @@ import StateContext from './state-context.js';
 import stateManager from './state-manager.js';
 
 function StateContextProvider({ renderIf, children, contentReference }) {
-    if (!renderIf && typeof renderIf != 'undefined') {
+    if (!renderIf) {
         return;
     }
 
