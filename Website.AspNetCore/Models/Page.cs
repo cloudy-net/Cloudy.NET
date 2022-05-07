@@ -22,8 +22,8 @@ namespace Website.AspNetCore.Models
         public string UrlSegment { get; set; }
         [UIHint("textarea({rows:2})")]
         public string Description { get; set; }
-        //[UIHint("html")]
-        //public string MainBody { get; set; }
+        [UIHint("html")]
+        public string MainBody { get; set; }
         public IEnumerable<ISidebarBlock> SidebarBlocks { get; set; }
     }
 }
