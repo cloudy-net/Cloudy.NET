@@ -36,7 +36,7 @@ cloudy-ui-list-item .cloudy-ui-context-menu-outer {
 
 cloudy-ui-list-item-content {
   overflow: hidden;
-  flex-grow: 0;
+  flex-grow: 1;
   align-self: stretch;
   display: flex;
   padding: 0 16px;
