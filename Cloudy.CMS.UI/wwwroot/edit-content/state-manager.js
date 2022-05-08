@@ -127,7 +127,7 @@ class StateManager {
                 changedField.value = change.value;
             }
 
-            if (state.referenceValues && (state.referenceValues[change.path[0]] === null && change.value === '' || state.referenceValues[change.path[0]] == change.value)) {
+            if (state.referenceValues && ((state.referenceValues[change.path[0]] === null || state.referenceValues[change.path[0]] === undefined) && change.value === '' || state.referenceValues[change.path[0]] == change.value)) {
                 state.changedFields.splice(state.changedFields.indexOf(changedField), 1);
             }
         }
