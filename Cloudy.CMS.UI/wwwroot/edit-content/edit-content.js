@@ -23,7 +23,7 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
             `Edit ${state.nameHint}` :
             contentReference.keyValues ?
                 `Edit ${nameGetter.getNameOf(state.referenceValues, contentType)}` :
-                `New ${contentType.name} ${state.changedFields.length}`;
+                `New ${contentType.name}`;
 
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
     const diffButton = canDiff ? html`<cloudy-ui-button disabled=${!hasChanges} onclick=${() => onDiff()}>${hasChanges ? 'Review' : 'No'} changes</cloudy-ui-button>` : null
