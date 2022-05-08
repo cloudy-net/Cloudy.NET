@@ -8,24 +8,30 @@ import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import showDiffContext from './show-diff-context.js';
 
-function DiffField({ fieldModel, change, initialValue, value }) {
-    //if (change && fieldModel.descriptor.control && (fieldModel.descriptor.control.id == 'text' || fieldModel.descriptor.control.id == 'textarea')) {
-        return html`
-            <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
-                <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
-                <div class=cloudy-ui-form-input>
-                    ${diff(initialValue || '', value || '', 0).map(([state, segment]) => html`<span class=${state == diff.INSERT ? 'cloudy-ui-diff-insert' : state == diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`)}
-                <//>
-            <//>
-        `;
-    //}
+const buildDiff = ([state, segment]) => {
+    if(state == diff.INSERT){
+        return html`<span class=cloudy-ui-diff-insert>${segment}</span>`;
+    }
 
-    //return html`
-    //    <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
-    //        <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
-    //        <${fieldModel.controlType} fieldModel=${fieldModel} initialValue=${initialValue} readonly="true" />
-    //    <//>
-    //`;
+    if(state == diff.DELETE){
+        return html`<span class=cloudy-ui-diff-delete>${segment}</span>`;
+    }
+
+    return segment;
+};
+
+function DiffField({ fieldModel, change, initialValue, value }) {
+    // fieldModel.descriptor.control.id == 'text'
+
+    let result = diff(initialValue || '', value || '', 0).map(buildDiff);
+    return html`
+        <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
+            <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
+            <div class=cloudy-ui-form-input>
+                ${result}
+            <//>
+        <//>
+    `;
 }
 
 function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
