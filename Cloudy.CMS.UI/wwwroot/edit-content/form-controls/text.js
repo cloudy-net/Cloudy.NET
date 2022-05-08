@@ -10,6 +10,7 @@ function Text({ fieldModel, initialState, path, onchange, readonly }) {
         <input
             ref=${ref}
             type="text"
+            key=${initialState.contentReference}
             class="cloudy-ui-form-input"
             name=${fieldModel.descriptor.id}
             defaultValue=${propertyGetter.get(initialState, path)}
