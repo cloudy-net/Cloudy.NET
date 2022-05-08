@@ -16,6 +16,7 @@ cloudy-ui-list-sub-header {
 
 cloudy-ui-list-item {
   display: flex;
+  flex-grow: 0;
   align-items: center;
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   cursor: pointer;
@@ -34,7 +35,8 @@ cloudy-ui-list-item .cloudy-ui-context-menu-outer {
 }
 
 cloudy-ui-list-item-content {
-  flex-grow: 1;
+  overflow: hidden;
+  flex-grow: 0;
   align-self: stretch;
   display: flex;
   padding: 0 16px;
@@ -58,6 +60,7 @@ cloudy-ui-list-item:hover > cloudy-ui-list-item-content, cloudy-ui-list-item.clo
 }
 
 cloudy-ui-list-item-text-container {
+  overflow: hidden;
   display: flex;
   flex-grow: 1;
   flex-direction: column;
@@ -66,7 +69,10 @@ cloudy-ui-list-item-text-container {
 }
 
 cloudy-ui-list-item-text {
+  overflow: hidden;
   display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 cloudy-ui-list-item-sub-text {
