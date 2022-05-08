@@ -1,10 +1,10 @@
+import propertyGetter from '../../data/property-getter.js';
 import { useEffect } from '../../lib/preact.hooks.module.js';
 import { createRef } from '../../lib/preact.module.js';
 import html from '../../util/html.js';
 
-function Html({ fieldModel, initialValue, onchange, readonly }) {
+function Html({ fieldModel, initialState, onchange, readonly, path }) {
     const ref = createRef();
-    // const changeEvent = onchange && (event => onchange(ref.current, event.srcElement.value));
 
     useEffect(() => {
         const instance = ref.current;
@@ -13,14 +13,18 @@ function Html({ fieldModel, initialValue, onchange, readonly }) {
             this.quill = new Quill(instance, {
                 theme: 'snow'
             });
-
-            onchange && this.quill.on('text-change', (delta, oldDelta, source) => onchange(instance, this.quill.root.innerHTML));
         }
 
-        if(this.quill.root.innerHTML != initialValue || null){
-            this.quill.root.innerHTML = initialValue || null;
+        const callback = (delta, oldDelta, source) => onchange(instance, this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, ''));
+
+        this.quill.root.innerHTML = propertyGetter.get(initialState, path) || null;
+
+        this.quill.on('text-change', callback);
+
+        return () => {
+            this.quill.off('text-change', callback);
         }
-    }, [initialValue]);
+    }, [initialState]);
 
     return html`
         <div ref=${ref} class="cloudy-ui-form-input">

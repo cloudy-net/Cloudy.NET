@@ -45,8 +45,9 @@ class StateManager {
     };
 
     getOrCreateStateForExistingContent(contentReference, nameHint) {
-        if (this.getState(contentReference)) {
-            return contentReference;
+        const existingState = this.getState(contentReference);
+        if (existingState) {
+            return existingState.contentReference;
         }
 
         const state = {

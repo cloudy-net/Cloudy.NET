@@ -69,6 +69,7 @@ cloudy-ui-form-field-changed:before {
   margin: 0;
   display: block;
   width: 100%;
+  min-height: 1.5em;
   padding: 5px 0 4px;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
