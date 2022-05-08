@@ -138,6 +138,17 @@ class StateManager {
         this.triggerStateChange(contentReference);
     }
 
+    discardChanges(contentReference, change) {
+        const state = this.getState(contentReference);
+
+        state.changedFields.splice(0, state.changedFields.length);
+
+        this.persist(state);
+
+        this.triggerAnyStateChange();
+        this.triggerStateChange(contentReference);
+    }
+
     updateIndex(){
         localStorage.setItem(this.indexStorageKey, JSON.stringify(this.states.filter(state => state.changedFields?.length).map(state => state.contentReference)));
     }

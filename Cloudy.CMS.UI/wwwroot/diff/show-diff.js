@@ -3,10 +3,12 @@ import { useEffect, useState, useCallback, useContext } from '../lib/preact.hook
 import Blade from '../components/blade/blade.js';
 import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import diff from './lib/diff.js';
-import stateManager from '../edit-content/state-manager.js';
 import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import showDiffContext from './show-diff-context.js';
+import ContextMenu from '../components/context-menu/context-menu.js';
+import ListItem from '../components/list/list-item.js';
+import stateManager from '../edit-content/state-manager.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){
@@ -84,6 +86,9 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
                 <//>
             <//>
             <cloudy-ui-blade-footer>
+                <${ContextMenu}>
+                    <${ListItem} text="Discard changes" onclick=${() => stateManager.discardChanges(contentReference)}/>
+                <//>
                 ${editButton}
                 <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.changedFields.length}>Save</cloudy-ui-button>
             </cloudy-ui-blade-footer>

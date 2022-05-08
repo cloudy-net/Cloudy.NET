@@ -1,4 +1,4 @@
-﻿import { useState } from '../../lib/preact.hooks.module.js';
+import { useState } from '../../lib/preact.hooks.module.js';
 import html from '../../util/html.js';
 import Button from '../button/button.js';
 import List from '../list/list.js';
@@ -13,12 +13,12 @@ function ContextMenu(props) {
     `;
 }
 
-function PopupMenu({ text, children }) {
+function PopupMenu({ buttonClass, text, children }) {
     const [visible, setVisible] = useState(false);
 
     return html`
         <cloudy-ui-context-menu-outer>
-            <${Button} class=${visible ? 'cloudy-ui-active' : null} text=${text} onClick=${() => setVisible(!visible)}/>
+            <${Button} cssClass="${buttonClass} ${visible ? 'cloudy-ui-active' : null}" text=${text} onClick=${() => setVisible(!visible)}/>
             ${visible && html`<${ContextMenu} children=${children}/>`}
         <//>
     `;
