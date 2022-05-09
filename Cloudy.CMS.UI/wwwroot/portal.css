@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* VARIABLES */
 /* VARIABLES */
 /* GLOBAL ELEMENTS */
@@ -474,4 +475,17 @@ cloudy-ui-nav-user {
 .cloudy-ui-diff-delete {
   background-color: #ffebe9;
   padding: 0 1px;
+}
+
+cloudy-ui-change-badge {
+  position: absolute;
+  padding-left: 0.25em;
+  visibility: hidden;
+}
+cloudy-ui-change-badge.cloudy-ui-unchanged {
+  visibility: initial;
+}
+cloudy-ui-change-badge:before {
+  content: "•";
+  color: #ff6600;
 }

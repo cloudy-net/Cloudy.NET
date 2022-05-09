@@ -12,9 +12,7 @@ export default function SimpleField({ fieldModel, initialState, path }) {
     const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'simple', operation: 'set', value } } }))
 
     const getChangeBadge = () => {
-        if (initialState.changedFields && initialState.changedFields.find(ch => arrayEquals(ch.path, path))) {
-            return html`<cloudy-ui-form-field-changed title="This field has pending changes."><//>`;
-        }
+        return html`<cloudy-ui-change-badge class=${initialState.changedFields && initialState.changedFields.find(ch => arrayEquals(ch.path, path)) ? 'cloudy-ui-unchanged' : null} title="This field has pending changes."><//>`;
     };
 
     return html`

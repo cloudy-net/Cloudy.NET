@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /* VARIABLES */
 /* FORM */
 .cloudy-ui-form {
@@ -53,14 +52,6 @@ fieldset.cloudy-ui-form-field > .cloudy-ui-form-field-label {
 .cloudy-ui-form-field-label .cloudy-ui-context-menu-outer {
   display: inline-block;
   vertical-align: middle;
-}
-
-cloudy-ui-form-field-changed {
-  padding: 0 4px;
-}
-cloudy-ui-form-field-changed:before {
-  content: "•";
-  color: #ff6600;
 }
 
 /* INPUT */

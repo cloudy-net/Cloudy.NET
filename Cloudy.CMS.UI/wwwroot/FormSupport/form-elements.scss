@@ -70,14 +70,6 @@ fieldset.cloudy-ui-form-field {
     vertical-align: middle;
 }
 
-cloudy-ui-form-field-changed {
-    padding: 0 4px;
-    &:before {
-        content: '•';
-        color: #ff6600;
-    }
-}
-
 
 
 /* INPUT */

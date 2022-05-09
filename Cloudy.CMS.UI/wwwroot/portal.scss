@@ -561,3 +561,18 @@ cloudy-ui-nav-user {
     background-color: #ffebe9;
     padding: 0 1px;
 }
+
+cloudy-ui-change-badge {
+    position: absolute;
+    padding-left: 0.25em;
+    visibility: hidden;
+
+    &.cloudy-ui-unchanged {
+        visibility: initial;
+    }
+
+    &:before {
+        content: '•';
+        color: #ff6600;
+    }
+}

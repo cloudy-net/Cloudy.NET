@@ -18,12 +18,16 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
 
     var hasChanges = state.changedFields?.length > 0;
 
-    const getTitle = () =>
-        state.loading ?
+    const getTitle = () => {
+        const state = useContext(stateContext);
+        const getBadge = () => html`<cloudy-ui-change-badge class=${state.changedFields.length ? 'cloudy-ui-unchanged' : null} title="This ${contentType.lowerCaseName} has pending changes."><//>`;
+
+        return state.loading ?
             `Edit ${state.nameHint}` :
             contentReference.keyValues ?
-                `Edit ${nameGetter.getNameOf(state.referenceValues, contentType)}` :
+                html`Edit ${nameGetter.getNameOf(state.referenceValues, contentType)}${getBadge()}` :
                 `New ${contentType.name}`;
+    };
 
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
     const diffButton = canDiff ? html`<cloudy-ui-button disabled=${!hasChanges} onclick=${() => onDiff()}>${hasChanges ? 'Review' : 'No'} changes</cloudy-ui-button>` : null
