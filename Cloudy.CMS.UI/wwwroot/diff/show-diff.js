@@ -87,7 +87,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
             <//>
             <cloudy-ui-blade-footer>
                 <${ContextMenu} position="bottom">
-                    <${ListItem} text="Discard changes" onclick=${() => stateManager.discardChanges(contentReference)}/>
+                    <${ListItem} text="Discard changes" onclick=${() => { stateManager.discardChanges(contentReference); onClose(); }}/>
                 <//>
                 ${editButton}
                 <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.changedFields.length}>Save</cloudy-ui-button>
