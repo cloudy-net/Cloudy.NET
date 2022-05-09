@@ -71,7 +71,7 @@ function Form({ contentReference }) {
 
     useEffect(() => {
         setInitialState(state);
-    }, [state.contentReference, state.loading]);
+    }, [state.contentReference, state.loading, state.changedFields]);
 
     return html`
         <div class='cloudy-ui-form ${state.loading ? 'cloudy-ui-loading' : null}' ref=${ref}>
