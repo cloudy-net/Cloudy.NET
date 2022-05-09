@@ -7,7 +7,7 @@ function TotalChangesButton({ onClick }) {
     const totalChanges = useContext(totalChangesContext);
 
     return html`
-        <${Button} cssClass="primary" text=${!totalChanges ? 'No changes' : totalChanges == 1 ? `${totalChanges} change` : `${totalChanges} changes`} disabled=${!totalChanges} onClick=${onClick}/>
+        <${Button} cssClass=${totalChanges && 'primary'} text=${!totalChanges ? 'No changes' : totalChanges == 1 ? `${totalChanges} change` : `${totalChanges} changes`} onClick=${onClick}/>
     `;
 }
 

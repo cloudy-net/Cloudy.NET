@@ -50,7 +50,7 @@ function App({ title }) {
                     <cloudy-ui-portal-nav-title>${title}<//>
                     <div>
                         <${TotalChangesContextProvider}>
-                            <${TotalChangesButton} onClick=${() => { listContentTypes(false); listContent(null); editContent(null); listChanges(true); showDiff(null); }}/>
+                            <${TotalChangesButton} onClick=${() => { listContent(null); editContent(null); showDiff(null); if(!listingChanges) { listContentTypes(false); listChanges(true); } else { listContentTypes(true); listChanges(false); } }}/>
                         <//>
                     </div>
                 <//>
