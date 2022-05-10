@@ -41,13 +41,13 @@ class StateManager {
         this.triggerAnyStateChange();
         this.triggerStateChange(contentReference);
 
-        return contentReference;
+        return state;
     };
 
-    getOrCreateStateForExistingContent(contentReference, nameHint) {
+    createOrUpdateStateForExistingContent(contentReference, nameHint) {
         const existingState = this.getState(contentReference);
         if (existingState) {
-            return existingState.contentReference;
+            return existingState;
         }
 
         const state = {
@@ -66,7 +66,7 @@ class StateManager {
 
         this.loadStateForContent(contentReference);
 
-        return contentReference;
+        return state;
     };
 
     loadStateForContent(contentReference){
