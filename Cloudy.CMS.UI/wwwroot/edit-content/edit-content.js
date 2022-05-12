@@ -22,12 +22,14 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
         const state = useContext(stateContext);
         const getBadge = () => html`<cloudy-ui-change-badge class=${state.changedFields.length ? 'cloudy-ui-unchanged' : null} title="This ${contentType.lowerCaseName} has pending changes."><//>`;
 
-        return state.loading ?
+        return state.loading && state.nameHint ?
             `Edit ${state.nameHint}` :
             contentReference.keyValues ?
                 html`Edit ${nameGetter.getNameOf(state.referenceValues, contentType)}${getBadge()}` :
                 `New ${contentType.name}`;
     };
+
+    const getConflictMessage = () => state.newVersion ? html`Conflict detected: This ${contentType.lowerCaseName} has been changed after you started editing. Please <u>review the remote changes</u> before saving.` : null;
 
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
     const diffButton = canDiff ? html`<cloudy-ui-button disabled=${!hasChanges} onclick=${() => onDiff()}>${hasChanges ? 'Review' : 'No'} changes</cloudy-ui-button>` : null
@@ -35,6 +37,7 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
     return html`
         <${Blade} scrollIntoView=${contentReference} title=${getTitle()} toolbar=${toolbar} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
+                ${getConflictMessage()}
                 <${Form} contentReference=${contentReference}/>
             <//>
             <cloudy-ui-blade-footer>

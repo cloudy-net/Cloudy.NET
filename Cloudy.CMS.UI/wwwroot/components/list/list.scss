@@ -111,6 +111,13 @@ cloudy-ui-list-item-badge {
             content: 'M';
         }
     }
+
+    &.cloudy-ui-conflict {
+        color: #ff0000;
+        &:before {
+            content: '!';
+        }
+    }
 }
 
 cloudy-ui-list-item-folder {

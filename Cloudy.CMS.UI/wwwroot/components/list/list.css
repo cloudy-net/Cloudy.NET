@@ -99,6 +99,12 @@ cloudy-ui-list-item-badge.cloudy-ui-modified {
 cloudy-ui-list-item-badge.cloudy-ui-modified:before {
   content: "M";
 }
+cloudy-ui-list-item-badge.cloudy-ui-conflict {
+  color: #ff0000;
+}
+cloudy-ui-list-item-badge.cloudy-ui-conflict:before {
+  content: "!";
+}
 
 cloudy-ui-list-item-folder {
   margin-right: 4px;

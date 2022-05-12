@@ -47,6 +47,7 @@ class StateManager {
     createOrUpdateStateForExistingContent(contentReference, nameHint) {
         const existingState = this.getState(contentReference);
         if (existingState) {
+            this.reloadContentForState(contentReference);
             return existingState;
         }
 
@@ -64,15 +65,60 @@ class StateManager {
         this.triggerAnyStateChange();
         this.triggerStateChange(contentReference);
 
-        this.loadStateForContent(contentReference);
+        this.loadContentForState(contentReference);
 
         return state;
     };
 
-    loadStateForContent(contentReference){
+    reloadContentForState(contentReference){
+        let state = this.getState(contentReference);
+
+        state = {
+            ...state,
+            loadingNewVersion: true,
+            newVersion: null,
+        };
+        this.replace(state);
+
         contentGetter.get(contentReference).then(content => {
-            const state = this.getState(contentReference);
-            const newState = {
+            state = this.getState(contentReference);
+
+            const newVersionIsDifferent = JSON.stringify(state.referenceValues) != JSON.stringify(state.content);
+
+            if(JSON.stringify(state.referenceValues) == JSON.stringify(content)){
+                state = {
+                    ...state,
+                    loadingNewVersion: false,
+                };
+            } else {
+                if(!state.changedFields.length){
+                    state = {
+                        ...state,
+                        loadingNewVersion: false,
+                        referenceValues: content,
+                        referenceDate: new Date(),
+                    };
+                } else {
+                    state = {
+                        ...state,
+                        loadingNewVersion: false,
+                        newVersion: {
+                            referenceValues: content,
+                            referenceDate: new Date(),
+                        },
+                    };
+                }
+            }
+            
+            this.replace(state);
+        });
+    }
+
+    loadContentForState(contentReference){
+        contentGetter.get(contentReference).then(content => {
+            let state = this.getState(contentReference);
+
+            state = {
                 ...state,
                 loading: false,
                 nameHint: null,
@@ -80,11 +126,8 @@ class StateManager {
                 referenceDate: new Date(),
                 changedFields: [],
             };
-            this.states[this.states.indexOf(state)] = newState;
-            this.persist(newState);
-
-            this.triggerAnyStateChange();
-            this.triggerStateChange(contentReference);
+            
+            this.replace(state);
         });
     }
 
@@ -96,6 +139,14 @@ class StateManager {
                     this.loadStateForContent(result.contentReference);
                 }
             });
+    }
+
+    replace(state) {
+            this.states[this.states.findIndex(s => contentReferenceEquals(s.contentReference, state.contentReference))] = state;
+            this.persist(state);
+
+            this.triggerAnyStateChange();
+            this.triggerStateChange(state.contentReference);
     }
 
     remove(contentReference) {

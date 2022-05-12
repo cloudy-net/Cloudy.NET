@@ -40,11 +40,10 @@ function ListContent({ contentType, activeContentReference, onEditContent, onNew
     const getBadges = item => {
         const state = states.find(s => arrayEquals(s.contentReference.keyValues, item.Keys));
 
-        if(!state || !state.changedFields?.length){
-            return;
-        }
+        const modifiedBadge = () => state && state.changedFields?.length ? html`<cloudy-ui-list-item-badge class="cloudy-ui-modified" title="${state.changedFields.length} changed fields"><//>` : null;
+        const conflictBadge = () => state && state.newVersion ? html`<cloudy-ui-list-item-badge class="cloudy-ui-conflict" title="${contentType.name} has conflicts"><//>` : null;
 
-        return html`<cloudy-ui-list-item-badge class="cloudy-ui-modified" title="${state.changedFields.length} changed fields"><//>`;
+        return html`${modifiedBadge()}${conflictBadge()}`;
     };
 
     return html`

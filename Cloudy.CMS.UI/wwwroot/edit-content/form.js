@@ -8,7 +8,7 @@ import SimpleField from './simple-field.js';
 import SortableField from './sortable-field.js';
 
 const renderField = (fieldModel, initialState) => {
-    if(!initialState || initialState.loading){
+    if(!initialState || initialState.loading || initialState.loadingNewVersion){
         return;
     }
 
@@ -71,10 +71,10 @@ function Form({ contentReference }) {
 
     useEffect(() => {
         setInitialState(state);
-    }, [state.contentReference, state.loading, state.changedFields]);
+    }, [state.contentReference, state.loading, state.loadingNewVersion, state.changedFields]);
 
     return html`
-        <div class='cloudy-ui-form ${state.loading ? 'cloudy-ui-loading' : null}' ref=${ref}>
+        <div class='cloudy-ui-form ${state.loading || state.loadingNewVersion ? 'cloudy-ui-loading' : null}' ref=${ref}>
             ${fieldModels.map(fieldModel => renderField(fieldModel, initialState))}
         <//>
     `;
