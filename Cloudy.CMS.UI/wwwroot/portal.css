@@ -491,8 +491,8 @@ cloudy-ui-change-badge:before {
   color: #ff6600;
 }
 
-/* EDIT CONFLICT */
-cloudy-ui-edit-conflict {
+/* INFO MESSAGE */
+cloudy-ui-info-message {
   display: block;
   padding: 16px;
   border-bottom: solid 1px #bce8f1;
