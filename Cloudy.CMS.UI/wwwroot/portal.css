@@ -477,6 +477,7 @@ cloudy-ui-nav-user {
   padding: 0 1px;
 }
 
+/* CHANGE BADGE */
 cloudy-ui-change-badge {
   position: absolute;
   padding-left: 0.25em;
@@ -488,4 +489,14 @@ cloudy-ui-change-badge.cloudy-ui-unchanged {
 cloudy-ui-change-badge:before {
   content: "•";
   color: #ff6600;
+}
+
+/* EDIT CONFLICT */
+cloudy-ui-edit-conflict {
+  display: block;
+  padding: 16px;
+  border-bottom: solid 1px #bce8f1;
+  background-color: #d9edf7;
+  color: #3a87ad;
+  font-size: 0.8rem;
 }
