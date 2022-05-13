@@ -7,7 +7,7 @@ import contentTypeProvider from '../data/content-type-provider.js';
 import stateContext from './state-context.js';
 import Blade from '../components/blade/blade.js';
 
-function EditContent({ contentReference, onClose, canDiff, onDiff }) {
+function EditContent({ contentReference, onClose, canDiff, onDiff, reviewRemoteChanges }) {
     if (!contentReference) {
         return;
     }
@@ -29,7 +29,7 @@ function EditContent({ contentReference, onClose, canDiff, onDiff }) {
                 `New ${contentType.name}`;
     };
 
-    const getConflictMessage = () => state.newVersion ? html`<cloudy-ui-info-message>Conflict detected: This ${contentType.lowerCaseName} has been changed after you started editing. <u>Review remote changes</u> before saving.<//>` : null;
+    const getConflictMessage = () => state.newVersion ? html`<cloudy-ui-info-message>Conflict detected: This ${contentType.lowerCaseName} has been changed after you started editing. <a onclick=${() => reviewRemoteChanges(true)}>Review remote changes<//> before saving.<//>` : null;
 
     const toolbar = html`<${Urls} contentReference=${contentReference}/>`;
     const diffButton = canDiff ? html`<cloudy-ui-button disabled=${!hasChanges} onclick=${() => onDiff()}>${hasChanges ? 'Review' : 'No'} changes</cloudy-ui-button>` : null

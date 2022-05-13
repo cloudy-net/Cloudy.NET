@@ -12,6 +12,8 @@ import PendingChanges from './diff/pending-changes.js';
 import contentTypeProvider from './data/content-type-provider.js';
 import ShowDiff from './diff/show-diff.js';
 import ShowDiffContextProvider from './diff/show-diff-context-provider.js';
+import ReviewRemoteChanges from './diff/review-remote-changes.js';
+import ReviewRemoteChangesContextProvider from './diff/review-remote-changes-context-provider.js';
 import ListContentContextProvider from './list-content-types/list-content-context-provider.js';
 
 function App({ title }) {
@@ -30,10 +32,11 @@ function App({ title }) {
     const [editingContent, editContent] = useState(null);
     const [listingChanges, listChanges] = useState(false);
     const [showingDiff, showDiff] = useState(null);
+    const [reviewingRemoteChanges, reviewRemoteChanges] = useState(false);
 
     const editContentBlade = html`
         <${StateContextProvider} renderIf=${editingContent} contentReference=${editingContent}>
-            <${EditContent} contentReference=${editingContent} onClose=${() => { editContent(null); listingContent ? showDiff(null) : null; }} canDiff=${listingContent} onDiff=${() => showDiff(editingContent)}/>
+            <${EditContent} contentReference=${editingContent} onClose=${() => { editContent(null); listingContent ? showDiff(null) : null; }} canDiff=${listingContent} onDiff=${() => showDiff(editingContent)} reviewRemoteChanges=${() => { reviewRemoteChanges(editingContent); }}/>
         <//>
     `;
 
@@ -62,6 +65,10 @@ function App({ title }) {
                     <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => showDiff(contentReference)} onClose=${() => { listChanges(null); showDiff(null); editContent(null); listContentTypes(true); }}/>
 
                     ${listingChanges ? html`${showDiffBlade}${editContentBlade}` : html`${editContentBlade}${showDiffBlade}`}
+
+                    <${ReviewRemoteChangesContextProvider} renderIf=${reviewingRemoteChanges} contentReference=${reviewingRemoteChanges}>
+                        <${ReviewRemoteChanges} contentReference=${reviewingRemoteChanges} onClose=${() => { reviewRemoteChanges(null); }} />
+                    <//>
                 <//>
             <//>
         <//>

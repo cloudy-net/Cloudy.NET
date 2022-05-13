@@ -500,3 +500,6 @@ cloudy-ui-info-message {
   color: #3a87ad;
   font-size: 0.8rem;
 }
+cloudy-ui-info-message a {
+  text-decoration: underline;
+}

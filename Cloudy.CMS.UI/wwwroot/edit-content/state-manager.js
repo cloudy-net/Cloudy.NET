@@ -114,6 +114,18 @@ class StateManager {
         });
     }
 
+    discardNewVersion(contentReference){
+        let state = this.getState(contentReference);
+
+        state = {
+            ...state,
+            referenceValues: state.newVersion.referenceValues,
+            referenceDate: state.newVersion.referenceDate,
+            newVersion: null,
+        };
+        this.replace(state);
+    }
+
     loadContentForState(contentReference){
         contentGetter.get(contentReference).then(content => {
             let state = this.getState(contentReference);
