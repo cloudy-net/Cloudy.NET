@@ -49,6 +49,9 @@ cloudy-ui-context-menu {
 cloudy-ui-context-menu.cloudy-ui-context-menu-bottom {
   bottom: 100%;
 }
+cloudy-ui-context-menu.cloudy-ui-context-menu-right {
+  right: 0;
+}
 cloudy-ui-context-menu cloudy-ui-list-item-text,
 cloudy-ui-context-menu cloudy-ui-list-item-sub-text {
   display: block;

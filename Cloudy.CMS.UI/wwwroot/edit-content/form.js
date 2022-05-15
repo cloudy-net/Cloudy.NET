@@ -4,38 +4,7 @@ import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import { createRef } from '../lib/preact.module.js';
 import stateManager from './state-manager.js';
 import stateContext from './state-context.js';
-import SimpleField from './simple-field.js';
-import SortableField from './sortable-field.js';
-
-const renderField = (fieldModel, initialState) => {
-    if(!initialState || initialState.loading || initialState.loadingNewVersion){
-        return;
-    }
-
-    const path = [fieldModel.descriptor.id];
-
-    if (fieldModel.descriptor.isSortable) {
-        return html`<${SortableField}
-            path=${path}
-            fieldModel=${fieldModel}
-            initialState=${initialState}
-        />`;
-    }
-
-    if (fieldModel.descriptor.embeddedFormId) {
-        return html`<${EmbeddedForm}
-            path=${path}
-            fieldModel=${fieldModel}
-            initialState=${initialState}
-        />`;
-    }
-
-    return html`<${SimpleField}
-        path=${path}
-        fieldModel=${fieldModel}
-        initialState=${initialState}
-    />`;
-}
+import renderField from './form/render-field.js';
 
 function Form({ contentReference }) {
     const [fieldModels, setFieldModels] = useState();
@@ -75,7 +44,7 @@ function Form({ contentReference }) {
 
     return html`
         <div class='cloudy-ui-form ${state.loading || state.loadingNewVersion ? 'cloudy-ui-loading' : null}' ref=${ref}>
-            ${fieldModels.map(fieldModel => renderField(fieldModel, initialState))}
+            ${fieldModels.map(fieldModel => renderField(fieldModel, initialState, [fieldModel.descriptor.id]))}
         <//>
     `;
 }
