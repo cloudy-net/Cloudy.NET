@@ -15,9 +15,9 @@ export default function SortableField({ path, fieldModel, initialState }) {
 
     let [values, setValues] = useState(initialState.referenceValues[path[0]] || []);
 
-    const add = () => {
+    const add = type => {
         ref.current.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'array', operation: 'add', value: {} } } }));
-        setValues([...values, {}]);
+        setValues([...values, { type, value: {} }]);
     };
 
     const renderValue = value => {
@@ -25,6 +25,14 @@ export default function SortableField({ path, fieldModel, initialState }) {
             return html`<${EmbeddedForm}
                 path=${path}
                 formId=${formId}
+                initialState=${initialState}
+            />`;
+        }
+
+        if (fieldModel.descriptor.isPolymorphic && value.type) {
+            return html`<${EmbeddedForm}
+                path=${path}
+                formId=${value.type}
                 initialState=${initialState}
             />`;
         }
@@ -48,7 +56,7 @@ export default function SortableField({ path, fieldModel, initialState }) {
         if (fieldModel.descriptor.isPolymorphic) {
             return html`
                 <${PopupMenu} text="Add" position="right">
-                    ${fieldModel.descriptor.polymorphicCandidates.map(c => html`<${ListItem} text="${c}" onclick=${() => {  }}/>`)}
+                    ${fieldModel.descriptor.polymorphicCandidates.map(c => html`<${ListItem} text="${c}" onclick=${() => add(c)}/>`)}
                 <//>
             `;
         }
