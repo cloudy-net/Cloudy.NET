@@ -21,6 +21,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     {
         ILogger Logger { get; }
         IContentTypeProvider ContentTypeProvider { get; }
+        IContextDescriptorProvider ContextDescriptorProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IFieldProvider FieldProvider { get; }
         IControlMatcher ControlMatcher { get; }
@@ -29,10 +30,11 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         ISingularizer Singularizer { get; }
         IPolymorphicFormFinder PolymorphicFormFinder { get; }
 
-        public FieldController(ILogger<FieldController> logger, IContentTypeProvider contentTypeProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer, IPolymorphicFormFinder polymorphicFormFinder)
+        public FieldController(ILogger<FieldController> logger, IContentTypeProvider contentTypeProvider, IContextDescriptorProvider contextDescriptorProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IFieldProvider fieldProvider, IControlMatcher controlMatcher, IHumanizer humanizer, IPluralizer pluralizer, ISingularizer singularizer, IPolymorphicFormFinder polymorphicFormFinder)
         {
             Logger = logger;
             ContentTypeProvider = contentTypeProvider;
+            ContextDescriptorProvider = contextDescriptorProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             FieldProvider = fieldProvider;
             ControlMatcher = controlMatcher;
@@ -42,68 +44,79 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             PolymorphicFormFinder = polymorphicFormFinder;
         }
 
-        public IEnumerable<FieldResponse> GetAllForForm(string id)
+        public IDictionary<string, IEnumerable<FieldResponse>> GetAll()
         {
-            var contentType = ContentTypeProvider.Get(id);
-            var primaryKeys = new HashSet<string>(PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(p => p.Name));
+            var result = new Dictionary<string, IEnumerable<FieldResponse>>();
 
-            var result = new List<FieldResponse>();
-
-            foreach(var field in FieldProvider.GetAllFor(id))
+            foreach (var contentType in ContentTypeProvider.GetAll())
             {
-                if (primaryKeys.Contains(field.Name))
+                if (ContextDescriptorProvider.GetFor(contentType.Type) == null)
                 {
                     continue;
                 }
 
-                if (!field.AutoGenerate)
+                var primaryKeys = new HashSet<string>(PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(p => p.Name));
+
+                var fields = new List<FieldResponse>();
+
+                foreach (var field in FieldProvider.GetAllFor(contentType.Id))
                 {
-                    continue;
-                }
-
-                var control = ControlMatcher.GetFor(field.Type, field.UIHints);
-                var embeddedFormId = ContentTypeProvider.GetAll().FirstOrDefault(f => f.Type == field.Type);
-                var isPolymorphic = field.Type.IsInterface;
-                var polymorphicCandidates = isPolymorphic ? PolymorphicFormFinder.FindFor(field.Type).ToList().AsReadOnly() : new List<string>().AsReadOnly();
-
-                if (control == null && embeddedFormId == null && !polymorphicCandidates.Any())
-                {
-                    Logger.LogInformation($"Could not find control for {id} {field.Name}");
-                    continue;
-                }
-
-                var label = field.Label;
-
-                if(label == null)
-                {
-                    label = field.Name;
-                    label = Humanizer.Humanize(field.Name);
-
-                    if (label.EndsWith(" ids"))
+                    if (primaryKeys.Contains(field.Name))
                     {
-                        label = label.Substring(0, label.Length - " ids".Length);
-                        label = Pluralizer.Pluralize(label);
+                        continue;
                     }
-                    else if (label.EndsWith(" id"))
+
+                    if (!field.AutoGenerate)
                     {
-                        label = label.Substring(0, label.Length - " id".Length);
+                        continue;
                     }
+
+                    var control = ControlMatcher.GetFor(field.Type, field.UIHints);
+                    var embeddedFormId = ContentTypeProvider.GetAll().FirstOrDefault(f => f.Type == field.Type);
+                    var isPolymorphic = field.Type.IsInterface;
+                    var polymorphicCandidates = isPolymorphic ? PolymorphicFormFinder.FindFor(field.Type).ToList().AsReadOnly() : new List<string>().AsReadOnly();
+
+                    if (control == null && embeddedFormId == null && !polymorphicCandidates.Any())
+                    {
+                        Logger.LogInformation($"Could not find control for {contentType.Id} {field.Name}");
+                        continue;
+                    }
+
+                    var label = field.Label;
+
+                    if (label == null)
+                    {
+                        label = field.Name;
+                        label = Humanizer.Humanize(field.Name);
+
+                        if (label.EndsWith(" ids"))
+                        {
+                            label = label.Substring(0, label.Length - " ids".Length);
+                            label = Pluralizer.Pluralize(label);
+                        }
+                        else if (label.EndsWith(" id"))
+                        {
+                            label = label.Substring(0, label.Length - " id".Length);
+                        }
+                    }
+
+                    var singularLabel = Singularizer.Singularize(label);
+
+                    fields.Add(new FieldResponse
+                    {
+                        Id = field.Name,
+                        Label = label,
+                        SingularLabel = singularLabel,
+                        Control = control,
+                        EmbeddedFormId = embeddedFormId?.Id,
+                        IsSortable = field.IsSortable,
+                        Group = field.Group,
+                        IsPolymorphic = isPolymorphic,
+                        PolymorphicCandidates = polymorphicCandidates,
+                    });
                 }
 
-                var singularLabel = Singularizer.Singularize(label);
-
-                result.Add(new FieldResponse
-                {
-                    Id = field.Name,
-                    Label = label,
-                    SingularLabel = singularLabel,
-                    Control = control,
-                    EmbeddedFormId = embeddedFormId?.Id,
-                    IsSortable = field.IsSortable,
-                    Group = field.Group,
-                    IsPolymorphic = isPolymorphic,
-                    PolymorphicCandidates = polymorphicCandidates,
-                });
+                result[contentType.Id] = fields;
             }
 
             return result;

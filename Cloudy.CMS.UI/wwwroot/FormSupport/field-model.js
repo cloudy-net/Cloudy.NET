@@ -1,8 +1,7 @@
 ﻿class FieldModel {
-    constructor(descriptor, controlType, fields) {
+    constructor(descriptor, controlType) {
         this.descriptor = descriptor;
         this.controlType = controlType;
-        this.fields = fields;
     }
 }
 
