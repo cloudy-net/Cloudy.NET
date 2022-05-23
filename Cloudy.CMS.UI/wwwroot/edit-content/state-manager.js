@@ -194,6 +194,13 @@ class StateManager {
                 state.changedFields.splice(state.changedFields.indexOf(changedField), 1);
             }
         }
+        
+        if (change.type == 'array') {
+            if (!changedField) {
+                state.changedFields.push(change);
+                changedField = change;
+            }
+        }
 
         this.persist(state);
 

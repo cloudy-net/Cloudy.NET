@@ -7,6 +7,7 @@ import Button from '../components/button/button.js'
 import SimpleField from './simple-field.js';
 import PopupMenu from '../components/popup-menu/popup-menu.js';
 import ListItem from '../components/list/list-item.js';
+import EmbeddedForm from './form/embedded-form.js';
 
 const generateNewArrayElementKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
@@ -16,14 +17,17 @@ export default function SortableField({ path, fieldModel, initialState }) {
     let [values, setValues] = useState(initialState.referenceValues[path[0]] || []);
 
     const add = type => {
-        ref.current.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'array', operation: 'add', value: {} } } }));
-        setValues([...values, { type, value: {} }]);
+        const key = generateNewArrayElementKey();
+        const value = { type, key, value: {} };
+        ref.current.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'array', operation: 'add', value } } }));
+        setValues([...values, value]);
     };
 
     const renderValue = value => {
+        const elementPath = [...path, value.key];
         if (fieldModel.descriptor.embeddedFormId) {
             return html`<${EmbeddedForm}
-                path=${path}
+                path=${elementPath}
                 formId=${formId}
                 initialState=${initialState}
             />`;
@@ -31,14 +35,14 @@ export default function SortableField({ path, fieldModel, initialState }) {
 
         if (fieldModel.descriptor.isPolymorphic && value.type) {
             return html`<${EmbeddedForm}
-                path=${path}
+                path=${elementPath}
                 formId=${value.type}
                 initialState=${initialState}
             />`;
         }
     
         return html`<${SimpleField}
-            path=${path}
+            path=${elementPath}
             fieldModel=${fieldModel}
             initialState=${initialState}
         />`;

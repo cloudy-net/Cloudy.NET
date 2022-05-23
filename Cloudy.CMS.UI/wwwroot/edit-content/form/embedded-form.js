@@ -1,10 +1,13 @@
-import html from '../util/html.js';
+import { useContext } from '../../lib/preact.hooks.module.js';
+import html from '../../util/html.js';
+import fieldModelContext from './field-model-context.js';
+import renderField from './render-field.js';
 
 function EmbeddedForm({ path, formId, initialState }){
     const fieldModels = useContext(fieldModelContext)[formId];
 
     return html`
-        <div class='cloudy-ui-form ${state.loading || state.loadingNewVersion ? 'cloudy-ui-loading' : null}' ref=${ref}>
+        <div class='cloudy-ui-form'>
             ${fieldModels.map(fieldModel => renderField(fieldModel, initialState, [...path, fieldModel.descriptor.id]))}
         <//>
     `;

@@ -50,18 +50,19 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
             foreach (var contentType in ContentTypeProvider.GetAll())
             {
-                if (ContextDescriptorProvider.GetFor(contentType.Type) == null)
-                {
-                    continue;
-                }
 
-                var primaryKeys = new HashSet<string>(PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(p => p.Name));
+                ISet<string> primaryKeys = null;
+                
+                if (ContextDescriptorProvider.GetFor(contentType.Type) != null)
+                {
+                    primaryKeys = new HashSet<string>(PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(p => p.Name));
+                }
 
                 var fields = new List<FieldResponse>();
 
                 foreach (var field in FieldProvider.GetAllFor(contentType.Id))
                 {
-                    if (primaryKeys.Contains(field.Name))
+                    if (primaryKeys?.Contains(field.Name) ?? false)
                     {
                         continue;
                     }
