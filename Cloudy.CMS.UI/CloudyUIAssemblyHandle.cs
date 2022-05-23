@@ -8,7 +8,7 @@ namespace Cloudy.CMS.UI
     [Style("ContextMenuSupport/context-menu.css")]
     [Style("ControlMessageSupport/control-message.css")]
     [Style("DataTableSupport/data-table.css")]
-    [Style("FormSupport/form-elements.css")]
+    [Style("edit-content/form/form-elements.css")]
     [Style("NotificationSupport/notification-manager.css")]
     [Style("LoadingSupport/loading.css")]
     public class CloudyUIAssemblyHandle

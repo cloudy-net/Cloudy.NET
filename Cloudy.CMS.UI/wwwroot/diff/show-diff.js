@@ -1,7 +1,6 @@
 import html from '../util/html.js';
 import { useEffect, useState, useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
-import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import diff from './lib/diff.js';
 import nameGetter from '../data/name-getter.js';
 import contentTypeProvider from '../data/content-type-provider.js';
@@ -37,15 +36,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
 }
 
 function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
-    const [fieldModels, setFieldModels] = useState();
-
-    useEffect(() => {
-        fieldModelBuilder.getFieldModels(contentReference.contentTypeId).then(fieldModels => setFieldModels(fieldModels));
-    }, [contentReference]);
-
-    if (!fieldModels) {
-        return;
-    }
+    const fieldModels = useContext(fieldModelContext)[contentReference.contentTypeId];
 
     const undoChanges = useCallback(() => {
         if (confirm('Undo changes? This is not reversible')) {

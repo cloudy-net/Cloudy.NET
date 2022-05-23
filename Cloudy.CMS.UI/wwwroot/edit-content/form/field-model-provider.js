@@ -1,10 +1,5 @@
-import urlFetcher from '../util/url-fetcher.js';
+import urlFetcher from '../../util/url-fetcher.js';
 import fieldControlProvider from './field-control-provider.js';
-import FieldModel from './field-model.js';
-
-
-
-/* FIELD MODEL BUILDER */
 
 class FieldModelBuilder {
     async getFieldModels() {
@@ -27,6 +22,13 @@ class FieldModelBuilder {
         }
 
         return new FieldModel(fieldDescriptor, null, null);
+    }
+}
+
+class FieldModel {
+    constructor(descriptor, controlType) {
+        this.descriptor = descriptor;
+        this.controlType = controlType;
     }
 }
 

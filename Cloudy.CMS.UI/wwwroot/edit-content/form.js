@@ -1,22 +1,13 @@
 import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import { createRef } from '../lib/preact.module.js';
 import stateManager from './state-manager.js';
 import stateContext from './state-context.js';
 import renderField from './form/render-field.js';
+import fieldModelContext from './form/field-model-context.js';
 
 function Form({ contentReference }) {
-    const [fieldModels, setFieldModels] = useState();
-
-    useEffect(() => {
-        fieldModelBuilder.getFieldModels(contentReference.contentTypeId)
-            .then(fieldModels => setFieldModels(fieldModels));
-    }, [contentReference.contentTypeId]);
-
-    if (!fieldModels) {
-        return null;
-    }
+    const fieldModels = useContext(fieldModelContext)[contentReference.contentTypeId];
 
     const ref = createRef(null);
 

@@ -15,6 +15,7 @@ import ShowDiffContextProvider from './diff/show-diff-context-provider.js';
 import ReviewRemoteChanges from './diff/review-remote-changes.js';
 import ReviewRemoteChangesContextProvider from './diff/review-remote-changes-context-provider.js';
 import ListContentContextProvider from './list-content-types/list-content-context-provider.js';
+import FieldModelContextProvider from './edit-content/form/field-model-context-provider.js';
 
 function App({ title }) {
     const [contentTypesHasLoaded, setContentTypesHasLoaded] = useState(false);
@@ -47,27 +48,29 @@ function App({ title }) {
     `;
 
     return html`
-        <${PopupMenuContextProvider}>
-            <cloudy-ui-portal>
-                <cloudy-ui-portal-nav>
-                    <cloudy-ui-portal-nav-title>${title}<//>
-                    <div>
-                        <${TotalChangesContextProvider}>
-                            <${TotalChangesButton} onClick=${() => { listContent(null); editContent(null); showDiff(null); if(!listingChanges) { listContentTypes(false); listChanges(true); } else { listContentTypes(true); listChanges(false); } }}/>
-                        <//>
-                    </div>
-                <//>
-                <cloudy-ui-app>
-                    <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
-                    <${ListContentContextProvider} renderIf=${listingContent}>
-                        <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => { stateManager.createOrUpdateStateForExistingContent(contentReference, nameHint); editContent(contentReference); showDiff(null); }} onNewContent=${contentType => { const state = stateManager.createStateForNewContent(contentType); editContent(state.contentReference); }} onClose=${() => listContent(null)}/>
+        <${FieldModelContextProvider}>
+            <${PopupMenuContextProvider}>
+                <cloudy-ui-portal>
+                    <cloudy-ui-portal-nav>
+                        <cloudy-ui-portal-nav-title>${title}<//>
+                        <div>
+                            <${TotalChangesContextProvider}>
+                                <${TotalChangesButton} onClick=${() => { listContent(null); editContent(null); showDiff(null); if(!listingChanges) { listContentTypes(false); listChanges(true); } else { listContentTypes(true); listChanges(false); } }}/>
+                            <//>
+                        </div>
                     <//>
-                    <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => showDiff(contentReference)} onClose=${() => { listChanges(null); showDiff(null); editContent(null); listContentTypes(true); }}/>
+                    <cloudy-ui-app>
+                        <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
+                        <${ListContentContextProvider} renderIf=${listingContent}>
+                            <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => { stateManager.createOrUpdateStateForExistingContent(contentReference, nameHint); editContent(contentReference); showDiff(null); }} onNewContent=${contentType => { const state = stateManager.createStateForNewContent(contentType); editContent(state.contentReference); }} onClose=${() => listContent(null)}/>
+                        <//>
+                        <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => showDiff(contentReference)} onClose=${() => { listChanges(null); showDiff(null); editContent(null); listContentTypes(true); }}/>
 
-                    ${listingChanges ? html`${showDiffBlade}${editContentBlade}` : html`${editContentBlade}${showDiffBlade}`}
+                        ${listingChanges ? html`${showDiffBlade}${editContentBlade}` : html`${editContentBlade}${showDiffBlade}`}
 
-                    <${ReviewRemoteChangesContextProvider} renderIf=${reviewingRemoteChanges} contentReference=${reviewingRemoteChanges}>
-                        <${ReviewRemoteChanges} contentReference=${reviewingRemoteChanges} onClose=${() => { reviewRemoteChanges(null); }} />
+                        <${ReviewRemoteChangesContextProvider} renderIf=${reviewingRemoteChanges} contentReference=${reviewingRemoteChanges}>
+                            <${ReviewRemoteChanges} contentReference=${reviewingRemoteChanges} onClose=${() => { reviewRemoteChanges(null); }} />
+                        <//>
                     <//>
                 <//>
             <//>

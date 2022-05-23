@@ -1,5 +1,6 @@
-﻿import notificationManager from "../NotificationSupport/notification-manager.js";
-import urlFetcher from "../util/url-fetcher.js";
+﻿import notificationManager from "../../NotificationSupport/notification-manager.js";
+import urlFetcher from "../../util/url-fetcher.js";
+
 class FieldControlProvider {
     constructor() {
         this.modulePathsPromise = urlFetcher.fetch('Control/ModulePaths', {
@@ -24,7 +25,7 @@ class FieldControlProvider {
                         modulePath = modulePath.replace('http://', 'https://');
                     }
                 } else {
-                    modulePath = `../${modulePath}`;
+                    modulePath = `../../${modulePath}`;
                 }
 
                 this.typeModulesPromises[field.control.id] = import(modulePath);

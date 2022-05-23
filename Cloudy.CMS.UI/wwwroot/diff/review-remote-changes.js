@@ -1,7 +1,6 @@
 import html from '../util/html.js';
-import { useEffect, useState, useCallback, useContext } from '../lib/preact.hooks.module.js';
+import { useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
-import fieldModelBuilder from '../FormSupport/field-model-builder.js';
 import diff from './lib/diff.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import ReviewRemoteChangesContext from './review-remote-changes-context.js';
@@ -34,15 +33,7 @@ function DiffField({ fieldModel, initialValue, value }) {
 }
 
 function ReviewRemoteChanges({ contentReference, onClose }) {
-    const [fieldModels, setFieldModels] = useState();
-
-    useEffect(() => {
-        fieldModelBuilder.getFieldModels(contentReference.contentTypeId).then(fieldModels => setFieldModels(fieldModels));
-    }, [contentReference]);
-
-    if (!fieldModels) {
-        return;
-    }
+    const fieldModels = useContext(fieldModelContext)[contentReference.contentTypeId];
     
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = useContext(ReviewRemoteChangesContext);
