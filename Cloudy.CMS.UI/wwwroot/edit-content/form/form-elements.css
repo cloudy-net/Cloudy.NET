@@ -271,7 +271,7 @@ cloudy-ui-select-preview-sub-text {
 
 /* HTML */
 .cloudy-ui-form-field .ql-toolbar.ql-snow {
-  padding: 4px;
+  padding: 4px 8px;
   border: none;
   border-radius: 4px;
   font-family: inherit;
