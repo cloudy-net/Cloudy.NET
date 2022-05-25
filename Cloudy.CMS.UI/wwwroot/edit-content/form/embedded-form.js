@@ -7,7 +7,7 @@ function EmbeddedForm({ path, formId, initialState }){
     const fieldModels = useContext(fieldModelContext)[formId];
 
     return html`
-        <div class='cloudy-ui-form'>
+        <cloudy-ui-sortable-item-form>
             ${fieldModels.map(fieldModel => renderField(fieldModel, initialState, [...path, fieldModel.descriptor.id]))}
         <//>
     `;
