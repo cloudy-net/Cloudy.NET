@@ -8,13 +8,16 @@ import SimpleField from './simple-field.js';
 import PopupMenu from '../components/popup-menu/popup-menu.js';
 import ListItem from '../components/list/list-item.js';
 import EmbeddedForm from './form/embedded-form.js';
+import propertyGetter from '../data/property-getter.js';
 
 const generateNewArrayElementKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
 export default function SortableField({ path, fieldModel, initialState }) {
     const ref = createRef(null);
 
-    let [values, setValues] = useState(initialState.referenceValues[path[0]] || []);
+    ;
+
+    let [values, setValues] = useState(propertyGetter.get(initialState, path) || []);
 
     const add = type => {
         const key = generateNewArrayElementKey();

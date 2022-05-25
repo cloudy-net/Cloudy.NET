@@ -1,4 +1,4 @@
-﻿const arrayEquals = (a, b) => {
+const arrayEquals = (a, b) => {
     if (a == null && b == null) {
         return true;
     }
@@ -8,6 +8,14 @@
     }
 
     if (b == null) {
+        return false;
+    }
+
+    if(!Array.isArray(a) || !Array.isArray(b)){
+        return false;
+    }
+
+    if(a.length != b.length){
         return false;
     }
 

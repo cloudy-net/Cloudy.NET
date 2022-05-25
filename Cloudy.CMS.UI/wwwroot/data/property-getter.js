@@ -5,14 +5,28 @@ class PropertyGetter {
         if(!state.changedFields){
             return;
         }
-        
-        const changedField = state.changedFields.find(f => arrayEquals(f.path, path) && f.type == 'simple' && f.operation == 'set');
 
-        if (changedField) {
-            return changedField.value;
+        let value = path.length == 1 ? state.referenceValues[path[0]] : null;
+        
+        for(let change of state.changedFields.filter(f => arrayEquals(f.path, path))){
+            if(change.type == 'simple'){
+                if(change.operation == 'set'){
+                    value = change.value;
+                }
+            }
+
+            if(change.type == 'array'){
+                if(value === null){
+                    value = [];
+                }
+                
+                if(change.operation == 'add'){
+                    value.push(change.value);
+                }
+            }
         }
 
-        return state.referenceValues[path[0]];
+        return value;
     }
 }
 
