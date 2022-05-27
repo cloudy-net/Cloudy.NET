@@ -9,6 +9,7 @@ import ContextMenu from '../components/context-menu/context-menu.js';
 import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldModelContext from '../edit-content/form/field-model-context.js';
+import arrayEquals from '../util/array-equals.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){
@@ -23,8 +24,6 @@ const buildDiff = ([state, segment]) => {
 };
 
 function DiffField({ fieldModel, change, initialValue, value }) {
-    // fieldModel.descriptor.control.id == 'text'
-
     let result = diff(initialValue || '', value || '', 0).map(buildDiff);
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
@@ -34,6 +33,50 @@ function DiffField({ fieldModel, change, initialValue, value }) {
             <//>
         <//>
     `;
+}
+
+const getValue = (target, path) => {
+    let value = target;
+
+    while(path.length){
+        if(!value){
+            return;
+        }
+
+        value = value[path[0]];
+
+        path = path.splice(1);
+    }
+
+    return value;
+};
+
+const getPendingValue = (state, path) => {
+    const changedField = state.changedFields.find(f => arrayEquals(f.path, path) && f.type == 'simple' && f.operation == 'set');
+
+    if (changedField) {
+        return changedField.value;
+    }
+
+    return getValue(state.referenceValues, path);
+};
+
+function renderDiffField(fieldModel, state, path){
+    if(fieldModel.descriptor.embeddedFormId){
+        const fieldModels = useContext(fieldModelContext)[fieldModel.descriptor.embeddedFormId];
+        
+        return html`<fieldset class="cloudy-ui-form-field">
+            <legend class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
+            ${fieldModels.map(f => renderDiffField(f, state, [...path, f.descriptor.id]))}
+        <//>`;
+    }
+
+    return html`<${DiffField}
+        change=${state.changedFields.find(f => arrayEquals(f.path, path))}
+        initialValue=${state.referenceValues[fieldModel.descriptor.id]}
+        value=${getPendingValue(state, path)}
+        fieldModel=${fieldModel}
+    />`;
 }
 
 function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
@@ -49,16 +92,6 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = useContext(showDiffContext);
 
-    const getPendingValue = key => {
-        const changedField = state.changedFields.find(f => f.path.length == 1 && f.path[0] == key && f.type == 'simple' && f.operation == 'set');
-
-        if (changedField) {
-            return changedField.value;
-        }
-
-        return state.referenceValues[key];
-    };
-
     const save = async () => {
         onSave();
     }
@@ -69,12 +102,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
         <${Blade} scrollIntoView=${contentReference} title=${'Review ' + nameGetter.getNameOf(state.referenceValues, contentType)} onClose=${() => onClose()}>
             <cloudy-ui-blade-content>
                 <div class="cloudy-ui-form">
-                    ${fieldModels.map(fieldModel => html`<${DiffField}
-                        change=${state.changedFields.find(f => f.path[f.path.length - 1] == fieldModel.descriptor.id)}
-                        initialValue=${state.referenceValues[fieldModel.descriptor.id]}
-                        value=${getPendingValue(fieldModel.descriptor.id)}
-                        fieldModel=${fieldModel}
-                    />`)}
+                    ${fieldModels.map(fieldModel => renderDiffField(fieldModel, state, [fieldModel.descriptor.id]))}
                 <//>
             <//>
             <cloudy-ui-blade-footer>

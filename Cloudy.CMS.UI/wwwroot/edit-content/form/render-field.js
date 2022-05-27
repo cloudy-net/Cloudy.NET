@@ -23,7 +23,7 @@ const renderField = (fieldModel, initialState, path) => {
         };
     
         return html`
-            <fieldset class="cloudy-ui-form-field cloudy-ui-simple">
+            <fieldset class="cloudy-ui-form-field">
                 <legend class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}${getChangeBadge()}<//>
                 <${EmbeddedForm}
                     path=${path}
