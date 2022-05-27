@@ -30,7 +30,7 @@ function DiffField({ fieldModel, change, initialValue, value }) {
         <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
             <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
             <div class=cloudy-ui-form-input>
-                ${result}
+                ${result == '' ? html`<br/>` : result}
             <//>
         <//>
     `;
