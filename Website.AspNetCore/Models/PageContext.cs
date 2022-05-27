@@ -19,6 +19,10 @@ namespace Website.AspNetCore.Models
         {
             modelBuilder
                 .Entity<Page>()
+                .Property(e => e.Facts)
+                .HasConversion(new JsonValueConverter<QuickFactsBlock>());
+            modelBuilder
+                .Entity<Page>()
                 .Property(e => e.SidebarBlocks)
                 .HasConversion(new JsonValueConverter<IEnumerable<ISidebarBlock>>());
             base.OnModelCreating(modelBuilder);

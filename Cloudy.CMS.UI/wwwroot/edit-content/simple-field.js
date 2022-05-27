@@ -4,11 +4,6 @@ import html from '../util/html.js';
 import arrayEquals from "../util/array-equals.js";
 
 export default function SimpleField({ fieldModel, initialState, path }) {
-    if (fieldModel.descriptor.embeddedFormId && !fieldModel.descriptor.isSortable) {
-        wrapperTag = 'fieldset';
-        labelTag = 'legend';
-    }
-
     const emitEvent = (element, value) => element.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'simple', operation: 'set', value } } }))
 
     const getChangeBadge = () => {

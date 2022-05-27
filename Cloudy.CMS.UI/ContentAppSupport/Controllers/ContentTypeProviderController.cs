@@ -99,7 +99,12 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
             }
 
-            var primaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => k.Name).ToList().AsReadOnly();
+            IEnumerable<string> primaryKeys = Enumerable.Empty<string>();
+
+            if (ContextDescriptorProvider.GetFor(contentType.Type) != null)
+            {
+                primaryKeys = PrimaryKeyPropertyGetter.GetFor(contentType.Type).Select(k => k.Name).ToList().AsReadOnly();
+            }
 
             var item = new ContentTypeResponseItem
             {

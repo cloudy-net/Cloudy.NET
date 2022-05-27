@@ -24,6 +24,7 @@ namespace Website.AspNetCore.Models
         public string Description { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
+        public QuickFactsBlock Facts { get; set; }
         public IEnumerable<ISidebarBlock> SidebarBlocks { get; set; }
     }
 }

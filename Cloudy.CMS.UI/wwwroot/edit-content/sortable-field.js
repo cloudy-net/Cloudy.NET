@@ -29,19 +29,23 @@ export default function SortableField({ path, fieldModel, initialState }) {
     const renderValue = value => {
         const elementPath = [...path, value.key];
         if (fieldModel.descriptor.embeddedFormId) {
-            return html`<${EmbeddedForm}
-                path=${elementPath}
-                formId=${formId}
-                initialState=${initialState}
-            />`;
+            return html`<cloudy-ui-sortable-item-form>
+                <${EmbeddedForm}
+                    path=${elementPath}
+                    formId=${formId}
+                    initialState=${initialState}
+                />
+            <//>`;
         }
 
         if (fieldModel.descriptor.isPolymorphic && value.type) {
-            return html`<${EmbeddedForm}
-                path=${elementPath}
-                formId=${value.type}
-                initialState=${initialState}
-            />`;
+            return html`<cloudy-ui-sortable-item-form>
+                <${EmbeddedForm}
+                    path=${elementPath}
+                    formId=${value.type}
+                    initialState=${initialState}
+                />
+            <//>`;
         }
     
         return html`<${SimpleField}
