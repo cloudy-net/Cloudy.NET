@@ -5,6 +5,7 @@ import diff from './lib/diff.js';
 import contentTypeProvider from '../data/content-type-provider.js';
 import ReviewRemoteChangesContext from './review-remote-changes-context.js';
 import stateManager from '../edit-content/state-manager.js';
+import fieldModelContext from '../edit-content/form/field-model-context.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){

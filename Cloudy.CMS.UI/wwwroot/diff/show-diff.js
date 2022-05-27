@@ -8,6 +8,7 @@ import showDiffContext from './show-diff-context.js';
 import ContextMenu from '../components/context-menu/context-menu.js';
 import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
+import fieldModelContext from '../edit-content/form/field-model-context.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){
