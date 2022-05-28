@@ -10,6 +10,8 @@ import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldModelContext from '../edit-content/form/field-model-context.js';
 import arrayEquals from '../util/array-equals.js';
+import getValueFromObject from '../util/get-value.js';
+import getIntermediateValue from '../util/get-intermediate-value.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){
@@ -35,30 +37,14 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     `;
 }
 
-const getValue = (target, path) => {
-    let value = target;
-
-    while(path.length){
-        if(!value){
-            return;
-        }
-
-        value = value[path[0]];
-
-        path = path.splice(1);
-    }
-
-    return value;
-};
-
 const getPendingValue = (state, path) => {
-    const changedField = state.changedFields.find(f => arrayEquals(f.path, path) && f.type == 'simple' && f.operation == 'set');
+    const change = state.changes.find(f => arrayEquals(f.path, path) && f.type == 'simple' && f.operation == 'set');
 
-    if (changedField) {
-        return changedField.value;
+    if (change) {
+        return change.value;
     }
 
-    return getValue(state.referenceValues, path);
+    return getValueFromObject(state.referenceValues, path);
 };
 
 function renderDiffField(fieldModel, state, path){
@@ -72,9 +58,9 @@ function renderDiffField(fieldModel, state, path){
     }
 
     return html`<${DiffField}
-        change=${state.changedFields.find(f => arrayEquals(f.path, path))}
+        change=${state.changes.find(f => arrayEquals(f.path, path))}
         initialValue=${state.referenceValues[fieldModel.descriptor.id]}
-        value=${getPendingValue(state, path)}
+        value=${getIntermediateValue(state.referenceValues, path, state.changes)}
         fieldModel=${fieldModel}
     />`;
 }
@@ -110,7 +96,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
                     <${ListItem} text="Discard changes" onclick=${() => { stateManager.discardChanges(contentReference); onClose(); }}/>
                 <//>
                 ${editButton}
-                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.changedFields.length}>Save</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.changes.length}>Save</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;

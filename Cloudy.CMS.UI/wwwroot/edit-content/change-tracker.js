@@ -69,7 +69,7 @@ class ChangeTracker {
         let changesForContent = this.pendingChanges.find(c => arrayEquals(contentId, c.contentId) && c.contentTypeId === contentTypeId);
 
         if (!changesForContent) {
-            changesForContent = { contentId, contentTypeId, changedFields: [] };
+            changesForContent = { contentId, contentTypeId, changes: [] };
             this.pendingChanges.push(changesForContent);
         }
 
@@ -80,35 +80,35 @@ class ChangeTracker {
             delete changesForContent.remove;
         }
 
-        let changedField = changesForContent.changedFields.find(f => arrayEquals(change.path, f.path));
+        let change = changesForContent.changes.find(f => arrayEquals(change.path, f.path));
 
         if (change.type == 'simple') {
-            if (!changedField) {
-                changesForContent.changedFields.push(changedField = change);
+            if (!change) {
+                changesForContent.changes.push(change = change);
             }
 
             if (change.operation == 'set') {
-                changedField.value = change.value;
+                change.value = change.value;
             }
         }
         
         if (change.type == 'array') {
-            if (!changedField) {
-                changesForContent.changedFields.push(changedField = { path: change.path, type: 'array', changes: [] });
+            if (!change) {
+                changesForContent.changes.push(change = { path: change.path, type: 'array', changes: [] });
             }
 
             if (change.operation == 'add') {
-                changedField.changes.push({ id: change.id, type: change.add, value: JSON.stringify(change.value) });
+                change.changes.push({ id: change.id, type: change.add, value: JSON.stringify(change.value) });
             }
             if (change.operation == 'update') {
-                const item = changedField.changes.find(i => i.id == change.id);
+                const item = change.changes.find(i => i.id == change.id);
                 item.value = change.value;
             }
             if (change.operation == 'delete') {
-                var item = changedField.changes.find(i => i.id == change.id);
+                var item = change.changes.find(i => i.id == change.id);
 
                 if (item.operation == 'add') {
-                    changedField.changes.splice(changedField.changes.indexOf(item), 1); // delete addition completely
+                    change.changes.splice(change.changes.indexOf(item), 1); // delete addition completely
                 } else {
                     item.operation = 'delete';
                     delete item.value;
@@ -116,7 +116,7 @@ class ChangeTracker {
             }
         }
 
-        if (changesForContent.changedFields.length == 0 && !changesForContent.remove) {
+        if (changesForContent.changes.length == 0 && !changesForContent.remove) {
             this.pendingChanges.splice(this.pendingChanges.indexOf(changesForContent), 1); // delete empty change object
         }
 
@@ -152,7 +152,7 @@ class ChangeTracker {
                 keyValues: c.contentId,
                 contentTypeId: c.contentTypeId,
                 remove: c.remove,
-                changedFields: c.changedFields
+                changes: c.changes
             }
         });
         if (await contentSaver.save(contentToSave) == false) {
@@ -182,13 +182,13 @@ class ChangeTracker {
             return value;
         }
 
-        const changedField = changesForContent.changedFields.find(c => arrayEquals(path, c.path));
+        const change = changesForContent.changes.find(c => arrayEquals(path, c.path));
 
-        if (!changedField) {
+        if (!change) {
             return value;
         }
 
-        return changedField.value;
+        return change.value;
     }
 
     mergeWithPendingChanges(contentId, contentTypeId, content) {
@@ -204,16 +204,16 @@ class ChangeTracker {
             return contentMapping;
         }
 
-        for (const changedField of changesForContent.changedFields) {
-            if (changedField.value) {
-                contentMapping[changedField.name] = changedField.value;
+        for (const change of changesForContent.changes) {
+            if (change.value) {
+                contentMapping[change.name] = change.value;
             }
-            if (changedField.changes) {
-                if (!Array.isArray(contentMapping[changedField.name])) {
-                    contentMapping[changedField.name] = [];
+            if (change.changes) {
+                if (!Array.isArray(contentMapping[change.name])) {
+                    contentMapping[change.name] = [];
                 }
-                for (const change of changedField.changes.filter(c => c.type == 'array.add')) {
-                    contentMapping[changedField.name].push(change.value);
+                for (const change of change.changes.filter(c => c.type == 'array.add')) {
+                    contentMapping[change.name].push(change.value);
                 }
             }
         }

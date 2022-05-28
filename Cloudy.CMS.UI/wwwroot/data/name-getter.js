@@ -39,10 +39,10 @@ class NameGetter {
         let name = null;
 
         const getProperty = key => {
-            const changedField = state.changedFields.find(f => f.path.length == 1 && f.path[0] == key && f.type == 'simple' && f.operation == 'set');
+            const change = state.changes.find(f => f.path.length == 1 && f.path[0] == key && f.type == 'simple' && f.operation == 'set');
 
-            if (changedField) {
-                return changedField.value;
+            if (change) {
+                return change.value;
             }
 
             return state.referenceValues[key];

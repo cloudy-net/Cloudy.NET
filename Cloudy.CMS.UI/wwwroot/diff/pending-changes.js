@@ -26,7 +26,7 @@ function PendingChanges({ renderIf, onSelect, onClose }) {
         .map(c => ({ contentType: c, changes: states.filter(s => s.contentReference.contentTypeId == c.id) }))
         .filter(g => g.changes.length);
 
-    const getSubText = (state, contentType) => state.remove ? 'Slated for removal' : state.contentReference.keyValues ? `Changed fields: ${state.changedFields.length}` : `New ${contentType.lowerCaseName} (created ${state.referenceDate.toLocaleString()})`;
+    const getSubText = (state, contentType) => state.remove ? 'Slated for removal' : state.contentReference.keyValues ? `Changed fields: ${state.changes.length}` : `New ${contentType.lowerCaseName} (created ${state.referenceDate.toLocaleString()})`;
     const getName = (state, contentType) => state.contentReference.newContentKey ? nameGetter.getNameOfState(state, contentType) : diff(nameGetter.getNameOf(state.referenceValues, contentType) || '', nameGetter.getNameOfState(state, contentType) || '', 0).map(([state, segment]) => html`<span class=${state == diff.INSERT ? 'cloudy-ui-diff-insert' : state == diff.DELETE ? 'cloudy-ui-diff-delete' : null}>${segment}</span>`);
     const renderItems = (states, contentType) => states.map(state => html`<${ListItem} text=${getName(state, contentType)} subtext=${getSubText(state, contentType)} onclick=${() => onSelect(state.contentReference)} />`)
 

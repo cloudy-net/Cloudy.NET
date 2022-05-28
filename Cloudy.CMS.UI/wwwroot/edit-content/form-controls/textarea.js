@@ -1,6 +1,6 @@
 ﻿import html from '../../util/html.js';
 import { createRef } from '../../lib/preact.module.js';
-import propertyGetter from '../../data/property-getter.js';
+import getIntermediateValue from '../../util/get-intermediate-value.js';
 
 function Textarea({ fieldModel, initialState, path, readonly, onchange }) {
     const ref = onchange && createRef();
@@ -13,7 +13,7 @@ function Textarea({ fieldModel, initialState, path, readonly, onchange }) {
             class="cloudy-ui-form-input"
             name=${fieldModel.descriptor.id}
             onInput=${changeEvent}
-            defaultValue=${propertyGetter.get(initialState, path)}
+            defaultValue=${getIntermediateValue(initialState.referenceValues, path, initialState.changes)}
             rows=${fieldModel.descriptor.control.parameters.options && fieldModel.descriptor.control.parameters.options.rows ? fieldModel.descriptor.control.parameters.options.rows.value : 8}
             readonly=${readonly}
         >

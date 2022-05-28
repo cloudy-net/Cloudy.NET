@@ -58,10 +58,10 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             var result = new List<SaveContentResult>();
 
-            foreach (var change in data.Changes)
+            foreach (var changedContent in data.ChangedContent)
             {
-                var contentType = ContentTypeProvider.Get(change.ContentReference.ContentTypeId);
-                var keyValues = PrimaryKeyConverter.Convert(change.ContentReference.KeyValues, contentType.Id);
+                var contentType = ContentTypeProvider.Get(changedContent.ContentReference.ContentTypeId);
+                var keyValues = PrimaryKeyConverter.Convert(changedContent.ContentReference.KeyValues, contentType.Id);
 
                 object content;
 
@@ -71,7 +71,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 }
                 else
                 {
-                    if (change.Remove)
+                    if (changedContent.Remove)
                     {
                         await ContentDeleter.DeleteAsync(contentType.Id, keyValues).ConfigureAwait(false);
                         result.Add(SaveContentResult.SuccessResult(contentType.Id, keyValues));
@@ -83,23 +83,23 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => p.Name, p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
 
-                if (change.ChangedFields.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
+                if (changedContent.Changes.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
-                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {change.ContentReference.ContentTypeId}!");
+                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {changedContent.ContentReference.ContentTypeId}!");
                 }
 
-                var changedSimpleFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Simple).ToList();
+                var changedSimpleFields = changedContent.Changes.Where(f => f.Type == ChangeType.Simple).ToList();
 
-                foreach (var changedField in changedSimpleFields)
+                foreach (var change in changedSimpleFields)
                 {
-                    UpdateSimpleField(content, changedField.Path, changedField.InitialValue, changedField.Value);
+                    UpdateSimpleField(content, change.Path, change.InitialValue, change.Value);
                 }
 
-                var changedArrayFields = change.ChangedFields.Where(f => f.Type == ChangedFieldType.Array).ToList();
+                var arrayChanges = changedContent.Changes.Where(f => f.Type == ChangeType.Array).ToList();
 
-                foreach (var changedField in changedArrayFields)
+                foreach (var change in arrayChanges)
                 {
-                    var name = changedField.Path.Single();
+                    var name = change.Path.Single();
                     var field = FieldProvider.GetFor(contentType.Id, name);
                     var property = contentType.Type.GetProperty(field.Name);
                     var array = (IList)property.GetGetMethod().Invoke(content, null);
@@ -112,7 +112,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
                     if (field.Type.IsInterface)
                     {
-                        foreach (var arrayChange in changedField.Changes) {
+                        foreach (var arrayChange in change.Changes) {
                             var polymorphicValue = JsonSerializer.Deserialize<PolymorphicValue>(arrayChange.Value);
                             var form = ContentTypeProvider.Get(polymorphicValue.Type);
                             var value = JsonSerializer.Deserialize(polymorphicValue.Value, form.Type);
@@ -227,7 +227,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class SaveContentRequestBody
         {
-            public IEnumerable<ChangedContent> Changes { get; set; }
+            public IEnumerable<ChangedContent> ChangedContent { get; set; }
         }
 
         public class ContentReference
@@ -242,16 +242,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public ContentReference ContentReference { get; set; }
             public bool Remove { get; set; }
             [Required]
-            public ChangedField[] ChangedFields { get; set; }
+            public Change[] Changes { get; set; }
         }
 
-        public static class ChangedFieldType
+        public static class ChangeType
         {
             public static string Simple => "simple";
             public static string Array => "array";
         }
 
-        public class ChangedField
+        public class Change
         {
             public string[] Path { get; set; }
             public string Type { get; set; }

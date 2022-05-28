@@ -1,5 +1,5 @@
-﻿import propertyGetter from '../../data/property-getter.js';
-import { createRef } from '../../lib/preact.module.js';
+﻿import { createRef } from '../../lib/preact.module.js';
+import getIntermediateValue from '../../util/get-intermediate-value.js';
 import html from '../../util/html.js';
 
 function Text({ fieldModel, initialState, path, onchange, readonly }) {
@@ -13,7 +13,7 @@ function Text({ fieldModel, initialState, path, onchange, readonly }) {
             key=${initialState.contentReference}
             class="cloudy-ui-form-input"
             name=${fieldModel.descriptor.id}
-            defaultValue=${propertyGetter.get(initialState, path)}
+            defaultValue=${getIntermediateValue(initialState.referenceValues, path, initialState.changes)}
             onInput=${changeEvent}
             readonly=${readonly}
         />
