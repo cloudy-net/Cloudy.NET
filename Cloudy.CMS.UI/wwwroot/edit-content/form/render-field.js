@@ -1,7 +1,7 @@
 import arrayEquals from '../../util/array-equals.js';
 import html from '../../util/html.js';
-import SimpleField from '../simple-field.js';
-import SortableField from '../sortable-field.js';
+import SimpleField from './simple-field.js';
+import SortableField from './sortable-field.js';
 import EmbeddedForm from './embedded-form.js';
 
 const renderField = (fieldModel, initialState, path) => {
