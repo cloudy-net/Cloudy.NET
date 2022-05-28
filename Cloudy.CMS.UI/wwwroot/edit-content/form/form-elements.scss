@@ -28,6 +28,10 @@ fieldset.cloudy-ui-form-field {
     border: solid 1px rgba(0, 0, 0, 0.23);
     border-radius: 4px;
     padding: 10px 14px 14px;
+
+    &:focus-within {
+        border-color: rgba(0, 0, 0, 0.42);
+    }
 }
 
 
