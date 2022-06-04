@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("checkbox", "FormSupport/Controls/checkbox.js")]
+    [Control("checkbox", null)]
     [MapControlToType(typeof(bool))]
     public class CheckboxControl
     {

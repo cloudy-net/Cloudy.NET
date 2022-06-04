@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("time", "FormSupport/Controls/time.js")]
+    [Control("time", null)]
     [MapControlToUIHint("time")]
     public class TimeControl
     {

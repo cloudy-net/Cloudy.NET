@@ -1,6 +1,6 @@
-import html from '../../util/html.js';
-import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
-import stateManager from '../state-manager.js';
+import html from '../../../util/html.js';
+import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-value.js';
+import stateManager from '../../state-manager.js';
 
 function Textarea({ fieldDescriptor, state, path, readonly }) {
     return html`

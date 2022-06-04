@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("text", "edit-content/form-controls/text.js")]
+    [Control("text", "edit-content/form/controls/text.js")]
     [MapControlToType(typeof(double))]
     [MapControlToType(typeof(double?))]
     [MapControlToType(typeof(int))]

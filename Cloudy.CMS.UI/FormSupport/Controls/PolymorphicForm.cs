@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("polymorphic-form", "edit-content/form-controls/polymorphic-form.js")]
+    [Control("polymorphic-form", null)]
     public class PolymorphicForm
     {
     }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("fileupload", "FormSupport/Controls/fileupload.js")]
+    [Control("fileupload", null)]
     [MapControlToType(typeof(FileUpload))]
     public class FileUpload
     {

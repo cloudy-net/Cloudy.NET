@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls.SelectSupport
 {
-    [Control("select", "FormSupport/Controls/select.js")]
+    [Control("select", null)]
     [MapControlToUIHint("select(provider:string, type:string)")]
     public class SelectControl
     {

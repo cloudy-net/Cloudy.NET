@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("html", "edit-content/form-controls/html.js")]
+    [Control("html", "edit-content/form/controls/html.js")]
     [MapControlToUIHint("html(options?)")]
     [Script("https://cdn.quilljs.com/1.3.6/quill.js")]
     [Style("https://cdn.quilljs.com/1.3.6/quill.snow.css")]

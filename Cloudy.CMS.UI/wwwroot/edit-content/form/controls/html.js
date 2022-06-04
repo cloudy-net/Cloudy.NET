@@ -1,7 +1,7 @@
-import { useEffect, useRef } from '../../lib/preact.hooks.module.js';
-import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
-import html from '../../util/html.js';
-import stateManager from '../state-manager.js';
+import { useEffect, useRef } from '../../../lib/preact.hooks.module.js';
+import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-value.js';
+import html from '../../../util/html.js';
+import stateManager from '../../state-manager.js';
 
 function Html({ fieldDescriptor, state, readonly, path }) {
     const ref = useRef(null);

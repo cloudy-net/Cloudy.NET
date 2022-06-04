@@ -28,6 +28,11 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport
             {
                 var modulePath = control.ModulePath;
 
+                if(modulePath == null)
+                {
+                    continue;
+                }
+
                 if (modulePath.StartsWith('/'))
                 {
                     modulePath = $"{Request.Scheme}://{Request.Host}{modulePath}";

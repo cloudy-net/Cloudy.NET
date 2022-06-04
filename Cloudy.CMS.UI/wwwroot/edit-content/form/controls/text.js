@@ -1,6 +1,6 @@
-import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
-import html from '../../util/html.js';
-import stateManager from '../state-manager.js';
+import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-value.js';
+import html from '../../../util/html.js';
+import stateManager from '../../state-manager.js';
 
 function Text({ fieldDescriptor, state, path, readonly }) {
     return html`

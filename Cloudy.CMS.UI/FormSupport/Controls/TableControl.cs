@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FormSupport.Controls
 {
-    [Control("table", "FormSupport/Controls/table.js")]
+    [Control("table", null)]
     [MapControlToUIHint("table(columns)")]
     public class TableControl
     {
