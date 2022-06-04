@@ -9,7 +9,7 @@ function ListContentTypes({ renderIf, activeContentType, onSelectContentType }) 
         return;
     }
 
-    const items = Object.values(useContext(contentTypeContext));
+    const items = Object.values(useContext(contentTypeContext)).filter(c => c.isStandalone);
 
     if (items?.length === 1) {
         onSelectContentType(items[0]);

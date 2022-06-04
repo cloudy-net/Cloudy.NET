@@ -58,11 +58,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
             foreach (var contentType in ContentTypeProvider.GetAll())
             {
-                if(ContextDescriptorProvider.GetFor(contentType.Type) == null)
-                {
-                    continue;
-                }
-
                 result.Add(await GetItem(contentType).ConfigureAwait(false));
             }
 
@@ -109,6 +104,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             var item = new ContentTypeResponseItem
             {
                 Id = contentType.Id,
+                IsStandalone = ContextDescriptorProvider.GetFor(contentType.Type) != null,
                 PrimaryKeys = primaryKeys,
                 Name = name,
                 LowerCaseName = name.Substring(0, 1).ToLower() + name.Substring(1),
@@ -132,6 +128,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         public class ContentTypeResponseItem
         {
             public string Id { get; set; }
+            public bool IsStandalone { get; set; }
             public IEnumerable<string> PrimaryKeys { get; set; }
             public string Name { get; set; }
             public string LowerCaseName { get; set; }
