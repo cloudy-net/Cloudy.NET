@@ -2,7 +2,7 @@ import { useContext, useEffect } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
 import nameGetter from '../data/name-getter.js';
 import Urls from './urls.js';
-import Form from './form.js';
+import Form from './form/form.js';
 import stateContext from './state-context.js';
 import Blade from '../components/blade/blade.js';
 import contentTypeContext from '../list-content-types/content-type-context.js';

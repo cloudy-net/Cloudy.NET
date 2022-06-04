@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
-import html from '../util/html.js';
-import stateContext from './state-context.js';
-import renderField from './form/render-field.js';
-import fieldDescriptorContext from './form/field-descriptor-context.js';
+import { useContext, useEffect, useState } from '../../lib/preact.hooks.module.js';
+import html from '../../util/html.js';
+import stateContext from '../state-context.js';
+import renderField from './render-field.js';
+import fieldDescriptorContext from './field-descriptor-context.js';
 
 function Form({ contentReference }) {
     const fieldDescriptors = useContext(fieldDescriptorContext)[contentReference.contentTypeId];
