@@ -43,7 +43,7 @@ function renderDiffField(fieldDescriptor, state, path){
         
         return html`<fieldset class="cloudy-ui-form-field">
             <legend class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
-            ${fieldDescriptors.map(f => renderDiffField(f, state, [...path, f.descriptor.id]))}
+            ${fieldDescriptors.map(f => renderDiffField(f, state, [...path, f.id]))}
         <//>`;
     }
 
