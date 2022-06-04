@@ -37,16 +37,6 @@ function DiffField({ fieldModel, change, initialValue, value }) {
     `;
 }
 
-const getPendingValue = (state, path) => {
-    const change = state.simpleChanges.find(f => arrayEquals(f.path, path));
-
-    if (change) {
-        return change.value;
-    }
-
-    return getValue(state.referenceValues, path);
-};
-
 function renderDiffField(fieldModel, state, path){
     if(fieldModel.descriptor.embeddedFormId){
         const fieldModels = useContext(fieldModelContext)[fieldModel.descriptor.embeddedFormId];
