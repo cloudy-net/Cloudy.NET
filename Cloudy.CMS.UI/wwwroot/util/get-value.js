@@ -1,5 +1,6 @@
 const getValue = (object, path) => {
     let value = object;
+    path = [...path];
 
     while(path.length){
         if(!value){
