@@ -3,17 +3,16 @@ import html from '../util/html.js';
 import nameGetter from '../data/name-getter.js';
 import Urls from './urls.js';
 import Form from './form.js';
-import contentTypeProvider from '../data/content-type-provider.js';
 import stateContext from './state-context.js';
 import Blade from '../components/blade/blade.js';
+import contentTypeContext from '../list-content-types/content-type-context.js';
 
 function EditContent({ contentReference, onClose, canDiff, onDiff, reviewRemoteChanges }) {
     if (!contentReference) {
         return;
     }
 
-    const contentType = contentTypeProvider.get(contentReference.contentTypeId);
-
+    const contentType = useContext(contentTypeContext)[contentReference.contentTypeId];
     const state = useContext(stateContext);
 
     var hasChanges = state.simpleChanges?.length > 0;

@@ -2,10 +2,10 @@ import html from '../util/html.js';
 import Blade from '../components/blade/blade.js';
 import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
-import contentTypeProvider from '../data/content-type-provider.js';
 import nameGetter from '../data/name-getter.js';
-import { useEffect, useState } from '../lib/preact.hooks.module.js';
+import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
 import diff from './lib/diff.js';
+import contentTypeContext from '../list-content-types/content-type-context.js';
 
 function PendingChanges({ renderIf, onSelect, onClose }) {
     if (!renderIf) {
@@ -21,8 +21,7 @@ function PendingChanges({ renderIf, onSelect, onClose }) {
         return () => { stateManager.offAnyStateChange(callback); };
     }, []);
 
-    const groups = contentTypeProvider
-        .getAll()
+    const groups = Object.values(useContext(contentTypeContext))
         .map(c => ({ contentType: c, changes: states.filter(s => s.contentReference.contentTypeId == c.id) }))
         .filter(g => g.changes.length);
 

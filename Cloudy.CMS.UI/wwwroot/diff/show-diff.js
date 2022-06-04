@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback, useContext } from '../lib/preact.hook
 import Blade from '../components/blade/blade.js';
 import diff from './lib/diff.js';
 import nameGetter from '../data/name-getter.js';
-import contentTypeProvider from '../data/content-type-provider.js';
 import showDiffContext from './show-diff-context.js';
 import ContextMenu from '../components/context-menu/context-menu.js';
 import ListItem from '../components/list/list-item.js';
@@ -12,6 +11,7 @@ import fieldModelContext from '../edit-content/form/field-model-context.js';
 import arrayEquals from '../util/array-equals.js';
 import getValue from '../util/get-value.js';
 import getIntermediateSimpleValue from '../util/get-intermediate-simple-value.js';
+import contentTypeContext from '../list-content-types/content-type-context.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){
@@ -65,7 +65,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
         }
     }, []);
 
-    const contentType = contentTypeProvider.get(contentReference.contentTypeId);
+    const contentType = useContext(contentTypeContext)[contentReference.contentTypeId];
     const state = useContext(showDiffContext);
 
     const save = async () => {

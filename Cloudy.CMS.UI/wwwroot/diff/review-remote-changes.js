@@ -2,10 +2,10 @@ import html from '../util/html.js';
 import { useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
 import diff from './lib/diff.js';
-import contentTypeProvider from '../data/content-type-provider.js';
 import ReviewRemoteChangesContext from './review-remote-changes-context.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldModelContext from '../edit-content/form/field-model-context.js';
+import contentTypeContext from '../list-content-types/content-type-context.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){
@@ -35,8 +35,7 @@ function DiffField({ fieldModel, initialValue, value }) {
 
 function ReviewRemoteChanges({ contentReference, onClose }) {
     const fieldModels = useContext(fieldModelContext)[contentReference.contentTypeId];
-    
-    const contentType = contentTypeProvider.get(contentReference.contentTypeId);
+    const contentType = useContext(contentTypeContext)[contentReference.contentTypeId];
     const state = useContext(ReviewRemoteChangesContext);
     
     const discard = useCallback(() => {
