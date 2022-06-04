@@ -18,7 +18,8 @@ cloudy-ui-list-sub-header {
     line-height: 18px;
 }
 
-cloudy-ui-list-item {
+cloudy-ui-list-item,
+.cloudy-ui-list-item {
     display: flex;
     flex-grow: 0;
     align-items: center;

@@ -23,6 +23,7 @@ function Urls({ contentReference }) {
 
     return html`
         <${PopupMenu} text='View'>
+            <cloudy-ui-info-message style="width: 300px; max-width: 100vw; box-sizing: border-box;">These URLs are not synced with your local changes.<//>
             ${urls && urls.map(url => html`<${ListItem} link="/${url}" target="blank" text=${url}/>`)}
         <//>
     `;
