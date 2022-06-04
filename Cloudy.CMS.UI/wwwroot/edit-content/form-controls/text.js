@@ -1,20 +1,16 @@
-﻿import { createRef } from '../../lib/preact.module.js';
-import getIntermediateValue from '../../util/get-intermediate-value.js';
+import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
 import html from '../../util/html.js';
+import stateManager from '../state-manager.js';
 
-function Text({ fieldModel, initialState, path, onchange, readonly }) {
-    const ref = onchange && createRef();
-    const changeEvent = onchange && (event => onchange(ref.current, event.srcElement.value));
-
+function Text({ fieldModel, state, path, readonly }) {
     return html`
         <input
-            ref=${ref}
             type="text"
-            key=${initialState.contentReference}
+            key=${state.contentReference}
             class="cloudy-ui-form-input"
             name=${fieldModel.descriptor.id}
-            defaultValue=${getIntermediateValue(initialState.referenceValues, path, initialState.changes)}
-            onInput=${changeEvent}
+            defaultValue=${getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges)}
+            onInput=${event => stateManager.registerSimpleChange(state.contentReference, path, event.srcElement.value)}
             readonly=${readonly}
         />
     `;

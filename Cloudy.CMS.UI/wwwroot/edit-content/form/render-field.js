@@ -19,7 +19,7 @@ const renderField = (fieldModel, initialState, path) => {
 
     if (fieldModel.descriptor.embeddedFormId) {
         const getChangeBadge = () => {
-            return html`<cloudy-ui-change-badge class=${initialState.changes && initialState.changes.find(ch => arrayEquals(ch.path, path)) ? 'cloudy-ui-unchanged' : null} title="This field has pending changes."><//>`;
+            return html`<cloudy-ui-change-badge class=${initialState.simpleChanges && initialState.simpleChanges.find(ch => arrayEquals(ch.path, path)) ? 'cloudy-ui-unchanged' : null} title="This field has pending changes."><//>`;
         };
     
         return html`
@@ -37,7 +37,7 @@ const renderField = (fieldModel, initialState, path) => {
     return html`<${SimpleField}
         path=${path}
         fieldModel=${fieldModel}
-        initialState=${initialState}
+        state=${initialState}
     />`;
 }
 

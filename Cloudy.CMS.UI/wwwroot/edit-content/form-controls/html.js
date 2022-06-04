@@ -1,10 +1,10 @@
-import { useEffect } from '../../lib/preact.hooks.module.js';
-import { createRef } from '../../lib/preact.module.js';
-import getIntermediateValue from '../../util/get-intermediate-value.js';
+import { useEffect, useRef } from '../../lib/preact.hooks.module.js';
+import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
 import html from '../../util/html.js';
+import stateManager from '../state-manager.js';
 
-function Html({ fieldModel, initialState, onchange, readonly, path }) {
-    const ref = createRef();
+function Html({ fieldModel, state, readonly, path }) {
+    const ref = useRef(null);
 
     useEffect(() => {
         const instance = ref.current;
@@ -15,16 +15,16 @@ function Html({ fieldModel, initialState, onchange, readonly, path }) {
             });
         }
 
-        const callback = (delta, oldDelta, source) => onchange(instance, this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, ''));
+        const callback = () => stateManager.registerSimpleChange(state.contentReference, path, this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, ''));
 
-        this.quill.root.innerHTML = getIntermediateValue(initialState.referenceValues, path, initialState.changes) || null;
+        this.quill.root.innerHTML = getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges) || null;
 
         this.quill.on('text-change', callback);
 
         return () => {
             this.quill.off('text-change', callback);
         }
-    }, [initialState]);
+    }, [state]);
 
     return html`
         <div ref=${ref} class="cloudy-ui-form-input">

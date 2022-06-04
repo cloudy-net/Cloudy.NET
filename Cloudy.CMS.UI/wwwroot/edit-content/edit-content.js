@@ -16,11 +16,11 @@ function EditContent({ contentReference, onClose, canDiff, onDiff, reviewRemoteC
 
     const state = useContext(stateContext);
 
-    var hasChanges = state.changes?.length > 0;
+    var hasChanges = state.simpleChanges?.length > 0;
 
     const getTitle = () => {
         const state = useContext(stateContext);
-        const getBadge = () => html`<cloudy-ui-change-badge class=${state.changes.length ? 'cloudy-ui-unchanged' : null} title="This ${contentType.lowerCaseName} has pending changes."><//>`;
+        const getBadge = () => html`<cloudy-ui-change-badge class=${state.simpleChanges.length ? 'cloudy-ui-unchanged' : null} title="This ${contentType.lowerCaseName} has pending changes."><//>`;
 
         return state.loading && state.nameHint ?
             `Edit ${state.nameHint}` :

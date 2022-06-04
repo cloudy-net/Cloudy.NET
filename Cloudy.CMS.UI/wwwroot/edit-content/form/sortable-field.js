@@ -1,26 +1,24 @@
 
-import { useState } from '../../lib/preact.hooks.module.js';
-import { createRef } from '../../lib/preact.module.js';
-
+import { useRef, useState } from '../../lib/preact.hooks.module.js';
 import html from '../../util/html.js';
 import Button from '../../components/button/button.js'
 import SimpleField from './simple-field.js';
 import PopupMenu from '../../components/popup-menu/popup-menu.js';
 import ListItem from '../../components/list/list-item.js';
 import EmbeddedForm from './embedded-form.js';
-import getIntermediateValue from '../../util/get-intermediate-value.js';
+import getValue from '../../util/get-value.js';
 
 const generateNewArrayElementKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
 export default function SortableField({ path, fieldModel, initialState }) {
-    const ref = createRef(null);
+    const ref = useRef(null);
 
-    let [values, setValues] = useState(getIntermediateValue(initialState.referenceValues, path, initialState.changes) || []);
+    let [values, setValues] = useState(/*getValue(initialState.referenceValues, path) || */[]);
 
     const add = type => {
         const key = generateNewArrayElementKey();
         const value = { type, key, value: {} };
-        ref.current.dispatchEvent(new CustomEvent('cloudy-ui-form-change', { bubbles: true, detail: { change: { path, type: 'array', operation: 'add', value } } }));
+        ref.current.dispatchEvent(new CustomEvent('cloudy-ui-form-array-change', { bubbles: true, detail: { change: { path, operation: 'add', value } } }));
         setValues([...values, value]);
     };
 
@@ -49,7 +47,7 @@ export default function SortableField({ path, fieldModel, initialState }) {
         return html`<${SimpleField}
             path=${elementPath}
             fieldModel=${fieldModel}
-            initialState=${initialState}
+            state=${initialState}
         />`;
     };
 

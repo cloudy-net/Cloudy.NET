@@ -1,4 +1,5 @@
-﻿import primaryKeyProvider from "./primary-key-provider.js";
+import getIntermediateSimpleValue from "../util/get-intermediate-simple-value.js";
+import primaryKeyProvider from "./primary-key-provider.js";
 
 class NameGetter {
     getNameOf(content, contentType) {
@@ -38,19 +39,9 @@ class NameGetter {
 
         let name = null;
 
-        const getProperty = key => {
-            const change = state.changes.find(f => f.path.length == 1 && f.path[0] == key && f.type == 'simple' && f.operation == 'set');
-
-            if (change) {
-                return change.value;
-            }
-
-            return state.referenceValues[key];
-        };
-
         if (!contentType.isSingleton) {
             if (contentType.isNameable) {
-                name = contentType.nameablePropertyName ? getProperty(contentType.nameablePropertyName) : getProperty('Name');
+                name = contentType.nameablePropertyName ? getIntermediateSimpleValue(state.referenceValues, [contentType.nameablePropertyName], state.simpleChanges) : getIntermediateSimpleValue(state.referenceValues, ['Name'], state.simpleChanges);
             }
         }
         if (!name) {

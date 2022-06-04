@@ -1,9 +1,8 @@
-﻿import { useEffect } from '../../lib/preact.hooks.module.js';
-import { createRef } from '../../lib/preact.module.js';
+﻿import { useEffect, useRef } from '../../lib/preact.hooks.module.js';
 import html from '../../util/html.js';
 
 function Blade({ scrollIntoView, cssClass, onClose, title, toolbar, children }) {
-    const ref = createRef(null);
+    const ref = useRef(null);
 
     if (scrollIntoView) {
         useEffect(() => {

@@ -24,7 +24,7 @@ class StateManager {
     }
 
     getAll(){
-        return this.states.filter(state => state.changes?.length);
+        return this.states.filter(state => state.simpleChanges?.length);
     }
 
     createStateForNewContent(contentType) {
@@ -34,7 +34,7 @@ class StateManager {
             contentReference,
             referenceValues: {},
             referenceDate: new Date(),
-            changes: [],
+            simpleChanges: [],
         };
         this.states.push(state);
         this.persist(state);
@@ -58,7 +58,7 @@ class StateManager {
             nameHint,
             referenceValues: null,
             referenceDate: null,
-            changes: null,
+            simpleChanges: null,
         };
         this.states.push(state);
         this.persist(state);
@@ -92,7 +92,7 @@ class StateManager {
                     loadingNewVersion: false,
                 };
             } else {
-                if(!state.changes.length){
+                if(!state.simpleChanges.length){
                     state = {
                         ...state,
                         loadingNewVersion: false,
@@ -137,7 +137,7 @@ class StateManager {
                 nameHint: null,
                 referenceValues: content,
                 referenceDate: new Date(),
-                changes: [],
+                simpleChanges: [],
             };
             
             this.replace(state);
@@ -176,33 +176,22 @@ class StateManager {
         return this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
     }
 
-    registerChange(contentReference, newChange) {
+    registerSimpleChange(contentReference, path, value) {
         const state = this.getState(contentReference);
 
-        let change = state.changes.find(f => arrayEquals(newChange.path, f.path));
+        let change = state.simpleChanges.find(f => arrayEquals(path, f.path));
 
-        if (newChange.type == 'simple') {
-            if (!change) {
-                state.changes.push(newChange);
-                change = newChange;
-            }
-
-            if (newChange.operation == 'set') {
-                change.value = newChange.value;
-            }
-
-            const initialValue = getValue(state.referenceValues, newChange.path);
-
-            if (((initialValue === null || initialValue === undefined) && newChange.value === '') || initialValue == newChange.value) {
-                state.changes.splice(state.changes.indexOf(change), 1);
-            }
+        if (!change) {
+            change = { path };
+            state.simpleChanges.push(change);
         }
-        
-        if (newChange.type == 'array') {
-            if (!change) {
-                state.changes.push(newChange);
-                change = newChange;
-            }
+
+        change.value = value;
+
+        const initialValue = getValue(state.referenceValues, path);
+
+        if ((value === '' && (initialValue === null || initialValue === undefined)) || initialValue == value) {
+            state.simpleChanges.splice(state.simpleChanges.indexOf(change), 1);
         }
 
         this.persist(state);
@@ -214,7 +203,7 @@ class StateManager {
     discardChanges(contentReference, change) {
         const state = this.getState(contentReference);
 
-        state.changes.splice(0, state.changes.length);
+        state.simpleChanges.splice(0, state.simpleChanges.length);
 
         this.persist(state);
 
@@ -223,11 +212,11 @@ class StateManager {
     }
 
     updateIndex(){
-        localStorage.setItem(this.indexStorageKey, JSON.stringify(this.states.filter(state => state.changes?.length).map(state => state.contentReference)));
+        localStorage.setItem(this.indexStorageKey, JSON.stringify(this.states.filter(state => state.simpleChanges?.length).map(state => state.contentReference)));
     }
     
     persist(state) {
-        if(state.changes?.length){
+        if(state.simpleChanges?.length){
             localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
         } else {
             localStorage.removeItem(`cloudy:${JSON.stringify(state.contentReference)}`);

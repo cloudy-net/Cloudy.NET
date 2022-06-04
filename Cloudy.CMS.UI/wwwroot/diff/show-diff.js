@@ -10,8 +10,8 @@ import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldModelContext from '../edit-content/form/field-model-context.js';
 import arrayEquals from '../util/array-equals.js';
-import getValueFromObject from '../util/get-value.js';
-import getIntermediateValue from '../util/get-intermediate-value.js';
+import getValue from '../util/get-value.js';
+import getIntermediateSimpleValue from '../util/get-intermediate-simple-value.js';
 
 const buildDiff = ([state, segment]) => {
     if(state == diff.INSERT){
@@ -38,13 +38,13 @@ function DiffField({ fieldModel, change, initialValue, value }) {
 }
 
 const getPendingValue = (state, path) => {
-    const change = state.changes.find(f => arrayEquals(f.path, path) && f.type == 'simple' && f.operation == 'set');
+    const change = state.simpleChanges.find(f => arrayEquals(f.path, path));
 
     if (change) {
         return change.value;
     }
 
-    return getValueFromObject(state.referenceValues, path);
+    return getValue(state.referenceValues, path);
 };
 
 function renderDiffField(fieldModel, state, path){
@@ -58,9 +58,9 @@ function renderDiffField(fieldModel, state, path){
     }
 
     return html`<${DiffField}
-        change=${state.changes.find(f => arrayEquals(f.path, path))}
+        change=${state.simpleChanges.find(f => arrayEquals(f.path, path))}
         initialValue=${state.referenceValues[fieldModel.descriptor.id]}
-        value=${getIntermediateValue(state.referenceValues, path, state.changes)}
+        value=${getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges)}
         fieldModel=${fieldModel}
     />`;
 }
@@ -96,7 +96,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
                     <${ListItem} text="Discard changes" onclick=${() => { stateManager.discardChanges(contentReference); onClose(); }}/>
                 <//>
                 ${editButton}
-                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.changes.length}>Save</cloudy-ui-button>
+                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.simpleChanges.length}>Save</cloudy-ui-button>
             </cloudy-ui-blade-footer>
         <//>
     `;
