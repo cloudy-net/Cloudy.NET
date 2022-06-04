@@ -10,10 +10,10 @@ import getValue from '../../util/get-value.js';
 
 const generateNewArrayElementKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
-export default function SortableField({ path, fieldModel, initialState }) {
+export default function SortableField({ path, fieldModel, state }) {
     const ref = useRef(null);
 
-    let [values, setValues] = useState(/*getValue(initialState.referenceValues, path) || */[]);
+    let [values, setValues] = useState(/*getValue(state.referenceValues, path) || */[]);
 
     const add = type => {
         const key = generateNewArrayElementKey();
@@ -29,7 +29,7 @@ export default function SortableField({ path, fieldModel, initialState }) {
                 <${EmbeddedForm}
                     path=${elementPath}
                     formId=${formId}
-                    initialState=${initialState}
+                    state=${state}
                 />
             <//>`;
         }
@@ -39,7 +39,7 @@ export default function SortableField({ path, fieldModel, initialState }) {
                 <${EmbeddedForm}
                     path=${elementPath}
                     formId=${value.type}
-                    initialState=${initialState}
+                    state=${state}
                 />
             <//>`;
         }
@@ -47,7 +47,7 @@ export default function SortableField({ path, fieldModel, initialState }) {
         return html`<${SimpleField}
             path=${elementPath}
             fieldModel=${fieldModel}
-            state=${initialState}
+            state=${state}
         />`;
     };
 
@@ -56,7 +56,7 @@ export default function SortableField({ path, fieldModel, initialState }) {
             return html`<${EmbeddedForm}
                 path=${path}
                 formId=${formId}
-                initialState=${initialState}
+                state=${state}
             />`;
         }
 

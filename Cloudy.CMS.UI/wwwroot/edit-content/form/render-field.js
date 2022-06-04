@@ -4,8 +4,8 @@ import SimpleField from './simple-field.js';
 import SortableField from './sortable-field.js';
 import EmbeddedForm from './embedded-form.js';
 
-const renderField = (fieldModel, initialState, path) => {
-    if(!initialState || initialState.loading || initialState.loadingNewVersion){
+const renderField = (fieldModel, state, path) => {
+    if(!state || state.loading || state.loadingNewVersion){
         return;
     }
 
@@ -13,13 +13,13 @@ const renderField = (fieldModel, initialState, path) => {
         return html`<${SortableField}
             path=${path}
             fieldModel=${fieldModel}
-            initialState=${initialState}
+            state=${state}
         />`;
     }
 
     if (fieldModel.descriptor.embeddedFormId) {
         const getChangeBadge = () => {
-            return html`<cloudy-ui-change-badge class=${initialState.simpleChanges && initialState.simpleChanges.find(ch => arrayEquals(ch.path, path)) ? 'cloudy-ui-unchanged' : null} title="This field has pending changes."><//>`;
+            return html`<cloudy-ui-change-badge class=${state.simpleChanges && state.simpleChanges.find(ch => arrayEquals(ch.path, path)) ? 'cloudy-ui-unchanged' : null} title="This field has pending changes."><//>`;
         };
     
         return html`
@@ -28,7 +28,7 @@ const renderField = (fieldModel, initialState, path) => {
                 <${EmbeddedForm}
                     path=${path}
                     formId=${fieldModel.descriptor.embeddedFormId}
-                    initialState=${initialState}
+                    state=${state}
                 />
             <//>
         `;
@@ -37,7 +37,7 @@ const renderField = (fieldModel, initialState, path) => {
     return html`<${SimpleField}
         path=${path}
         fieldModel=${fieldModel}
-        state=${initialState}
+        state=${state}
     />`;
 }
 

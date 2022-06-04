@@ -9,7 +9,7 @@ function Form({ contentReference }) {
 
     const state = useContext(stateContext);
 
-    const [initialState, setInitialState] = useState();
+    const [state, setInitialState] = useState();
 
     useEffect(() => {
         setInitialState(state);
@@ -17,7 +17,7 @@ function Form({ contentReference }) {
 
     return html`
         <div class='cloudy-ui-form ${state.loading || state.loadingNewVersion ? 'cloudy-ui-loading' : null}'>
-            ${fieldModels.map(fieldModel => renderField(fieldModel, initialState, [fieldModel.descriptor.id]))}
+            ${fieldModels.map(fieldModel => renderField(fieldModel, state, [fieldModel.descriptor.id]))}
         <//>
     `;
 }
