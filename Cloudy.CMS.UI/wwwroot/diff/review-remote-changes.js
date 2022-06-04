@@ -4,7 +4,7 @@ import Blade from '../components/blade/blade.js';
 import diff from './lib/diff.js';
 import ReviewRemoteChangesContext from './review-remote-changes-context.js';
 import stateManager from '../edit-content/state-manager.js';
-import fieldModelContext from '../edit-content/form/field-model-context.js';
+import fieldDescriptorContext from '../edit-content/form/field-descriptor-context.js';
 import contentTypeContext from '../list-content-types/content-type-context.js';
 
 const buildDiff = ([state, segment]) => {
@@ -19,13 +19,13 @@ const buildDiff = ([state, segment]) => {
     return segment;
 };
 
-function DiffField({ fieldModel, initialValue, value }) {
-    // fieldModel.descriptor.control.id == 'text'
+function DiffField({ fieldDescriptor, initialValue, value }) {
+    // fieldDescriptor.id == 'text'
 
     let result = diff(initialValue || '', value || '', 0).map(buildDiff);
     return html`
         <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
-            <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}<//>
+            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
             <div class=cloudy-ui-form-input>
                 ${result}
             <//>
@@ -34,7 +34,7 @@ function DiffField({ fieldModel, initialValue, value }) {
 }
 
 function ReviewRemoteChanges({ contentReference, onClose }) {
-    const fieldModels = useContext(fieldModelContext)[contentReference.contentTypeId];
+    const fieldDescriptors = useContext(fieldDescriptorContext)[contentReference.contentTypeId];
     const contentType = useContext(contentTypeContext)[contentReference.contentTypeId];
     const state = useContext(ReviewRemoteChangesContext);
     
@@ -50,10 +50,10 @@ function ReviewRemoteChanges({ contentReference, onClose }) {
                     These are the changes that were done after the ${contentType.lowerCaseName} was first retrieved.
                 <//>
                 <div class="cloudy-ui-form">
-                    ${fieldModels.map(fieldModel => html`<${DiffField}
-                        initialValue=${state.referenceValues[fieldModel.descriptor.id]}
-                        value=${state.newVersion.referenceValues[fieldModel.descriptor.id]}
-                        fieldModel=${fieldModel}
+                    ${fieldDescriptors.map(fieldDescriptor => html`<${DiffField}
+                        initialValue=${state.referenceValues[fieldDescriptor.id]}
+                        value=${state.newVersion.referenceValues[fieldDescriptor.id]}
+                        fieldDescriptor=${fieldDescriptor}
                     />`)}
                 <//>
             <//>

@@ -3,7 +3,7 @@ import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value
 import html from '../../util/html.js';
 import stateManager from '../state-manager.js';
 
-function Html({ fieldModel, state, readonly, path }) {
+function Html({ fieldDescriptor, state, readonly, path }) {
     const ref = useRef(null);
 
     useEffect(() => {

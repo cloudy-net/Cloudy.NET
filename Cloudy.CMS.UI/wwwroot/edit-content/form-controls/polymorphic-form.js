@@ -1,6 +1,6 @@
 import html from '../../util/html.js';
 
-function PolymorphicForm({ fieldModel, state, path, onchange, readonly }) {
+function PolymorphicForm({ fieldDescriptor, state, path, onchange, readonly }) {
     return html`
         <div>
             Test

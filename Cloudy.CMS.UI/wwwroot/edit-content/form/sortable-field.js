@@ -10,7 +10,7 @@ import getValue from '../../util/get-value.js';
 
 const generateNewArrayElementKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
-export default function SortableField({ path, fieldModel, state }) {
+export default function SortableField({ path, fieldDescriptor, state }) {
     const ref = useRef(null);
 
     let [values, setValues] = useState(/*getValue(state.referenceValues, path) || */[]);
@@ -24,7 +24,7 @@ export default function SortableField({ path, fieldModel, state }) {
 
     const renderValue = value => {
         const elementPath = [...path, value.key];
-        if (fieldModel.descriptor.embeddedFormId) {
+        if (fieldDescriptor.embeddedFormId) {
             return html`<cloudy-ui-sortable-item-form>
                 <${EmbeddedForm}
                     path=${elementPath}
@@ -34,7 +34,7 @@ export default function SortableField({ path, fieldModel, state }) {
             <//>`;
         }
 
-        if (fieldModel.descriptor.isPolymorphic && value.type) {
+        if (fieldDescriptor.isPolymorphic && value.type) {
             return html`<cloudy-ui-sortable-item-form>
                 <${EmbeddedForm}
                     path=${elementPath}
@@ -46,13 +46,13 @@ export default function SortableField({ path, fieldModel, state }) {
     
         return html`<${SimpleField}
             path=${elementPath}
-            fieldModel=${fieldModel}
+            fieldDescriptor=${fieldDescriptor}
             state=${state}
         />`;
     };
 
     const addButton = () => {
-        if (fieldModel.descriptor.embeddedFormId) {
+        if (fieldDescriptor.embeddedFormId) {
             return html`<${EmbeddedForm}
                 path=${path}
                 formId=${formId}
@@ -60,10 +60,10 @@ export default function SortableField({ path, fieldModel, state }) {
             />`;
         }
 
-        if (fieldModel.descriptor.isPolymorphic) {
+        if (fieldDescriptor.isPolymorphic) {
             return html`
                 <${PopupMenu} text="Add" position="right">
-                    ${fieldModel.descriptor.polymorphicCandidates.map(c => html`<${ListItem} text="${c}" onclick=${() => add(c)}/>`)}
+                    ${fieldDescriptor.polymorphicCandidates.map(c => html`<${ListItem} text="${c}" onclick=${() => add(c)}/>`)}
                 <//>
             `;
         }
@@ -73,7 +73,7 @@ export default function SortableField({ path, fieldModel, state }) {
 
     return html`
         <div class="cloudy-ui-form-field" ref=${ref}>
-            <div class="cloudy-ui-form-field-label">${fieldModel.descriptor.label || fieldModel.descriptor.id}</div>
+            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}</div>
             <cloudy-ui-sortable-items>
                 ${values.map(value => renderValue(value))}
             <//>

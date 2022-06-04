@@ -1,16 +1,16 @@
-﻿import html from '../../util/html.js';
+import html from '../../util/html.js';
 import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
 import stateManager from '../state-manager.js';
 
-function Textarea({ fieldModel, state, path, readonly }) {
+function Textarea({ fieldDescriptor, state, path, readonly }) {
     return html`
         <textarea
             type="text"
             class="cloudy-ui-form-input"
-            name=${fieldModel.descriptor.id}
+            name=${fieldDescriptor.id}
             onInput=${event => stateManager.registerSimpleChange(state.contentReference, path, event.srcElement.value)}
             defaultValue=${getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges)}
-            rows=${fieldModel.descriptor.control.parameters.options && fieldModel.descriptor.control.parameters.options.rows ? fieldModel.descriptor.control.parameters.options.rows.value : 8}
+            rows=${fieldDescriptor.control.parameters.options && fieldDescriptor.control.parameters.options.rows ? fieldDescriptor.control.parameters.options.rows.value : 8}
             readonly=${readonly}
         >
         <//>
