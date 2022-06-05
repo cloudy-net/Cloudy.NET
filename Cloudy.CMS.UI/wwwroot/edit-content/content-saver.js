@@ -2,13 +2,20 @@ import notificationManager from "../NotificationSupport/notification-manager.js"
 import urlFetcher from "../util/url-fetcher.js";
 
 class ContentSaver {
-    async save(changes) {
+    async save(states) {
         const response = await urlFetcher.fetch("SaveContent/SaveContent", {
             credentials: "include",
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                changes
+                changedContent: states
+                .map(state => ({ 
+                    contentReference: state.contentReference,
+                    simpleChanges: state.simpleChanges.map(simpleChange => ({
+                        ...simpleChange,
+                        value: JSON.stringify(simpleChange.value)
+                    }))
+                }))
             }),
         }, 'Could not save content');
 

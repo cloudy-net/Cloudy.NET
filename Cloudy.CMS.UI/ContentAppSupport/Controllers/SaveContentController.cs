@@ -83,43 +83,43 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Id).ToDictionary(p => p.Name, p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
 
-                if (changedContent.Changes.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
+                if (changedContent.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
                     throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {changedContent.ContentReference.ContentTypeId}!");
                 }
 
-                var changedSimpleFields = changedContent.Changes.Where(f => f.Type == ChangeType.Simple).ToList();
+                var changedSimpleFields = changedContent.SimpleChanges.ToList();
 
                 foreach (var change in changedSimpleFields)
                 {
-                    UpdateSimpleField(content, change.Path, change.InitialValue, change.Value);
+                    UpdateSimpleField(content, change.Path, change.Value);
                 }
 
-                var arrayChanges = changedContent.Changes.Where(f => f.Type == ChangeType.Array).ToList();
+                //var arrayChanges = changedContent.SimpleChanges.Where(f => f.Type == ChangeType.Array).ToList();
 
-                foreach (var change in arrayChanges)
-                {
-                    var name = change.Path.Single();
-                    var field = FieldProvider.GetFor(contentType.Id, name);
-                    var property = contentType.Type.GetProperty(field.Name);
-                    var array = (IList)property.GetGetMethod().Invoke(content, null);
+                //foreach (var change in arrayChanges)
+                //{
+                //    var name = change.Path.Single();
+                //    var field = FieldProvider.GetFor(contentType.Id, name);
+                //    var property = contentType.Type.GetProperty(field.Name);
+                //    var array = (IList)property.GetGetMethod().Invoke(content, null);
 
-                    if(array == null)
-                    {
-                        array = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(field.Type));
-                        property.GetSetMethod().Invoke(content, new object[] { array });
-                    }
+                //    if(array == null)
+                //    {
+                //        array = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(field.Type));
+                //        property.GetSetMethod().Invoke(content, new object[] { array });
+                //    }
 
-                    if (field.Type.IsInterface)
-                    {
-                        foreach (var arrayChange in change.Changes) {
-                            var polymorphicValue = JsonSerializer.Deserialize<PolymorphicValue>(arrayChange.Value);
-                            var form = ContentTypeProvider.Get(polymorphicValue.Type);
-                            var value = JsonSerializer.Deserialize(polymorphicValue.Value, form.Type);
-                            array.Add(value);
-                        }
-                    }
-                }
+                //    if (field.Type.IsInterface)
+                //    {
+                //        foreach (var arrayChange in change.Changes) {
+                //            var polymorphicValue = JsonSerializer.Deserialize<PolymorphicValue>(arrayChange.Value);
+                //            var form = ContentTypeProvider.Get(polymorphicValue.Type);
+                //            var value = JsonSerializer.Deserialize(polymorphicValue.Value, form.Type);
+                //            array.Add(value);
+                //        }
+                //    }
+                //}
 
                 if (!TryValidateModel(content))
                 {
@@ -186,47 +186,63 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             }
         }
 
-        private void UpdateSimpleField(object instance, IEnumerable<string> path, string initialValue, string value)
+        private void UpdateSimpleField(object target, IEnumerable<string> path, string value)
         {
-            var contentType = ContentTypeProvider.Get(instance.GetType());
+            var contentType = ContentTypeProvider.Get(target.GetType());
 
             var name = path.First();
+
+            path = path.Skip(1);
+
             var field = FieldProvider.GetFor(contentType.Id, name);
             var property = contentType.Type.GetProperty(field.Name);
 
-            if (path.Count() == 1)
+            if (!path.Any())
             {
-                property.GetSetMethod().Invoke(instance, new object[] { Convert.ChangeType(value, property.PropertyType) });
+                property.GetSetMethod().Invoke(target, new object[] { JsonSerializer.Deserialize(value, property.PropertyType) });
                 return;
             }
-
-            var instanceValue = property.GetValue(instance);
             
             if (field.IsSortable)
             {
-                var indexString = path.ElementAt(1);
+                //var indexString = path.ElementAt(1);
 
-                if (!indexString.StartsWith("original-"))
-                {
-                    throw new Exception("Simple updates to non-persisted array elements not supported");
-                }
+                //if (!indexString.StartsWith("original-"))
+                //{
+                //    throw new Exception("Simple updates to non-persisted array elements not supported");
+                //}
 
-                var index = int.Parse(indexString.Substring("original-".Length));
-                
-                var elementAtMethod = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(m => m.Name == nameof(Enumerable.ElementAt) && m.GetParameters()[1].ParameterType == typeof(int));
-                var genericElementAtMethod = elementAtMethod.Single().MakeGenericMethod(field.Type);
-                var element = genericElementAtMethod.Invoke(null, new object[] { instanceValue, index });
+                //var index = int.Parse(indexString.Substring("original-".Length));
 
-                UpdateSimpleField(element, path.Skip(2), initialValue, value);
+                //var elementAtMethod = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(m => m.Name == nameof(Enumerable.ElementAt) && m.GetParameters()[1].ParameterType == typeof(int));
+                //var genericElementAtMethod = elementAtMethod.Single().MakeGenericMethod(field.Type);
+                //var element = genericElementAtMethod.Invoke(null, new object[] { instanceValue, index });
+
+                //UpdateSimpleField(element, path.Skip(2), value);
+                throw new NotImplementedException("Simple updates to sortables not implemented (yet!)");
             }
             else
             {
-                throw new NotImplementedException("Nested types not implemented (yet!)");
+                if (property.GetGetMethod().Invoke(target, null) == null) // create instance implicitly
+                {
+                    if (field.Type.IsInterface || field.Type.IsAbstract)
+                    {
+                        throw new NotImplementedException("Updates to nested interfaces or abstract classes not implemented (yet!)");
+                    }
+
+                    var instance = Activator.CreateInstance(field.Type);
+                    property.GetSetMethod().Invoke(target, new object[] { instance });
+                }
+
+                target = property.GetGetMethod().Invoke(target, null);
+
+                UpdateSimpleField(target, path, value);
             }
         }
 
         public class SaveContentRequestBody
         {
+            [Required]
             public IEnumerable<ChangedContent> ChangedContent { get; set; }
         }
 
@@ -239,24 +255,16 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
 
         public class ChangedContent
         {
+            [Required]
             public ContentReference ContentReference { get; set; }
             public bool Remove { get; set; }
             [Required]
-            public Change[] Changes { get; set; }
+            public SimpleChange[] SimpleChanges { get; set; }
         }
 
-        public static class ChangeType
-        {
-            public static string Simple => "simple";
-            public static string Array => "array";
-        }
-
-        public class Change
+        public class SimpleChange
         {
             public string[] Path { get; set; }
-            public string Type { get; set; }
-            public ArrayChange[] Changes { get; set; }
-            public string InitialValue { get; set; }
             public string Value { get; set; }
         }
 
