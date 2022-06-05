@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback, useContext } from '../lib/preact.hook
 import Blade from '../components/blade/blade.js';
 import diff from './lib/diff.js';
 import nameGetter from '../data/name-getter.js';
-import showDiffContext from './show-diff-context.js';
+import reviewChangesContext from './review-changes-context.js';
 import ContextMenu from '../components/context-menu/context-menu.js';
 import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
@@ -55,7 +55,7 @@ function renderDiffField(fieldDescriptor, state, path){
     />`;
 }
 
-function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
+function ReviewChanges({ contentReference, onClose, canEdit, onEdit, onSave }) {
     const fieldDescriptors = useContext(fieldDescriptorContext)[contentReference.contentTypeId];
 
     const undoChanges = useCallback(() => {
@@ -66,7 +66,7 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
     }, []);
 
     const contentType = useContext(contentTypeContext)[contentReference.contentTypeId];
-    const state = useContext(showDiffContext);
+    const state = useContext(reviewChangesContext);
 
     const save = async () => {
         onSave();
@@ -92,4 +92,4 @@ function ShowDiff({ contentReference, onClose, canEdit, onEdit, onSave }) {
     `;
 }
 
-export default ShowDiff;
+export default ReviewChanges;

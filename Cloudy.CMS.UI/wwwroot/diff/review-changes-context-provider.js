@@ -1,9 +1,9 @@
 import html from '../util/html.js';
-import ShowDiffContext from './show-diff-context.js';
+import ReviewChangesContext from './review-changes-context.js';
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import stateManager from '../edit-content/state-manager.js';
 
-function ShowDiffContextProvider({ renderIf, children, contentReference }) {
+function ReviewChangesContextProvider({ renderIf, children, contentReference }) {
     if (!renderIf) {
         return;
     }
@@ -22,10 +22,10 @@ function ShowDiffContextProvider({ renderIf, children, contentReference }) {
     }, [contentReference]);
 
     return html`
-        <${ShowDiffContext.Provider} value=${state}>
+        <${ReviewChangesContext.Provider} value=${state}>
             ${children}
         <//>
     `;
 }
 
-export default ShowDiffContextProvider;
+export default ReviewChangesContextProvider;
