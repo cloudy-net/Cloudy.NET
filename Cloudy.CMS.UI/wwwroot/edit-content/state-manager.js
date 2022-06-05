@@ -95,8 +95,6 @@ class StateManager {
         contentGetter.get(contentReference).then(content => {
             state = this.getState(contentReference);
 
-            const newVersionIsDifferent = JSON.stringify(state.referenceValues) != JSON.stringify(state.content);
-
             if(JSON.stringify(state.referenceValues) == JSON.stringify(content)){
                 state = {
                     ...state,
@@ -160,7 +158,7 @@ class StateManager {
             .save(contentReferences.map(c => this.getState(c)))
             .then(results => {
                 for(let result of results.filter(r => r.success)){
-                    this.loadStateForContent(result.contentReference);
+                    this.loadContentForState(result.contentReference);
                 }
             });
     }
