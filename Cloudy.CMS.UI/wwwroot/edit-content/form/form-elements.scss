@@ -24,7 +24,6 @@
 
 fieldset.cloudy-ui-form-field {
     min-inline-size: unset;
-    background: transparent;
     border: solid 1px rgba(0, 0, 0, 0.23);
     border-radius: 4px;
     padding: 10px 14px 14px;
@@ -87,7 +86,7 @@ fieldset.cloudy-ui-form-field {
     padding: 8px;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 4px;
-    background-color: transparent;
+    background: white;
     font: inherit;
     color: currentColor;
 
@@ -356,4 +355,22 @@ cloudy-ui-select-preview-sub-text {
 .cloudy-ui-form-field .ql-editor {
     padding: 0;
     line-height: inherit;
+}
+
+
+
+/* DIFF */
+
+.cloudy-ui-diff-insert {
+    background-color: #e6ffec;
+}
+span.cloudy-ui-diff-insert {
+    padding: 0 1px;
+}
+
+.cloudy-ui-diff-delete {
+    background-color: #ffebe9;
+}
+span.cloudy-ui-diff-delete {
+    padding: 0 1px;
 }

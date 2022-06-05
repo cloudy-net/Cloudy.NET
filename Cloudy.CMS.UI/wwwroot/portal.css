@@ -466,17 +466,6 @@ cloudy-ui-nav-user {
   background-size: 24px;
 }
 
-/* DIFF */
-.cloudy-ui-diff-insert {
-  background-color: #e6ffec;
-  padding: 0 1px;
-}
-
-.cloudy-ui-diff-delete {
-  background-color: #ffebe9;
-  padding: 0 1px;
-}
-
 /* CHANGE BADGE */
 cloudy-ui-change-badge {
   position: absolute;

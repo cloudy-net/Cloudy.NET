@@ -1,41 +1,15 @@
 import html from '../util/html.js';
-import { useEffect, useState, useCallback, useContext } from '../lib/preact.hooks.module.js';
+import { useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
-import diff from './lib/diff.js';
 import nameGetter from '../data/name-getter.js';
 import reviewChangesContext from './review-changes-context.js';
 import ContextMenu from '../components/context-menu/context-menu.js';
 import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldDescriptorContext from '../edit-content/form/field-descriptor-context.js';
-import arrayEquals from '../util/array-equals.js';
-import getValue from '../util/get-value.js';
 import getIntermediateSimpleValue from '../util/get-intermediate-simple-value.js';
 import contentTypeContext from '../list-content-types/content-type-context.js';
-
-const buildDiff = ([state, segment]) => {
-    if(state == diff.INSERT){
-        return html`<span class=cloudy-ui-diff-insert>${segment}</span>`;
-    }
-
-    if(state == diff.DELETE){
-        return html`<span class=cloudy-ui-diff-delete>${segment}</span>`;
-    }
-
-    return segment;
-};
-
-function DiffField({ fieldDescriptor, change, initialValue, value }) {
-    let result = diff(initialValue || '', value || '', 0).map(buildDiff);
-    return html`
-        <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
-            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
-            <div class=cloudy-ui-form-input>
-                ${result == '' ? html`<br/>` : result}
-            <//>
-        <//>
-    `;
-}
+import DiffField from './diff-field.js';
 
 function renderDiffField(fieldDescriptor, state, path){
     if(fieldDescriptor.embeddedFormId){
@@ -48,10 +22,9 @@ function renderDiffField(fieldDescriptor, state, path){
     }
 
     return html`<${DiffField}
-        change=${state.simpleChanges.find(f => arrayEquals(f.path, path))}
+        fieldDescriptor=${fieldDescriptor}
         initialValue=${state.referenceValues[fieldDescriptor.id]}
         value=${getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges)}
-        fieldDescriptor=${fieldDescriptor}
     />`;
 }
 

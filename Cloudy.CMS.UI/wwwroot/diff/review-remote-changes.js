@@ -1,36 +1,31 @@
 import html from '../util/html.js';
 import { useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
-import diff from './lib/diff.js';
 import ReviewRemoteChangesContext from './review-remote-changes-context.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldDescriptorContext from '../edit-content/form/field-descriptor-context.js';
 import contentTypeContext from '../list-content-types/content-type-context.js';
+import DiffField from './diff-field.js';
 
-const buildDiff = ([state, segment]) => {
-    if(state == diff.INSERT){
-        return html`<span class=cloudy-ui-diff-insert>${segment}</span>`;
+function renderDiffField(fieldDescriptor, initialValue, value) {
+    if(fieldDescriptor.embeddedFormId){
+        const fieldDescriptors = useContext(fieldDescriptorContext)[fieldDescriptor.embeddedFormId];
+
+        const state = initialValue && !value ? 'cloudy-ui-diff-delete' :
+        !initialValue && value ? 'cloudy-ui-diff-insert' :
+        '';
+        
+        return html`<fieldset class="cloudy-ui-form-field ${state}">
+            <legend class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
+            ${fieldDescriptors.map(f => renderDiffField(f, initialValue ? initialValue[f.id] : null, value ? value[f.id] : null))}
+        <//>`;
     }
 
-    if(state == diff.DELETE){
-        return html`<span class=cloudy-ui-diff-delete>${segment}</span>`;
-    }
-
-    return segment;
-};
-
-function DiffField({ fieldDescriptor, initialValue, value }) {
-    // fieldDescriptor.id == 'text'
-
-    let result = diff(initialValue || '', value || '', 0).map(buildDiff);
-    return html`
-        <div class="cloudy-ui-form-field cloudy-ui-simple cloudy-ui-readonly">
-            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
-            <div class=cloudy-ui-form-input>
-                ${result}
-            <//>
-        <//>
-    `;
+    return html`<${DiffField}
+        fieldDescriptor=${fieldDescriptor}
+        initialValue=${initialValue}
+        value=${value}
+    />`;
 }
 
 function ReviewRemoteChanges({ contentReference, onClose }) {
@@ -50,11 +45,7 @@ function ReviewRemoteChanges({ contentReference, onClose }) {
                     These are the changes that were done after the ${contentType.lowerCaseName} was first retrieved.
                 <//>
                 <div class="cloudy-ui-form">
-                    ${fieldDescriptors.map(fieldDescriptor => html`<${DiffField}
-                        initialValue=${state.referenceValues[fieldDescriptor.id]}
-                        value=${state.newVersion.referenceValues[fieldDescriptor.id]}
-                        fieldDescriptor=${fieldDescriptor}
-                    />`)}
+                    ${fieldDescriptors.map(fieldDescriptor => renderDiffField(fieldDescriptor, state.referenceValues[fieldDescriptor.id], state.newVersion.referenceValues[fieldDescriptor.id]))}
                 <//>
             <//>
             <cloudy-ui-blade-footer>
