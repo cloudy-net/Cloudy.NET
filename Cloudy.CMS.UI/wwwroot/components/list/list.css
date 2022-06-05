@@ -98,9 +98,15 @@ cloudy-ui-list-item-badge {
   align-self: center;
   justify-self: flex-end;
   border-radius: 50%;
+  height: 1.5em;
+  width: 1.5em;
+  text-align: center;
+  color: #000;
+  background: rgba(0, 0, 0, 0.1);
 }
 cloudy-ui-list-item-badge.cloudy-ui-modified {
-  color: #ff6600;
+  color: #f60;
+  background: rgba(255, 102, 0, 0.1);
 }
 cloudy-ui-list-item-badge.cloudy-ui-modified:before {
   content: "M";
