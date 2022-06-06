@@ -4,8 +4,8 @@ import Blade from '../components/blade/blade.js';
 import ReviewRemoteChangesContext from './review-remote-changes-context.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldDescriptorContext from '../edit-content/form/field-descriptor-context.js';
-import contentTypeContext from '../list-content-types/content-type-context.js';
 import DiffField from './diff-field.js';
+import contentTypeProvider from '../list-content-types/content-type-provider.js';
 
 function renderDiffField(fieldDescriptor, initialValue, value) {
     if(fieldDescriptor.embeddedFormId){
@@ -30,7 +30,7 @@ function renderDiffField(fieldDescriptor, initialValue, value) {
 
 function ReviewRemoteChanges({ contentReference, onClose }) {
     const fieldDescriptors = useContext(fieldDescriptorContext)[contentReference.contentTypeId];
-    const contentType = useContext(contentTypeContext)[contentReference.contentTypeId];
+    const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = useContext(ReviewRemoteChangesContext);
     
     const discard = useCallback(() => {

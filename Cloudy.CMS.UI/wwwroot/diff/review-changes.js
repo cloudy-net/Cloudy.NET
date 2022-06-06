@@ -8,8 +8,8 @@ import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
 import fieldDescriptorContext from '../edit-content/form/field-descriptor-context.js';
 import getIntermediateSimpleValue from '../util/get-intermediate-simple-value.js';
-import contentTypeContext from '../list-content-types/content-type-context.js';
 import DiffField from './diff-field.js';
+import contentTypeProvider from '../list-content-types/content-type-provider.js';
 
 function renderDiffField(fieldDescriptor, state, path){
     if(fieldDescriptor.embeddedFormId){
@@ -38,7 +38,7 @@ function ReviewChanges({ contentReference, onClose, canEdit, onEdit, onSave }) {
         }
     }, []);
 
-    const contentType = useContext(contentTypeContext)[contentReference.contentTypeId];
+    const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = useContext(reviewChangesContext);
 
     const save = async () => {

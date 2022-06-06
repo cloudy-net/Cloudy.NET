@@ -1,5 +1,5 @@
 
-import { useContext, useState } from '../../lib/preact.hooks.module.js';
+import { useState } from '../../lib/preact.hooks.module.js';
 import html from '../../util/html.js';
 import Button from '../../components/button/button.js'
 import SimpleField from './simple-field.js';
@@ -8,7 +8,7 @@ import ListItem from '../../components/list/list-item.js';
 import EmbeddedForm from './embedded-form.js';
 import getReferenceValue from '../../util/get-reference-value.js';
 import stateManager from '../state-manager.js';
-import contentTypeContext from '../../list-content-types/content-type-context.js';
+import contentTypeProvider from '../../list-content-types/content-type-provider.js';
 
 const generateNewArrayElementKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
@@ -42,8 +42,6 @@ const renderElement = (path, fieldDescriptor, state, element) => {
 };
 
 const AddButton = ({ path, fieldDescriptor, state, onAdd }) => {
-    const contentTypes = useContext(contentTypeContext);
-
     if (fieldDescriptor.embeddedFormId) {
         return html`<${EmbeddedForm}
             path=${path}
@@ -55,7 +53,7 @@ const AddButton = ({ path, fieldDescriptor, state, onAdd }) => {
     if (fieldDescriptor.isPolymorphic) {
         return html`
             <${PopupMenu} text="Add" position="right">
-                ${fieldDescriptor.polymorphicCandidates.map(c => html`<${ListItem} text="${contentTypes[c].name}" onclick=${() => onAdd(c)}/>`)}
+                ${fieldDescriptor.polymorphicCandidates.map(c => html`<${ListItem} text="${contentTypeProvider.get(c).name}" onclick=${() => onAdd(c)}/>`)}
             <//>
         `;
     }

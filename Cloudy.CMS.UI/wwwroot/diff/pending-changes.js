@@ -3,9 +3,9 @@ import Blade from '../components/blade/blade.js';
 import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
 import nameGetter from '../data/name-getter.js';
-import { useContext, useEffect, useState } from '../lib/preact.hooks.module.js';
+import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import diff from './lib/diff.js';
-import contentTypeContext from '../list-content-types/content-type-context.js';
+import contentTypeProvider from '../list-content-types/content-type-provider.js';
 
 function PendingChanges({ renderIf, onSelect, onClose }) {
     if (!renderIf) {
@@ -21,7 +21,8 @@ function PendingChanges({ renderIf, onSelect, onClose }) {
         return () => { stateManager.offAnyStateChange(callback); };
     }, []);
 
-    const groups = Object.values(useContext(contentTypeContext))
+    const groups = contentTypeProvider
+        .all
         .map(c => ({ contentType: c, changes: states.filter(s => s.contentReference.contentTypeId == c.id) }))
         .filter(g => g.changes.length);
 
