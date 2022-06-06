@@ -2,7 +2,6 @@
 import ListContentTypes from './list-content-types/list-content-types.js';
 import ListContent from './list-content-types/list-content.js';
 import EditContent from './edit-content/edit-content.js';
-import TotalChangesContextProvider from './edit-content/total-changes-context-provider.js';
 import PopupMenuContextProvider from './components/popup-menu/popup-menu-context-provider.js';
 import TotalChangesButton from './diff/total-changes-button.js';
 import { useState } from './lib/preact.hooks.module.js';
@@ -46,9 +45,7 @@ function App({ title }) {
                             <cloudy-ui-portal-nav>
                                 <cloudy-ui-portal-nav-title>${title}<//>
                                 <div>
-                                    <${TotalChangesContextProvider}>
-                                        <${TotalChangesButton} onClick=${() => { listContent(null); editContent(null); reviewChanges(null); if(!listingChanges) { listContentTypes(false); listChanges(true); } else { listContentTypes(true); listChanges(false); } }}/>
-                                    <//>
+                                    <${TotalChangesButton} onClick=${() => { listContent(null); editContent(null); reviewChanges(null); if(!listingChanges) { listContentTypes(false); listChanges(true); } else { listContentTypes(true); listChanges(false); } }}/>
                                 </div>
                             <//>
                             <cloudy-ui-app>
