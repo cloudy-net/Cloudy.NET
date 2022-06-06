@@ -74,7 +74,7 @@ fieldset.cloudy-ui-form-field > .cloudy-ui-form-field-label {
 .cloudy-ui-form-field.cloudy-ui-simple.cloudy-ui-readonly:hover .cloudy-ui-form-input, .cloudy-ui-form-field.cloudy-ui-readonly .cloudy-ui-form-input:hover {
   border-color: #ccc;
 }
-.cloudy-ui-form-input:focus, .cloudy-ui-form-field.cloudy-ui-simple:hover .cloudy-ui-form-input:focus {
+.cloudy-ui-form-input:focus, .cloudy-ui-form-input:focus-within, .cloudy-ui-form-field.cloudy-ui-simple:hover .cloudy-ui-form-input:focus {
   outline: none;
   border-color: #1976d2;
 }

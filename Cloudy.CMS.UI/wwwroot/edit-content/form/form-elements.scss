@@ -97,6 +97,7 @@ fieldset.cloudy-ui-form-field {
     }
 
     &:focus,
+    &:focus-within,
     .cloudy-ui-form-field.cloudy-ui-simple:hover &:focus {
         outline: none;
         border-color: #1976d2;
