@@ -21,9 +21,9 @@ export default function SimpleField({ fieldDescriptor, state, path }) {
     }
 
     return html`
-        <div class="cloudy-ui-form-field cloudy-ui-simple">
-            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}${getChangeBadge()}</div>
+        <label class="cloudy-ui-form-field cloudy-ui-simple">
+            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}${getChangeBadge()}<//>
             <${fieldControl} path=${path} fieldDescriptor=${fieldDescriptor} state=${state}/>
-        </div>
+        <//>
     `;
 }

@@ -27,10 +27,6 @@ fieldset.cloudy-ui-form-field {
     border: solid 1px $light-gray;
     border-radius: 4px;
     padding: 10px 14px 14px;
-
-    &:focus-within {
-        border-color: $light-gray-lighter;
-    }
 }
 
 

@@ -20,9 +20,6 @@ fieldset.cloudy-ui-form-field {
   border-radius: 4px;
   padding: 10px 14px 14px;
 }
-fieldset.cloudy-ui-form-field:focus-within {
-  border-color: #ddd;
-}
 
 /* LABEL */
 .cloudy-ui-form-field-label {
