@@ -3,6 +3,16 @@ import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-va
 import html from '../../../util/html.js';
 import stateManager from '../../state-manager.js';
 
+
+document.addEventListener('click', function({ target }){ 
+    if(target.classList.contains('cloudy-ui-form-field-label') && target.nextSibling && target.nextSibling.classList.contains('quill-wrapper')){
+        const editor = target.nextSibling.querySelector('[contenteditable="true"]');
+        if(editor) {
+            editor.focus();
+        }
+    }
+});
+
 function Html({ fieldDescriptor, state, readonly, path }) {
     const ref = useRef(null);
 
