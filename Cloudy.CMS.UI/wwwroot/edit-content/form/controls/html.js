@@ -27,7 +27,9 @@ function Html({ fieldDescriptor, state, readonly, path }) {
     }, [state]);
 
     return html`
-        <div ref=${ref} class="cloudy-ui-form-input">
+        <div class="cloudy-ui-form-input quill-wrapper">
+            <div ref=${ref}>
+            <//>
         <//>
     `;
 }

@@ -326,11 +326,19 @@ cloudy-ui-select-preview-sub-text {
 
 /* HTML */
 
-.cloudy-ui-form-field .ql-toolbar.ql-snow {
+
+.cloudy-ui-form-input.quill-wrapper {
+    padding: 0;
+    overflow: hidden;
+}
+
+.cloudy-ui-form-input.quill-wrapper .ql-toolbar.ql-snow {
     padding: 4px 8px;
     border: none;
-    border-radius: 4px;
+    line-height: 1;
+    border-bottom: 1px solid #aaa;
     font-family: inherit;
+    background: #f8f8f8;
 }
 
 .cloudy-ui-form-field .ql-toolbar.ql-snow .ql-formats {
@@ -348,8 +356,7 @@ cloudy-ui-select-preview-sub-text {
 
 .cloudy-ui-form-field .ql-container.ql-snow {
     padding: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.3) !important;
-    border-radius: 4px;
+    border: none !important;
 }
 
 .cloudy-ui-form-field .ql-editor {
