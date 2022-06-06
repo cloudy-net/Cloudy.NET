@@ -10,6 +10,7 @@ import getIntermediateSimpleValue from '../util/get-intermediate-simple-value.js
 import DiffField from './diff-field.js';
 import contentTypeProvider from '../list-content-types/content-type-provider.js';
 import fieldDescriptorProvider from '../edit-content/form/field-descriptor-provider.js';
+import getReferenceValue from '../util/get-reference-value.js';
 
 function renderDiffField(fieldDescriptor, state, path){
     if(fieldDescriptor.embeddedFormId){
@@ -23,7 +24,7 @@ function renderDiffField(fieldDescriptor, state, path){
 
     return html`<${DiffField}
         fieldDescriptor=${fieldDescriptor}
-        initialValue=${state.referenceValues[fieldDescriptor.id]}
+        initialValue=${getReferenceValue(state, path)}
         value=${getIntermediateSimpleValue(state, path)}
     />`;
 }
