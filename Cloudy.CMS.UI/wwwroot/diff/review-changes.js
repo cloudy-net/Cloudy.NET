@@ -24,7 +24,7 @@ function renderDiffField(fieldDescriptor, state, path){
     return html`<${DiffField}
         fieldDescriptor=${fieldDescriptor}
         initialValue=${state.referenceValues[fieldDescriptor.id]}
-        value=${getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges)}
+        value=${getIntermediateSimpleValue(state, path)}
     />`;
 }
 

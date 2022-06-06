@@ -6,7 +6,7 @@ import SimpleField from './simple-field.js';
 import PopupMenu from '../../components/popup-menu/popup-menu.js';
 import ListItem from '../../components/list/list-item.js';
 import EmbeddedForm from './embedded-form.js';
-import getValue from '../../util/get-value.js';
+import getReferenceValue from '../../util/get-reference-value.js';
 import stateManager from '../state-manager.js';
 import contentTypeContext from '../../list-content-types/content-type-context.js';
 
@@ -64,7 +64,7 @@ const AddButton = ({ path, fieldDescriptor, state, onAdd }) => {
 };
 
 export default function SortableField({ path, fieldDescriptor, state }) {
-    let [elements, setElements] = useState((getValue(state.referenceValues, path) || []).map((value, index) => ({ key: index, type: value.type })));
+    let [elements, setElements] = useState((getReferenceValue(state.referenceValues, path) || []).map((value, index) => ({ key: index, type: value.type })));
 
     const onAdd = type => {
         const element = { key: generateNewArrayElementKey(), type };

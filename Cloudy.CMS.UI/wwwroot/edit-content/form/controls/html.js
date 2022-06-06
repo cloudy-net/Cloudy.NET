@@ -37,7 +37,7 @@ function Html({ fieldDescriptor, state, readonly, path }) {
         
         const callback = () => stateManager.registerSimpleChange(state.contentReference, path, this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, ''));
 
-        this.quill.root.innerHTML = getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges) || null;
+        this.quill.root.innerHTML = getIntermediateSimpleValue(state, path) || null;
 
         this.quill.on('text-change', callback);
 

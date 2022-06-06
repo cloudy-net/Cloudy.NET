@@ -9,7 +9,7 @@ function Text({ fieldDescriptor, state, path, readonly }) {
             key=${state.contentReference}
             class="cloudy-ui-form-input"
             name=${fieldDescriptor.id}
-            defaultValue=${getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges)}
+            defaultValue=${getIntermediateSimpleValue(state, path)}
             onInput=${event => stateManager.registerSimpleChange(state.contentReference, path, event.srcElement.value)}
             readonly=${readonly}
         />

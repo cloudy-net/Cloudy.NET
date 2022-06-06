@@ -1,10 +1,9 @@
-const getValue = (object, path) => {
-    let value = object;
-    path = [...path];
+const getReferenceValue = (state, [...path]) => {
+    let value = state.referenceValues;
 
     while(path.length){
         if(!value){
-            return;
+            return null;
         }
 
         value = value[path[0]];
@@ -15,4 +14,4 @@ const getValue = (object, path) => {
     return value;
 };
 
-export default getValue;
+export default getReferenceValue;

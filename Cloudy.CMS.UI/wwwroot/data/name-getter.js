@@ -41,7 +41,9 @@ class NameGetter {
 
         if (!contentType.isSingleton) {
             if (contentType.isNameable) {
-                name = contentType.nameablePropertyName ? getIntermediateSimpleValue(state.referenceValues, [contentType.nameablePropertyName], state.simpleChanges) : getIntermediateSimpleValue(state.referenceValues, ['Name'], state.simpleChanges);
+                name = contentType.nameablePropertyName ?
+                getIntermediateSimpleValue(state, [contentType.nameablePropertyName]) :
+                getIntermediateSimpleValue(state, ['Name']);
             }
         }
         if (!name) {

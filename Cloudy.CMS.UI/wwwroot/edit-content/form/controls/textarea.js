@@ -9,7 +9,7 @@ function Textarea({ fieldDescriptor, state, path, readonly }) {
             class="cloudy-ui-form-input"
             name=${fieldDescriptor.id}
             onInput=${event => stateManager.registerSimpleChange(state.contentReference, path, event.srcElement.value)}
-            defaultValue=${getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges)}
+            defaultValue=${getIntermediateSimpleValue(state, path)}
             rows=${fieldDescriptor.control.parameters.options && fieldDescriptor.control.parameters.options.rows ? fieldDescriptor.control.parameters.options.rows.value : 8}
             readonly=${readonly}
         >

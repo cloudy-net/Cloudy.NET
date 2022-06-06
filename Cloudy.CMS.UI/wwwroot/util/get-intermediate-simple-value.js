@@ -1,10 +1,10 @@
 import arrayEquals from "./array-equals.js";
-import getValue from "./get-value.js";
+import getReferenceValue from "./get-reference-value.js";
 
-const getIntermediateSimpleValue = (object, path, simpleChanges) => {
-    let value = getValue(object, path);
+const getIntermediateSimpleValue = (state, path) => {
+    let value = getReferenceValue(state, path);
     
-    const change = simpleChanges.find(c => arrayEquals(c.path, path));
+    const change = state.simpleChanges.find(c => arrayEquals(c.path, path));
 
     if(change){
         value = change.value;
