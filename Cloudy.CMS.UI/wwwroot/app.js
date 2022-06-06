@@ -13,7 +13,6 @@ import ReviewChanges from './diff/review-changes.js';
 import ReviewChangesContextProvider from './diff/review-changes-context-provider.js';
 import ReviewRemoteChanges from './diff/review-remote-changes.js';
 import ReviewRemoteChangesContextProvider from './diff/review-remote-changes-context-provider.js';
-import ListContentContextProvider from './list-content-types/list-content-context-provider.js';
 import FieldDescriptorContextProvider from './edit-content/form/field-descriptor-context-provider.js';
 import ContentTypeContextProvider from './list-content-types/content-type-context-provider.js';
 import FormControlContextProvider from './edit-content/form/field-control-context-provider.js';
@@ -54,9 +53,7 @@ function App({ title }) {
                             <//>
                             <cloudy-ui-app>
                                 <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
-                                <${ListContentContextProvider} renderIf=${listingContent}>
-                                    <${ListContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => { stateManager.createOrUpdateStateForExistingContent(contentReference, nameHint); editContent(contentReference); reviewChanges(null); }} onNewContent=${contentType => { const state = stateManager.createStateForNewContent(contentType); editContent(state.contentReference); }} onClose=${() => listContent(null)}/>
-                                <//>
+                                <${ListContent} renderIf=${listingContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => { stateManager.createOrUpdateStateForExistingContent(contentReference, nameHint); editContent(contentReference); reviewChanges(null); }} onNewContent=${contentType => { const state = stateManager.createStateForNewContent(contentType); editContent(state.contentReference); }} onClose=${() => listContent(null)}/>
                                 <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => reviewChanges(contentReference)} onClose=${() => { listChanges(null); reviewChanges(null); editContent(null); listContentTypes(true); }}/>
 
                                 ${listingChanges ? html`${reviewChangesBlade}${editContentBlade}` : html`${editContentBlade}${reviewChangesBlade}`}

@@ -6,10 +6,14 @@ import urlFetcher from '../util/url-fetcher.js';
 import nameGetter from '../data/name-getter.js';
 import Button from '../components/button/button.js';
 import Blade from '../components/blade/blade.js';
-import listContentContext from './list-content-context.js';
 import arrayEquals from '../util/array-equals.js';
+import stateManager from '../edit-content/state-manager.js';
 
-function ListContent({ contentType, activeContentReference, onEditContent, onNewContent, onClose }) {
+function ListContent({ renderIf, contentType, activeContentReference, onEditContent, onNewContent, onClose }) {
+    if(!renderIf){
+        return;
+    }
+
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -25,7 +29,18 @@ function ListContent({ contentType, activeContentReference, onEditContent, onNew
 
     const toolbar = html`<${Button} text="New" onClick=${() => onNewContent(contentType)}><//>`;
 
-    const states = useContext(listContentContext);
+    const [states, setStates] = useState(stateManager.getAll());
+
+    useEffect(() => {
+        const callback = () => {
+            setStates(stateManager.getAll());
+        };
+        stateManager.onAnyStateChange(callback);
+
+        return () => {
+            stateManager.offAnyStateChange(callback);
+        };
+    }, []);
 
     const getName = item => {
         const state = states.find(s => arrayEquals(s.contentReference.keyValues, item.Keys));
