@@ -12,9 +12,9 @@ import ReviewChanges from './diff/review-changes.js';
 import ReviewChangesContextProvider from './diff/review-changes-context-provider.js';
 import ReviewRemoteChanges from './diff/review-remote-changes.js';
 import ReviewRemoteChangesContextProvider from './diff/review-remote-changes-context-provider.js';
-import FieldDescriptorContextProvider from './edit-content/form/field-descriptor-context-provider.js';
 import FormControlContextProvider from './edit-content/form/field-control-context-provider.js';
 import contentTypeProvider from './list-content-types/content-type-provider.js';
+import fieldDescriptorProvider from './edit-content/form/field-descriptor-provider.js';
 
 function App({ title }) {
     const [loading, setLoading] = useState(true);
@@ -22,6 +22,7 @@ function App({ title }) {
     useEffect(() => {
         Promise.all([
             contentTypeProvider.fetch(),
+            fieldDescriptorProvider.fetch(),
         ])
         .then(() => setLoading(false));
     }, [loading]);
@@ -50,26 +51,24 @@ function App({ title }) {
     `;
 
     return html`
-        <${FieldDescriptorContextProvider}>
-            <${FormControlContextProvider}>
-                <${PopupMenuContextProvider}>
-                    <cloudy-ui-portal>
-                        <cloudy-ui-portal-nav>
-                            <cloudy-ui-portal-nav-title>${title}<//>
-                            <div>
-                                <${TotalChangesButton} onClick=${() => { listContent(null); editContent(null); reviewChanges(null); if(!listingChanges) { listContentTypes(false); listChanges(true); } else { listContentTypes(true); listChanges(false); } }}/>
-                            </div>
-                        <//>
-                        <cloudy-ui-app>
-                            <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
-                            <${ListContent} renderIf=${listingContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => { stateManager.createOrUpdateStateForExistingContent(contentReference, nameHint); editContent(contentReference); reviewChanges(null); }} onNewContent=${contentType => { const state = stateManager.createStateForNewContent(contentType); editContent(state.contentReference); }} onClose=${() => listContent(null)}/>
-                            <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => reviewChanges(contentReference)} onClose=${() => { listChanges(null); reviewChanges(null); editContent(null); listContentTypes(true); }}/>
+        <${FormControlContextProvider}>
+            <${PopupMenuContextProvider}>
+                <cloudy-ui-portal>
+                    <cloudy-ui-portal-nav>
+                        <cloudy-ui-portal-nav-title>${title}<//>
+                        <div>
+                            <${TotalChangesButton} onClick=${() => { listContent(null); editContent(null); reviewChanges(null); if(!listingChanges) { listContentTypes(false); listChanges(true); } else { listContentTypes(true); listChanges(false); } }}/>
+                        </div>
+                    <//>
+                    <cloudy-ui-app>
+                        <${ListContentTypes} renderIf=${listingContentTypes} activeContentType=${listingContent} onSelectContentType=${contentType => listContent(contentType)}/>
+                        <${ListContent} renderIf=${listingContent} activeContentReference=${editingContent} contentType=${listingContent} onEditContent=${(contentReference, nameHint) => { stateManager.createOrUpdateStateForExistingContent(contentReference, nameHint); editContent(contentReference); reviewChanges(null); }} onNewContent=${contentType => { const state = stateManager.createStateForNewContent(contentType); editContent(state.contentReference); }} onClose=${() => listContent(null)}/>
+                        <${PendingChanges} renderIf=${listingChanges} onSelect=${contentReference => reviewChanges(contentReference)} onClose=${() => { listChanges(null); reviewChanges(null); editContent(null); listContentTypes(true); }}/>
 
-                            ${listingChanges ? html`${reviewChangesBlade}${editContentBlade}` : html`${editContentBlade}${reviewChangesBlade}`}
+                        ${listingChanges ? html`${reviewChangesBlade}${editContentBlade}` : html`${editContentBlade}${reviewChangesBlade}`}
 
-                            <${ReviewRemoteChangesContextProvider} renderIf=${reviewingRemoteChanges} contentReference=${reviewingRemoteChanges}>
-                                <${ReviewRemoteChanges} contentReference=${reviewingRemoteChanges} onClose=${() => { reviewRemoteChanges(null); }} />
-                            <//>
+                        <${ReviewRemoteChangesContextProvider} renderIf=${reviewingRemoteChanges} contentReference=${reviewingRemoteChanges}>
+                            <${ReviewRemoteChanges} contentReference=${reviewingRemoteChanges} onClose=${() => { reviewRemoteChanges(null); }} />
                         <//>
                     <//>
                 <//>

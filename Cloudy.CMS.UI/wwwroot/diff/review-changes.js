@@ -6,14 +6,14 @@ import reviewChangesContext from './review-changes-context.js';
 import ContextMenu from '../components/context-menu/context-menu.js';
 import ListItem from '../components/list/list-item.js';
 import stateManager from '../edit-content/state-manager.js';
-import fieldDescriptorContext from '../edit-content/form/field-descriptor-context.js';
 import getIntermediateSimpleValue from '../util/get-intermediate-simple-value.js';
 import DiffField from './diff-field.js';
 import contentTypeProvider from '../list-content-types/content-type-provider.js';
+import fieldDescriptorProvider from '../edit-content/form/field-descriptor-provider.js';
 
 function renderDiffField(fieldDescriptor, state, path){
     if(fieldDescriptor.embeddedFormId){
-        const fieldDescriptors = useContext(fieldDescriptorContext)[fieldDescriptor.embeddedFormId];
+        const fieldDescriptors = fieldDescriptorProvider.get(fieldDescriptor.embeddedFormId);
         
         return html`<fieldset class="cloudy-ui-form-field">
             <legend class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
@@ -29,7 +29,7 @@ function renderDiffField(fieldDescriptor, state, path){
 }
 
 function ReviewChanges({ contentReference, onClose, canEdit, onEdit, onSave }) {
-    const fieldDescriptors = useContext(fieldDescriptorContext)[contentReference.contentTypeId];
+    const fieldDescriptors = fieldDescriptorProvider.get(contentReference.contentTypeId);
 
     const undoChanges = useCallback(() => {
         if (confirm('Undo changes? This is not reversible')) {

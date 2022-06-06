@@ -62,7 +62,7 @@ const AddButton = ({ path, fieldDescriptor, state, onAdd }) => {
 };
 
 export default function SortableField({ path, fieldDescriptor, state }) {
-    let [elements, setElements] = useState((getReferenceValue(state.referenceValues, path) || []).map((value, index) => ({ key: index, type: value.type })));
+    let [elements, setElements] = useState((getReferenceValue(state, path) || []).map((value, index) => ({ key: index, type: value.type })));
 
     const onAdd = type => {
         const element = { key: generateNewArrayElementKey(), type };

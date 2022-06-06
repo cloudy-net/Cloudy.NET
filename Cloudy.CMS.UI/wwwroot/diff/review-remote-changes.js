@@ -3,13 +3,13 @@ import { useCallback, useContext } from '../lib/preact.hooks.module.js';
 import Blade from '../components/blade/blade.js';
 import ReviewRemoteChangesContext from './review-remote-changes-context.js';
 import stateManager from '../edit-content/state-manager.js';
-import fieldDescriptorContext from '../edit-content/form/field-descriptor-context.js';
 import DiffField from './diff-field.js';
 import contentTypeProvider from '../list-content-types/content-type-provider.js';
+import fieldDescriptorProvider from '../edit-content/form/field-descriptor-provider.js';
 
 function renderDiffField(fieldDescriptor, initialValue, value) {
     if(fieldDescriptor.embeddedFormId){
-        const fieldDescriptors = useContext(fieldDescriptorContext)[fieldDescriptor.embeddedFormId];
+        const fieldDescriptors = fieldDescriptorProvider(fieldDescriptor.embeddedFormId);
 
         const state = initialValue && !value ? 'cloudy-ui-diff-delete' :
         !initialValue && value ? 'cloudy-ui-diff-insert' :
@@ -29,7 +29,7 @@ function renderDiffField(fieldDescriptor, initialValue, value) {
 }
 
 function ReviewRemoteChanges({ contentReference, onClose }) {
-    const fieldDescriptors = useContext(fieldDescriptorContext)[contentReference.contentTypeId];
+    const fieldDescriptors = fieldDescriptorProvider.get(contentReference.contentTypeId);
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = useContext(ReviewRemoteChangesContext);
     

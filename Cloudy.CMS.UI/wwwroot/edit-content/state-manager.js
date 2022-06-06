@@ -197,7 +197,7 @@ class StateManager {
 
         change.value = value;
 
-        const initialValue = getReferenceValue(state.referenceValues, path);
+        const initialValue = getReferenceValue(state, path);
 
         if ((value === '' && (initialValue === null || initialValue === undefined)) || initialValue == value) {
             state.simpleChanges.splice(state.simpleChanges.indexOf(change), 1);

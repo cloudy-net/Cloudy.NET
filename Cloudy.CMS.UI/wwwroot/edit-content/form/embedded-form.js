@@ -1,9 +1,8 @@
-import { useContext } from '../../lib/preact.hooks.module.js';
-import fieldDescriptorContext from './field-descriptor-context.js';
+import fieldDescriptorProvider from './field-descriptor-provider.js';
 import renderField from './render-field.js';
 
 function EmbeddedForm({ path, formId, state }){
-    const fieldDescriptors = useContext(fieldDescriptorContext)[formId];
+    const fieldDescriptors = fieldDescriptorProvider.get(formId);
 
     return fieldDescriptors.map(fieldDescriptor => renderField(fieldDescriptor, state, [...path, fieldDescriptor.id]));
 }
