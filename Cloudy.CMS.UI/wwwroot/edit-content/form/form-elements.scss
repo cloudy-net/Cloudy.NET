@@ -24,12 +24,12 @@
 
 fieldset.cloudy-ui-form-field {
     min-inline-size: unset;
-    border: solid 1px rgba(0, 0, 0, 0.23);
+    border: solid 1px $light-gray;
     border-radius: 4px;
     padding: 10px 14px 14px;
 
     &:focus-within {
-        border-color: rgba(0, 0, 0, 0.42);
+        border-color: $light-gray-lighter;
     }
 }
 
@@ -60,7 +60,7 @@ fieldset.cloudy-ui-form-field {
     }
 
     .cloudy-ui-form-field:focus-within > & {
-        color: $bright-blue;
+        color: black;
     }
 
     fieldset.cloudy-ui-form-field > & {
@@ -84,7 +84,7 @@ fieldset.cloudy-ui-form-field {
     width: 100%;
     min-height: 1.5em;
     padding: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    border: 1px solid $light-gray;
     border-radius: 4px;
     background: white;
     font: inherit;
@@ -92,12 +92,12 @@ fieldset.cloudy-ui-form-field {
 
     .cloudy-ui-form-field.cloudy-ui-simple:hover &,
     &:hover {
-        border-color: rgba(0, 0, 0, 0.42);
+        border-color: $light-gray-darker;
     }
 
     .cloudy-ui-form-field.cloudy-ui-simple.cloudy-ui-readonly:hover &,
     .cloudy-ui-form-field.cloudy-ui-readonly &:hover {
-        border-color: rgba(0, 0, 0, 0.3);
+        border-color: $light-gray;
     }
 
     &:focus,
@@ -336,7 +336,7 @@ cloudy-ui-select-preview-sub-text {
     padding: 4px 8px;
     border: none;
     line-height: 1;
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid $light-gray;
     font-family: inherit;
     background: #f8f8f8;
 }
