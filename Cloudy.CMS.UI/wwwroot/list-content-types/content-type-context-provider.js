@@ -1,17 +1,13 @@
 import { useEffect, useState } from '../lib/preact.hooks.module.js';
 import html from '../util/html.js';
-import urlFetcher from '../util/url-fetcher.js';
 import ContentTypeContext from './content-type-context.js';
+import contentTypeProvider from './content-type-provider.js';
 
 function ContentTypeContextProvider({ children }) {
     const [state, setState] = useState(null);
 
     useEffect(() => {
-        urlFetcher
-        .fetch('ContentTypeProvider/GetAll', { credentials: 'include' }, 'Could not get content types')
-        .then(response => {
-            setState(response.reduce((result, contentType) => { result[contentType.id] = contentType; return result; }, {}));
-        });
+        contentTypeProvider.fetch().then(() => setState(contentTypeProvider.allById));
     }, []);
 
     return html`
