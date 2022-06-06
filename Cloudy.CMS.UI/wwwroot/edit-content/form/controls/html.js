@@ -11,10 +11,20 @@ function Html({ fieldDescriptor, state, readonly, path }) {
         
         if(!this.quill){
             this.quill = new Quill(instance, {
-                theme: 'snow'
+                theme: 'snow',
+                modules: {
+                    keyboard: {
+                        bindings: {
+                            tab: {
+                                key: 9,
+                                handler: () => true
+                            }
+                        }
+                    }
+                }
             });
         }
-
+        
         const callback = () => stateManager.registerSimpleChange(state.contentReference, path, this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, ''));
 
         this.quill.root.innerHTML = getIntermediateSimpleValue(state.referenceValues, path, state.simpleChanges) || null;
