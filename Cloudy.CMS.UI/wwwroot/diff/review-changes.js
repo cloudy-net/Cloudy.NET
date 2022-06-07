@@ -29,7 +29,7 @@ function renderDiffField(fieldDescriptor, state, path){
     />`;
 }
 
-function ReviewChanges({ contentReference, onClose, canEdit, onEdit, onSave }) {
+function ReviewChanges({ contentReference, onClose, canEdit, onEdit }) {
     const fieldDescriptors = fieldDescriptorProvider.get(contentReference.contentTypeId);
 
     const undoChanges = useCallback(() => {
@@ -43,7 +43,7 @@ function ReviewChanges({ contentReference, onClose, canEdit, onEdit, onSave }) {
     const state = useContext(reviewChangesContext);
 
     const save = async () => {
-        onSave();
+        stateManager.save([contentReference]);
     }
 
     const editButton = canEdit ? html`<cloudy-ui-button tabindex="0" onclick=${() => onEdit()}>Edit</cloudy-ui-button>` : null;

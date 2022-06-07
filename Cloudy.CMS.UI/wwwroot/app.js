@@ -46,7 +46,7 @@ function App({ title }) {
 
     const reviewChangesBlade = html`
         <${ReviewChangesContextProvider} renderIf=${reviewingChanges} contentReference=${reviewingChanges}>
-            <${ReviewChanges} contentReference=${reviewingChanges} onClose=${() => { reviewChanges(null); listingChanges ? editContent(null) : null }} canEdit=${listingChanges} onEdit=${() => editContent(reviewingChanges)} onSave=${() => { stateManager.save([reviewingChanges]); }}/>
+            <${ReviewChanges} contentReference=${reviewingChanges} onClose=${() => { reviewChanges(null); listingChanges ? editContent(null) : null }} canEdit=${listingChanges} onEdit=${() => editContent(reviewingChanges)}/>
         <//>
     `;
 
