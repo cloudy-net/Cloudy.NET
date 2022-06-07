@@ -18,7 +18,7 @@ function TotalChangesButton({ onClick }) {
     }, []);
 
     return html`
-        <${Button} cssClass=${totalChanges && 'primary'} text=${!totalChanges ? 'No changes' : totalChanges == 1 ? `${totalChanges} change` : `${totalChanges} changes`} onClick=${onClick}/>
+        <${Button} text=${!totalChanges ? 'No changes' : totalChanges == 1 ? `${totalChanges} change` : `${totalChanges} changes`} onClick=${onClick}/>
     `;
 }
 
