@@ -31,21 +31,10 @@ function renderDiffField(fieldDescriptor, state, path){
 
 function ReviewChanges({ contentReference, onClose, canEdit, onEdit }) {
     const fieldDescriptors = fieldDescriptorProvider.get(contentReference.contentTypeId);
-
-    const undoChanges = useCallback(() => {
-        if (confirm('Undo changes? This is not reversible')) {
-            resetChange(diffData.contentId, diffData.contentTypeId);
-            onClose();
-        }
-    }, []);
-
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = useContext(reviewChangesContext);
 
-    const save = async () => {
-        stateManager.save([contentReference]);
-    }
-
+    const saveButton = html`<cloudy-ui-button tabindex="0" class="primary" onclick=${() => stateManager.save([contentReference])} disabled=${!state.simpleChanges.length}>Save</cloudy-ui-button>`;
     const editButton = canEdit ? html`<cloudy-ui-button tabindex="0" onclick=${() => onEdit()}>Edit</cloudy-ui-button>` : null;
 
     return html`
@@ -60,7 +49,7 @@ function ReviewChanges({ contentReference, onClose, canEdit, onEdit }) {
                     <${ListItem} text="Discard changes" onclick=${() => { stateManager.discardChanges(contentReference); onClose(); }}/>
                 <//>
                 ${editButton}
-                <cloudy-ui-button tabindex="0" class="primary" onclick=${() => save()} disabled=${!state.simpleChanges.length}>Save</cloudy-ui-button>
+                ${saveButton}
             </cloudy-ui-blade-footer>
         <//>
     `;
