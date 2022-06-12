@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* VARIABLES */
 /* FORM */
 .cloudy-ui-form {
@@ -169,6 +170,20 @@ cloudy-ui-sortable-buttons .cloudy-ui-context-menu-outer {
   line-height: inherit;
 }
 
+/* CHANGE INDICATOR */
+cloudy-ui-form-field-change-indicator {
+  position: absolute;
+  padding-left: 0.25em;
+  visibility: hidden;
+}
+cloudy-ui-form-field-change-indicator:before {
+  content: "•";
+  color: #ff6600;
+}
+cloudy-ui-form-field-change-indicator.cloudy-ui-added, cloudy-ui-form-field-change-indicator.cloudy-ui-removed, cloudy-ui-form-field-change-indicator.cloudy-ui-modified {
+  visibility: visible;
+}
+
 /* DIFF */
 .cloudy-ui-diff-insert {
   background-color: #e6ffec;
@@ -184,4 +199,45 @@ span.cloudy-ui-diff-insert {
 
 span.cloudy-ui-diff-delete {
   padding: 0 1px;
+}
+
+/* FORM FIELD CHANGE BADGE */
+cloudy-ui-form-field-change-badge {
+  margin-left: 5px;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  border-radius: 2px;
+  padding: 1px 2px;
+  text-align: center;
+  font-size: 9px;
+  color: #000;
+  background: rgba(0, 0, 0, 0.1);
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-added {
+  color: #f60;
+  background: rgba(255, 102, 0, 0.1);
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-added:before {
+  content: "Added";
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-removed {
+  color: #f60;
+  background: rgba(255, 102, 0, 0.1);
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-removed:before {
+  content: "Removed";
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-modified {
+  color: #f60;
+  background: rgba(255, 102, 0, 0.1);
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-modified:before {
+  content: "Modified";
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-conflict {
+  color: #f60;
+}
+cloudy-ui-form-field-change-badge.cloudy-ui-conflict:before {
+  content: "Conflict";
 }

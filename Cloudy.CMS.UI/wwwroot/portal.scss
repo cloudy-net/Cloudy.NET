@@ -549,25 +549,6 @@ cloudy-ui-nav-user {
 
 
 
-/* CHANGE BADGE */
-
-cloudy-ui-change-badge {
-    position: absolute;
-    padding-left: 0.25em;
-    visibility: hidden;
-
-    &.cloudy-ui-unchanged {
-        visibility: initial;
-    }
-
-    &:before {
-        content: '•';
-        color: #ff6600;
-    }
-}
-
-
-
 /* INFO MESSAGE */
 
 cloudy-ui-info-message {

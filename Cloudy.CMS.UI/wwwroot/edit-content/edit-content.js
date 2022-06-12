@@ -23,12 +23,11 @@ function EditContent({ contentReference, onClose, canDiff, onDiff, reviewRemoteC
 
     const getTitle = () => {
         const state = useContext(stateContext);
-        const getBadge = () => html`<cloudy-ui-change-badge class=${state.simpleChanges.length ? 'cloudy-ui-unchanged' : null} title="This ${contentType.lowerCaseName} has pending changes."><//>`;
 
         return state.loading && state.nameHint ?
             `Edit ${state.nameHint}` :
             contentReference.keyValues ?
-                html`Edit ${nameGetter.getNameOf(state.referenceValues, contentType)}${getBadge()}` :
+                html`Edit ${nameGetter.getNameOf(state.referenceValues, contentType)}` :
                 `New ${contentType.name}`;
     };
 

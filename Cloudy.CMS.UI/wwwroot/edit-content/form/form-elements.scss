@@ -206,6 +206,27 @@ cloudy-ui-sortable-buttons {
 
 
 
+/* CHANGE INDICATOR */
+
+cloudy-ui-form-field-change-indicator {
+    position: absolute;
+    padding-left: 0.25em;
+    visibility: hidden;
+
+    &:before {
+        content: '•';
+        color: #ff6600;
+    }
+
+    &.cloudy-ui-added,
+    &.cloudy-ui-removed,
+    &.cloudy-ui-modified {
+        visibility: visible;
+    }
+}
+
+
+
 /* DIFF */
 
 .cloudy-ui-diff-insert {
@@ -220,4 +241,52 @@ span.cloudy-ui-diff-insert {
 }
 span.cloudy-ui-diff-delete {
     padding: 0 1px;
+}
+
+
+
+/* FORM FIELD CHANGE BADGE */
+
+cloudy-ui-form-field-change-badge {
+    margin-left: 5px;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    border-radius: 2px;
+    padding: 1px 2px;
+    text-align: center;
+    font-size: 9px;
+    color: #000;
+    background: rgba(#000, 0.1);
+
+    &.cloudy-ui-added {
+        color: #f60;
+        background: rgba(#f60, 0.1);
+        &:before {
+            content: 'Added';
+        }
+    }
+
+    &.cloudy-ui-removed {
+        color: #f60;
+        background: rgba(#f60, 0.1);
+        &:before {
+            content: 'Removed';
+        }
+    }
+
+    &.cloudy-ui-modified {
+        color: #f60;
+        background: rgba(#f60, 0.1);
+        &:before {
+            content: 'Modified';
+        }
+    }
+
+    &.cloudy-ui-conflict {
+        color: #f60;
+        &:before {
+            content: 'Conflict';
+        }
+    }
 }

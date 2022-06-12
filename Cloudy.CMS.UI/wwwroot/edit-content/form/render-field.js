@@ -18,13 +18,9 @@ const renderField = (fieldDescriptor, state, path) => {
     }
 
     if (fieldDescriptor.embeddedFormId) {
-        const getChangeBadge = () => {
-            return html`<cloudy-ui-change-badge class=${state.simpleChanges && state.simpleChanges.find(ch => arrayEquals(ch.path, path)) ? 'cloudy-ui-unchanged' : null} title="This field has pending changes."><//>`;
-        };
-    
         return html`
             <fieldset class="cloudy-ui-form-field">
-                <legend class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}${getChangeBadge()}<//>
+                <legend class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
                 <${EmbeddedForm}
                     path=${path}
                     formId=${fieldDescriptor.embeddedFormId}
