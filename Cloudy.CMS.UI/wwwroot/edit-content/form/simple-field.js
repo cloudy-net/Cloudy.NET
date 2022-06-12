@@ -1,6 +1,5 @@
 
 import html from '../../util/html.js';
-import arrayEquals from "../../util/array-equals.js";
 import { useContext } from '../../lib/preact.hooks.module.js';
 import fieldControlContext from './field-control-context.js';
 import getReferenceValue from '../../util/get-reference-value.js';
