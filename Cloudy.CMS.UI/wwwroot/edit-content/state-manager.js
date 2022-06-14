@@ -10,7 +10,7 @@ const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) &
 
 class StateManager {
     indexStorageKey = "cloudy:statesIndex";
-    schema = "1.1";
+    schema = "1.2";
     states = this.loadStates();
 
     loadStates() {
@@ -213,11 +213,11 @@ class StateManager {
         this.triggerStateChange(contentReference);
     }
 
-    registerArrayAdd(contentReference, path, value) {
+    registerArrayAdd(contentReference, path, key, type) {
         const state = this.getState(contentReference);
 
-        const change = { path, value };
-        state.arrayAdds.push(change);
+        const arrayAdd = { path, key, type };
+        state.arrayAdds.push(arrayAdd);
 
         this.persist(state);
 

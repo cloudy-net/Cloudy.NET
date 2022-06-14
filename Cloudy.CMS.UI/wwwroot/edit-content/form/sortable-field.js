@@ -1,5 +1,5 @@
 
-import { useState } from '../../lib/preact.hooks.module.js';
+import { useEffect, useState } from '../../lib/preact.hooks.module.js';
 import html from '../../util/html.js';
 import Button from '../../components/button/button.js'
 import SimpleField from './simple-field.js';
@@ -9,6 +9,7 @@ import EmbeddedForm from './embedded-form.js';
 import getReferenceValue from '../../util/get-reference-value.js';
 import stateManager from '../state-manager.js';
 import contentTypeProvider from '../../list-content-types/content-type-provider.js';
+import arrayEquals from '../../util/array-equals.js';
 
 const generateNewArrayElementKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
@@ -62,11 +63,21 @@ const AddButton = ({ path, fieldDescriptor, state, onAdd }) => {
 };
 
 export default function SortableField({ path, fieldDescriptor, state }) {
-    let [elements, setElements] = useState((getReferenceValue(state, path) || []).map((value, index) => ({ key: index, type: value.type })));
+    let [elements, setElements] = useState([]);
+
+    useEffect(() => {
+        const referenceValue = getReferenceValue(state, path) || [];
+        const arrayAdds = state.arrayAdds.filter(add => arrayEquals(add.path, path));
+        
+        setElements([
+            ...referenceValue.map((value, index) => ({ key: index, type: value.type })),
+            ...arrayAdds.map(({ key, type }) => ({ key, type })),
+        ]);
+    }, [path, state]);
 
     const onAdd = type => {
         const element = { key: generateNewArrayElementKey(), type };
-        stateManager.registerArrayAdd(state.contentReference, path, element);
+        stateManager.registerArrayAdd(state.contentReference, path, element.key, element.type);
         setElements([...elements, element]);
     };
 
