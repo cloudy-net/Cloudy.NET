@@ -11,6 +11,7 @@ import DiffField from './diff-field.js';
 import contentTypeProvider from '../list-content-types/content-type-provider.js';
 import fieldDescriptorProvider from '../edit-content/form/field-descriptor-provider.js';
 import getReferenceValue from '../util/get-reference-value.js';
+import hasChanges from '../edit-content/has-changes.js';
 
 function renderDiffField(fieldDescriptor, state, path){
     if(fieldDescriptor.embeddedFormId){
@@ -34,7 +35,7 @@ function ReviewChanges({ contentReference, onClose, canEdit, onEdit }) {
     const contentType = contentTypeProvider.get(contentReference.contentTypeId);
     const state = useContext(reviewChangesContext);
 
-    const saveButton = html`<cloudy-ui-button tabindex="0" class="primary" onclick=${() => stateManager.save([contentReference])} disabled=${!state.simpleChanges.length}>Save</cloudy-ui-button>`;
+    const saveButton = html`<cloudy-ui-button tabindex="0" class="primary" onclick=${() => stateManager.save([contentReference])} disabled=${!hasChanges(state)}>Save</cloudy-ui-button>`;
     const editButton = canEdit ? html`<cloudy-ui-button tabindex="0" onclick=${() => onEdit()}>Edit</cloudy-ui-button>` : null;
 
     return html`

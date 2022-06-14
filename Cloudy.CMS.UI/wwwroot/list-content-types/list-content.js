@@ -8,6 +8,7 @@ import Button from '../components/button/button.js';
 import Blade from '../components/blade/blade.js';
 import arrayEquals from '../util/array-equals.js';
 import stateManager from '../edit-content/state-manager.js';
+import hasChanges from '../edit-content/has-changes.js';
 
 function ListContent({ renderIf, contentType, activeContentReference, onEditContent, onNewContent, onClose }) {
     if(!renderIf){
@@ -55,7 +56,7 @@ function ListContent({ renderIf, contentType, activeContentReference, onEditCont
     const getBadges = item => {
         const state = states.find(s => arrayEquals(s.contentReference.keyValues, item.Keys));
 
-        const modifiedBadge = () => state && state.simpleChanges?.length ? html`<cloudy-ui-list-item-badge class="cloudy-ui-modified" title="${state.simpleChanges.length} changed fields"><//>` : null;
+        const modifiedBadge = () => state && hasChanges(state) ? html`<cloudy-ui-list-item-badge class="cloudy-ui-modified" title="${state.simpleChanges.length} changed fields"><//>` : null;
         const conflictBadge = () => state && state.newVersion ? html`<cloudy-ui-list-item-badge class="cloudy-ui-conflict" title="${contentType.name} has conflicts"><//>` : null;
 
         return html`${modifiedBadge()}${conflictBadge()}`;
