@@ -67,11 +67,11 @@ export default function SortableField({ path, fieldDescriptor, state }) {
 
     useEffect(() => {
         const referenceValue = getReferenceValue(state, path) || [];
-        const arrayAdds = state.arrayAdds.filter(add => arrayEquals(add.path, path));
+        const arrayChanges = state.arrayChanges.filter(add => arrayEquals(add.path, path));
         
         setElements([
             ...referenceValue.map((value, index) => ({ key: index, type: value.type })),
-            ...arrayAdds.map(({ key, type }) => ({ key, type })),
+            ...arrayChanges.map(({ key, type }) => ({ key, type })),
         ]);
     }, [path, state]);
 

@@ -1,3 +1,3 @@
-const hasChanges = state => state.simpleChanges?.length || state.arrayAdds?.length;
+const hasChanges = state => state.simpleChanges?.length || state.arrayChanges?.length;
 
 export default hasChanges;
