@@ -82,14 +82,11 @@ export default function SortableField({ path, fieldDescriptor, state }) {
     };
 
     return html`
-        <div class="cloudy-ui-form-field">
-            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}</div>
-            <cloudy-ui-sortable-items>
-                ${elements.map(value => renderElement(path, fieldDescriptor, state, value))}
-            <//>
-            <cloudy-ui-sortable-buttons>
-                <${AddButton} path=${path} fieldDescriptor=${fieldDescriptor} state=${state} onAdd=${onAdd} />
-            <//>
-        </div>
+        <cloudy-ui-sortable-items>
+            ${elements.map(value => renderElement(path, fieldDescriptor, state, value))}
+        <//>
+        <cloudy-ui-sortable-buttons>
+            <${AddButton} path=${path} fieldDescriptor=${fieldDescriptor} state=${state} onAdd=${onAdd} />
+        <//>
     `;
 }
