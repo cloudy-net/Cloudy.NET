@@ -15,9 +15,9 @@ function renderDiffField(fieldDescriptor, initialValue, value) {
         !initialValue && value ? 'cloudy-ui-diff-insert' :
         '';
         
-        return html`<fieldset class="cloudy-ui-form-field ${state}">
-            <legend class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
-            ${fieldDescriptors.map(f => renderDiffField(f, initialValue ? initialValue[f.id] : null, value ? value[f.id] : null))}
+        return html`<div class="cloudy-ui-form-field ${state}">
+            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}</div>
+            <div class=cloudy-ui-embedded-form>${fieldDescriptors.map(f => renderDiffField(f, initialValue ? initialValue[f.id] : null, value ? value[f.id] : null))}<//>
         <//>`;
     }
 

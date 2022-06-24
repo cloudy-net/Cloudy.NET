@@ -17,9 +17,9 @@ function renderDiffField(fieldDescriptor, state, path){
     if(fieldDescriptor.embeddedFormId){
         const fieldDescriptors = fieldDescriptorProvider.get(fieldDescriptor.embeddedFormId);
         
-        return html`<fieldset class="cloudy-ui-form-field">
-            <legend class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
-            ${fieldDescriptors.map(f => renderDiffField(f, state, [...path, f.id]))}
+        return html`<div class="cloudy-ui-form-field">
+            <div class="cloudy-ui-form-field-label">${fieldDescriptor.label || fieldDescriptor.id}<//>
+            <div class=cloudy-ui-embedded-form>${fieldDescriptors.map(f => renderDiffField(f, state, [...path, f.id]))}<//>
         <//>`;
     }
 
