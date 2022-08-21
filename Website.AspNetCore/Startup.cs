@@ -9,6 +9,7 @@ using Website.AspNetCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Cloudy.CMS.Routing;
+using Cloudy.CMS.UI;
 
 namespace Website.AspNetCore
 {
@@ -23,17 +24,14 @@ namespace Website.AspNetCore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRazorPages().AddApplicationPart(typeof(CloudyUIAssemblyHandle).Assembly);
             services.AddMvc();
             services.AddCloudy(cloudy => cloudy
                 .AddAdmin(admin => admin.Unprotect())
                 .AddContext<PageContext>()
             );
             services.AddDbContext<PageContext>(options => options
-                .UseSqlServer(
-                    Configuration.GetConnectionString("sqlserver") ?? throw new Exception("No sqlserver connection string found in appsettings/env"),
-                    options => options.EnableRetryOnFailure()
-                )
-                .EnableSensitiveDataLogging()
+                .UseInMemoryDatabase("cloudytest")
             );
         }
 
@@ -44,14 +42,16 @@ namespace Website.AspNetCore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCloudyAdminStaticFilesFromPath("../Cloudy.CMS.UI/wwwroot");
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx => ctx.Context.Response.Headers.Append("Cache-Control", $"no-cache")
+            });
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapCloudyAdminRoutes();
+                endpoints.MapRazorPages();
                 endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
                 endpoints.MapGet("/pages/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute<Page>().Name}"));
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Index" });
