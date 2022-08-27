@@ -1,0 +1,16 @@
+﻿@page
+@using Cloudy.CMS.ContentTypeSupport
+@model Cloudy.CMS.UI.Pages.Admin.IndexModel
+@inject IContentTypeProvider ContentTypeProvider
+<h1>What to edit?</h1>
+
+@foreach (var contentType in ContentTypeProvider.GetAll())
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">@contentType.Id</h5>
+            @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
+            <a href="#" class="btn btn-primary">List all</a>
+        </div>
+    </div>
+}
