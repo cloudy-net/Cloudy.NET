@@ -1,2 +1,0 @@
-import{options as n,Fragment as o,Component as e}from"./preact.module.js";function t(o,e){return n.__a&&n.__a(e),o}"undefined"!=typeof window&&window.__PREACT_DEVTOOLS__&&window.__PREACT_DEVTOOLS__.attachPreact("10.8.2",n,{Fragment:o,Component:e});export{t as addHookName};
-// https://unpkg.com/browse/preact@10.8.2/devtools/dist/devtools.module.js
