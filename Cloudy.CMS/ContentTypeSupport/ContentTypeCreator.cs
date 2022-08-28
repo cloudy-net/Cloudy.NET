@@ -3,6 +3,7 @@ using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,7 +38,15 @@ namespace Cloudy.CMS.ContentTypeSupport
                     continue;
                 }
 
-                result.Add(new ContentTypeDescriptor(contentTypeAttribute.Id, type));
+
+
+                result.Add(new ContentTypeDescriptor(
+                    contentTypeAttribute.Id,
+                    type,
+                    type.IsAssignableTo(typeof(INameable)),
+                    type.IsAssignableTo(typeof(IImageable)),
+                    type.IsAssignableTo(typeof(IRoutable))
+                ));
             }
 
             return result;

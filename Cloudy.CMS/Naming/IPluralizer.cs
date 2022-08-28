@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.UI.ContentAppSupport
+﻿namespace Cloudy.CMS.Naming
 {
     public interface IPluralizer
     {

@@ -1,3 +1,4 @@
+using Cloudy.CMS.Naming;
 using Cloudy.CMS.UI.ContentAppSupport;
 using System;
 using Xunit;

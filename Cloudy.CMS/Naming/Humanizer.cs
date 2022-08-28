@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Cloudy.CMS.UI.ContentAppSupport
+namespace Cloudy.CMS.Naming
 {
     public class Humanizer : IHumanizer
     {

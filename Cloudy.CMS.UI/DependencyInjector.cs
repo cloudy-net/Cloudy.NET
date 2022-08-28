@@ -18,9 +18,6 @@ namespace Cloudy.CMS.UI
         {
             services.AddSingleton<IMemberExpressionFromExpressionExtractor, MemberExpressionFromExpressionExtractor>();
             services.AddScoped<IUrlProvider, UrlProvider>();
-            services.AddSingleton<IPluralizer, Pluralizer>();
-            services.AddSingleton<ISingularizer, Singularizer>();
-            services.AddSingleton<IHumanizer, Humanizer>();
             services.AddSingleton<INameExpressionParser, NameExpressionParser>();
             services.AddSingleton<IImageExpressionParser, ImageExpressionParser>();
             services.AddSingleton<IListActionModuleCreator, ListActionModuleCreator>();
