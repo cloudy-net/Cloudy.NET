@@ -1,11 +1,13 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IContentTypeProvider = Cloudy.CMS.ContentTypeSupport.IContentTypeProvider;
 
 namespace Cloudy.CMS.Routing
 {
@@ -14,14 +16,12 @@ namespace Cloudy.CMS.Routing
         ILogger Logger { get; }
         EndpointDataSource EndpointDataSource { get; }
         IContentTypeProvider ContentTypeProvider { get; }
-        IContentTypeExpander ContentTypeExpander { get; }
 
-        public ContentRouteCreator(ILogger<ContentRouteCreator> logger, EndpointDataSource endpointDataSource, IContentTypeProvider contentTypeProvider, IContentTypeExpander contentTypeExpander)
+        public ContentRouteCreator(ILogger<ContentRouteCreator> logger, EndpointDataSource endpointDataSource, IContentTypeProvider contentTypeProvider)
         {
             Logger = logger;
             EndpointDataSource = endpointDataSource;
             ContentTypeProvider = contentTypeProvider;
-            ContentTypeExpander = contentTypeExpander;
         }
 
         public IEnumerable<ContentRouteDescriptor> Create()
@@ -87,11 +87,11 @@ namespace Cloudy.CMS.Routing
                         var endParenthesisIndex = content.IndexOf(')');
                         var name = startParenthesisIndex == -1 ? content : content.Substring(0, startParenthesisIndex);
 
-                        var contentTypeOrGroupIdOrTypeName = startParenthesisIndex == -1 ? null : content.Substring(startParenthesisIndex + 1, endParenthesisIndex - (startParenthesisIndex + 1));
+                        var type = startParenthesisIndex == -1 ? null : content.Substring(startParenthesisIndex + 1, endParenthesisIndex - (startParenthesisIndex + 1));
 
-                        if (contentTypeOrGroupIdOrTypeName != null)
+                        if (type != null)
                         {
-                            contentTypes = ContentTypeExpander.Expand(contentTypeOrGroupIdOrTypeName).ToList().AsReadOnly();
+                            contentTypes = new List<ContentTypeDescriptor> { ContentTypeProvider.Get(type) }.AsReadOnly();
                         }
 
                         path.Add($"{{{name}}}");

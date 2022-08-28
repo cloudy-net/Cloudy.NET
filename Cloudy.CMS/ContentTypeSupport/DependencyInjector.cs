@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport.GroupSupport;
-using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
+﻿using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,11 +17,7 @@ namespace Cloudy.CMS.ContentTypeSupport
 
             services.AddSingleton<IContentTypeCreator, ContentTypeCreator>();
             services.AddSingleton<IContentTypeProvider, ContentTypeProvider>();
-            services.AddSingleton<IContentTypeGroupCreator, ContentTypeGroupCreator>();
-            services.AddSingleton<IContentTypeGroupProvider, ContentTypeGroupProvider>();
-            services.AddSingleton<IContentTypeGroupMatcher, ContentTypeGroupMatcher>();
             services.AddSingleton<IPropertyDefinitionProvider, PropertyDefinitionProvider>();
-            services.AddSingleton<IContentTypeExpander, ContentTypeExpander>();
         }
     }
 }

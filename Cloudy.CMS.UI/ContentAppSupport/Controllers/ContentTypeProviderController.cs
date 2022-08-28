@@ -1,7 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.ContentTypeSupport.GroupSupport;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ContentTypeActionSupport;
 using Cloudy.CMS.UI.ContentAppSupport.ListActionSupport;
@@ -30,12 +29,11 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
         INameExpressionParser NameExpressionParser { get; }
         IImageExpressionParser ImageExpressionParser { get; }
         IListActionModuleProvider ListActionModuleProvider { get; }
-        IContentTypeGroupMatcher ContentTypeGroupMatcher { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IContextDescriptorProvider ContextDescriptorProvider { get; }
 
-        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IContentTypeGroupMatcher contentTypeGroupMatcher, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IPrimaryKeyGetter primaryKeyGetter, IContextDescriptorProvider contextDescriptorProvider)
+        public ContentTypeProviderController(IContentTypeProvider contentTypeProvider, IHumanizer humanizer, IPluralizer pluralizer, ISingletonProvider singletonProvider, ISingletonGetter singletonGetter, IContentTypeActionModuleProvider contentTypeActionModuleProvider, INameExpressionParser nameExpressionParser, IImageExpressionParser imageExpressionParser, IListActionModuleProvider listActionModuleProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IPrimaryKeyGetter primaryKeyGetter, IContextDescriptorProvider contextDescriptorProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             Humanizer = humanizer;
@@ -46,7 +44,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             NameExpressionParser = nameExpressionParser;
             ImageExpressionParser = imageExpressionParser;
             ListActionModuleProvider = listActionModuleProvider;
-            ContentTypeGroupMatcher = contentTypeGroupMatcher;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             PrimaryKeyGetter = primaryKeyGetter;
             ContextDescriptorProvider = contextDescriptorProvider;
@@ -120,7 +117,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
                 Count = -1,
                 ContentTypeActionModules = ContentTypeActionModuleProvider.GetContentTypeActionModulesFor(contentType.Id),
                 ListActionModules = ListActionModuleProvider.GetListActionModulesFor(contentType.Id),
-                ContentTypeGroups = ContentTypeGroupMatcher.GetContentTypeGroupsFor(contentType.Id).Select(t => t.Id).ToList().AsReadOnly(),
             };
             return item;
         }
@@ -144,7 +140,6 @@ namespace Cloudy.CMS.UI.ContentAppSupport.Controllers
             public int Count { get; set; }
             public IEnumerable<string> ContentTypeActionModules { get; set; }
             public IEnumerable<string> ListActionModules { get; set; }
-            public IEnumerable<string> ContentTypeGroups { get; set; }
         }
     }
 }
