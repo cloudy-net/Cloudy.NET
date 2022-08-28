@@ -1,6 +1,4 @@
-﻿using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMappingSupport;
-using Cloudy.CMS.ComposableSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,11 +9,9 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMa
     {
         IDictionary<Type, string> Mappings { get; }
 
-        public TypeControlMatcher(IComposableProvider composableProvider)
+        public TypeControlMatcher(ITypeControlMappingCreator typeControlMappingCreator)
         {
-            Mappings = composableProvider
-                .GetAll<ITypeControlMappingCreator>()
-                .SelectMany(c => c.Create())
+            Mappings = typeControlMappingCreator.Create()
                 .GroupBy(m => m.Type)
                 .ToDictionary(m => m.Key, m => m.First().ControlId);
         }

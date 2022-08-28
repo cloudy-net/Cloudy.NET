@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ComposableSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +9,9 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.UIHintControl
     {
         IDictionary<string, IEnumerable<UIHintControlMapping>> Values { get; }
 
-        public UIHintControlMappingProvider(IComposableProvider composableProvider)
+        public UIHintControlMappingProvider(IUIHintControlMappingCreator uIHintControlMappingCreator)
         {
-            Values = composableProvider
-                .GetAll<IUIHintControlMappingCreator>()
-                .SelectMany(c => c.Create())
+            Values = uIHintControlMappingCreator.Create()
                 .GroupBy(m => m.UIHintDefinition.Id)
                 .ToDictionary(m => m.Key, m => (IEnumerable<UIHintControlMapping>)m);
         }

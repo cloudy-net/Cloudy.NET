@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
-using Cloudy.CMS.ComposableSupport;
 
 namespace Cloudy.CMS.SingletonSupport
 {
