@@ -40,7 +40,7 @@ namespace Cloudy.CMS.SingletonSupport
                     continue;
                 }
 
-                services.AddTransient(type, serviceProvider => serviceProvider.GetService<ISingletonGetter>().GetAsync(contentTypeAttribute.Id).Result);
+                services.AddTransient(type, serviceProvider => serviceProvider.GetService<ISingletonGetter>().GetAsync(type).Result);
             }
         }
     }

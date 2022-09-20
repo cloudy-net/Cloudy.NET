@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Website.AspNetCore.Models.Blocks
 {
-    [ContentType("9d5acd1d-ac51-42d0-b414-bbdc9d24ddce")]
+    [ContentType]
     public class SellingPointsBlock : ISidebarBlock
     {
         public string SellingPoint1 { get; set; }

@@ -20,10 +20,9 @@ namespace Cloudy.CMS.SingletonSupport
             ContentFinder = contentFinder;
         }
 
-        public async Task<object> GetAsync(string contentTypeId)
+        public async Task<object> GetAsync(Type type)
         {
-            var contentType = ContentTypeProvider.Get(contentTypeId);
-            return (await ContentFinder.Find(contentType.Type).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
+            return (await ContentFinder.Find(type).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
         }
 
         public async Task<T> GetAsync<T>() where T : class

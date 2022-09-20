@@ -6,7 +6,7 @@ namespace Cloudy.CMS.SingletonSupport
 {
     public interface ISingletonGetter
     {
-        Task<object> GetAsync(string contentTypeId);
+        Task<object> GetAsync(Type type);
         Task<T> GetAsync<T>() where T : class;
     }
 }

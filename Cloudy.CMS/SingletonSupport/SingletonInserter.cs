@@ -30,8 +30,8 @@ namespace Cloudy.CMS.SingletonSupport
         {
             foreach (var singleton in SingletonProvider.GetAll())
             {
-                var content = await SingletonGetter.GetAsync(singleton.ContentTypeId).ConfigureAwait(false);
                 var contentType = ContentTypeProvider.Get(singleton.ContentTypeId);
+                var content = await SingletonGetter.GetAsync(contentType.Type).ConfigureAwait(false);
 
                 if (content != null)
                 {

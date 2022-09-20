@@ -11,7 +11,7 @@ using Website.AspNetCore.Models.Blocks;
 
 namespace Website.AspNetCore.Models
 {
-    [ContentType("80ca82a2-b46e-4394-88e0-a77ae93a9366")]
+    [ContentType]
     public class Page : INameable, IRoutable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

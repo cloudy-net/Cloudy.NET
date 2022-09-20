@@ -40,7 +40,7 @@ namespace Tests
             Assert.Same(typeof(Class_B_Extends_A), contentType.Type);
         }
 
-        [ContentType("lorem")]
+        [ContentType]
         public abstract class Class_A_Abstract
         {
             public string Id { get; set; }

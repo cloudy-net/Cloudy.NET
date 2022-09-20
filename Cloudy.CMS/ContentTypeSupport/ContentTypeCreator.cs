@@ -41,7 +41,7 @@ namespace Cloudy.CMS.ContentTypeSupport
 
 
                 result.Add(new ContentTypeDescriptor(
-                    contentTypeAttribute.Id,
+                    type.Name,
                     type,
                     type.IsAssignableTo(typeof(INameable)),
                     type.IsAssignableTo(typeof(IImageable)),
