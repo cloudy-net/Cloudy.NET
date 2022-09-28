@@ -23,7 +23,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.PolymorphicCo
             {
                 if (type.IsAssignableFrom(contentType.Type))
                 {
-                    result.Add(contentType.Id);
+                    result.Add(contentType.Name);
                 }
             }
 

@@ -125,7 +125,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
             }
 
             writer.WriteStartObject();
-            writer.WriteString("Type", contentType.Id);
+            writer.WriteString("Type", contentType.Name);
             writer.WritePropertyName("Value");
             writer.WriteStartObject();
 

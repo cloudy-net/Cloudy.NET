@@ -21,7 +21,7 @@ namespace Cloudy.CMS.Routing
 
             foreach(var contentRoute in ContentRouteProvider.GetAll())
             {
-                if(!contentRoute.ContentTypes.Any(c => c.Id == contentType.Id))
+                if(!contentRoute.ContentTypes.Any(c => c.Name == contentType.Name))
                 {
                     continue;
                 }

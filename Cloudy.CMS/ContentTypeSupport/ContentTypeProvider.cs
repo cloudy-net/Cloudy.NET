@@ -11,13 +11,13 @@ namespace Cloudy.CMS.ContentTypeSupport
     {
         IEnumerable<ContentTypeDescriptor> ContentTypes { get; }
         Dictionary<Type, ContentTypeDescriptor> ContentTypesByType { get; }
-        Dictionary<string, ContentTypeDescriptor> ContentTypesById { get; }
+        Dictionary<string, ContentTypeDescriptor> ContentTypesByName { get; }
 
         public ContentTypeProvider(IContentTypeCreator contentTypeCreator)
         {
             ContentTypes = contentTypeCreator.Create().ToList().AsReadOnly();
             ContentTypesByType = ContentTypes.ToDictionary(t => t.Type, t => t);
-            ContentTypesById = ContentTypes.ToDictionary(t => t.Id, t => t);
+            ContentTypesByName = ContentTypes.ToDictionary(t => t.Name, t => t);
         }
 
         public ContentTypeDescriptor Get(Type type)
@@ -25,14 +25,14 @@ namespace Cloudy.CMS.ContentTypeSupport
             return GetMostSpecificAssignableFrom(ContentTypesByType, type);
         }
 
-        public ContentTypeDescriptor Get(string id)
+        public ContentTypeDescriptor Get(string name)
         {
-            if (!ContentTypesById.ContainsKey(id))
+            if (!ContentTypesByName.ContainsKey(name))
             {
                 return null;
             }
 
-            return ContentTypesById[id];
+            return ContentTypesByName[name];
         }
 
         public IEnumerable<ContentTypeDescriptor> GetAll()

@@ -43,7 +43,7 @@ namespace Tests
             var result = results.Single();
 
             Assert.Equal(resultingTemplate, result.Template);
-            Assert.Equal(resultingTypes, string.Join(",", result.ContentTypes.Select(t => t.Id)));
+            Assert.Equal(resultingTypes, string.Join(",", result.ContentTypes.Select(t => t.Name)));
         }
 
         class ContentTypeA : InterfaceA

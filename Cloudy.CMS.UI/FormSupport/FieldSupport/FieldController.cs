@@ -61,7 +61,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 var fields = new List<FieldResponse>();
 
-                foreach (var field in FieldProvider.GetAllFor(contentType.Id))
+                foreach (var field in FieldProvider.GetAllFor(contentType.Name))
                 {
                     if (primaryKeys?.Contains(field.Name) ?? false)
                     {
@@ -80,7 +80,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                     if (control == null && embeddedFormId == null && !polymorphicCandidates.Any())
                     {
-                        Logger.LogInformation($"Could not find control for {contentType.Id} {field.Name}");
+                        Logger.LogInformation($"Could not find control for {contentType.Name} {field.Name}");
                         continue;
                     }
 
@@ -110,7 +110,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                         Label = label,
                         SingularLabel = singularLabel,
                         Control = control,
-                        EmbeddedFormId = embeddedFormId?.Id,
+                        EmbeddedFormId = embeddedFormId?.Name,
                         IsSortable = field.IsSortable,
                         Group = field.Group,
                         IsPolymorphic = isPolymorphic,
@@ -118,7 +118,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     });
                 }
 
-                result[contentType.Id] = fields;
+                result[contentType.Name] = fields;
             }
 
             return result;

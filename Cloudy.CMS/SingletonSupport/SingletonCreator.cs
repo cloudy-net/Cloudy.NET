@@ -28,7 +28,7 @@ namespace Cloudy.CMS.SingletonSupport
                     continue;
                 }
 
-                result.Add(new SingletonDescriptor(contentType.Id, contentType.Type));
+                result.Add(new SingletonDescriptor(contentType.Name, contentType.Type));
             }
 
             return result.AsReadOnly();

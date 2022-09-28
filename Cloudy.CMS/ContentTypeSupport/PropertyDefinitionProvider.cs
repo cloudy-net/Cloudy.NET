@@ -32,7 +32,7 @@ namespace Cloudy.CMS.ContentTypeSupport
                     propertyDefinitions.Add(propertyDefinitionCreator.Create(property));
                 }
 
-                Values[contentType.Id] = propertyDefinitions.AsReadOnly();
+                Values[contentType.Name] = propertyDefinitions.AsReadOnly();
             }
         }
 

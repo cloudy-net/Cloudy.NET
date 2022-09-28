@@ -36,7 +36,7 @@ namespace Tests
 
             var contentType = result.Single();
 
-            Assert.Equal("lorem", contentType.Id);
+            Assert.Equal("lorem", contentType.Name);
             Assert.Same(typeof(Class_B_Extends_A), contentType.Type);
         }
 

@@ -13,7 +13,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         public FieldProvider(IContentTypeProvider contentTypeProvider, IFieldCreator fieldCreator)
         {
             FieldsByFormId = contentTypeProvider.GetAll().ToDictionary(
-                f => f.Id,
+                f => f.Name,
                 f => (IDictionary<string, FieldDescriptor>)f.Type
                     .GetProperties()
                     .Where(p => p.GetGetMethod() != null && p.GetSetMethod() != null)

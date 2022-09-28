@@ -22,7 +22,7 @@ namespace Cloudy.CMS.UI.ContentAppSupport.ListActionSupport
             {
                 foreach(ListActionsAttribute attribute in contentType.Type.GetCustomAttributes(typeof(ListActionsAttribute), true))
                 {
-                    result.Add(new ListActionModuleDescriptor(contentType.Id, attribute.ModulePath));
+                    result.Add(new ListActionModuleDescriptor(contentType.Name, attribute.ModulePath));
                 }
             }
 
