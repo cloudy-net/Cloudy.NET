@@ -36,9 +36,9 @@ namespace Cloudy.CMS.ContentTypeSupport
             }
         }
 
-        public IEnumerable<PropertyDefinitionDescriptor> GetFor(string contentTypeId)
+        public IEnumerable<PropertyDefinitionDescriptor> GetFor(string contentType)
         {
-            return Values[contentTypeId];
+            return Values[contentType];
         }
     }
 }

@@ -12,7 +12,8 @@ using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
 using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.AssemblySupport;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -43,13 +44,13 @@ namespace Microsoft.AspNetCore.Builder
                 configurator.AddComponentAssembly(Assembly.GetCallingAssembly());
             }
 
-            var AssemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
-            services.AddSingleton<IAssemblyProvider>(AssemblyProvider);
+            var assemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
+            var contextDescriptorProvider = new ContextDescriptorProvider(ContextDescriptor.CreateFrom(options.Contexts));
 
+            services.AddSingleton<IAssemblyProvider>(assemblyProvider);
+            services.AddSingleton<IContextDescriptorProvider>(contextDescriptorProvider);
             
-            services.AddSingleton<IContextDescriptorProvider>(new ContextDescriptorProvider(ContextDescriptor.CreateFrom(options.Contexts)));
-            
-            foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(AssemblyProvider)).GetAll())
+            foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(assemblyProvider, contextDescriptorProvider)).GetAll())
             {
                 injector.InjectDependencies(services);
             }

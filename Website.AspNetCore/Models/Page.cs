@@ -7,11 +7,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using Website.AspNetCore.Models.Blocks;
 
 namespace Website.AspNetCore.Models
 {
-    [ContentType]
     public class Page : INameable, IRoutable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,7 +22,5 @@ namespace Website.AspNetCore.Models
         public string Description { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
-        public QuickFactsBlock Facts { get; set; }
-        public IEnumerable<ISidebarBlock> SidebarBlocks { get; set; }
     }
 }

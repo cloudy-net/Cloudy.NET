@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+
+namespace Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods
+{
+    public interface IContentFinderQuery
+    {
+        IContentFinderQuery WithContentType(params string[] contentTypeIds);
+        void WhereParent(string parent);
+        void WhereHasNoParent();
+        Task<IEnumerable<object>> GetResultAsync();
+        IContentFinderQuery WhereEquals<T1, T2>(Expression<Func<T1, T2>> property, T2 value) where T1 : class;
+    }
+}

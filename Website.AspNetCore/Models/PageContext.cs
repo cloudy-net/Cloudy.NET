@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Website.AspNetCore.Models.Blocks;
 
 namespace Website.AspNetCore.Models
 {
@@ -17,14 +16,6 @@ namespace Website.AspNetCore.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .Entity<Page>()
-                .Property(e => e.Facts)
-                .HasConversion(new JsonValueConverter<QuickFactsBlock>());
-            modelBuilder
-                .Entity<Page>()
-                .Property(e => e.SidebarBlocks)
-                .HasConversion(new JsonValueConverter<IEnumerable<ISidebarBlock>>());
             base.OnModelCreating(modelBuilder);
         }
     }

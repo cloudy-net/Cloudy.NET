@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cloudy.CMS.AssemblySupport;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport.TypeControlMa
         {
             var result = new List<TypeControlMapping>();
 
-            foreach (var assembly in AssemblyProvider.GetAll())
+            foreach (var assembly in AssemblyProvider.Assemblies)
             {
                 foreach (var type in assembly.Types)
                 {

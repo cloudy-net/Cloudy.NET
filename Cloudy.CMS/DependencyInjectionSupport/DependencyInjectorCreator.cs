@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cloudy.CMS.AssemblySupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,20 +8,13 @@ using System.Text;
 
 namespace Cloudy.CMS.DependencyInjectionSupport
 {
-    public class DependencyInjectorCreator : IDependencyInjectorCreator
+    public record DependencyInjectorCreator(IAssemblyProvider AssemblyProvider, IContextDescriptorProvider ContextDescriptorProvider) : IDependencyInjectorCreator
     {
-        IAssemblyProvider AssemblyProvider { get; }
-
-        public DependencyInjectorCreator(IAssemblyProvider assemblyProvider)
-        {
-            AssemblyProvider = assemblyProvider;
-        }
-
         public IEnumerable<IDependencyInjector> Create()
         {
             var result = new List<IDependencyInjector>();
 
-            foreach (var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
+            foreach (var type in AssemblyProvider.Assemblies.SelectMany(a => a.Types))
             {
                 if (!typeof(IDependencyInjector).IsAssignableFrom(type))
                 {
@@ -31,16 +26,27 @@ namespace Cloudy.CMS.DependencyInjectionSupport
                     continue;
                 }
 
-                var injectedAssemblyProviderConstructor = type.GetConstructor(new Type[] { typeof(IAssemblyProvider) });
+                {
+                    var injectedAssemblyProviderConstructor = type.GetConstructor(new Type[] { typeof(IAssemblyProvider) });
 
-                if (injectedAssemblyProviderConstructor != null)
-                {
-                    result.Add((IDependencyInjector)injectedAssemblyProviderConstructor.Invoke(new object[] { AssemblyProvider }));
+                    if (injectedAssemblyProviderConstructor != null)
+                    {
+                        result.Add((IDependencyInjector)injectedAssemblyProviderConstructor.Invoke(new object[] { AssemblyProvider }));
+                        continue;
+                    }
                 }
-                else
+
                 {
-                    result.Add((IDependencyInjector)Activator.CreateInstance(type));
+                    var injectedAssemblyProviderAndContextDescriptorProviderConstructor = type.GetConstructor(new Type[] { typeof(IAssemblyProvider), typeof(IContextDescriptorProvider) });
+
+                    if (injectedAssemblyProviderAndContextDescriptorProviderConstructor != null)
+                    {
+                        result.Add((IDependencyInjector)injectedAssemblyProviderAndContextDescriptorProviderConstructor.Invoke(new object[] { AssemblyProvider, ContextDescriptorProvider }));
+                        continue;
+                    }
                 }
+
+                result.Add((IDependencyInjector)Activator.CreateInstance(type));
             }
 
             return result;

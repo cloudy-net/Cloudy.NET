@@ -1,4 +1,6 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.AssemblySupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,30 +11,18 @@ using System.Text;
 
 namespace Cloudy.CMS.SingletonSupport
 {
-    public class DependencyInjector : IDependencyInjector
+    public record DependencyInjector(IAssemblyProvider AssemblyProvider, IContextDescriptorProvider ContextDescriptorProvider) : IDependencyInjector
     {
-        IAssemblyProvider AssemblyProvider { get; }
-
-        public DependencyInjector(IAssemblyProvider assemblyProvider)
-        {
-            AssemblyProvider = assemblyProvider;
-        }
-
         public void InjectDependencies(IServiceCollection services)
         {
             services.AddScoped<ISingletonCreator, SingletonCreator>();
             services.AddScoped<ISingletonGetter, SingletonGetter>();
             services.AddScoped<ISingletonProvider, SingletonProvider>();
 
-            foreach (var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
+            var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.PropertyType)).ToList();
+
+            foreach (var type in AssemblyProvider.Assemblies.SelectMany(a => a.Types))
             {
-                var contentTypeAttribute = type.GetCustomAttribute<ContentTypeAttribute>();
-
-                if (contentTypeAttribute == null)
-                {
-                    continue;
-                }
-
                 var singletonAttribute = type.GetCustomAttribute<SingletonAttribute>();
 
                 if (singletonAttribute == null)

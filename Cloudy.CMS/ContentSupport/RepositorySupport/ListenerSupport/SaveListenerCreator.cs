@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.AssemblySupport;
+using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.ListenerSupport
         {
             var result = new List<ISaveListener<object>>();
 
-            foreach(var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
+            foreach(var type in AssemblyProvider.Assemblies.SelectMany(a => a.Types))
             {
                 if (!type.IsClass)
                 {

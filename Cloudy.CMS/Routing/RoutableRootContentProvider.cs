@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods;
 
 namespace Cloudy.CMS.Routing
 {

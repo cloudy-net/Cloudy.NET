@@ -1,4 +1,8 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods;
+using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
+using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
+using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

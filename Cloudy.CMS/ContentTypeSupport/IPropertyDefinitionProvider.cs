@@ -6,6 +6,6 @@ namespace Cloudy.CMS.ContentTypeSupport
 {
     public interface IPropertyDefinitionProvider
     {
-        IEnumerable<PropertyDefinitionDescriptor> GetFor(string contentTypeId);
+        IEnumerable<PropertyDefinitionDescriptor> GetFor(string name);
     }
 }

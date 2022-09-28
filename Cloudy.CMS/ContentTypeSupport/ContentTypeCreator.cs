@@ -1,4 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using System;
 using System.Collections.Generic;
@@ -11,34 +13,20 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentTypeSupport
 {
-    public class ContentTypeCreator : IContentTypeCreator
+    public record ContentTypeCreator(IContextDescriptorProvider ContextDescriptorProvider) : IContentTypeCreator
     {
-        IAssemblyProvider AssemblyProvider { get; }
-
-        public ContentTypeCreator(IAssemblyProvider assemblyProvider)
-        {
-            AssemblyProvider = assemblyProvider;
-        }
-
         public IEnumerable<ContentTypeDescriptor> Create()
         {
-            var types = AssemblyProvider
-                    .GetAll()
-                    .SelectMany(a => a.Types)
-                    .Where(t => t.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>() != null);
+            var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.PropertyType)).ToList();
 
             var result = new List<ContentTypeDescriptor>();
 
             foreach (var type in types)
             {
-                var contentTypeAttribute = type.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>();
-
                 if (type.IsAbstract)
                 {
                     continue;
                 }
-
-
 
                 result.Add(new ContentTypeDescriptor(
                     type.Name,

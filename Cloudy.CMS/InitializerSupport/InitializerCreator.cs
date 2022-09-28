@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.AssemblySupport;
+using Cloudy.CMS.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,7 +22,7 @@ namespace Cloudy.CMS.InitializerSupport
         {
             var result = new List<IInitializer>();
 
-            foreach (var assembly in AssemblyProvider.GetAll())
+            foreach (var assembly in AssemblyProvider.Assemblies)
             {
                 foreach (var type in assembly.Types)
                 {

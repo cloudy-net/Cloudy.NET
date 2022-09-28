@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cloudy.CMS.AssemblySupport;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,7 +20,7 @@ namespace Cloudy.CMS.UI.FormSupport.ControlSupport
         {
             var result = new List<ControlDescriptor>();
 
-            foreach(var assembly in AssemblyProvider.GetAll())
+            foreach(var assembly in AssemblyProvider.Assemblies)
             {
                 foreach (var type in assembly.Types)
                 {

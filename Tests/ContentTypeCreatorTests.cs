@@ -2,12 +2,12 @@
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using Moq;
-using Cloudy.CMS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xunit;
+using Cloudy.CMS.AssemblySupport;
 
 namespace Tests
 {
@@ -17,9 +17,9 @@ namespace Tests
         public void ExcludesAbstractClass()
         {
             var assemblyProvider = Mock.Of<IAssemblyProvider>();
-            Mock.Get(assemblyProvider).Setup(p => p.GetAll()).Returns(new List<AssemblyWrapper> { new AssemblyWrapper(new List<Type> { typeof(Class_A_Abstract) }) });
+            Mock.Get(assemblyProvider).Setup(p => p.Assemblies).Returns(new List<AssemblyWrapper> { new AssemblyWrapper(new List<Type> { typeof(Class_A_Abstract) }) });
 
-            var result = new ContentTypeCreator(assemblyProvider).Create();
+            var result = new ContentTypeCreator(null).Create();
 
             Assert.Empty(result);
         }
@@ -28,9 +28,9 @@ namespace Tests
         public void IncludesAbstractClassIfSingleSubclassExists()
         {
             var assemblyProvider = Mock.Of<IAssemblyProvider>();
-            Mock.Get(assemblyProvider).Setup(p => p.GetAll()).Returns(new List<AssemblyWrapper> { new AssemblyWrapper(new List<Type> { typeof(Class_B_Extends_A) }) });
+            Mock.Get(assemblyProvider).Setup(p => p.Assemblies).Returns(new List<AssemblyWrapper> { new AssemblyWrapper(new List<Type> { typeof(Class_B_Extends_A) }) });
 
-            var result = new ContentTypeCreator(assemblyProvider).Create();
+            var result = new ContentTypeCreator(null).Create();
 
             Assert.Single(result);
 
@@ -40,7 +40,6 @@ namespace Tests
             Assert.Same(typeof(Class_B_Extends_A), contentType.Type);
         }
 
-        [ContentType]
         public abstract class Class_A_Abstract
         {
             public string Id { get; set; }
