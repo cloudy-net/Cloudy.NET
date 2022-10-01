@@ -12,14 +12,14 @@ namespace Cloudy.CMS.ContentTypeSupport.Name
 {
     public class ContentTypeNameProvider : IContentTypeNameProvider
     {
-        IDictionary<Type, ContentTypeNameDescriptor> Values { get; }
+        IDictionary<Type, ContentTypeName> Values { get; }
 
         public ContentTypeNameProvider(IContentTypeNameCreator contentTypeNameCreator)
         {
             Values = contentTypeNameCreator.Create().ToDictionary(n => n.Type, n => n);
         }
 
-        public ContentTypeNameDescriptor Get(Type type)
+        public ContentTypeName Get(Type type)
         {
             if (!Values.ContainsKey(type))
             {

@@ -9,16 +9,16 @@ namespace Cloudy.CMS.ContentTypeSupport.Name
 {
     public record ContentTypeNameCreator(IContentTypeProvider ContentTypeProvider, IHumanizer Humanizer, IPluralizer Pluralizer) : IContentTypeNameCreator
     {
-        public IEnumerable<ContentTypeNameDescriptor> Create()
+        public IEnumerable<ContentTypeName> Create()
         {
-            var result = new List<ContentTypeNameDescriptor>();
+            var result = new List<ContentTypeName>();
 
             foreach (var type in ContentTypeProvider.GetAll().Select(t => t.Type))
             {
                 var name = type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(type.Name);
                 var pluralName = Pluralizer.Pluralize(name);
 
-                result.Add(new ContentTypeNameDescriptor(
+                result.Add(new ContentTypeName(
                     type,
                     name,
                     name.Substring(0, 1).ToLower() + name.Substring(1),

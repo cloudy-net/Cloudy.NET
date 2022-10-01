@@ -4,16 +4,21 @@
 @model Cloudy.CMS.UI.Pages.Admin.IndexModel
 @inject IContentTypeProvider ContentTypeProvider
 @inject IContentTypeNameProvider ContentTypeNameProvider
-<h1>What to edit?</h1>
 
-@foreach (var contentType in ContentTypeProvider.GetAll())
-{
-    var name = ContentTypeNameProvider.Get(contentType.Type);
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">@name.Name</h5>
-            @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
-            <a href="@Url.Page("/Admin/List", new { ContentType = contentType.Name })" class="btn btn-primary">List all</a>
+@await Html.PartialAsync("Nav")
+
+<div class="container">
+    <h1 class="h2">What to edit?</h1>
+
+    @foreach (var contentType in ContentTypeProvider.GetAll())
+    {
+        var name = ContentTypeNameProvider.Get(contentType.Type);
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@name.Name</h5>
+                @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
+                <a href="@Url.Page("/Admin/List", new { ContentType = contentType.Name })" class="btn btn-primary">List all</a>
+            </div>
         </div>
-    </div>
-}
+    }
+</div>

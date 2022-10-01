@@ -1,0 +1,35 @@
+﻿@using Cloudy.CMS.ContentTypeSupport
+@using Cloudy.CMS.ContentTypeSupport.Name
+@using Cloudy.CMS.Naming
+@using System.Reflection
+@inject IHumanizer Humanizer
+@inject IContentTypeProvider ContentTypeProvider
+@inject IContentTypeNameProvider ContentTypeNameProvider
+
+<nav class="navbar navbar-expand-lg bg-light mb-2">
+    <div class="container">
+        <a class="navbar-brand" href="#">@Humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name)</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="@Url.Page("/Admin/Index")">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Content types
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach(var contentType in ContentTypeProvider.GetAll().OrderBy(c => c.Name)){
+                            var name = ContentTypeNameProvider.Get(contentType.Type);
+
+                            <li><a class="dropdown-item" href="@Url.Page("/Admin/List", new { ContentType = contentType.Name })">@name.PluralName</a></li>
+                        }
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

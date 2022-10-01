@@ -5,6 +5,6 @@ namespace Cloudy.CMS.ContentTypeSupport.Name
 {
     public interface IContentTypeNameCreator
     {
-        IEnumerable<ContentTypeNameDescriptor> Create();
+        IEnumerable<ContentTypeName> Create();
     }
 }
