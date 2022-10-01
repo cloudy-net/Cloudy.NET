@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
-using Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods;
+using Cloudy.CMS.ContentSupport.RepositorySupport.Methods;
 using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.DependencyInjectionSupport;

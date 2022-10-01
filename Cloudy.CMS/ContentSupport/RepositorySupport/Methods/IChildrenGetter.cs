@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods
+namespace Cloudy.CMS.ContentSupport.RepositorySupport.Methods
 {
     public interface IChildrenGetter
     {

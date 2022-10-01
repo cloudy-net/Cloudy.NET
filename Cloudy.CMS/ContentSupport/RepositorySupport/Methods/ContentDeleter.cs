@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods
+namespace Cloudy.CMS.ContentSupport.RepositorySupport.Methods
 {
     public class ContentDeleter : IContentDeleter
     {

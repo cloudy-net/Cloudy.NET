@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods
+namespace Cloudy.CMS.ContentSupport.RepositorySupport.Methods
 {
     public interface IContentFinderQuery
     {

@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods;
+using Cloudy.CMS.ContentSupport.RepositorySupport.Methods;
 using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;

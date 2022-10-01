@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.DataMethods
+namespace Cloudy.CMS.ContentSupport.RepositorySupport.Methods
 {
     public interface IContentMover
     {
