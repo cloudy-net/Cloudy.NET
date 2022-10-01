@@ -35,7 +35,7 @@ namespace Cloudy.CMS
 
         public CloudyConfigurator AddContext<T>() where T : class
         {
-            Options.Contexts[typeof(T)] = typeof(T).GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
+            Options.ContextTypes.Add(typeof(T));
 
             return this;
         }

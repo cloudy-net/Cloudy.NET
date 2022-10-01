@@ -14,7 +14,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
         {
             ContextDescriptors = contextDescriptors.ToList().AsReadOnly();
             ByDbSetType = contextDescriptors
-                .SelectMany(c => c.DbSets.Select(s => new KeyValuePair<Type, ContextDescriptor>(s.PropertyType.GetGenericArguments()[0], c)))
+                .SelectMany(c => c.DbSets.Select(s => new KeyValuePair<Type, ContextDescriptor>(s.Type, c)))
                 .ToDictionary(p => p.Key, p => p.Value);
         }
 

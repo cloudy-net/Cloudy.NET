@@ -45,7 +45,7 @@ namespace Microsoft.AspNetCore.Builder
             }
 
             var assemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
-            var contextDescriptorProvider = new ContextDescriptorProvider(ContextDescriptor.CreateFrom(options.Contexts));
+            var contextDescriptorProvider = new ContextDescriptorProvider(new ContextDescriptorCreator().Create(options.ContextTypes));
 
             services.AddSingleton<IAssemblyProvider>(assemblyProvider);
             services.AddSingleton<IContextDescriptorProvider>(contextDescriptorProvider);

@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
+using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +11,12 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
     public class ContextDescriptor
     {
         public Type Type { get; }
-        public IEnumerable<PropertyInfo> DbSets { get; }
+        public IEnumerable<DbSetDescriptor> DbSets { get; }
 
-        public ContextDescriptor(Type type, IEnumerable<PropertyInfo> dbSets)
+        public ContextDescriptor(Type type, IEnumerable<DbSetDescriptor> dbSets)
         {
             Type = type;
             DbSets = dbSets.ToList().AsReadOnly();
-        }
-
-        public static IEnumerable<ContextDescriptor> CreateFrom(IDictionary<Type, IEnumerable<PropertyInfo>> entries)
-        {
-            var result = new List<ContextDescriptor>();
-
-            foreach (var entry in entries)
-            {
-                result.Add(new ContextDescriptor(entry.Key, entry.Value));
-            }
-
-            return result.AsReadOnly();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
 using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Cloudy.CMS.ContentTypeSupport
     {
         public IEnumerable<ContentTypeDescriptor> Create()
         {
-            var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.PropertyType)).ToList();
+            var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.Type)).ToList();
 
             var result = new List<ContentTypeDescriptor>();
 

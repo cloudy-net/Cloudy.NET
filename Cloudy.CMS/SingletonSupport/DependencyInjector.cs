@@ -19,7 +19,7 @@ namespace Cloudy.CMS.SingletonSupport
             services.AddScoped<ISingletonGetter, SingletonGetter>();
             services.AddScoped<ISingletonProvider, SingletonProvider>();
 
-            var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.PropertyType)).ToList();
+            var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.Type)).ToList();
 
             foreach (var type in AssemblyProvider.Assemblies.SelectMany(a => a.Types))
             {
