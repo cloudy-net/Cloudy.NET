@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Website.AspNetCore.Models
 {
+    [Display(Description = "This is a sample class to show off most bells and whistles of the CMS toolkit.")]
     public class Page : INameable, IRoutable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

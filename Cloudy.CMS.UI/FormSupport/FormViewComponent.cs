@@ -18,7 +18,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
         public async Task<IViewComponentResult> InvokeAsync(string contentType)
         {
-            return View(new FormViewModel
+            return View("Form", new FormViewModel
             {
                 Fields = FieldProvider.Get(contentType),
             });

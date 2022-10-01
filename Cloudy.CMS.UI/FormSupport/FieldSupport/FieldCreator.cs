@@ -36,6 +36,10 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 var label = displayAttribute?.GetName() ?? humanizedName;
 
                 var type = propertyDefinition.Type;
+                var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
+
+                var partial = "Form/Text";
+
                 var isSortable = false;
 
                 if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IEnumerable<>) || type.GetGenericTypeDefinition() == typeof(List<>) || type.GetGenericTypeDefinition() == typeof(IList<>)))
@@ -44,9 +48,14 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     isSortable = true;
                 }
 
-                var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
+                var renderChrome = true;
 
-                result.Add(new FieldDescriptor(name, type, uiHints, label, isSortable, autoGenerate, group));
+                if (uiHints.Contains("nochrome") || propertyDefinition.Attributes.Any(c => c.GetType().GetCustomAttributes<UIHintAttribute>().Any(a => a.UIHint == "nochrome")))
+                {
+                    renderChrome = false;
+                }
+
+                result.Add(new FieldDescriptor(name, type, propertyDefinition.Attributes, label, partial, isSortable, autoGenerate, renderChrome, group));
             }
             
             return result;

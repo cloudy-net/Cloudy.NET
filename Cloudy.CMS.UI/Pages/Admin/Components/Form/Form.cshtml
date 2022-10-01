@@ -1,0 +1,25 @@
+﻿@using Cloudy.CMS.UI.FormSupport
+@model FormViewModel
+
+<form method="post">
+    @foreach (var field in Model.Fields)
+    {
+        var fieldModel = new FieldViewModel { Field = field };
+
+        if (field.RenderChrome)
+        {
+            <div class="mb-3">
+                <label for="field-@field.Name" class="form-label">@field.Label</label>
+                @await Html.PartialAsync(field.Partial, fieldModel)
+            </div>
+        }
+        else
+        {
+            @await Html.PartialAsync(field.Partial, fieldModel)
+        }
+    }
+
+    <div class="d-flex">
+        <button class="btn btn-primary">Save</button>
+    </div>
+</form>
