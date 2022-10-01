@@ -6,7 +6,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     public interface IFieldProvider
     {
-        IEnumerable<FieldDescriptor> GetAllFor(string name);
-        FieldDescriptor GetFor(string id, string name);
+        IEnumerable<FieldDescriptor> Get(string contentType);
     }
 }

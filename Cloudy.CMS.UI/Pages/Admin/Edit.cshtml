@@ -12,9 +12,5 @@
         <a class="btn btn-sm btn-beta" href="@Url.Page("/Admin/List", new { ContentType = Model.ContentType.Name })">Back</a>
     </h1>
 
-    @await Html.PartialAsync("Shared/Form", new FormViewModel())
-
-    <div class="d-flex">
-        <button class="btn btn-primary">Save</button>
-    </div>
+    @await Component.InvokeAsync("Form", new FormViewModel())
 </div>

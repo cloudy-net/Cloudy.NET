@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cloudy.CMS.UI.FormSupport.FieldSupport;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public class FormViewModel
     {
+        public IEnumerable<FieldDescriptor> Fields { get; set; }
     }
 }

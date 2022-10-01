@@ -1,0 +1,16 @@
+﻿@using Cloudy.CMS.UI.FormSupport
+@model FormViewModel
+
+<form method="post">
+    @foreach (var field in Model.Fields)
+    {
+        <div class="mb-3">
+            <label for="field-@field.Name" class="form-label">@field.Label</label>
+            <input type="text" class="form-control" id="field-@field.Name" name="@field.Name">
+        </div>
+    }
+
+    <div class="d-flex">
+        <button class="btn btn-primary">Save</button>
+    </div>
+</form>

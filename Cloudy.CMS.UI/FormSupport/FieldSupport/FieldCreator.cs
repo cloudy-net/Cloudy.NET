@@ -1,7 +1,5 @@
-﻿using Cloudy.CMS.UI.FormSupport.ControlSupport;
-using Cloudy.CMS.UI.FormSupport.ControlSupport.MatchingSupport;
-using Cloudy.CMS.UI.FormSupport.UIHintSupport;
-using Cloudy.CMS.UI.FormSupport.UIHintSupport.ParserSupport;
+﻿using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.Naming;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,43 +11,45 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     public class FieldCreator : IFieldCreator
     {
-        IPropertyAttributeInheritor PropertyAttributeInheritor { get; }
-        IInterfacePropertyMapper InterfacePropertyMapper { get; }
-        IUIHintParser UIHintParser { get; }
+        IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
+        IHumanizer Humanizer { get; }
 
-        public FieldCreator(IPropertyAttributeInheritor propertyAttributeInheritor, IInterfacePropertyMapper interfacePropertyMapper, IUIHintParser uiHintParser)
+        public FieldCreator(IPropertyDefinitionProvider propertyDefinitionProvider, IHumanizer humanizer)
         {
-            PropertyAttributeInheritor = propertyAttributeInheritor;
-            InterfacePropertyMapper = interfacePropertyMapper;
-            UIHintParser = uiHintParser;
+            PropertyDefinitionProvider = propertyDefinitionProvider;
+            Humanizer = humanizer;
         }
 
-        public FieldDescriptor Create(PropertyInfo property)
+        public IEnumerable<FieldDescriptor> Create(string contentType)
         {
-            var displayAttribute = PropertyAttributeInheritor.GetFor<DisplayAttribute>(property).FirstOrDefault();
+            var result = new List<FieldDescriptor>();
 
-            var autoGenerate = displayAttribute?.GetAutoGenerateField() ?? true;
-            var group = displayAttribute?.GetGroupName();
-            var label = displayAttribute?.GetName();
-            
-            var type = property.PropertyType;
-            var isSortable = false;
-
-            if(type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IEnumerable<>) || type.GetGenericTypeDefinition() == typeof(List<>) || type.GetGenericTypeDefinition() == typeof(IList<>)))
+            foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType))
             {
-                type = type.GetGenericArguments().Single();
-                isSortable = true;
-            }
+                var displayAttribute = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 
-            var uiHints = new List<UIHint>();
-            foreach(var uiHintAttribute in PropertyAttributeInheritor.GetFor<UIHintAttribute>(property))
-            {
-                var uiHint = uiHintAttribute.UIHint;
+                var autoGenerate = displayAttribute?.GetAutoGenerateField() ?? true;
+                var group = displayAttribute?.GetGroupName();
 
-                uiHints.Add(UIHintParser.Parse(uiHint));
+                var name = propertyDefinition.Name;
+                var humanizedName = Humanizer.Humanize(name);
+                var label = displayAttribute?.GetName() ?? humanizedName;
+
+                var type = propertyDefinition.Type;
+                var isSortable = false;
+
+                if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IEnumerable<>) || type.GetGenericTypeDefinition() == typeof(List<>) || type.GetGenericTypeDefinition() == typeof(IList<>)))
+                {
+                    type = type.GetGenericArguments().Single();
+                    isSortable = true;
+                }
+
+                var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
+
+                result.Add(new FieldDescriptor(name, type, uiHints, label, isSortable, autoGenerate, group));
             }
             
-            return new FieldDescriptor(property.Name, type, uiHints.AsReadOnly(), label, isSortable, autoGenerate, group);
+            return result;
         }
     }
 }
