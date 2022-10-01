@@ -1,12 +1,14 @@
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.Name;
 using Cloudy.CMS.UI.List;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 
 namespace Cloudy.CMS.UI.Pages.Admin
 {
+    [Authorize("adminarea")]
     public class ListModel : PageModel
     {
         IContentTypeProvider ContentTypeProvider { get; }

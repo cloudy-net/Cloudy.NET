@@ -3,9 +3,11 @@ using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.Pages.Admin
 {
+    [Authorize("adminarea")]
     public class NewModel : PageModel
     {
         IContentTypeProvider ContentTypeProvider { get; }

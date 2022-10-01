@@ -2,9 +2,11 @@ using Cloudy.CMS.ContentTypeSupport.Name;
 using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.Pages
 {
+    [Authorize("adminarea")]
     public class EditModel : PageModel
     {
         IContentTypeProvider ContentTypeProvider { get; }

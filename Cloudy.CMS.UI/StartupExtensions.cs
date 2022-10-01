@@ -30,11 +30,11 @@ namespace Microsoft.AspNetCore.Builder
 
             if (options.Unprotect)
             {
-                configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("Cloudy.CMS.UI", builder => builder.RequireAssertion(a => true)));
+                configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("adminarea", builder => builder.RequireAssertion(a => true)));
             }
             else
             {
-                configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("Cloudy.CMS.UI", builder => builder.RequireAuthenticatedUser()));
+                configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("adminarea", builder => builder.RequireAuthenticatedUser()));
             }
 
             return configurator;
