@@ -2,15 +2,16 @@ using Cloudy.CMS.ContentTypeSupport.Name;
 using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 
-namespace Cloudy.CMS.UI.Pages
+namespace Cloudy.CMS.UI.Pages.Admin
 {
-    public class EditModel : PageModel
+    public class NewModel : PageModel
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContentTypeNameProvider ContentTypeNameProvider { get; }
 
-        public EditModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider)
+        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentTypeNameProvider = contentTypeNameProvider;
