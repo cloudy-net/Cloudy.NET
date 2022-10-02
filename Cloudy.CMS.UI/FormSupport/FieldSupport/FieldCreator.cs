@@ -38,7 +38,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 var type = propertyDefinition.Type;
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
 
-                var partial = "Form/Text";
+                var partial = $"Form/{uiHints.FirstOrDefault() ?? "text"}";
 
                 var isSortable = false;
 
