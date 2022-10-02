@@ -5,13 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
-using Website.AspNetCore.Models;
+using TestWebsite.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Cloudy.CMS.Routing;
 using Cloudy.CMS.UI;
 
-namespace Website.AspNetCore
+namespace TestWebsite
 {
     public class Startup
     {

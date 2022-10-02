@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Website.AspNetCore.Models
+namespace TestWebsite.Models
 {
     [Display(Description = "This is a sample class to show off most bells and whistles of the CMS toolkit.")]
     public class Page : INameable, IRoutable

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Website.AspNetCore.Models
+namespace TestWebsite.Models
 {
     public class PageContext : DbContext
     {
