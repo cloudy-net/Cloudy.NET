@@ -25,19 +25,5 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.DbSet
 
             return task.GetType().GetProperty("Result").GetValue(task);
         }
-
-        public async Task AddAsync(object entity)
-        {
-            var genericValueTask = DbSet.GetType().GetMethod(nameof(DbSet<object>.AddAsync)).Invoke(DbSet, new object[] { entity, null });
-
-            var task = (Task)genericValueTask.GetType().GetMethod(nameof(ValueTask<object>.AsTask)).Invoke(genericValueTask, new object[] { });
-
-            await task.ConfigureAwait(false);
-        }
-
-        public void Remove(object entity)
-        {
-            DbSet.GetType().GetMethod(nameof(DbSet<object>.Remove)).Invoke(DbSet, new object[] { entity });
-        }
     }
 }

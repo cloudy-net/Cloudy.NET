@@ -11,8 +11,10 @@ namespace Cloudy.CMS.UI.FormSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddScoped<IFieldCreator, FieldCreator>();
-            services.AddScoped<IFieldProvider, FieldProvider>();
+            services.AddSingleton<IFieldCreator, FieldCreator>();
+            services.AddSingleton<IFieldProvider, FieldProvider>();
+            services.AddSingleton<IInstanceUpdater, InstanceUpdater>();
+            services.AddSingleton<IFormValueConverter, FormValueConverter>();
         }
     }
 }

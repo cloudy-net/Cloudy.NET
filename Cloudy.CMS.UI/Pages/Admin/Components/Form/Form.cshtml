@@ -2,8 +2,14 @@
 @model FormViewModel
 
 <form method="post">
+    @Html.AntiForgeryToken()
+
     @foreach (var field in Model.Fields)
     {
+        if(Model.New && Model.PrimaryKeyNames.Contains(field.Name)){
+            continue;
+        }
+
         var fieldModel = new FieldViewModel { Field = field };
 
         if (field.RenderChrome)

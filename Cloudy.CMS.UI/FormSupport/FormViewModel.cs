@@ -10,5 +10,7 @@ namespace Cloudy.CMS.UI.FormSupport
     public class FormViewModel
     {
         public IEnumerable<FieldDescriptor> Fields { get; set; }
+        public IEnumerable<string> PrimaryKeyNames { get; set; }
+        public bool New { get; set; }
     }
 }
