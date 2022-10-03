@@ -15,7 +15,7 @@ namespace Cloudy.CMS.UI.List
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public ListResultResponse ListResult(string contentType, string query, [FromServices] IContentTypeProvider contentTypeProvider, [FromServices] IContextCreator contextCreator)
+        public async Task<ListResultResponse> ListResult(string contentType, string query, [FromServices] IContentTypeProvider contentTypeProvider, [FromServices] IContextCreator contextCreator)
         {
             var type = contentTypeProvider.Get(contentType);
 
@@ -30,7 +30,7 @@ namespace Cloudy.CMS.UI.List
 
             return new ListResultResponse
             {
-                Items = dbSet.ToDynamicList(),
+                Items = await dbSet.ToDynamicListAsync().ConfigureAwait(false),
             };
         }
 
