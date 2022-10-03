@@ -38,5 +38,10 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
 
             throw new CouldNotFindAnyDbSetForTypeInsideContextException(type, Context.GetType());
         }
+
+        public void Dispose()
+        {
+            Context.Dispose();
+        }
     }
 }

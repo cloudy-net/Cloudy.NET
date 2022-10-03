@@ -4,7 +4,7 @@ using System;
 
 namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
 {
-    public interface IContextWrapper
+    public interface IContextWrapper : IDisposable
     {
         DbContext Context { get; }
         IDbSetWrapper GetDbSet(Type type);
