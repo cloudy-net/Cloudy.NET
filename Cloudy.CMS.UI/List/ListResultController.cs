@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
 using Cloudy.CMS.ContentTypeSupport;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,12 @@ namespace Cloudy.CMS.UI.List
                 dbSet = dbSet.Where($"Name.Contains(@0)", query);
             }
 
+            var totalCount = await dbSet.CountAsync().ConfigureAwait(false);
+
             return new ListResultResponse
             {
-                Items = await dbSet.ToDynamicListAsync().ConfigureAwait(false),
+                Items = await dbSet.Page(1, 50).ToDynamicListAsync().ConfigureAwait(false),
+                TotalCount = totalCount,
             };
         }
 
@@ -42,6 +46,7 @@ namespace Cloudy.CMS.UI.List
         public class ListResultResponse
         {
             public IEnumerable<object> Items { get; set; }
+            public int TotalCount { get; set; }
         }
     }
 }
