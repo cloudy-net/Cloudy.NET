@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Cloudy.CMS.UI.Pages
+namespace Cloudy.CMS.UI.Areas.Admin.Pages
 {
     [Authorize("adminarea")]
     public class EditModel : PageModel

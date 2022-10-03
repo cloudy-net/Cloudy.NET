@@ -1,10 +1,10 @@
-﻿@page "ContentType"
-@model Cloudy.CMS.UI.Pages.Admin.ListModel
+﻿@page
+@model Cloudy.CMS.UI.Areas.Admin.Pages.ListModel
 
 @await Html.PartialAsync("Shared/Nav")
 
 <div class="container">
-    <h1 class="h2">Listing @Model.ContentTypeName.PluralName <a class="btn btn-sm btn-primary" href="@Url.Page("/Admin/New", new { ContentType = Model.ContentType.Name })">New</a></h1>
+    <h1 class="h2">Listing @Model.ContentTypeName.PluralName <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", ContentType = Model.ContentType.Name })">New</a></h1>
 
     <table class="table">
         <thead>

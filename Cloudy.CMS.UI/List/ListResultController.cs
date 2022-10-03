@@ -13,8 +13,9 @@ namespace Cloudy.CMS.UI.List
     public class ListResultController
     {
         [HttpGet]
-        [Route("/api/list/result")]
-        public ListResultResponse ListResult(string contentType, [FromServices] IContentTypeProvider contentTypeProvider, [FromServices] IContextCreator contextCreator)
+        [Area("Admin")]
+        [Route("/{area}/api/list/result")]
+        public ListResultResponse ListResult(string contentType, string query, [FromServices] IContentTypeProvider contentTypeProvider, [FromServices] IContextCreator contextCreator)
         {
             var type = contentTypeProvider.Get(contentType);
 
@@ -24,7 +25,7 @@ namespace Cloudy.CMS.UI.List
 
             return new ListResultResponse
             {
-                Items = dbSet.ToDynamicList(),
+                Items = dbSet.Where($"Name.Contains(@0)", query).ToDynamicList(),
             };
         }
 

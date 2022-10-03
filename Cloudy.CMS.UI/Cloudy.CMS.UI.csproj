@@ -31,4 +31,8 @@
 		<ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Areas\NewFolder\" />
+	</ItemGroup>
+
 </Project>

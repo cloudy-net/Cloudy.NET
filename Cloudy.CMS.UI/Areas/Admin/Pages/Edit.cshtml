@@ -1,0 +1,16 @@
+﻿@page
+@using Cloudy.CMS.UI.FormSupport
+@model Cloudy.CMS.UI.Areas.Admin.Pages.EditModel
+
+@await Html.PartialAsync("Shared/Nav")
+
+<div class="container">
+    <h1 class="h2">
+        <a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a>
+        /
+        New
+        <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
+    </h1>
+
+    @await Component.InvokeAsync("Form", new FormViewModel())
+</div>

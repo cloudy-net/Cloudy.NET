@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.UI.Pages.Admin
+namespace Cloudy.CMS.UI.Areas.Admin.Pages
 {
     [Authorize("adminarea")]
     public class ListModel : PageModel

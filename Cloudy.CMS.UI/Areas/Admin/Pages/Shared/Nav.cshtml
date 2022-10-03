@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="@Url.Page("/Admin/Index")">Home</a>
+                    <a class="nav-link active" aria-current="page" href="@Url.Page("Index", new { area = "Admin" })">Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -25,7 +25,7 @@
                         @foreach(var contentType in ContentTypeProvider.GetAll().OrderBy(c => c.Name)){
                             var name = ContentTypeNameProvider.Get(contentType.Type);
 
-                            <li><a class="dropdown-item" href="@Url.Page("/Admin/List", new { ContentType = contentType.Name })">@name.PluralName</a></li>
+                            <li><a class="dropdown-item" href="@Url.Page("List", new { area = "Admin", ContentType = contentType.Name })">@name.PluralName</a></li>
                         }
                     </ul>
                 </li>

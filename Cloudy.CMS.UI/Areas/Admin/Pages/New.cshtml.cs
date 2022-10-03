@@ -12,7 +12,7 @@ using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.Pages.Admin
+namespace Cloudy.CMS.UI.Areas.Admin.Pages
 {
     [Authorize("adminarea")]
     public class NewModel : PageModel
