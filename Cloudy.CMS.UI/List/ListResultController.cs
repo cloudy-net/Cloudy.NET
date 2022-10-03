@@ -57,11 +57,9 @@ namespace Cloudy.CMS.UI.List
 
             var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name).Where(p => columnNames.Contains(p.Name));
 
-            //await foreach(var instance in (IAsyncEnumerable<object>)dbSet)
-            foreach(var instance in new List<object> { new MyPage { Name = "Lorem" } })
+            await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
             {
                 var row = new Dictionary<string, string>();
-
 
                 foreach(var propertyDefinition in propertyDefinitions)
                 {
@@ -78,9 +76,11 @@ namespace Cloudy.CMS.UI.List
                     using (var writer = new StringWriter())
                     using (view as IDisposable)
                     {
-                        var viewContext = new ViewContext(ControllerContext, view, ViewData, TempData, writer, new HtmlHelperOptions());
+                        var viewData = new ViewDataDictionary(ViewData) { Model = new ListColumnViewModel(type, instance, propertyDefinition, propertyDefinition.Getter(instance)) };
+
+                        var viewContext = new ViewContext(ControllerContext, view, viewData, TempData, writer, new HtmlHelperOptions());
                         await view.RenderAsync(viewContext).ConfigureAwait(false);
-                        row[propertyDefinition.Name] = writer.ToString();
+                        row[propertyDefinition.Name] = writer.ToString().Trim();
                     }
                 }
 
