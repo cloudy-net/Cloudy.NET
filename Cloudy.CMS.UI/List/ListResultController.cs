@@ -23,9 +23,14 @@ namespace Cloudy.CMS.UI.List
 
             var dbSet = (IQueryable)context.GetDbSet(type.Type).DbSet;
 
+            if(query != null)
+            {
+                dbSet = dbSet.Where($"Name.Contains(@0)", query);
+            }
+
             return new ListResultResponse
             {
-                Items = dbSet.Where($"Name.Contains(@0)", query).ToDynamicList(),
+                Items = dbSet.ToDynamicList(),
             };
         }
 
