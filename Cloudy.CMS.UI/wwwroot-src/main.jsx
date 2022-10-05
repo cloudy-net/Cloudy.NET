@@ -1,8 +1,8 @@
 import { render } from 'preact'
-import { App } from './app'
+import { ListTable } from './list-table'
 import './main.scss'
 
-const element = document.getElementById('list-tbody');
+const element = document.querySelector('.list-table');
 const settings = JSON.parse(element.getAttribute('settings'));
 
-render(<App {...settings} />, element);
+render(<ListTable {...settings} />, element);

@@ -42,6 +42,18 @@ namespace TestWebsite
                 app.UseDeveloperExceptionPage();
             }
 
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<PageContext>();
+
+                for (var i = 0; i < 50; i++)
+                {
+                    context.Add(new Page { Name = Guid.NewGuid().ToString() });
+                }
+
+                context.SaveChanges();
+            }
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx => ctx.Context.Response.Headers.Append("Cache-Control", $"no-cache")

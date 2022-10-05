@@ -53,6 +53,8 @@ namespace Cloudy.CMS.UI.List
 
             var totalCount = await dbSet.CountAsync().ConfigureAwait(false);
 
+            dbSet = dbSet.Page(1, 20);
+
             var result = new List<IDictionary<string, string>>();
 
             var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name).Where(p => columnNames.Contains(p.Name));
