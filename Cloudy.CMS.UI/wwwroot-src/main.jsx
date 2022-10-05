@@ -2,4 +2,7 @@ import { render } from 'preact'
 import { App } from './app'
 import './main.scss'
 
-render(<App />, document.getElementById('app'))
+const element = document.getElementById('list-tbody');
+const settings = JSON.parse(element.getAttribute('settings'));
+
+render(<App {...settings} />, element);

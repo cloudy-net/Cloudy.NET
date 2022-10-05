@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Text.Json
 @model Cloudy.CMS.UI.Areas.Admin.Pages.ListModel
 
 @await Html.PartialAsync("Shared/Nav")
@@ -15,11 +16,8 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-
-        </tbody>
+        <tbody id="list-tbody" settings="@JsonSerializer.Serialize(new { ContentType = Model.ContentType.Name, Columns = Model.Columns })"></tbody>
     </table>
 
     <script type="module" crossorigin src="/_content/Cloudy.CMS.UI/index.bundle.js"></script>
-    <div id="app"></div>
 </div>
