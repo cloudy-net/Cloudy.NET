@@ -12,6 +12,7 @@ export default defineConfig({
         chunkFileNames: '[name].[ext]'
       }
     },
+    sourcemap: true,
     outDir: '../wwwroot'
   }
 })
