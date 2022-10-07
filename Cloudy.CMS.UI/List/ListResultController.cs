@@ -12,8 +12,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Resources;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.List
@@ -36,7 +34,7 @@ namespace Cloudy.CMS.UI.List
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string contentType, string columns)
+        public async Task<ListResultResponse> ListResult(string contentType, string columns, int page, int pageSize)
         {
             var columnNames = columns.Split(",");
 
@@ -53,7 +51,7 @@ namespace Cloudy.CMS.UI.List
 
             var totalCount = await dbSet.CountAsync().ConfigureAwait(false);
 
-            dbSet = dbSet.Page(1, 20);
+            dbSet = dbSet.Page(page, pageSize);
 
             var result = new List<IDictionary<string, string>>();
 

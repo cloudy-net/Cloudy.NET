@@ -10,7 +10,7 @@ export function ListTable({ ContentType, Columns, PageSize }) {
   const [data, setData] = useState();
   
   useEffect(function () {
-    fetch(`/Admin/api/list/result?contentType=${ContentType}&columns=${columns.map(c => c.Name).join(',')}&pageSize=${PageSize}&page=${page}`)
+    fetch(`/Admin/api/list/result?contentType=${ContentType}&columns=${columns.map(c => c.Name).join(',')}&pageSize=${pageSize}&page=${page}`)
     .then(response => response.json())
     .then(response => {
       setLoading(false);
@@ -30,10 +30,11 @@ export function ListTable({ ContentType, Columns, PageSize }) {
   }
 
   return (
-    <>
+    <table class="table">
       <thead>
         <tr>
           {columns.map(c => <th>{c.Name}</th>)}
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -45,13 +46,13 @@ export function ListTable({ ContentType, Columns, PageSize }) {
             <nav>
               <ul class="pagination justify-content-center">
                 <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")}>Previous</a></li>
-                {pages.map((_, i) => <li class="page-item"><a class="page-link">{i + 1}</a></li>)}
+                {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
                 <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")}>Next</a></li>
               </ul>
             </nav>
           </td>
         </tr>
       </tfoot>
-    </>
+    </table>
   );
 }
