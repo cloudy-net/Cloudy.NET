@@ -22,7 +22,7 @@ public class Page : INameable, IRoutable
 ```C#
 endpoints.MapGet("/pages/{route:contentroute}", async c => 
     await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute<Page>().Name}")
-);           
+);
 ```
 
 ![Screenshot of a browser routing a request to previously mentioned route](readme-images/routing.png?raw=true)
