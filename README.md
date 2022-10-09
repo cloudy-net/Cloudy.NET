@@ -1,4 +1,4 @@
-# Cloudy is an automatic scaffolding solution for .NET using EF Core.
+# Cloudy creates a CMS out of your EF Core context.
 
 Just create your DbContext, Models, and hook up Cloudy. Configure behavior with UI hints.
 
