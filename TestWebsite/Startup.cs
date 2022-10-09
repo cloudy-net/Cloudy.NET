@@ -42,6 +42,7 @@ namespace TestWebsite
                 app.UseDeveloperExceptionPage();
             }
 
+            // seed with some data
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<PageContext>();
@@ -66,7 +67,11 @@ namespace TestWebsite
                 endpoints.MapRazorPages();
                 endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
                 endpoints.MapGet("/pages", async c => await c.Response.WriteAsJsonAsync(c.RequestServices.GetService<PageContext>().Pages));
-                endpoints.MapGet("/pages/{route:contentroute}", async c => await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute<Page>().Name}"));
+                
+                endpoints.MapGet("/pages/{route:contentroute}", async c => 
+                    await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute<Page>().Name}")
+                );
+                
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Index" });
             });
         }
