@@ -14,7 +14,7 @@ public class Page : INameable, IRoutable
     public string Description { get; set; }
     [UIHint("html")]
     public string MainBody { get; set; }
-}    
+}
 ```
 
 ![Screenshot of how Cloudy scaffolds previously mentioned model, showing URL segment that will be used for routing](readme-images/create-new.png?raw=true)
