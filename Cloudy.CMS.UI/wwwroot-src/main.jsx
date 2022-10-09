@@ -3,6 +3,9 @@ import { ListTable } from './list-table'
 import './main.scss'
 
 const element = document.querySelector('.list-table');
-const settings = JSON.parse(element.getAttribute('settings'));
 
-render(<ListTable {...settings} />, element);
+if(element){
+    const settings = JSON.parse(element.getAttribute('settings'));
+
+    render(<ListTable {...settings} />, element);
+}
