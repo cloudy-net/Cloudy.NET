@@ -9,13 +9,11 @@ namespace Cloudy.CMS.Mvc.Routing
 {
     public class UrlProvider : IUrlProvider
     {
-        IContentGetter ContentGetter { get; }
         IAncestorProvider AncestorProvider { get; }
 
-        public UrlProvider(IAncestorProvider ancestorProvider, IContentGetter contentGetter)
+        public UrlProvider(IAncestorProvider ancestorProvider)
         {
             AncestorProvider = ancestorProvider;
-            ContentGetter = contentGetter;
         }
 
         public async Task<string> GetAsync(object content)

@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using Microsoft.AspNetCore.Mvc;
@@ -22,13 +23,15 @@ namespace Cloudy.CMS.UI.List
         IContentTypeProvider ContentTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         ICompositeViewEngine CompositeViewEngine { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine)
+        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContentTypeProvider = contentTypeProvider;
             ContextCreator = contextCreator;
             CompositeViewEngine = compositeViewEngine;
+            PrimaryKeyGetter = primaryKeyGetter;
         }
 
         [HttpGet]
@@ -53,15 +56,15 @@ namespace Cloudy.CMS.UI.List
 
             dbSet = dbSet.Page(page, pageSize);
 
-            var result = new List<IDictionary<string, string>>();
+            var result = new List<ListRow>();
 
-            var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name).Where(p => columnNames.Contains(p.Name));
+            var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name);
 
             await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
             {
-                var row = new Dictionary<string, string>();
+                var columnValues = new List<string>();
 
-                foreach(var propertyDefinition in propertyDefinitions)
+                foreach(var propertyDefinition in columnNames.Select(n => propertyDefinitions.Single(p => n == p.Name)))
                 {
                     var partialViewName = $"Columns/Text";
                     var viewResult = CompositeViewEngine.FindView(ControllerContext, partialViewName, false);
@@ -80,34 +83,30 @@ namespace Cloudy.CMS.UI.List
 
                         var viewContext = new ViewContext(ControllerContext, view, viewData, TempData, writer, new HtmlHelperOptions());
                         await view.RenderAsync(viewContext).ConfigureAwait(false);
-                        row[propertyDefinition.Name] = writer.ToString().Trim();
+                        columnValues.Add(writer.ToString().Trim());
                     }
                 }
 
-                result.Add(row);
+                result.Add(new ListRow(
+                    PrimaryKeyGetter.Get(instance),
+                    columnValues
+                ));
             }
 
-            return new ListResultResponse
-            {
-                Items = result,
-                TotalCount = totalCount,
-            };
+            return new ListResultResponse(
+                result,
+                totalCount
+            );
         }
 
-        public class ListResultPayload
-        {
-            public List<string> Columns { get; set; }
-        }
+        public record ListResultResponse(
+            IEnumerable<ListRow> Items,
+            int TotalCount
+        );
 
-        public class ListResultResponse
-        {
-            public IEnumerable<object> Items { get; set; }
-            public int TotalCount { get; set; }
-        }
-
-        private class MyPage
-        {
-            public string Name { get; set; }
-        }
+        public record ListRow(
+            IEnumerable<object> Keys,
+            IEnumerable<string> Values
+        );
     }
 }

@@ -1,6 +1,9 @@
 ﻿@page
+@using Cloudy.CMS.Naming
 @using Cloudy.CMS.UI.FormSupport
 @model Cloudy.CMS.UI.Areas.Admin.Pages.EditModel
+
+@inject INameGetter NameGetter
 
 @await Html.PartialAsync("Shared/Nav")
 
@@ -8,9 +11,9 @@
     <h1 class="h2">
         <a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a>
         /
-        New
+        Edit <span class="opacity-75">@NameGetter.GetName(Model.Instance)</span>
         <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
     </h1>
 
-    @await Component.InvokeAsync("Form", new FormViewModel())
+    @await Component.InvokeAsync("Form", new { area = "Admin", ContentType = Model.ContentType.Name, Instance = Model.Instance })
 </div>

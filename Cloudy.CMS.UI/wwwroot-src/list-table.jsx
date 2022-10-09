@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 
-export function ListTable({ ContentType, Columns, PageSize }) {
+export function ListTable({ ContentType, Columns, PageSize, EditLink }) {
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -38,7 +38,12 @@ export function ListTable({ ContentType, Columns, PageSize }) {
         </tr>
       </thead>
       <tbody>
-        {data.items.map(d => <tr>{columns.map(c => <td>{d[c.Name]}</td>)}<td></td></tr>)}
+        {data.items.map(d => <tr>
+          {columns.map((_, i) => 
+            <td>{d.values[i]}</td>
+          )}
+          <td><a href={`${EditLink}${d.keys.map(k => `&keys=${k}`)}`}>Edit</a></td>
+        </tr>)}
       </tbody>
       <tfoot>
         <tr>

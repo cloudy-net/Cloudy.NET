@@ -23,7 +23,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             services.AddScoped<IPrimaryKeyGetter, PrimaryKeyGetter>();
             services.AddScoped<IPrimaryKeySetter, PrimaryKeySetter>();
 
-            services.AddScoped<IContentGetter, ContentGetter>();
             services.AddScoped<IContentFinder, ContentFinder>();
             services.AddScoped<IContentUpdater, ContentUpdater>();
 

@@ -7,6 +7,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
 {
     public interface IPrimaryKeyConverter
     {
-        object[] Convert(IEnumerable<JsonElement> keyValues, string contentTypeId);
+        object[] Convert(IEnumerable<string> keyValues, Type contentType);
     }
 }

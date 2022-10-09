@@ -22,7 +22,7 @@ namespace Cloudy.CMS.UI.FormSupport
             ContentTypeProvider = contentTypeProvider;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string contentType)
+        public async Task<IViewComponentResult> InvokeAsync(string contentType, object instance)
         {
             var type = ContentTypeProvider.Get(contentType);
 
@@ -30,7 +30,8 @@ namespace Cloudy.CMS.UI.FormSupport
             {
                 Fields = FieldProvider.Get(contentType),
                 PrimaryKeyNames = PrimaryKeyPropertyGetter.GetFor(type.Type).Select(p => p.Name).ToList().AsReadOnly(),
-                New = true,
+                Instance = instance,
+                New = instance == null,
             });
         }
     }

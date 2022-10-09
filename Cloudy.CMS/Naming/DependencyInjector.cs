@@ -15,6 +15,7 @@ namespace Cloudy.CMS.Naming
             services.AddSingleton<IPluralizer, Pluralizer>();
             services.AddSingleton<ISingularizer, Singularizer>();
             services.AddSingleton<IHumanizer, Humanizer>();
+            services.AddSingleton<INameGetter, NameGetter>();
         }
     }
 }
