@@ -2,7 +2,11 @@
 
 Just create your DbContext, Models, and hook up Cloudy. Configure behavior with UI hints.
 
-![Screenshot of the Cloudy CMS admin UI.](/screenshot.png?raw=true)
+![Example of a standard EF Core model in C#](readme-images/model.png?raw=true)
+![Screenshot of how Cloudy scaffolds previously mentioned model, showing URL segment that will be used for routing](readme-images/create-new.png?raw=true)
+![Code demonstrating how to setup a route with Cloudy](readme-images/setup.png?raw=true)
+![Screenshot of a browser routing a request to previously mentioned route](readme-images/routing.png?raw=true)
+
 
 # Installation
 
