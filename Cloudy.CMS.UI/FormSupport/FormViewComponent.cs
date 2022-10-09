@@ -14,10 +14,12 @@ namespace Cloudy.CMS.UI.FormSupport
         IFieldProvider FieldProvider { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
+        IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
 
-        public FormViewComponent(IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentTypeProvider contentTypeProvider)
+        public FormViewComponent(IFieldProvider fieldProvider, IPropertyDefinitionProvider propertyDefinitionProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContentTypeProvider contentTypeProvider)
         {
             FieldProvider = fieldProvider;
+            PropertyDefinitionProvider = propertyDefinitionProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             ContentTypeProvider = contentTypeProvider;
         }
@@ -26,13 +28,13 @@ namespace Cloudy.CMS.UI.FormSupport
         {
             var type = ContentTypeProvider.Get(contentType);
 
-            return View("Form", new FormViewModel
-            {
-                Fields = FieldProvider.Get(contentType),
-                PrimaryKeyNames = PrimaryKeyPropertyGetter.GetFor(type.Type).Select(p => p.Name).ToList().AsReadOnly(),
-                Instance = instance,
-                New = instance == null,
-            });
+            return View("Form", new FormViewModel(
+                FieldProvider.Get(contentType),
+                PropertyDefinitionProvider.GetFor(type.Name),
+                PrimaryKeyPropertyGetter.GetFor(type.Type).Select(p => p.Name).ToList().AsReadOnly(),
+                type,
+                instance
+            ));
         }
     }
 }

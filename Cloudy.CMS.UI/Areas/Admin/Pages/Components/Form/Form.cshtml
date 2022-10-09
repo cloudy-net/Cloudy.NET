@@ -1,16 +1,34 @@
-﻿@using Cloudy.CMS.UI.FormSupport
+﻿@using Cloudy.CMS.ContentTypeSupport
+@using Cloudy.CMS.UI.FormSupport
 @model FormViewModel
 
 <form method="post">
     @Html.AntiForgeryToken()
 
+    @if (Model.Instance != null)
+    {
+        @foreach (var field in Model.Fields)
+        {
+            if (!Model.PrimaryKeyNames.Contains(field.Name))
+            {
+                continue;
+            }
+
+            var property = Model.PropertyDefinitions.Single(p => p.Name == field.Name);
+
+            <input type="hidden" id="field-@field.Name" name="@field.Name" value="@property.Getter(Model.Instance)">
+        }
+    }
+
     @foreach (var field in Model.Fields)
     {
-        if(Model.New && Model.PrimaryKeyNames.Contains(field.Name)){
+        if(Model.PrimaryKeyNames.Contains(field.Name)){
             continue;
         }
 
-        var fieldModel = new FieldViewModel { Field = field };
+        var property = Model.PropertyDefinitions.Single(p => p.Name == field.Name);
+
+        var fieldModel = new FieldViewModel(Model.ContentType, Model.Instance, field, property, property.Getter(Model.Instance));
 
         if (field.RenderChrome)
         {

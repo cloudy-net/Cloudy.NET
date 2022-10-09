@@ -15,5 +15,9 @@
         <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
     </h1>
 
-    @await Component.InvokeAsync("Form", new { area = "Admin", ContentType = Model.ContentType.Name, Instance = Model.Instance })
+    <div class="card">
+        <div class="card-body">
+            @await Component.InvokeAsync("Form", new { area = "Admin", ContentType = Model.ContentType.Name, Instance = Model.Instance })
+        </div>
+    </div>
 </div>
