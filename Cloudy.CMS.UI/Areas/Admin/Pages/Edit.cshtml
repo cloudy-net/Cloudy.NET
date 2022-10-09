@@ -8,13 +8,20 @@
 @await Html.PartialAsync("Shared/Nav")
 
 <div class="container">
-    <h1 class="h2">
-        <a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a>
-        /
-        Edit <span class="opacity-75">@NameGetter.GetName(Model.Instance)</span>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </nav>
+</div>
+<div class="container">
+    <h1 class="h2 mb-4">
+        @NameGetter.GetName(Model.Instance)
         <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
     </h1>
-
+</div>
+<div class="container">
     <div class="card">
         <div class="card-body">
             @await Component.InvokeAsync("Form", new { area = "Admin", ContentType = Model.ContentType.Name, Instance = Model.Instance })

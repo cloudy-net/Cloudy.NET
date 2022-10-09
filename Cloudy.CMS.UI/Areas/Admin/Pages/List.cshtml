@@ -5,8 +5,16 @@
 @await Html.PartialAsync("Shared/Nav")
 
 <div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a></li>
+        </ol>
+    </nav>
+</div>
+<div class="container">
     <h1 class="h2">Listing @Model.ContentTypeName.PluralName <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", ContentType = Model.ContentType.Name })">New</a></h1>
-
+</div>
+<div class="container">
     <div class="list-table" settings="@JsonSerializer.Serialize(new { ContentType = Model.ContentType.Name, Columns = Model.Columns, PageSize = 10, EditLink = Url.Page("Edit", new { area = "Admin", ContentType = Model.ContentType.Name }) })">
     </div>
 </div>

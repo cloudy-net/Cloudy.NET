@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using Microsoft.AspNetCore.Http;
 using Cloudy.CMS.UI.FormSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.Methods;
 using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
+using System.Linq;
 
 namespace Cloudy.CMS.UI.Areas.Admin.Pages
 {
@@ -19,13 +19,15 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContentTypeNameProvider ContentTypeNameProvider { get; }
+        IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IInstanceUpdater InstanceUpdater { get; }
         IContextProvider ContextProvider { get; }
 
-        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IInstanceUpdater instanceUpdater, IContextProvider contextProvider)
+        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IInstanceUpdater instanceUpdater, IContextProvider contextProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentTypeNameProvider = contentTypeNameProvider;
+            PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             InstanceUpdater = instanceUpdater;
             ContextProvider = contextProvider;
         }
@@ -33,22 +35,30 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
         public ContentTypeDescriptor ContentType { get; set; }
         public ContentTypeName ContentTypeName { get; set; }
 
-        public void OnGet(string contentType)
+        void BindData(string contentType)
         {
             ContentType = ContentTypeProvider.Get(contentType);
             ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
         }
 
-        public async Task OnPost(string contentType, [FromForm] IFormCollection form)
+        public void OnGet(string contentType)
         {
-            ContentType = ContentTypeProvider.Get(contentType);
-            ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
+            BindData(contentType);
+        }
+
+        public async Task<IActionResult> OnPost(string contentType, [FromForm] IFormCollection form)
+        {
+            BindData(contentType);
+
+            var primaryKeyNames = PrimaryKeyPropertyGetter.GetFor(ContentType.Type).Select(p => p.Name).ToList();
 
             var context = ContextProvider.GetFor(ContentType.Type);
             var instance = Activator.CreateInstance(ContentType.Type);
-            InstanceUpdater.Update(ContentType.Name, instance, form);
+            InstanceUpdater.Update(ContentType, primaryKeyNames, instance, form);
             await context.Context.AddAsync(instance).ConfigureAwait(false);
             await context.Context.SaveChangesAsync().ConfigureAwait(false);
+
+            return Redirect(Url.Page("List", new { area = "Admin", ContentType = ContentType.Name }));
         }
     }
 }
