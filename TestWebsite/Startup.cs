@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Cloudy.CMS.Routing;
 using Cloudy.CMS.UI;
+using System.Linq;
 
 namespace TestWebsite
 {
@@ -46,10 +47,12 @@ namespace TestWebsite
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<PageContext>();
+                var random = new Random();
+                var lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".Split(' ');
 
-                for (var i = 0; i < 50; i++)
+                for (var i = 0; i < 30; i++)
                 {
-                    context.Add(new Page { Name = Guid.NewGuid().ToString() });
+                    context.Add(new Page { Name = string.Join(" ", lipsum.OrderBy(t => random.Next()).Take(random.Next(5 + 2))).TrimEnd(',', '.') });
                 }
 
                 context.SaveChanges();
