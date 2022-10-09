@@ -13,8 +13,6 @@ namespace TestWebsite.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        [Display]
-        [RegularExpression(@"^[-_a-zA-Z0-9]*$", ErrorMessage = "Invalid URL")]
         public string UrlSegment { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
