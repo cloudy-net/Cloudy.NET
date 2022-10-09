@@ -72,6 +72,10 @@ The UI works well with external login providers. Just follow the official guides
 
 Cloudy.CMS is made to align completely with Entity Framework Core.
 
+# Building the repository
+
+Clone the repo and run. To get the frontend code of the Admin section running, run `npm ci` and `npm run build` from the `wwwroot-src/` folder. Alternatively, you can run `npm ci` and then `npm run dev` and set the Configuration value (right click the sample project in Visual Studio and choose "Edit user secrets") `ViteBaseUri` to the running Vite URL, something like `http://localhost:5173/`.
+
 # Usage for large corporations
 
 This CMS is under active development, and is not guaranteed to keep API compatibility between releases.
