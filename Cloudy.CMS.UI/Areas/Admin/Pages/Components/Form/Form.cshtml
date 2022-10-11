@@ -27,8 +27,9 @@
         }
 
         var property = Model.PropertyDefinitions.Single(p => p.Name == field.Name);
+        var value = Model.Instance != null ? property.Getter(Model.Instance) : null;
 
-        var fieldModel = new FieldViewModel(Model.ContentType, Model.Instance, field, property, property.Getter(Model.Instance));
+        var fieldModel = new FieldViewModel(Model.ContentType, Model.Instance, field, property, value);
 
         if (field.RenderChrome)
         {
