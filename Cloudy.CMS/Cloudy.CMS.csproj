@@ -9,10 +9,6 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/cloudy-net/Cloudy.CMS.git</RepositoryUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<DebugSymbols>True</DebugSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<DebugType>embedded</DebugType>
 		<NoWarn>CS1998</NoWarn>
 		<PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
 	</PropertyGroup>
