@@ -50,9 +50,9 @@ export default ({ ContentType, Columns, PageSize, EditLink }) => {
           <td>
             <nav>
               <ul class="pagination justify-content-center">
-                <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")}>Previous</a></li>
+                <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))}>Previous</a></li>
                 {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
-                <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")}>Next</a></li>
+                <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
               </ul>
             </nav>
           </td>

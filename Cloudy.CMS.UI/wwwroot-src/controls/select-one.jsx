@@ -22,9 +22,10 @@ export default ({ ControlName, ContentType, Columns, PageSize }) => {
       .then(response => {
         setLoading(false);
         setData(response);
-        const pageCount = Math.ceil(response.totalCount / pageSize);
+        const pageCount = Math.max(1, Math.ceil(response.totalCount / pageSize));
         setPageCount(pageCount);
         setPages([...Array(pageCount)]);
+        setPage(Math.min(pageCount, page)); // if filtered results have less pages than what is on the current page
       });
   }, [page, pageSize, Columns, open, filter]);
 
@@ -42,11 +43,12 @@ export default ({ ControlName, ContentType, Columns, PageSize }) => {
       {data.items.map(item =>
         <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => setValue(item.reference)}>{item.name}</a></div>
       )}
+      {[...new Array(PageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
       <nav>
         <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
-          <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} title="Previous">&laquo;</a></li>
+          <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
           {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
-          <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} title="Next">&raquo;</a></li>
+          <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
         </ul>
       </nav>
     </>;
