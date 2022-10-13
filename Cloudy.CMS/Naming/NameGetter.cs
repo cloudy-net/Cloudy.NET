@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.Name;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.Naming
 {
-    public record NameGetter(IContentTypeProvider ContentTypeProvider, IContentTypeNameProvider ContentTypeNameProvider) : INameGetter
+    public record NameGetter(IContentTypeProvider ContentTypeProvider, IContentTypeNameProvider ContentTypeNameProvider, IPrimaryKeyGetter PrimaryKeyGetter) : INameGetter
     {
         public string GetName(object instance)
         {
@@ -23,6 +24,16 @@ namespace Cloudy.CMS.Naming
             if(instance is INameable nameable)
             {
                 name = nameable.Name;
+            }
+
+            if (name == null)
+            {
+                var primaryKeys = PrimaryKeyGetter.Get(instance);
+
+                if (primaryKeys[0] != null)
+                {
+                    name = string.Join(", ", primaryKeys);
+                }
             }
 
             if(name == null)

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 
 export default ({ ContentType, Columns, PageSize, EditLink }) => {
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(PageSize);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [pages, setPages] = useState();

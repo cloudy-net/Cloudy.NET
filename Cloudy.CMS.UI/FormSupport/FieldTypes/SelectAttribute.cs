@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FormSupport.FieldType
+namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class SelectAttribute : Attribute

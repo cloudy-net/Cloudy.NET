@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.UI.FormSupport.FieldType;
+using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
 using System.Linq;
 
