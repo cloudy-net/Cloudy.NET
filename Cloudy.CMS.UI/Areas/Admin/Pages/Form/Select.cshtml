@@ -1,0 +1,7 @@
+﻿@using Cloudy.CMS.UI.FormSupport
+@using System.Linq
+@using Cloudy.CMS.UI.FormSupport.FieldType
+@using System.Text.Json
+@model FieldViewModel
+
+<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { Type = Model.Field.Attributes.OfType<SelectAttribute>().Single().Type.Name }))"></div>

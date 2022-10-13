@@ -15,6 +15,6 @@
     <h1 class="h2">Listing @Model.ContentTypeName.PluralName <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", ContentType = Model.ContentType.Name })">New</a></h1>
 </div>
 <div class="container">
-    <div class="list-table" settings="@JsonSerializer.Serialize(new { ContentType = Model.ContentType.Name, Columns = Model.Columns, PageSize = 10, EditLink = Url.Page("Edit", new { area = "Admin", ContentType = Model.ContentType.Name }) })">
+    <div class="list-page-table" settings="@JsonSerializer.Serialize(new { ContentType = Model.ContentType.Name, Columns = Model.Columns, PageSize = 10, EditLink = Url.Page("Edit", new { area = "Admin", ContentType = Model.ContentType.Name }) })">
     </div>
 </div>

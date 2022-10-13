@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.UI.FormSupport.FieldType;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,5 +19,7 @@ namespace TestWebsite.Models
         public string Description { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
+        [Select(typeof(Page))]
+        public Tuple<Guid> RelatedPage { get; set; }
     }
 }

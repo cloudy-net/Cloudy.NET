@@ -1,11 +1,12 @@
 import { render } from 'preact'
-import { ListTable } from './list-table'
+import Table from './list-page/table'
+import SelectOne from './controls/select-one'
+
 import './main.scss'
 
-const element = document.querySelector('.list-table');
-
-if(element){
-    const settings = JSON.parse(element.getAttribute('settings'));
-
-    render(<ListTable {...settings} />, element);
-}
+document.querySelectorAll('.list-page-table').forEach(element =>
+    render(<Table {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
+);
+document.querySelectorAll('.select-one-control').forEach(element =>
+    render(<SelectOne {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
+);

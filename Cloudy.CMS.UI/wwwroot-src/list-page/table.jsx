@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 
-export function ListTable({ ContentType, Columns, PageSize, EditLink }) {
+export default ({ ContentType, Columns, PageSize, EditLink }) => {
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();

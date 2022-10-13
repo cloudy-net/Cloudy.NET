@@ -13,11 +13,13 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IHumanizer Humanizer { get; }
+        IFieldTypeMapper FieldTypeMapper { get; set; }
 
-        public FieldCreator(IPropertyDefinitionProvider propertyDefinitionProvider, IHumanizer humanizer)
+        public FieldCreator(IPropertyDefinitionProvider propertyDefinitionProvider, IHumanizer humanizer, IFieldTypeMapper fieldTypeMapper)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             Humanizer = humanizer;
+            FieldTypeMapper = fieldTypeMapper;
         }
 
         public IEnumerable<FieldDescriptor> Create(string contentType)
@@ -38,7 +40,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 var type = propertyDefinition.Type;
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
 
-                var partial = $"Form/{uiHints.FirstOrDefault() ?? "text"}";
+                var partialName = uiHints.FirstOrDefault() ?? FieldTypeMapper.MapToPartial(propertyDefinition);
+
+                var partial = $"Form/{partialName}";
 
                 var isSortable = false;
 
