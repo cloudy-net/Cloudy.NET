@@ -55,7 +55,7 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect }) => 
     return <>
       <SelectOneFilter callback={value => setFilter(value)} />
       {data.items.map(item =>
-        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => onSelect(item)}>{item.name}</a></div>
+        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item); setOpen(false); }}>{item.name}</a></div>
       )}
       {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
       <nav>
