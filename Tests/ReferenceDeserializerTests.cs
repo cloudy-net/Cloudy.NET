@@ -21,7 +21,7 @@ namespace Tests
 
             var value = "[\"lorem\"]";
             var expected = new List<string> { "lorem" };
-            var actual = new ReferenceDeserializer(primaryKeyPropertyGetter).Deserialize(typeof(object), value);
+            var actual = new ReferenceDeserializer(primaryKeyPropertyGetter).Get(typeof(object), value);
 
             Assert.Equal(expected, actual);
         }

@@ -11,7 +11,7 @@ namespace Cloudy.CMS.EntitySupport.Reference
 {
     public record ReferenceDeserializer(IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter) : IReferenceDeserializer
     {
-        public object[] Deserialize(Type contentType, string reference)
+        public object[] Get(Type contentType, string reference)
         {
             var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(contentType).ToList();
 

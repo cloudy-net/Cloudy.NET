@@ -88,7 +88,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 
             using var context = ContextCreator.CreateFor(type.Type);
 
-            var instance = await context.Context.FindAsync(type.Type, referenceDeserializer.Deserialize(type.Type, reference)).ConfigureAwait(false);
+            var instance = await context.Context.FindAsync(type.Type, referenceDeserializer.Get(type.Type, reference)).ConfigureAwait(false);
             
             return new SelectResultItem(
                 NameGetter.GetName(instance),

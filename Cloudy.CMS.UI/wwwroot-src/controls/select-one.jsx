@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import SelectOneDropdown from './select-one-dropdown';
 
-export default ({ controlName, contentType, pageSize }) => {
+export default ({ controlName, contentType, pageSize, value: initialValue }) => {
   const [open, setOpen] = useState();
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(initialValue);
   const [item, setItem] = useState();
   const ref = useRef(null);
 
@@ -16,26 +16,26 @@ export default ({ controlName, contentType, pageSize }) => {
       return;
     }
 
-    fetch(`/Admin/api/controls/select/item?contentType=${contentType}&reference=${value}`)
+    fetch(`/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}`)
       .then(response => response.json())
       .then(response => {
         setItem(response);
       });
   }, [value]);
 
-  useEffect(() => {
-    const callback = event => {
-      if(!ref.current){
-        return;
-      }
-      if(ref.current == event.target || ref.current.contains(event.target)){
-        return;
-      }
-      setOpen(false);
-    };
-    document.addEventListener('click', callback);
-    return () => document.removeEventListener('click', callback);
-  }, []);
+  // useEffect(() => {
+  //   const callback = event => {
+  //     if(!ref.current){
+  //       return;
+  //     }
+  //     if(ref.current == event.target || ref.current.contains(event.target)){
+  //       return;
+  //     }
+  //     setOpen(false);
+  //   };
+  //   document.addEventListener('click', callback);
+  //   return () => document.removeEventListener('click', callback);
+  // }, []);
 
   return <>
     <input type="hidden" class="form-control" name={controlName} value={value} />

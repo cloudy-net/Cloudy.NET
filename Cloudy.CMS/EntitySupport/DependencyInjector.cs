@@ -14,6 +14,7 @@ namespace Cloudy.CMS.EntitySupport
         public void InjectDependencies(IServiceCollection services)
         {
             services.AddScoped<IReferenceDeserializer, ReferenceDeserializer>();
+            services.AddScoped<IReferenceSerializer, ReferenceSerializer>();
         }
     }
 }

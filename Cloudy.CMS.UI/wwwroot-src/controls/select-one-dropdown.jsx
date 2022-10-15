@@ -37,10 +37,14 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect }) => 
 
   return <>
     <SelectOneFilter callback={value => setFilter(value)} />
-    {data.items.map(item =>
-      <div><a class={"dropdown-item" + (value && (item.reference == value.reference) ? " active" : "")} onClick={() => onSelect(item)}>{item.name}</a></div>
-    )}
+    <>
+      {data.items.map(item =>
+        <div><a class={"dropdown-item" + (value && (item.reference == value.reference) ? " active" : "")} onClick={() => onSelect(item)}>{item.name}</a></div>
+      )}
+    </>
+    <>
     {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
+    </>
     <nav>
       <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>

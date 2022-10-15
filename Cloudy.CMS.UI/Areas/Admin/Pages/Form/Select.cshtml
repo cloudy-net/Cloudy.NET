@@ -1,4 +1,5 @@
 ﻿@using Cloudy.CMS.ContentTypeSupport
+@using Cloudy.CMS.EntitySupport.Reference
 @using Cloudy.CMS.UI.FormSupport
 @using System.Linq
 @using Cloudy.CMS.UI.FormSupport.FieldTypes
@@ -6,6 +7,7 @@
 @model FieldViewModel
 
 @inject IContentTypeProvider ContentTypeProvider
+@inject IReferenceSerializer ReferenceSerializer
 
 @{
     var selectAttribute = Model.Field.Attributes.OfType<SelectAttribute>().FirstOrDefault();
@@ -23,4 +25,4 @@
     }
 }
 
-<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { controlName = Model.Field.Name, contentType = type.Name, pageSize = 10, value = Model.Value }))"></div>
+<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { controlName = Model.Field.Name, contentType = type.Name, pageSize = 10, value = ReferenceSerializer.Get(Model.Value) }))"></div>
