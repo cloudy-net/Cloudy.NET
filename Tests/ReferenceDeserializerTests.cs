@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.EntitySupport.Reference;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Tests
 
             var value = "[\"lorem\"]";
             var expected = new List<string> { "lorem" };
-            var actual = new ReferenceDeserializer(primaryKeyPropertyGetter).Get(typeof(object), value);
+            var actual = new ReferenceDeserializer(primaryKeyPropertyGetter, Mock.Of<ILogger<ReferenceDeserializer>>()).Get(typeof(object), value, false);
 
             Assert.Equal(expected, actual);
         }
