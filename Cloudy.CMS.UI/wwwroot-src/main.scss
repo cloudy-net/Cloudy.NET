@@ -1,3 +1,10 @@
+body {
+    background: rgba(black, 0.045);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 a {
     cursor: pointer;
 }
@@ -5,6 +12,12 @@ a {
 .btn-beta {
     border: solid 1px var(--bs-border-color-translucent);
 }
+
+.navbar {
+    box-shadow: rgb(black, 0.05) 0px 0px 10px;
+}
+
+// Dropdowns
 
 .dropdown-menu {
     width: 300px;

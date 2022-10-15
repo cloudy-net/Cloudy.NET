@@ -2,6 +2,6 @@
 @using System.Reflection
 @inject IHumanizer Humanizer
 
-<div class="bg-light mt-4 p-4">
+<div class="bg-light mt-4 p-4 mt-auto">
     @Humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name), @DateTime.Now.Year.
 </div>
