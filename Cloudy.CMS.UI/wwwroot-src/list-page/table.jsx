@@ -42,7 +42,7 @@ export default ({ ContentType, Columns, PageSize, EditLink }) => {
           {columns.map((_, i) => 
             <td>{d.values[i]}</td>
           )}
-          <td><a href={`${EditLink}${d.keys.map(k => `&keys=${k}`)}`}>Edit</a></td>
+          <td><a href={`${EditLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a></td>
         </tr>)}
       </tbody>
       <tfoot>
