@@ -93,6 +93,12 @@ namespace Cloudy.CMS.Naming
             //        }
 
             // cats, bags, hats, speakers
+
+            if (word.EndsWith('s'))
+            {
+                return word;
+            }
+
             return word + "s";
 
         }
