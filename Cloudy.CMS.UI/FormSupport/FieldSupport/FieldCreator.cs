@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.Naming;
+using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +36,12 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 var name = propertyDefinition.Name;
                 var humanizedName = Humanizer.Humanize(name);
+
+                if(propertyDefinition.Attributes.OfType<SelectAttribute>().Any() && humanizedName.EndsWith(" id"))
+                {
+                    humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
+                }
+
                 var label = displayAttribute?.GetName() ?? humanizedName;
 
                 var type = propertyDefinition.Type;
