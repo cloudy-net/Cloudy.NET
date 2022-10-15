@@ -7,11 +7,11 @@ export default ({ controlName, contentType, pageSize, value: initialValue }) => 
   const [preview, setPreview] = useState();
 
   useEffect(() => {
-    if(!value){
+    if (!value) {
       return;
     }
 
-    if(preview && preview.reference == value){
+    if (preview && preview.reference == value) {
       return;
     }
 
@@ -25,7 +25,14 @@ export default ({ controlName, contentType, pageSize, value: initialValue }) => 
   return <>
     <input type="hidden" class="form-control" name={controlName} value={value} />
 
-    {preview && <div class="form-control mb-2">{preview.name}</div>}
+    {value && !preview && <div class="input-group mb-3">
+      <span class="input-group-text" ></span>
+      <div type="text" class="form-control">&nbsp;</div>
+    </div>}
+    {preview && <div class="input-group mb-3">
+      <span class="input-group-text" ></span>
+      <div type="text" class="form-control">{preview.name}</div>
+    </div>}
 
     <SelectOneDropdown contentType={contentType} pageSize={pageSize} value={value} onSelect={item => { setValue(item.reference); setPreview(item); }} />
   </>;
