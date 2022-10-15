@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentSupport.Serialization
 {
@@ -15,7 +12,10 @@ namespace Cloudy.CMS.ContentSupport.Serialization
         static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { };
         public static void JsonConversion<ReturnType>(this PropertyBuilder<ReturnType> propertyBuilder)
         {
-            propertyBuilder.HasConversion(v => JsonSerializer.Serialize(v, JsonSerializerOptions), v => JsonSerializer.Deserialize<ReturnType>(v, JsonSerializerOptions));
+            propertyBuilder.HasConversion(
+                value => value != null ? JsonSerializer.Serialize(value, JsonSerializerOptions) : null,
+                value => value != null ? JsonSerializer.Deserialize<ReturnType>(value, JsonSerializerOptions) : default(ReturnType)
+            );
         }
     }
 }
