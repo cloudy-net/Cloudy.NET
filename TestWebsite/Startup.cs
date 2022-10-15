@@ -48,7 +48,10 @@ namespace TestWebsite
             {
                 var context = scope.ServiceProvider.GetService<PageContext>();
 
-                context.Pages.Add(new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPage = new Tuple<Guid>(new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c")) });
+                context.SimpleKeyTests.Add(new SimpleKeyTest { Id = new Guid("042f0213-6e95-4b23-b924-e43bb51c219d") });
+                context.SimpleKeyTests.Add(new SimpleKeyTest { Id = new Guid("51e36eda-12ce-41f7-893e-4a475a2b7116"), RelatedPage = new Tuple<Guid>(new Guid("042f0213-6e95-4b23-b924-e43bb51c219d")), RelatedPage2 = new Guid("042f0213-6e95-4b23-b924-e43bb51c219d"), RelatedPage3 = new Guid("042f0213-6e95-4b23-b924-e43bb51c219d") });
+
+                context.Pages.Add(new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim" });
                 context.Pages.Add(new Page { Id = new Guid("c31836f7-830e-44d3-b231-97d48cf44df3"), Name = "esse ea Excepteur in minim dolore" });
                 context.Pages.Add(new Page { Id = new Guid("9ab7ea51-f66a-426e-a18c-51316a396a9e"), Name = "dolor" });
                 context.Pages.Add(new Page { Id = new Guid("0c1c40a9-ee61-4071-a1e5-17a2079d882a"), Name = "ut et occaecat ad sit" });

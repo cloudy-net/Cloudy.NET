@@ -15,11 +15,12 @@ namespace TestWebsite.Models
 
         public DbSet<Page> Pages { get; set; }
         public DbSet<CompositeKeyTest> CompositeKeyTests { get; set; }
+        public DbSet<SimpleKeyTest> SimpleKeyTests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Page>().Property(p => p.RelatedPage).JsonConversion();
+            modelBuilder.Entity<SimpleKeyTest>().Property(p => p.RelatedPage).JsonConversion();
             modelBuilder.Entity<CompositeKeyTest>().HasKey(p => new { p.FirstPrimaryKey, p.SecondPrimaryKey });
             modelBuilder.Entity<CompositeKeyTest>().Property(p => p.RelatedObject).JsonConversion();
         }
