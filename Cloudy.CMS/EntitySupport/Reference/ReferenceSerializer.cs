@@ -29,7 +29,7 @@ namespace Cloudy.CMS.EntitySupport.Reference
                 return JsonSerializer.Serialize(result);
             }
 
-            return null;
+            return JsonSerializer.Serialize(value);
         }
     }
 }
