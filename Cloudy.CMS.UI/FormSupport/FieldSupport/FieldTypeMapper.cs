@@ -11,7 +11,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         {
             if(propertyDefinitionDescriptor.Attributes.Any(a => a is SelectAttribute))
             {
-                return "select";
+                return "selectone";
             }
 
             if(propertyDefinitionDescriptor.Type == typeof(string))
