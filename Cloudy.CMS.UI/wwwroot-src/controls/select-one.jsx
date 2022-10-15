@@ -1,68 +1,32 @@
-import { useEffect, useState } from 'preact/hooks';
-import Filter from './select-one-filter'
+import { useEffect, useRef, useState } from 'preact/hooks';
+import SelectOneDropdown from './select-one-dropdown';
+import SelectOneFilter from './select-one-filter';
 
-export default ({ ControlName, ContentType, Columns, PageSize }) => {
-  const [pageSize, setPageSize] = useState(PageSize);
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState();
-  const [pages, setPages] = useState();
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState();
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState();
-  const [filter, setFilter] = useState('');
+export default ({ controlName, contentType, pageSize, value: initialValue }) => {
+  const [value, setValue] = useState(initialValue);
+  const [preview, setPreview] = useState();
 
-  useEffect(function () {
-    if (!open) {
+  useEffect(() => {
+    if(!value){
       return;
     }
 
-    fetch(`/Admin/api/controls/select/list?contentType=${ContentType}&filter=${filter}&pageSize=${pageSize}&page=${page}`)
+    if(preview && preview.reference == value){
+      return;
+    }
+
+    fetch(`/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}`)
       .then(response => response.json())
       .then(response => {
-        setLoading(false);
-        setData(response);
-        const pageCount = Math.max(1, Math.ceil(response.totalCount / pageSize));
-        setPageCount(pageCount);
-        setPages([...Array(pageCount)]);
-        setPage(Math.min(pageCount, page)); // if filtered results have less pages than what is on the current page
+        setPreview(response);
       });
-  }, [page, pageSize, Columns, open, filter]);
-
-  const render = () => {
-    if (loading) {
-      return <>Loading ...</>;
-    }
-
-    if (!data) {
-      return <>Could not load data</>;
-    }
-
-    return <>
-      <Filter callback={value => setFilter(value)} />
-      {data.items.map(item =>
-        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => setValue(item.reference)}>{item.name}</a></div>
-      )}
-      {[...new Array(PageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
-      <nav>
-        <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
-          <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
-          {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
-          <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
-        </ul>
-      </nav>
-    </>;
-  };
+  }, [value]);
 
   return <>
-    <input type="hidden" class="form-control" name={ControlName} value={value} />
-    <div class="dropdown">
-      <button class="btn btn-beta dropdown-toggle" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
-        Add
-      </button>
-      <div class={"dropdown-menu" + (open ? " show" : "")}>
-        {render()}
-      </div>
-    </div>
+    <input type="hidden" class="form-control" name={controlName} value={value} />
+
+    {preview && <div class="form-control mb-2">{preview.name}</div>}
+
+    <SelectOneDropdown contentType={contentType} pageSize={pageSize} value={value} onSelect={item => { setValue(item.reference); setPreview(item); }} />
   </>;
 }
