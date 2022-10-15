@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import SelectOneFilter from "./select-one-filter";
 
 export default ({ contentType, pageSize: initialPageSize, value, onSelect }) => {
@@ -9,6 +9,8 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect }) => 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const [filter, setFilter] = useState('');
+  const [open, setOpen] = useState();
+  const ref = useRef(null);
 
   useEffect(function () {
     if (!open) {
@@ -27,30 +29,51 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect }) => 
       });
   }, [page, pageSize, open, filter]);
 
-  if (loading) {
-    return <>Loading ...</>;
-  }
+  useEffect(() => {
+    const callback = event => {
+      if(!ref.current){
+        return;
+      }
+      if(ref.current == event.target || ref.current.contains(event.target)){
+        return;
+      }
+      setOpen(false);
+    };
+    document.addEventListener('click', callback);
+    return () => document.removeEventListener('click', callback);
+  }, []);
 
-  if (!data) {
-    return <>Could not load data</>;
-  }
+  const render = () => {
+    if (loading) {
+      return <>Loading ...</>;
+    }
 
-  return <>
-    <SelectOneFilter callback={value => setFilter(value)} />
-    <>
+    if (!data) {
+      return <>Could not load data</>;
+    }
+
+    return <>
+      <SelectOneFilter callback={value => setFilter(value)} />
       {data.items.map(item =>
-        <div><a class={"dropdown-item" + (value && (item.reference == value.reference) ? " active" : "")} onClick={() => onSelect(item)}>{item.name}</a></div>
+        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => onSelect(item)}>{item.name}</a></div>
       )}
-    </>
-    <>
-    {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
-    </>
-    <nav>
-      <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
-        <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
-        {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
-        <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
-      </ul>
-    </nav>
-  </>;
+      {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
+      <nav>
+        <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
+          <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
+          {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
+          <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
+        </ul>
+      </nav>
+    </>;
+  };
+
+  return <div class="dropdown d-inline-block" ref={ref}>
+    <button class="btn btn-beta dropdown-toggle" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
+      Add
+    </button>
+    <div class={"dropdown-menu" + (open ? " show" : "")}>
+      {render()}
+    </div>
+  </div>;
 };
