@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import SelectOneFilter from "./select-one-filter";
 
-export default ({ contentType, pageSize: initialPageSize, value, onSelect }) => {
+export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpleKey }) => {
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -17,7 +17,7 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect }) => 
       return;
     }
 
-    fetch(`/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}`)
+    fetch(`/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`)
       .then(response => response.json())
       .then(response => {
         setLoading(false);

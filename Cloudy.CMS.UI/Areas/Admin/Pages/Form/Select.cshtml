@@ -4,12 +4,15 @@
 @using System.Linq
 @using Cloudy.CMS.UI.FormSupport.FieldTypes
 @using System.Text.Json
+@using System.Runtime.CompilerServices
 @model FieldViewModel
 
 @inject IContentTypeProvider ContentTypeProvider
 @inject IReferenceSerializer ReferenceSerializer
 
 @{
+    var controlName = Model.Field.Name;
+
     var selectAttribute = Model.Field.Attributes.OfType<SelectAttribute>().FirstOrDefault();
 
     if (selectAttribute == null)
@@ -23,6 +26,19 @@
     {
         throw new Exception($"The [Select] attribute on property {Model.Field.Name} on type {Model.Field.Type} specifies the type {selectAttribute.Type}, which is not an instance type tracked by Cloudy.");
     }
+
+    var contentType = type.Name;
+    var pageSize = 10;
+
+    var value = Model.Value;
+
+    if(Model.Field.Type.IsValueType && value != null && value.Equals(Activator.CreateInstance(value.GetType()))){
+        value = null;
+    }
+
+    value = ReferenceSerializer.Get(value);
+
+    var simpleKey = Model.Field.Type.IsValueType && !Model.Field.Type.IsAssignableTo(typeof(ITuple));
 }
 
-<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { controlName = Model.Field.Name, contentType = type.Name, pageSize = 10, value = ReferenceSerializer.Get(Model.Value) }))"></div>
+<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { controlName, contentType, pageSize, value, simpleKey }))"></div>

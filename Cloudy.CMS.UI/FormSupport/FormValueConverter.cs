@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -19,12 +20,22 @@ namespace Cloudy.CMS.UI.FormSupport
                 return null; // empty strings are converted to null
             }
 
-            if(propertyDefinition.Type == typeof(string))
+            if (propertyDefinition.Type == typeof(string))
             {
                 return value;
             }
 
-            if(propertyDefinition.Type.IsGenericType && propertyDefinition.Type.GetGenericTypeDefinition() == typeof(Tuple<>))
+            if (propertyDefinition.Type == typeof(Guid) || propertyDefinition.Type == typeof(Guid?))
+            {
+                return Guid.Parse(value);
+            }
+
+            if (propertyDefinition.Type == typeof(int) || propertyDefinition.Type == typeof(int?))
+            {
+                return int.Parse(value);
+            }
+
+            if (propertyDefinition.Type.IsAssignableTo(typeof(ITuple)))
             {
                 var json = JsonDocument.Parse(value).RootElement;
 

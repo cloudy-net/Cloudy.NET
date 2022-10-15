@@ -41,23 +41,23 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/controls/select/preview")]
-        public async Task<PreviewResult> GetCard(string contentType, string reference)
+        public async Task<PreviewResult> GetCard(string contentType, string reference, bool simpleKey)
         {
             var type = ContentTypeProvider.Get(contentType);
 
+            var deserializedReference = ReferenceDeserializer.Get(type.Type, reference, simpleKey);
+
             using var context = ContextCreator.CreateFor(type.Type);
 
-            var instance = await context.Context.FindAsync(type.Type, ReferenceDeserializer.Get(type.Type, reference)).ConfigureAwait(false);
+            var instance = await context.Context.FindAsync(type.Type, deserializedReference).ConfigureAwait(false);
             
             return new PreviewResult(
-                NameGetter.GetName(instance),
-                JsonSerializer.Serialize(PrimaryKeyGetter.Get(instance))
+                NameGetter.GetName(instance)
             );
         }
 
         public record PreviewResult(
-            string Name,
-            string Reference
+            string Name
         );
     }
 }

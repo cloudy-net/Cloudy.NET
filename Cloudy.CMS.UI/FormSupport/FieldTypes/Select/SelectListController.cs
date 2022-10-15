@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
-    public class SelectController : Controller
+    public class SelectListController : Controller
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IContentTypeProvider ContentTypeProvider { get; }
@@ -29,7 +29,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         INameGetter NameGetter { get; }
 
-        public SelectController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, INameGetter nameGetter)
+        public SelectListController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, INameGetter nameGetter)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContentTypeProvider = contentTypeProvider;
@@ -41,7 +41,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/controls/select/list")]
-        public async Task<SelectResult> List(string contentType, string filter, int page, int pageSize)
+        public async Task<SelectResult> List(string contentType, string filter, int page, int pageSize, bool simpleKey)
         {
             var type = ContentTypeProvider.Get(contentType);
 
@@ -67,9 +67,10 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 
             await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
             {
+                var keys = PrimaryKeyGetter.Get(instance);
                 result.Add(new SelectResultItem(
                     NameGetter.GetName(instance),
-                    JsonSerializer.Serialize(PrimaryKeyGetter.Get(instance))
+                    JsonSerializer.SerializeToElement(simpleKey ? keys.First() : keys)
                 ));
             }
 
@@ -79,26 +80,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
             );
         }
 
-        [HttpGet]
-        [Area("Admin")]
-        [Route("/{area}/api/controls/select/getcard")]
-        public async Task<SelectResultItem> GetCard(string contentType, string reference, [FromServices] IReferenceDeserializer referenceDeserializer)
-        {
-            var type = ContentTypeProvider.Get(contentType);
-
-            using var context = ContextCreator.CreateFor(type.Type);
-
-            var instance = await context.Context.FindAsync(type.Type, referenceDeserializer.Get(type.Type, reference)).ConfigureAwait(false);
-            
-            return new SelectResultItem(
-                NameGetter.GetName(instance),
-                JsonSerializer.Serialize(PrimaryKeyGetter.Get(instance))
-            );
-        }
-
         public record SelectResultItem(
             string Name,
-            string Reference
+            JsonElement Reference
         );
 
         public record SelectResult(

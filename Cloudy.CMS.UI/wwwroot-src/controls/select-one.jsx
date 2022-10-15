@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import SelectOneDropdown from './select-one-dropdown';
 import SelectOneFilter from './select-one-filter';
 
-export default ({ controlName, contentType, pageSize, value: initialValue }) => {
+export default ({ controlName, contentType, pageSize, value: initialValue, simpleKey }) => {
   const [value, setValue] = useState(initialValue);
   const [preview, setPreview] = useState();
 
@@ -15,7 +15,7 @@ export default ({ controlName, contentType, pageSize, value: initialValue }) => 
       return;
     }
 
-    fetch(`/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}`)
+    fetch(`/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}&simpleKey=${simpleKey}`)
       .then(response => response.json())
       .then(response => {
         setPreview(response);
@@ -34,6 +34,6 @@ export default ({ controlName, contentType, pageSize, value: initialValue }) => 
       <div type="text" class="form-control">{preview.name}</div>
     </div>}
 
-    <SelectOneDropdown contentType={contentType} pageSize={pageSize} value={value} onSelect={item => { setValue(item.reference); setPreview(item); }} />
+    <SelectOneDropdown contentType={contentType} pageSize={pageSize} value={value} onSelect={item => { setValue(simpleKey ? item.reference : JSON.stringify(item.reference)); setPreview(item); }} simpleKey={simpleKey} />
   </>;
 }
