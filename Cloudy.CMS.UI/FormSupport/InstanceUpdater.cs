@@ -32,11 +32,6 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 var value = FormValueConverter.Convert(form[field.Name].FirstOrDefault(), propertyDefinition);
 
-                if(propertyDefinition.Type == typeof(string) && (value as string) == "") // don't save empty strings
-                {
-                    value = null;
-                }
-
                 propertyDefinition.Setter(instance, value);
             }
         }

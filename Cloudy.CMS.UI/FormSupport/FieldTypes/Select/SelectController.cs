@@ -2,6 +2,7 @@
 using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntitySupport.Reference;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.UI.List;
 using Microsoft.AspNetCore.Mvc;
@@ -75,6 +76,23 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
             return new SelectResult(
                 result,
                 totalCount
+            );
+        }
+
+        [HttpGet]
+        [Area("Admin")]
+        [Route("/{area}/api/controls/select/getcard")]
+        public async Task<SelectResultItem> GetCard(string contentType, string reference, [FromServices] IReferenceDeserializer referenceDeserializer)
+        {
+            var type = ContentTypeProvider.Get(contentType);
+
+            using var context = ContextCreator.CreateFor(type.Type);
+
+            var instance = await context.Context.FindAsync(type.Type, referenceDeserializer.Deserialize(type.Type, reference)).ConfigureAwait(false);
+            
+            return new SelectResultItem(
+                NameGetter.GetName(instance),
+                JsonSerializer.Serialize(PrimaryKeyGetter.Get(instance))
             );
         }
 
