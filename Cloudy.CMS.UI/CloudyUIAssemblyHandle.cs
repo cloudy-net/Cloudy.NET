@@ -1,5 +1,5 @@
 ﻿
-namespace Cloudy.CMS.UI
+namespace Microsoft.AspNetCore.Builder
 {
     public class CloudyUIAssemblyHandle
     {
