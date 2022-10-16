@@ -27,10 +27,12 @@ namespace TestWebsite
         {
             services.AddRazorPages().AddApplicationPart(typeof(CloudyUIAssemblyHandle).Assembly);
             services.AddMvc();
+#pragma warning disable CS0618 // Type or member is obsolete
             services.AddCloudy(cloudy => cloudy
                 .AddAdmin(admin => admin.Unprotect())
                 .AddContext<PageContext>()
             );
+#pragma warning restore CS0618 // Type or member is obsolete
             services.AddDbContext<PageContext>(options => options
                 .UseInMemoryDatabase("cloudytest")
             );

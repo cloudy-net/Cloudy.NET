@@ -12,6 +12,7 @@ namespace Cloudy.CMS.UI
             Options = options;
         }
 
+        [Obsolete("Unprotect() should only be used for demo purposes. Please implement authentication/authorization or suppress this warning.")]
         public CloudyAdminConfigurator Unprotect()
         {
             Options.Unprotect = true;
