@@ -19,8 +19,14 @@ namespace Cloudy.CMS.Naming
                 return word;
             }
 
-            return word + "s";
+            if (word.EndsWith('y'))
+            {
+                word = word.Substring(0, word.Length - 1) + "ie";
+            }
 
+            word = word + "s";
+
+            return word;
         }
     }
 }
