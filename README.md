@@ -71,7 +71,7 @@ The UI works well with external login providers. Just follow the official guides
 
 # Database
 
-Cloudy.CMS is made to align completely with Entity Framework Core.
+Cloudy.CMS supports any database supported by EF Core: Inmemory, SQLite, SQL Server, CosmosDB ... even `/dev/null` (for legal reasons, that last one was a joke)
 
 # Building the repository
 
