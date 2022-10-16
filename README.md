@@ -44,7 +44,7 @@ builder.Services.AddCloudy(cloudy => cloudy
     .AddContext<MyContext>()                // Adds EF Core context with your content types
 );
 
-services.AddDbContext<PageContext>(options => options
+services.AddDbContext<MyContext>(options => options
     .UseInMemoryDatabase("cloudytest")      // Adjust according to your needs.
 );
 
