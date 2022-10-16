@@ -3,6 +3,8 @@
 @inject IHumanizer Humanizer
 
 <div class="mt-4"></div>
-<div class="bg-light p-4 mt-auto">
-    @Humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name), @DateTime.Now.Year.
+<div class="footer p-4 mt-auto">
+    <div class="container">
+        @Humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name), @DateTime.Now.Year.
+    </div>
 </div>

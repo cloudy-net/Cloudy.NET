@@ -14,7 +14,13 @@ a {
 }
 
 .navbar {
-    box-shadow: rgb(black, 0.05) 0px 0px 10px;
+    background: #fcfcfc;
+    border-bottom: 1px solid #ddd;
+}
+
+.footer {
+    background: #fcfcfc;
+    border-top: 1px solid #ddd;
 }
 
 // Dropdowns
