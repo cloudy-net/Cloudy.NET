@@ -58,6 +58,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints => {
     endpoints.MapRazorPages();
+    endpoints.MapControllers();
     endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
 });
 
