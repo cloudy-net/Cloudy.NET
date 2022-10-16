@@ -17,6 +17,8 @@ namespace TestWebsite.Models
         public string UrlSegment { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
+        [Select(typeof(Page))]
+        public string RelatedPageId { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
     }
