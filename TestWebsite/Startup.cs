@@ -91,6 +91,7 @@ namespace TestWebsite
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
                 endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
                 endpoints.MapGet("/pages", async c => await c.Response.WriteAsJsonAsync(c.RequestServices.GetService<PageContext>().Pages));
                 
