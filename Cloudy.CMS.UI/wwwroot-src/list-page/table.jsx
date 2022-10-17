@@ -34,7 +34,7 @@ export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
       <thead>
         <tr>
           {columns.map(c => <th>{c.Name}</th>)}
-          <th></th>
+          <th style="width: 1%;"></th>
         </tr>
       </thead>
       <tbody>
@@ -47,6 +47,7 @@ export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
             <a href={`${DeleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
           </td>
         </tr>)}
+        {[...new Array(pageSize - data.items.length)].map(() => <tr><td style="border-bottom-color: transparent;">&nbsp;</td></tr>)}
       </tbody>
     </table>
     <nav>

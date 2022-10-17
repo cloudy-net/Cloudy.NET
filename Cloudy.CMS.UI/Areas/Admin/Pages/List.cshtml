@@ -13,7 +13,7 @@
 </div>
 
 <div class="container">
-    <h1 class="h2 mb-2">
+    <h1 class="h2 mb-3">
         Listing @Model.ContentTypeName.PluralName
         <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", ContentType = Model.ContentType.Name })">New</a>
     </h1>
@@ -23,7 +23,7 @@
     var settings = new {
         ContentType = Model.ContentType.Name,
         Columns = Model.Columns,
-        PageSize = 20,
+        PageSize = 15,
         EditLink = Url.Page("Edit", new { area = "Admin", ContentType = Model.ContentType.Name }),
         DeleteLink = Url.Page("Delete", new { area = "Admin", ContentType = Model.ContentType.Name }),
     };
@@ -31,7 +31,7 @@
 
 <div class="container">
     <div class="card">
-        <div class="card-body">
+        <div class="card-body" style="min-height: 500px;">
             <div class="list-page-table" settings="@JsonSerializer.Serialize(settings)">
             </div>
         </div>
