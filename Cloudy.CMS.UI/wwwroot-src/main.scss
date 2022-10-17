@@ -23,6 +23,12 @@ a {
     border-top: 1px solid #ddd;
 }
 
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
 // Dropdowns
 
 .dropdown-menu {

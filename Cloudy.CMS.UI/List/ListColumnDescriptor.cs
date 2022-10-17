@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.UI.List
 {
     public record ListColumnDescriptor(
-        string Name
+        string Name,
+        string Label,
+        int Order
     );
 }

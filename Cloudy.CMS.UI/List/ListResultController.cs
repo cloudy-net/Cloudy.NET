@@ -2,6 +2,7 @@
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
+using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -67,6 +68,12 @@ namespace Cloudy.CMS.UI.List
                 foreach(var propertyDefinition in columnNames.Select(n => propertyDefinitions.Single(p => n == p.Name)))
                 {
                     var partialViewName = $"Columns/Text";
+
+                    if (propertyDefinition.Attributes.OfType<SelectAttribute>().Any())
+                    {
+                        partialViewName = "Columns/Select";
+                    }
+
                     var viewResult = CompositeViewEngine.FindView(ControllerContext, partialViewName, false);
 
                     if (!viewResult.Success)
