@@ -30,7 +30,7 @@
             var name = ContentTypeNameProvider.Get(contentType.Type);
             var description = contentType.Type.GetCustomAttribute<DisplayAttribute>()?.Description;
             <div class="col-4 mb-4 d-flex">
-                <div class="card w-100">
+                <div class="card w-100" style="min-height: 200px;">
                     <div class="card-body">
                         <h5 class="card-title">@name.PluralName</h5>
                         @if (description != null)
