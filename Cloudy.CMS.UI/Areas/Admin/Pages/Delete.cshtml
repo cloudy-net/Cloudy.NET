@@ -1,0 +1,47 @@
+﻿@page
+@using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
+@using Cloudy.CMS.Naming
+@model Cloudy.CMS.UI.Areas.Admin.Pages.DeleteModel
+
+@inject INameGetter NameGetter
+@inject IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter
+
+@await Html.PartialAsync("Shared/Nav")
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a></li>
+            <li class="breadcrumb-item active">Delete</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container">
+    <h1 class="h2 mb-2">
+        Delete @NameGetter.GetName(Model.Instance)
+        <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
+    </h1>
+</div>
+
+@{
+    var keys = string.Join(", ", PrimaryKeyPropertyGetter.GetFor(Model.ContentType.Type).Select(p => $"{p.Name} <code>{p.GetValue(Model.Instance)}</code>"));
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="alert alert-primary" role="alert">
+                <p>You are going to delete the @Model.ContentTypeName.LowerCaseName "@NameGetter.GetName(Model.Instance)" (with @Html.Raw(keys)).</p>
+                <p class="mb-0">This action is <strong>permanent</strong>. There is no going back.</p>
+            </div>
+
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-primary" type="submit">Delete permanently</button> <a class="btn btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("Shared/Footer")

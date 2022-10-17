@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 
-export default ({ ContentType, Columns, PageSize, EditLink }) => {
+export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
   const [pageSize, setPageSize] = useState(PageSize);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -42,7 +42,10 @@ export default ({ ContentType, Columns, PageSize, EditLink }) => {
           {columns.map((_, i) =>
             <td>{d.values[i]}</td>
           )}
-          <td><a href={`${EditLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a></td>
+          <td>
+            <a class="me-2" href={`${EditLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
+            <a href={`${DeleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
+          </td>
         </tr>)}
       </tbody>
     </table>
