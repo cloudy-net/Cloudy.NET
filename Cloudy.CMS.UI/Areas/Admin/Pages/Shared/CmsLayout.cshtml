@@ -31,6 +31,13 @@
         else
         {
             <script type="module" src="@viteBaseUri/main.jsx"></script>
+            <script>
+                window.addEventListener('load', () => {
+                    if(!window.viteIsLoaded){
+                        document.write('<div class="alert alert-primary" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 500px; max-width: 80vw; box-shadow: rgba(255, 255, 255, 0.75) 0 0 0 5px;"><h2>Vite is configured but not started.</h2><p class="mb-0">Please go to <code>wwwroot-src/</code> and <code>npm run dev</code></p></div>')
+                    }
+                });
+            </script>
         }
     </body>
 </html>

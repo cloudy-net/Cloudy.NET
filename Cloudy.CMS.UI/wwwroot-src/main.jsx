@@ -4,6 +4,8 @@ import SelectOne from './controls/select-one'
 
 import './main.scss'
 
+window.viteIsLoaded = true;
+
 document.querySelectorAll('.list-page-table').forEach(element =>
     render(<Table {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
 );
