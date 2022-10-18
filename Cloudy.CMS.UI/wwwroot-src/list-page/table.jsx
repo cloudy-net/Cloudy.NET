@@ -63,7 +63,7 @@ export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
         <tbody>
           {data.items.map(d => <tr>
             {columns.map((_, i) =>
-              <td>{d.values[i]}</td>
+              <td dangerouslySetInnerHTML={{__html:d.values[i]}}></td>
             )}
             <td>
               <a class="me-2" href={`${EditLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
