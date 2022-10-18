@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import SelectOneDropdown from './select-one-dropdown';
-import SelectOneFilter from './select-one-filter';
 
 export default ({ controlName, contentType, pageSize, value: initialValue, simpleKey }) => {
   const [value, setValue] = useState(initialValue);

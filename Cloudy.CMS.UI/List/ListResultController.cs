@@ -38,20 +38,21 @@ namespace Cloudy.CMS.UI.List
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string contentType, string columns, int page, int pageSize)
+        public async Task<ListResultResponse> ListResult(string contentType, string columns, int page, int pageSize, string search)
         {
             var columnNames = columns.Split(",");
-
             var type = ContentTypeProvider.Get(contentType);
-
+            var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name);
+            var selectedPropertyDefinitions = columnNames.Select(n => propertyDefinitions.First(p => n == p.Name));
+            
             using var context = ContextCreator.CreateFor(type.Type);
 
             var dbSet = (IQueryable)context.GetDbSet(type.Type).DbSet;
 
-            //if(query != null)
-            //{
-            //    dbSet = dbSet.Where($"Name.Contains(@0)", query);
-            //}
+            if (!string.IsNullOrEmpty(search))
+            {
+                dbSet = dbSet.Where(string.Join(" OR ", selectedPropertyDefinitions.Where(p => p.Type == typeof(string)).Select(p => $"{p.Name}.Contains(@0)")), search);
+            }
 
             var totalCount = await dbSet.CountAsync().ConfigureAwait(false);
 
@@ -59,13 +60,11 @@ namespace Cloudy.CMS.UI.List
 
             var result = new List<ListRow>();
 
-            var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name);
-
             await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
             {
                 var columnValues = new List<string>();
 
-                foreach(var propertyDefinition in columnNames.Select(n => propertyDefinitions.Single(p => n == p.Name)))
+                foreach(var propertyDefinition in selectedPropertyDefinitions)
                 {
                     var partialViewName = $"Columns/Text";
 

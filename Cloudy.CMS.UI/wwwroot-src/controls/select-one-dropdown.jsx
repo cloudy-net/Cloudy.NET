@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import SelectOneFilter from "./select-one-filter";
+import SearchBox from "../components/search-box";
 
 export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpleKey }) => {
   const [pageSize, setPageSize] = useState(initialPageSize);
@@ -53,7 +53,7 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
     }
 
     return <>
-      <SelectOneFilter callback={value => setFilter(value)} />
+      <SearchBox callback={value => setFilter(value)} />
       {data.items.map(item =>
         <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item); setOpen(false); }}>{item.name}</a></div>
       )}

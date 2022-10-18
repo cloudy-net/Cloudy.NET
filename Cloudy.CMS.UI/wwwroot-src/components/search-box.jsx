@@ -1,7 +1,7 @@
 import debounce from "lodash.debounce";
 import { useEffect, useMemo, useRef } from "preact/hooks";
 
-export default ({ callback }) => {
+export default ({ className, callback }) => {
   const debouncedResults = useMemo(() => {
     return debounce(event => callback(event.target.value), 250);
   }, []);
@@ -23,6 +23,6 @@ export default ({ callback }) => {
   });
 
   return <div class="m-2">
-    <input class="form-control form-control-sm" type="text" onInput={debouncedResults} ref={ref} />
-  </div>
+    <input class={"form-control" + (className ? " " + className : "")} type="text" placeholder="Search" onInput={debouncedResults} ref={ref} />
+  </div>;
 };

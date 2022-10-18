@@ -39,3 +39,17 @@ a {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+
+
+/* LIST PAGE */
+
+.list-page-search {
+    width: 100%;
+    max-width: 250px;
+    margin-bottom: 20px;
+}
+
+.list-page-blank-row td {
+    border-bottom-color: transparent;
+}
