@@ -32,12 +32,12 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
                     result.Add(value);
                     continue;
                 }
-                else if (type == typeof(Guid))
+                else if (type == typeof(Guid) || type == typeof(Guid?))
                 {
                     result.Add(Guid.Parse(value));
                     continue;
                 }
-                else if (type == typeof(int))
+                else if (type == typeof(int) || type == typeof(int?))
                 {
                     result.Add(int.Parse(value));
                     continue;

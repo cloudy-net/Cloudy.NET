@@ -14,7 +14,7 @@ namespace TestWebsite.Models
     {
         [ListColumn]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         [ListColumn(Order = 0)]
         public string Name { get; set; }
         public string UrlSegment { get; set; }
@@ -22,7 +22,7 @@ namespace TestWebsite.Models
         public string Description { get; set; }
         [ListColumn]
         [Select(typeof(Page))]
-        public Guid RelatedPageId { get; set; }
+        public Guid? RelatedPageId { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
     }
