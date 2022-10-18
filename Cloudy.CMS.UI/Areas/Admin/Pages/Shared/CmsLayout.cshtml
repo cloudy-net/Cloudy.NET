@@ -59,6 +59,19 @@
                 window.addEventListener('load', () => {
                     if (!window.viteIsLoaded) {
                         document.querySelector('.vite-alert').style = '';
+
+                        const checkError = () => {
+                            if(document.querySelector("live-preview-root")){
+                                document.querySelector('.vite-alert').remove();
+                                document.querySelector('.vite-loading').remove();
+
+                                return;
+                            }
+
+                            setTimeout(checkError, 100);
+                        };
+
+                        checkError();
                     } else {
                         document.querySelector('.vite-loading').remove();
                     }
