@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Cloudy.CMS;
-using Cloudy.CMS.AspNetCore.DependencyInjectionSupport;
 using Cloudy.CMS.DependencyInjectionSupport;
 using Cloudy.CMS.InitializerSupport;
 using System;
@@ -11,8 +10,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
-using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.AssemblySupport;
 
 namespace Microsoft.AspNetCore.Builder

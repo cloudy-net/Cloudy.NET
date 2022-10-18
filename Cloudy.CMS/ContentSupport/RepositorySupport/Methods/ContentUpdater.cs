@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+﻿using Cloudy.CMS.ContextSupport;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 

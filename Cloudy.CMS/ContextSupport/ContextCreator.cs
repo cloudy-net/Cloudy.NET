@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
+namespace Cloudy.CMS.ContextSupport
 {
     public class ContextCreator : IContextCreator
     {
@@ -23,7 +21,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
 
             if (contextDescriptor == null)
             {
-                throw new CouldNotFindAnyDbContextWithDbSetForTypeException(type);
+                return null;
             }
 
             return new ContextWrapper((DbContext)ServiceProvider.GetRequiredService(contextDescriptor.Type));

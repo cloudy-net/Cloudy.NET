@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.DbSet
+namespace Cloudy.CMS.ContextSupport
 {
     public record DbSetDescriptor(
         Type Type,

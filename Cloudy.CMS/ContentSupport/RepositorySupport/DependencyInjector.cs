@@ -1,6 +1,5 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+﻿using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport.Methods;
-using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,12 +22,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             services.AddScoped<IPrimaryKeyGetter, PrimaryKeyGetter>();
             services.AddScoped<IPrimaryKeySetter, PrimaryKeySetter>();
 
-            services.AddScoped<IContentFinder, ContentFinder>();
             services.AddScoped<IContentUpdater, ContentUpdater>();
-
-            services.AddScoped<IDbSetProvider, DbSetProvider>();
-            services.AddScoped<IContextProvider, ContextProvider>();
-            services.AddScoped<IContextCreator, ContextCreator>();
         }
     }
 }

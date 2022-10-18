@@ -1,16 +1,8 @@
 ﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
-using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
-using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
+using Cloudy.CMS.ContextSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Cloudy.CMS.ContentTypeSupport
 {

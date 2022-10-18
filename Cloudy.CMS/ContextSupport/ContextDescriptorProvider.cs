@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
+namespace Cloudy.CMS.ContextSupport
 {
     public class ContextDescriptorProvider : IContextDescriptorProvider
     {

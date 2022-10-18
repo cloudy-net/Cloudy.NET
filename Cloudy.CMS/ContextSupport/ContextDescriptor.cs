@@ -1,12 +1,8 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
-using Cloudy.CMS.ContentTypeSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
+namespace Cloudy.CMS.ContextSupport
 {
     public class ContextDescriptor
     {

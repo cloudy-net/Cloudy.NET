@@ -1,11 +1,10 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
+namespace Cloudy.CMS.ContextSupport
 {
     public class ContextWrapper : IContextWrapper
     {
@@ -21,22 +20,22 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
                 .ToDictionary(p => p.PropertyType.GetGenericArguments()[0], p => p);
         }
 
-        public IDbSetWrapper GetDbSet(Type type)
+        public object GetDbSet(Type type)
         {
             if (DbSetsByType.ContainsKey(type))
             {
-                return new DbSetWrapper(DbSetsByType[type].GetValue(Context), type);
+                return DbSetsByType[type].GetValue(Context);
             }
 
             foreach (var pair in DbSetsByType)
             {
                 if (pair.Key.IsAssignableFrom(type))
                 {
-                    return new DbSetWrapper(pair.Value.GetValue(Context), pair.Key);
+                    return pair.Value.GetValue(Context);
                 }
             }
 
-            throw new CouldNotFindAnyDbSetForTypeInsideContextException(type, Context.GetType());
+            return null;
         }
 
         public void Dispose()

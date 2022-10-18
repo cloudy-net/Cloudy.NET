@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
+namespace Cloudy.CMS.ContextSupport
 {
     public class ContextProvider : IContextProvider
     {

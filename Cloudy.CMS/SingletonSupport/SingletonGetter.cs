@@ -1,33 +1,40 @@
-﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.Methods;
+﻿using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
+using Cloudy.CMS.Naming;
+using System.Text.Json;
 
 namespace Cloudy.CMS.SingletonSupport
 {
     public class SingletonGetter : ISingletonGetter
     {
         IContentTypeProvider ContentTypeProvider { get; }
-        IContentFinder ContentFinder { get; }
+        IContextCreator ContextCreator { get; }
 
-        public SingletonGetter(IContentTypeProvider contentTypeProvider, IContentFinder contentFinder)
+        public SingletonGetter(IContentTypeProvider contentTypeProvider, IContextCreator contextCreator)
         {
             ContentTypeProvider = contentTypeProvider;
-            ContentFinder = contentFinder;
+            ContextCreator = contextCreator;
         }
 
         public async Task<object> GetAsync(Type type)
         {
-            return (await ContentFinder.Find(type).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
-        }
+            using var context = ContextCreator.CreateFor(type);
+            var dbSet = (IQueryable)context.GetDbSet(type);
 
-        public async Task<T> GetAsync<T>() where T : class
-        {
-            return (T)(await ContentFinder.Find(typeof(T)).GetResultAsync().ConfigureAwait(false)).FirstOrDefault();
+            dbSet = dbSet.Cast<object>().Take(1);
+
+            await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
+            {
+                return instance;
+            }
+
+            return null;
         }
     }
 }

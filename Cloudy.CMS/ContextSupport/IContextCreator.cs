@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
+namespace Cloudy.CMS.ContextSupport
 {
     public interface IContextCreator
     {

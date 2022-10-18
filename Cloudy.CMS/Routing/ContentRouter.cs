@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContextSupport;
 
 namespace Cloudy.CMS.Routing
 {
@@ -34,7 +34,7 @@ namespace Cloudy.CMS.Routing
                 {
                     var dbSet = ContextProvider.GetFor(type.Type).GetDbSet(type.Type);
 
-                    var result = ((IQueryable)dbSet.DbSet).Cast<IRoutable>().Where(r => r.UrlSegment == segment).FirstOrDefault();
+                    var result = ((IQueryable)dbSet).Cast<IRoutable>().Where(r => r.UrlSegment == segment).FirstOrDefault();
 
                     if(result != null)
                     {

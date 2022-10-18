@@ -1,12 +1,9 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.DbSet;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.Context
+namespace Cloudy.CMS.ContextSupport
 {
     public class ContextDescriptorCreator : IContextDescriptorCreator
     {

@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+﻿using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
@@ -47,7 +47,7 @@ namespace Cloudy.CMS.UI.List
             
             using var context = ContextCreator.CreateFor(type.Type);
 
-            var dbSet = (IQueryable)context.GetDbSet(type.Type).DbSet;
+            var dbSet = (IQueryable)context.GetDbSet(type.Type);
 
             if (!string.IsNullOrEmpty(search))
             {

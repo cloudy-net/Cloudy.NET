@@ -1,4 +1,27 @@
-﻿@using Cloudy.CMS.UI.List
+﻿@using Cloudy.CMS.ContextSupport
+@using Cloudy.CMS.ContentTypeSupport
+@using Cloudy.CMS.Naming
+@using Cloudy.CMS.UI.FormSupport.FieldTypes
+@using Cloudy.CMS.UI.List
 @model ListColumnViewModel
 
-@Model.Value
+@inject IContentTypeProvider ContentTypeProvider
+@inject IContextProvider ContextProvider
+@inject INameGetter NameGetter
+
+@{
+    var select = Model.PropertyDefinition.Attributes.OfType<SelectAttribute>().First();
+    var type = ContentTypeProvider.Get(select.Type);
+    var context = ContextProvider.GetFor(type.Type);
+    var instance = await context.Context.FindAsync(type.Type, Model.Value).ConfigureAwait(false);
+    var name = NameGetter.GetName(instance);
+
+    if (name != null)
+    {
+        @name
+    }
+    else
+    {
+        <i>Does not exist</i>
+    }
+}

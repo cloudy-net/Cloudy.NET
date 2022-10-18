@@ -1,4 +1,4 @@
-using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport.Name;
 using Cloudy.CMS.ContentTypeSupport;

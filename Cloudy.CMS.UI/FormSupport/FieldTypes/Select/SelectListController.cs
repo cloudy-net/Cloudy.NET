@@ -1,18 +1,13 @@
 ﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
+using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.EntitySupport.Reference;
 using Cloudy.CMS.Naming;
-using Cloudy.CMS.UI.List;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
@@ -47,7 +42,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 
             using var context = ContextCreator.CreateFor(type.Type);
 
-            var dbSet = (IQueryable)context.GetDbSet(type.Type).DbSet;
+            var dbSet = (IQueryable)context.GetDbSet(type.Type);
 
             if (filter != null)
             {

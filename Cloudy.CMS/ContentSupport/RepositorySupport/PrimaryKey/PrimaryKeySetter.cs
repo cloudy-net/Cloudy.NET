@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.Context;
-using Microsoft.EntityFrameworkCore;
+﻿using Cloudy.CMS.ContextSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
