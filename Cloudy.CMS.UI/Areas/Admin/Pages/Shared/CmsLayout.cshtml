@@ -16,28 +16,55 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
         @if(viteBaseUri == null){
             <link href="/_content/Cloudy.CMS.UI/index.css" rel="stylesheet">
-        }
-        else
-        {
-            <script type="module" src="@viteBaseUri/@@vite/client"></script>
-        }
-    </head>
-    <body>
-        @RenderBody()
-        @if (viteBaseUri == null)
-        {
             <script async type="module" crossorigin="anonymous" src="/_content/Cloudy.CMS.UI/index.bundle.js"></script>
         }
         else
         {
+            <script type="module" src="@viteBaseUri/@@vite/client"></script>
             <script type="module" src="@viteBaseUri/main.jsx"></script>
+        }
+    </head>
+    <body>
+        @if (viteBaseUri != null)
+        {
+            <style>
+                .vite-loading {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 10;
+                    background: white;
+                }
+                .vite-alert {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    z-index: 20;
+                    transform: translate(-50%, -50%);
+                    width: 500px;
+                    max-width: 80vw;
+                    box-shadow: rgba(255, 255, 255, 0.75) 0 0 0 5px;
+                }
+            </style>
+            <div class="vite-loading"></div>
+            <div class="alert alert-primary vite-alert" style="display: none;">
+                <h1 class="h3">Vite is configured but not started.</h1>
+                <p>Please go to <code>wwwroot-src/</code> and <code>npm run dev</code></p>
+                <p>To disable Vite and load frontend assets normally, remove the configuration setting <code>ViteBaseUri</code>.</p>
+                <button class="btn btn-primary" onclick="location.reload();">Reload page</button>
+            </div>
             <script>
                 window.addEventListener('load', () => {
-                    if(!window.viteIsLoaded){
-                        document.write('<div class="alert alert-primary" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 500px; max-width: 80vw; box-shadow: rgba(255, 255, 255, 0.75) 0 0 0 5px;"><h2>Vite is configured but not started.</h2><p class="mb-0">Please go to <code>wwwroot-src/</code> and <code>npm run dev</code></p></div>')
+                    if (!window.viteIsLoaded) {
+                        document.querySelector('.vite-alert').style = '';
+                    } else {
+                        document.querySelector('.vite-loading').remove();
                     }
                 });
             </script>
         }
+        @RenderBody()
     </body>
 </html>
