@@ -4,13 +4,12 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Björn Ali Göransson</Authors>
 		<Description>Cloudy CMS for .NET Core</Description>
-		<Version>1.62.19</Version>
+		<Version>1.62.20</Version>
 		<Copyright>2018 Björn Ali Göransson</Copyright>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/cloudy-net/Cloudy.CMS.git</RepositoryUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<NoWarn>CS1998</NoWarn>
-		<PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
