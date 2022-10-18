@@ -62,7 +62,7 @@
                         document.querySelector('.vite-alert').style = '';
 
                         const checkError = () => {
-                            if(document.querySelector("live-preview-root")){
+                        if (document.querySelector("vite-error-overlay")) {
                                 document.querySelector('.vite-alert').remove();
                                 document.querySelector('.vite-loading').remove();
 
