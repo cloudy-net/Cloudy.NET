@@ -19,7 +19,7 @@
 
 <div class="container">
     <h1 class="h2 mb-3">
-        Delete @NameGetter.GetName(Model.Instance)
+        Delete @Model.ContentTypeName.PluralLowerCaseName
         <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
     </h1>
 </div>
@@ -32,7 +32,10 @@
     <div class="card">
         <div class="card-body">
             <div class="alert alert-primary" role="alert">
-                <p>You are going to delete the @Model.ContentTypeName.LowerCaseName "@NameGetter.GetName(Model.Instance)" (with @Html.Raw(keys)).</p>
+                <p>You are going to delete the following @Model.ContentTypeName.PluralLowerCaseName:</p>
+                <ul>
+                    <li>@NameGetter.GetName(Model.Instance)" (with @Html.Raw(keys))</li>
+                </ul>
                 <p class="mb-0">This action is <strong>permanent</strong>. There is no going back.</p>
             </div>
 
