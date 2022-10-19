@@ -1,4 +1,5 @@
 ﻿@using Cloudy.CMS.UI.FormSupport
 @model FieldViewModel
 
-<input type="text" class="form-control" id="field-@Model.Field.Name" name="@Model.Field.Name" value="@Model.Value">
+<input type="hidden" id="field-@Model.Field.Name" name="@Model.Field.Name" value="@Model.Value">
+<div class="html-control" for="#field-@Model.Field.Name"></div>
