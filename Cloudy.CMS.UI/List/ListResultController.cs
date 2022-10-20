@@ -51,7 +51,7 @@ namespace Cloudy.CMS.UI.List
 
             if (!string.IsNullOrEmpty(search))
             {
-                dbSet = dbSet.Where(string.Join(" OR ", selectedPropertyDefinitions.Where(p => p.Type == typeof(string)).Select(p => $"{p.Name}.Contains(@0)")), search);
+                dbSet = dbSet.Where(string.Join(" OR ", selectedPropertyDefinitions.Where(p => p.Type == typeof(string)).Select(p => $"{p.Name}.Contains(@0, \"{StringComparison.InvariantCultureIgnoreCase}\")")), search);
             }
 
             var totalCount = await dbSet.CountAsync().ConfigureAwait(false);

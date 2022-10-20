@@ -48,7 +48,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
             {
                 if (type.Type.IsAssignableTo(typeof(INameable)))
                 {
-                    dbSet = dbSet.Where($"Name.Contains(@0)", filter);
+                    dbSet = dbSet.Where($"Name.Contains(@0, \"{StringComparison.InvariantCultureIgnoreCase}\")", filter);
                 }
             }
 
