@@ -16,7 +16,6 @@ document.querySelectorAll('.html-control').forEach(element => {
   var input = document.querySelector(element.getAttribute('for'));
   var quill = new Quill(element, {
     modules: {
-      // toolbar: '#toolbar'
     },
     theme: 'snow'
   });
