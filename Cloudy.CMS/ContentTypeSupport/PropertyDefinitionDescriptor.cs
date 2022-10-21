@@ -9,21 +9,14 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.ContentTypeSupport
 {
     [DebuggerDisplay("{Name}")]
-    public class PropertyDefinitionDescriptor
-    {
-        public string Name { get; }
-        public Type Type { get; }
-        public Func<object, object> Getter { get; }
-        public Action<object, object> Setter { get; }
-        public IEnumerable<object> Attributes { get; }
-
-        public PropertyDefinitionDescriptor(string name, Type type, Func<object, object> getter, Action<object, object> setter, IEnumerable<object> attributes)
-        {
-            Name = name;
-            Type = type;
-            Getter = getter;
-            Setter = setter;
-            Attributes = attributes.ToList().AsReadOnly();
-        }
-    }
+    public record PropertyDefinitionDescriptor(
+        string Name,
+        Type Type,
+        Func<object, object> Getter,
+        Action<object, object> Setter,
+        IEnumerable<object> Attributes,
+        bool Nullable,
+        bool List,
+        bool Enum
+    );
 }

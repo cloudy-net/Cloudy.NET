@@ -13,7 +13,7 @@
 @{
     var controlName = Model.Field.Name;
 
-    var selectAttribute = Model.Field.Attributes.OfType<SelectAttribute>().FirstOrDefault();
+    var selectAttribute = Model.Property.Attributes.OfType<SelectAttribute>().FirstOrDefault();
 
     if (selectAttribute == null)
     {

@@ -25,5 +25,6 @@ namespace TestWebsite.Models
         public Guid? RelatedPageId { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
+        public Category? Category { get; set; }
     }
 }

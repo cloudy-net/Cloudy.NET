@@ -1,8 +1,9 @@
+import './main.scss'
+
 import { render } from 'preact'
 import Table from './list-page/table'
-import SelectOne from './controls/select-one'
-
-import './main.scss'
+import SelectOne from './select-one/select-one'
+import EnumDropdown from './enum-dropdown/enum-dropdown';
 
 window.viteIsLoaded = true;
 
@@ -11,6 +12,9 @@ document.querySelectorAll('.list-page-table').forEach(element =>
 );
 document.querySelectorAll('.select-one-control').forEach(element =>
   render(<SelectOne {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
+);
+document.querySelectorAll('.enum-dropdown-control').forEach(element =>
+  render(<EnumDropdown {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
 );
 document.querySelectorAll('.html-control').forEach(element => {
   var input = document.querySelector(element.getAttribute('for'));

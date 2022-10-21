@@ -47,17 +47,34 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 var type = propertyDefinition.Type;
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
 
-                var partialName = uiHints.FirstOrDefault() ?? FieldTypeMapper.MapToPartial(propertyDefinition);
+                string partialName = null;
+
+                if (propertyDefinition.Attributes.Any(a => a is SelectAttribute))
+                {
+                    partialName = "selectone";
+                }
+
+                if (propertyDefinition.Type == typeof(string))
+                {
+                    partialName = "text";
+                }
+
+                if (propertyDefinition.Enum)
+                {
+                    partialName = "enumdropdown";
+                }
+
+                if (uiHints.Any())
+                {
+                    partialName = uiHints.First();
+                }
+
+                if(partialName == null)
+                {
+                    partialName = "failed";
+                }
 
                 var partial = $"Form/{partialName}";
-
-                var isSortable = false;
-
-                if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IEnumerable<>) || type.GetGenericTypeDefinition() == typeof(List<>) || type.GetGenericTypeDefinition() == typeof(IList<>)))
-                {
-                    type = type.GetGenericArguments().Single();
-                    isSortable = true;
-                }
 
                 var renderChrome = true;
 
@@ -66,7 +83,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     renderChrome = false;
                 }
 
-                result.Add(new FieldDescriptor(name, type, propertyDefinition.Attributes, label, partial, isSortable, autoGenerate, renderChrome, group));
+                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group));
             }
             
             return result;

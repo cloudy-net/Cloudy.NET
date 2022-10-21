@@ -9,15 +9,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     {
         public string MapToPartial(PropertyDefinitionDescriptor propertyDefinitionDescriptor)
         {
-            if(propertyDefinitionDescriptor.Attributes.Any(a => a is SelectAttribute))
-            {
-                return "selectone";
-            }
-
-            if(propertyDefinitionDescriptor.Type == typeof(string))
-            {
-                return "text";
-            }
 
             return "failed";
         }

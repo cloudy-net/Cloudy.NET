@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
@@ -25,14 +26,19 @@ namespace Cloudy.CMS.UI.FormSupport
                 return value;
             }
 
-            if (propertyDefinition.Type == typeof(Guid) || propertyDefinition.Type == typeof(Guid?))
+            if (propertyDefinition.Type == typeof(Guid))
             {
                 return Guid.Parse(value);
             }
 
-            if (propertyDefinition.Type == typeof(int) || propertyDefinition.Type == typeof(int?))
+            if (propertyDefinition.Type == typeof(int))
             {
                 return int.Parse(value);
+            }
+
+            if (propertyDefinition.Enum)
+            {
+                return Enum.Parse(propertyDefinition.Type, value);
             }
 
             if (propertyDefinition.Type.IsAssignableTo(typeof(ITuple)))

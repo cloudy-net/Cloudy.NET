@@ -10,7 +10,35 @@ namespace Cloudy.CMS.ContentTypeSupport
     {
         public PropertyDefinitionDescriptor Create(PropertyInfo property)
         {
-            return new PropertyDefinitionDescriptor(property.Name, property.PropertyType, (instance) => property.GetValue(instance), (instance, value) => property.SetValue(instance, value), property.GetCustomAttributes());
+            var type = property.PropertyType;
+            var nullable = false;
+
+            var nullableType = Nullable.GetUnderlyingType(type);
+
+            if(nullableType != null)
+            {
+                type = nullableType;
+                nullable = true;
+            }
+
+            var list = false;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>))
+            {
+                type = type.GetGenericArguments().Single();
+                list = true;
+            }
+
+            return new PropertyDefinitionDescriptor(
+                property.Name,
+                type,
+                (instance) => property.GetValue(instance),
+                (instance, value) => property.SetValue(instance, value),
+                property.GetCustomAttributes(),
+                nullable,
+                list,
+                type.IsEnum
+            );
         }
     }
 }

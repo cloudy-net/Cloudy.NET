@@ -1,0 +1,25 @@
+﻿@using Cloudy.CMS.UI.FormSupport
+@using System.Text.Json
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+@model FieldViewModel
+
+@{
+    var controlName = Model.Field.Name;
+    var controlId = $"field-{Model.Field.Name}";
+
+    var value = Model.Value?.ToString();
+
+    var type = Model.Field.Type;
+    var nullable = Model.Property.Nullable;
+
+    var options = new Dictionary<string, string>();
+
+    foreach(var name in Enum.GetNames(type)){
+        var label = type.GetField(name)?.GetCustomAttribute<DisplayAttribute>()?.Name ?? name;
+
+        options[name] = label;
+    }
+}
+
+<div class="enum-dropdown-control" settings="@(JsonSerializer.Serialize(new { controlId, controlName, value, nullable, options }))"></div>
