@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Cloudy.CMS.ContentSupport;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -71,6 +72,11 @@ namespace Cloudy.CMS.UI.List
                     if (propertyDefinition.Attributes.OfType<SelectAttribute>().Any())
                     {
                         partialViewName = "Columns/Select";
+                    }
+
+                    if(type.Type.IsAssignableTo(typeof(INameable)) && propertyDefinition.Name == nameof(INameable.Name))
+                    {
+                        partialViewName = "Columns/Name";
                     }
 
                     var viewResult = CompositeViewEngine.FindView(ControllerContext, partialViewName, false);

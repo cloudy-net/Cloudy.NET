@@ -1,0 +1,10 @@
+﻿@using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
+@using Cloudy.CMS.UI.List
+@model ListColumnViewModel
+
+@inject IPrimaryKeyGetter PrimaryKeyGetter
+
+@{
+    var editLink = Url.Page("/Edit", new { area = "Admin", ContentType = Model.ContentType.Name, keys = PrimaryKeyGetter.Get(Model.Instance) });
+}
+<a href="@editLink">@Model.Value</a>
