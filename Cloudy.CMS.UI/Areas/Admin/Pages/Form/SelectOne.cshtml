@@ -39,6 +39,7 @@
     value = ReferenceSerializer.Get(value);
 
     var simpleKey = Model.Field.Type.IsValueType && !Model.Field.Type.IsAssignableTo(typeof(ITuple));
+    var editLink = Url.Page("Edit", new { area = "Admin", ContentType = Model.ContentType.Name });
 }
 
-<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { controlName, contentType, pageSize, value, simpleKey }))"></div>
+<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { controlName, contentType, pageSize, value, simpleKey, editLink }))"></div>

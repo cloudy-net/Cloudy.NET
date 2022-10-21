@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import SelectOneDropdown from './select-one-dropdown';
 
-export default ({ controlName, contentType, pageSize, value: initialValue, simpleKey }) => {
+export default ({ controlName, contentType, pageSize, value: initialValue, simpleKey, editLink }) => {
   const [value, setValue] = useState(initialValue);
   const [preview, setPreview] = useState();
 
@@ -31,6 +31,7 @@ export default ({ controlName, contentType, pageSize, value: initialValue, simpl
     {preview && <div class="input-group mb-3">
       <span class="input-group-text" ></span>
       <div type="text" class="form-control">{preview.name}</div>
+      <a class="btn btn-beta" href={`${editLink}&${simpleKey ? `keys=${preview.reference}` : preview.reference.map(key => `keys=${key}`).join('&')}`} target="_blank">Edit</a>
     </div>}
 
     <SelectOneDropdown contentType={contentType} pageSize={pageSize} value={value} onSelect={item => { setValue(simpleKey ? item.reference : JSON.stringify(item.reference)); setPreview(item); }} simpleKey={simpleKey} />

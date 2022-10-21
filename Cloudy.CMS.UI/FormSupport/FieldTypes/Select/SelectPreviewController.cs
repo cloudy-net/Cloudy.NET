@@ -42,12 +42,14 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
             var instance = await context.Context.FindAsync(type.Type, deserializedReference).ConfigureAwait(false);
             
             return new PreviewResult(
-                NameGetter.GetName(instance)
+                NameGetter.GetName(instance),
+                deserializedReference
             );
         }
 
         public record PreviewResult(
-            string Name
+            string Name,
+            object Reference
         );
     }
 }
