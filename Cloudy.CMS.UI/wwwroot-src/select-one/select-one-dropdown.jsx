@@ -69,7 +69,7 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
   };
 
   return <div class="dropdown d-inline-block" ref={ref}>
-    <button class="btn btn-beta dropdown-toggle" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
+    <button class="btn btn-beta btn-sm dropdown-toggle" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
       Add
     </button>
     <div class={"dropdown-menu" + (open ? " show" : "")}>
