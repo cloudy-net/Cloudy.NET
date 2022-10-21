@@ -6,19 +6,25 @@ export default ({ controlName, contentType, pageSize, value: initialValue, simpl
   const [preview, setPreview] = useState();
 
   useEffect(() => {
-    if (!value) {
-      return;
-    }
+    (async () => {
+      if (!value) {
+        return;
+      }
 
-    if (preview && preview.reference == value) {
-      return;
-    }
+      if (preview && preview.reference == value) {
+        return;
+      }
 
-    fetch(`/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}&simpleKey=${simpleKey}`)
-      .then(response => response.json())
-      .then(response => {
-        setPreview(response);
-      });
+      var response = await fetch(`/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}&simpleKey=${simpleKey}`);
+
+      if (response.status == 404) {
+        setPreview({ notFound: true });
+        return;
+      }
+
+      var json = await response.json();
+      setPreview(json);
+    })();
   }, [value]);
 
   return <>
@@ -28,7 +34,11 @@ export default ({ controlName, contentType, pageSize, value: initialValue, simpl
       <span class="input-group-text" ></span>
       <div type="text" class="form-control">&nbsp;</div>
     </div>}
-    {preview && <div class="input-group mb-3">
+    {preview && preview.notFound && <div class="input-group mb-3">
+      <div type="text" class="form-control"><span class="information-missing">Could not find <code>{simpleKey ? value : JSON.parse(value).join(', ')}</code></span></div>
+      <button class="btn btn-beta" type="button" onClick={() => { setValue(null); setPreview(null); }}>Remove</button>
+    </div>}
+    {preview && !preview.notFound && <div class="input-group mb-3">
       <span class="input-group-text" ></span>
       <div type="text" class="form-control">{preview.name}</div>
       <a class="btn btn-beta" href={`${editLink}&${simpleKey ? `keys=${preview.reference}` : preview.reference.map(key => `keys=${key}`).join('&')}`} target="_blank">Edit</a>
