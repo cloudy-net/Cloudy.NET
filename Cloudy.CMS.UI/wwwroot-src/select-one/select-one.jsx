@@ -32,6 +32,7 @@ export default ({ controlName, contentType, pageSize, value: initialValue, simpl
       <span class="input-group-text" ></span>
       <div type="text" class="form-control">{preview.name}</div>
       <a class="btn btn-beta" href={`${editLink}&${simpleKey ? `keys=${preview.reference}` : preview.reference.map(key => `keys=${key}`).join('&')}`} target="_blank">Edit</a>
+      <button class="btn btn-beta" type="button" onClick={() => { setValue(null); setPreview(null); }}>Remove</button>
     </div>}
 
     <SelectOneDropdown contentType={contentType} pageSize={pageSize} value={value} onSelect={item => { setValue(simpleKey ? item.reference : JSON.stringify(item.reference)); setPreview(item); }} simpleKey={simpleKey} />
