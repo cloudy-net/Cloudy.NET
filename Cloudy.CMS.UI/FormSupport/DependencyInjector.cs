@@ -15,7 +15,6 @@ namespace Cloudy.CMS.UI.FormSupport
             services.AddSingleton<IFieldProvider, FieldProvider>();
             services.AddSingleton<IInstanceUpdater, InstanceUpdater>();
             services.AddSingleton<IFormValueConverter, FormValueConverter>();
-            services.AddSingleton<IFieldTypeMapper, FieldTypeMapper>();
         }
     }
 }

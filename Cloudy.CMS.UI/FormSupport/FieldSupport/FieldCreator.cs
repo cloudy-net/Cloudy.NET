@@ -14,13 +14,11 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IHumanizer Humanizer { get; }
-        IFieldTypeMapper FieldTypeMapper { get; set; }
 
-        public FieldCreator(IPropertyDefinitionProvider propertyDefinitionProvider, IHumanizer humanizer, IFieldTypeMapper fieldTypeMapper)
+        public FieldCreator(IPropertyDefinitionProvider propertyDefinitionProvider, IHumanizer humanizer)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             Humanizer = humanizer;
-            FieldTypeMapper = fieldTypeMapper;
         }
 
         public IEnumerable<FieldDescriptor> Create(string contentType)
