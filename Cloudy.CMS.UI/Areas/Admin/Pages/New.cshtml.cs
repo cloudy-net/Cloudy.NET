@@ -22,14 +22,16 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IInstanceUpdater InstanceUpdater { get; }
         IContextProvider ContextProvider { get; }
+        IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IInstanceUpdater instanceUpdater, IContextProvider contextProvider)
+        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IInstanceUpdater instanceUpdater, IContextProvider contextProvider, IPrimaryKeyGetter primaryKeyGetter)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentTypeNameProvider = contentTypeNameProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             InstanceUpdater = instanceUpdater;
             ContextProvider = contextProvider;
+            PrimaryKeyGetter = primaryKeyGetter;
         }
 
         public ContentTypeDescriptor ContentType { get; set; }
@@ -58,7 +60,7 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
             await context.Context.AddAsync(instance).ConfigureAwait(false);
             await context.Context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Redirect(Url.Page("List", new { area = "Admin", ContentType = ContentType.Name }));
+            return Redirect(Url.Page("Edit", new { area = "Admin", ContentType = ContentType.Name, keys = PrimaryKeyGetter.Get(instance) }));
         }
     }
 }
