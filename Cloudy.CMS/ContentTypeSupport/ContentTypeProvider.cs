@@ -22,6 +22,11 @@ namespace Cloudy.CMS.ContentTypeSupport
 
         public ContentTypeDescriptor Get(Type type)
         {
+            if(type == null)
+            {
+                return null;
+            }
+
             return GetMostSpecificAssignableFrom(ContentTypesByType, type);
         }
 
