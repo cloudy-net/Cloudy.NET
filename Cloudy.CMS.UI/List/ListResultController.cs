@@ -16,6 +16,9 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Cloudy.CMS.EntitySupport.Reference;
+using System.Security.Cryptography.Xml;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -39,7 +42,7 @@ namespace Cloudy.CMS.UI.List
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string contentType, string columns, int page, int pageSize, string search)
+        public async Task<ListResultResponse> ListResult(string contentType, string columns, IDictionary<string, string> filters, int page, int pageSize, string search)
         {
             var columnNames = columns.Split(",");
             var type = ContentTypeProvider.Get(contentType);
@@ -53,6 +56,28 @@ namespace Cloudy.CMS.UI.List
             if (!string.IsNullOrEmpty(search))
             {
                 dbSet = dbSet.Where(string.Join(" OR ", selectedPropertyDefinitions.Where(p => p.Type == typeof(string)).Select(p => $"{p.Name}.Contains(@0, \"{StringComparison.InvariantCultureIgnoreCase}\")")), search);
+            }
+
+
+            if (filters.Any())
+            {
+                var i = 0;
+
+                var queries = new List<string>();
+                var values = new List<object>();
+
+                foreach(var filter in filters)
+                {
+                    queries.Add($"{filter.Key} == @{i++}");
+
+                    var propertyDefinition = propertyDefinitions.Where(p => p.Name == filter.Key).FirstOrDefault();
+
+                    //var deserializedReference = ReferenceDeserializer.Get(type.Type, reference, simpleKey);
+
+                    values.Add(filter.Value);
+                }
+
+                dbSet = dbSet.Where(string.Join(" OR ", queries), values.ToArray());
             }
 
             var totalCount = await dbSet.CountAsync().ConfigureAwait(false);

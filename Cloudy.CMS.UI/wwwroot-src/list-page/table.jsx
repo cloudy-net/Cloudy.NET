@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box';
+import ListFilter from './list-filter';
 
-export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
-  const [pageSize, setPageSize] = useState(PageSize);
+export default ({ contentType, columns: initialColumns, filters: listFilters, pageSize: initialPageSize, editLink, deleteLink }) => {
+  const [pageSize, setPageSize] = useState(initialPageSize);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [pages, setPages] = useState();
-  const [columns, setColumns] = useState(Columns);
+  const [columns, setColumns] = useState(initialColumns);
+  const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const [error, setError] = useState();
@@ -15,7 +17,7 @@ export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
 
   useEffect(function () {
     (async () => {
-      const response = await fetch(`/Admin/api/list/result?contentType=${ContentType}&columns=${columns.map(c => c.Name).join(',')}&pageSize=${pageSize}&page=${page}&search=${search}`);
+      const response = await fetch(`/Admin/api/list/result?contentType=${contentType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(JSON.stringify(value))}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`);
 
       if (!response.ok) {
         setError({ response, body: await response.text() });
@@ -30,13 +32,13 @@ export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
       setPageCount(pageCount);
       setPages([...Array(pageCount)]);
     })();
-  }, [page, pageSize, Columns, retryError, search]);
+  }, [page, pageSize, columns, filters, retryError, search]);
 
   if (error) {
     return <>
       <div class="alert alert-primary">
         <p>There was an error (<code>{error.response.status}{error.response.statusText ? " " + error.response.statusText : ""}</code>) loading your list{error.body ? ":" : "."}</p>
-        {error.body ? <pre>{error.body}</pre> : ""}
+        {error.body ? <small><pre>{error.body}</pre></small> : ""}
         <p class="mb-0"><button class="btn btn-primary" onClick={() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
       </div>
     </>;
@@ -51,23 +53,26 @@ export default ({ ContentType, Columns, PageSize, EditLink, DeleteLink }) => {
   }
 
   return <>
-    <SearchBox className="list-page-search" callback={value => setSearch(value)} />
+    <div class="list-page-header m-2">
+      <SearchBox className="list-page-search" callback={value => setSearch(value)} />
+      {listFilters.map(c => <ListFilter {...c} filter={(key, value) => { setFilters({...filters, [key]: value }) }} />)}
+    </div>
     <div class="table-responsive">
       <table class="table">
         <thead>
           <tr>
-            {columns.map(c => <th>{c.Label}</th>)}
+            {columns.map(c => <th>{c.label}</th>)}
             <th style="width: 1%;"></th>
           </tr>
         </thead>
         <tbody>
           {data.items.map(d => <tr>
             {columns.map((_, i) =>
-              <td dangerouslySetInnerHTML={{__html:d.values[i]}}></td>
+              <td dangerouslySetInnerHTML={{ __html: d.values[i] }}></td>
             )}
             <td>
-              <a class="me-2" href={`${EditLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
-              <a href={`${DeleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
+              <a class="me-2" href={`${editLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
+              <a href={`${deleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
             </td>
           </tr>)}
           {[...new Array(pageSize - data.items.length)].map(() => <tr class="list-page-blank-row"><td>&nbsp;</td></tr>)}

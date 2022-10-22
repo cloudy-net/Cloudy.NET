@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.DependencyInjectionSupport;
+using Cloudy.CMS.UI.List.Filter;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Cloudy.CMS.UI.List
         {
             services.AddScoped<IListColumnProvider, ListColumnProvider>();
             services.AddScoped<IListColumnCreator, ListColumnCreator>();
+            services.AddScoped<IListFilterProvider, ListFilterProvider>();
+            services.AddScoped<IListFilterCreator, ListFilterCreator>();
         }
     }
 }

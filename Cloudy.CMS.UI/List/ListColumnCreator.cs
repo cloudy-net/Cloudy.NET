@@ -6,8 +6,6 @@ using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -21,9 +19,9 @@ namespace Cloudy.CMS.UI.List
             {
                 var columns = new List<ListColumnDescriptor>();
 
-                var listColumnProperties = PropertyDefinitionProvider.GetFor(contentType.Name).Where(p => p.Attributes.OfType<ListColumnAttribute>().Any());
+                var properties = PropertyDefinitionProvider.GetFor(contentType.Name).Where(p => p.Attributes.OfType<ListColumnAttribute>().Any());
 
-                if (!listColumnProperties.Any())
+                if (!properties.Any())
                 {
                     if (contentType.IsNameable)
                     {
@@ -43,7 +41,7 @@ namespace Cloudy.CMS.UI.List
                 else
                 {
                     var order = 10000;
-                    foreach (var propertyDefinition in listColumnProperties)
+                    foreach (var propertyDefinition in properties)
                     {
                         var name = propertyDefinition.Name;
                         var humanizedName = Humanizer.Humanize(name);
@@ -53,9 +51,9 @@ namespace Cloudy.CMS.UI.List
                             humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                         }
 
-                        var listColumnAttribute = propertyDefinition.Attributes.OfType<ListColumnAttribute>().First();
+                        var attribute = propertyDefinition.Attributes.OfType<ListColumnAttribute>().First();
 
-                        columns.Add(new ListColumnDescriptor(name, humanizedName, listColumnAttribute.Order == -10000 ? order++ : listColumnAttribute.Order));
+                        columns.Add(new ListColumnDescriptor(name, humanizedName, attribute.Order == -10000 ? order++ : attribute.Order));
                     }
                 }
 

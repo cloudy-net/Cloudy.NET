@@ -22,7 +22,5 @@ export default ({ className, callback }) => {
     ref.current.focus();
   }, []);
 
-  return <div class="m-2">
-    <input class={"form-control" + (className ? " " + className : "")} type="text" placeholder="Search" onInput={debouncedResults} ref={ref} />
-  </div>;
+  return <input class={"form-control" + (className ? " " + className : "")} type="text" placeholder="Search" onInput={debouncedResults} ref={ref} />;
 };

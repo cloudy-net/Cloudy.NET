@@ -44,10 +44,26 @@ a {
 
 /* LIST PAGE */
 
+.list-page-header {
+    display: flex;
+    flex-direction: row;
+}
+
 .list-page-search {
     width: 100%;
     max-width: 250px;
     margin-bottom: 20px;
+    margin-right: auto;
+}
+
+.list-filter {
+    width: 250px;
+
+    .form-select {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 .list-page-blank-row td {

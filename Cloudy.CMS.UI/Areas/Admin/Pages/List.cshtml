@@ -23,6 +23,7 @@
     var settings = new {
         ContentType = Model.ContentType.Name,
         Columns = Model.Columns,
+        Filters = Model.Filters,
         PageSize = 15,
         EditLink = Url.Page("Edit", new { area = "Admin", ContentType = Model.ContentType.Name }),
         DeleteLink = Url.Page("Delete", new { area = "Admin", ContentType = Model.ContentType.Name }),
@@ -32,7 +33,7 @@
 <div class="container">
     <div class="card">
         <div class="card-body" style="min-height: 500px;">
-            <div class="list-page-table" settings="@JsonSerializer.Serialize(settings)">
+            <div class="list-page-table" settings="@JsonSerializer.Serialize(settings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })">
             </div>
         </div>
     </div>

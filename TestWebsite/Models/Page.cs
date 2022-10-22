@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using Cloudy.CMS.UI.List;
+using Cloudy.CMS.UI.List.Filter;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,11 +21,13 @@ namespace TestWebsite.Models
         public string UrlSegment { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
+        [ListFilter]
         [ListColumn]
         [Select(typeof(Page))]
         public Guid? RelatedPageId { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
+        [ListFilter]
         public Category? Category { get; set; }
     }
 }

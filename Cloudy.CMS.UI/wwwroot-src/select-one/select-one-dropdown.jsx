@@ -31,10 +31,10 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
 
   useEffect(() => {
     const callback = event => {
-      if(!ref.current){
+      if (!ref.current) {
         return;
       }
-      if(ref.current == event.target || ref.current.contains(event.target)){
+      if (ref.current == event.target || ref.current.contains(event.target)) {
         return;
       }
       setOpen(false);
@@ -53,7 +53,9 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
     }
 
     return <>
-      <SearchBox callback={value => setFilter(value)} />
+      <div class="mx-2">
+        <SearchBox className="form-control-sm" callback={value => setFilter(value)} />
+      </div>
       {data.items.map(item =>
         <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item); setOpen(false); }}>{item.name}</a></div>
       )}
