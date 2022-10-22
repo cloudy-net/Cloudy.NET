@@ -53,6 +53,9 @@ namespace TestWebsite
                 context.SimpleKeyTests.Add(new SimpleKeyTest { Id = new Guid("042f0213-6e95-4b23-b924-e43bb51c219d") });
                 context.SimpleKeyTests.Add(new SimpleKeyTest { Id = new Guid("51e36eda-12ce-41f7-893e-4a475a2b7116"), RelatedPage = new Tuple<Guid>(new Guid("042f0213-6e95-4b23-b924-e43bb51c219d")), RelatedPage2 = new Guid("042f0213-6e95-4b23-b924-e43bb51c219d"), RelatedPage3 = new Guid("042f0213-6e95-4b23-b924-e43bb51c219d") });
 
+                context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), SecondPrimaryKey = 1 });
+                context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("3fdb600b-e801-4588-9f6d-cf03df8180d8"), SecondPrimaryKey = 2, RelatedObject = new Tuple<Guid, int>(new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), 1) });
+
                 context.Pages.Add(new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801") });
                 context.Pages.Add(new Page { Id = new Guid("c31836f7-830e-44d3-b231-97d48cf44df3"), Name = "esse ea Excepteur in minim dolore" });
                 context.Pages.Add(new Page { Id = new Guid("0c1c40a9-ee61-4071-a1e5-17a2079d882a"), Name = "ut et occaecat ad sit" });

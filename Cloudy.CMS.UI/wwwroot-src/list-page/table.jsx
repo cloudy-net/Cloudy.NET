@@ -17,7 +17,7 @@ export default ({ contentType, columns: initialColumns, filters: listFilters, pa
 
   useEffect(function () {
     (async () => {
-      const response = await fetch(`/Admin/api/list/result?contentType=${contentType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(JSON.stringify(value))}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`);
+      const response = await fetch(`/Admin/api/list/result?contentType=${contentType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`);
 
       if (!response.ok) {
         setError({ response, body: await response.text() });
@@ -55,7 +55,18 @@ export default ({ contentType, columns: initialColumns, filters: listFilters, pa
   return <>
     <div class="list-page-header m-2">
       <SearchBox className="list-page-search" callback={value => setSearch(value)} />
-      {listFilters.map(c => <ListFilter {...c} filter={(key, value) => { setFilters({...filters, [key]: value }) }} />)}
+      {listFilters.map(c => <ListFilter {...c} filter={(key, value) => {
+        if (!value) {
+          var newFilters = {...filters};
+
+          delete newFilters[key];
+
+          setFilters(newFilters);
+          return;
+        }
+        
+        setFilters({ ...filters, [key]: value });
+      }} />)}
     </div>
     <div class="table-responsive">
       <table class="table">

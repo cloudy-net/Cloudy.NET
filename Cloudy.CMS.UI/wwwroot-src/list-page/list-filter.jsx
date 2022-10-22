@@ -1,9 +1,9 @@
 import ListFilterSelectDropdown from "./list-filter-select-dropdown";
 
-export default ({ name, label, select, selectType, filter }) => {
+export default ({ name, label, select, selectType, simpleKey, filter }) => {
     if (select) {
         return <>
-            <ListFilterSelectDropdown label={label} contentType={selectType} onSelect={value => filter(name, value)} simpleKey={false} />
+            <ListFilterSelectDropdown label={label} contentType={selectType} simpleKey={simpleKey} onSelect={value => filter(name, value)} />
         </>;
     }
 };

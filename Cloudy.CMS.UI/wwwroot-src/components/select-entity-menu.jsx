@@ -51,7 +51,7 @@ export default ({ contentType, simpleKey, value, onSelect }) => {
       <SearchBox className="form-control-sm" callback={value => setFilter(value)} />
     </div>
     {data.items.map(item =>
-      <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item); }}>{item.name}</a></div>
+      <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item.reference == value ? null : item); }}>{item.name}</a></div>
     )}
     {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
     <nav>

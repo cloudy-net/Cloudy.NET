@@ -11,8 +11,6 @@
 @inject IReferenceSerializer ReferenceSerializer
 
 @{
-    var controlName = Model.Field.Name;
-
     var selectAttribute = Model.Property.Attributes.OfType<SelectAttribute>().FirstOrDefault();
 
     if (selectAttribute == null)
@@ -27,9 +25,6 @@
         throw new Exception($"The [Select] attribute on property {Model.Field.Name} on type {Model.Field.Type} specifies the type {selectAttribute.Type}, which is not an instance type tracked by Cloudy.");
     }
 
-    var contentType = type.Name;
-    var pageSize = 10;
-
     var value = Model.Value;
 
     if(Model.Field.Type.IsValueType && value != null && value.Equals(Activator.CreateInstance(value.GetType()))){
@@ -38,8 +33,15 @@
 
     value = ReferenceSerializer.Get(value);
 
-    var simpleKey = Model.Field.Type.IsValueType && !Model.Field.Type.IsAssignableTo(typeof(ITuple));
-    var editLink = Url.Page("Edit", new { area = "Admin", ContentType = type.Name });
+    var settings = new
+    {
+        ControlName = Model.Field.Name,
+        ContentType = type.Name,
+        PageSize = 10,
+        value,
+        SimpleKey = !Model.Field.Type.IsAssignableTo(typeof(ITuple)),
+        EditLink = Url.Page("Edit", new { area = "Admin", ContentType = type.Name }),
+    };
 }
 
-<div class="select-one-control" settings="@(JsonSerializer.Serialize(new { controlName, contentType, pageSize, value, simpleKey, editLink }))"></div>
+<div class="select-one-control" settings="@(JsonSerializer.Serialize(settings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }))"></div>

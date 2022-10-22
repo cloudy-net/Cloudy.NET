@@ -12,6 +12,7 @@ namespace Cloudy.CMS.UI.List.Filter
         string ContentType,
         bool Select,
         string SelectType,
+        bool SimpleKey,
         int Order
     );
 }

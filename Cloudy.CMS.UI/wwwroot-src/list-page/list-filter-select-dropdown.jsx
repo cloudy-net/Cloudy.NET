@@ -26,7 +26,7 @@ export default ({ label, contentType, onSelect, simpleKey }) => {
       <label>{label}</label>
     </div>
     <div class={"dropdown-menu" + (open ? " show" : "")}>
-      <SelectEntityMenu contentType={contentType} simpleKey={simpleKey} value={value && value.reference} onSelect={item => { setValue(item); onSelect(item.reference); }} />
+      <SelectEntityMenu contentType={contentType} simpleKey={simpleKey} value={value && value.reference} onSelect={item => { setValue(item); onSelect(item && item.reference); }} />
     </div>
   </div>;
 };

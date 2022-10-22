@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace Cloudy.CMS.UI.List.Filter
 {
@@ -40,7 +41,9 @@ namespace Cloudy.CMS.UI.List.Filter
 
                     var attribute = propertyDefinition.Attributes.OfType<ListFilterAttribute>().First();
 
-                    columns.Add(new ListFilterDescriptor(name, humanizedName, contentType.Name, select, selectType, attribute.Order == -10000 ? order++ : attribute.Order));
+                    var simpleKey = !propertyDefinition.Type.IsAssignableTo(typeof(ITuple));
+
+                    columns.Add(new ListFilterDescriptor(name, humanizedName, contentType.Name, select, selectType, simpleKey, attribute.Order == -10000 ? order++ : attribute.Order));
                 }
 
                 result[contentType.Type] = columns.OrderBy(c => c.Order);

@@ -19,6 +19,7 @@ using Cloudy.CMS.ContentSupport;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Cloudy.CMS.EntitySupport.Reference;
 using System.Security.Cryptography.Xml;
+using System.Runtime.CompilerServices;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -29,20 +30,22 @@ namespace Cloudy.CMS.UI.List
         IContextCreator ContextCreator { get; }
         ICompositeViewEngine CompositeViewEngine { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
+        IReferenceDeserializer ReferenceDeserializer { get; }
 
-        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter)
+        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, IReferenceDeserializer referenceDeserializer)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             ContentTypeProvider = contentTypeProvider;
             ContextCreator = contextCreator;
             CompositeViewEngine = compositeViewEngine;
             PrimaryKeyGetter = primaryKeyGetter;
+            ReferenceDeserializer = referenceDeserializer;
         }
 
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string contentType, string columns, IDictionary<string, string> filters, int page, int pageSize, string search)
+        public async Task<ListResultResponse> ListResult(string contentType, string columns, [FromQuery(Name = "filters")]IDictionary<string, string> filters, int page, int pageSize, string search)
         {
             var columnNames = columns.Split(",");
             var type = ContentTypeProvider.Get(contentType);
@@ -72,9 +75,11 @@ namespace Cloudy.CMS.UI.List
 
                     var propertyDefinition = propertyDefinitions.Where(p => p.Name == filter.Key).FirstOrDefault();
 
-                    //var deserializedReference = ReferenceDeserializer.Get(type.Type, reference, simpleKey);
+                    var simpleKey = !propertyDefinition.Type.IsAssignableTo(typeof(ITuple));
 
-                    values.Add(filter.Value);
+                    var value = ReferenceDeserializer.Get(type.Type, filter.Value, simpleKey);
+
+                    values.Add(simpleKey ? value.First() : Activator.CreateInstance(propertyDefinition.Type, value));
                 }
 
                 dbSet = dbSet.Where(string.Join(" OR ", queries), values.ToArray());
