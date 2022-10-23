@@ -54,17 +54,19 @@ export default ({ contentType, columns: initialColumns, filters: listFilters, pa
 
   return <>
     <div class="list-page-header m-2">
-      <SearchBox className="list-page-search" callback={value => setSearch(value)} />
+      <div class="list-page-search">
+        <SearchBox callback={value => setSearch(value)} floating={listFilters.length} />
+      </div>
       {listFilters.map(c => <ListFilter {...c} filter={(key, value) => {
         if (!value) {
-          var newFilters = {...filters};
+          var newFilters = { ...filters };
 
           delete newFilters[key];
 
           setFilters(newFilters);
           return;
         }
-        
+
         setFilters({ ...filters, [key]: value });
       }} />)}
     </div>

@@ -26,3 +26,12 @@ document.querySelectorAll('.html-control').forEach(element => {
   quill.clipboard.dangerouslyPasteHTML(input.value)
   quill.on('text-change', () => input.value = quill.root.innerHTML);
 });
+document.addEventListener('keydown', event => {
+  if(event.key != 'Enter'){
+    return;
+  }
+
+  if(event.target.tagName == 'A' && !event.target.getAttribute('href') && event.target.getAttribute('tabindex') == '0'){
+    event.target.click();
+  }
+});

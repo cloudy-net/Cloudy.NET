@@ -48,12 +48,16 @@ export default ({ contentType, simpleKey, value, onSelect }) => {
 
   return <>
     <div class="mx-2">
-      <SearchBox className="form-control-sm" callback={value => setFilter(value)} />
+      <SearchBox small={true} callback={value => setFilter(value)} />
     </div>
-    {data.items.map(item =>
-      <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item.reference == value ? null : item); }}>{item.name}</a></div>
-    )}
-    {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
+    <div>
+      {data.items.map(item =>
+        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item.reference == value ? null : item); }} tabIndex="0">{item.name}</a></div>
+      )}
+    </div>
+    <div>
+      {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
+    </div>
     <nav>
       <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>

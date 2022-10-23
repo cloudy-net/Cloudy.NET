@@ -54,7 +54,7 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
 
     return <>
       <div class="mx-2">
-        <SearchBox className="form-control-sm" callback={value => setFilter(value)} />
+        <SearchBox small={true} callback={value => setFilter(value)} />
       </div>
       {data.items.map(item =>
         <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item); setOpen(false); }}>{item.name}</a></div>

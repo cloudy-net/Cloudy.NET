@@ -1,7 +1,7 @@
 import debounce from "lodash.debounce";
 import { useEffect, useMemo, useRef } from "preact/hooks";
 
-export default ({ className, callback }) => {
+export default ({ callback, floating, small }) => {
   const debouncedResults = useMemo(() => {
     return debounce(event => callback(event.target.value), 250);
   }, []);
@@ -22,5 +22,12 @@ export default ({ className, callback }) => {
     ref.current.focus();
   }, []);
 
-  return <input class={"form-control" + (className ? " " + className : "")} type="text" placeholder="Search" onInput={debouncedResults} ref={ref} />;
+  if (floating) {
+    return <div class="form-floating list-page-search">
+      <input class="form-control" type="text" onInput={debouncedResults} ref={ref} />
+      <label>Search</label>
+    </div>;
+  }
+
+  return <input class={"form-control" + (small ? " form-control-sm" : "")} type="text" placeholder="Search" onInput={debouncedResults} ref={ref} />;
 };
