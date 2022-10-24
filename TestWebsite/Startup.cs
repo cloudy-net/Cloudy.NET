@@ -16,13 +16,6 @@ namespace TestWebsite
 {
     public class Startup
     {
-        IConfiguration Configuration { get; }
-
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages().AddApplicationPart(typeof(CloudyUIAssemblyHandle).Assembly);
@@ -30,6 +23,7 @@ namespace TestWebsite
 #pragma warning disable CS0618 // Type or member is obsolete
             services.AddCloudy(cloudy => cloudy
                 .AddAdmin(admin => admin.Unprotect())
+                .AddAzureMediaPicker()
                 .AddContext<PageContext>()
             );
 #pragma warning restore CS0618 // Type or member is obsolete

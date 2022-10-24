@@ -48,6 +48,11 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 string partialName = null;
 
+                if (propertyDefinition.Type == typeof(string))
+                {
+                    partialName = "text";
+                }
+
                 if (propertyDefinition.Attributes.Any(a => a is SelectAttribute))
                 {
                     partialName = "selectone";
@@ -56,11 +61,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 if (propertyDefinition.Attributes.Any(a => a is MediaPickerAttribute))
                 {
                     partialName = "mediapicker";
-                }
-
-                if (propertyDefinition.Type == typeof(string))
-                {
-                    partialName = "text";
                 }
 
                 if (propertyDefinition.Enum)
