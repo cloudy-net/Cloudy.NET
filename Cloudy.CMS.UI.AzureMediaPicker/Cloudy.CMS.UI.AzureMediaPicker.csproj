@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Authors>Björn Ali Göransson</Authors>
+		<Description>Cloudy CMS Azure Media Picker</Description>
+		<Version>1.62.37</Version>
+		<Copyright>2018 Björn Ali Göransson</Copyright>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/cloudy-net/Cloudy.CMS.git</RepositoryUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<NoWarn>CS1998</NoWarn>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<IncludeContentInPack>false</IncludeContentInPack>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DefaultItemExcludes>$(DefaultItemExcludes);wwwroot\.gitignore</DefaultItemExcludes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Cloudy.CMS.UI\Cloudy.CMS.UI.csproj" />
+	</ItemGroup>
+</Project>
