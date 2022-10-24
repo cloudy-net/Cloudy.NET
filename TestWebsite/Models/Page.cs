@@ -26,7 +26,7 @@ namespace TestWebsite.Models
         [ListColumn]
         [Select(typeof(Page))]
         public Guid? RelatedPageId { get; set; }
-        [MediaPicker]
+        [MediaPicker("azure")]
         public string MainImage { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }

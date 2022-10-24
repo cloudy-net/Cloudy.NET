@@ -9,5 +9,11 @@ namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
     [AttributeUsage(AttributeTargets.Property)]
     public class MediaPickerAttribute : Attribute
     {
+        public string Provider { get; }
+
+        public MediaPickerAttribute(string provider = null)
+        {
+            Provider = provider;
+        }
     }
 }

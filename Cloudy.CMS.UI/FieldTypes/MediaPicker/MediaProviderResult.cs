@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
 {
-    public interface IMediaProvider
-    {
-        Task<MediaProviderResult> List(int pageSize, int page);
-    }
+    public record MediaProviderResult(
+        IEnumerable<MediaProviderResultItem> Items,
+        string ContinuationToken,
+        int? TotalCount
+    );
 }
