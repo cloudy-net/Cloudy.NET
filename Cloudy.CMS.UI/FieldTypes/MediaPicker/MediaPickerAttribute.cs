@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
 {
-    public class MediaPickerAttribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public class MediaPickerAttribute : Attribute
     {
     }
 }

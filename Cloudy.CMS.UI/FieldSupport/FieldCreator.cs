@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.Naming;
+using Cloudy.CMS.UI.FieldTypes.MediaPicker;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,11 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                 if (propertyDefinition.Attributes.Any(a => a is SelectAttribute))
                 {
                     partialName = "selectone";
+                }
+
+                if (propertyDefinition.Attributes.Any(a => a is MediaPickerAttribute))
+                {
+                    partialName = "mediapicker";
                 }
 
                 if (propertyDefinition.Type == typeof(string))
