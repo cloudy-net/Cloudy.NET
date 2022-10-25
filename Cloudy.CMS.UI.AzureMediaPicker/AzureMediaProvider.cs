@@ -35,7 +35,7 @@ namespace Cloudy.CMS.UI.AzureMediaPicker
                         container.GetBlobClient(item.Name).Uri.ToString()
                     ));
                 }
-                return new MediaProviderResult(items, page.ContinuationToken, null);
+                return new MediaProviderResult(items, !string.IsNullOrEmpty(blobPage.ContinuationToken) ? blobPage.ContinuationToken : null, null);
             }
 
             return null;

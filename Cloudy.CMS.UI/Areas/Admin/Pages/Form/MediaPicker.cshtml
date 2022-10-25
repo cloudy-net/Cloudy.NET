@@ -7,6 +7,8 @@
 @{
     var settings = new {
         Provider = Model.Property.Attributes.OfType<MediaPickerAttribute>().First().Provider,
+        ControlName = Model.Field.Name,
+        InitialValue = Model.Value,
     };
 }
 

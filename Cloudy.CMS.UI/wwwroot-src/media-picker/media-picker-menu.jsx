@@ -48,7 +48,7 @@ export default ({ provider, value, onSelect }) => {
   return <>
     <div>
       {data.items.map(item =>
-        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item.reference == value ? null : item); }} tabIndex="0">{item.name}</a></div>
+        <div><a class={"dropdown-item" + (item.url == value ? " active" : "")} onClick={() => { onSelect(item.url == value ? null : item.url); }} tabIndex="0">{item.name}</a></div>
       )}
     </div>
     <div>
