@@ -19,7 +19,7 @@ export default ({ controlName, provider, initialValue }) => {
           Add
         </button>
         <div class={"dropdown-menu" + (open ? " show" : "")}>
-          <MediaPickerMenu provider={provider} value={value} onSelect={newValue => { setValue(newValue != value ? newValue : null); setOpen(false); }} />
+          {open && <MediaPickerMenu provider={provider} value={value} onSelect={newValue => { setValue(newValue != value ? newValue : null); setOpen(false); }} />}
         </div>
       </div>
     </ClickOutsideDetector>
