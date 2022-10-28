@@ -8,6 +8,6 @@ namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
 {
     public interface IMediaProvider
     {
-        Task<MediaProviderResult> List(int pageSize, int page);
+        Task<MediaProviderResult> List(string path);
     }
 }

@@ -21,24 +21,36 @@ namespace Cloudy.CMS.UI.AzureMediaPicker
             BlobServiceClient = new BlobServiceClient(configuration.GetConnectionString("azuremedia"));
         }
 
-        public async Task<MediaProviderResult> List(int pageSize, int page)
+        public async Task<MediaProviderResult> List(string path)
         {
             var container = BlobServiceClient.GetBlobContainerClient("media");
 
-            await foreach (var blobPage in container.GetBlobsAsync().AsPages(default, pageSize))
+            var result = new List<MediaItem>();
+
+            await foreach (var blobPage in container.GetBlobsByHierarchyAsync(prefix: path ?? string.Empty, delimiter: "/").AsPages())
             {
-                var items = new List<MediaProviderResultItem>();
-                foreach (BlobItem item in blobPage.Values)
+                foreach(var item in blobPage.Values)
                 {
-                    items.Add(new MediaProviderResultItem(
-                        item.Name,
-                        container.GetBlobClient(item.Name).Uri.ToString()
-                    ));
+                    if (item.IsPrefix)
+                    {
+                        result.Add(new MediaItem(
+                            item.Prefix.TrimEnd('/').Split('/').Last(),
+                            "folder",
+                            item.Prefix
+                        ));
+                    }
+                    else
+                    {
+                        result.Add(new MediaItem(
+                            item.Blob.Name.Split('/').Last(),
+                            "file",
+                            container.GetBlobClient(item.Blob.Name).Uri.ToString()
+                        ));
+                    }
                 }
-                return new MediaProviderResult(items, !string.IsNullOrEmpty(blobPage.ContinuationToken) ? blobPage.ContinuationToken : null, null);
             }
 
-            return null;
+            return new MediaProviderResult(result);
         }
     }
 }

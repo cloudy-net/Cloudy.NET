@@ -19,9 +19,9 @@ namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/controls/mediapicker/list")]
-        public async Task<IActionResult> Test(string provider, int pageSize, int page)
+        public async Task<IActionResult> Test(string provider, string path)
         {
-            return Json(await MediaProvider.List(pageSize, page).ConfigureAwait(false));
+            return Json(await MediaProvider.List(path).ConfigureAwait(false));
         }
     }
 }
