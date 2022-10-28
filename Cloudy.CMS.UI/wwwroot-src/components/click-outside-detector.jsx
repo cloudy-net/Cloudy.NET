@@ -8,6 +8,9 @@ export default ({ onClickOutside, children }) => {
         if (!ref.current) {
           return;
         }
+        if (!event.target.isConnected) {
+          return;
+        }
         if (ref.current == event.target || ref.current.contains(event.target)) {
           return;
         }
