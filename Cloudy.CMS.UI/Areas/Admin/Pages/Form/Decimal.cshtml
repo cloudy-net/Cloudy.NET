@@ -1,0 +1,4 @@
+﻿@using Cloudy.CMS.UI.FormSupport
+@model FieldViewModel
+
+<input type="text" pattern="[0-9]+(.[0-9]+?)?" placeholder="@(!Model.Property.Nullable ? "0.0" : null)" class="form-control" id="field-@Model.Field.Name" name="@Model.Field.Name" value="@Model.Value">

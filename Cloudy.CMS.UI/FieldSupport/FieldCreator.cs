@@ -53,6 +53,31 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     partialName = "text";
                 }
 
+                if (propertyDefinition.Type == typeof(int))
+                {
+                    partialName = "number";
+                }
+
+                if (propertyDefinition.Type == typeof(double))
+                {
+                    partialName = "decimal";
+                }
+
+                if (propertyDefinition.Type == typeof(DateTime) || propertyDefinition.Type == typeof(DateTimeOffset))
+                {
+                    partialName = "datetime";
+                }
+
+                if (propertyDefinition.Type == typeof(TimeSpan) || propertyDefinition.Type == typeof(TimeOnly))
+                {
+                    partialName = "time";
+                }
+
+                if (propertyDefinition.Type == typeof(DateOnly))
+                {
+                    partialName = "date";
+                }
+
                 if (propertyDefinition.Attributes.Any(a => a is SelectAttribute))
                 {
                     partialName = "selectone";

@@ -1,0 +1,29 @@
+﻿@using Cloudy.CMS.UI.FormSupport
+@model FieldViewModel
+
+@{
+    string value = null;
+
+    if (Model.Value is DateTime dateTime)
+    {
+        value = dateTime.ToString("HH:mm");
+    }
+
+    if (Model.Value is DateTimeOffset dateTimeOffset)
+    {
+        value = dateTimeOffset.ToString("HH:mm");
+    }
+
+    if (Model.Value is TimeOnly timeOnly)
+    {
+        value = timeOnly.ToString("HH:mm");
+    }
+
+    if (Model.Value is TimeSpan timeSpan)
+    {
+        value = timeSpan.ToString("HH:mm");
+    }
+
+}
+
+<input type="time" class="form-control" id="field-@Model.Field.Name" name="@Model.Field.Name" value="@value">

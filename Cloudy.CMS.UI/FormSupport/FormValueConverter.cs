@@ -36,6 +36,36 @@ namespace Cloudy.CMS.UI.FormSupport
                 return int.Parse(value);
             }
 
+            if (propertyDefinition.Type == typeof(double))
+            {
+                return double.Parse(value);
+            }
+
+            if (propertyDefinition.Type == typeof(DateTime))
+            {
+                return DateTime.Parse(value);
+            }
+
+            if (propertyDefinition.Type == typeof(DateTimeOffset))
+            {
+                return DateTimeOffset.Parse(value);
+            }
+
+            if (propertyDefinition.Type == typeof(TimeSpan))
+            {
+                return TimeSpan.Parse(value);
+            }
+
+            if (propertyDefinition.Type == typeof(DateOnly))
+            {
+                return DateOnly.Parse(value);
+            }
+
+            if (propertyDefinition.Type == typeof(TimeOnly))
+            {
+                return TimeOnly.Parse(value);
+            }
+
             if (propertyDefinition.Enum)
             {
                 return Enum.Parse(propertyDefinition.Type, value);
