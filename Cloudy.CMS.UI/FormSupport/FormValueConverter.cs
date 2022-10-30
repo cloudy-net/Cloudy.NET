@@ -26,6 +26,11 @@ namespace Cloudy.CMS.UI.FormSupport
                 return value;
             }
 
+            if (propertyDefinition.Type == typeof(bool))
+            {
+                return value == "true";
+            }
+
             if (propertyDefinition.Type == typeof(Guid))
             {
                 return Guid.Parse(value);

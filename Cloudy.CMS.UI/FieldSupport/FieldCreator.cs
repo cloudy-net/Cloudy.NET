@@ -53,6 +53,11 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     partialName = "text";
                 }
 
+                if (propertyDefinition.Type == typeof(bool))
+                {
+                    partialName = "checkbox";
+                }
+
                 if (propertyDefinition.Type == typeof(int))
                 {
                     partialName = "number";
