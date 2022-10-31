@@ -13,13 +13,13 @@ namespace Cloudy.CMS.ContentTypeSupport.Name
         {
             var result = new List<ContentTypeName>();
 
-            foreach (var type in ContentTypeProvider.GetAll().Select(t => t.Type))
+            foreach (var type in ContentTypeProvider.GetAll())
             {
-                var name = type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(type.Name);
+                var name = type.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(type.Name);
                 var pluralName = Pluralizer.Pluralize(name);
 
                 result.Add(new ContentTypeName(
-                    type,
+                    type.Type,
                     name,
                     name.Substring(0, 1).ToLower() + name.Substring(1),
                     pluralName,
