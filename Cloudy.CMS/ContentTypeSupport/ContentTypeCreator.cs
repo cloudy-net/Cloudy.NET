@@ -21,8 +21,15 @@ namespace Cloudy.CMS.ContentTypeSupport
                     continue;
                 }
 
+                var name = type.Name;
+
+                if (type.IsGenericType)
+                {
+                    name = $"{name.Split('`')[0]}<{string.Join(",", type.GetGenericArguments().Select(t => t.Name))}>";
+                }
+
                 result.Add(new ContentTypeDescriptor(
-                    type.Name,
+                    name,
                     type,
                     type.IsAssignableTo(typeof(INameable)),
                     type.IsAssignableTo(typeof(IImageable)),
