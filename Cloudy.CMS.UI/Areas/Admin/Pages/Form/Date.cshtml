@@ -1,25 +1,31 @@
 ﻿@using Cloudy.CMS.UI.FormSupport
 @using System.Text.Json
+@using System.Globalization
 @model FieldViewModel
 
 @{
     string value = null;
+    string backendValue = null;
 
     if(Model.Value is DateTime dateTime){
         value = dateTime.ToString("yyyy-MM-dd");
+        backendValue = dateTime.ToString("o", CultureInfo.InvariantCulture);
     }
 
     if(Model.Value is DateTimeOffset dateTimeOffset){
         value = dateTimeOffset.ToString("yyyy-MM-dd");
+        backendValue = dateTimeOffset.ToString("o", CultureInfo.InvariantCulture);
     }
 
     if(Model.Value is DateOnly dateOnly){
         value = dateOnly.ToString("yyyy-MM-dd");
+        backendValue = dateOnly.ToString("o", CultureInfo.InvariantCulture);
     }
 
     if (Model.Value is TimeSpan timeSpan)
     {
         value = timeSpan.ToString("yyyy-MM-dd");
+        backendValue = timeSpan.ToString("o", CultureInfo.InvariantCulture);
     }
 
     var settings = new
@@ -28,7 +34,7 @@
         ControlId = $"field-{Model.Field.Name}",
         Type = "date",
         InitialValue = value,
-        InitialBackendValue = Model.Value.ToString(),
+        InitialBackendValue = backendValue,
     };
 }
 
