@@ -22,7 +22,7 @@ namespace TestWebsite
             services.AddMvc();
 #pragma warning disable CS0618 // Type or member is obsolete
             services.AddCloudy(cloudy => cloudy
-                .AddAdmin()
+                .AddAdmin(admin => admin.Unprotect())
                 .AddAzureMediaPicker()
                 .AddContext<PageContext>()
             );
