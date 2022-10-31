@@ -30,7 +30,17 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 var propertyDefinition = propertyDefinitions[field.Name];
 
-                var value = FormValueConverter.Convert(form[field.Name].FirstOrDefault(), propertyDefinition);
+                var formValue = form[field.Name].FirstOrDefault();
+                object value;
+
+                try
+                {
+                    value = FormValueConverter.Convert(formValue, propertyDefinition);
+                }
+                catch (Exception exception)
+                {
+                    throw new Exception($"Could not convert value \"{formValue}\" to {propertyDefinition.Type} on {contentType.Name} property {propertyDefinition.Name}", exception);
+                }
 
                 propertyDefinition.Setter(instance, value);
             }

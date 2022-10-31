@@ -3,6 +3,7 @@ using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Mime;
 using System.Runtime.CompilerServices;
@@ -38,12 +39,12 @@ namespace Cloudy.CMS.UI.FormSupport
 
             if (propertyDefinition.Type == typeof(int))
             {
-                return int.Parse(value);
+                return int.Parse(value, CultureInfo.InvariantCulture);
             }
 
             if (propertyDefinition.Type == typeof(double))
             {
-                return double.Parse(value);
+                return double.Parse(value, CultureInfo.InvariantCulture);
             }
 
             if (propertyDefinition.Type == typeof(DateTime))

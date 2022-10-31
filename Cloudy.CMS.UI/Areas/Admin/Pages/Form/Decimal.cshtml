@@ -1,4 +1,24 @@
 ﻿@using Cloudy.CMS.UI.FormSupport
+@using System.Globalization
 @model FieldViewModel
 
-<input type="text" pattern="[0-9]+(.[0-9]+?)?" placeholder="@(!Model.Property.Nullable ? "0.0" : null)" class="form-control" id="field-@Model.Field.Name" name="@Model.Field.Name" value="@Model.Value">
+@{
+    var value = Model.Value;
+
+    if (value is double)
+    {
+        value = ((double)value).ToString(CultureInfo.InvariantCulture);
+    }
+
+    if (value is double?)
+    {
+        value = ((double?)value)?.ToString(CultureInfo.InvariantCulture);
+    }
+
+    if(value as string == "0")
+    {
+        value = "0.0";
+    }
+}
+
+<input type="text" pattern="[0-9]+(.[0-9]+?)?" placeholder="@(!Model.Property.Nullable ? "0.0" : null)" class="form-control" id="field-@Model.Field.Name" name="@Model.Field.Name" value="@value">

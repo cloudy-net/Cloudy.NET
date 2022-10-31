@@ -5,6 +5,7 @@ import Table from './list-page/table'
 import SelectOne from './select-one/select-one'
 import EnumDropdown from './enum-dropdown/enum-dropdown';
 import MediaPicker from './media-picker/media-picker';
+import DatePicker from './date-picker/date-picker';
 
 window.viteIsLoaded = true;
 
@@ -44,3 +45,7 @@ document.addEventListener('keydown', event => {
     event.target.click();
   }
 });
+
+document.querySelectorAll('.date-picker-control').forEach(element =>
+  render(<DatePicker {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
+);

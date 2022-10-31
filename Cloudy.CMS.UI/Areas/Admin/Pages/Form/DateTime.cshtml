@@ -1,4 +1,5 @@
 ﻿@using Cloudy.CMS.UI.FormSupport
+@using System.Text.Json
 @model FieldViewModel
 
 @{
@@ -19,6 +20,15 @@
         value = timeSpan.ToString("yyyy-MM-ddTHH:mm");
     }
 
+
+    var settings = new
+    {
+        ControlName = Model.Field.Name,
+        ControlId = $"field-{Model.Field.Name}",
+        Type = "datetime-local",
+        InitialValue = value,
+        InitialBackendValue = Model.Value.ToString(),
+    };
 }
 
-<input type="datetime-local" class="form-control" id="field-@Model.Field.Name" name="@Model.Field.Name" value="@value">
+<div class="date-picker-control" settings="@JsonSerializer.Serialize(settings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })"></div>
