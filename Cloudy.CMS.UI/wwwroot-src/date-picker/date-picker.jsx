@@ -1,5 +1,4 @@
-import _ from "lodash";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 
 export default ({ controlName, controlId, type, initialValue, initialBackendValue }) => {
     const [value, setValue] = useState(initialValue);
