@@ -34,7 +34,7 @@ Create a new, empty ASP.NET Core web application.
 
 Install Cloudy.CMS and Cloudy.CMS.UI from NuGet.
 
-```
+```C#
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages().AddApplicationPart(typeof(CloudyUIAssemblyHandle).Assembly);
@@ -71,11 +71,17 @@ app.Run();
 
 # Authentication
 
-The UI works well with external login providers. Just follow the official guides and don't forget to remove `Unprotect()` in UseCloudyAdmin!
+The UI works well with external login providers and ASP.NET Identity. Remove `Unprotect()` in UseCloudyAdmin, and define the `adminarea` authorization policy to something appropriate.
+
+The following example allows anyone having logged in access to the admin area:
+
+```C#
+configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("adminarea", builder => builder.RequireAuthenticatedUser()));
+```
 
 # Database
 
-Cloudy.CMS supports any database supported by EF Core: Inmemory, SQLite, SQL Server, CosmosDB ... even `/dev/null` (for legal reasons, that last one was a joke)
+Cloudy.CMS supports any database supported by EF Core: Inmemory, SQLite, SQL Server, CosmosDB ...
 
 # Building the repository
 

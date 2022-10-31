@@ -32,10 +32,6 @@ namespace Microsoft.AspNetCore.Builder
             {
                 configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("adminarea", builder => builder.RequireAssertion(a => true)));
             }
-            else
-            {
-                configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("adminarea", builder => builder.RequireAuthenticatedUser()));
-            }
 
             return configurator;
         }
