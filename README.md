@@ -37,8 +37,6 @@ Install Cloudy.CMS and Cloudy.CMS.UI from NuGet.
 ```C#
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorPages().AddApplicationPart(typeof(CloudyUIAssemblyHandle).Assembly);
-builder.Services.AddMvc();
 builder.Services.AddCloudy(cloudy => cloudy
     .AddAdmin(admin => admin.Unprotect())   // NOTE: Admin UI will be publicly available!
     .AddContext<MyContext>()                // Adds EF Core context with your content types
