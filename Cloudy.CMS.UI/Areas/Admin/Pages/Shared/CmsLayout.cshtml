@@ -60,26 +60,46 @@
                 <button class="btn btn-primary" onclick="location.reload();">Reload page</button>
             </div>
             <script>
-                window.addEventListener('load', () => {
-                    if (!window.viteIsLoaded) {
-                        document.querySelector('.vite-alert').style = '';
+            window.addEventListener('load', () => {
+                if (!window.viteIsLoaded) {
+                    document.querySelector('.vite-alert').style = '';
 
-                        const checkError = () => {
-                        if (document.querySelector("vite-error-overlay")) {
-                                document.querySelector('.vite-alert').remove();
-                                document.querySelector('.vite-loading').remove();
+                        
+                    const checkStarted = async () => {
+                        let response = null;
 
-                                return;
-                            }
+                        try {
+                            response = await fetch("@viteBaseUri");
+                        } catch {
+                        }
 
-                            setTimeout(checkError, 100);
-                        };
+                        if (response && response.ok) {
+                            location.reload();
 
-                        checkError();
-                    } else {
-                        document.querySelector('.vite-loading').remove();
-                    }
-                });
+                            return;
+                        }
+
+                        setTimeout(checkStarted, 3000);
+                    };
+
+                    checkStarted();
+
+                    const checkError = () => {
+                    if (document.querySelector("vite-error-overlay")) {
+                            document.querySelector('.vite-alert').remove();
+                            document.querySelector('.vite-loading').remove();
+
+                            return;
+                        }
+
+                        setTimeout(checkError, 100);
+                    };
+
+                    checkError();
+                } else {
+                    document.querySelector('.vite-loading').remove();
+                }
+            });
             </script>
         }
         @RenderBody()
