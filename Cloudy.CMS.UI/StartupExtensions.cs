@@ -22,7 +22,9 @@ namespace Microsoft.AspNetCore.Builder
 
         public static CloudyConfigurator AddAdmin(this CloudyConfigurator configurator, Action<CloudyAdminConfigurator> admin)
         {
-            configurator.AddComponent<CloudyUIAssemblyHandle>();
+            configurator.AddComponent(Assembly.GetExecutingAssembly());
+
+            configurator.Services.AddMvc().AddApplicationPart(Assembly.GetExecutingAssembly());
 
             var options = new CloudyAdminOptions();
             admin(new CloudyAdminConfigurator(options));

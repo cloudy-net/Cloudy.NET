@@ -21,7 +21,12 @@ namespace Cloudy.CMS
 
         public CloudyConfigurator AddComponent<T>() where T : class
         {
-            Options.Assemblies.Add(typeof(T).Assembly);
+            return AddComponent(typeof(T).Assembly);
+        }
+
+        public CloudyConfigurator AddComponent(Assembly assembly)
+        {
+            Options.Assemblies.Add(assembly);
 
             return this;
         }

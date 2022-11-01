@@ -18,8 +18,7 @@ namespace TestWebsite
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages().AddApplicationPart(typeof(CloudyUIAssemblyHandle).Assembly);
-            services.AddMvc();
+            ;
 #pragma warning disable CS0618 // Type or member is obsolete
             services.AddCloudy(cloudy => cloudy
                 .AddAdmin(admin => admin.Unprotect())
