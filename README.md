@@ -48,7 +48,7 @@ services.AddDbContext<MyContext>(options => options
 
 var app = builder.Build();
 
-app.UseStaticFiles(new StaticFileOptions().MustValidate()); // .MustValidate() removes the need for manually clearing browser cache when updating frontend assets
+app.UseStaticFiles(new StaticFileOptions().MustValidate()); // This removes the need for manually clearing browser cache when updating frontend assets
 
 app.UseRouting();
 app.UseAuthentication();
