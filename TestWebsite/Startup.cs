@@ -74,10 +74,7 @@ namespace TestWebsite
                 context.SaveChanges();
             }
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                OnPrepareResponse = ctx => ctx.Context.Response.Headers.Append("Cache-Control", $"no-cache")
-            });
+            app.UseStaticFiles(new StaticFileOptions().MustValidate());
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

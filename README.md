@@ -48,11 +48,7 @@ services.AddDbContext<MyContext>(options => options
 
 var app = builder.Build();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    // Not strictly necessary, but good - browsers will cache but revalidate on ETag every time.
-    OnPrepareResponse = ctx => ctx.Context.Response.Headers.Append("Cache-Control", $"no-cache")
-});
+app.UseStaticFiles(new StaticFileOptions().MustValidate()); // .MustValidate() removes the need for manually clearing browser cache when updating frontend assets
 
 app.UseRouting();
 app.UseAuthentication();
