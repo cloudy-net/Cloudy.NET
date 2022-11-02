@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import SearchBox from "../components/search-box";
 
-export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpleKey }) => {
+export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpleKey, imageable }) => {
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -53,11 +53,11 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
     }
 
     return <>
-      <div class="mx-2">
+      <div class="mx-2 mb-2">
         <SearchBox small={true} callback={value => setFilter(value)} />
       </div>
       {data.items.map(item =>
-        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item); setOpen(false); }}>{item.name}</a></div>
+        <div class="dropdown-item-outer">{imageable && <div class="dropdown-image-outer">{item.image && <img class="dropdown-image" src={item.image} />}</div>}<a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item); setOpen(false); }}>{item.name}</a></div>
       )}
       {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
       <nav>

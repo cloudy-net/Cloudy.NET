@@ -12,4 +12,4 @@
     };
 }
 
-<div class="media-picker-control" settings="@(JsonSerializer.Serialize(settings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }))"></div>
+<div class="media-picker-control" settings="@(JsonSerializer.Serialize(settings, new JsonSerializerOptions().CloudyDefault()))"></div>

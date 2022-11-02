@@ -33,7 +33,7 @@
 <div class="container">
     <div class="card">
         <div class="card-body" style="min-height: 500px;">
-            <div class="list-page-table" settings="@JsonSerializer.Serialize(settings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })">
+            <div class="list-page-table" settings="@JsonSerializer.Serialize(settings, new JsonSerializerOptions().CloudyDefault())">
             </div>
         </div>
     </div>

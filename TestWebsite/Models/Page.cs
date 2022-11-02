@@ -12,9 +12,8 @@ using System.Linq;
 namespace TestWebsite.Models
 {
     [Display(Description = "This is a sample class to show off most bells and whistles of the CMS toolkit.")]
-    public class Page : INameable, IRoutable
+    public class Page : INameable, IRoutable, IImageable
     {
-        [ListColumn]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
         [ListColumn(Order = 0)]
@@ -26,8 +25,9 @@ namespace TestWebsite.Models
         [ListColumn]
         [Select(typeof(Page))]
         public Guid? RelatedPageId { get; set; }
+        [ListColumn(Order = -100)]
         [MediaPicker("azure")]
-        public string MainImage { get; set; }
+        public string Image { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
         [ListFilter]

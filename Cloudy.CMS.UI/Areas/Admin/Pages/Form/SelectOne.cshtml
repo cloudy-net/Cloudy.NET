@@ -41,7 +41,8 @@
         value,
         SimpleKey = !Model.Field.Type.IsAssignableTo(typeof(ITuple)),
         EditLink = Url.Page("Edit", new { area = "Admin", ContentType = type.Name }),
+        Imageable = type.IsImageable,
     };
 }
 
-<div class="select-one-control" settings="@(JsonSerializer.Serialize(settings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }))"></div>
+<div class="select-one-control" settings="@(JsonSerializer.Serialize(settings, new JsonSerializerOptions().CloudyDefault()))"></div>

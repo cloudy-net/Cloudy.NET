@@ -35,9 +35,30 @@ a {
     width: 300px;
 }
 
+.dropdown-item-outer {
+    display: flex;
+}
+
+.dropdown-image-outer {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.dropdown-image {
+    display: block;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+}
+
 .dropdown-item {
     text-overflow: ellipsis;
     overflow: hidden;
+
+    .dropdown-image-outer + & {
+        padding-left: 10px;
+    }
 }
 
 
@@ -76,6 +97,16 @@ a {
     margin-right: 0.2rem;
 }
 
+.list-image {
+    display: block;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin: -0.5rem;
+}
+
+
+
 /* HTML CONTROL */
 
 .ql-toolbar.ql-snow {
@@ -86,6 +117,48 @@ a {
     border-bottom-left-radius: .375rem;
     border-bottom-right-radius: .375rem;
 }
+
+
+
+/* SELECT ONE */
+
+.select-one.imageable {
+    min-height: 50px;
+}
+
+.select-one .input-group-text {
+    padding: 5px;
+}
+
+.select-one .form-control {
+    display: flex;
+    align-items: center;
+}
+
+.select-one .btn {
+    display: flex;
+    align-items: center;
+}
+
+.select-one-preview-image {
+    display: block;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+
+
+/* MEDIA PICKER */
+
+.media-picker-preview-image {
+    display: block;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+
 
 /* INFORMATION MISSING */
 

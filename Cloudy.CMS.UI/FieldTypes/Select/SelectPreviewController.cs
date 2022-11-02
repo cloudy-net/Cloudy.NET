@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cloudy.CMS.ContentSupport;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
@@ -15,15 +18,13 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContextCreator ContextCreator { get; }
-        IPrimaryKeyGetter PrimaryKeyGetter { get; }
         INameGetter NameGetter { get; }
         IReferenceDeserializer ReferenceDeserializer { get; }
 
-        public SelectPreviewController(IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, INameGetter nameGetter, IReferenceDeserializer referenceDeserializer)
+        public SelectPreviewController(IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, INameGetter nameGetter, IReferenceDeserializer referenceDeserializer)
         {
             ContentTypeProvider = contentTypeProvider;
             ContextCreator = contextCreator;
-            PrimaryKeyGetter = primaryKeyGetter;
             NameGetter = nameGetter;
             ReferenceDeserializer = referenceDeserializer;
         }
@@ -48,13 +49,15 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 
             return Json(new PreviewResult(
                 NameGetter.GetName(instance),
-                deserializedReference
-            ));
+                deserializedReference,
+                (instance as IImageable)?.Image
+            ), new JsonSerializerOptions().CloudyDefault());
         }
 
         public record PreviewResult(
             string Name,
-            object Reference
+            object Reference,
+            string Image
         );
     }
 }

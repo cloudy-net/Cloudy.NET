@@ -10,7 +10,7 @@ export default ({ controlName, provider, initialValue }) => {
     <input type="hidden" class="form-control" name={controlName} value={value} />
 
     {value && <div class="mb-2">
-      <img src={value} style="width: 200px; max-height: 200px;" />
+      <img class="media-picker-preview-image" src={value} />
     </div>}
 
     <ClickOutsideDetector onClickOutside={() => setOpen(false)}>

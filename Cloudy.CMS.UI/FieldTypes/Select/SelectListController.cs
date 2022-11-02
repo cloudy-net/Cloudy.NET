@@ -13,6 +13,7 @@ using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
@@ -36,7 +37,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/controls/select/list")]
-        public async Task<SelectResult> List(string contentType, string filter, int page, int pageSize, bool simpleKey)
+        public async Task<IActionResult> List(string contentType, string filter, int page, int pageSize, bool simpleKey)
         {
             var type = ContentTypeProvider.Get(contentType);
 
@@ -65,19 +66,21 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
                 var keys = PrimaryKeyGetter.Get(instance);
                 result.Add(new SelectResultItem(
                     NameGetter.GetName(instance),
-                    JsonSerializer.SerializeToElement(simpleKey ? keys.First() : keys)
+                    JsonSerializer.SerializeToElement(simpleKey ? keys.First() : keys),
+                    (instance as IImageable)?.Image
                 ));
             }
 
-            return new SelectResult(
+            return Json(new SelectResult(
                 result,
                 totalCount
-            );
+            ), new JsonSerializerOptions().CloudyDefault());
         }
 
         public record SelectResultItem(
             string Name,
-            JsonElement Reference
+            JsonElement Reference,
+            string Image
         );
 
         public record SelectResult(

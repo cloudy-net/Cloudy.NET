@@ -36,4 +36,4 @@
     };
 }
 
-<div class="date-picker-control" settings="@JsonSerializer.Serialize(settings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })"></div>
+<div class="date-picker-control" settings="@JsonSerializer.Serialize(settings, new JsonSerializerOptions().CloudyDefault())"></div>

@@ -43,15 +43,15 @@ namespace Cloudy.CMS.UI.List
                     var order = 10000;
                     foreach (var propertyDefinition in properties)
                     {
+                        var attribute = propertyDefinition.Attributes.OfType<ListColumnAttribute>().First();
+
                         var name = propertyDefinition.Name;
-                        var humanizedName = Humanizer.Humanize(name);
+                        var humanizedName = attribute.Name ?? Humanizer.Humanize(name);
 
                         if (propertyDefinition.Attributes.OfType<SelectAttribute>().Any() && humanizedName.EndsWith(" id"))
                         {
                             humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                         }
-
-                        var attribute = propertyDefinition.Attributes.OfType<ListColumnAttribute>().First();
 
                         columns.Add(new ListColumnDescriptor(name, humanizedName, attribute.Order == -10000 ? order++ : attribute.Order));
                     }

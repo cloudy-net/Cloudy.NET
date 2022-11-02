@@ -61,7 +61,6 @@ namespace Cloudy.CMS.UI.List
                 dbSet = dbSet.Where(string.Join(" OR ", selectedPropertyDefinitions.Where(p => p.Type == typeof(string)).Select(p => $"{p.Name}.Contains(@0, \"{StringComparison.InvariantCultureIgnoreCase}\")")), search);
             }
 
-
             if (filters.Any())
             {
                 var i = 0;
@@ -97,16 +96,28 @@ namespace Cloudy.CMS.UI.List
 
                 foreach(var propertyDefinition in selectedPropertyDefinitions)
                 {
-                    var partialViewName = $"Columns/Text";
+                    var partialViewName = $"Columns/text";
 
                     if (propertyDefinition.Attributes.OfType<SelectAttribute>().Any())
                     {
-                        partialViewName = "Columns/Select";
+                        partialViewName = "Columns/select";
                     }
 
-                    if(type.Type.IsAssignableTo(typeof(INameable)) && propertyDefinition.Name == nameof(INameable.Name))
+                    if (type.Type.IsAssignableTo(typeof(INameable)) && propertyDefinition.Name == nameof(INameable.Name))
                     {
-                        partialViewName = "Columns/Name";
+                        partialViewName = "Columns/name";
+                    }
+
+                    if (type.Type.IsAssignableTo(typeof(IImageable)) && propertyDefinition.Name == nameof(IImageable.Image))
+                    {
+                        partialViewName = "Columns/image";
+                    }
+
+                    var uiHint = propertyDefinition.Attributes.OfType<ListColumnAttribute>().FirstOrDefault()?.UIHint;
+
+                    if(uiHint != null)
+                    {
+                        partialViewName = $"Columns/{uiHint}";
                     }
 
                     var viewResult = CompositeViewEngine.FindView(ControllerContext, partialViewName, false);

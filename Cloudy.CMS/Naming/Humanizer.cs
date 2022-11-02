@@ -10,6 +10,11 @@ namespace Cloudy.CMS.Naming
     {
         public string Humanize(string value)
         {
+            if(value == string.Empty)
+            {
+                return value;
+            }
+
             value = value[..1].ToUpper() + value[1..]; // uppercase first letter
             value = value.Replace("-", " "); // split words on hyphen/dash (kebab case)
             value = value.Replace("_", " "); // split words on underscore (snake case)
