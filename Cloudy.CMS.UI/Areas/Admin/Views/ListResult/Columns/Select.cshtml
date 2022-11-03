@@ -1,4 +1,5 @@
-﻿@using Cloudy.CMS.ContextSupport
+﻿@using Cloudy.CMS.ContentSupport
+@using Cloudy.CMS.ContextSupport
 @using Cloudy.CMS.ContentTypeSupport
 @using Cloudy.CMS.Naming
 @using Cloudy.CMS.UI.FormSupport.FieldTypes
@@ -24,6 +25,13 @@
     }
 
     var instance = await context.Context.FindAsync(type.Type, Model.Value).ConfigureAwait(false);
+
+    var image = (instance as IImageable)?.Image;
+
+    if (image != null)
+    {
+        <img class="list-image-in-name" src="@image" alt="" />
+    }
 
     var name = NameGetter.GetName(instance);
 

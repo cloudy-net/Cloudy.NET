@@ -1,4 +1,5 @@
-﻿@using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
+﻿@using Cloudy.CMS.ContentSupport
+@using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
 @using Cloudy.CMS.UI.List
 @model ListColumnViewModel
 
@@ -7,4 +8,10 @@
 @{
     var editLink = Url.Page("/Edit", new { area = "Admin", ContentType = Model.ContentType.Name, keys = PrimaryKeyGetter.Get(Model.Instance) });
 }
+
+@if (Model.ContentType.IsImageable)
+{
+    <img class="list-image-in-name" src="@(((IImageable)Model.Instance).Image)" alt="" />
+}
+
 <a href="@editLink">@Model.Value</a>

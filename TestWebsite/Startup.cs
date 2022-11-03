@@ -18,7 +18,6 @@ namespace TestWebsite
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            ;
 #pragma warning disable CS0618 // Type or member is obsolete
             services.AddCloudy(cloudy => cloudy
                 .AddAdmin(admin => admin.Unprotect())
