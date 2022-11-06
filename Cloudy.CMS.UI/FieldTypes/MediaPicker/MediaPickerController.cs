@@ -19,9 +19,18 @@ namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/controls/mediapicker/list")]
-        public async Task<IActionResult> Test(string provider, string path)
+        public async Task<IActionResult> List(string provider, string path)
         {
             return Json(await MediaProvider.List(path).ConfigureAwait(false));
+        }
+
+        [HttpPost]
+        [Area("Admin")]
+        [Route("/{area}/api/controls/mediapicker/upload")]
+        public async Task<IActionResult> Upload(string provider, string path)
+        {
+            return Json(new { Success = true });
+            //return Json(await MediaProvider.List(path).ConfigureAwait(false));
         }
     }
 }

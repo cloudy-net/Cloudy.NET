@@ -69,7 +69,7 @@ export default ({ provider, value, onSelect }) => {
   };
 
   return <>
-    <div class="dropdown-nav">
+    <div class="media-picker-header">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a onClick={() => setPathSegments([])}>Root</a></li>
         {pathSegments.map((segment, i) =>
@@ -80,7 +80,7 @@ export default ({ provider, value, onSelect }) => {
           </li>
         )}
 
-        <li class="dropdown-nav-back"><a class={'btn btn-sm' + (!pathSegments.length ? ' disabled' : '')} onClick={() => popPathSegment()} title="Back up one level">Back</a></li>
+        <li class="media-picker-header-back"><a class={'btn btn-sm' + (!pathSegments.length ? ' disabled' : '')} onClick={() => popPathSegment()} title="Back up one level">Back</a></li>
       </ol>
     </div>
     <div>
@@ -101,11 +101,12 @@ export default ({ provider, value, onSelect }) => {
     <div>
       {[...new Array(pageSize - items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
     </div>
-    <nav>
-      <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
+    <nav class="media-picker-footer">
+      <ul class="pagination pagination-sm">
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous" tabindex="0">&laquo;</a></li>
         {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)} tabindex="0">{i + 1}</a></li>)}
         <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next" tabindex="0">&raquo;</a></li>
+        <li class="ms-auto"><a class="btn btn-primary btn-sm" onClick={() => { }} title="Upload new file">Upload</a></li>
       </ul>
     </nav>
   </>;
