@@ -7,13 +7,13 @@ export default ({ provider, value, onSelect }) => {
   const [pages, setPages] = useState();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
-  const [path, setPath] = useState('');
+  const [pathSegments, setPathSegments] = useState([]);
   const [error, setError] = useState();
   const [retryError, setRetryError] = useState(0);
 
   useEffect(function () {
     (async () => {
-      var response = await fetch(`/Admin/api/controls/mediapicker/list?provider=${provider}&path=${encodeURIComponent(path)}`);
+      var response = await fetch(`/Admin/api/controls/mediapicker/list?provider=${provider}&path=${pathSegments.length ? encodeURIComponent(pathSegments.join('/')) + '/' : ''}`);
 
       if (!response.ok) {
         setError({ response, body: await response.text() });
@@ -29,7 +29,7 @@ export default ({ provider, value, onSelect }) => {
       setPages([...Array(pageCount)]);
       setPage(Math.min(pageCount, page)); // if filtered results have less pages than what is on the current page
     })();
-  }, [path, retryError]);
+  }, [pathSegments, retryError]);
 
   if (error) {
     return <>
@@ -56,25 +56,37 @@ export default ({ provider, value, onSelect }) => {
   const skip = (page - 1) * pageSize;
   const items = data.items.slice(skip, skip + pageSize);
 
-  const getPreviousPath = path => {
-    const segments = path.split("/");
-    segments.splice(segments.length - 2, 2);
-    const result = segments.join("/")
+  const pushPathSegment = segment => {
+    setPathSegments([...pathSegments, segment]);
+  };
 
-    return result == '' ? '' : result + '/';
+  const popPathSegment = () => {
+    const segments = [...pathSegments];
+
+    segments.pop();
+
+    setPathSegments(segments);
   };
 
   return <>
+    <div class="dropdown-nav">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a>Root</a></li>
+        {pathSegments.map((segment, i) => <li class={'breadcrumb-item' + (i == pathSegments.length - 1 ? ' active' : '')} aria-current="page">{segment}</li>)}
+        
+        <li class="dropdown-nav-back"><a class={'btn btn-primary btn-sm' + (!pathSegments.length ? ' disabled' : '')} onClick={() => popPathSegment()} title="Back up one level">Back</a></li>
+      </ol>
+    </div>
     <div>
       {items.map(item =>
         <div>
           {item.type == 'folder' ?
-            <a class="dropdown-item" onClick={event => { setPath(item.value); setTimeout(() => event.target.blur(), 0) }} tabIndex="0">
-              <span class="list-icon">📁</span>
+            <a class="dropdown-item" onClick={event => { pushPathSegment(item.value); setTimeout(() => event.target.blur(), 0) }} tabIndex="0">
+              <span class="media-picker-icon">📁</span>
               {item.name}
             </a> :
             <a class={"dropdown-item" + (item.value == value ? " active" : "")} onClick={() => { onSelect(item.value == value ? null : item.value); }} tabIndex="0">
-              <span class="list-icon">📄</span>
+              <span class="media-picker-icon">📄</span>
               {item.name}
             </a>}
         </div>
@@ -86,7 +98,6 @@ export default ({ provider, value, onSelect }) => {
     <nav>
       <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous" tabindex="0">&laquo;</a></li>
-        {path && <li class="page-item"><a class="page-link" onClick={() => setPath(getPreviousPath(path))} title="Back up one level" tabindex="0">🔙</a></li>}
         {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)} tabindex="0">{i + 1}</a></li>)}
         <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next" tabindex="0">&raquo;</a></li>
       </ul>

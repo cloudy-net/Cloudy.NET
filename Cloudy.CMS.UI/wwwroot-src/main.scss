@@ -91,12 +91,6 @@ a {
     border-bottom-color: transparent;
 }
 
-.list-icon {
-    display: inline-block;
-    width: 1.4em;
-    margin-right: 0.2rem;
-}
-
 .list-image {
     display: block;
     width: 40px;
@@ -170,6 +164,33 @@ a {
     width: 100px;
     height: 100px;
     object-fit: cover;
+}
+
+.dropdown-nav {
+    margin-top: -0.5rem;
+    background: rgba(black, 0.03);
+    padding: 0.5rem;
+    font-size: 14px;
+}
+
+.dropdown-nav .breadcrumb {
+    margin: 0;
+    margin-left: 0.5rem;
+}
+
+.dropdown-nav-back {
+    margin-left: auto;
+}
+
+.dropdown-nav-back .btn {
+    margin: -0.25rem 0;
+    border: 0;
+}
+
+.media-picker-icon {
+    display: inline-block;
+    width: 1.4em;
+    margin-right: 0.2rem;
 }
 
 

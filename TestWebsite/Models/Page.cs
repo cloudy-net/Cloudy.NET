@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace TestWebsite.Models
 {
-    [Display(Description = "This is a sample class to show off most bells and whistles of the CMS toolkit.")]
+    [Display(Description = "Create pages for your website.")]
     public class Page : INameable, IRoutable, IImageable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,27 +31,5 @@ namespace TestWebsite.Models
         public string MainBody { get; set; }
         [ListFilter]
         public Category? Category { get; set; }
-        public int Integer { get; set; }
-        public int? NullableInteger { get; set; }
-        public double Double { get; set; }
-        public double? NullableDouble { get; set; }
-        public DateTime DateTime { get; set; }
-        public DateTime? NullableDateTime { get; set; }
-        public DateTimeOffset DateTimeOffset { get; set; }
-        public DateTimeOffset? NullableDateTimeOffset { get; set; }
-        [UIHint("date")]
-        public DateTime DateTimeWithDate { get; set; }
-        [UIHint("date")]
-        public DateTimeOffset DateTimeOffsetWithDate { get; set; }
-        [UIHint("time")]
-        public DateTime DateTimeWithTime { get; set; }
-        [UIHint("time")]
-        public DateTimeOffset DateTimeOffsetWithTime { get; set; }
-        public DateOnly DateOnly { get; set; }
-        public DateOnly? NullableDateOnly { get; set; }
-        public TimeOnly TimeOnly { get; set; }
-        public TimeOnly? NullableTimeOnly { get; set; }
-        public bool Checkbox { get; set; }
-        public bool? NullableCheckbox { get; set; }
     }
 }

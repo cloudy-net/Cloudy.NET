@@ -33,10 +33,11 @@ namespace Cloudy.CMS.UI.AzureMediaPicker
                 {
                     if (item.IsPrefix)
                     {
+                        var prefix = item.Prefix.TrimEnd('/').Split('/').Last();
                         result.Add(new MediaItem(
-                            item.Prefix.TrimEnd('/').Split('/').Last(),
+                            prefix,
                             "folder",
-                            item.Prefix
+                            prefix
                         ));
                     }
                     else
