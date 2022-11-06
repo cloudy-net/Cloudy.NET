@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
 {
-    public record MediaProviderResult(
+    public record MediaProviderListResult(
         IEnumerable<MediaItem> Items
     );
 }

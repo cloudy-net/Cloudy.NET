@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
+    [Authorize("adminarea")]
     public class SelectPreviewController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }

@@ -14,7 +14,12 @@ export default ({ contentType, simpleKey, value, onSelect }) => {
 
   useEffect(function () {
     (async () => {
-      var response = await fetch(`/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`);
+      var response = await fetch(
+        `/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`,
+        {
+          credentials: 'include'
+        }
+      );
 
       if (!response.ok) {
         setError({ response, body: await response.text() });

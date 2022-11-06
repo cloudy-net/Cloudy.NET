@@ -1,11 +1,13 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Cloudy.CMS.UI.FieldTypes.MediaPicker;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +23,7 @@ namespace Cloudy.CMS.UI.AzureMediaPicker
             BlobServiceClient = new BlobServiceClient(configuration.GetConnectionString("azuremedia"));
         }
 
-        public async Task<MediaProviderResult> List(string path)
+        public async Task<MediaProviderListResult> List(string path)
         {
             var container = BlobServiceClient.GetBlobContainerClient("media");
 
@@ -51,7 +53,19 @@ namespace Cloudy.CMS.UI.AzureMediaPicker
                 }
             }
 
-            return new MediaProviderResult(result);
+            return new MediaProviderListResult(result);
+        }
+
+        public async Task<MediaProviderUploadResult> Upload(string path, IFormFile file)
+        {
+            using var read = file.OpenReadStream();
+
+            var container = BlobServiceClient.GetBlobContainerClient("media");
+            var blobClient = container.GetBlobClient($"{path}/{file.FileName}");
+
+            var result = await blobClient.UploadAsync(read, false);
+
+            return new MediaProviderUploadResult(blobClient.Uri.ToString());
         }
     }
 }

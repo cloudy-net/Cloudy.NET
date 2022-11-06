@@ -14,9 +14,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
+    [Authorize("adminarea")]
     public class SelectListController : Controller
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }

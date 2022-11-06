@@ -15,7 +15,12 @@ export default ({ controlName, contentType, pageSize, value: initialValue, simpl
         return;
       }
 
-      var response = await fetch(`/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}&simpleKey=${simpleKey}`);
+      var response = await fetch(
+        `/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}&simpleKey=${simpleKey}`,
+        {
+          credentials: 'include'
+        }
+      );
 
       if (response.status == 404) {
         setPreview({ notFound: true });

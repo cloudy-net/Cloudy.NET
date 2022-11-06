@@ -17,7 +17,12 @@ export default ({ contentType, columns: initialColumns, filters: listFilters, pa
 
   useEffect(function () {
     (async () => {
-      const response = await fetch(`/Admin/api/list/result?contentType=${contentType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`);
+      const response = await fetch(
+        `/Admin/api/list/result?contentType=${contentType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`,
+        {
+          credentials: 'include'
+        }
+      );
 
       if (!response.ok) {
         setError({ response, body: await response.text() });

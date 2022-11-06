@@ -17,7 +17,12 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
       return;
     }
 
-    fetch(`/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`)
+    fetch(
+      `/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`,
+      {
+        credentials: 'include'
+      }
+    )
       .then(response => response.json())
       .then(response => {
         setLoading(false);

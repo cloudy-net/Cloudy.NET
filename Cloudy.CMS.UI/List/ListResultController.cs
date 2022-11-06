@@ -16,13 +16,13 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Cloudy.CMS.EntitySupport.Reference;
-using System.Security.Cryptography.Xml;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudy.CMS.UI.List
 {
+    [Authorize("adminarea")]
     public class ListResultController : Controller
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }

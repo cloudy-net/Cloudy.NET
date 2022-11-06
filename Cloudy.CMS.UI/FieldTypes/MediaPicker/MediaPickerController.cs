@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
 {
+    [Authorize("adminarea")]
     public class MediaPickerController : Controller
     {
         IMediaProvider MediaProvider { get; }
@@ -21,16 +26,15 @@ namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
         [Route("/{area}/api/controls/mediapicker/list")]
         public async Task<IActionResult> List(string provider, string path)
         {
-            return Json(await MediaProvider.List(path).ConfigureAwait(false));
+            return Json(await MediaProvider.List(path).ConfigureAwait(false), new JsonSerializerOptions().CloudyDefault());
         }
 
         [HttpPost]
         [Area("Admin")]
         [Route("/{area}/api/controls/mediapicker/upload")]
-        public async Task<IActionResult> Upload(string provider, string path)
+        public async Task<IActionResult> Upload(string provider, string path, IFormFile file)
         {
-            return Json(new { Success = true });
-            //return Json(await MediaProvider.List(path).ConfigureAwait(false));
+            return Json(await MediaProvider.Upload(path, file).ConfigureAwait(false), new JsonSerializerOptions().CloudyDefault());
         }
     }
 }

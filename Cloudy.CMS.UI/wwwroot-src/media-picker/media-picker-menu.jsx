@@ -10,10 +10,16 @@ export default ({ provider, value, onSelect }) => {
   const [pathSegments, setPathSegments] = useState([]);
   const [error, setError] = useState();
   const [retryError, setRetryError] = useState(0);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(function () {
     (async () => {
-      var response = await fetch(`/Admin/api/controls/mediapicker/list?provider=${provider}&path=${pathSegments.length ? encodeURIComponent(pathSegments.join('/')) + '/' : ''}`);
+      var response = await fetch(
+        `/Admin/api/controls/mediapicker/list?provider=${provider}&path=${pathSegments.length ? encodeURIComponent(pathSegments.join('/')) + '/' : ''}`,
+        {
+          credentials: 'include'
+        }
+      );
 
       if (!response.ok) {
         setError({ response, body: await response.text() });
@@ -29,7 +35,7 @@ export default ({ provider, value, onSelect }) => {
       setPages([...Array(pageCount)]);
       setPage(Math.min(pageCount, page)); // if filtered results have less pages than what is on the current page
     })();
-  }, [pathSegments, retryError]);
+  }, [pathSegments, retryError, refresh]);
 
   if (error) {
     return <>
@@ -67,6 +73,32 @@ export default ({ provider, value, onSelect }) => {
 
     setPathSegments(segments);
   };
+
+  const selectFile = () => {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = async () => {
+      const data = new FormData();
+      data.append('file', input.files[0]);
+      data.append('path', pathSegments.join('/'));
+
+      const response = await fetch(`/Admin/api/controls/mediapicker/upload?provider=${provider}`, {
+        method: 'POST',
+        body: data,
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        setError({ response, body: await response.text() });
+        return;
+      }
+
+      const json = await response.json();
+
+      onSelect(json.path);
+    };
+    input.click();
+  }
 
   return <>
     <div class="media-picker-header">
@@ -106,7 +138,19 @@ export default ({ provider, value, onSelect }) => {
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous" tabindex="0">&laquo;</a></li>
         {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)} tabindex="0">{i + 1}</a></li>)}
         <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next" tabindex="0">&raquo;</a></li>
-        <li class="ms-auto"><a class="btn btn-primary btn-sm" onClick={() => { }} title="Upload new file">Upload</a></li>
+        <li class="ms-auto">
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-primary" onClick={() => selectFile()}>Upload</button>
+            <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"></button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
   </>;
