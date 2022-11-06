@@ -71,10 +71,16 @@ export default ({ provider, value, onSelect }) => {
   return <>
     <div class="dropdown-nav">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a>Root</a></li>
-        {pathSegments.map((segment, i) => <li class={'breadcrumb-item' + (i == pathSegments.length - 1 ? ' active' : '')} aria-current="page">{segment}</li>)}
-        
-        <li class="dropdown-nav-back"><a class={'btn btn-primary btn-sm' + (!pathSegments.length ? ' disabled' : '')} onClick={() => popPathSegment()} title="Back up one level">Back</a></li>
+        <li class="breadcrumb-item"><a onClick={() => setPathSegments([])}>Root</a></li>
+        {pathSegments.map((segment, i) =>
+          <li class={'breadcrumb-item' + (i == pathSegments.length - 1 ? ' active' : '')}>
+            {i < pathSegments.length - 1 ?
+              <a onClick={() => setPathSegments(pathSegments.slice(0, i + 1))}>{segment}</a> :
+              <>{segment}</>}
+          </li>
+        )}
+
+        <li class="dropdown-nav-back"><a class={'btn btn-sm' + (!pathSegments.length ? ' disabled' : '')} onClick={() => popPathSegment()} title="Back up one level">Back</a></li>
       </ol>
     </div>
     <div>
