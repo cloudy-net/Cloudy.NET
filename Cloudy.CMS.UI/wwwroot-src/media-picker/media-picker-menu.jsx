@@ -101,13 +101,13 @@ export default ({ provider, value, onSelect }) => {
     <div>
       {[...new Array(pageSize - items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
     </div>
-    <nav class="media-picker-footer">
+    <div class="media-picker-footer">
       <ul class="pagination pagination-sm">
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous" tabindex="0">&laquo;</a></li>
         {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)} tabindex="0">{i + 1}</a></li>)}
         <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next" tabindex="0">&raquo;</a></li>
         <li class="ms-auto"><a class="btn btn-primary btn-sm" onClick={() => { }} title="Upload new file">Upload</a></li>
       </ul>
-    </nav>
+    </div>
   </>;
 };
