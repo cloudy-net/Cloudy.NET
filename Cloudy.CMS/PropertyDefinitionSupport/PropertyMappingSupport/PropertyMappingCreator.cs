@@ -11,7 +11,7 @@ namespace Cloudy.CMS.PropertyDefinitionSupport.PropertyMappingSupport
     {
         public PropertyMapping Create(PropertyInfo property)
         {
-            if (property.GetCustomAttribute<CloudyIgnore>() != null)
+            if (property.GetCustomAttribute<CloudyIgnoreAttribute>() != null)
             {
                 return new PropertyMapping(PropertyMappingType.Ignored);
             }

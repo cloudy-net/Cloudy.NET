@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Cloudy.CMS.ContentSupport;
 
 namespace TestWebsite.Models
 {
@@ -30,5 +31,7 @@ namespace TestWebsite.Models
         public TimeOnly? NullableTimeOnly { get; set; }
         public bool Checkbox { get; set; }
         public bool? NullableCheckbox { get; set; }
+        [CloudyIgnore]
+        public string IgnoredProperty { get; set; }
     }
 }
