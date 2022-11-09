@@ -21,8 +21,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
             services.AddScoped<IPrimaryKeyPropertyGetter, PrimaryKeyPropertyGetter>();
             services.AddScoped<IPrimaryKeyGetter, PrimaryKeyGetter>();
             services.AddScoped<IPrimaryKeySetter, PrimaryKeySetter>();
-
-            services.AddScoped<IContentUpdater, ContentUpdater>();
         }
     }
 }
