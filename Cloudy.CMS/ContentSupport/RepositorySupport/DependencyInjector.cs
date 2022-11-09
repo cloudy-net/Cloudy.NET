@@ -14,7 +14,6 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport
         public void InjectDependencies(IServiceCollection services)
         {
             services.AddScoped<IAncestorProvider, AncestorProvider>();
-            services.AddScoped<IContentChildrenCounter, ContentChildrenCounter>();
             services.AddScoped<IChildrenGetter, ChildrenGetter>();
 
             services.AddScoped<IPrimaryKeyConverter, PrimaryKeyConverter>();
