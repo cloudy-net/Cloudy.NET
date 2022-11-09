@@ -2,6 +2,7 @@
 using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.Naming;
+using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
 using System.Collections.Generic;

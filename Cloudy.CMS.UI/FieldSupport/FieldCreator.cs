@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.Naming;
+﻿using Cloudy.CMS.Naming;
+using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.UI.FieldTypes.MediaPicker;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;

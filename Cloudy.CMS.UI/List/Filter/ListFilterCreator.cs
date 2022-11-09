@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using Cloudy.CMS.PropertyDefinitionSupport;
 
 namespace Cloudy.CMS.UI.List.Filter
 {

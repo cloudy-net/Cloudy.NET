@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.PropertyDefinitionSupport
 {
     public class PropertyDefinitionCreator : IPropertyDefinitionCreator
     {
@@ -15,7 +15,7 @@ namespace Cloudy.CMS.ContentTypeSupport
 
             var nullableType = Nullable.GetUnderlyingType(type);
 
-            if(nullableType != null)
+            if (nullableType != null)
             {
                 type = nullableType;
                 nullable = true;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
+namespace Cloudy.CMS.PropertyDefinitionSupport.PropertyMappingSupport
 {
     public interface IPropertyMappingCreator
     {

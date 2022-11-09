@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.PropertyDefinitionSupport
 {
     public interface IPropertyDefinitionProvider
     {

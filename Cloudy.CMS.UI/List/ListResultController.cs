@@ -19,6 +19,7 @@ using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.EntitySupport.Reference;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authorization;
+using Cloudy.CMS.PropertyDefinitionSupport;
 
 namespace Cloudy.CMS.UI.List
 {

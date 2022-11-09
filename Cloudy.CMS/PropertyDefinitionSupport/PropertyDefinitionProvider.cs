@@ -1,9 +1,10 @@
-﻿using Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport;
+﻿using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.PropertyDefinitionSupport.PropertyMappingSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.PropertyDefinitionSupport
 {
     public class PropertyDefinitionProvider : IPropertyDefinitionProvider
     {

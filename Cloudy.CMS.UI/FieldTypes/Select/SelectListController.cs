@@ -15,6 +15,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
+using Cloudy.CMS.PropertyDefinitionSupport;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {

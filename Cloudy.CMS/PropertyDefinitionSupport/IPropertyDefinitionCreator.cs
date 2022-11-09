@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.PropertyDefinitionSupport
 {
     public interface IPropertyDefinitionCreator
     {

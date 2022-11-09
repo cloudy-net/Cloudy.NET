@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
+namespace Cloudy.CMS.PropertyDefinitionSupport.PropertyMappingSupport
 {
     public class PropertyMappingCreator : IPropertyMappingCreator
     {
@@ -20,7 +20,7 @@ namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
             {
                 var interfaceProperty = interfaceType.GetProperty(property.Name);
 
-                if(interfaceProperty == null)
+                if (interfaceProperty == null)
                 {
                     continue;
                 }
@@ -46,7 +46,7 @@ namespace Cloudy.CMS.ContentTypeSupport.PropertyMappingSupport
                 }
             }
 
-            if(property.GetGetMethod() == null || property.GetSetMethod() == null)
+            if (property.GetGetMethod() == null || property.GetSetMethod() == null)
             {
                 return new PropertyMapping(PropertyMappingType.Incomplete);
             }

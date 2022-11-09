@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.PropertyDefinitionSupport
 {
     [DebuggerDisplay("{Name}")]
     public record PropertyDefinitionDescriptor(
