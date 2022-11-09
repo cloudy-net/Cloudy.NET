@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
-using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.UI.FormSupport;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.Mime;
 using System.Linq;
+using Cloudy.CMS.EntitySupport.PrimaryKey;
 
 namespace Cloudy.CMS.UI.Areas.Admin.Pages
 {

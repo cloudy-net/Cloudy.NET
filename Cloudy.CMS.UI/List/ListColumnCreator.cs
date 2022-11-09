@@ -1,6 +1,6 @@
 ﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;

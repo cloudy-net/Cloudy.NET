@@ -1,7 +1,7 @@
 ﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContentTypeSupport.Name;
+using Cloudy.CMS.EntitySupport.PrimaryKey;
 using System;
 using System.Collections.Generic;
 using System.Linq;

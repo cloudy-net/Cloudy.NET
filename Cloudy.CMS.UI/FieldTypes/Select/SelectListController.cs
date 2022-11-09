@@ -1,6 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.Naming;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +15,7 @@ using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.CMS.EntitySupport.PrimaryKey;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {

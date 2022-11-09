@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
+namespace Cloudy.CMS.EntitySupport.PrimaryKey
 {
     public class PrimaryKeyGetter : IPrimaryKeyGetter
     {

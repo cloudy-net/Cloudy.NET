@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
+﻿using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.EntitySupport.Reference;
 using Microsoft.Extensions.Logging;
 using Moq;

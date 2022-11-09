@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
+namespace Cloudy.CMS.EntitySupport.PrimaryKey
 {
     public class PrimaryKeySetter : IPrimaryKeySetter
     {

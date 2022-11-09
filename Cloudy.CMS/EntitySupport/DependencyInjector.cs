@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.DependencyInjectionSupport;
+using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.EntitySupport.Reference;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -15,6 +16,11 @@ namespace Cloudy.CMS.EntitySupport
         {
             services.AddScoped<IReferenceDeserializer, ReferenceDeserializer>();
             services.AddScoped<IReferenceSerializer, ReferenceSerializer>();
+
+            services.AddScoped<IPrimaryKeyConverter, PrimaryKeyConverter>();
+            services.AddScoped<IPrimaryKeyPropertyGetter, PrimaryKeyPropertyGetter>();
+            services.AddScoped<IPrimaryKeyGetter, PrimaryKeyGetter>();
+            services.AddScoped<IPrimaryKeySetter, PrimaryKeySetter>();
         }
     }
 }

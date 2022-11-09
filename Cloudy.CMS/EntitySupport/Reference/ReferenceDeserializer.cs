@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey;
+﻿using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.Logging;
 using System;

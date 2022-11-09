@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-namespace Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
+namespace Cloudy.CMS.EntitySupport.PrimaryKey
 {
     public class PrimaryKeyConverter : IPrimaryKeyConverter
     {
@@ -27,7 +27,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
                 var value = values[i];
                 var type = types[i];
 
-                if(type == typeof(string))
+                if (type == typeof(string))
                 {
                     result.Add(value);
                     continue;
@@ -42,7 +42,7 @@ namespace Cloudy.CMS.ContentSupport.RepositorySupport.PrimaryKey
                     result.Add(int.Parse(value));
                     continue;
                 }
-                
+
                 throw new Exception($"Type {type} is not currently supported");
             }
 
