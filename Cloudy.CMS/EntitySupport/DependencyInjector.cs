@@ -20,7 +20,6 @@ namespace Cloudy.CMS.EntitySupport
             services.AddScoped<IPrimaryKeyConverter, PrimaryKeyConverter>();
             services.AddScoped<IPrimaryKeyPropertyGetter, PrimaryKeyPropertyGetter>();
             services.AddScoped<IPrimaryKeyGetter, PrimaryKeyGetter>();
-            services.AddScoped<IPrimaryKeySetter, PrimaryKeySetter>();
         }
     }
 }
