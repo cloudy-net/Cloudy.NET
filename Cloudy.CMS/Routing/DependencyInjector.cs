@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.DependencyInjectionSupport;
+using Cloudy.CMS.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Cloudy.CMS.Routing
             services.AddSingleton<IContentRouteCreator, ContentRouteCreator>();
             services.AddSingleton<IContentRouteProvider, ContentRouteProvider>();
             services.AddSingleton<IContentRouteMatcher, ContentRouteMatcher>();
+            services.AddScoped<IUrlProvider, UrlProvider>();
         }
     }
 }
