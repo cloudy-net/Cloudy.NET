@@ -37,10 +37,5 @@ namespace Cloudy.CMS.ContextSupport
 
             return null;
         }
-
-        public void Dispose()
-        {
-            Context.Dispose();
-        }
     }
 }

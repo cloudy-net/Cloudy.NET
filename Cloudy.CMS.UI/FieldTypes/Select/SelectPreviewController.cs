@@ -39,7 +39,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 
             var deserializedReference = ReferenceDeserializer.Get(type.Type, reference, simpleKey);
 
-            using var context = ContextCreator.CreateFor(type.Type);
+            var context = ContextCreator.CreateFor(type.Type);
 
             var instance = await context.Context.FindAsync(type.Type, deserializedReference).ConfigureAwait(false);
             

@@ -15,22 +15,19 @@ namespace Cloudy.CMS.SingletonSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddScoped<ISingletonCreator, SingletonCreator>();
-            services.AddScoped<ISingletonGetter, SingletonGetter>();
-            services.AddScoped<ISingletonProvider, SingletonProvider>();
-
-            var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.Type)).ToList();
-
-            foreach (var type in AssemblyProvider.Assemblies.SelectMany(a => a.Types))
+            foreach (var context in ContextDescriptorProvider.GetAll())
             {
-                var singletonAttribute = type.GetCustomAttribute<SingletonAttribute>();
-
-                if (singletonAttribute == null)
+                foreach (var dbSet in context.DbSets)
                 {
-                    continue;
-                }
+                    var singletonAttribute = dbSet.Type.GetCustomAttribute<SingletonAttribute>();
 
-                services.AddTransient(type, serviceProvider => serviceProvider.GetService<ISingletonGetter>().GetAsync(type).Result);
+                    if (singletonAttribute == null)
+                    {
+                        continue;
+                    }
+
+                    services.AddTransient(dbSet.Type, serviceProvider => ((IQueryable)serviceProvider.GetService<IContextCreator>().CreateFor(context.Type).GetDbSet(dbSet.Type)).Cast<object>().FirstOrDefault());
+                }
             }
         }
     }

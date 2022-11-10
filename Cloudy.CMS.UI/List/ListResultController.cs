@@ -53,7 +53,7 @@ namespace Cloudy.CMS.UI.List
             var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name);
             var selectedPropertyDefinitions = columnNames.Select(n => propertyDefinitions.First(p => n == p.Name));
             
-            using var context = ContextCreator.CreateFor(type.Type);
+            var context = ContextCreator.CreateFor(type.Type);
 
             var dbSet = (IQueryable)context.GetDbSet(type.Type);
 

@@ -18,14 +18,14 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContentTypeNameProvider ContentTypeNameProvider { get; }
-        IContextProvider ContextProvider { get; }
+        IContextCreator ContextCreator { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
 
-        public DeleteModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IContextProvider contextProvider, IPrimaryKeyConverter primaryKeyConverter)
+        public DeleteModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentTypeNameProvider = contentTypeNameProvider;
-            ContextProvider = contextProvider;
+            ContextCreator = contextCreator;
             PrimaryKeyConverter = primaryKeyConverter;
         }
 
@@ -38,7 +38,7 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
             ContentType = ContentTypeProvider.Get(contentType);
             ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
             var keyValues = PrimaryKeyConverter.Convert(keys, ContentType.Type);
-            var context = ContextProvider.GetFor(ContentType.Type);
+            var context = ContextCreator.CreateFor(ContentType.Type);
             Instance = await context.Context.FindAsync(ContentType.Type, keyValues).ConfigureAwait(false);
         }
 
@@ -63,7 +63,7 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
                 return NotFound($"Could not find instance of type {contentType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
             }
 
-            var context = ContextProvider.GetFor(ContentType.Type);
+            var context = ContextCreator.CreateFor(ContentType.Type);
             context.Context.Remove(Instance);
             await context.Context.SaveChangesAsync().ConfigureAwait(false);
 

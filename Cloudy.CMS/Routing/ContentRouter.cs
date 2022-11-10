@@ -11,13 +11,13 @@ namespace Cloudy.CMS.Routing
 {
     public class ContentRouter : IContentRouter
     {
-        IContextProvider ContextProvider { get; }
+        IContextCreator ContextCreator { get; }
         IRootContentRouter RootContentRouter { get; }
         IRoutableRootContentProvider RoutableRootContentProvider { get; }
 
-        public ContentRouter(IContextProvider contextProvider, IRootContentRouter rootContentRouter, IRoutableRootContentProvider routableRootContentProvider)
+        public ContentRouter(IContextCreator contextCreator, IRootContentRouter rootContentRouter, IRoutableRootContentProvider routableRootContentProvider)
         {
-            ContextProvider = contextProvider;
+            ContextCreator = contextCreator;
             RootContentRouter = rootContentRouter;
             RoutableRootContentProvider = routableRootContentProvider;
         }
@@ -32,7 +32,7 @@ namespace Cloudy.CMS.Routing
 
                 foreach(var type in types.Where(t => typeof(IRoutable).IsAssignableFrom(t.Type) && !typeof(IHierarchical).IsAssignableFrom(t.Type)))
                 {
-                    var dbSet = ContextProvider.GetFor(type.Type).GetDbSet(type.Type);
+                    var dbSet = ContextCreator.CreateFor(type.Type).GetDbSet(type.Type);
 
                     var result = ((IQueryable)dbSet).Cast<IRoutable>().Where(r => r.UrlSegment == segment).FirstOrDefault();
 

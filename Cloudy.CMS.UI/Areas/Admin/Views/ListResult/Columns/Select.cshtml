@@ -7,13 +7,13 @@
 @model ListColumnViewModel
 
 @inject IContentTypeProvider ContentTypeProvider
-@inject IContextProvider ContextProvider
+@inject IContextCreator ContextCreator
 @inject INameGetter NameGetter
 
 @{
     var select = Model.PropertyDefinition.Attributes.OfType<SelectAttribute>().First();
     var type = ContentTypeProvider.Get(select.Type);
-    var context = ContextProvider.GetFor(type.Type);
+    var context = ContextCreator.CreateFor(type.Type);
 
     if(Model.Value == null){
         return;

@@ -12,18 +12,18 @@ namespace Cloudy.CMS.EntitySupport.PrimaryKey
     {
         IDictionary<Type, IEnumerable<PropertyInfo>> CachedKeys { get; } = new Dictionary<Type, IEnumerable<PropertyInfo>>();
 
-        IContextProvider ContextProvider { get; }
+        IContextCreator ContextCreator { get; }
 
-        public PrimaryKeyPropertyGetter(IContextProvider contextProvider)
+        public PrimaryKeyPropertyGetter(IContextCreator contextCreator)
         {
-            ContextProvider = contextProvider;
+            ContextCreator = contextCreator;
         }
 
         public IEnumerable<PropertyInfo> GetFor(Type type)
         {
             if (!CachedKeys.ContainsKey(type))
             {
-                var context = ContextProvider.GetFor(type);
+                var context = ContextCreator.CreateFor(type);
                 CachedKeys[type] = context.Context.Model.FindEntityType(type).FindPrimaryKey().Properties.Select(p => p.PropertyInfo).ToList().AsReadOnly();
             }
 

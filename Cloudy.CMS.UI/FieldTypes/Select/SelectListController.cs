@@ -44,7 +44,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
         {
             var type = ContentTypeProvider.Get(contentType);
 
-            using var context = ContextCreator.CreateFor(type.Type);
+            var context = ContextCreator.CreateFor(type.Type);
 
             var dbSet = (IQueryable)context.GetDbSet(type.Type);
 

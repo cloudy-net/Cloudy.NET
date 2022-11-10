@@ -12,7 +12,6 @@ namespace Cloudy.CMS.ContextSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddScoped<IContextProvider, ContextProvider>();
             services.AddScoped<IContextCreator, ContextCreator>();
         }
     }

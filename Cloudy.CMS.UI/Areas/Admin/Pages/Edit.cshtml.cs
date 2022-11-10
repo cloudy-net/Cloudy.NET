@@ -20,17 +20,17 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
         IContentTypeProvider ContentTypeProvider { get; }
         IContentTypeNameProvider ContentTypeNameProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
-        IContextProvider ContextProvider { get; }
+        IContextCreator ContextCreator { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IInstanceUpdater InstanceUpdater { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public EditModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContextProvider contextProvider, IPrimaryKeyConverter primaryKeyConverter, IInstanceUpdater instanceUpdater, IPrimaryKeyGetter primaryKeyGetter)
+        public EditModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter, IInstanceUpdater instanceUpdater, IPrimaryKeyGetter primaryKeyGetter)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentTypeNameProvider = contentTypeNameProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
-            ContextProvider = contextProvider;
+            ContextCreator = contextCreator;
             PrimaryKeyConverter = primaryKeyConverter;
             InstanceUpdater = instanceUpdater;
             PrimaryKeyGetter = primaryKeyGetter;
@@ -45,7 +45,7 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
             ContentType = ContentTypeProvider.Get(contentType);
             ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
             var keyValues = PrimaryKeyConverter.Convert(keys, ContentType.Type);
-            var context = ContextProvider.GetFor(ContentType.Type);
+            var context = ContextCreator.CreateFor(ContentType.Type);
             Instance = await context.Context.FindAsync(ContentType.Type, keyValues).ConfigureAwait(false);
         }
 
@@ -72,7 +72,7 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
 
             var primaryKeyNames = PrimaryKeyPropertyGetter.GetFor(ContentType.Type).Select(p => p.Name).ToList();
 
-            var context = ContextProvider.GetFor(ContentType.Type);
+            var context = ContextCreator.CreateFor(ContentType.Type);
             InstanceUpdater.Update(ContentType, primaryKeyNames, Instance, form);
             await context.Context.SaveChangesAsync().ConfigureAwait(false);
 
