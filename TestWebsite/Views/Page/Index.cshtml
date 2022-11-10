@@ -1,10 +1,13 @@
-﻿@model TestWebsite.Models.Page
+﻿@using TestWebsite.Models;
+@model TestWebsite.Models.Page
+
+@inject SiteSettings SiteSettings
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>@Model.Name</title>
+    <title>@SiteSettings.SiteName - @Model.Name</title>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
 

@@ -17,6 +17,7 @@ namespace TestWebsite.Models
         public DbSet<CompositeKeyTest> CompositeKeyTests { get; set; }
         public DbSet<SimpleKeyTest> SimpleKeyTests { get; set; }
         public DbSet<PropertyTestBed> PropertyTestBeds { get; set; }
+        public DbSet<SiteSettings> SiteSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
