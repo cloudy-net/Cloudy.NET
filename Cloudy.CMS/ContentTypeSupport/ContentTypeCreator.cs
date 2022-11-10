@@ -1,8 +1,10 @@
 ﻿using Cloudy.CMS.ContentSupport;
 using Cloudy.CMS.ContextSupport;
+using Cloudy.CMS.SingletonSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Cloudy.CMS.ContentTypeSupport
 {
@@ -33,7 +35,8 @@ namespace Cloudy.CMS.ContentTypeSupport
                     type,
                     type.IsAssignableTo(typeof(INameable)),
                     type.IsAssignableTo(typeof(IImageable)),
-                    type.IsAssignableTo(typeof(IRoutable))
+                    type.IsAssignableTo(typeof(IRoutable)),
+                    type.IsAssignableTo(typeof(ISingleton))
                 ));
             }
 

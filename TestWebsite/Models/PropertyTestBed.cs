@@ -2,10 +2,11 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.SingletonSupport;
 
 namespace TestWebsite.Models
 {
-    public class PropertyTestBed
+    public class PropertyTestBed : ISingleton
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

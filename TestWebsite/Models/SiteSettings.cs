@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestWebsite.Models
 {
-    [Singleton]
-    public class SiteSettings
+    public class SiteSettings : ISingleton
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

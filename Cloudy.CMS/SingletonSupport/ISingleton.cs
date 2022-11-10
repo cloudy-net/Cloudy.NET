@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cloudy.CMS.SingletonSupport
 {
-    public class SingletonAttribute : Attribute
+    public interface ISingleton
     {
     }
 }

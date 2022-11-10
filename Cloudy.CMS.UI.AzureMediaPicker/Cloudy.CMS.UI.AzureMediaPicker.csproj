@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Björn Ali Göransson</Authors>
 		<Description>Cloudy CMS Azure Media Picker</Description>
-		<Version>1.62.58</Version>
+		<Version>1.62.59</Version>
 		<Copyright>2018 Björn Ali Göransson</Copyright>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/cloudy-net/Cloudy.CMS.git</RepositoryUrl>

@@ -19,9 +19,7 @@ namespace Cloudy.CMS.SingletonSupport
             {
                 foreach (var dbSet in context.DbSets)
                 {
-                    var singletonAttribute = dbSet.Type.GetCustomAttribute<SingletonAttribute>();
-
-                    if (singletonAttribute == null)
+                    if (!dbSet.Type.IsAssignableTo(typeof(ISingleton)))
                     {
                         continue;
                     }
