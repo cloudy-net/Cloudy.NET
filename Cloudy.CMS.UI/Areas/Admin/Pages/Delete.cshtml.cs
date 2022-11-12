@@ -46,6 +46,11 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
         {
             await BindData(contentType, keys).ConfigureAwait(false);
 
+            if (ContentType.IsSingleton)
+            {
+                return Redirect(Url.Page("List", new { area = "Admin", ContentType = ContentType.Name }));
+            }
+
             if (Instance == null)
             {
                 return NotFound($"Could not find instance of type {contentType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
@@ -57,6 +62,11 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
         public async Task<IActionResult> OnPost(string contentType, string[] keys, [FromForm] IFormCollection form)
         {
             await BindData(contentType, keys).ConfigureAwait(false);
+
+            if (ContentType.IsSingleton)
+            {
+                return Redirect(Url.Page("List", new { area = "Admin", ContentType = ContentType.Name }));
+            }
 
             if (Instance == null)
             {

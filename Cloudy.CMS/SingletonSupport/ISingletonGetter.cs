@@ -9,5 +9,6 @@ namespace Cloudy.CMS.SingletonSupport
     public interface ISingletonGetter
     {
         Task<T> Get<T>() where T : class;
+        Task<object> Get(Type type);
     }
 }

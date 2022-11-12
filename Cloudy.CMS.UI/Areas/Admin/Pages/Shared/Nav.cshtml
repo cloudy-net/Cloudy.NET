@@ -1,5 +1,6 @@
 ﻿@using Cloudy.CMS.ContentTypeSupport
 @using Cloudy.CMS.ContentTypeSupport.Name
+@using Cloudy.CMS.EntitySupport.PrimaryKey;
 @using Cloudy.CMS.Naming
 @using System.Reflection
 @inject IHumanizer Humanizer
@@ -25,7 +26,14 @@
                         @foreach(var contentType in ContentTypeProvider.GetAll().OrderBy(c => c.Name)){
                             var name = ContentTypeNameProvider.Get(contentType.Type);
 
-                            <li><a class="dropdown-item" href="@Url.Page("List", new { area = "Admin", ContentType = contentType.Name })">@name.PluralName</a></li>
+                            @if (contentType.IsSingleton)
+                            {
+                                <li><a class="dropdown-item" href="@Url.Page("List", new { area = "Admin", ContentType = contentType.Name })">@name.Name</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" href="@Url.Page("List", new { area = "Admin", ContentType = contentType.Name })">@name.PluralName</a></li>
+                            }
                         }
                     </ul>
                 </li>

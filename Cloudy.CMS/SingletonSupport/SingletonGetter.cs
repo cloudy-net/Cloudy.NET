@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.ContextSupport;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,9 +11,14 @@ namespace Cloudy.CMS.SingletonSupport
     {
         public async Task<T> Get<T>() where T : class
         {
-            var context = ContextCreator.CreateFor(typeof(T));
-            var queryable = (IQueryable)context.GetDbSet(typeof(T));
-            return (T)await queryable.Cast<object>().FirstOrDefaultAsync().ConfigureAwait(false);
+            return (T)await Get(typeof(T)).ConfigureAwait(false);
+        }
+
+        public async Task<object> Get(Type type)
+        {
+            var context = ContextCreator.CreateFor(type);
+            var queryable = (IQueryable)context.GetDbSet(type);
+            return await queryable.Cast<object>().FirstOrDefaultAsync().ConfigureAwait(false);
         }
     }
 }
