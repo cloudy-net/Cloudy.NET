@@ -18,7 +18,7 @@ namespace Tests
     {
         [Theory]
         [InlineData("lorem", null, null)]
-        [InlineData("lorem/{route:contentroute}", "lorem/{contentroute}", "sit,dol")]
+        [InlineData("lorem/{route:contentroute}", "lorem/{contentroute}", "ContentTypeA,ContentTypeB")]
         public void CreatesRoutes(string pattern, string resultingTemplate, string resultingTypes)
         {
             var contentTypeA = new ContentTypeDescriptor("sit", typeof(ContentTypeA));
@@ -43,7 +43,7 @@ namespace Tests
             var result = results.Single();
 
             Assert.Equal(resultingTemplate, result.Template);
-            Assert.Equal(resultingTypes, string.Join(",", result.ContentTypes.Select(t => t.Name)));
+            Assert.Equal(resultingTypes, string.Join(",", result.Types.Select(t => t.Name)));
         }
 
         class ContentTypeA : InterfaceA

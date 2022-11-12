@@ -13,17 +13,24 @@ namespace Tests
         [Fact]
         public void MatchesType()
         {
-            var contentTypeA = new ContentTypeDescriptor("lorem", typeof(string));
-            var contentTypeB = new ContentTypeDescriptor("ipsum", typeof(string));
-            
-            var routeA = new ContentRouteDescriptor("template", new List<ContentTypeDescriptor> { contentTypeA });
-            var routeB = new ContentRouteDescriptor("template", new List<ContentTypeDescriptor> {  });
+            var routeA = new ContentRouteDescriptor("template", new List<Type> { typeof(ClassA) });
+            var routeB = new ContentRouteDescriptor("template", new List<Type> {  });
             var contentRouteProvider = Mock.Of<IContentRouteProvider>();
             Mock.Get(contentRouteProvider).Setup(p => p.GetAll()).Returns(new List<ContentRouteDescriptor> { routeA, routeB });
             
             var sut = new ContentRouteMatcher(contentRouteProvider);
-            Assert.Equal(new List<ContentRouteDescriptor> { routeA }, sut.GetFor(contentTypeA));
-            Assert.Empty(sut.GetFor(contentTypeB));
+            Assert.Equal(new List<ContentRouteDescriptor> { routeA }, sut.GetFor(typeof(ClassA)));
+            Assert.Empty(sut.GetFor(typeof(ClassB)));
+        }
+
+        class ClassA
+        {
+
+        }
+
+        class ClassB
+        {
+
         }
     }
 }

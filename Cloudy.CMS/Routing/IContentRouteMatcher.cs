@@ -7,6 +7,6 @@ namespace Cloudy.CMS.Routing
 {
     public interface IContentRouteMatcher
     {
-        IEnumerable<ContentRouteDescriptor> GetFor(ContentTypeDescriptor contentType);
+        IEnumerable<ContentRouteDescriptor> GetFor(Type type);
     }
 }

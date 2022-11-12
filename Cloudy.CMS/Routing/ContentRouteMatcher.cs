@@ -6,22 +6,15 @@ using System.Text;
 
 namespace Cloudy.CMS.Routing
 {
-    public class ContentRouteMatcher : IContentRouteMatcher
+    public record ContentRouteMatcher(IContentRouteProvider ContentRouteProvider) : IContentRouteMatcher
     {
-        public IContentRouteProvider ContentRouteProvider { get; }
-
-        public ContentRouteMatcher(IContentRouteProvider contentRouteProvider)
-        {
-            ContentRouteProvider = contentRouteProvider;
-        }
-
-        public IEnumerable<ContentRouteDescriptor> GetFor(ContentTypeDescriptor contentType)
+        public IEnumerable<ContentRouteDescriptor> GetFor(Type type)
         {
             var result = new List<ContentRouteDescriptor>();
 
             foreach(var contentRoute in ContentRouteProvider.GetAll())
             {
-                if(!contentRoute.ContentTypes.Any(c => c.Name == contentType.Name))
+                if(!contentRoute.Types.Any(t => t == type))
                 {
                     continue;
                 }

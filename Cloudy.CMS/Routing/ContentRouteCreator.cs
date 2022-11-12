@@ -64,7 +64,7 @@ namespace Cloudy.CMS.Routing
                     continue;
                 }
 
-                IEnumerable<ContentTypeDescriptor> contentTypes = null;
+                IEnumerable<Type> types = null;
 
                 var path = new List<string>();
 
@@ -87,23 +87,30 @@ namespace Cloudy.CMS.Routing
                         var endParenthesisIndex = content.IndexOf(')');
                         var name = startParenthesisIndex == -1 ? content : content.Substring(0, startParenthesisIndex);
 
-                        var type = startParenthesisIndex == -1 ? null : content.Substring(startParenthesisIndex + 1, endParenthesisIndex - (startParenthesisIndex + 1));
+                        var typeName = startParenthesisIndex == -1 ? null : content.Substring(startParenthesisIndex + 1, endParenthesisIndex - (startParenthesisIndex + 1));
 
-                        if (type != null)
+                        if (typeName != null)
                         {
-                            contentTypes = new List<ContentTypeDescriptor> { ContentTypeProvider.Get(type) }.AsReadOnly();
+                            var contentType = ContentTypeProvider.Get(typeName);
+
+                            if (contentType == null)
+                            {
+                                throw new Exception($"Could not find content type with name {typeName} for content route");
+                            }
+
+                            types = new List<Type> { contentType.Type }.AsReadOnly();
                         }
 
                         path.Add($"{{{name}}}");
                     }
                 }
 
-                if (contentTypes == null)
+                if (types == null)
                 {
-                    contentTypes = ContentTypeProvider.GetAll().ToList().AsReadOnly();
+                    types = ContentTypeProvider.GetAll().Select(t => t.Type).ToList().AsReadOnly();
                 }
 
-                result[routeEndpoint.RoutePattern.RawText] = new ContentRouteDescriptor(string.Join("/", path), contentTypes);
+                result[routeEndpoint.RoutePattern.RawText] = new ContentRouteDescriptor(string.Join("/", path), types);
             }
 
             return result.Values.ToList().AsReadOnly();

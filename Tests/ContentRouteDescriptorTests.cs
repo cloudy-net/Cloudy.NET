@@ -14,7 +14,7 @@ namespace Tests
         [InlineData("lorem/{contentroute}", "ipsum", "lorem/ipsum")]
         public void Apply(string template, string contentRouteSegment, string expectedResult)
         {
-            Assert.Equal(expectedResult, new ContentRouteDescriptor(template, Enumerable.Empty<ContentTypeDescriptor>()).Apply(contentRouteSegment));
+            Assert.Equal(expectedResult, new ContentRouteDescriptor(template, Enumerable.Empty<Type>()).Apply(contentRouteSegment));
         }
     }
 }

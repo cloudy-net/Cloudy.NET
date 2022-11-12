@@ -1,9 +1,12 @@
 ﻿@page
+@using Cloudy.CMS.ContentSupport;
 @using Cloudy.CMS.Naming
+@using Cloudy.CMS.Routing;
 @using Cloudy.CMS.UI.FormSupport
 @model Cloudy.CMS.UI.Areas.Admin.Pages.EditModel
 
 @inject INameGetter NameGetter
+@inject IContentRouteMatcher ContentRouteMatcher
 
 @await Html.PartialAsync("Shared/Nav")
 
@@ -19,6 +22,38 @@
 <div class="container">
     <h1 class="h2 mb-3">
         @NameGetter.GetName(Model.Instance)
+
+        @{
+            var routes = ContentRouteMatcher.GetFor(Model.ContentType.Type);
+
+            if (routes.Any())
+            {
+                if(routes.Count() == 1)
+                {
+                    var route = routes.Single();
+                    var url = "/" + route.Apply(((IRoutable)Model.Instance).UrlSegment);
+
+                    <a class="btn btn-primary btn-sm" href="@url">
+                        View
+                    </a>
+                }
+                else
+                {
+                    <div class="dropdown d-inline-block">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            View
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach(var route in routes)
+                            {
+                                var url = "/" + route.Apply(((IRoutable)Model.Instance).UrlSegment);
+                                <li><a class="dropdown-item" href="@url">@url</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+            }
+        }
         <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
     </h1>
 </div>
