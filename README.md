@@ -50,15 +50,12 @@ var app = builder.Build();
 
 app.UseStaticFiles(new StaticFileOptions().MustValidate()); // This removes the need for manually clearing browser cache when updating frontend assets
 
-app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints => {
-    endpoints.MapRazorPages();
-    endpoints.MapControllers();
-    endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
-});
+app.MapRazorPages();
+app.MapControllers();
+app.MapGet("/", async c => c.Response.Redirect("/Admin"));
 
 app.Run();
 ```
