@@ -11,7 +11,6 @@
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<NoWarn>CS1998</NoWarn>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-		<IncludeContentInPack>false</IncludeContentInPack>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -21,6 +20,18 @@
 	<PropertyGroup>
 		<DefaultItemExcludes>$(DefaultItemExcludes);wwwroot\.gitignore</DefaultItemExcludes>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="wwwroot-src\package-lock.json" />
+	  <Content Remove="wwwroot-src\package.json" />
+	  <Content Remove="wwwroot\index.html" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot-src\package-lock.json" />
+	  <None Include="wwwroot-src\package.json" />
+	  <None Include="wwwroot\index.html" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="6.2.22" />
