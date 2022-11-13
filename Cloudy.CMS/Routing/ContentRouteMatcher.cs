@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,11 @@ namespace Cloudy.CMS.Routing
     {
         public IEnumerable<ContentRouteDescriptor> GetFor(Type type)
         {
+            if (!type.IsAssignableTo(typeof(IRoutable)))
+            {
+                return Enumerable.Empty<ContentRouteDescriptor>();
+            }
+
             var result = new List<ContentRouteDescriptor>();
 
             foreach(var contentRoute in ContentRouteProvider.GetAll())
