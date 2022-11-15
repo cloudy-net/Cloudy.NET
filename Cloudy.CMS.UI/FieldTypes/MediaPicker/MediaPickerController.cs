@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
 {
     [Authorize("adminarea")]
+    [ResponseCache(NoStore = true)]
     public class MediaPickerController : Controller
     {
         IMediaProvider MediaProvider { get; }

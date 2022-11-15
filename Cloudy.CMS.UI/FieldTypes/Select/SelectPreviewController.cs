@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
     [Authorize("adminarea")]
+    [ResponseCache(NoStore = true)]
     public class SelectPreviewController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }

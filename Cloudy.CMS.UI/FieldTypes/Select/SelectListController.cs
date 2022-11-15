@@ -20,6 +20,7 @@ using Cloudy.CMS.EntitySupport.PrimaryKey;
 namespace Cloudy.CMS.UI.FormSupport.FieldTypes
 {
     [Authorize("adminarea")]
+    [ResponseCache(NoStore = true)]
     public class SelectListController : Controller
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }

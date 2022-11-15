@@ -24,6 +24,7 @@ using Cloudy.CMS.EntitySupport.PrimaryKey;
 namespace Cloudy.CMS.UI.List
 {
     [Authorize("adminarea")]
+    [ResponseCache(NoStore = true)]
     public class ListResultController : Controller
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
