@@ -20,5 +20,5 @@ export default ({ onClickOutside, children }) => {
       return () => document.removeEventListener('click', callback);
     }, []);
   
-    return <div ref={ref}>{children}</div>;
+    return <div style="display: inline-block;" ref={ref}>{children}</div>;
   };

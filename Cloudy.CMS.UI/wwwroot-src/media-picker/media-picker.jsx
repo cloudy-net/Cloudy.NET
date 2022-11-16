@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
-import ClickOutsideDetector from "../components/click-outside-detector";
+import closeDropdown from "../components/close-dropdown";
+import Dropdown from "../components/dropdown";
 import MediaPickerMenu from "./media-picker-menu";
 
 export default ({ controlName, provider, initialValue }) => {
@@ -13,15 +14,12 @@ export default ({ controlName, provider, initialValue }) => {
       <img class="media-picker-preview-image" src={value} />
     </div>}
 
-    <ClickOutsideDetector onClickOutside={() => setOpen(false)}>
-      <div class="dropdown d-inline-block">
-        <button class="btn btn-beta btn-sm dropdown-toggle" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
-          Add
-        </button>
-        <div class={"dropdown-menu" + (open ? " show" : "")}>
-          {open && <MediaPickerMenu provider={provider} value={value} onSelect={newValue => { setValue(newValue != value ? newValue : null); setOpen(false); }} />}
-        </div>
-      </div>
-    </ClickOutsideDetector>
+    <Dropdown text="Add">
+      <MediaPickerMenu provider={provider} value={value} onSelect={newValue => { setValue(newValue != value ? newValue : null); setOpen(false); }} />
+    </Dropdown>
+
+    {/* <Dropdown text="Other" className="ms-2">
+      <a class="dropdown-item" onClick={closeDropdown}>hej</a>
+    </Dropdown> */}
   </>;
 };
