@@ -1,3 +1,3 @@
-export default event => {
-    event.target.dispatchEvent(new Event('close-dropdown', { bubbles: true }));
+export default element => {
+    element.dispatchEvent(new Event('close-dropdown', { bubbles: true }));
 };

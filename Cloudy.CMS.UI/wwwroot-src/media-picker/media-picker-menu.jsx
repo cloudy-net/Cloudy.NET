@@ -1,4 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
+import closeDropdown from "../components/close-dropdown";
 
 export default ({ provider, value, onSelect }) => {
   const [pageSize] = useState(10);
@@ -74,7 +75,7 @@ export default ({ provider, value, onSelect }) => {
     setPathSegments(segments);
   };
 
-  const selectFile = () => {
+  const selectFile = element => {
     let input = document.createElement('input');
     input.type = 'file';
     input.onchange = async () => {
@@ -96,6 +97,7 @@ export default ({ provider, value, onSelect }) => {
       const json = await response.json();
 
       onSelect(json.path);
+      closeDropdown(element);
     };
     input.click();
   }
@@ -123,7 +125,7 @@ export default ({ provider, value, onSelect }) => {
               <span class="media-picker-icon">📁</span>
               {item.name}
             </a> :
-            <a class={"dropdown-item" + (item.value == value ? " active" : "")} onClick={() => { onSelect(item.value == value ? null : item.value); }} tabIndex="0">
+            <a class={"dropdown-item" + (item.value == value ? " active" : "")} onClick={event => { onSelect(item.value == value ? null : item.value); closeDropdown(event.target); }} tabIndex="0">
               <span class="media-picker-icon">📄</span>
               {item.name}
             </a>}
@@ -140,7 +142,7 @@ export default ({ provider, value, onSelect }) => {
         <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next" tabindex="0">&raquo;</a></li>
         <li class="ms-auto">
           <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-primary" onClick={() => selectFile()}>Upload</button>
+            <button type="button" class="btn btn-sm btn-primary" onClick={event => selectFile(event.target)}>Upload</button>
             {/* <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"></button>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="#">Action</a>

@@ -5,7 +5,16 @@ import MediaPickerMenu from "./media-picker-menu";
 
 export default ({ controlName, provider, initialValue }) => {
   const [value, setValue] = useState(initialValue);
-  const [open, setOpen] = useState();
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(value);
+  };
+
+  const paste = async () => {
+    const text = await navigator.clipboard.readText();
+
+    setValue(text);
+  };
 
   return <>
     <input type="hidden" class="form-control" name={controlName} value={value} />
@@ -15,11 +24,13 @@ export default ({ controlName, provider, initialValue }) => {
     </div>}
 
     <Dropdown text="Add">
-      <MediaPickerMenu provider={provider} value={value} onSelect={newValue => { setValue(newValue != value ? newValue : null); setOpen(false); }} />
+      <MediaPickerMenu provider={provider} value={value} onSelect={newValue => { setValue(newValue != value ? newValue : null); }} />
     </Dropdown>
 
-    {/* <Dropdown text="Other" className="ms-2">
-      <a class="dropdown-item" onClick={closeDropdown}>hej</a>
-    </Dropdown> */}
+    <Dropdown text="Other" className="ms-2">
+      <a class="dropdown-item" onClick={ event => { copy(); closeDropdown(event.target); } }>Copy</a>
+      <a class="dropdown-item" onClick={ event => { paste(); closeDropdown(event.target); } }>Paste</a>
+      <a class="dropdown-item" onClick={ event => { setValue(''); closeDropdown(event.target); } }>Clear</a>
+    </Dropdown>
   </>;
 };
