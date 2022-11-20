@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.Internal;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.SingletonSupport;
 using System;
@@ -36,7 +37,8 @@ namespace Cloudy.CMS.ContentTypeSupport
                     type.IsAssignableTo(typeof(INameable)),
                     type.IsAssignableTo(typeof(IImageable)),
                     type.IsAssignableTo(typeof(IRoutable)),
-                    type.IsAssignableTo(typeof(ISingleton))
+                    type.IsAssignableTo(typeof(ISingleton)),
+                    type.IsAssignableTo(typeof(IHierarchicalMarkerInterface))
                 ));
             }
 

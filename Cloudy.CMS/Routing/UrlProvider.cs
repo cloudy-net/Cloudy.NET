@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.ContentSupport.Internal;
 using Cloudy.CMS.ContentSupport.RepositorySupport.Methods;
 
 namespace Cloudy.CMS.Mvc.Routing
@@ -25,7 +26,7 @@ namespace Cloudy.CMS.Mvc.Routing
                 return null;
             }
 
-            var hierarchical = content as IHierarchical;
+            var hierarchical = content as IHierarchicalMarkerInterface;
 
             if (hierarchical == null)
             {

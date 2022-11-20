@@ -12,12 +12,15 @@ using System.Linq;
 namespace TestWebsite.Models
 {
     [Display(Description = "Create pages for your website.")]
-    public class Page : INameable, IRoutable, IImageable
+    public class Page : INameable, IRoutable, IImageable, IHierarchical<Guid?>
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
         [ListColumn(Order = 0)]
         public string Name { get; set; }
+        [Select(typeof(Page))]
+        [ListFilter]
+        public Guid? Parent { get; set; }
         public string UrlSegment { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
