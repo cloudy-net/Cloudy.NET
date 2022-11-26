@@ -19,7 +19,6 @@ namespace TestWebsite.Models
         [ListColumn(Order = 0, Sortable = true)]
         public string Name { get; set; }
         [Select(typeof(Page))]
-        [ListFilter]
         public Guid? Parent { get; set; }
         public string UrlSegment { get; set; }
         [UIHint("textarea")]
