@@ -16,7 +16,7 @@ namespace TestWebsite.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
-        [ListColumn(Order = 0)]
+        [ListColumn(Order = 0, Sortable = true)]
         public string Name { get; set; }
         [Select(typeof(Page))]
         [ListFilter]

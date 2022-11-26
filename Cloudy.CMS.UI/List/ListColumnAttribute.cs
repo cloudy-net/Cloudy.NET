@@ -27,5 +27,10 @@ namespace Cloudy.CMS.UI.List
         /// Sets the column name.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Sets whether the column is sortable.
+        /// </summary>
+        public bool Sortable { get; set; }
     }
 }
