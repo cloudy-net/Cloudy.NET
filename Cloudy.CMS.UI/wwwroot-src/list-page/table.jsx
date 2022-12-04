@@ -55,13 +55,7 @@ export default ({ contentType, columns: initialColumns, filters: listFilters, pa
 
   if (loading) {
     content = <>Loading ...</>;
-  }
-
-  if (!data) {
-    content = <>Could not load data</>;
-  }
-
-  if (content == null) {
+  } else {
     content = <table class="table">
       <thead>
         <tr>
