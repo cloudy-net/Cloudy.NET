@@ -33,14 +33,14 @@
                     var route = routes.Single();
                     var url = "/" + route.Apply(((IRoutable)Model.Instance).UrlSegment);
 
-                    <a class="btn btn-primary btn-sm" href="@url">
+                    <a class="btn btn-beta btn-sm" href="@url">
                         View
                     </a>
                 }
                 else
                 {
                     <div class="dropdown d-inline-block">
-                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-beta btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             View
                         </button>
                         <ul class="dropdown-menu">
@@ -54,7 +54,7 @@
                 }
             }
         }
-        <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
+        <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", ContentType = Model.ContentType.Name })">New</a>
     </h1>
 </div>
 
