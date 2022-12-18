@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.UI.FormSupport;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Net.Mime;
 using System.Linq;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
+using System.Collections.Generic;
 
 namespace Cloudy.CMS.UI.Areas.Admin.Pages
 {
@@ -19,31 +18,27 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContentTypeNameProvider ContentTypeNameProvider { get; }
-        IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IContextCreator ContextCreator { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
-        IInstanceUpdater InstanceUpdater { get; }
-        IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public EditModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter, IInstanceUpdater instanceUpdater, IPrimaryKeyGetter primaryKeyGetter)
+        public EditModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentTypeNameProvider = contentTypeNameProvider;
-            PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             ContextCreator = contextCreator;
             PrimaryKeyConverter = primaryKeyConverter;
-            InstanceUpdater = instanceUpdater;
-            PrimaryKeyGetter = primaryKeyGetter;
         }
 
         public ContentTypeDescriptor ContentType { get; set; }
         public ContentTypeName ContentTypeName { get; set; }
+        public IEnumerable<string> Keys { get; set; }
         public object Instance { get; set; }
 
         async Task BindData(string contentType, string[] keys)
         {
             ContentType = ContentTypeProvider.Get(contentType);
             ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
+            Keys = keys;
             var keyValues = PrimaryKeyConverter.Convert(keys, ContentType.Type);
             var context = ContextCreator.CreateFor(ContentType.Type);
             Instance = await context.Context.FindAsync(ContentType.Type, keyValues).ConfigureAwait(false);
@@ -59,24 +54,6 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
             }
 
             return Page();
-        }
-
-        public async Task<IActionResult> OnPost(string contentType, string[] keys, [FromForm] IFormCollection form)
-        {
-            await BindData(contentType, keys).ConfigureAwait(false);
-
-            if (Instance == null)
-            {
-                return NotFound($"Could not find instance of type {contentType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
-            }
-
-            var primaryKeyNames = PrimaryKeyPropertyGetter.GetFor(ContentType.Type).Select(p => p.Name).ToList();
-
-            var context = ContextCreator.CreateFor(ContentType.Type);
-            InstanceUpdater.Update(ContentType, primaryKeyNames, Instance, form);
-            await context.Context.SaveChangesAsync().ConfigureAwait(false);
-
-            return Redirect(Url.Page("Edit", new { area = "Admin", ContentType = ContentType.Name, keys = PrimaryKeyGetter.Get(Instance) }));
         }
     }
 }

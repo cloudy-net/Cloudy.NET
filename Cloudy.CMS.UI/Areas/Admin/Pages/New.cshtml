@@ -23,7 +23,7 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            @await Component.InvokeAsync("Form", new { area = "Admin", ContentType = Model.ContentType.Name })
+            <div class="cloudy-form" content-type="@Model.ContentType.Name"></div>
         </div>
     </div>
 </div>

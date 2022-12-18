@@ -3,6 +3,8 @@
 @using Cloudy.CMS.Naming
 @using Cloudy.CMS.Routing;
 @using Cloudy.CMS.UI.FormSupport
+@using System.Web;
+@using System.Text.Json;
 @model Cloudy.CMS.UI.Areas.Admin.Pages.EditModel
 
 @inject INameGetter NameGetter
@@ -61,7 +63,7 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            @await Component.InvokeAsync("Form", new { area = "Admin", ContentType = Model.ContentType.Name, Instance = Model.Instance })
+            <div class="cloudy-form" content-type="@Model.ContentType.Name" keys="@HttpUtility.HtmlAttributeEncode(JsonSerializer.Serialize(Model.Keys))"></div>
         </div>
     </div>
 </div>

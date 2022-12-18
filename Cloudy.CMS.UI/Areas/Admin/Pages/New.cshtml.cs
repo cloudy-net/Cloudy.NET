@@ -19,19 +19,11 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
     {
         IContentTypeProvider ContentTypeProvider { get; }
         IContentTypeNameProvider ContentTypeNameProvider { get; }
-        IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
-        IInstanceUpdater InstanceUpdater { get; }
-        IContextCreator ContextCreator { get; }
-        IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IInstanceUpdater instanceUpdater, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter)
+        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider)
         {
             ContentTypeProvider = contentTypeProvider;
             ContentTypeNameProvider = contentTypeNameProvider;
-            PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
-            InstanceUpdater = instanceUpdater;
-            ContextCreator = contextCreator;
-            PrimaryKeyGetter = primaryKeyGetter;
         }
 
         public ContentTypeDescriptor ContentType { get; set; }
@@ -46,21 +38,6 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
         public void OnGet(string contentType)
         {
             BindData(contentType);
-        }
-
-        public async Task<IActionResult> OnPost(string contentType, [FromForm] IFormCollection form)
-        {
-            BindData(contentType);
-
-            var primaryKeyNames = PrimaryKeyPropertyGetter.GetFor(ContentType.Type).Select(p => p.Name).ToList();
-
-            var context = ContextCreator.CreateFor(ContentType.Type);
-            var instance = Activator.CreateInstance(ContentType.Type);
-            InstanceUpdater.Update(ContentType, primaryKeyNames, instance, form);
-            await context.Context.AddAsync(instance).ConfigureAwait(false);
-            await context.Context.SaveChangesAsync().ConfigureAwait(false);
-
-            return Redirect(Url.Page("Edit", new { area = "Admin", ContentType = ContentType.Name, keys = PrimaryKeyGetter.Get(instance) }));
         }
     }
 }

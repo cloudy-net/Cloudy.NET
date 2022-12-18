@@ -1,6 +1,0 @@
-﻿@using Cloudy.CMS.UI.FormSupport
-@model FieldViewModel
-
-<div>
-    <input type="checkbox" class="form-check-input" id="field-@Model.Field.Name" name="@Model.Field.Name" value="true" checked="@(Model.Value as bool? == true ? "checked" : null)">
-</div>
