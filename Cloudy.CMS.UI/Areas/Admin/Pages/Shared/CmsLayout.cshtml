@@ -63,7 +63,7 @@
             window.addEventListener('load', () => {
                 if (!window.viteIsLoaded) {
                     document.querySelector('.vite-alert').style = '';
-
+                    let hasFailed = false;
                         
                     const checkStarted = async () => {
                         let response = null;
@@ -74,10 +74,15 @@
                         }
 
                         if (response && response.ok) {
-                            location.reload();
+                            if(hasFailed) {
+                                location.reload();
 
-                            return;
+                                return;
+                            }
+                        } else {
+                            hasFailed = true;
                         }
+
 
                         setTimeout(checkStarted, 3000);
                     };
