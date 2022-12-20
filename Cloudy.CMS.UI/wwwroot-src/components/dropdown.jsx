@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "@preact-htm";
 import ClickOutsideDetector from "./click-outside-detector"
 
 const Dropdown = ({ text, className, button, children }) => {

@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState } from "@preact-htm";
 
 export default ({ controlName, controlId, type, initialValue, initialBackendValue }) => {
     const [value, setValue] = useState(initialValue);

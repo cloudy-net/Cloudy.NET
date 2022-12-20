@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState } from "@preact-htm";
 import closeDropdown from "../components/close-dropdown";
 import Dropdown from "../components/dropdown";
 import MediaPickerMenu from "./media-picker-menu";

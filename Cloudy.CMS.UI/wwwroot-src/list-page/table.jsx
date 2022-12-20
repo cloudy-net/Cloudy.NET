@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from '@preact-htm';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
 

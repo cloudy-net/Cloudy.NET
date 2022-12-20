@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "@preact-htm";
 import SelectEntityMenu from "../components/select-entity-menu";
 
 export default ({ label, contentType, onSelect, simpleKey }) => {

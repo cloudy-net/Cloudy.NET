@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "@preact-htm";
 import SearchBox from "../components/search-box";
 
 export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpleKey, imageable }) => {

@@ -1,6 +1,6 @@
 import './main.scss'
 
-import { render } from 'preact'
+import { render } from '@preact-htm'
 import Table from './list-page/table'
 import SelectOne from './select-one/select-one'
 import EnumDropdown from './enum-dropdown/enum-dropdown';
@@ -48,4 +48,8 @@ document.addEventListener('keydown', event => {
 
 document.querySelectorAll('.date-picker-control').forEach(element =>
   render(<DatePicker {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
+);
+
+document.querySelectorAll('.cloudy-form').forEach(element =>
+  render(<Form {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
 );

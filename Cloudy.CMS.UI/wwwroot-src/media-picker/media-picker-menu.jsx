@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "@preact-htm";
 import closeDropdown from "../components/close-dropdown";
 
 export default ({ provider, value, onSelect }) => {

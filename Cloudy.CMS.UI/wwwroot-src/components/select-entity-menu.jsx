@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "@preact-htm";
 import SearchBox from "./search-box";
 
 export default ({ contentType, simpleKey, value, onSelect }) => {

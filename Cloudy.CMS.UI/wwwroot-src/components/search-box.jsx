@@ -1,5 +1,5 @@
 import debounce from "lodash.debounce";
-import { useEffect, useMemo, useRef } from "preact/hooks";
+import { useEffect, useMemo, useRef } from "@preact-htm";
 
 export default ({ callback, floating, small }) => {
   const debouncedResults = useMemo(() => {
