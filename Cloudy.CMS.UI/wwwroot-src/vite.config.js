@@ -1,22 +1,25 @@
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
+import path from 'path';
+
+const preactLocation = path.join(path.resolve(__dirname), './preact-htm/standalone.module.js');
 
 export default defineConfig({
   plugins: [preact()],
   resolve: {
     alias: {
-      '@preact-htm': './preact-htm/standalone.module.js'
+      '@preact-htm': preactLocation
     }
   },
-  server: {
-    fs: {
-      strict: false
-    }
-  },
+  // server: {
+  //   fs: {
+  //     strict: false
+  //   }
+  // },
   build: {
     rollupOptions: {
       external: [
-        './preact-htm/standalone.module.js'
+        preactLocation
       ],
       output: {
         entryFileNames: '[name].bundle.js',

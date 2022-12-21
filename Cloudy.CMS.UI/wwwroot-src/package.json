@@ -11,14 +11,13 @@
     "prepare": "copyfiles --flat node_modules/htm/preact/standalone.module.js preact-htm/"
   },
   "dependencies": {
-    "@rollup/plugin-alias": "^4.0.2",
-    "copyfiles": "^2.4.1",
     "htm": "^3.1.1",
     "lodash.debounce": "^4.0.8",
     "preact": "^10.11.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.4.0",
+    "copyfiles": "^2.4.1",
     "sass": "^1.55.0",
     "vite": "^3.1.3"
   }
