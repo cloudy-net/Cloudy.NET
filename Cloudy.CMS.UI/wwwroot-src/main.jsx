@@ -6,6 +6,7 @@ import SelectOne from './select-one/select-one'
 import EnumDropdown from './enum-dropdown/enum-dropdown';
 import MediaPicker from './media-picker/media-picker';
 import DatePicker from './date-picker/date-picker';
+import Form from './form/form';
 
 window.viteIsLoaded = true;
 

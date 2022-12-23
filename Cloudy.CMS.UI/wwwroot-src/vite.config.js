@@ -11,11 +11,6 @@ export default defineConfig({
       '@preact-htm': preactLocation
     }
   },
-  // server: {
-  //   fs: {
-  //     strict: false
-  //   }
-  // },
   build: {
     rollupOptions: {
       external: [
