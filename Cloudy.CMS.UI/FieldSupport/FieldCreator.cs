@@ -108,7 +108,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     partialName = "failed";
                 }
 
-                var partial = $"Form/{partialName}";
+                var partial = $"/_content/Cloudy.CMS.UI/Form/{partialName}.js";
 
                 var renderChrome = true;
 
