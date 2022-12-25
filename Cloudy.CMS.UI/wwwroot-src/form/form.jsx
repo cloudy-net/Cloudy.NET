@@ -30,7 +30,7 @@ function Form({ contentType }) {
     }, []);
 
     let content;
-    
+
     if (error) {
         content = <>
             <div class="alert alert-primary">
@@ -47,7 +47,7 @@ function Form({ contentType }) {
     if (loading) {
         content = <>Loading ...</>;
     } else {
-        content = <>Form!</>;
+        content = <>{fields.length} fields!</>;
     }
 
     return content;
