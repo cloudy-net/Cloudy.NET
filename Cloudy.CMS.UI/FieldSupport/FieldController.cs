@@ -17,7 +17,7 @@ namespace Cloudy.CMS.UI.FieldSupport
 
         [HttpGet]
         [Area("Admin")]
-        [Route("/{area}/api/form/fields/{contentType}")]
+        [Route("/{area}/api/form/fields")]
         public object GetFields(string contentType)
         {
             return FieldProvider.Get(contentType);
