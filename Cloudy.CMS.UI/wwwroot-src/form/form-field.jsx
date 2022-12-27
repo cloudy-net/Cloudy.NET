@@ -1,4 +1,4 @@
-import { useContext } from '@preact-htm';
+import { html, useContext } from '@preact-htm';
 import FieldComponentContext from "./field-component-context";
 
 const FormField = ({ name, label, partial }) => {
@@ -8,10 +8,10 @@ const FormField = ({ name, label, partial }) => {
         return;
     }
 
-    return <div class="mb-3">
-    <label for={name} class="form-label">{label}</label>
-    {fieldComponents[partial]()}
-    </div>
+    return html`<div class="mb-3">
+    <label for=${name} class="form-label">${label}</label>
+    <${fieldComponents[partial]} name=${name} value=${''} />
+    </div>`
 };
 
 export default FormField;
