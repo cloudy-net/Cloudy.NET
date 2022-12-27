@@ -1,6 +1,6 @@
 import { useEffect, useState } from '@preact-htm';
 import FieldComponentProvider from './field-component-provider.js';
-import FormField from './form-field.js';
+import FormField from './form-field.jsx';
 
 function Form({ contentType }) {
   const [loading, setLoading] = useState(true);
