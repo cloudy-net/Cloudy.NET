@@ -33,5 +33,44 @@ namespace TestWebsite.Models
         public string MainBody { get; set; }
         [ListFilter]
         public Category? Category { get; set; }
+        //[Block(typeof(Page))]
+        //public IList<LayoutItem> Test { get; set; }
+    }
+
+    public class BlockAttribute : Attribute
+    {
+        public Type Type { get; }
+
+        public BlockAttribute(Type type)
+        {
+            Type = type;
+        }
+    }
+
+    public class LayoutItem : IBlockItem<Guid>
+    {
+        public Guid ItemId { get; set; }
+        public Guid Item { get; set; }
+        public ColumnWidth Width { get; set; }
+        public string Title { get; set; }
+    }
+
+    public enum ColumnWidth
+    {
+        Full = 0,
+        Half = 1,
+        Third = 2,
+    }
+
+    public interface IBlockItem<T>
+    {
+        Guid ItemId { get; set; }
+        T Item { get; }
+    }
+
+    public class Link
+    {
+        public string Text { get; set; }
+        public string Url { get; set; }
     }
 }
