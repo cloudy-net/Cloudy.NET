@@ -1,4 +1,4 @@
-import { html } from '/_content/Cloudy.CMS.UI/preact-htm/standalone.module.js';
+import { html } from '../../preact-htm/standalone.module.js';
 
 const Control = ({ name, value }) => {
     return html`<div>
