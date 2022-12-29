@@ -16,7 +16,7 @@ export default defineConfig({
         },
         {
           src: 'form/controls',
-          dest: 'form/controls',
+          dest: 'form/',
         },
         {
           src: 'node_modules/htm/preact/standalone.module.js',
