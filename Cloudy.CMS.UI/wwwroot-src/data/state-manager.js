@@ -2,6 +2,7 @@ import contentGetter from "./content-getter.js";
 import arrayEquals from "../util/array-equals.js";
 import getReferenceValue from "../util/get-reference-value.js";
 import contentSaver from "./content-saver.js";
+import hasChanges from './has-changes.js';
 
 const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
@@ -9,14 +10,14 @@ const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) &
 
 class StateManager {
     indexStorageKey = "cloudy:statesIndex";
-    schema = "1";
+    schema = "1.3";
     states = this.loadStates();
 
     loadStates() {
         let index = JSON.parse(localStorage.getItem(this.indexStorageKey) || JSON.stringify({ schema: this.schema, elements: [] }));
 
         if(index.schema != this.schema){
-            if(confirm(`Warning: The state schema has changed (new version: ${this.schema}, old version: ${index.schema}).\n\nThis means the format of local state has changed, and your local changes are no longer understood by the Admin UI.\n\nYou are required to clear your local changes to avoid any strange bugs.\n\nPress OK to continue, or cancel to do the necessary schema changes manually to your localStorage (not supported officially).`)){
+            if(confirm(`Warning: The state schema has changed (new version: ${this.schema}, old version: ${index.schema}).\n\nThis means the format of local changes has changed, and your local changes are no longer understood by the Admin UI.\n\nYou are required to clear your local changes to avoid any strange bugs.\n\nPress OK to continue, or cancel to do the necessary schema changes manually to your localStorage (not supported officially).`)){
                 Object.keys(localStorage)
                 .filter(key => key.startsWith("cloudy:"))
                 .forEach(key => localStorage.removeItem(key));
@@ -35,7 +36,7 @@ class StateManager {
     }
 
     getAll(){
-        return this.states.filter(state => state.simpleChanges?.length);
+        return this.states.filter(state => hasChanges(state));
     }
 
     createStateForNewContent(contentType) {
@@ -46,6 +47,7 @@ class StateManager {
             referenceValues: {},
             referenceDate: new Date(),
             simpleChanges: [],
+            arrayChanges: [],
         };
         this.states.push(state);
         this.persist(state);
@@ -70,6 +72,7 @@ class StateManager {
             referenceValues: null,
             referenceDate: null,
             simpleChanges: null,
+            arrayChanges: null,
         };
         this.states.push(state);
         this.persist(state);
@@ -101,7 +104,7 @@ class StateManager {
                     loadingNewVersion: false,
                 };
             } else {
-                if(!state.simpleChanges.length){
+                if(!hasChanges(state)){
                     state = {
                         ...state,
                         loadingNewVersion: false,
@@ -147,6 +150,7 @@ class StateManager {
                 referenceValues: content,
                 referenceDate: new Date(),
                 simpleChanges: [],
+                arrayChanges: [],
             };
             
             this.replace(state);
@@ -197,7 +201,7 @@ class StateManager {
 
         change.value = value;
 
-        const initialValue = getReferenceValue(state.referenceValues, path);
+        const initialValue = getReferenceValue(state, path);
 
         if ((value === '' && (initialValue === null || initialValue === undefined)) || initialValue == value) {
             state.simpleChanges.splice(state.simpleChanges.indexOf(change), 1);
@@ -209,10 +213,23 @@ class StateManager {
         this.triggerStateChange(contentReference);
     }
 
+    registerArrayAdd(contentReference, path, key, type) {
+        const state = this.getState(contentReference);
+
+        const arrayAdd = { path, key, type };
+        state.arrayChanges.push(arrayAdd);
+
+        this.persist(state);
+
+        this.triggerAnyStateChange();
+        this.triggerStateChange(contentReference);
+    }
+
     discardChanges(contentReference, change) {
         const state = this.getState(contentReference);
 
         state.simpleChanges.splice(0, state.simpleChanges.length);
+        state.arrayChanges.splice(0, state.arrayChanges.length);
 
         this.persist(state);
 
@@ -221,11 +238,11 @@ class StateManager {
     }
 
     updateIndex(){
-        localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => state.simpleChanges?.length).map(state => state.contentReference) }));
+        localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => hasChanges(state)).map(state => state.contentReference) }));
     }
     
     persist(state) {
-        if(state.simpleChanges?.length){
+        if(state.simpleChanges?.length || state.arrayChanges?.length){
             localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
         } else {
             localStorage.removeItem(`cloudy:${JSON.stringify(state.contentReference)}`);
