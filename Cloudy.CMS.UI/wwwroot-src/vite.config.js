@@ -11,8 +11,12 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'change/change-tracker.js',
-          dest: 'change/',
+          src: 'form/entity-context.js',
+          dest: 'form/',
+        },
+        {
+          src: 'data/state-manager.js',
+          dest: 'data/',
         },
         {
           src: 'form/controls',
@@ -33,7 +37,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: [
-        'change/change-tracker.js',
+        'data/state-manager.js',
+        'form/entity-context.js',
         preactLocation,
       ],
       output: {
