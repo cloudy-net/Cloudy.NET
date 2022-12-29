@@ -12,11 +12,15 @@ export default defineConfig({
       targets: [
         {
           src: 'change/change-tracker.js',
-          dest: 'change/change-tracker.js',
+          dest: 'change/',
+        },
+        {
+          src: 'form/controls',
+          dest: 'form/controls',
         },
         {
           src: 'node_modules/htm/preact/standalone.module.js',
-          dest: 'preact-htm/standalone.module.js',
+          dest: 'preact-htm/',
         },
       ],
     }),
