@@ -1,5 +1,5 @@
 import { useEffect, useState } from '@preact-htm';
-import FieldComponentProvider from './field-component-provider.js';
+import FieldComponentProvider from './field-component-provider.jsx';
 import FormField from './form-field.jsx';
 
 function Form({ contentType }) {
