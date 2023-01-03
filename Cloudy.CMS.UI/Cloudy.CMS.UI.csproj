@@ -30,7 +30,6 @@
 	<ItemGroup>
 	  <None Include="wwwroot-src\package-lock.json" />
 	  <None Include="wwwroot-src\package.json" />
-	  <None Include="wwwroot\index.html" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,6 +43,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\" />
 	</ItemGroup>
 
 </Project>
