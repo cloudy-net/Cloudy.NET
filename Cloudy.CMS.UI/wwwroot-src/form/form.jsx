@@ -1,4 +1,5 @@
 import { useEffect, useState } from '@preact-htm';
+import EntityContextProvider from './entity-context-provider.jsx';
 import FieldComponentProvider from './field-component-provider.jsx';
 import FormField from './form-field.jsx';
 
@@ -50,9 +51,11 @@ function Form({ contentType }) {
     return <>Loading ...</>;
   }
 
-  return <FieldComponentProvider>
-    {fields.map(field => <FormField {...field} />)}
-  </FieldComponentProvider>
+  return <EntityContextProvider>
+    <FieldComponentProvider>
+      {fields.map(field => <FormField {...field} />)}
+    </FieldComponentProvider>
+  </EntityContextProvider>
 };
 
 export default Form;
