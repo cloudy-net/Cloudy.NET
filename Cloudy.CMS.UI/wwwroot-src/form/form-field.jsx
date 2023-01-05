@@ -10,7 +10,7 @@ const FormField = ({ name, path, label, partial }) => {
 
     return html`<div class="mb-3">
     <label for=${name} class="form-label">${label}</label>
-    <${fieldComponents[partial]} name=${name} path=${path} value=${''} />
+    <${fieldComponents[partial]} name=${name} path=${path} />
     </div>`
 };
 

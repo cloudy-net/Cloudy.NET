@@ -23,6 +23,10 @@ export default defineConfig({
           dest: 'form/',
         },
         {
+          src: 'util/*',
+          dest: 'util/',
+        },
+        {
           src: 'node_modules/htm/preact/standalone.module.js',
           dest: 'preact-htm/',
         },
@@ -42,6 +46,10 @@ export default defineConfig({
       external: [
         'data/state-manager.js',
         'form/entity-context.js',
+        'util/array-equals.js',
+        'util/get-intermediate-simple-value.js',
+        'util/get-reference-value.js',
+        'util/url-fetcher.js',
         preactLocation,
       ],
       output: {

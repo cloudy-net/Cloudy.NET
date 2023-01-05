@@ -24,7 +24,7 @@ export default ({ contentType, keyValues, children }) => {
     return () => stateManager.offStateChange(contentReference, callback);
   }, [keyValues]);
 
-  return <EntityContext.Provider value={{ contentReference }}>
+  return <EntityContext.Provider value={{ contentReference, state }}>
     {contentReference && state && !state.loading && children || <>Loading ...</>}
   </EntityContext.Provider>;
 };
