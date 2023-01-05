@@ -12,14 +12,16 @@ export default ({ contentType, keyValues, children }) => {
     if (keyValues) {
       contentReference = { contentType, keyValues };
       setContentReference(contentReference);
-      stateManager.createOrUpdateStateForExistingContent(contentReference);
+      const state = stateManager.createOrUpdateStateForExistingContent(contentReference);
+      setState(state);
     } else {
       const state = stateManager.createStateForNewContent(contentType);
       contentReference = state.contentReference
       setContentReference(contentReference);
+      setState(state);
     }
 
-    const callback = () => setState(stateManager.getState(contentReference));
+    const callback = () => setState({...stateManager.getState(contentReference)});
     stateManager.onStateChange(contentReference, callback);
     return () => stateManager.offStateChange(contentReference, callback);
   }, [keyValues]);
