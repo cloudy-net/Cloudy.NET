@@ -34,6 +34,9 @@ export default defineConfig({
       '@preact-htm': preactLocation
     }
   },
+  server: {
+    hmr: false
+  },
   build: {
     rollupOptions: {
       external: [
