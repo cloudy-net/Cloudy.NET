@@ -1,9 +1,8 @@
 import { useEffect, useState } from '@preact-htm';
-import EntityContextProvider from './entity-context-provider.jsx';
 import FieldComponentProvider from './field-component-provider.jsx';
 import FormField from './form-field.jsx';
 
-function Form({ contentType }) {
+function Form({ contentType, keyValues }) {
   const [loading, setLoading] = useState(true);
   const [fields, setFields] = useState();
   const [error, setError] = useState();
@@ -51,7 +50,7 @@ function Form({ contentType }) {
     return <>Loading ...</>;
   }
 
-  return <EntityContextProvider>
+  return <EntityContextProvider value={{ contentType, keyValues, reference: { contentType, keyValues } }}>
     <FieldComponentProvider>
       {fields.map(field => <FormField {...field} />)}
     </FieldComponentProvider>

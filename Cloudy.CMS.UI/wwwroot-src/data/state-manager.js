@@ -6,7 +6,7 @@ import hasChanges from './has-changes.js';
 
 const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
-const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.contentTypeId == b.contentTypeId;
+const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.contentType == b.contentType;
 
 class StateManager {
     indexStorageKey = "cloudy:statesIndex";
@@ -17,7 +17,7 @@ class StateManager {
         let index = JSON.parse(localStorage.getItem(this.indexStorageKey) || JSON.stringify({ schema: this.schema, elements: [] }));
 
         if(index.schema != this.schema){
-            if(confirm(`Warning: The state schema has changed (new version: ${this.schema}, old version: ${index.schema}).\n\nThis means the format of local changes has changed, and your local changes are no longer understood by the Admin UI.\n\nYou are required to clear your local changes to avoid any strange bugs.\n\nPress OK to continue, or cancel to do the necessary schema changes manually to your localStorage (not supported officially).`)){
+            if(confirm(`Warning: The state schema has changed (new version: ${this.schema}, old version: ${index.schema}).\n\nThis means the format of local state has changed, and your local changes are no longer understood by the Admin UI.\n\nYou are required to clear your local changes to avoid any strange bugs.\n\nPress OK to continue, or cancel to do the necessary schema changes manually to your localStorage (not supported officially).`)){
                 Object.keys(localStorage)
                 .filter(key => key.startsWith("cloudy:"))
                 .forEach(key => localStorage.removeItem(key));
@@ -40,7 +40,7 @@ class StateManager {
     }
 
     createStateForNewContent(contentType) {
-        const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, contentTypeId: contentType.id };
+        const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, contentType };
 
         const state = {
             contentReference,

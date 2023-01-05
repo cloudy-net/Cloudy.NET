@@ -13,12 +13,12 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public static class FormTagRenderer
     {
-        public static IHtmlContent RenderCloudyForm(this IHtmlHelper html, ContentTypeDescriptor contentType, IEnumerable<string> keys = null)
+        public static IHtmlContent RenderCloudyForm(this IHtmlHelper html, ContentTypeDescriptor contentType, IEnumerable<string> keyValues = null)
         {
             var settings = new
             {
                 contentType = contentType.Name,
-                keys = keys
+                keyValues
             };
             return new HtmlString($"<div class=\"cloudy-form\" settings=\"{HttpUtility.HtmlAttributeEncode(JsonSerializer.Serialize(settings))}\" ></div>");
         }
