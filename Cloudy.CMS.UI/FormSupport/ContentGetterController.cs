@@ -1,18 +1,12 @@
-﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.RepositorySupport;
-using Cloudy.CMS.ContentSupport.Serialization;
+﻿using Cloudy.CMS.ContentSupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FormSupport
@@ -54,7 +48,7 @@ namespace Cloudy.CMS.UI.FormSupport
             }
 
             var options = new JsonSerializerOptions();
-            ContentJsonConverterProvider.GetAll().ToList().ForEach(c => options.Converters.Add(c));
+            ContentJsonConverterProvider.GetAll().ToList().ForEach(options.Converters.Add);
             return Json(content, options);
         }
 
