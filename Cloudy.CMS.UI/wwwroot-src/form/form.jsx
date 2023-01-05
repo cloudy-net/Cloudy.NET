@@ -1,6 +1,7 @@
 import { useEffect, useState } from '@preact-htm';
 import FieldComponentProvider from './field-component-provider.jsx';
 import FormField from './form-field.jsx';
+import EntityContextProvider from './entity-context-provider'
 
 function Form({ contentType, keyValues }) {
   const [loading, setLoading] = useState(true);
