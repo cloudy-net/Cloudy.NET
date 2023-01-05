@@ -51,9 +51,9 @@ function Form({ contentType, keyValues }) {
     return <>Loading ...</>;
   }
 
-  return <EntityContextProvider value={{ contentType, keyValues, reference: { contentType, keyValues } }}>
+  return <EntityContextProvider {...{ contentType, keyValues }}>
     <FieldComponentProvider>
-      {fields.map(field => <FormField {...field} />)}
+      {fields.map(field => <FormField {...field} path={[field.name]} />)}
     </FieldComponentProvider>
   </EntityContextProvider>
 };
