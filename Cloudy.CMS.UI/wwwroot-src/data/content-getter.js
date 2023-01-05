@@ -4,7 +4,7 @@ import ContentNotFound from './content-not-found.js';
 class ContentGetter {
     async get(contentReference) {
         const result = await urlFetcher.fetch(
-            `ContentGetter/Get`,
+            `/Admin/api/form/content/get`,
             {
                 credentials: 'include',
                 method: 'POST',
