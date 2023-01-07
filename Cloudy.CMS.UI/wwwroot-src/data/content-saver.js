@@ -3,7 +3,7 @@ import urlFetcher from "../util/url-fetcher.js";
 
 class ContentSaver {
     async save(states) {
-        const response = await urlFetcher.fetch("SaveContent/SaveContent", {
+        const response = await urlFetcher.fetch("/Admin/api/form/content/save", {
             credentials: "include",
             method: "POST",
             headers: { "Content-Type": "application/json" },
