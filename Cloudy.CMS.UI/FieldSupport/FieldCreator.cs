@@ -30,7 +30,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             {
                 var displayAttribute = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 
-                var autoGenerate = displayAttribute?.GetAutoGenerateField() ?? true;
+                var autoGenerate = displayAttribute?.GetAutoGenerateField();
                 var group = displayAttribute?.GetGroupName();
 
                 var name = propertyDefinition.Name;

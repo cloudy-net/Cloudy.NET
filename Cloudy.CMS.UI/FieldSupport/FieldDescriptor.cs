@@ -14,7 +14,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         [property: JsonIgnore] Type Type,
         string Label,
         string Partial,
-        bool AutoGenerate,
+        bool? AutoGenerate,
         bool RenderChrome,
         string Tab
     );
