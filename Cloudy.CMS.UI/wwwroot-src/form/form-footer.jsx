@@ -15,7 +15,7 @@ const FormFooter = ({ contentType }) => {
     setSaving(false);
   };
 
-  return <><button class="btn btn-primary" type="button" disabled={!state.simpleChanges || saving} onClick={save}>{saving ? 'Saving ...' : 'Save'}</button></>
+  return <><button class="btn btn-primary" type="button" disabled={!state.simpleChanges.length || saving} onClick={save}>{saving ? 'Saving ...' : 'Save'}</button></>
 };
 
 export default FormFooter;
