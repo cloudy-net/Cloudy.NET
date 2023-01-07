@@ -12,7 +12,7 @@ const Control = ({ name, path }) => {
   return html`<div>
       <input
         type="text"
-        pattern="[0-9]+"
+        pattern="[0-9]+(.[0-9]+?)?"
         class="form-control"
         id=${`field-${name}`}
         name=${name}
