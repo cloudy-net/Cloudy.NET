@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
-    [Authorize("Cloudy.CMS.UI")]
-    [Area("Cloudy.CMS")]
+    [Authorize("adminarea")]
+    [Area("Admin")]
     public class SaveContentController : Controller
     {
         IContentTypeProvider ContentTypeProvider { get; }
@@ -39,6 +39,7 @@ namespace Cloudy.CMS.UI.FormSupport
         }
 
         [HttpPost]
+        [Route("/{area}/api/form/content/save")]
         public async Task<SaveContentResponse> SaveContent([FromBody] SaveContentRequestBody data)
         {
             if (!ModelState.IsValid)
@@ -52,7 +53,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
             foreach (var changedContent in data.ChangedContent)
             {
-                var contentType = ContentTypeProvider.Get(changedContent.ContentReference.ContentTypeId);
+                var contentType = ContentTypeProvider.Get(changedContent.ContentReference.ContentType);
                 var context = ContextCreator.CreateFor(contentType.Type);
 
                 contexts.Add(context);
@@ -82,7 +83,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 if (changedContent.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
-                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {changedContent.ContentReference.ContentTypeId}!");
+                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {changedContent.ContentReference.ContentType}!");
                 }
 
                 var changedSimpleFields = changedContent.SimpleChanges.ToList();
@@ -167,7 +168,7 @@ namespace Cloudy.CMS.UI.FormSupport
                     Success = true,
                     ContentReference = new ContentReference
                     {
-                        ContentTypeId = contentTypeId,
+                        ContentType = contentTypeId,
                         KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
                     },
                 };
@@ -180,7 +181,7 @@ namespace Cloudy.CMS.UI.FormSupport
                     Success = false,
                     ContentReference = new ContentReference
                     {
-                        ContentTypeId = contentTypeId,
+                        ContentType = contentTypeId,
                         KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
                     },
                     ValidationErrors = validationErrors.ToDictionary(e => e.Key, e => (IEnumerable<string>)e.Value.ToList().AsReadOnly()),
@@ -252,7 +253,7 @@ namespace Cloudy.CMS.UI.FormSupport
         {
             public JsonElement[] KeyValues { get; set; }
             [Required]
-            public string ContentTypeId { get; set; }
+            public string ContentType { get; set; }
         }
 
         public class ChangedContent
