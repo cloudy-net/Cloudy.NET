@@ -27,6 +27,10 @@ export default defineConfig({
           dest: 'util/',
         },
         {
+          src: 'components/*',
+          dest: 'components/',
+        },
+        {
           src: 'node_modules/htm/preact/standalone.module.js',
           dest: 'preact-htm/',
         },
@@ -35,7 +39,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@preact-htm': preactLocation
+      '@preact-htm': preactLocation,
     }
   },
   server: {
@@ -46,10 +50,13 @@ export default defineConfig({
       external: [
         'data/state-manager.js',
         'form/entity-context.js',
+        'media-picker/media-picker-menu.js',
+        'components/*',
         'util/array-equals.js',
         'util/get-intermediate-simple-value.js',
         'util/get-reference-value.js',
         'util/url-fetcher.js',
+        'util/debounce.js',
         preactLocation,
       ],
       output: {

@@ -2,10 +2,6 @@ import './main.scss'
 
 import { render } from '@preact-htm'
 import Table from './list-page/table'
-import SelectOne from './select-one/select-one'
-import EnumDropdown from './enum-dropdown/enum-dropdown';
-import MediaPicker from './media-picker/media-picker';
-import DatePicker from './date-picker/date-picker';
 import Form from './form/form';
 
 window.viteIsLoaded = true;
@@ -13,29 +9,6 @@ window.viteIsLoaded = true;
 document.querySelectorAll('.list-page-table').forEach(element =>
   render(<Table {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
 );
-
-document.querySelectorAll('.select-one-control').forEach(element =>
-  render(<SelectOne {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
-);
-
-document.querySelectorAll('.enum-dropdown-control').forEach(element =>
-  render(<EnumDropdown {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
-);
-
-document.querySelectorAll('.media-picker-control').forEach(element =>
-  render(<MediaPicker {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
-);
-
-document.querySelectorAll('.html-control').forEach(element => {
-  var input = document.querySelector(element.getAttribute('for'));
-  var quill = new Quill(element, {
-    modules: {
-    },
-    theme: 'snow'
-  });
-  quill.clipboard.dangerouslyPasteHTML(input.value)
-  quill.on('text-change', () => input.value = quill.root.innerHTML);
-});
 
 document.addEventListener('keydown', event => {
   if(event.key != 'Enter'){
@@ -46,10 +19,6 @@ document.addEventListener('keydown', event => {
     event.target.click();
   }
 });
-
-document.querySelectorAll('.date-picker-control').forEach(element =>
-  render(<DatePicker {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)
-);
 
 document.querySelectorAll('.cloudy-form').forEach(element =>
   render(<Form {...JSON.parse(element.getAttribute('settings') || '{}')} />, element)

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "@preact-htm";
-import closeDropdown from "../components/close-dropdown";
+import { html, useEffect, useState } from "@preact-htm";
+import closeDropdown from "../components/close-dropdown.js";
 
 export default ({ provider, value, onSelect }) => {
   const [pageSize] = useState(10);

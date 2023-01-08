@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "@preact-htm";
+import { html, useEffect, useRef, useState } from "../preact-htm/standalone.module.js";
 import ClickOutsideDetector from "./click-outside-detector"
 
 const Dropdown = ({ text, className, button, children }) => {
@@ -22,14 +22,14 @@ const Dropdown = ({ text, className, button, children }) => {
     }
   }, []);
 
-  return <ClickOutsideDetector onClickOutside={() => setOpen(false)}>
-    <div class={"dropdown d-inline-block" + (className ? ' ' + className : '')} ref={ref}>
-      {button || <button class="btn btn-beta btn-sm dropdown-toggle" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>{text}</button>}
-      <div class={"dropdown-menu" + (open ? " show" : "")}>
-        {open && children}
+  return html`<${ClickOutsideDetector} onClickOutside=${() => setOpen(false)}>
+    <div class=${"dropdown d-inline-block" + (className ? ' ' + className : '')} ref=${ref}>
+      ${button || html`<button class="btn btn-beta btn-sm dropdown-toggle" type="button" aria-expanded=${open} onClick=${() => setOpen(!open)}>${text}</button>`}
+      <div class=${"dropdown-menu" + (open ? " show" : "")}>
+        ${open && children}
       </div>
     </div>
-  </ClickOutsideDetector>;
+  <//>`;
 }
 
 export default Dropdown;

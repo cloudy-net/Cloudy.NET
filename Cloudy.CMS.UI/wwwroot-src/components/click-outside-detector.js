@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "@preact-htm";
+import { html, useEffect, useRef } from "../preact-htm/standalone.module.js";
 
 export default ({ onClickOutside, children }) => {
     const ref = useRef(null);
@@ -20,5 +20,5 @@ export default ({ onClickOutside, children }) => {
       return () => document.removeEventListener('click', callback);
     }, []);
   
-    return <div style="display: inline-block;" ref={ref}>{children}</div>;
+    return html`<div style="display: inline-block;" ref=${ref}>${children}</div>`;
   };
