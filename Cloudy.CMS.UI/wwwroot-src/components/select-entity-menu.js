@@ -48,12 +48,12 @@ export default ({ contentType, simpleKey, value, onSelect }) => {
   }
 
   if (loading) {
-    return html`<>Loading ...</>`;
+    return html`Loading ...`;
   }
 
-  return html`<>
+  return html`
     <div class="mx-2">
-      <SearchBox small=${true} callback=${value => setFilter(value)} />
+      <${SearchBox} small=${true} callback=${value => setFilter(value)} />
     </div>
     <div>
       ${data.items.map(item =>
@@ -65,10 +65,10 @@ export default ({ contentType, simpleKey, value, onSelect }) => {
     </div>
     <nav>
       <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
-        <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
+        <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
         ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
-        <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
+        <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
       </ul>
     </nav>
-  </>`;
+  `;
 };
