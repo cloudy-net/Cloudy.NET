@@ -22,9 +22,10 @@ namespace TestWebsite.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<SimpleKeyTest>().Property(p => p.RelatedPage).JsonConversion();
+            modelBuilder.Entity<SimpleKeyTest>().Property(p => p.RelatedPage).SerializeIntoJson();
             modelBuilder.Entity<CompositeKeyTest>().HasKey(p => new { p.FirstPrimaryKey, p.SecondPrimaryKey });
-            modelBuilder.Entity<CompositeKeyTest>().Property(p => p.RelatedObject).JsonConversion();
+            modelBuilder.Entity<CompositeKeyTest>().Property(p => p.RelatedObject).SerializeIntoJson();
+            modelBuilder.Entity<Page>().Property(p => p.Link).JsonBlockConversion();
         }
     }
 }
