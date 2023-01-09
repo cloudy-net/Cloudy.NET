@@ -1,6 +1,5 @@
 ﻿using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FieldTypes.EmbeddedBlock;
 using Cloudy.CMS.UI.FieldTypes.MediaPicker;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
@@ -104,12 +103,21 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     partialName = uiHints.First();
                 }
 
-                if(partialName == null)
+                var block = partialName == null && type != typeof(string) && (type.IsClass || type.IsInterface);
+
+                IEnumerable<string> blockTypes = null;
+
+                if (block)
+                {
+                    blockTypes = new List<string> { type.Name };
+                }
+
+                if(!block && partialName == null)
                 {
                     partialName = "failed";
                 }
 
-                var partial = partialName.StartsWith('/') ? partialName : $"../../form/controls/{partialName}.js";
+                var partial = partialName != null ? (partialName.StartsWith('/') ? partialName : $"../../form/controls/{partialName}.js") : null;
 
                 var renderChrome = true;
 
@@ -118,14 +126,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     renderChrome = false;
                 }
 
-                IEnumerable<string> blockTypes = null;
-
-                if (propertyDefinition.Attributes.Any(a => a is EmbeddedBlockAttribute))
-                {
-                    blockTypes = new List<string> { type.Name };
-                }
-
-                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group, blockTypes));
+                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group, block, blockTypes));
             }
             
             return result;

@@ -16,7 +16,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         [Route("/{area}/api/form/fields/components")]
         public object Get()
         {
-            return ContentTypeProvider.GetAll().SelectMany(c => FieldProvider.Get(c.Name)).Select(f => f.Partial).Distinct();
+            return ContentTypeProvider.GetAll().SelectMany(c => FieldProvider.Get(c.Name)).Select(f => f.Partial).Where(p => p != null).Distinct();
         }
     }
 }
