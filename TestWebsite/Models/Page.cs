@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.UI.FieldTypes.EmbeddedBlock;
 using Cloudy.CMS.UI.FieldTypes.MediaPicker;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using Cloudy.CMS.UI.List;
@@ -35,6 +36,8 @@ namespace TestWebsite.Models
         public Category? Category { get; set; }
         //[Block(typeof(Page))]
         //public IList<LayoutItem> Test { get; set; }
+        [EmbeddedBlock]
+        public Link Link { get; set; }
     }
 
     public class BlockAttribute : Attribute

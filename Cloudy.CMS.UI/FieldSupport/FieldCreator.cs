@@ -1,5 +1,6 @@
 ﻿using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.CMS.UI.FieldTypes.EmbeddedBlock;
 using Cloudy.CMS.UI.FieldTypes.MediaPicker;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
@@ -112,12 +113,19 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 
                 var renderChrome = true;
 
-                if (uiHints.Contains("nochrome") || propertyDefinition.Attributes.Any(c => c.GetType().GetCustomAttributes<UIHintAttribute>().Any(a => a.UIHint == "nochrome")))
+                if (uiHints.Contains("nochrome"))
                 {
                     renderChrome = false;
                 }
 
-                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group));
+                IEnumerable<string> blockTypes = null;
+
+                if (propertyDefinition.Attributes.Any(a => a is EmbeddedBlockAttribute))
+                {
+                    blockTypes = new List<string> { type.Name };
+                }
+
+                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group, blockTypes));
             }
             
             return result;

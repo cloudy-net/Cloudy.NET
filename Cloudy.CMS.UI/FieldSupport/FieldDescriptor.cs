@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Cloudy.CMS.UI.FormSupport.FieldSupport
@@ -16,6 +13,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         string Partial,
         bool? AutoGenerate,
         bool RenderChrome,
-        string Tab
+        string Tab,
+        IEnumerable<string> BlockTypes = null
     );
 }
