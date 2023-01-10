@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,11 +10,6 @@ namespace Cloudy.CMS.PropertyDefinitionSupport.PropertyMappingSupport
     {
         public PropertyMapping Create(PropertyInfo property)
         {
-            if (property.GetCustomAttribute<CloudyIgnoreAttribute>() != null)
-            {
-                return new PropertyMapping(PropertyMappingType.Ignored);
-            }
-
             foreach (var interfaceType in property.DeclaringType.GetInterfaces())
             {
                 var interfaceProperty = interfaceType.GetProperty(property.Name);
