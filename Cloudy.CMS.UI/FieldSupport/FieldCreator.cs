@@ -103,16 +103,15 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     partialName = uiHints.First();
                 }
 
-                var block = partialName == null && type != typeof(string) && (type.IsClass || type.IsInterface);
+                var settings = new Dictionary<string, object>();
 
-                IEnumerable<string> blockTypes = null;
-
-                if (block)
+                if (propertyDefinition.Block)
                 {
-                    blockTypes = new List<string> { type.Name };
+                    partialName = "embeddedblock";
+                    settings["types"] = propertyDefinition.BlockTypes.Select(t => t.Name);
                 }
 
-                if(!block && partialName == null)
+                if(partialName == null)
                 {
                     partialName = "failed";
                 }
@@ -126,7 +125,7 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
                     renderChrome = false;
                 }
 
-                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group, block, blockTypes));
+                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group, settings));
             }
             
             return result;

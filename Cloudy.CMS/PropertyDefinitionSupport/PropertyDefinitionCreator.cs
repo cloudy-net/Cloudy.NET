@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Cloudy.CMS.PropertyDefinitionSupport
 {
@@ -29,15 +28,20 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
                 list = true;
             }
 
+            var block = type != typeof(string) && (type.IsClass || type.IsInterface);
+            var blockTypes = block ? new List<Type> { type } : null;
+
             return new PropertyDefinitionDescriptor(
                 property.Name,
                 type,
-                (instance) => property.GetValue(instance),
-                (instance, value) => property.SetValue(instance, value),
+                property.GetValue,
+                property.SetValue,
                 property.GetCustomAttributes(),
                 nullable,
                 list,
-                type.IsEnum
+                type.IsEnum,
+                block,
+                blockTypes
             );
         }
     }

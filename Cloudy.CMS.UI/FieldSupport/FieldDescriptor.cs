@@ -14,7 +14,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
         bool? AutoGenerate,
         bool RenderChrome,
         string Tab,
-        bool Block,
-        IEnumerable<string> BlockTypes = null
+        IDictionary<string, object> Settings
     );
 }

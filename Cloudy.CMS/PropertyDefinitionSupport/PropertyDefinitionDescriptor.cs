@@ -17,6 +17,8 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
         IEnumerable<object> Attributes,
         bool Nullable,
         bool List,
-        bool Enum
+        bool Enum,
+        bool Block,
+        IEnumerable<Type> BlockTypes
     );
 }
