@@ -3,9 +3,9 @@ import stateManager from '../../data/state-manager.js';
 import EntityContext from '../entity-context.js';
 import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
 
-const Control = ({ name, path }) => {
+const Control = ({ name, path, settings }) => {
   const { contentReference, state } = useContext(EntityContext);
-
+console.log(settings)
   const onchange = event => {
     stateManager.registerSimpleChange(contentReference, path, event.target.value)
   };
