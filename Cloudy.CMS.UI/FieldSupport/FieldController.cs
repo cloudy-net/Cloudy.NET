@@ -25,7 +25,7 @@ namespace Cloudy.CMS.UI.FieldSupport
 
             if(entityType == null)
             {
-
+                return FieldProvider.Get(typeName).Where(f => f.AutoGenerate ?? true);
             }
 
             var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(entityType.Type);

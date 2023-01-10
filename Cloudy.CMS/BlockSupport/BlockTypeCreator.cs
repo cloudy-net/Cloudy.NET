@@ -15,7 +15,7 @@ namespace Cloudy.CMS.BlockSupport
 {
     public record BlockTypeCreator(IEntityTypeProvider EntityTypeProvider, IPropertyDefinitionProvider PropertyDefinitionProvider, IAssemblyProvider AssemblyProvider) : IBlockTypeCreator
     {
-        public IEnumerable<BlockTypeDescriptor> Create()
+        public IEnumerable<Type> Create()
         {
             var explicitBlockTypes = EntityTypeProvider
                 .GetAll()
@@ -28,7 +28,6 @@ namespace Cloudy.CMS.BlockSupport
             return AssemblyProvider.GetAll()
                 .SelectMany(a => a.Types)
                 .Where(t => explicitBlockTypes.Any(b => t.IsAssignableTo(b)))
-                .Select(t => new BlockTypeDescriptor(t.Name, t))
                 .ToList()
                 .AsReadOnly();
         }

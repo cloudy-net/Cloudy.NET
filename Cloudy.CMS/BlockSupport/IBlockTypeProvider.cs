@@ -8,8 +8,8 @@ namespace Cloudy.CMS.BlockSupport
 {
     public interface IBlockTypeProvider
     {
-        BlockTypeDescriptor Get(Type type);
-        BlockTypeDescriptor Get(string name);
-        IEnumerable<BlockTypeDescriptor> GetAll();
+        Type Get(Type type);
+        Type Get(string name);
+        IEnumerable<Type> GetAll();
     }
 }

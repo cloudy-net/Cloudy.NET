@@ -49,7 +49,7 @@ const EmbeddedBlockFields = ({ type }) => {
       return html`Loading ...`;
     }
 
-    return html`${fields.map(field => html`<FormField {...field} path={[field.name]} />`)}`;
+    return html`${fields.map(field => html`<${FormField} ...${field} path=${[field.name]} />`)}`;
 };
 
 export default EmbeddedBlockFields;

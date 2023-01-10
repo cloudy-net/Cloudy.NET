@@ -28,7 +28,7 @@ namespace Tests
 
             var result = new BlockTypeCreator(entityTypeProvider, propertyDefinitionProvider, assemblyProvider).Create();
 
-            Assert.Equal(new List<BlockTypeDescriptor> { new BlockTypeDescriptor(nameof(TypeA), typeof(TypeA)), new BlockTypeDescriptor(nameof(TypeB), typeof(TypeB)) }, result);
+            Assert.Equal(new List<Type> { typeof(TypeA), typeof(TypeB) }, result);
         }
 
         class PropertyOwner { }

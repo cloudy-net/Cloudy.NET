@@ -9,47 +9,45 @@ namespace Cloudy.CMS.BlockSupport
 {
     public class BlockTypeProvider : IBlockTypeProvider
     {
-        IEnumerable<BlockTypeDescriptor> BlockTypes { get; }
-        Dictionary<Type, BlockTypeDescriptor> BlockTypesByType { get; }
-        Dictionary<string, BlockTypeDescriptor> BlockTypesByName { get; }
+        IEnumerable<Type> Types { get; }
+        Dictionary<string, Type> TypesByName { get; }
 
         public BlockTypeProvider(IBlockTypeCreator blockTypeCreator)
         {
-            BlockTypes = blockTypeCreator.Create().ToList().AsReadOnly();
-            BlockTypesByType = BlockTypes.ToDictionary(t => t.Type, t => t);
-            BlockTypesByName = BlockTypes.ToDictionary(t => t.Name, t => t);
+            Types = blockTypeCreator.Create().ToList().AsReadOnly();
+            TypesByName = Types.ToDictionary(t => t.Name, t => t);
         }
 
-        public BlockTypeDescriptor Get(Type type)
+        public Type Get(Type type)
         {
             if (type == null)
             {
                 return null;
             }
 
-            return GetMostSpecificAssignableFrom(BlockTypesByType, type);
+            return GetMostSpecificAssignableFrom(Types, type);
         }
 
-        public BlockTypeDescriptor Get(string name)
+        public Type Get(string name)
         {
-            if (!BlockTypesByName.ContainsKey(name))
+            if (!TypesByName.ContainsKey(name))
             {
                 return null;
             }
 
-            return BlockTypesByName[name];
+            return TypesByName[name];
         }
 
-        public IEnumerable<BlockTypeDescriptor> GetAll()
+        public IEnumerable<Type> GetAll()
         {
-            return BlockTypes;
+            return Types;
         }
 
-        public static BlockTypeDescriptor GetMostSpecificAssignableFrom(Dictionary<Type, BlockTypeDescriptor> types, Type type)
+        public static Type GetMostSpecificAssignableFrom(IEnumerable<Type> types, Type type)
         {
-            if (types.ContainsKey(type))
+            if (types.Contains(type))
             {
-                return types[type];
+                return type;
             }
 
             var baseType = type.GetTypeInfo().BaseType;

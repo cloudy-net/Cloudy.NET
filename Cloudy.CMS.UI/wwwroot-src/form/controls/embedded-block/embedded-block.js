@@ -6,9 +6,9 @@ import EmbeddedBlockFields from './embedded-block-fields.js';
 
 const Control = ({ name, path, settings: { types } }) => {
   const { contentReference, state } = useContext(EntityContext);
-  
+
   return html`<div>
-      <${EmbeddedBlockFields} blockType="Link"/>
+      <${EmbeddedBlockFields} type="Link"/>
     </div>`;
 }
 
