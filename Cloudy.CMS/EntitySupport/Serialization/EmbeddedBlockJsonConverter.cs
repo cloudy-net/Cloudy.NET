@@ -7,13 +7,13 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.ContentSupport.Serialization
+namespace Cloudy.CMS.EntitySupport.Serialization
 {
-    public class ContentJsonConverter<T> : JsonConverter<T> where T : class
+    public class EmbeddedBlockJsonConverter<T> : JsonConverter<T> where T : class
     {
         IContentTypeProvider ContentTypeProvider { get; }
 
-        public ContentJsonConverter(IContentTypeProvider contentTypeProvider)
+        public EmbeddedBlockJsonConverter(IContentTypeProvider contentTypeProvider)
         {
             ContentTypeProvider = contentTypeProvider;
         }
@@ -78,7 +78,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
                 .GetProperties()
                 .Where(p => !p.GetIndexParameters().Any() && p.GetGetMethod() != null && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute)))
                 .ToDictionary(p => p.Name, p => p);
-            
+
             while (reader.Read())
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
@@ -99,7 +99,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
 
                 var propertyName = reader.GetString();
 
-                if(properties.TryGetValue(propertyName, out var property))
+                if (properties.TryGetValue(propertyName, out var property))
                 {
                     reader.Read();
                     var value = JsonSerializer.Deserialize(ref reader, property.PropertyType, options);

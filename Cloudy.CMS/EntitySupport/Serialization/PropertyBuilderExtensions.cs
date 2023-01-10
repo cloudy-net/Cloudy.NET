@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 
-namespace Cloudy.CMS.ContentSupport.Serialization
+namespace Cloudy.CMS.EntitySupport.Serialization
 {
     public static class PropertyBuilderExtensions
     {

@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport.Serialization;
+﻿using Cloudy.CMS.EntitySupport.Serialization;
 using Cloudy.CMS.ContentTypeSupport;
 using Moq;
 using System;
@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class ContentJsonConverterTests
+    public class EmbeddedBlockJsonConverterTests
     {
         public class ContentTypeA : InterfaceA
         {
@@ -40,9 +40,9 @@ namespace Tests
             {
                 WriteIndented = false,
                 Converters = {
-                    new ContentJsonConverter<ContentTypeA>(contentTypeProvider),
-                    new ContentJsonConverter<InterfaceA>(contentTypeProvider),
-                    new ContentJsonConverter<ContentTypeB>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<ContentTypeA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<InterfaceA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<ContentTypeB>(contentTypeProvider),
                 }
             };
 
@@ -63,9 +63,9 @@ namespace Tests
             {
                 WriteIndented = false,
                 Converters = {
-                    new ContentJsonConverter<ContentTypeA>(contentTypeProvider),
-                    new ContentJsonConverter<InterfaceA>(contentTypeProvider),
-                    new ContentJsonConverter<ContentTypeB>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<ContentTypeA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<InterfaceA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<ContentTypeB>(contentTypeProvider),
                 }
             };
 
@@ -88,7 +88,7 @@ namespace Tests
             {
                 WriteIndented = false,
                 Converters = {
-                    new ContentJsonConverter<ContentTypeB>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<ContentTypeB>(contentTypeProvider),
                 }
             };
 
@@ -109,7 +109,7 @@ namespace Tests
             {
                 WriteIndented = false,
                 Converters = {
-                    new ContentJsonConverter<ContentTypeA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<ContentTypeA>(contentTypeProvider),
                 }
             };
 
@@ -130,7 +130,7 @@ namespace Tests
             {
                 WriteIndented = false,
                 Converters = {
-                    new ContentJsonConverter<InterfaceA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<InterfaceA>(contentTypeProvider),
                 }
             };
 

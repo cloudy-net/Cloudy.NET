@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.ContentSupport.Serialization;
-using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
+using Cloudy.CMS.EntitySupport.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -19,9 +19,9 @@ namespace Cloudy.CMS.UI.FormSupport
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContentTypeProvider ContentTypeProvider { get; }
         IContextCreator ContextCreator { get; }
-        IContentJsonConverterProvider ContentJsonConverterProvider { get; }
+        IEmbeddedBlockJsonConverterProvider ContentJsonConverterProvider { get; }
 
-        public ContentGetterController(IPrimaryKeyConverter primaryKeyConverter, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, IContentJsonConverterProvider contentJsonConverterProvider)
+        public ContentGetterController(IPrimaryKeyConverter primaryKeyConverter, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider)
         {
             PrimaryKeyConverter = primaryKeyConverter;
             ContentTypeProvider = contentTypeProvider;

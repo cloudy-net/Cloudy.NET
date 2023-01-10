@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.ContentSupport.Serialization
+namespace Cloudy.CMS.EntitySupport.Serialization
 {
-    public class ContentJsonConverterCreator : IContentJsonConverterCreator
+    public class EmbeddedBlockJsonConverterCreator : IEmbeddedBlockJsonConverterCreator
     {
         IContentJsonConverterTypeProvider ContentJsonConverterTypeProvider { get; }
         IServiceProvider ServiceProvider { get; }
 
-        public ContentJsonConverterCreator(IContentJsonConverterTypeProvider contentJsonConverterTypeProvider, IServiceProvider serviceProvider)
+        public EmbeddedBlockJsonConverterCreator(IContentJsonConverterTypeProvider contentJsonConverterTypeProvider, IServiceProvider serviceProvider)
         {
             ContentJsonConverterTypeProvider = contentJsonConverterTypeProvider;
             ServiceProvider = serviceProvider;
@@ -23,7 +23,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
         {
             return ContentJsonConverterTypeProvider
                 .GetAll()
-                .Select(t => typeof(ContentJsonConverter<>)
+                .Select(t => typeof(EmbeddedBlockJsonConverter<>)
                 .MakeGenericType(t))
                 .Select(t => ActivatorUtilities.CreateInstance(ServiceProvider, t))
                 .Cast<JsonConverter>();

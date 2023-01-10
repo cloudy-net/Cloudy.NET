@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentSupport.Serialization
+namespace Cloudy.CMS.EntitySupport.Serialization
 {
     public class Initializer : IInitializer
     {
-        public Initializer(IContentJsonConverterProvider contentJsonConverterProvider)
+        public Initializer(IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider)
         {
-            ContentJsonConverterProvider.UglyInstance = contentJsonConverterProvider;
+            EmbeddedBlockJsonConverterProvider.UglyInstance = contentJsonConverterProvider;
         }
 
         public async Task InitializeAsync() { }

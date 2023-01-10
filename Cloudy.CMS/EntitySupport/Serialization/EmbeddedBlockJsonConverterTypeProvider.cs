@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.ContentSupport.Serialization
+namespace Cloudy.CMS.EntitySupport.Serialization
 {
-    public class ContentJsonConverterTypeProvider : IContentJsonConverterTypeProvider
+    public class EmbeddedBlockJsonConverterTypeProvider : IContentJsonConverterTypeProvider
     {
         IContentTypeProvider ContentTypeProvider { get; }
 
-        public ContentJsonConverterTypeProvider(IContentTypeProvider contentTypeProvider)
+        public EmbeddedBlockJsonConverterTypeProvider(IContentTypeProvider contentTypeProvider)
         {
             ContentTypeProvider = contentTypeProvider;
         }
@@ -20,7 +20,7 @@ namespace Cloudy.CMS.ContentSupport.Serialization
         {
             var types = new HashSet<Type>();
 
-            foreach(var contentType in ContentTypeProvider.GetAll())
+            foreach (var contentType in ContentTypeProvider.GetAll())
             {
                 types.Add(contentType.Type);
 

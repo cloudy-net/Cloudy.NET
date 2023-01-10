@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.ContentSupport.Serialization
+namespace Cloudy.CMS.EntitySupport.Serialization
 {
-    public class ContentJsonConverterProvider : IContentJsonConverterProvider
+    public class EmbeddedBlockJsonConverterProvider : IEmbeddedBlockJsonConverterProvider
     {
-        public static IContentJsonConverterProvider UglyInstance { get; set; }
+        public static IEmbeddedBlockJsonConverterProvider UglyInstance { get; set; }
 
         IEnumerable<JsonConverter> ContentJsonConverters { get; }
 
-        public ContentJsonConverterProvider(IContentJsonConverterCreator contentJsonConverterCreator)
+        public EmbeddedBlockJsonConverterProvider(IEmbeddedBlockJsonConverterCreator contentJsonConverterCreator)
         {
             ContentJsonConverters = contentJsonConverterCreator.Create().ToList().AsReadOnly();
         }
