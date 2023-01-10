@@ -1,7 +1,7 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cloudy.CMS.ContentSupport
+namespace Cloudy.CMS.EntitySupport
 {
     public interface INameable
     {

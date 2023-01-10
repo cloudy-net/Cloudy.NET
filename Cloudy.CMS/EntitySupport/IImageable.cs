@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.ContentSupport
+namespace Cloudy.CMS.EntitySupport
 {
     public interface IImageable
     {

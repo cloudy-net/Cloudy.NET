@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.EntitySupport;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;

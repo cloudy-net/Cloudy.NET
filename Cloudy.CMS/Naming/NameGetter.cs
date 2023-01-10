@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport;
+﻿using Cloudy.CMS.EntitySupport;
 using Cloudy.CMS.ContentTypeSupport.Name;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.SingletonSupport;

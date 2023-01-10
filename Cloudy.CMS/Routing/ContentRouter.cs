@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.EntitySupport;
 
 namespace Cloudy.CMS.Routing
 {

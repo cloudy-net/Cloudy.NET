@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport.RepositorySupport;
-using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

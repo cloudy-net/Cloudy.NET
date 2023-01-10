@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentSupport.Internal;
+﻿using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.EntitySupport.Internal;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.SingletonSupport;
 using System;

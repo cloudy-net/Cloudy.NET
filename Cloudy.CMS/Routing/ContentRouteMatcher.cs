@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.ContentSupport;
-using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntitySupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;

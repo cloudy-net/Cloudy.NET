@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Cloudy.CMS.ContentSupport;
+using Cloudy.CMS.EntitySupport;
 using Cloudy.CMS.ContentTypeSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 
