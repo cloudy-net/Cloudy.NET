@@ -15,6 +15,10 @@ export default defineConfig({
           dest: 'form/',
         },
         {
+          src: 'form/form-field.js',
+          dest: 'form/',
+        },
+        {
           src: 'data/state-manager.js',
           dest: 'data/',
         },
@@ -50,6 +54,7 @@ export default defineConfig({
       external: [
         'data/state-manager.js',
         'form/entity-context.js',
+        'form/form-field.js',
         'media-picker/media-picker-menu.js',
         'components/*',
         'util/array-equals.js',

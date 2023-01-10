@@ -6,7 +6,7 @@ import FormFooter from './form-footer.jsx';
 function Form({ entityType, keyValues }) {
   return <FieldComponentProvider>
     <EntityContextProvider {...{ entityType, keyValues }}>
-      <FormFields {...{ entityType }} />
+      <FormFields type={entityType} />
       <FormFooter />
     </EntityContextProvider>
   </FieldComponentProvider>

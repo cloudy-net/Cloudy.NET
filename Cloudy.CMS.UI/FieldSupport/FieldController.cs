@@ -19,7 +19,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/form/fields")]
-        public IEnumerable<FieldDescriptor> GetFields([FromQuery(Name = "entityType")] string entityTypeName)
+        public IEnumerable<FieldDescriptor> GetFields([FromQuery(Name = "type")] string entityTypeName)
         {
             var entityType = EntityTypeProvider.Get(entityTypeName);
             var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(entityType.Type);

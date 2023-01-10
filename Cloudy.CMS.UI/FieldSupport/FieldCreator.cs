@@ -107,7 +107,7 @@ namespace Cloudy.CMS.UI.FieldSupport
 
                 if (propertyDefinition.Block)
                 {
-                    partialName = "embeddedblock";
+                    partialName = "embedded-block/embedded-block";
                     settings["types"] = propertyDefinition.BlockTypes.Select(t => t.Name);
                 }
 
