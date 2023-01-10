@@ -29,7 +29,6 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
             }
 
             var block = type != typeof(string) && (type.IsClass || type.IsInterface);
-            var blockTypes = block ? new List<Type> { type } : null;
 
             return new PropertyDefinitionDescriptor(
                 property.Name,
@@ -40,8 +39,7 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
                 nullable,
                 list,
                 type.IsEnum,
-                block,
-                blockTypes
+                block
             );
         }
     }

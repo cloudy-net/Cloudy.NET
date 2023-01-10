@@ -12,13 +12,12 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
     public record PropertyDefinitionDescriptor(
         string Name,
         Type Type,
-        Func<object, object> Getter,
-        Action<object, object> Setter,
-        IEnumerable<object> Attributes,
-        bool Nullable,
-        bool List,
-        bool Enum,
-        bool Block,
-        IEnumerable<Type> BlockTypes
+        Func<object, object> Getter = null,
+        Action<object, object> Setter = null,
+        IEnumerable<object> Attributes = null,
+        bool Nullable = false,
+        bool List = false,
+        bool Enum = false,
+        bool Block = false
     );
 }

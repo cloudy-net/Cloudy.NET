@@ -22,7 +22,7 @@ namespace Cloudy.CMS.InitializerSupport
         {
             var result = new List<IInitializer>();
 
-            foreach (var assembly in AssemblyProvider.Assemblies)
+            foreach (var assembly in AssemblyProvider.GetAll())
             {
                 foreach (var type in assembly.Types)
                 {

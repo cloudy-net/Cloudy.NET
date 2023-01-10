@@ -19,11 +19,17 @@ namespace Cloudy.CMS.UI.FieldSupport
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/form/fields")]
-        public IEnumerable<FieldDescriptor> GetFields([FromQuery(Name = "type")] string entityTypeName)
+        public IEnumerable<FieldDescriptor> GetFields([FromQuery(Name = "type")] string typeName)
         {
-            var entityType = EntityTypeProvider.Get(entityTypeName);
+            var entityType = EntityTypeProvider.Get(typeName);
+
+            if(entityType == null)
+            {
+
+            }
+
             var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(entityType.Type);
-            return FieldProvider.Get(entityTypeName).Where(f => f.AutoGenerate ?? !primaryKeyProperties.Any(p => p.Name == f.Name));
+            return FieldProvider.Get(typeName).Where(f => f.AutoGenerate ?? !primaryKeyProperties.Any(p => p.Name == f.Name));
         }
     }
 }

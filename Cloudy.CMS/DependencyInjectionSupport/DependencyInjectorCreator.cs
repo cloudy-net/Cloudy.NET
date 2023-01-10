@@ -14,7 +14,7 @@ namespace Cloudy.CMS.DependencyInjectionSupport
         {
             var result = new List<IDependencyInjector>();
 
-            foreach (var type in AssemblyProvider.Assemblies.SelectMany(a => a.Types))
+            foreach (var type in AssemblyProvider.GetAll().SelectMany(a => a.Types))
             {
                 if (!typeof(IDependencyInjector).IsAssignableFrom(type))
                 {

@@ -8,11 +8,16 @@ namespace Cloudy.CMS.AssemblySupport
 {
     public class AssemblyProvider : IAssemblyProvider
     {
-        public IEnumerable<AssemblyWrapper> Assemblies { get; }
+        IEnumerable<AssemblyWrapper> Assemblies { get; }
 
         public AssemblyProvider(IEnumerable<AssemblyWrapper> assemblies)
         {
             Assemblies = assemblies.ToList().AsReadOnly();
+        }
+
+        public IEnumerable<AssemblyWrapper> GetAll()
+        {
+            return Assemblies;
         }
     }
 }
