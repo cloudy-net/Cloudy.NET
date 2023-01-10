@@ -17,7 +17,7 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     [Authorize("adminarea")]
     [Area("Admin")]
-    public class SaveContentController : Controller
+    public class SaveEntityController : Controller
     {
         IEntityTypeProvider EntityTypeProvider { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
@@ -27,7 +27,7 @@ namespace Cloudy.CMS.UI.FormSupport
         IFieldProvider FieldProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
 
-        public SaveContentController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
+        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
         {
             EntityTypeProvider = entityTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
@@ -60,26 +60,26 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 var keyValues = PrimaryKeyConverter.Convert(changedContent.ContentReference.KeyValues.Select(k => k.ToString()), entityType.Type);
 
-                object content;
+                object entity;
 
                 if (keyValues == null)
                 {
-                    content = Activator.CreateInstance(entityType.Type);
+                    entity = Activator.CreateInstance(entityType.Type);
                 }
                 else
                 {
-                    content = await context.Context.FindAsync(entityType.Type, keyValues).ConfigureAwait(false);
+                    entity = await context.Context.FindAsync(entityType.Type, keyValues).ConfigureAwait(false);
 
                     if (changedContent.Remove)
                     {
-                        context.Context.Remove(content);
+                        context.Context.Remove(entity);
                         result.Add(SaveContentResult.SuccessResult(entityType.Name, keyValues));
                         continue;
                     }
                 }
 
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(entityType.Name).ToDictionary(p => p.Name, p => p);
-                var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
+                var idProperties = PrimaryKeyPropertyGetter.GetFor(entity.GetType());
 
                 if (changedContent.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
@@ -90,7 +90,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 foreach (var change in changedSimpleFields)
                 {
-                    UpdateSimpleField(content, change.Path, change.Value);
+                    UpdateSimpleField(entity, change.Path, change.Value);
                 }
 
                 //var arrayChanges = changedContent.SimpleChanges.Where(f => f.Type == ChangeType.Array).ToList();
@@ -119,7 +119,7 @@ namespace Cloudy.CMS.UI.FormSupport
                 //    }
                 //}
 
-                if (!TryValidateModel(content))
+                if (!TryValidateModel(entity))
                 {
                     result.Add(SaveContentResult.ValidationFailureResult(entityType.Name, keyValues, ModelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage))));
                     continue;
@@ -127,14 +127,14 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 if (keyValues == null)
                 {
-                    await context.Context.AddAsync(content).ConfigureAwait(false);
+                    await context.Context.AddAsync(entity).ConfigureAwait(false);
                 }
                 else
                 {
                     //await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
                 }
 
-                result.Add(SaveContentResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(content)));
+                result.Add(SaveContentResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(entity)));
             }
 
             foreach(var context in contexts)
