@@ -1,5 +1,5 @@
 ﻿
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using Microsoft.AspNetCore.Authorization;
@@ -14,17 +14,17 @@ namespace Cloudy.CMS.UI.FieldSupport
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]
-    public record FieldController(IFieldProvider FieldProvider, IContentTypeProvider ContentTypeProvider, IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter)
+    public record FieldController(IFieldProvider FieldProvider, IEntityTypeProvider EntityTypeProvider, IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter)
     {
 
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/form/fields")]
-        public IEnumerable<FieldDescriptor> GetFields([FromQuery(Name = "contentType")] string contentTypeName)
+        public IEnumerable<FieldDescriptor> GetFields([FromQuery(Name = "entityType")] string entityTypeName)
         {
-            var contentType = ContentTypeProvider.Get(contentTypeName);
-            var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(contentType.Type);
-            return FieldProvider.Get(contentTypeName).Where(f => f.AutoGenerate ?? !primaryKeyProperties.Any(p => p.Name == f.Name));
+            var entityType = EntityTypeProvider.Get(entityTypeName);
+            var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(entityType.Type);
+            return FieldProvider.Get(entityTypeName).Where(f => f.AutoGenerate ?? !primaryKeyProperties.Any(p => p.Name == f.Name));
         }
     }
 }

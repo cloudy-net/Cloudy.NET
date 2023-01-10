@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using Microsoft.AspNetCore.Mvc;
@@ -28,16 +28,16 @@ namespace Cloudy.CMS.UI.List
     public class ListResultController : Controller
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         ICompositeViewEngine CompositeViewEngine { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IReferenceDeserializer ReferenceDeserializer { get; }
 
-        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, IReferenceDeserializer referenceDeserializer)
+        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, IReferenceDeserializer referenceDeserializer)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             CompositeViewEngine = compositeViewEngine;
             PrimaryKeyGetter = primaryKeyGetter;
@@ -47,10 +47,10 @@ namespace Cloudy.CMS.UI.List
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string contentType, string columns, [FromQuery(Name = "filters")]IDictionary<string, string> filters, int page, int pageSize, string search)
+        public async Task<ListResultResponse> ListResult(string entityType, string columns, [FromQuery(Name = "filters")]IDictionary<string, string> filters, int page, int pageSize, string search)
         {
             var columnNames = columns.Split(",");
-            var type = ContentTypeProvider.Get(contentType);
+            var type = EntityTypeProvider.Get(entityType);
             var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name);
             var selectedPropertyDefinitions = columnNames.Select(n => propertyDefinitions.First(p => n == p.Name));
             

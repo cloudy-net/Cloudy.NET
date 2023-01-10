@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.EntitySupport.Serialization;
@@ -17,14 +17,14 @@ namespace Cloudy.CMS.UI.FormSupport
     public class ContentGetterController : Controller
     {
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         IEmbeddedBlockJsonConverterProvider ContentJsonConverterProvider { get; }
 
-        public ContentGetterController(IPrimaryKeyConverter primaryKeyConverter, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider)
+        public ContentGetterController(IPrimaryKeyConverter primaryKeyConverter, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider)
         {
             PrimaryKeyConverter = primaryKeyConverter;
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             ContentJsonConverterProvider = contentJsonConverterProvider;
         }
@@ -38,10 +38,10 @@ namespace Cloudy.CMS.UI.FormSupport
                 return BadRequest();
             }
 
-            var contentType = ContentTypeProvider.Get(payload.ContentType);
-            var keys = PrimaryKeyConverter.Convert(payload.KeyValues, contentType.Type);
-            var context = ContextCreator.CreateFor(contentType.Type);
-            var content = await context.Context.FindAsync(contentType.Type, keys).ConfigureAwait(false);
+            var entityType = EntityTypeProvider.Get(payload.EntityType);
+            var keys = PrimaryKeyConverter.Convert(payload.KeyValues, entityType.Type);
+            var context = ContextCreator.CreateFor(entityType.Type);
+            var content = await context.Context.FindAsync(entityType.Type, keys).ConfigureAwait(false);
 
             if(content == null)
             {
@@ -58,7 +58,7 @@ namespace Cloudy.CMS.UI.FormSupport
             [Required]
             public string[] KeyValues { get; set; }
             [Required]
-            public string ContentType { get; set; }
+            public string EntityType { get; set; }
         }
     }
 }

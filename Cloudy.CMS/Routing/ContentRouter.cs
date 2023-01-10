@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace Cloudy.CMS.Routing
             RoutableRootContentProvider = routableRootContentProvider;
         }
 
-        public async Task<object> RouteContentAsync(IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
+        public async Task<object> RouteContentAsync(IEnumerable<string> segments, IEnumerable<EntityTypeDescriptor> types)
         {
             segments = segments.Where(s => !string.IsNullOrEmpty(s)).ToList().AsReadOnly();
 

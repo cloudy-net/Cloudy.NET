@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.Routing;
 using Moq;
@@ -30,7 +30,7 @@ namespace Tests
             }
 
             var result = new RootContentRouter(Mock.Of<IPrimaryKeyGetter>(), Mock.Of<IContentSegmentRouter>())
-                .Route(root, segments, Enumerable.Empty<ContentTypeDescriptor>());
+                .Route(root, segments, Enumerable.Empty<EntityTypeDescriptor>());
 
             if (shouldMatch)
             {

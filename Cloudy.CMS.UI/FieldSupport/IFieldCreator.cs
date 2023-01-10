@@ -6,6 +6,6 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     public interface IFieldCreator
     {
-        IEnumerable<FieldDescriptor> Create(string contentType);
+        IEnumerable<FieldDescriptor> Create(string entityType);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +8,24 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
 {
     public class FieldProvider : IFieldProvider
     {
-        IDictionary<string, IEnumerable<FieldDescriptor>> FieldsByContentType { get; }
+        IDictionary<string, IEnumerable<FieldDescriptor>> FieldsByEntityType { get; }
 
-        public FieldProvider(IContentTypeProvider contentTypeProvider, IFieldCreator fieldCreator)
+        public FieldProvider(IEntityTypeProvider entityTypeProvider, IFieldCreator fieldCreator)
         {
-            FieldsByContentType = contentTypeProvider.GetAll().ToDictionary(
+            FieldsByEntityType = entityTypeProvider.GetAll().ToDictionary(
                 f => f.Name,
                 f => fieldCreator.Create(f.Name)
             );
         }
 
-        public IEnumerable<FieldDescriptor> Get(string contentType)
+        public IEnumerable<FieldDescriptor> Get(string entityType)
         {
-            if (!FieldsByContentType.ContainsKey(contentType))
+            if (!FieldsByEntityType.ContainsKey(entityType))
             {
                 return null;
             }
 
-            return FieldsByContentType[contentType];
+            return FieldsByEntityType[entityType];
         }
     }
 }

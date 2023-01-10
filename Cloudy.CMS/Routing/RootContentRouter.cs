@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 
 namespace Cloudy.CMS.Routing
@@ -19,7 +19,7 @@ namespace Cloudy.CMS.Routing
             ContentSegmentRouter = contentSegmentRouter;
         }
 
-        public object Route(object root, IEnumerable<string> segments, IEnumerable<ContentTypeDescriptor> types)
+        public object Route(object root, IEnumerable<string> segments, IEnumerable<EntityTypeDescriptor> types)
         {
             if (!segments.Any())
             {

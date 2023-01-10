@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.UI.FormSupport.FieldTypes;
 using System;
@@ -12,17 +12,17 @@ using Cloudy.CMS.PropertyDefinitionSupport;
 
 namespace Cloudy.CMS.UI.List.Filter
 {
-    public record ListFilterCreator(IContentTypeProvider ContentTypeProvider, IPropertyDefinitionProvider PropertyDefinitionProvider, IHumanizer Humanizer) : IListFilterCreator
+    public record ListFilterCreator(IEntityTypeProvider EntityTypeProvider, IPropertyDefinitionProvider PropertyDefinitionProvider, IHumanizer Humanizer) : IListFilterCreator
     {
         public IDictionary<Type, IEnumerable<ListFilterDescriptor>> Create()
         {
             var result = new Dictionary<Type, IEnumerable<ListFilterDescriptor>>();
 
-            foreach (var contentType in ContentTypeProvider.GetAll())
+            foreach (var entityType in EntityTypeProvider.GetAll())
             {
                 var columns = new List<ListFilterDescriptor>();
 
-                var properties = PropertyDefinitionProvider.GetFor(contentType.Name).Where(p => p.Attributes.OfType<ListFilterAttribute>().Any());
+                var properties = PropertyDefinitionProvider.GetFor(entityType.Name).Where(p => p.Attributes.OfType<ListFilterAttribute>().Any());
 
                 var order = 10000;
                 foreach (var propertyDefinition in properties)
@@ -37,16 +37,16 @@ namespace Cloudy.CMS.UI.List.Filter
 
                     var selectAttribute = propertyDefinition.Attributes.OfType<SelectAttribute>().FirstOrDefault();
                     var select = selectAttribute != null;
-                    var selectType = selectAttribute != null ? ContentTypeProvider.Get(selectAttribute.Type)?.Name : null;
+                    var selectType = selectAttribute != null ? EntityTypeProvider.Get(selectAttribute.Type)?.Name : null;
 
                     var attribute = propertyDefinition.Attributes.OfType<ListFilterAttribute>().First();
 
                     var simpleKey = !propertyDefinition.Type.IsAssignableTo(typeof(ITuple));
 
-                    columns.Add(new ListFilterDescriptor(name, humanizedName, contentType.Name, select, selectType, simpleKey, attribute.Order == -10000 ? order++ : attribute.Order));
+                    columns.Add(new ListFilterDescriptor(name, humanizedName, entityType.Name, select, selectType, simpleKey, attribute.Order == -10000 ? order++ : attribute.Order));
                 }
 
-                result[contentType.Type] = columns.OrderBy(c => c.Order);
+                result[entityType.Type] = columns.OrderBy(c => c.Order);
             }
 
             return result;

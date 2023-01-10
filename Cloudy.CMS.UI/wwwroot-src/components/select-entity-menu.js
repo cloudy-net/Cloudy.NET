@@ -1,7 +1,7 @@
 import { html, useEffect, useState } from "../preact-htm/standalone.module.js";
 import SearchBox from "./search-box.js";
 
-export default ({ contentType, simpleKey, value, onSelect }) => {
+export default ({ entityType, simpleKey, value, onSelect }) => {
   const [pageSize] = useState(10);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -15,7 +15,7 @@ export default ({ contentType, simpleKey, value, onSelect }) => {
   useEffect(function () {
     (async () => {
       var response = await fetch(
-        `/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`,
+        `/Admin/api/controls/select/list?entityType=${entityType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`,
         {
           credentials: 'include'
         }

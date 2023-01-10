@@ -1,7 +1,7 @@
 import { useEffect, useState } from '@preact-htm';
 import FormField from './form-field';
 
-const FormFields = ({ contentType }) => {
+const FormFields = ({ entityType }) => {
     const [loading, setLoading] = useState(true);
     const [fields, setFields] = useState();
     const [error, setError] = useState();
@@ -12,7 +12,7 @@ const FormFields = ({ contentType }) => {
         setError(null);
   
         const response = await fetch(
-          `/Admin/api/form/fields?contentType=${contentType}`,
+          `/Admin/api/form/fields?entityType=${entityType}`,
           {
             credentials: 'include'
           }

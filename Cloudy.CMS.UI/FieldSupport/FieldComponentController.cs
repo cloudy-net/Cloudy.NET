@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.UI.FormSupport.FieldSupport;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldSupport
 {
-    public record FieldComponentController(IContentTypeProvider ContentTypeProvider, IFieldProvider FieldProvider)
+    public record FieldComponentController(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider)
     {
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/form/fields/components")]
         public object Get()
         {
-            return ContentTypeProvider.GetAll().SelectMany(c => FieldProvider.Get(c.Name)).Select(f => f.Partial).Where(p => p != null).Distinct();
+            return EntityTypeProvider.GetAll().SelectMany(c => FieldProvider.Get(c.Name)).Select(f => f.Partial).Where(p => p != null).Distinct();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Routing;
 using System;
 using System.Collections.Generic;

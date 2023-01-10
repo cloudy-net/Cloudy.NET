@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using System;
@@ -11,11 +11,11 @@ namespace Cloudy.CMS.Routing
 {
     public class ContentRouteConstraint : IRouteConstraint
     {
-        IEnumerable<ContentTypeDescriptor> Types { get; }
+        IEnumerable<EntityTypeDescriptor> Types { get; }
 
-        public ContentRouteConstraint(IContentTypeProvider contentTypeProvider, string type = null)
+        public ContentRouteConstraint(IEntityTypeProvider entityTypeProvider, string type = null)
         {
-            Types = type != null ? new List<ContentTypeDescriptor> { contentTypeProvider.Get(type) }.AsReadOnly() : contentTypeProvider.GetAll();
+            Types = type != null ? new List<EntityTypeDescriptor> { entityTypeProvider.Get(type) }.AsReadOnly() : entityTypeProvider.GetAll();
 
             if(Types == null)
             {

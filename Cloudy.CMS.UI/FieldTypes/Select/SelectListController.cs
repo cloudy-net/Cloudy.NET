@@ -1,6 +1,6 @@
 ﻿using Cloudy.CMS.EntitySupport;
 using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Naming;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -24,15 +24,15 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
     public class SelectListController : Controller
     {
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         INameGetter NameGetter { get; }
 
-        public SelectListController(IPropertyDefinitionProvider propertyDefinitionProvider, IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, INameGetter nameGetter)
+        public SelectListController(IPropertyDefinitionProvider propertyDefinitionProvider, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, INameGetter nameGetter)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             PrimaryKeyGetter = primaryKeyGetter;
             NameGetter = nameGetter;
@@ -41,9 +41,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/controls/select/list")]
-        public async Task<IActionResult> List(string contentType, string filter, int page, int pageSize, bool simpleKey)
+        public async Task<IActionResult> List(string entityType, string filter, int page, int pageSize, bool simpleKey)
         {
-            var type = ContentTypeProvider.Get(contentType);
+            var type = EntityTypeProvider.Get(entityType);
 
             var context = ContextCreator.CreateFor(type.Type);
 

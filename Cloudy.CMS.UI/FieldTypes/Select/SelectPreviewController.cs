@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntitySupport.Reference;
 using Cloudy.CMS.Naming;
 using Microsoft.AspNetCore.Mvc;
@@ -18,14 +18,14 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
     [ResponseCache(NoStore = true)]
     public class SelectPreviewController : Controller
     {
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         INameGetter NameGetter { get; }
         IReferenceDeserializer ReferenceDeserializer { get; }
 
-        public SelectPreviewController(IContentTypeProvider contentTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, INameGetter nameGetter, IReferenceDeserializer referenceDeserializer)
+        public SelectPreviewController(IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, INameGetter nameGetter, IReferenceDeserializer referenceDeserializer)
         {
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             NameGetter = nameGetter;
             ReferenceDeserializer = referenceDeserializer;
@@ -34,9 +34,9 @@ namespace Cloudy.CMS.UI.FormSupport.FieldTypes
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/controls/select/preview")]
-        public async Task<IActionResult> GetCard(string contentType, string reference, bool simpleKey)
+        public async Task<IActionResult> GetCard(string entityType, string reference, bool simpleKey)
         {
-            var type = ContentTypeProvider.Get(contentType);
+            var type = EntityTypeProvider.Get(entityType);
 
             var deserializedReference = ReferenceDeserializer.Get(type.Type, reference, simpleKey);
 

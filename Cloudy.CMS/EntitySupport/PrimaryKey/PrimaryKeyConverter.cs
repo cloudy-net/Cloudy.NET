@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +15,12 @@ namespace Cloudy.CMS.EntitySupport.PrimaryKey
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
         }
 
-        public object[] Convert(IEnumerable<string> keyValues, Type contentType)
+        public object[] Convert(IEnumerable<string> keyValues, Type entityType)
         {
             var result = new List<object>();
 
             var values = keyValues.ToList();
-            var types = PrimaryKeyPropertyGetter.GetFor(contentType).Select(p => p.PropertyType).ToList();
+            var types = PrimaryKeyPropertyGetter.GetFor(entityType).Select(p => p.PropertyType).ToList();
 
             for (var i = 0; i < values.Count; i++)
             {

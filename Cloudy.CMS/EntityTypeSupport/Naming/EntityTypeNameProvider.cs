@@ -8,18 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Cloudy.CMS.ContentTypeSupport.Name
+namespace Cloudy.CMS.EntityTypeSupport.Naming
 {
-    public class ContentTypeNameProvider : IContentTypeNameProvider
+    public class EntityTypeNameProvider : IEntityTypeNameProvider
     {
-        IDictionary<Type, ContentTypeName> Values { get; }
+        IDictionary<Type, EntityTypeName> Values { get; }
 
-        public ContentTypeNameProvider(IContentTypeNameCreator contentTypeNameCreator)
+        public EntityTypeNameProvider(IEntityTypeNameCreator entityTypeNameCreator)
         {
-            Values = contentTypeNameCreator.Create().ToDictionary(n => n.Type, n => n);
+            Values = entityTypeNameCreator.Create().ToDictionary(n => n.Type, n => n);
         }
 
-        public ContentTypeName Get(Type type)
+        public EntityTypeName Get(Type type)
         {
             if (!Values.ContainsKey(type))
             {

@@ -7,26 +7,26 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active"><a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a></li>
+            <li class="breadcrumb-item active"><a href="@Url.Page("List", new { area = "Admin", EntityType = Model.EntityType.Name })">@Model.EntityTypeName.PluralName</a></li>
         </ol>
     </nav>
 </div>
 
 <div class="container">
     <h1 class="h2 mb-3">
-        Listing @Model.ContentTypeName.PluralName
-        <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", ContentType = Model.ContentType.Name })">New</a>
+        Listing @Model.EntityTypeName.PluralName
+        <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", EntityType = Model.EntityType.Name })">New</a>
     </h1>
 </div>
 
 @{
     var settings = new {
-        ContentType = Model.ContentType.Name,
+        EntityType = Model.EntityType.Name,
         Columns = Model.Columns,
         Filters = Model.Filters,
         PageSize = 15,
-        EditLink = Url.Page("Edit", new { area = "Admin", ContentType = Model.ContentType.Name }),
-        DeleteLink = Url.Page("Delete", new { area = "Admin", ContentType = Model.ContentType.Name }),
+        EditLink = Url.Page("Edit", new { area = "Admin", EntityType = Model.EntityType.Name }),
+        DeleteLink = Url.Page("Delete", new { area = "Admin", EntityType = Model.EntityType.Name }),
     };
 }
 

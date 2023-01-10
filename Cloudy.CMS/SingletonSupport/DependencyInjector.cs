@@ -1,6 +1,6 @@
 ﻿using Cloudy.CMS.AssemblySupport;
 using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;

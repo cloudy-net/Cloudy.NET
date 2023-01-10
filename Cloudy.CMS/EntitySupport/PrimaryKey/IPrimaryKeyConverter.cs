@@ -7,6 +7,6 @@ namespace Cloudy.CMS.EntitySupport.PrimaryKey
 {
     public interface IPrimaryKeyConverter
     {
-        object[] Convert(IEnumerable<string> keyValues, Type contentType);
+        object[] Convert(IEnumerable<string> keyValues, Type entityType);
     }
 }

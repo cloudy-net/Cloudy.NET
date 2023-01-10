@@ -2,16 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.EntityTypeSupport.Naming
 {
     public class DependencyInjector : IDependencyInjector
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IContentTypeCreator, ContentTypeCreator>();
-            services.AddSingleton<IContentTypeProvider, ContentTypeProvider>();
+            services.AddSingleton<IEntityTypeNameProvider, EntityTypeNameProvider>();
+            services.AddSingleton<IEntityTypeNameCreator, EntityTypeNameCreator>();
         }
     }
 }

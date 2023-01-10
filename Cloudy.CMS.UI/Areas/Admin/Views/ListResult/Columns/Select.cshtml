@@ -1,18 +1,18 @@
 ﻿@using Cloudy.CMS.EntitySupport
 @using Cloudy.CMS.ContextSupport
-@using Cloudy.CMS.ContentTypeSupport
+@using Cloudy.CMS.EntityTypeSupport
 @using Cloudy.CMS.Naming
 @using Cloudy.CMS.UI.FormSupport.FieldTypes
 @using Cloudy.CMS.UI.List
 @model ListColumnViewModel
 
-@inject IContentTypeProvider ContentTypeProvider
+@inject IEntityTypeProvider EntityTypeProvider
 @inject IContextCreator ContextCreator
 @inject INameGetter NameGetter
 
 @{
     var select = Model.PropertyDefinition.Attributes.OfType<SelectAttribute>().First();
-    var type = ContentTypeProvider.Get(select.Type);
+    var type = EntityTypeProvider.Get(select.Type);
     var context = ContextCreator.CreateFor(type.Type);
 
     if(Model.Value == null){

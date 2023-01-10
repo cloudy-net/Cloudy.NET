@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport.Serialization;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -13,12 +13,12 @@ namespace Tests
 {
     public class EmbeddedBlockJsonConverterTests
     {
-        public class ContentTypeA : InterfaceA
+        public class EntityTypeA : InterfaceA
         {
             public string Test { get; set; } = "Lorem";
         }
 
-        public class ContentTypeB
+        public class EntityTypeB
         {
             public IList<InterfaceA> Items { get; set; }
         }
@@ -30,70 +30,70 @@ namespace Tests
         [Fact]
         public void SerializesIListWithInterface()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(c => c.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)), new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)) });
-            Mock.Get(contentTypeProvider).Setup(c => c.Get(typeof(ContentTypeA))).Returns(new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)));
-            Mock.Get(contentTypeProvider).Setup(c => c.Get(typeof(ContentTypeB))).Returns(new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)));
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(c => c.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)), new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)) });
+            Mock.Get(entityTypeProvider).Setup(c => c.Get(typeof(EntityTypeA))).Returns(new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)));
+            Mock.Get(entityTypeProvider).Setup(c => c.Get(typeof(EntityTypeB))).Returns(new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)));
 
-            var content = new ContentTypeB { Items = new List<InterfaceA> { new ContentTypeA() } };
+            var content = new EntityTypeB { Items = new List<InterfaceA> { new EntityTypeA() } };
             var options = new JsonSerializerOptions
             {
                 WriteIndented = false,
                 Converters = {
-                    new EmbeddedBlockJsonConverter<ContentTypeA>(contentTypeProvider),
-                    new EmbeddedBlockJsonConverter<InterfaceA>(contentTypeProvider),
-                    new EmbeddedBlockJsonConverter<ContentTypeB>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<EntityTypeA>(entityTypeProvider),
+                    new EmbeddedBlockJsonConverter<InterfaceA>(entityTypeProvider),
+                    new EmbeddedBlockJsonConverter<EntityTypeB>(entityTypeProvider),
                 }
             };
 
             var result = JsonSerializer.Serialize(content, options);
 
-            Assert.Equal("{\"Type\":\"contentTypeB\",\"Value\":{\"Items\":[{\"Type\":\"contentTypeA\",\"Value\":{\"Test\":\"Lorem\"}}]}}", result);
+            Assert.Equal("{\"Type\":\"entityTypeB\",\"Value\":{\"Items\":[{\"Type\":\"entityTypeA\",\"Value\":{\"Test\":\"Lorem\"}}]}}", result);
         }
 
         [Fact]
         public void DeserializesIListWithInterface()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(c => c.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)), new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)) });
-            Mock.Get(contentTypeProvider).Setup(c => c.Get("contentTypeA")).Returns(new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)));
-            Mock.Get(contentTypeProvider).Setup(c => c.Get("contentTypeB")).Returns(new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)));
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(c => c.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)), new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)) });
+            Mock.Get(entityTypeProvider).Setup(c => c.Get("entityTypeA")).Returns(new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)));
+            Mock.Get(entityTypeProvider).Setup(c => c.Get("entityTypeB")).Returns(new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)));
 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = false,
                 Converters = {
-                    new EmbeddedBlockJsonConverter<ContentTypeA>(contentTypeProvider),
-                    new EmbeddedBlockJsonConverter<InterfaceA>(contentTypeProvider),
-                    new EmbeddedBlockJsonConverter<ContentTypeB>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<EntityTypeA>(entityTypeProvider),
+                    new EmbeddedBlockJsonConverter<InterfaceA>(entityTypeProvider),
+                    new EmbeddedBlockJsonConverter<EntityTypeB>(entityTypeProvider),
                 }
             };
 
-            var value = "{\"Type\":\"contentTypeB\",\"Value\":{\"Items\":[{\"Type\":\"contentTypeA\",\"Value\":{\"Test\":\"Lorem\"}}]}}";
-            var result = JsonSerializer.Deserialize<ContentTypeB>(value, options);
+            var value = "{\"Type\":\"entityTypeB\",\"Value\":{\"Items\":[{\"Type\":\"entityTypeA\",\"Value\":{\"Test\":\"Lorem\"}}]}}";
+            var result = JsonSerializer.Deserialize<EntityTypeB>(value, options);
 
             Assert.Single(result.Items);
-            Assert.IsType<ContentTypeA>(result.Items.Single());
-            Assert.Equal("Lorem", ((ContentTypeA)result.Items.Single()).Test);
+            Assert.IsType<EntityTypeA>(result.Items.Single());
+            Assert.Equal("Lorem", ((EntityTypeA)result.Items.Single()).Test);
         }
 
         [Fact]
         public void DeserializesEmptyIListWithInterface()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(c => c.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)) });
-            Mock.Get(contentTypeProvider).Setup(c => c.Get("contentTypeB")).Returns(new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)));
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(c => c.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)) });
+            Mock.Get(entityTypeProvider).Setup(c => c.Get("entityTypeB")).Returns(new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)));
 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = false,
                 Converters = {
-                    new EmbeddedBlockJsonConverter<ContentTypeB>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<EntityTypeB>(entityTypeProvider),
                 }
             };
 
-            var value = "{\"Type\":\"contentTypeB\",\"Value\":{\"Items\":[]}}";
-            var result = JsonSerializer.Deserialize<ContentTypeB>(value, options);
+            var value = "{\"Type\":\"entityTypeB\",\"Value\":{\"Items\":[]}}";
+            var result = JsonSerializer.Deserialize<EntityTypeB>(value, options);
 
             Assert.Empty(result.Items);
         }
@@ -101,20 +101,20 @@ namespace Tests
         [Fact]
         public void DeserializesContent()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(c => c.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)) });
-            Mock.Get(contentTypeProvider).Setup(c => c.Get("contentTypeA")).Returns(new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)));
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(c => c.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)) });
+            Mock.Get(entityTypeProvider).Setup(c => c.Get("entityTypeA")).Returns(new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)));
 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = false,
                 Converters = {
-                    new EmbeddedBlockJsonConverter<ContentTypeA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<EntityTypeA>(entityTypeProvider),
                 }
             };
 
-            var value = "{\"Type\":\"contentTypeA\",\"Value\":{\"Test\":\"Lorem\"}}";
-            var result = JsonSerializer.Deserialize<ContentTypeA>(value, options);
+            var value = "{\"Type\":\"entityTypeA\",\"Value\":{\"Test\":\"Lorem\"}}";
+            var result = JsonSerializer.Deserialize<EntityTypeA>(value, options);
 
             Assert.Equal("Lorem", result.Test);
         }
@@ -122,22 +122,22 @@ namespace Tests
         [Fact]
         public void DeserializesInterface()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(c => c.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)) });
-            Mock.Get(contentTypeProvider).Setup(c => c.Get("contentTypeA")).Returns(new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)));
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(c => c.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)) });
+            Mock.Get(entityTypeProvider).Setup(c => c.Get("entityTypeA")).Returns(new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)));
 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = false,
                 Converters = {
-                    new EmbeddedBlockJsonConverter<InterfaceA>(contentTypeProvider),
+                    new EmbeddedBlockJsonConverter<InterfaceA>(entityTypeProvider),
                 }
             };
 
-            var value = "{\"Type\":\"contentTypeA\",\"Value\":{}}";
+            var value = "{\"Type\":\"entityTypeA\",\"Value\":{}}";
             var result = JsonSerializer.Deserialize<InterfaceA>(value, options);
 
-            Assert.IsType<ContentTypeA>(result);
+            Assert.IsType<EntityTypeA>(result);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cloudy.CMS.EntitySupport

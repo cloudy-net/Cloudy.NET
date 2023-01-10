@@ -15,7 +15,7 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Page("List", new { area = "Admin", EntityType = Model.EntityType.Name })">@Model.EntityTypeName.PluralName</a></li>
             <li class="breadcrumb-item active">Edit</li>
         </ol>
     </nav>
@@ -26,7 +26,7 @@
         @NameGetter.GetName(Model.Instance)
 
         @{
-            var routes = ContentRouteMatcher.GetFor(Model.ContentType.Type);
+            var routes = ContentRouteMatcher.GetFor(Model.EntityType.Type);
 
             if (routes.Any())
             {
@@ -56,14 +56,14 @@
                 }
             }
         }
-        <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", ContentType = Model.ContentType.Name })">New</a>
+        <a class="btn btn-sm btn-primary" href="@Url.Page("New", new { area = "Admin", EntityType = Model.EntityType.Name })">New</a>
     </h1>
 </div>
 
 <div class="container">
     <div class="card">
         <div class="card-body">
-            @Html.RenderCloudyForm(Model.ContentType, Model.Keys)
+            @Html.RenderCloudyForm(Model.EntityType, Model.Keys)
         </div>
     </div>
 </div>

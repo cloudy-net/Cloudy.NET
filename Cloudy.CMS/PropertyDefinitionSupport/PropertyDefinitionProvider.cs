@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,13 +9,13 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
     {
         IDictionary<string, IEnumerable<PropertyDefinitionDescriptor>> Values { get; } = new Dictionary<string, IEnumerable<PropertyDefinitionDescriptor>>();
 
-        public PropertyDefinitionProvider(IContentTypeProvider contentTypeProvider, IPropertyDefinitionCreator propertyDefinitionCreator)
+        public PropertyDefinitionProvider(IEntityTypeProvider entityTypeProvider, IPropertyDefinitionCreator propertyDefinitionCreator)
         {
-            foreach (var contentType in contentTypeProvider.GetAll())
+            foreach (var entityType in entityTypeProvider.GetAll())
             {
                 var propertyDefinitions = new List<PropertyDefinitionDescriptor>();
 
-                foreach (var property in contentType.Type.GetProperties())
+                foreach (var property in entityType.Type.GetProperties())
                 {
                     if (property.GetGetMethod() == null || property.GetSetMethod() == null)
                     {
@@ -25,13 +25,13 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
                     propertyDefinitions.Add(propertyDefinitionCreator.Create(property));
                 }
 
-                Values[contentType.Name] = propertyDefinitions.AsReadOnly();
+                Values[entityType.Name] = propertyDefinitions.AsReadOnly();
             }
         }
 
-        public IEnumerable<PropertyDefinitionDescriptor> GetFor(string contentType)
+        public IEnumerable<PropertyDefinitionDescriptor> GetFor(string entityType)
         {
-            return Values[contentType];
+            return Values[entityType];
         }
     }
 }

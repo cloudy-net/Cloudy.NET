@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "@preact-htm";
 import SearchBox from "../components/search-box";
 
-export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpleKey, imageable }) => {
+export default ({ entityType, pageSize: initialPageSize, value, onSelect, simpleKey, imageable }) => {
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -18,7 +18,7 @@ export default ({ contentType, pageSize: initialPageSize, value, onSelect, simpl
     }
 
     fetch(
-      `/Admin/api/controls/select/list?contentType=${contentType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`,
+      `/Admin/api/controls/select/list?entityType=${entityType}&filter=${filter}&pageSize=${pageSize}&page=${page}&simpleKey=${simpleKey}`,
       {
         credentials: 'include'
       }

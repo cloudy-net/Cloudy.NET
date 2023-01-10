@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -18,19 +18,19 @@ namespace Tests
     {
         [Theory]
         [InlineData("lorem", null, null)]
-        [InlineData("lorem/{route:contentroute}", "lorem/{contentroute}", "ContentTypeA,ContentTypeB")]
+        [InlineData("lorem/{route:contentroute}", "lorem/{contentroute}", "EntityTypeA,EntityTypeB")]
         public void CreatesRoutes(string pattern, string resultingTemplate, string resultingTypes)
         {
-            var contentTypeA = new ContentTypeDescriptor("sit", typeof(ContentTypeA));
-            var contentTypeB = new ContentTypeDescriptor("dol", typeof(ContentTypeB));
+            var entityTypeA = new EntityTypeDescriptor("sit", typeof(EntityTypeA));
+            var entityTypeB = new EntityTypeDescriptor("dol", typeof(EntityTypeB));
 
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { contentTypeA, contentTypeB });
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(p => p.GetAll()).Returns(new List<EntityTypeDescriptor> { entityTypeA, entityTypeB });
 
             var endpoint = new RouteEndpoint(async context => { }, RoutePatternFactory.Parse(pattern), 0, null, null);
             var dataSource = new CompositeEndpointDataSource(new List<EndpointDataSource> { new DefaultEndpointDataSource(endpoint) });
 
-            var results = new ContentRouteCreator(Mock.Of<ILogger<ContentRouteCreator>>(), dataSource, contentTypeProvider).Create();
+            var results = new ContentRouteCreator(Mock.Of<ILogger<ContentRouteCreator>>(), dataSource, entityTypeProvider).Create();
 
             if(resultingTemplate == null)
             {
@@ -46,15 +46,15 @@ namespace Tests
             Assert.Equal(resultingTypes, string.Join(",", result.Types.Select(t => t.Name)));
         }
 
-        class ContentTypeA : InterfaceA
+        class EntityTypeA : InterfaceA
         {
         }
 
-        class ContentTypeB
+        class EntityTypeB
         {
         }
 
-        class ContentTypeC
+        class EntityTypeC
         {
         }
 

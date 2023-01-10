@@ -6,10 +6,10 @@
 @inject IPrimaryKeyGetter PrimaryKeyGetter
 
 @{
-    var editLink = Url.Page("/Edit", new { area = "Admin", ContentType = Model.ContentType.Name, keys = PrimaryKeyGetter.Get(Model.Instance) });
+    var editLink = Url.Page("/Edit", new { area = "Admin", EntityType = Model.EntityType.Name, keys = PrimaryKeyGetter.Get(Model.Instance) });
 }
 
-@if (Model.ContentType.IsImageable)
+@if (Model.EntityType.IsImageable)
 {
     <img class="list-image-in-name" src="@(((IImageable)Model.Instance).Image)" alt="" />
 }

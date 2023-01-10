@@ -4,6 +4,6 @@ namespace Cloudy.CMS.EntitySupport.Reference
 {
     public interface IReferenceDeserializer
     {
-        object[] Get(Type contentType, string reference, bool simpleKey);
+        object[] Get(Type entityType, string reference, bool simpleKey);
     }
 }

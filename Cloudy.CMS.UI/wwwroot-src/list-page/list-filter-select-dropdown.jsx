@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "@preact-htm";
 import SelectEntityMenu from "../components/select-entity-menu.js";
 
-export default ({ label, contentType, onSelect, simpleKey }) => {
+export default ({ label, entityType, onSelect, simpleKey }) => {
   const [value, setValue] = useState();
   const [open, setOpen] = useState();
   const ref = useRef(null);
@@ -26,7 +26,7 @@ export default ({ label, contentType, onSelect, simpleKey }) => {
       <label>{label}</label>
     </div>
     <div class={"dropdown-menu" + (open ? " show" : "")}>
-      <SelectEntityMenu contentType={contentType} simpleKey={simpleKey} value={value && value.reference} onSelect={item => { setValue(item); onSelect(item && item.reference); }} />
+      <SelectEntityMenu entityType={entityType} simpleKey={simpleKey} value={value && value.reference} onSelect={item => { setValue(item); onSelect(item && item.reference); }} />
     </div>
   </div>;
 };

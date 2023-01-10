@@ -9,7 +9,7 @@ namespace Cloudy.CMS.UI.List.Filter
     public record ListFilterDescriptor(
         string Name,
         string Label,
-        string ContentType,
+        string EntityType,
         bool Select,
         string SelectType,
         bool SimpleKey,

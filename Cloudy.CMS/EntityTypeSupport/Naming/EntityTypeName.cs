@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace Cloudy.CMS.ContentTypeSupport.Name
+namespace Cloudy.CMS.EntityTypeSupport.Naming
 {
-    public record ContentTypeName(
+    public record EntityTypeName(
         Type Type,
         string Name,
         string LowerCaseName,

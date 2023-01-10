@@ -1,6 +1,6 @@
 using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.ContentTypeSupport.Name;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport.Naming;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.UI.FormSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,68 +16,68 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
     [Authorize("adminarea")]
     public class DeleteModel : PageModel
     {
-        IContentTypeProvider ContentTypeProvider { get; }
-        IContentTypeNameProvider ContentTypeNameProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
+        IEntityTypeNameProvider EntityTypeNameProvider { get; }
         IContextCreator ContextCreator { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
 
-        public DeleteModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter)
+        public DeleteModel(IEntityTypeProvider entityTypeProvider, IEntityTypeNameProvider entityTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter)
         {
-            ContentTypeProvider = contentTypeProvider;
-            ContentTypeNameProvider = contentTypeNameProvider;
+            EntityTypeProvider = entityTypeProvider;
+            EntityTypeNameProvider = entityTypeNameProvider;
             ContextCreator = contextCreator;
             PrimaryKeyConverter = primaryKeyConverter;
         }
 
-        public ContentTypeDescriptor ContentType { get; set; }
-        public ContentTypeName ContentTypeName { get; set; }
+        public EntityTypeDescriptor EntityType { get; set; }
+        public EntityTypeName EntityTypeName { get; set; }
         public object Instance { get; set; }
 
-        async Task BindData(string contentType, string[] keys)
+        async Task BindData(string entityType, string[] keys)
         {
-            ContentType = ContentTypeProvider.Get(contentType);
-            ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
-            var keyValues = PrimaryKeyConverter.Convert(keys, ContentType.Type);
-            var context = ContextCreator.CreateFor(ContentType.Type);
-            Instance = await context.Context.FindAsync(ContentType.Type, keyValues).ConfigureAwait(false);
+            EntityType = EntityTypeProvider.Get(entityType);
+            EntityTypeName = EntityTypeNameProvider.Get(EntityType.Type);
+            var keyValues = PrimaryKeyConverter.Convert(keys, EntityType.Type);
+            var context = ContextCreator.CreateFor(EntityType.Type);
+            Instance = await context.Context.FindAsync(EntityType.Type, keyValues).ConfigureAwait(false);
         }
 
-        public async Task<IActionResult> OnGet(string contentType, string[] keys)
+        public async Task<IActionResult> OnGet(string entityType, string[] keys)
         {
-            await BindData(contentType, keys).ConfigureAwait(false);
+            await BindData(entityType, keys).ConfigureAwait(false);
 
-            if (ContentType.IsSingleton)
+            if (EntityType.IsSingleton)
             {
-                return Redirect(Url.Page("List", new { area = "Admin", ContentType = ContentType.Name }));
+                return Redirect(Url.Page("List", new { area = "Admin", EntityType = EntityType.Name }));
             }
 
             if (Instance == null)
             {
-                return NotFound($"Could not find instance of type {contentType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
+                return NotFound($"Could not find instance of type {entityType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
             }
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(string contentType, string[] keys, [FromForm] IFormCollection form)
+        public async Task<IActionResult> OnPost(string entityType, string[] keys, [FromForm] IFormCollection form)
         {
-            await BindData(contentType, keys).ConfigureAwait(false);
+            await BindData(entityType, keys).ConfigureAwait(false);
 
-            if (ContentType.IsSingleton)
+            if (EntityType.IsSingleton)
             {
-                return Redirect(Url.Page("List", new { area = "Admin", ContentType = ContentType.Name }));
+                return Redirect(Url.Page("List", new { area = "Admin", EntityType = EntityType.Name }));
             }
 
             if (Instance == null)
             {
-                return NotFound($"Could not find instance of type {contentType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
+                return NotFound($"Could not find instance of type {entityType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
             }
 
-            var context = ContextCreator.CreateFor(ContentType.Type);
+            var context = ContextCreator.CreateFor(EntityType.Type);
             context.Context.Remove(Instance);
             await context.Context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Redirect(Url.Page("List", new { area = "Admin", ContentType = ContentType.Name }));
+            return Redirect(Url.Page("List", new { area = "Admin", EntityType = EntityType.Name }));
         }
     }
 }

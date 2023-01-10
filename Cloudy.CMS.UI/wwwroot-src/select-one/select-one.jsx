@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from '@preact-htm';
 import SelectOneDropdown from './select-one-dropdown';
 
-export default ({ controlName, contentType, pageSize, value: initialValue, simpleKey, editLink, imageable }) => {
+export default ({ controlName, entityType, pageSize, value: initialValue, simpleKey, editLink, imageable }) => {
   const [value, setValue] = useState(initialValue);
   const [preview, setPreview] = useState();
 
@@ -16,7 +16,7 @@ export default ({ controlName, contentType, pageSize, value: initialValue, simpl
       }
 
       var response = await fetch(
-        `/Admin/api/controls/select/preview?contentType=${contentType}&reference=${value}&simpleKey=${simpleKey}`,
+        `/Admin/api/controls/select/preview?entityType=${entityType}&reference=${value}&simpleKey=${simpleKey}`,
         {
           credentials: 'include'
         }
@@ -51,6 +51,6 @@ export default ({ controlName, contentType, pageSize, value: initialValue, simpl
       <button class="btn btn-beta" type="button" onClick={() => { setValue(null); setPreview(null); }}>Remove</button>
     </div>}
 
-    <SelectOneDropdown contentType={contentType} pageSize={pageSize} value={value} onSelect={item => { setValue(simpleKey ? item.reference : JSON.stringify(item.reference)); setPreview(item); }} simpleKey={simpleKey} imageable={imageable} />
+    <SelectOneDropdown entityType={entityType} pageSize={pageSize} value={value} onSelect={item => { setValue(simpleKey ? item.reference : JSON.stringify(item.reference)); setPreview(item); }} simpleKey={simpleKey} imageable={imageable} />
   </>;
 }

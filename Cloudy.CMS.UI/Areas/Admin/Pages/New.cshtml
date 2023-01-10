@@ -7,7 +7,7 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">@Model.ContentTypeName.PluralName</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Page("List", new { area = "Admin", EntityType = Model.EntityType.Name })">@Model.EntityTypeName.PluralName</a></li>
             <li class="breadcrumb-item active">New</li>
         </ol>
     </nav>
@@ -15,15 +15,15 @@
 
 <div class="container">
     <h1 class="h2 mb-3">
-        New @Model.ContentTypeName.LowerCaseName
-        <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", ContentType = Model.ContentType.Name })">Back</a>
+        New @Model.EntityTypeName.LowerCaseName
+        <a class="btn btn-sm btn-beta" href="@Url.Page("List", new { area = "Admin", EntityType = Model.EntityType.Name })">Back</a>
     </h1>
 </div>
 
 <div class="container">
     <div class="card">
         <div class="card-body">
-            @Html.RenderCloudyForm(Model.ContentType)
+            @Html.RenderCloudyForm(Model.EntityType)
         </div>
     </div>
 </div>

@@ -5,20 +5,20 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Cloudy.CMS.ContentTypeSupport.Name
+namespace Cloudy.CMS.EntityTypeSupport.Naming
 {
-    public record ContentTypeNameCreator(IContentTypeProvider ContentTypeProvider, IHumanizer Humanizer, IPluralizer Pluralizer) : IContentTypeNameCreator
+    public record EntityTypeNameCreator(IEntityTypeProvider EntityTypeProvider, IHumanizer Humanizer, IPluralizer Pluralizer) : IEntityTypeNameCreator
     {
-        public IEnumerable<ContentTypeName> Create()
+        public IEnumerable<EntityTypeName> Create()
         {
-            var result = new List<ContentTypeName>();
+            var result = new List<EntityTypeName>();
 
-            foreach (var type in ContentTypeProvider.GetAll())
+            foreach (var type in EntityTypeProvider.GetAll())
             {
                 var name = type.Type.GetCustomAttribute<DisplayAttribute>()?.Name ?? Humanizer.Humanize(type.Name);
                 var pluralName = Pluralizer.Pluralize(name);
 
-                result.Add(new ContentTypeName(
+                result.Add(new EntityTypeName(
                     type.Type,
                     name,
                     name.Substring(0, 1).ToLower() + name.Substring(1),

@@ -12,9 +12,9 @@ namespace Cloudy.CMS.EntitySupport.Reference
 {
     public record ReferenceDeserializer(IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter, ILogger<ReferenceDeserializer> Logger) : IReferenceDeserializer
     {
-        public object[] Get(Type contentType, string reference, bool simpleKey)
+        public object[] Get(Type entityType, string reference, bool simpleKey)
         {
-            var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(contentType).ToList();
+            var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(entityType).ToList();
 
             if (simpleKey)
             {
@@ -50,12 +50,12 @@ namespace Cloudy.CMS.EntitySupport.Reference
 
             if(json.ValueKind != JsonValueKind.Array)
             {
-                throw new Exception($"Entity reference {reference} for type {contentType} could not be deserialized into JSON array");
+                throw new Exception($"Entity reference {reference} for type {entityType} could not be deserialized into JSON array");
             }
 
             if(primaryKeyProperties.Count != json.GetArrayLength())
             {
-                throw new Exception($"Entity reference {reference} array length {json.GetArrayLength()} did not match primary key count {primaryKeyProperties.Count} on type {contentType}");
+                throw new Exception($"Entity reference {reference} array length {json.GetArrayLength()} did not match primary key count {primaryKeyProperties.Count} on type {entityType}");
             }
 
             for (var i = 0; i < primaryKeyProperties.Count; i++)

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.EntityTypeSupport
 {
     [DebuggerDisplay("{Name}")]
-    public record ContentTypeDescriptor(
+    public record EntityTypeDescriptor(
         string Name,
         Type Type,
         bool IsNameable = false,

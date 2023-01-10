@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.ContextSupport;
 using Moq;
 using System;
@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class ContentTypeCreatorTests
+    public class EntityTypeCreatorTests
     {
         [Fact]
         public void GeneratesNamesOfGenericTypes()
@@ -21,7 +21,7 @@ namespace Tests
 
             Mock.Get(contextDescriptorProvider).Setup(c => c.GetAll()).Returns(new List<ContextDescriptor> { new ContextDescriptor(typeof(string), new List<DbSetDescriptor> { new DbSetDescriptor(typeof(MyClass<ClassA, ClassB>), null) }) });
 
-            var result = new ContentTypeCreator(contextDescriptorProvider).Create();
+            var result = new EntityTypeCreator(contextDescriptorProvider).Create();
 
             var actual = result.Single().Name;
 

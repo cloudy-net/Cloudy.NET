@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.ContentTypeSupport.Name;
+using Cloudy.CMS.EntityTypeSupport.Naming;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.SingletonSupport;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.Naming
 {
-    public record NameGetter(IContentTypeNameProvider ContentTypeNameProvider, IPrimaryKeyGetter PrimaryKeyGetter) : INameGetter
+    public record NameGetter(IEntityTypeNameProvider EntityTypeNameProvider, IPrimaryKeyGetter PrimaryKeyGetter) : INameGetter
     {
         public string GetName(object instance)
         {
@@ -20,11 +20,11 @@ namespace Cloudy.CMS.Naming
             }
 
             var type = instance.GetType();
-            var contentTypeName = ContentTypeNameProvider.Get(type);
+            var entityTypeName = EntityTypeNameProvider.Get(type);
 
             if (instance is ISingleton)
             {
-                return contentTypeName.Name;
+                return entityTypeName.Name;
             }
 
             string name = null;
@@ -46,7 +46,7 @@ namespace Cloudy.CMS.Naming
 
             if(name == null)
             {
-                name = contentTypeName.Name;
+                name = entityTypeName.Name;
             }
 
             return name;

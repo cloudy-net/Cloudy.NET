@@ -3,7 +3,7 @@ import FormField from './form-field';
 import EntityContext from './entity-context';
 import stateManager from '../data/state-manager';
 
-const FormFooter = ({ contentType }) => {
+const FormFooter = ({ entityType }) => {
   const [saving, setSaving] = useState();
   const { state } = useContext(EntityContext);
 

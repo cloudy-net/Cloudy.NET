@@ -1,5 +1,5 @@
-using Cloudy.CMS.ContentTypeSupport.Name;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport.Naming;
+using Cloudy.CMS.EntityTypeSupport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -17,27 +17,27 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
     [Authorize("adminarea")]
     public class NewModel : PageModel
     {
-        IContentTypeProvider ContentTypeProvider { get; }
-        IContentTypeNameProvider ContentTypeNameProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
+        IEntityTypeNameProvider EntityTypeNameProvider { get; }
 
-        public NewModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider)
+        public NewModel(IEntityTypeProvider entityTypeProvider, IEntityTypeNameProvider entityTypeNameProvider)
         {
-            ContentTypeProvider = contentTypeProvider;
-            ContentTypeNameProvider = contentTypeNameProvider;
+            EntityTypeProvider = entityTypeProvider;
+            EntityTypeNameProvider = entityTypeNameProvider;
         }
 
-        public ContentTypeDescriptor ContentType { get; set; }
-        public ContentTypeName ContentTypeName { get; set; }
+        public EntityTypeDescriptor EntityType { get; set; }
+        public EntityTypeName EntityTypeName { get; set; }
 
-        void BindData(string contentType)
+        void BindData(string entityType)
         {
-            ContentType = ContentTypeProvider.Get(contentType);
-            ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
+            EntityType = EntityTypeProvider.Get(entityType);
+            EntityTypeName = EntityTypeNameProvider.Get(EntityType.Type);
         }
 
-        public void OnGet(string contentType)
+        public void OnGet(string entityType)
         {
-            BindData(contentType);
+            BindData(entityType);
         }
     }
 }

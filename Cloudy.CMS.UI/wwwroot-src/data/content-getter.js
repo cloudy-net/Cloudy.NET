@@ -11,7 +11,7 @@ class ContentGetter {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(contentReference)
             },
-            `Could not get content ${JSON.stringify(contentReference.keyValues)} (${contentReference.contentTypeId})`,
+            `Could not get content ${JSON.stringify(contentReference.keyValues)} (${contentReference.entityTypeId})`,
             {
                 410: () => new ContentNotFound(contentReference)
             }

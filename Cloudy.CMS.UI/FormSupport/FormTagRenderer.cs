@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -13,11 +13,11 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public static class FormTagRenderer
     {
-        public static IHtmlContent RenderCloudyForm(this IHtmlHelper html, ContentTypeDescriptor contentType, IEnumerable<string> keyValues = null)
+        public static IHtmlContent RenderCloudyForm(this IHtmlHelper html, EntityTypeDescriptor entityType, IEnumerable<string> keyValues = null)
         {
             var settings = new
             {
-                contentType = contentType.Name,
+                entityType = entityType.Name,
                 keyValues
             };
             return new HtmlString($"<div class=\"cloudy-form\" settings=\"{HttpUtility.HtmlAttributeEncode(JsonSerializer.Serialize(settings))}\" ></div>");

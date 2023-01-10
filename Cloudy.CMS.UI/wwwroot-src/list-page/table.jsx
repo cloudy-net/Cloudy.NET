@@ -2,7 +2,7 @@ import { useEffect, useState } from '@preact-htm';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
 
-export default ({ contentType, columns: initialColumns, filters: listFilters, pageSize: initialPageSize, editLink, deleteLink }) => {
+export default ({ entityType, columns: initialColumns, filters: listFilters, pageSize: initialPageSize, editLink, deleteLink }) => {
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -20,7 +20,7 @@ export default ({ contentType, columns: initialColumns, filters: listFilters, pa
       setError(null);
 
       const response = await fetch(
-        `/Admin/api/list/result?contentType=${contentType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`,
+        `/Admin/api/list/result?entityType=${entityType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`,
         {
           credentials: 'include'
         }

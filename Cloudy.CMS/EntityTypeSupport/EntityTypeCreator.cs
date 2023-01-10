@@ -7,15 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Cloudy.CMS.ContentTypeSupport
+namespace Cloudy.CMS.EntityTypeSupport
 {
-    public record ContentTypeCreator(IContextDescriptorProvider ContextDescriptorProvider) : IContentTypeCreator
+    public record EntityTypeCreator(IContextDescriptorProvider ContextDescriptorProvider) : IEntityTypeCreator
     {
-        public IEnumerable<ContentTypeDescriptor> Create()
+        public IEnumerable<EntityTypeDescriptor> Create()
         {
             var types = ContextDescriptorProvider.GetAll().SelectMany(c => c.DbSets.Select(p => p.Type)).ToList();
 
-            var result = new List<ContentTypeDescriptor>();
+            var result = new List<EntityTypeDescriptor>();
 
             foreach (var type in types)
             {
@@ -31,7 +31,7 @@ namespace Cloudy.CMS.ContentTypeSupport
                     name = $"{name.Split('`')[0]}<{string.Join(",", type.GetGenericArguments().Select(t => t.Name))}>";
                 }
 
-                result.Add(new ContentTypeDescriptor(
+                result.Add(new EntityTypeDescriptor(
                     name,
                     type,
                     type.IsAssignableTo(typeof(INameable)),

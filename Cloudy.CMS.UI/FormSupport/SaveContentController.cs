@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.PropertyDefinitionSupport;
@@ -19,7 +19,7 @@ namespace Cloudy.CMS.UI.FormSupport
     [Area("Admin")]
     public class SaveContentController : Controller
     {
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IContextCreator ContextCreator { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
@@ -27,9 +27,9 @@ namespace Cloudy.CMS.UI.FormSupport
         IFieldProvider FieldProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
 
-        public SaveContentController(IContentTypeProvider contentTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
+        public SaveContentController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
         {
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
             ContextCreator = contextCreator;
             PrimaryKeyGetter = primaryKeyGetter;
@@ -53,37 +53,37 @@ namespace Cloudy.CMS.UI.FormSupport
 
             foreach (var changedContent in data.ChangedContent)
             {
-                var contentType = ContentTypeProvider.Get(changedContent.ContentReference.ContentType);
-                var context = ContextCreator.CreateFor(contentType.Type);
+                var entityType = EntityTypeProvider.Get(changedContent.ContentReference.EntityType);
+                var context = ContextCreator.CreateFor(entityType.Type);
 
                 contexts.Add(context);
 
-                var keyValues = PrimaryKeyConverter.Convert(changedContent.ContentReference.KeyValues.Select(k => k.ToString()), contentType.Type);
+                var keyValues = PrimaryKeyConverter.Convert(changedContent.ContentReference.KeyValues.Select(k => k.ToString()), entityType.Type);
 
                 object content;
 
                 if (keyValues == null)
                 {
-                    content = Activator.CreateInstance(contentType.Type);
+                    content = Activator.CreateInstance(entityType.Type);
                 }
                 else
                 {
-                    content = await context.Context.FindAsync(contentType.Type, keyValues).ConfigureAwait(false);
+                    content = await context.Context.FindAsync(entityType.Type, keyValues).ConfigureAwait(false);
 
                     if (changedContent.Remove)
                     {
                         context.Context.Remove(content);
-                        result.Add(SaveContentResult.SuccessResult(contentType.Name, keyValues));
+                        result.Add(SaveContentResult.SuccessResult(entityType.Name, keyValues));
                         continue;
                     }
                 }
 
-                var propertyDefinitions = PropertyDefinitionProvider.GetFor(contentType.Name).ToDictionary(p => p.Name, p => p);
+                var propertyDefinitions = PropertyDefinitionProvider.GetFor(entityType.Name).ToDictionary(p => p.Name, p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(content.GetType());
 
                 if (changedContent.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
-                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {changedContent.ContentReference.ContentType}!");
+                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {changedContent.ContentReference.EntityType}!");
                 }
 
                 var changedSimpleFields = changedContent.SimpleChanges.ToList();
@@ -98,8 +98,8 @@ namespace Cloudy.CMS.UI.FormSupport
                 //foreach (var change in arrayChanges)
                 //{
                 //    var name = change.Path.Single();
-                //    var field = FieldProvider.GetFor(contentType.Id, name);
-                //    var property = contentType.Type.GetProperty(field.Name);
+                //    var field = FieldProvider.GetFor(entityType.Id, name);
+                //    var property = entityType.Type.GetProperty(field.Name);
                 //    var array = (IList)property.GetGetMethod().Invoke(content, null);
 
                 //    if(array == null)
@@ -112,7 +112,7 @@ namespace Cloudy.CMS.UI.FormSupport
                 //    {
                 //        foreach (var arrayChange in change.Changes) {
                 //            var polymorphicValue = JsonSerializer.Deserialize<PolymorphicValue>(arrayChange.Value);
-                //            var form = ContentTypeProvider.Get(polymorphicValue.Type);
+                //            var form = EntityTypeProvider.Get(polymorphicValue.Type);
                 //            var value = JsonSerializer.Deserialize(polymorphicValue.Value, form.Type);
                 //            array.Add(value);
                 //        }
@@ -121,7 +121,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 if (!TryValidateModel(content))
                 {
-                    result.Add(SaveContentResult.ValidationFailureResult(contentType.Name, keyValues, ModelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage))));
+                    result.Add(SaveContentResult.ValidationFailureResult(entityType.Name, keyValues, ModelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage))));
                     continue;
                 }
 
@@ -134,7 +134,7 @@ namespace Cloudy.CMS.UI.FormSupport
                     //await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
                 }
 
-                result.Add(SaveContentResult.SuccessResult(contentType.Name, PrimaryKeyGetter.Get(content)));
+                result.Add(SaveContentResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(content)));
             }
 
             foreach(var context in contexts)
@@ -161,27 +161,27 @@ namespace Cloudy.CMS.UI.FormSupport
             public ContentReference ContentReference { get; private set; }
             public IDictionary<string, IEnumerable<string>> ValidationErrors { get; private set; }
 
-            public static SaveContentResult SuccessResult(string contentTypeId, IEnumerable<object> keyValues)
+            public static SaveContentResult SuccessResult(string entityTypeId, IEnumerable<object> keyValues)
             {
                 return new SaveContentResult
                 {
                     Success = true,
                     ContentReference = new ContentReference
                     {
-                        ContentType = contentTypeId,
+                        EntityType = entityTypeId,
                         KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
                     },
                 };
             }
 
-            public static SaveContentResult ValidationFailureResult(string contentTypeId, IEnumerable<object> keyValues, IDictionary<string, IEnumerable<string>> validationErrors)
+            public static SaveContentResult ValidationFailureResult(string entityTypeId, IEnumerable<object> keyValues, IDictionary<string, IEnumerable<string>> validationErrors)
             {
                 return new SaveContentResult
                 {
                     Success = false,
                     ContentReference = new ContentReference
                     {
-                        ContentType = contentTypeId,
+                        EntityType = entityTypeId,
                         KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
                     },
                     ValidationErrors = validationErrors.ToDictionary(e => e.Key, e => (IEnumerable<string>)e.Value.ToList().AsReadOnly()),
@@ -191,14 +191,14 @@ namespace Cloudy.CMS.UI.FormSupport
 
         private void UpdateSimpleField(object target, IEnumerable<string> path, string value)
         {
-            var contentType = ContentTypeProvider.Get(target.GetType());
+            var entityType = EntityTypeProvider.Get(target.GetType());
 
             var name = path.First();
 
             path = path.Skip(1);
 
-            var field = FieldProvider.Get(contentType.Name).FirstOrDefault(f => f.Name == name);
-            var property = contentType.Type.GetProperty(field.Name);
+            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == name);
+            var property = entityType.Type.GetProperty(field.Name);
 
             if (!path.Any())
             {
@@ -253,7 +253,7 @@ namespace Cloudy.CMS.UI.FormSupport
         {
             public JsonElement[] KeyValues { get; set; }
             [Required]
-            public string ContentType { get; set; }
+            public string EntityType { get; set; }
         }
 
         public class ChangedContent

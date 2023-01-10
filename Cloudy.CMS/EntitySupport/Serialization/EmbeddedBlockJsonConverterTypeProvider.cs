@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,27 +9,27 @@ namespace Cloudy.CMS.EntitySupport.Serialization
 {
     public class EmbeddedBlockJsonConverterTypeProvider : IContentJsonConverterTypeProvider
     {
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
 
-        public EmbeddedBlockJsonConverterTypeProvider(IContentTypeProvider contentTypeProvider)
+        public EmbeddedBlockJsonConverterTypeProvider(IEntityTypeProvider entityTypeProvider)
         {
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
         }
 
         public IEnumerable<Type> GetAll()
         {
             var types = new HashSet<Type>();
 
-            foreach (var contentType in ContentTypeProvider.GetAll())
+            foreach (var entityType in EntityTypeProvider.GetAll())
             {
-                types.Add(contentType.Type);
+                types.Add(entityType.Type);
 
-                for (var baseType = contentType.Type; baseType != typeof(object); baseType = baseType.BaseType)
+                for (var baseType = entityType.Type; baseType != typeof(object); baseType = baseType.BaseType)
                 {
                     types.Add(baseType);
                 }
 
-                foreach (var interfaceType in contentType.Type.GetInterfaces())
+                foreach (var interfaceType in entityType.Type.GetInterfaces())
                 {
                     types.Add(interfaceType);
                 }

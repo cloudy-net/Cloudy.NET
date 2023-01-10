@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +11,11 @@ namespace Cloudy.CMS.EntitySupport.Serialization
 {
     public class EmbeddedBlockJsonConverter<T> : JsonConverter<T> where T : class
     {
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
 
-        public EmbeddedBlockJsonConverter(IContentTypeProvider contentTypeProvider)
+        public EmbeddedBlockJsonConverter(IEntityTypeProvider entityTypeProvider)
         {
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
         }
 
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -42,8 +42,8 @@ namespace Cloudy.CMS.EntitySupport.Serialization
                 throw new JsonException("Type discriminator of content container expected");
             }
 
-            var contentTypeId = reader.GetString();
-            var contentType = ContentTypeProvider.Get(contentTypeId);
+            var entityTypeId = reader.GetString();
+            var entityType = EntityTypeProvider.Get(entityTypeId);
 
             reader.Read();
             if (reader.TokenType != JsonTokenType.PropertyName)
@@ -56,7 +56,7 @@ namespace Cloudy.CMS.EntitySupport.Serialization
                 throw new JsonException("Property name `Value` of content value of content container expected");
             }
 
-            if (contentType == null)
+            if (entityType == null)
             {
                 reader.Skip();
                 reader.Read();
@@ -73,8 +73,8 @@ namespace Cloudy.CMS.EntitySupport.Serialization
                 throw new JsonException("Start object of content value of content container expected");
             }
 
-            var content = (T)Activator.CreateInstance(contentType.Type);
-            var properties = contentType.Type
+            var content = (T)Activator.CreateInstance(entityType.Type);
+            var properties = entityType.Type
                 .GetProperties()
                 .Where(p => !p.GetIndexParameters().Any() && p.GetGetMethod() != null && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute)))
                 .ToDictionary(p => p.Name, p => p);
@@ -116,20 +116,20 @@ namespace Cloudy.CMS.EntitySupport.Serialization
 
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
-            var contentType = ContentTypeProvider.Get(value.GetType());
+            var entityType = EntityTypeProvider.Get(value.GetType());
 
-            if (contentType == null)
+            if (entityType == null)
             {
                 writer.WriteNullValue();
                 return;
             }
 
             writer.WriteStartObject();
-            writer.WriteString("Type", contentType.Name);
+            writer.WriteString("Type", entityType.Name);
             writer.WritePropertyName("Value");
             writer.WriteStartObject();
 
-            var properties = contentType.Type.GetProperties().Where(p => !p.GetIndexParameters().Any() && p.GetGetMethod() != null && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute)));
+            var properties = entityType.Type.GetProperties().Where(p => !p.GetIndexParameters().Any() && p.GetGetMethod() != null && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute)));
             foreach (var property in properties)
             {
                 writer.WritePropertyName(property.Name);

@@ -1,5 +1,5 @@
-using Cloudy.CMS.ContentTypeSupport.Name;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport.Naming;
+using Cloudy.CMS.EntityTypeSupport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
@@ -16,41 +16,41 @@ namespace Cloudy.CMS.UI.Areas.Admin.Pages
     [Authorize("adminarea")]
     public class EditModel : PageModel
     {
-        IContentTypeProvider ContentTypeProvider { get; }
-        IContentTypeNameProvider ContentTypeNameProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
+        IEntityTypeNameProvider EntityTypeNameProvider { get; }
         IContextCreator ContextCreator { get; }
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
 
-        public EditModel(IContentTypeProvider contentTypeProvider, IContentTypeNameProvider contentTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter)
+        public EditModel(IEntityTypeProvider entityTypeProvider, IEntityTypeNameProvider entityTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyConverter primaryKeyConverter)
         {
-            ContentTypeProvider = contentTypeProvider;
-            ContentTypeNameProvider = contentTypeNameProvider;
+            EntityTypeProvider = entityTypeProvider;
+            EntityTypeNameProvider = entityTypeNameProvider;
             ContextCreator = contextCreator;
             PrimaryKeyConverter = primaryKeyConverter;
         }
 
-        public ContentTypeDescriptor ContentType { get; set; }
-        public ContentTypeName ContentTypeName { get; set; }
+        public EntityTypeDescriptor EntityType { get; set; }
+        public EntityTypeName EntityTypeName { get; set; }
         public IEnumerable<string> Keys { get; set; }
         public object Instance { get; set; }
 
-        async Task BindData(string contentType, string[] keys)
+        async Task BindData(string entityType, string[] keys)
         {
-            ContentType = ContentTypeProvider.Get(contentType);
-            ContentTypeName = ContentTypeNameProvider.Get(ContentType.Type);
+            EntityType = EntityTypeProvider.Get(entityType);
+            EntityTypeName = EntityTypeNameProvider.Get(EntityType.Type);
             Keys = keys;
-            var keyValues = PrimaryKeyConverter.Convert(keys, ContentType.Type);
-            var context = ContextCreator.CreateFor(ContentType.Type);
-            Instance = await context.Context.FindAsync(ContentType.Type, keyValues).ConfigureAwait(false);
+            var keyValues = PrimaryKeyConverter.Convert(keys, EntityType.Type);
+            var context = ContextCreator.CreateFor(EntityType.Type);
+            Instance = await context.Context.FindAsync(EntityType.Type, keyValues).ConfigureAwait(false);
         }
 
-        public async Task<IActionResult> OnGet(string contentType, string[] keys)
+        public async Task<IActionResult> OnGet(string entityType, string[] keys)
         {
-            await BindData(contentType, keys).ConfigureAwait(false);
+            await BindData(entityType, keys).ConfigureAwait(false);
 
             if (Instance == null)
             {
-                return NotFound($"Could not find instance of type {contentType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
+                return NotFound($"Could not find instance of type {entityType} and key{(keys.Length > 1 ? "s" : null)} {string.Join(", ", keys)}");
             }
 
             return Page();

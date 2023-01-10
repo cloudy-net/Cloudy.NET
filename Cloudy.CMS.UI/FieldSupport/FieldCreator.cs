@@ -22,11 +22,11 @@ namespace Cloudy.CMS.UI.FormSupport.FieldSupport
             Humanizer = humanizer;
         }
 
-        public IEnumerable<FieldDescriptor> Create(string contentType)
+        public IEnumerable<FieldDescriptor> Create(string entityType)
         {
             var result = new List<FieldDescriptor>();
 
-            foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(contentType))
+            foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(entityType))
             {
                 var displayAttribute = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
 

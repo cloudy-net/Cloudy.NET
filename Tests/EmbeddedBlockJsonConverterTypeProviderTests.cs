@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport.Serialization;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace Tests
         {
 
         }
-        class ContentTypeA : BaseClassA
+        class EntityTypeA : BaseClassA
         {
 
         }
@@ -22,11 +22,11 @@ namespace Tests
         {
 
         }
-        class ContentTypeB : InterfaceB
+        class EntityTypeB : InterfaceB
         {
 
         }
-        class ContentTypeC : InterfaceB
+        class EntityTypeC : InterfaceB
         {
 
         }
@@ -34,34 +34,34 @@ namespace Tests
         [Fact]
         public void AddsBaseTypes()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeA", typeof(ContentTypeA)) });
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(p => p.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeA", typeof(EntityTypeA)) });
 
-            var result = new EmbeddedBlockJsonConverterTypeProvider(contentTypeProvider).GetAll();
+            var result = new EmbeddedBlockJsonConverterTypeProvider(entityTypeProvider).GetAll();
 
-            Assert.Equal(new List<Type> { typeof(ContentTypeA), typeof(BaseClassA) }.AsReadOnly(), result);
+            Assert.Equal(new List<Type> { typeof(EntityTypeA), typeof(BaseClassA) }.AsReadOnly(), result);
         }
 
         [Fact]
         public void AddsInterfaces()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)) });
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(p => p.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)) });
 
-            var result = new EmbeddedBlockJsonConverterTypeProvider(contentTypeProvider).GetAll();
+            var result = new EmbeddedBlockJsonConverterTypeProvider(entityTypeProvider).GetAll();
 
-            Assert.Equal(new List<Type> { typeof(ContentTypeB), typeof(InterfaceB) }.AsReadOnly(), result);
+            Assert.Equal(new List<Type> { typeof(EntityTypeB), typeof(InterfaceB) }.AsReadOnly(), result);
         }
 
         [Fact]
         public void HandlesDuplicateTypes()
         {
-            var contentTypeProvider = Mock.Of<IContentTypeProvider>();
-            Mock.Get(contentTypeProvider).Setup(p => p.GetAll()).Returns(new List<ContentTypeDescriptor> { new ContentTypeDescriptor("contentTypeB", typeof(ContentTypeB)), new ContentTypeDescriptor("contentTypeC", typeof(ContentTypeC)) });
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(p => p.GetAll()).Returns(new List<EntityTypeDescriptor> { new EntityTypeDescriptor("entityTypeB", typeof(EntityTypeB)), new EntityTypeDescriptor("entityTypeC", typeof(EntityTypeC)) });
 
-            var result = new EmbeddedBlockJsonConverterTypeProvider(contentTypeProvider).GetAll();
+            var result = new EmbeddedBlockJsonConverterTypeProvider(entityTypeProvider).GetAll();
 
-            Assert.Equal(new List<Type> { typeof(ContentTypeB), typeof(InterfaceB), typeof(ContentTypeC) }.AsReadOnly(), result);
+            Assert.Equal(new List<Type> { typeof(EntityTypeB), typeof(InterfaceB), typeof(EntityTypeC) }.AsReadOnly(), result);
         }
     }
 }

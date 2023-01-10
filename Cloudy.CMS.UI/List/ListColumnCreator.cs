@@ -1,5 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.ContentTypeSupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
@@ -10,21 +10,21 @@ using System.Linq;
 
 namespace Cloudy.CMS.UI.List
 {
-    public record ListColumnCreator(IContentTypeProvider ContentTypeProvider, IPropertyDefinitionProvider PropertyDefinitionProvider, IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter, IHumanizer Humanizer) : IListColumnCreator
+    public record ListColumnCreator(IEntityTypeProvider EntityTypeProvider, IPropertyDefinitionProvider PropertyDefinitionProvider, IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter, IHumanizer Humanizer) : IListColumnCreator
     {
         public IDictionary<Type, IEnumerable<ListColumnDescriptor>> Create()
         {
             var result = new Dictionary<Type, IEnumerable<ListColumnDescriptor>>();
 
-            foreach(var contentType in ContentTypeProvider.GetAll())
+            foreach(var entityType in EntityTypeProvider.GetAll())
             {
                 var columns = new List<ListColumnDescriptor>();
 
-                var properties = PropertyDefinitionProvider.GetFor(contentType.Name).Where(p => p.Attributes.OfType<ListColumnAttribute>().Any());
+                var properties = PropertyDefinitionProvider.GetFor(entityType.Name).Where(p => p.Attributes.OfType<ListColumnAttribute>().Any());
 
                 if (!properties.Any())
                 {
-                    if (contentType.IsNameable)
+                    if (entityType.IsNameable)
                     {
                         var name = nameof(INameable.Name);
                         columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), 0));
@@ -32,7 +32,7 @@ namespace Cloudy.CMS.UI.List
                     else
                     {
                         var order = 0;
-                        foreach(var primaryKeyProperty in PrimaryKeyPropertyGetter.GetFor(contentType.Type))
+                        foreach(var primaryKeyProperty in PrimaryKeyPropertyGetter.GetFor(entityType.Type))
                         {
                             var name = primaryKeyProperty.Name;
                             columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), order++));
@@ -58,7 +58,7 @@ namespace Cloudy.CMS.UI.List
                     }
                 }
 
-                result[contentType.Type] = columns.OrderBy(c => c.Order);
+                result[entityType.Type] = columns.OrderBy(c => c.Order);
             }
 
             return result;

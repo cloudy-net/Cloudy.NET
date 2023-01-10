@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContentTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.AspNetCore.StaticFiles;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IContentTypeProvider = Cloudy.CMS.ContentTypeSupport.IContentTypeProvider;
+using IEntityTypeProvider = Cloudy.CMS.EntityTypeSupport.IEntityTypeProvider;
 
 namespace Cloudy.CMS.Routing
 {
@@ -15,13 +15,13 @@ namespace Cloudy.CMS.Routing
     {
         ILogger Logger { get; }
         EndpointDataSource EndpointDataSource { get; }
-        IContentTypeProvider ContentTypeProvider { get; }
+        IEntityTypeProvider EntityTypeProvider { get; }
 
-        public ContentRouteCreator(ILogger<ContentRouteCreator> logger, EndpointDataSource endpointDataSource, IContentTypeProvider contentTypeProvider)
+        public ContentRouteCreator(ILogger<ContentRouteCreator> logger, EndpointDataSource endpointDataSource, IEntityTypeProvider entityTypeProvider)
         {
             Logger = logger;
             EndpointDataSource = endpointDataSource;
-            ContentTypeProvider = contentTypeProvider;
+            EntityTypeProvider = entityTypeProvider;
         }
 
         public IEnumerable<ContentRouteDescriptor> Create()
@@ -91,14 +91,14 @@ namespace Cloudy.CMS.Routing
 
                         if (typeName != null)
                         {
-                            var contentType = ContentTypeProvider.Get(typeName);
+                            var entityType = EntityTypeProvider.Get(typeName);
 
-                            if (contentType == null)
+                            if (entityType == null)
                             {
                                 throw new Exception($"Could not find content type with name {typeName} for content route");
                             }
 
-                            types = new List<Type> { contentType.Type }.AsReadOnly();
+                            types = new List<Type> { entityType.Type }.AsReadOnly();
                         }
 
                         path.Add($"{{{name}}}");
@@ -107,7 +107,7 @@ namespace Cloudy.CMS.Routing
 
                 if (types == null)
                 {
-                    types = ContentTypeProvider.GetAll().Select(t => t.Type).ToList().AsReadOnly();
+                    types = EntityTypeProvider.GetAll().Select(t => t.Type).ToList().AsReadOnly();
                 }
 
                 result[routeEndpoint.RoutePattern.RawText] = new ContentRouteDescriptor(string.Join("/", path), types);

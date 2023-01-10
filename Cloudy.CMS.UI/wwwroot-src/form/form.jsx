@@ -3,10 +3,10 @@ import EntityContextProvider from './entity-context-provider'
 import FormFields from './form-fields.jsx';
 import FormFooter from './form-footer.jsx';
 
-function Form({ contentType, keyValues }) {
+function Form({ entityType, keyValues }) {
   return <FieldComponentProvider>
-    <EntityContextProvider {...{ contentType, keyValues }}>
-      <FormFields {...{ contentType }} />
+    <EntityContextProvider {...{ entityType, keyValues }}>
+      <FormFields {...{ entityType }} />
       <FormFooter />
     </EntityContextProvider>
   </FieldComponentProvider>

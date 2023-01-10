@@ -6,7 +6,7 @@ import hasChanges from './has-changes.js';
 
 const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
-const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.contentType == b.contentType;
+const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
 
 class StateManager {
     indexStorageKey = "cloudy:statesIndex";
@@ -39,8 +39,8 @@ class StateManager {
         return this.states.filter(state => hasChanges(state));
     }
 
-    createStateForNewContent(contentType) {
-        const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, contentType };
+    createStateForNewContent(entityType) {
+        const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, entityType };
 
         const state = {
             contentReference,
