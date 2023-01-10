@@ -1,5 +1,4 @@
 ﻿using Cloudy.CMS.ContentTypeSupport;
-using Cloudy.CMS.PropertyDefinitionSupport.PropertyMappingSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +9,7 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
     {
         IDictionary<string, IEnumerable<PropertyDefinitionDescriptor>> Values { get; } = new Dictionary<string, IEnumerable<PropertyDefinitionDescriptor>>();
 
-        public PropertyDefinitionProvider(IContentTypeProvider contentTypeProvider, IPropertyMappingProvider propertyMappingProvider, IPropertyDefinitionCreator propertyDefinitionCreator)
+        public PropertyDefinitionProvider(IContentTypeProvider contentTypeProvider, IPropertyDefinitionCreator propertyDefinitionCreator)
         {
             foreach (var contentType in contentTypeProvider.GetAll())
             {
@@ -18,14 +17,7 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
 
                 foreach (var property in contentType.Type.GetProperties())
                 {
-                    var mapping = propertyMappingProvider.Get(property);
-
-                    if (mapping.PropertyMappingType == PropertyMappingType.Ignored)
-                    {
-                        continue;
-                    }
-
-                    if (mapping.PropertyMappingType == PropertyMappingType.Incomplete)
+                    if (property.GetGetMethod() == null || property.GetSetMethod() == null)
                     {
                         continue;
                     }
