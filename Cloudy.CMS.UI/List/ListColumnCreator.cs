@@ -3,7 +3,7 @@ using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FormSupport.FieldTypes;
+using Cloudy.CMS.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
 using System.Linq;

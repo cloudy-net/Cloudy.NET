@@ -1,7 +1,7 @@
 ﻿using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FieldTypes.MediaPicker;
-using Cloudy.CMS.UI.FormSupport.FieldTypes;
+using Cloudy.CMS.UI.FieldSupport.MediaPicker;
+using Cloudy.CMS.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.UI.FormSupport.FieldSupport
+namespace Cloudy.CMS.UI.FieldSupport
 {
     public class FieldCreator : IFieldCreator
     {

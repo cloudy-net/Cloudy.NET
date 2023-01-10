@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
+namespace Cloudy.CMS.UI.FieldSupport.MediaPicker
 {
     public interface IMediaProvider
     {

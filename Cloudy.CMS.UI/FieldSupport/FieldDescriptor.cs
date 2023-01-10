@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.UI.FormSupport.FieldSupport
+namespace Cloudy.CMS.UI.FieldSupport
 {
     [DebuggerDisplay("{Name}")]
     public record FieldDescriptor(

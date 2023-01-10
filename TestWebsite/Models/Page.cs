@@ -1,6 +1,6 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.UI.FieldTypes.MediaPicker;
-using Cloudy.CMS.UI.FormSupport.FieldTypes;
+using Cloudy.CMS.UI.FieldSupport.MediaPicker;
+using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.List;
 using Cloudy.CMS.UI.List.Filter;
 using System;

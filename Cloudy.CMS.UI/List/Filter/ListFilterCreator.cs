@@ -1,7 +1,6 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Naming;
-using Cloudy.CMS.UI.FormSupport.FieldTypes;
+using Cloudy.CMS.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
 using System.Linq;

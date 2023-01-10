@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.UI.FieldTypes.MediaPicker
+namespace Cloudy.CMS.UI.FieldSupport.MediaPicker
 {
     public record MediaItem (
         string Name,

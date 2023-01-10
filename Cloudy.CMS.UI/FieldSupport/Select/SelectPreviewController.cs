@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Cloudy.CMS.UI.FormSupport.FieldTypes
+namespace Cloudy.CMS.UI.FieldSupport.Select
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

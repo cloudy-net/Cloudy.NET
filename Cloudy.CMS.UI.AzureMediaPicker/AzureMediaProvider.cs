@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Cloudy.CMS.UI.FieldTypes.MediaPicker;
+using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cloudy.CMS.UI.FormSupport.FieldSupport
+namespace Cloudy.CMS.UI.FieldSupport
 {
     public class FieldProvider : IFieldProvider
     {

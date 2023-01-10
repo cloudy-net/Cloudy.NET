@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 
-namespace Cloudy.CMS.UI.FormSupport.FieldTypes
+namespace Cloudy.CMS.UI.FieldSupport.Select
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]
