@@ -39,7 +39,7 @@ export default ({ name, path, provider }) => {
     <${Dropdown} text="Other" className="ms-2">
       <a class="dropdown-item" onClick=${ event => { copy(); closeDropdown(event.target); } }>Copy</a>
       <a class="dropdown-item" onClick=${ event => { paste(); closeDropdown(event.target); } }>Paste</a>
-      <a class="dropdown-item" onClick=${ event => { setValue(''); closeDropdown(event.target); } }>Clear</a>
+      <a class="dropdown-item" onClick=${ event => { setValue(''); simpleChangeHandler.registerChange(stateManager, contentReference, path, ''); closeDropdown(event.target); } }>Clear</a>
     <//>
   `;
 };
