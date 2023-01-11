@@ -9,7 +9,7 @@ const Control = ({ name, path, settings: { types } }) => {
   const { contentReference, state } = useContext(EntityContext);
 
   return html`<div>
-      <${Dropdown} text="Add" className="ms-2">
+      <${Dropdown} text="Add">
         ${types.map(type => html`<a class="dropdown-item" onClick=${ event => { closeDropdown(event.target); } }>${type}</a>`)}
       <//>
     </div>`;
