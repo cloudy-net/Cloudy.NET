@@ -23,6 +23,10 @@ export default defineConfig({
           dest: 'data/',
         },
         {
+          src: 'data/change-handlers/simple-change-handler.js',
+          dest: 'data/change-handlers/',
+        },
+        {
           src: 'form/controls',
           dest: 'form/',
         },
@@ -52,13 +56,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: [
+        'data/change-handlers/simple-change-handler.js',
         'data/state-manager.js',
         'form/entity-context.js',
         'form/form-field.js',
         'media-picker/media-picker-menu.js',
         'components/*',
         'util/array-equals.js',
-        'util/get-intermediate-simple-value.js',
         'util/get-reference-value.js',
         'util/url-fetcher.js',
         'util/debounce.js',

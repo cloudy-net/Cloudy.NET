@@ -1,7 +1,6 @@
 import { html, useContext } from '../../../preact-htm/standalone.module.js';
 import stateManager from '../../../data/state-manager.js';
 import EntityContext from '../../entity-context.js';
-import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-value.js';
 import EmbeddedBlockFields from './embedded-block-fields.js';
 import Dropdown from '../../../components/dropdown.js';
 import closeDropdown from '../../../components/close-dropdown.js';

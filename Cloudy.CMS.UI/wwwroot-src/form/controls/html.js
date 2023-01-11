@@ -1,7 +1,7 @@
 import { html, useContext, useEffect, useRef } from '../../preact-htm/standalone.module.js';
 import stateManager from '../../data/state-manager.js';
 import EntityContext from '../entity-context.js';
-import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
+import simpleChangeHandler from '../../data/change-handlers/simple-change-handler.js';
 
 
 document.addEventListener('click', function ({ target }) {
@@ -40,7 +40,7 @@ const Control = function ({ name, path }) {
     const callback = () => {
       const value = this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, '');
       this.quill.root.innerHTMLValue = value;
-      stateManager.registerSimpleChange(contentReference, path, value);
+      simpleChangeHandler.registerChange(stateManager, contentReference, path, value);
     };
 
     this.quill.on('text-change', callback);
@@ -51,7 +51,7 @@ const Control = function ({ name, path }) {
   }, [contentReference]);
 
   useEffect(() => {
-    const value = getIntermediateSimpleValue(state, path) || null;
+    const value = simpleChangeHandler.getIntermediateValue(state, path) || null;
 
     if (this.quill.root.innerHTMLValue != value) {
       this.quill.root.innerHTML = this.quill.root.innerHTMLValue = value;

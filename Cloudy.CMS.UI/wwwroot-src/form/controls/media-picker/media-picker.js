@@ -3,12 +3,12 @@ import closeDropdown from "../../../components/close-dropdown.js";
 import Dropdown from "../../../components/dropdown.js";
 import MediaPickerMenu from "./media-picker-menu.js";
 import stateManager from '../../../data/state-manager.js';
-import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-value.js';
 import EntityContext from '../../entity-context.js';
+import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
 
 export default ({ name, path, provider }) => {
   const { contentReference, state } = useContext(EntityContext);
-  const [value, setValue] = useState(getIntermediateSimpleValue(state, path));
+  const [value, setValue] = useState(simpleChangeHandler.getIntermediateValue(state, path));
 
   const copy = async () => {
     await navigator.clipboard.writeText(value);
@@ -22,7 +22,7 @@ export default ({ name, path, provider }) => {
 
   const onchange = newValue => {
     setValue(newValue != value ? newValue : null);
-    stateManager.registerSimpleChange(contentReference, path, newValue);
+    simpleChangeHandler.registerChange(stateManager, contentReference, path, newValue);
   }
 
   return html`
