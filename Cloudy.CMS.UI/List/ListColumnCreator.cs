@@ -16,7 +16,7 @@ namespace Cloudy.CMS.UI.List
         {
             var result = new Dictionary<Type, IEnumerable<ListColumnDescriptor>>();
 
-            foreach(var entityType in EntityTypeProvider.GetAll())
+            foreach(var entityType in EntityTypeProvider.GetAll().Where(t => t.IsIndependent))
             {
                 var columns = new List<ListColumnDescriptor>();
 

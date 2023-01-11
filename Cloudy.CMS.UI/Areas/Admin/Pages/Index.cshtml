@@ -28,7 +28,7 @@
 
 <div class="container">
     <div class="row">
-        @foreach (var entityType in EntityTypeProvider.GetAll())
+        @foreach (var entityType in EntityTypeProvider.GetAll().Where(t => t.IsIndependent))
         {
             var name = EntityTypeNameProvider.Get(entityType.Type);
             var description = entityType.Type.GetCustomAttribute<DisplayAttribute>()?.Description;

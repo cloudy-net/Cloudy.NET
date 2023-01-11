@@ -6,10 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cloudy.CMS.AssemblySupport;
+using Cloudy.CMS.PropertyDefinitionSupport;
 
 namespace Cloudy.CMS.EntityTypeSupport
 {
-    public record EntityTypeCreator(IContextDescriptorProvider ContextDescriptorProvider) : IEntityTypeCreator
+    public record EntityTypeCreator(IContextDescriptorProvider ContextDescriptorProvider, IAssemblyProvider AssemblyProvider) : IEntityTypeCreator
     {
         public IEnumerable<EntityTypeDescriptor> Create()
         {
@@ -34,6 +36,7 @@ namespace Cloudy.CMS.EntityTypeSupport
                 result.Add(new EntityTypeDescriptor(
                     name,
                     type,
+                    true,
                     type.IsAssignableTo(typeof(INameable)),
                     type.IsAssignableTo(typeof(IImageable)),
                     type.IsAssignableTo(typeof(IRoutable)),
@@ -41,6 +44,18 @@ namespace Cloudy.CMS.EntityTypeSupport
                     type.IsAssignableTo(typeof(IHierarchicalMarkerInterface))
                 ));
             }
+
+            var explicitBlockTypes = result.SelectMany(t => t.Type.GetProperties())
+                .Where(p => p.GetGetMethod() != null && p.GetSetMethod() != null)
+                .Where(p => p.PropertyType != typeof(string) && (p.PropertyType.IsClass || p.PropertyType.IsInterface))
+                .Select(p => p.PropertyType).ToList().AsReadOnly();
+
+            var blockTypes = AssemblyProvider.GetAll()
+                .SelectMany(a => a.Types)
+                .Where(t => explicitBlockTypes.Any(b => t.IsAssignableTo(b)))
+                .Select(t => new EntityTypeDescriptor(t.Name, t));
+
+            result.AddRange(blockTypes);
 
             return result;
         }

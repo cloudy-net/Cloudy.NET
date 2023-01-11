@@ -23,7 +23,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         {
             var entityType = EntityTypeProvider.Get(typeName);
 
-            if(entityType == null)
+            if(!entityType.IsIndependent)
             {
                 return FieldProvider.Get(typeName).Where(f => f.AutoGenerate ?? true);
             }

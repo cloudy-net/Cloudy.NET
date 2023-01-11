@@ -1,5 +1,4 @@
 ﻿using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.BlockSupport;
 using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
@@ -29,30 +28,6 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
                 }
 
                 Values[entityType.Name] = propertyDefinitions.AsReadOnly();
-            }
-
-            var explicitBlockTypes = entityTypeProvider.GetAll().SelectMany(t => Values[t.Name])
-                .Where(p => p.Block).Select(p => p.Type).ToList().AsReadOnly();
-
-            var blockTypes = assemblyProvider.GetAll()
-                .SelectMany(a => a.Types)
-                .Where(t => explicitBlockTypes.Any(b => t.IsAssignableTo(b)));
-
-            foreach (var type in blockTypes)
-            {
-                var propertyDefinitions = new List<PropertyDefinitionDescriptor>();
-
-                foreach (var property in type.GetProperties())
-                {
-                    if (property.GetGetMethod() == null || property.GetSetMethod() == null)
-                    {
-                        continue;
-                    }
-
-                    propertyDefinitions.Add(propertyDefinitionCreator.Create(property));
-                }
-
-                Values[type.Name] = propertyDefinitions.AsReadOnly();
             }
         }
 

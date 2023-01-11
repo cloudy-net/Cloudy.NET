@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.BlockSupport;
-using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
@@ -13,7 +12,7 @@ using System.Text;
 
 namespace Cloudy.CMS.UI.FieldSupport
 {
-    public record FieldCreator(IPropertyDefinitionProvider PropertyDefinitionProvider, IHumanizer Humanizer, IEntityTypeProvider EntityTypeProvider, IBlockTypeProvider BlockTypeProvider) : IFieldCreator
+    public record FieldCreator(IPropertyDefinitionProvider PropertyDefinitionProvider, IHumanizer Humanizer, IEntityTypeProvider EntityTypeProvider) : IFieldCreator
     {
         public IEnumerable<FieldDescriptor> Create(string entityType)
         {
@@ -101,7 +100,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 if (propertyDefinition.Block)
                 {
                     partialName = "embedded-block/embedded-block";
-                    settings["types"] = EntityTypeProvider.GetAll().Select(t => t.Type).Concat(BlockTypeProvider.GetAll()).Where(t => t.IsAssignableTo(propertyDefinition.Type)).Select(t => t.Name).ToList().AsReadOnly();
+                    settings["types"] = EntityTypeProvider.GetAll().Select(t => t.Type).Where(t => t.IsAssignableTo(propertyDefinition.Type)).Select(t => t.Name).ToList().AsReadOnly();
                 }
 
                 if(partialName == null)

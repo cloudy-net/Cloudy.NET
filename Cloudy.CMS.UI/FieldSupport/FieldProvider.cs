@@ -1,5 +1,4 @@
-﻿using Cloudy.CMS.BlockSupport;
-using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.CMS.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +10,10 @@ namespace Cloudy.CMS.UI.FieldSupport
     {
         IDictionary<string, IEnumerable<FieldDescriptor>> FieldsByEntityType { get; }
 
-        public FieldProvider(IEntityTypeProvider entityTypeProvider, IBlockTypeProvider blockTypeProvider, IFieldCreator fieldCreator)
+        public FieldProvider(IEntityTypeProvider entityTypeProvider, IFieldCreator fieldCreator)
         {
-            FieldsByEntityType = entityTypeProvider.GetAll().Select(t => t.Type)
-                .Concat(blockTypeProvider.GetAll())
+            FieldsByEntityType = entityTypeProvider.GetAll()
+                .Select(t => t.Type)
                 .ToDictionary(
                     f => f.Name,
                     f => fieldCreator.Create(f.Name)

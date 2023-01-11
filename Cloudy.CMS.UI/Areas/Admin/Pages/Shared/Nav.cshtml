@@ -23,7 +23,7 @@
                         Content types
                     </a>
                     <ul class="dropdown-menu">
-                        @foreach(var entityType in EntityTypeProvider.GetAll().OrderBy(c => c.Name)){
+                        @foreach(var entityType in EntityTypeProvider.GetAll().Where(t => t.IsIndependent).OrderBy(c => c.Name)){
                             var name = EntityTypeNameProvider.Get(entityType.Type);
 
                             @if (entityType.IsSingleton)

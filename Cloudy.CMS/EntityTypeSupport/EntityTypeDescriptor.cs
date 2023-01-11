@@ -7,6 +7,7 @@ namespace Cloudy.CMS.EntityTypeSupport
     public record EntityTypeDescriptor(
         string Name,
         Type Type,
+        bool IsIndependent = false,
         bool IsNameable = false,
         bool IsImageable = false,
         bool IsRoutable = false,
