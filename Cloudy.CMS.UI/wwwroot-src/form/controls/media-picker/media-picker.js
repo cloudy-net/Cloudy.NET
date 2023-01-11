@@ -1,10 +1,10 @@
-import { useState, html, useContext } from '../../preact-htm/standalone.module.js';
-import closeDropdown from "../../components/close-dropdown.js";
-import Dropdown from "../../components/dropdown.js";
-import MediaPickerMenu from "../../media-picker/media-picker-menu.js";
-import stateManager from '../../data/state-manager.js';
-import getIntermediateSimpleValue from '../../util/get-intermediate-simple-value.js';
-import EntityContext from '../entity-context.js';
+import { useState, html, useContext } from '../../../preact-htm/standalone.module.js';
+import closeDropdown from "../../../components/close-dropdown.js";
+import Dropdown from "../../../components/dropdown.js";
+import MediaPickerMenu from "./media-picker-menu.js";
+import stateManager from '../../../data/state-manager.js';
+import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-value.js';
+import EntityContext from '../../entity-context.js';
 
 export default ({ name, path, provider }) => {
   const { contentReference, state } = useContext(EntityContext);

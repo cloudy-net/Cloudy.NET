@@ -82,7 +82,7 @@ namespace Cloudy.CMS.UI.FieldSupport
 
                 if (propertyDefinition.Attributes.Any(a => a is MediaPickerAttribute))
                 {
-                    partialName = "mediapicker";
+                    partialName = "media-picker/media-picker";
                 }
 
                 if (propertyDefinition.Enum)
