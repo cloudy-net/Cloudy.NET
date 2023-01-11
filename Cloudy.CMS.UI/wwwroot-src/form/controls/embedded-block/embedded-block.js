@@ -3,13 +3,17 @@ import stateManager from '../../../data/state-manager.js';
 import EntityContext from '../../entity-context.js';
 import getIntermediateSimpleValue from '../../../util/get-intermediate-simple-value.js';
 import EmbeddedBlockFields from './embedded-block-fields.js';
+import Dropdown from '../../../components/dropdown.js';
+import closeDropdown from '../../../components/close-dropdown.js';
 
 const Control = ({ name, path, settings: { types } }) => {
   const { contentReference, state } = useContext(EntityContext);
 
   return html`<div>
-      <${EmbeddedBlockFields} type="Link"/>
+      <${Dropdown} text="Add" className="ms-2">
+        ${types.map(type => html`<a class="dropdown-item" onClick=${ event => { closeDropdown(event.target); } }>${type}</a>`)}
+      <//>
     </div>`;
 }
-
+//<${EmbeddedBlockFields} type="HeroBlock"/>
 export default Control;

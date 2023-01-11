@@ -52,6 +52,7 @@ namespace Cloudy.CMS.EntityTypeSupport
 
             var blockTypes = AssemblyProvider.GetAll()
                 .SelectMany(a => a.Types)
+                .Where(t => !t.IsAbstract && !t.IsInterface)
                 .Where(t => explicitBlockTypes.Any(b => t.IsAssignableTo(b)))
                 .Select(t => new EntityTypeDescriptor(t.Name, t));
 
