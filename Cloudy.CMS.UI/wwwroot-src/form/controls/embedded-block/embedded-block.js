@@ -4,15 +4,32 @@ import EntityContext from '../../entity-context.js';
 import EmbeddedBlockFields from './embedded-block-fields.js';
 import Dropdown from '../../../components/dropdown.js';
 import closeDropdown from '../../../components/close-dropdown.js';
+import embeddedBlockChangeHandler from '../../../data/change-handlers/embedded-block-change-handler.js';
 
-const Control = ({ name, path, settings: { types } }) => {
+const Control = ({ name, label, path, settings: { types } }) => {
   const { contentReference, state } = useContext(EntityContext);
 
-  return html`<div>
-      <${Dropdown} text="Add">
-        ${types.map(type => html`<a class="dropdown-item" onClick=${ event => { closeDropdown(event.target); } }>${type}</a>`)}
+  const type = embeddedBlockChangeHandler.getIntermediateType(state, path);
+
+  if (type) {
+    const dropdown = html`<${Dropdown} text="More">
+      <a class="dropdown-item" onClick=${event => { embeddedBlockChangeHandler.setType(stateManager, contentReference, path, ''); closeDropdown(event.target); }}>Remove</a>
+    <//>`;
+    return html`<div class="mb-3">
+      <label for=${name} class="form-label">${label} ${dropdown}</label>
+      <fieldset class="m-2">
+        <${EmbeddedBlockFields} type=${type}/>
       <//>
-    </div>`;
+    <//>`;
+  }
+
+  return html`<div class="mb-3">
+        <label for=${name} class="form-label">${label}</label>
+        <${Dropdown} text="Add">
+          ${types.map(type => html`<a class="dropdown-item" onClick=${event => { embeddedBlockChangeHandler.setType(stateManager, contentReference, path, type); closeDropdown(event.target); }}>${type}</a>`)}
+        <//>
+      <//>
+    `;
 }
-//<${EmbeddedBlockFields} type="HeroBlock"/>
+
 export default Control;

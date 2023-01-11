@@ -29,7 +29,7 @@ class SimpleChangeHandler {
     const initialValue = getReferenceValue(state, path);
 
     if ((value === '' && (initialValue === null || initialValue === undefined)) || initialValue == value) {
-      state.simpleChanges.splice(state.simpleChanges.indexOf(change), 1);
+      state.simpleChanges.splice(state.simpleChanges.indexOf(change), 1); // remove changes that didn't change anything
     }
 
     stateManager.persist(state);

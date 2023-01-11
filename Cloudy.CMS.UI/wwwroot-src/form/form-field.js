@@ -3,11 +3,15 @@ import arrayEquals from '../util/array-equals.js';
 import EntityContext from './entity-context.js';
 import FieldComponentContext from "./field-component-context.js";
 
-const FormField = ({ name, path, label, partial, settings }) => {
+const FormField = ({ name, path, label, renderChrome, partial, settings }) => {
     const fieldComponents = useContext(FieldComponentContext);
 
     if(!fieldComponents){
         return;
+    }
+    
+    if(!renderChrome){
+        return html`<${fieldComponents[partial]} ...${{ name, label, path, settings }} />`;
     }
 
     const { state } = useContext(EntityContext);
@@ -15,7 +19,7 @@ const FormField = ({ name, path, label, partial, settings }) => {
 
     return html`<div class="mb-3">
     <label for=${name} class="form-label">${label} ${simpleChange ? '*' : null}</label>
-    <${fieldComponents[partial]} name=${name} path=${path} settings=${settings} />
+    <${fieldComponents[partial]} ...${{ name, label, path, settings }} />
     </div>`
 };
 

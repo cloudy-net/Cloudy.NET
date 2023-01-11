@@ -112,7 +112,7 @@ namespace Cloudy.CMS.UI.FieldSupport
 
                 var renderChrome = true;
 
-                if (uiHints.Contains("nochrome"))
+                if (uiHints.Contains("nochrome") || propertyDefinition.Block)
                 {
                     renderChrome = false;
                 }
