@@ -2,6 +2,11 @@ import { useEffect, useState } from '@preact-htm';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
 
+const SORT_DIRECTION = {
+  ASCENDING: 'asc',
+  DESCENDING: 'desc',
+};
+
 export default ({ entityType, columns: initialColumns, filters: listFilters, pageSize: initialPageSize, editLink, deleteLink }) => {
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [page, setPage] = useState(1);
@@ -14,13 +19,23 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
   const [error, setError] = useState();
   const [retryError, setRetryError] = useState(0);
   const [search, setSearch] = useState('');
+  const [orderBy, setOrderBy] = useState(initialColumns[0].name);
+  const [orderByDirection, setOrderByDirection] = useState(SORT_DIRECTION.ASCENDING);
 
+  const setSorting = (newOrderBy) => {
+    if (newOrderBy == orderBy) {
+      setOrderByDirection(orderByDirection === SORT_DIRECTION.ASCENDING ? SORT_DIRECTION.DESCENDING : SORT_DIRECTION.ASCENDING);
+    } else setOrderByDirection(SORT_DIRECTION.ASCENDING);
+
+    setOrderBy(newOrderBy);
+  };
+  
   useEffect(function () {
     (async () => {
       setError(null);
 
       const response = await fetch(
-        `/Admin/api/list/result?entityType=${entityType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}`,
+        `/Admin/api/list/result?entityType=${entityType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`,
         {
           credentials: 'include'
         }
@@ -39,7 +54,7 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
       setPageCount(pageCount);
       setPages([...Array(pageCount)]);
     })();
-  }, [page, pageSize, columns, filters, retryError, search]);
+  }, [page, pageSize, columns, filters, retryError, search, orderBy, orderByDirection]);
 
   let content = null;
 
@@ -59,7 +74,10 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
     content = <table class="table">
       <thead>
         <tr>
-          {columns.map(c => <th>{c.label}</th>)}
+          {columns.map(c => c.sortable 
+            ? <th role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
+            : <th>{c.label}</th>  
+          )}
           <th style="width: 1%;"></th>
         </tr>
       </thead>
