@@ -19,7 +19,7 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
   const [error, setError] = useState();
   const [retryError, setRetryError] = useState(0);
   const [search, setSearch] = useState('');
-  const [orderBy, setOrderBy] = useState(initialColumns[0].name);
+  const [orderBy, setOrderBy] = useState((initialColumns.find(x => x.sortable) || {}).name || '');
   const [orderByDirection, setOrderByDirection] = useState(SORT_DIRECTION.ASCENDING);
 
   const setSorting = (newOrderBy) => {

@@ -87,7 +87,11 @@ namespace Cloudy.CMS.UI.List
 
             var totalCount = await dbSet.CountAsync().ConfigureAwait(false);
 
-            dbSet = dbSet.OrderBy($"{orderBy} == NULL").ThenBy($"{orderBy} {orderByDirection}");
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                dbSet = dbSet.OrderBy($"{orderBy} == NULL").ThenBy($"{orderBy} {orderByDirection}");
+            }
+            
             dbSet = dbSet.Page(page, pageSize);
 
             var result = new List<ListRow>();
