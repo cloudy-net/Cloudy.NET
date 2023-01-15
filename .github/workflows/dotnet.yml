@@ -11,6 +11,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Start Docker
+      run: docker-compose up --abort-on-container-exit
     
     - name: setup dotnet
       uses: actions/setup-dotnet@v1
