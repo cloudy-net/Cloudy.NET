@@ -5,7 +5,7 @@ namespace Cloudy.CMS.UI.Extensions
 {
     public static class PropertyDefinitionDescriptorExtensions
     {
-        public static T GetAttributeGenericType<T>(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
+        public static T GetAttribute<T>(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
             where T : class
         {
             return propertyDefinitionDescriptor?

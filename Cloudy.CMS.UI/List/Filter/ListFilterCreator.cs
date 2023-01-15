@@ -35,7 +35,7 @@ namespace Cloudy.CMS.UI.List.Filter
                         humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                     }
 
-                    var selectAttribute = propertyDefinition.GetAttributeGenericType<ISelectAttribute>();
+                    var selectAttribute = propertyDefinition.GetAttribute<ISelectAttribute>();
                     var select = selectAttribute != null;
                     var selectType = select ? EntityTypeProvider.Get(selectAttribute.Type)?.Name : null;
 
