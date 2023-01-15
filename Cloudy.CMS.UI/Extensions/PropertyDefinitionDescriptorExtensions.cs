@@ -1,30 +1,25 @@
 ﻿using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FieldSupport.Select;
-using System;
 using System.Linq;
 
 namespace Cloudy.CMS.UI.Extensions
 {
     public static class PropertyDefinitionDescriptorExtensions
     {
-        public static Type GetSelectAttributeType(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
+        public static T GetAttributeGenericType<T>(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
+            where T : class
         {
             return propertyDefinitionDescriptor?
                 .Attributes
-                .Select(x => x.GetType())
-                .Where(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(SelectAttribute<>))
-                .FirstOrDefault()?.GetGenericArguments().FirstOrDefault()?.UnderlyingSystemType;
+                .Where(x => typeof(T).IsAssignableFrom(x.GetType()))
+                .OfType<T>()
+                .FirstOrDefault();
         }
 
-        public static bool AnySelectAttribute(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
+        public static bool AnyAttribute<T>(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
         {
             return propertyDefinitionDescriptor?
                 .Attributes
-                .Select(x => x.GetType())
-                .Any(
-                    t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(SelectAttribute<>)
-            ) ?? false;
-
+                .Any(x => typeof(T).IsAssignableFrom(x.GetType())) ?? false;
         }
     }
 }

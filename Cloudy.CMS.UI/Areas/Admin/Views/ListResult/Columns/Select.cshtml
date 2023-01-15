@@ -12,8 +12,8 @@
 @inject INameGetter NameGetter
 
 @{
-    var selectType = Model.PropertyDefinition.GetSelectAttributeType();
-    var type = EntityTypeProvider.Get(selectType);
+    var select = Model.PropertyDefinition.GetAttributeGenericType<ISelectAttribute>();
+    var type = EntityTypeProvider.Get(select.Type);
     var context = ContextCreator.CreateFor(type.Type);
 
     if (Model.Value == null)
