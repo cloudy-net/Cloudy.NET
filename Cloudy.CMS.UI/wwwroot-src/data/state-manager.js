@@ -1,7 +1,5 @@
 import contentGetter from "./content-getter.js";
 import arrayEquals from "../util/array-equals.js";
-import simpleChangeHandler from "./change-handlers/simple-change-handler.js";
-import embeddedBlockChangeHandler from "./change-handlers/embedded-block-change-handler.js";
 import urlFetcher from "../util/url-fetcher.js";
 
 const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
@@ -10,9 +8,8 @@ const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) &
 
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.4";
+  schema = "1.5";
   states = this.loadStates();
-  handlers = [simpleChangeHandler, embeddedBlockChangeHandler]
 
   loadStates() {
     let index = JSON.parse(localStorage.getItem(this.indexStorageKey) || JSON.stringify({ schema: this.schema, elements: [] }));
@@ -47,8 +44,8 @@ class StateManager {
       contentReference,
       referenceValues: {},
       referenceDate: new Date(),
+      changes: [],
     };
-    this.handlers.forEach(h => h.initState(state));
     this.states.push(state);
     this.persist(state);
 
@@ -71,8 +68,8 @@ class StateManager {
       nameHint,
       referenceValues: null,
       referenceDate: null,
+      changes: [],
     };
-    this.handlers.forEach(h => h.nullState(state));
     this.states.push(state);
     this.persist(state);
 
@@ -149,8 +146,8 @@ class StateManager {
       nameHint: null,
       referenceValues: content,
       referenceDate: new Date(),
+      changes: [],
     };
-    this.handlers.forEach(h => h.initState(state));
 
     this.replace(state);
   }
@@ -164,7 +161,7 @@ class StateManager {
       body: JSON.stringify({
         changedEntities: states.map(state => ({
           entityReference: state.contentReference,
-          entityChanges: this.handlers.reduce((payload, handler) => handler.addSavePayload(state, payload), {}),
+          entityChanges: state.changes,
         }))
       }),
     }, 'Could not save entity');
@@ -215,7 +212,7 @@ class StateManager {
   discardChanges(contentReference, change) {
     const state = this.getState(contentReference);
 
-    this.handlers.forEach(h => h.discardChanges(state));
+    state.changes.splice(0, state.changes.length);
 
     this.persist(state);
 
@@ -224,7 +221,11 @@ class StateManager {
   }
 
   hasChanges(state, path = null) {
-    return this.handlers.filter(h => h.hasChanges(state, path)).length;
+    if (path) {
+      return state.changes?.find(c => arrayEquals(c.path, path));
+    }
+
+    return state.changes?.length;
   }
 
   updateIndex() {
