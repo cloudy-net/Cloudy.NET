@@ -111,13 +111,25 @@ label {
     height: 40px;
     object-fit: cover;
     vertical-align: inherit;
+    display: none;
 
-    &:not([src]) {
-        visibility: hidden;
+    &[src] {
+        display: inline-block;
+    }
+
+    &--image-not-set {
+        display: inline-block;
+        padding: 2px 0;
+
+        &__bg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            background: #f2f2f2;
+        }
     }
 }
-
-
 
 /* HTML CONTROL */
 
