@@ -8,7 +8,7 @@ const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) &
 
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.5";
+  schema = "1.6";
   states = this.loadStates();
 
   loadStates() {

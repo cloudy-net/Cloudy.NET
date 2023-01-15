@@ -8,7 +8,7 @@ class EmbeddedBlockChangeHandler {
     let change = state.changes.find(c => c['$type'] == 'embeddedblock' && arrayEquals(path, c.path));
 
     if (!change) {
-      change = { '$type': 'embeddedblock', path };
+      change = { '$type': 'embeddedblock', 'date': Date.now(), path };
       state.changes.push(change);
     }
 

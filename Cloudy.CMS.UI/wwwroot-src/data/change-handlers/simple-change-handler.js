@@ -8,7 +8,7 @@ class SimpleChangeHandler {
     let change = state.changes.find(c => c['$type'] == 'simple' && arrayEquals(path, c.path));
 
     if (!change) {
-      change = { '$type': 'simple', path };
+      change = { '$type': 'simple', 'date': Date.now(), path };
       state.changes.push(change);
     }
 
