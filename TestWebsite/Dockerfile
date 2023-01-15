@@ -2,7 +2,6 @@
 
 WORKDIR /App
 
-COPY ./Cloudy.CMS.sln ./
 COPY ./Cloudy.CMS ./Cloudy.CMS
 COPY ./Cloudy.CMS.UI ./Cloudy.CMS.UI
 COPY ./Cloudy.CMS.UI.AzureMediaPicker ./Cloudy.CMS.UI.AzureMediaPicker
