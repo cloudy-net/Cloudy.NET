@@ -2,6 +2,7 @@
 @using Cloudy.CMS.ContextSupport
 @using Cloudy.CMS.EntityTypeSupport
 @using Cloudy.CMS.Naming
+@using Cloudy.CMS.UI.Extensions
 @using Cloudy.CMS.UI.FieldSupport.Select
 @using Cloudy.CMS.UI.List
 @model ListColumnViewModel
@@ -11,11 +12,12 @@
 @inject INameGetter NameGetter
 
 @{
-    var select = Model.PropertyDefinition.Attributes.OfType<SelectAttribute>().First();
-    var type = EntityTypeProvider.Get(select.Type);
+    var selectType = Model.PropertyDefinition.GetSelectAttributeType();
+    var type = EntityTypeProvider.Get(selectType);
     var context = ContextCreator.CreateFor(type.Type);
 
-    if(Model.Value == null){
+    if (Model.Value == null)
+    {
         return;
     }
 

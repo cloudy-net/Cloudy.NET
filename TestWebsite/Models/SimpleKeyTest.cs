@@ -9,13 +9,14 @@ namespace TestWebsite.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [Select(typeof(SimpleKeyTest))]
+        [Select<SimpleKeyTest>]
         public Tuple<Guid> RelatedPage { get; set; }
-        [Select(typeof(SimpleKeyTest))]
+
+        [Select<SimpleKeyTest>]
 
         public Guid RelatedPage2 { get; set; }
-        [Select(typeof(SimpleKeyTest))]
 
+        [Select<SimpleKeyTest>]
         public Guid? RelatedPage3 { get; set; }
     }
 }

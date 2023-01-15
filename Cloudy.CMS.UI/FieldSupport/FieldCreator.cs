@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.CMS.UI.Extensions;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using System;
@@ -28,7 +29,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var name = propertyDefinition.Name;
                 var humanizedName = Humanizer.Humanize(name);
 
-                if(propertyDefinition.Attributes.OfType<SelectAttribute>().Any() && humanizedName.EndsWith(" id"))
+                if(propertyDefinition.AnySelectAttribute() && humanizedName.EndsWith(" id"))
                 {
                     humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                 }
@@ -75,7 +76,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                     partialName = "date";
                 }
 
-                if (propertyDefinition.Attributes.Any(a => a is SelectAttribute))
+                if (propertyDefinition.AnySelectAttribute())
                 {
                     partialName = "selectone";
                 }

@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 namespace Cloudy.CMS.UI.FieldSupport.Select
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class SelectAttribute : Attribute
+    public class SelectAttribute<T> : Attribute
     {
-        public Type Type { get; }
-
-        public SelectAttribute(Type type)
-        {
-            Type = type;
-        }
+        public Type Type => typeof(T);
     }
 }
