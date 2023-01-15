@@ -30,12 +30,12 @@ namespace Cloudy.CMS.UI.List.Filter
                     var name = propertyDefinition.Name;
                     var humanizedName = Humanizer.Humanize(name);
 
-                    if (propertyDefinition.AnyAttribute<ISelectAttribute>() && humanizedName.EndsWith(" id"))
+                    if (propertyDefinition.Attributes.AnyAttribute<ISelectAttribute>() && humanizedName.EndsWith(" id"))
                     {
                         humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                     }
 
-                    var selectAttribute = propertyDefinition.GetAttribute<ISelectAttribute>();
+                    var selectAttribute = propertyDefinition.Attributes.GetAttribute<ISelectAttribute>();
                     var select = selectAttribute != null;
                     var selectType = select ? EntityTypeProvider.Get(selectAttribute.Type)?.Name : null;
 

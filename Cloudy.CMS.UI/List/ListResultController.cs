@@ -100,7 +100,7 @@ namespace Cloudy.CMS.UI.List
                 {
                     var partialViewName = $"Columns/text";
 
-                    if (propertyDefinition.AnyAttribute<ISelectAttribute>())
+                    if (propertyDefinition.Attributes.AnyAttribute<ISelectAttribute>())
                     {
                         partialViewName = "Columns/select";
                     }

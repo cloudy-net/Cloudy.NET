@@ -1,25 +1,23 @@
-﻿using Cloudy.CMS.PropertyDefinitionSupport;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Cloudy.CMS.UI.Extensions
 {
     public static class PropertyDefinitionDescriptorExtensions
     {
-        public static T GetAttribute<T>(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
+        public static T GetAttribute<T>(this IEnumerable<Attribute> attributes)
             where T : class
         {
-            return propertyDefinitionDescriptor?
-                .Attributes
+            return attributes
                 .Where(x => typeof(T).IsAssignableFrom(x.GetType()))
                 .OfType<T>()
                 .FirstOrDefault();
         }
 
-        public static bool AnyAttribute<T>(this PropertyDefinitionDescriptor propertyDefinitionDescriptor)
+        public static bool AnyAttribute<T>(this IEnumerable<Attribute> attributes)
         {
-            return propertyDefinitionDescriptor?
-                .Attributes
-                .Any(x => typeof(T).IsAssignableFrom(x.GetType())) ?? false;
+            return attributes.Any(x => typeof(T).IsAssignableFrom(x.GetType()));
         }
     }
 }

@@ -12,7 +12,7 @@
 @inject INameGetter NameGetter
 
 @{
-    var select = Model.PropertyDefinition.GetAttribute<ISelectAttribute>();
+    var select = Model.PropertyDefinition.Attributes.GetAttribute<ISelectAttribute>();
     var type = EntityTypeProvider.Get(select.Type);
     var context = ContextCreator.CreateFor(type.Type);
 
