@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
@@ -44,7 +45,7 @@ namespace Cloudy.CMS.UI.FormSupport
         {
             if (!ModelState.IsValid)
             {
-                throw new Exception("Invalid state");
+                throw new Exception($"Invalid state:\n{string.Join("\n", ModelState.Where(entry => entry.Value.ValidationState == ModelValidationState.Invalid).SelectMany(entry => entry.Value.Errors.Select(error => $"{entry.Key}: {error.ErrorMessage}")))}");
             }
 
             var contexts = new HashSet<IContextWrapper>();
@@ -81,12 +82,12 @@ namespace Cloudy.CMS.UI.FormSupport
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(entityType.Name).ToDictionary(p => p.Name, p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(entity.GetType());
 
-                if (changedEntity.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
+                if (changedEntity.EntityChanges.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
                     throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.EntityReference.EntityType}!");
                 }
 
-                var changedSimpleFields = changedEntity.SimpleChanges.ToList();
+                var changedSimpleFields = changedEntity.EntityChanges.SimpleChanges.ToList();
 
                 foreach (var change in changedSimpleFields)
                 {
@@ -261,6 +262,12 @@ namespace Cloudy.CMS.UI.FormSupport
             [Required]
             public EntityReference EntityReference { get; set; }
             public bool Remove { get; set; }
+            [Required]
+            public EntityChanges EntityChanges { get; set; }
+        }
+
+        public class EntityChanges
+        {
             [Required]
             public SimpleChange[] SimpleChanges { get; set; }
         }

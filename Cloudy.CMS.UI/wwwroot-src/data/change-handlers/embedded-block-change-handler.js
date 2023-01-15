@@ -11,10 +11,14 @@ class EmbeddedBlockChangeHandler {
   discardChanges(state) {
     state.embeddedBlockChanges.splice(0, state.embeddedBlockChanges.length);
   }
-  hasChanges(state) {
+  hasChanges(state, path = null) {
+    if (path) {
+      return state.embeddedBlockChanges?.find(c => arrayEquals(c.path, path))
+    }
+
     return state.embeddedBlockChanges?.length;
   }
-  addSavePayload(state, payload){
+  addSavePayload(state, payload) {
     payload.embeddedBlockChanges = state.embeddedBlockChanges;
 
     return payload;

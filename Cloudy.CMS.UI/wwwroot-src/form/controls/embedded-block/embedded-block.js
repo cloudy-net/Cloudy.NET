@@ -16,7 +16,7 @@ const Control = ({ name, label, path, settings: { types } }) => {
       <a class="dropdown-item" onClick=${event => { embeddedBlockChangeHandler.setType(stateManager, contentReference, path, ''); closeDropdown(event.target); }}>Remove</a>
     <//>`;
     return html`<div class="mb-3">
-      <label for=${name} class="form-label">${label} ${dropdown}</label>
+      <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null} ${dropdown}</label>
       <fieldset class="m-2">
         <${EmbeddedBlockFields} type=${type}/>
       <//>
@@ -24,7 +24,7 @@ const Control = ({ name, label, path, settings: { types } }) => {
   }
 
   return html`<div class="mb-3">
-        <label for=${name} class="form-label">${label}</label>
+        <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null}</label>
         <${Dropdown} text="Add">
           ${types.map(type => html`<a class="dropdown-item" onClick=${event => { embeddedBlockChangeHandler.setType(stateManager, contentReference, path, type); closeDropdown(event.target); }}>${type}</a>`)}
         <//>

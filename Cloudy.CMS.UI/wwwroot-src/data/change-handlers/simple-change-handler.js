@@ -11,7 +11,11 @@ class SimpleChangeHandler {
   discardChanges(state) {
     state.simpleChanges.splice(0, state.simpleChanges.length);
   }
-  hasChanges(state) {
+  hasChanges(state, path = null) {
+    if (path) {
+      return state.simpleChanges?.find(c => arrayEquals(c.path, path))
+    }
+
     return state.simpleChanges?.length;
   }
   addSavePayload(state, payload){

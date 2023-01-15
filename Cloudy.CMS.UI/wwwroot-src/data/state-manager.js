@@ -164,7 +164,7 @@ class StateManager {
       body: JSON.stringify({
         changedEntities: states.map(state => ({
           entityReference: state.contentReference,
-          changes: this.handlers.reduce((payload, handler) => handler.addSavePayload(state, payload), {}),
+          entityChanges: this.handlers.reduce((payload, handler) => handler.addSavePayload(state, payload), {}),
         }))
       }),
     }, 'Could not save entity');
@@ -223,8 +223,8 @@ class StateManager {
     this.triggerStateChange(contentReference);
   }
 
-  hasChanges(state) {
-    return this.handlers.filter(h => h.hasChanges(state)).length;
+  hasChanges(state, path = null) {
+    return this.handlers.filter(h => h.hasChanges(state, path)).length;
   }
 
   updateIndex() {
