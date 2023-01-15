@@ -2,7 +2,6 @@ import contentGetter from "./content-getter.js";
 import arrayEquals from "../util/array-equals.js";
 import getReferenceValue from "../util/get-reference-value.js";
 import contentSaver from "./content-saver.js";
-import hasChanges from './has-changes.js';
 import simpleChangeHandler from "./change-handlers/simple-change-handler.js";
 import embeddedBlockChangeHandler from "./change-handlers/embedded-block-change-handler.js";
 
@@ -39,7 +38,7 @@ class StateManager {
     }
 
     getAll() {
-        return this.states.filter(state => hasChanges(state));
+        return this.states.filter(state => this.hasChanges(state));
     }
 
     createStateForNewContent(entityType) {
@@ -105,7 +104,7 @@ class StateManager {
                     loadingNewVersion: false,
                 };
             } else {
-                if (!hasChanges(state)) {
+                if (!this.hasChanges(state)) {
                     state = {
                         ...state,
                         loadingNewVersion: false,
@@ -198,12 +197,16 @@ class StateManager {
         this.triggerStateChange(contentReference);
     }
 
+    hasChanges(state) {
+        return this.handlers.filter(h => h.hasChanges(state)).length;
+    }
+
     updateIndex() {
-        localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => hasChanges(state)).map(state => state.contentReference) }));
+        localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => this.hasChanges(state)).map(state => state.contentReference) }));
     }
 
     persist(state) {
-        if (this.handlers.filter(h => h.hasChanges(state)).length) {
+        if (this.hasChanges(state)) {
             localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
         } else {
             localStorage.removeItem(`cloudy:${JSON.stringify(state.contentReference)}`);
