@@ -49,7 +49,7 @@ namespace Cloudy.CMS.UI.List
                         var name = propertyDefinition.Name;
                         var humanizedName = attribute.Name ?? Humanizer.Humanize(name);
 
-                        if (propertyDefinition.Attributes.OfType<SelectAttribute>().Any() && humanizedName.EndsWith(" id"))
+                        if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any() && humanizedName.EndsWith(" id"))
                         {
                             humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                         }

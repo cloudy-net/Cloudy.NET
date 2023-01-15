@@ -14,7 +14,7 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
         Type Type,
         Func<object, object> Getter = null,
         Action<object, object> Setter = null,
-        IEnumerable<object> Attributes = null,
+        IEnumerable<Attribute> Attributes = null,
         bool Nullable = false,
         bool List = false,
         bool Enum = false,

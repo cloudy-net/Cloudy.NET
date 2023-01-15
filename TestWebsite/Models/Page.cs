@@ -18,14 +18,15 @@ namespace TestWebsite.Models
         public Guid? Id { get; set; }
         [ListColumn(Order = 0, Sortable = true)]
         public string Name { get; set; }
-        [Select(typeof(Page))]
+
+        [Select<Page>]
         public Guid? Parent { get; set; }
         public string UrlSegment { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
         [ListFilter]
         [ListColumn]
-        [Select(typeof(Page))]
+        [Select<Page>]
         public Guid? RelatedPageId { get; set; }
         [MediaPicker("azure")]
         public string Image { get; set; }
