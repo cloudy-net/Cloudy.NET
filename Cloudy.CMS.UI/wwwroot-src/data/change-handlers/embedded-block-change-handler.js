@@ -14,6 +14,11 @@ class EmbeddedBlockChangeHandler {
   hasChanges(state) {
     return state.embeddedBlockChanges?.length;
   }
+  addSavePayload(state, payload){
+    payload.embeddedBlockChanges = state.embeddedBlockChanges;
+
+    return payload;
+  }
   setType(stateManager, contentReference, path, type) {
     const state = stateManager.getState(contentReference);
 

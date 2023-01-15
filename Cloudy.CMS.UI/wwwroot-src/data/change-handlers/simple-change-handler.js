@@ -14,6 +14,14 @@ class SimpleChangeHandler {
   hasChanges(state) {
     return state.simpleChanges?.length;
   }
+  addSavePayload(state, payload){
+    payload.simpleChanges = state.simpleChanges.map(simpleChange => ({
+      ...simpleChange,
+      value: JSON.stringify(simpleChange.value)
+    }));
+
+    return payload;
+  }
   registerChange(stateManager, contentReference, path, value) {
     const state = stateManager.getState(contentReference);
 

@@ -39,8 +39,8 @@ namespace Cloudy.CMS.UI.FormSupport
         }
 
         [HttpPost]
-        [Route("/{area}/api/form/content/save")]
-        public async Task<SaveContentResponse> SaveContent([FromBody] SaveContentRequestBody data)
+        [Route("/{area}/api/form/entity/save")]
+        public async Task<SaveEntityResponse> SaveEntity([FromBody] SaveEntityRequestBody data)
         {
             if (!ModelState.IsValid)
             {
@@ -49,16 +49,16 @@ namespace Cloudy.CMS.UI.FormSupport
 
             var contexts = new HashSet<IContextWrapper>();
 
-            var result = new List<SaveContentResult>();
+            var result = new List<SaveEntityResult>();
 
-            foreach (var changedContent in data.ChangedContent)
+            foreach (var changedEntity in data.ChangedEntities)
             {
-                var entityType = EntityTypeProvider.Get(changedContent.ContentReference.EntityType);
+                var entityType = EntityTypeProvider.Get(changedEntity.EntityReference.EntityType);
                 var context = ContextCreator.CreateFor(entityType.Type);
 
                 contexts.Add(context);
 
-                var keyValues = PrimaryKeyConverter.Convert(changedContent.ContentReference.KeyValues.Select(k => k.ToString()), entityType.Type);
+                var keyValues = PrimaryKeyConverter.Convert(changedEntity.EntityReference.KeyValues.Select(k => k.ToString()), entityType.Type);
 
                 object entity;
 
@@ -70,10 +70,10 @@ namespace Cloudy.CMS.UI.FormSupport
                 {
                     entity = await context.Context.FindAsync(entityType.Type, keyValues).ConfigureAwait(false);
 
-                    if (changedContent.Remove)
+                    if (changedEntity.Remove)
                     {
                         context.Context.Remove(entity);
-                        result.Add(SaveContentResult.SuccessResult(entityType.Name, keyValues));
+                        result.Add(SaveEntityResult.SuccessResult(entityType.Name, keyValues));
                         continue;
                     }
                 }
@@ -81,31 +81,31 @@ namespace Cloudy.CMS.UI.FormSupport
                 var propertyDefinitions = PropertyDefinitionProvider.GetFor(entityType.Name).ToDictionary(p => p.Name, p => p);
                 var idProperties = PrimaryKeyPropertyGetter.GetFor(entity.GetType());
 
-                if (changedContent.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
+                if (changedEntity.SimpleChanges.Any(c => c.Path.Length == 1 && idProperties.Any(p => p.Name == c.Path[0])))
                 {
-                    throw new Exception($"Tried to change primary key of content {string.Join(", ", keyValues)} with type {changedContent.ContentReference.EntityType}!");
+                    throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.EntityReference.EntityType}!");
                 }
 
-                var changedSimpleFields = changedContent.SimpleChanges.ToList();
+                var changedSimpleFields = changedEntity.SimpleChanges.ToList();
 
                 foreach (var change in changedSimpleFields)
                 {
                     UpdateSimpleField(entity, change.Path, change.Value);
                 }
 
-                //var arrayChanges = changedContent.SimpleChanges.Where(f => f.Type == ChangeType.Array).ToList();
+                //var arrayChanges = changedEntity.SimpleChanges.Where(f => f.Type == ChangeType.Array).ToList();
 
                 //foreach (var change in arrayChanges)
                 //{
                 //    var name = change.Path.Single();
                 //    var field = FieldProvider.GetFor(entityType.Id, name);
                 //    var property = entityType.Type.GetProperty(field.Name);
-                //    var array = (IList)property.GetGetMethod().Invoke(content, null);
+                //    var array = (IList)property.GetGetMethod().Invoke(Entity, null);
 
                 //    if(array == null)
                 //    {
                 //        array = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(field.Type));
-                //        property.GetSetMethod().Invoke(content, new object[] { array });
+                //        property.GetSetMethod().Invoke(Entity, new object[] { array });
                 //    }
 
                 //    if (field.Type.IsInterface)
@@ -121,7 +121,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 if (!TryValidateModel(entity))
                 {
-                    result.Add(SaveContentResult.ValidationFailureResult(entityType.Name, keyValues, ModelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage))));
+                    result.Add(SaveEntityResult.ValidationFailureResult(entityType.Name, keyValues, ModelState.ToDictionary(i => i.Key, i => i.Value.Errors.Select(e => e.ErrorMessage))));
                     continue;
                 }
 
@@ -131,10 +131,10 @@ namespace Cloudy.CMS.UI.FormSupport
                 }
                 else
                 {
-                    //await ContentUpdater.UpdateAsync(content).ConfigureAwait(false);
+                    //await EntityUpdater.UpdateAsync(Entity).ConfigureAwait(false);
                 }
 
-                result.Add(SaveContentResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(entity)));
+                result.Add(SaveEntityResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(entity)));
             }
 
             foreach(var context in contexts)
@@ -142,31 +142,31 @@ namespace Cloudy.CMS.UI.FormSupport
                 await context.Context.SaveChangesAsync().ConfigureAwait(false);
             }
 
-            return new SaveContentResponse(result);
+            return new SaveEntityResponse(result);
         }
 
-        public class SaveContentResponse
+        public class SaveEntityResponse
         {
-            public IEnumerable<SaveContentResult> Results { get; }
+            public IEnumerable<SaveEntityResult> Results { get; }
 
-            public SaveContentResponse(IEnumerable<SaveContentResult> result)
+            public SaveEntityResponse(IEnumerable<SaveEntityResult> result)
             {
                 Results = result.ToList().AsReadOnly();
             }
         }
 
-        public class SaveContentResult
+        public class SaveEntityResult
         {
             public bool Success { get; private set; }
-            public ContentReference ContentReference { get; private set; }
+            public EntityReference EntityReference { get; private set; }
             public IDictionary<string, IEnumerable<string>> ValidationErrors { get; private set; }
 
-            public static SaveContentResult SuccessResult(string entityTypeId, IEnumerable<object> keyValues)
+            public static SaveEntityResult SuccessResult(string entityTypeId, IEnumerable<object> keyValues)
             {
-                return new SaveContentResult
+                return new SaveEntityResult
                 {
                     Success = true,
-                    ContentReference = new ContentReference
+                    EntityReference = new EntityReference
                     {
                         EntityType = entityTypeId,
                         KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
@@ -174,12 +174,12 @@ namespace Cloudy.CMS.UI.FormSupport
                 };
             }
 
-            public static SaveContentResult ValidationFailureResult(string entityTypeId, IEnumerable<object> keyValues, IDictionary<string, IEnumerable<string>> validationErrors)
+            public static SaveEntityResult ValidationFailureResult(string entityTypeId, IEnumerable<object> keyValues, IDictionary<string, IEnumerable<string>> validationErrors)
             {
-                return new SaveContentResult
+                return new SaveEntityResult
                 {
                     Success = false,
-                    ContentReference = new ContentReference
+                    EntityReference = new EntityReference
                     {
                         EntityType = entityTypeId,
                         KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
@@ -243,23 +243,23 @@ namespace Cloudy.CMS.UI.FormSupport
             }
         }
 
-        public class SaveContentRequestBody
+        public class SaveEntityRequestBody
         {
             [Required]
-            public IEnumerable<ChangedContent> ChangedContent { get; set; }
+            public IEnumerable<ChangedEntity> ChangedEntities { get; set; }
         }
 
-        public class ContentReference
+        public class EntityReference
         {
             public JsonElement[] KeyValues { get; set; }
             [Required]
             public string EntityType { get; set; }
         }
 
-        public class ChangedContent
+        public class ChangedEntity
         {
             [Required]
-            public ContentReference ContentReference { get; set; }
+            public EntityReference EntityReference { get; set; }
             public bool Remove { get; set; }
             [Required]
             public SimpleChange[] SimpleChanges { get; set; }
