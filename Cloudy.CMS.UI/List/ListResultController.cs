@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Authorization;
 using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.UI.FieldSupport.Select;
-using Cloudy.CMS.UI.Extensions;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -100,7 +99,7 @@ namespace Cloudy.CMS.UI.List
                 {
                     var partialViewName = $"Columns/text";
 
-                    if (propertyDefinition.Attributes.AnyAttribute<ISelectAttribute>())
+                    if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any())
                     {
                         partialViewName = "Columns/select";
                     }

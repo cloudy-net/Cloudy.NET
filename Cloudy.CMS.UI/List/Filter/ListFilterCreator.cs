@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.Extensions;
 
 namespace Cloudy.CMS.UI.List.Filter
 {
@@ -30,12 +29,12 @@ namespace Cloudy.CMS.UI.List.Filter
                     var name = propertyDefinition.Name;
                     var humanizedName = Humanizer.Humanize(name);
 
-                    if (propertyDefinition.Attributes.AnyAttribute<ISelectAttribute>() && humanizedName.EndsWith(" id"))
+                    if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any() && humanizedName.EndsWith(" id"))
                     {
                         humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                     }
 
-                    var selectAttribute = propertyDefinition.Attributes.GetAttribute<ISelectAttribute>();
+                    var selectAttribute = propertyDefinition.Attributes.OfType<ISelectAttribute>().FirstOrDefault();
                     var select = selectAttribute != null;
                     var selectType = select ? EntityTypeProvider.Get(selectAttribute.Type)?.Name : null;
 
