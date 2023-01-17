@@ -6,15 +6,15 @@
 
 class NotificationManager {
     constructor() {
-        this.element = document.createElement('cloudy-ui-notifications');
+        // this.element = document.createElement('cloudy-ui-notifications');
 
-        var bootstrap = () => { document.body.appendChild(this.element); }
+        // var bootstrap = () => { document.body.appendChild(this.element); }
 
-        if (document.readyState != 'loading') {
-            bootstrap();
-        } else {
-            document.addEventListener('DOMContentLoaded', bootstrap);
-        }
+        // if (document.readyState != 'loading') {
+        //     bootstrap();
+        // } else {
+        //     document.addEventListener('DOMContentLoaded', bootstrap);
+        // }
     }
 
     addNotification(callback) {
