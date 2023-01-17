@@ -4,37 +4,21 @@ import getReferenceValue from "../../util/get-reference-value";
 class SimpleChangeHandler {
   registerChange(stateManager, contentReference, path, value) {
     const state = stateManager.getState(contentReference);
+    const change = stateManager.getOrCreateLatestChange(state, 'simple', path);
 
-    let change = state.changes.find(c => c['$type'] == 'simple' && arrayEquals(path, c.path));
-
-    if (!change) {
-      change = { '$type': 'simple', 'date': Date.now(), path };
-      state.changes.push(change);
-    }
-
+    change.date = Date.now();
     change.value = value;
 
-    const initialValue = getReferenceValue(state, path);
-
-    if ((value === '' && (initialValue === null || initialValue === undefined)) || initialValue == value) {
-      state.changes.splice(state.changes.indexOf(change), 1); // remove changes that didn't change anything
-    }
-
     stateManager.persist(state);
-
-    stateManager.triggerAnyStateChange();
-    stateManager.triggerStateChange(contentReference);
   }
   getIntermediateValue(state, path) {
-    let value = getReferenceValue(state, path);
+    const changes = state.changes.filter(c => c['$type'] == 'simple' && arrayEquals(c.path, path));
 
-    const change = state.changes.find(c => c['$type'] == 'simple' && arrayEquals(c.path, path));
-
-    if (change) {
-      value = change.value;
+    if(changes.length){
+      return changes[changes.length - 1].value;
     }
 
-    return value;
+    return getReferenceValue(state, path);
   }
 }
 

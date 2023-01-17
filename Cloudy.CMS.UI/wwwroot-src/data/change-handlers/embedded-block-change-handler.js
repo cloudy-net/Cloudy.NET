@@ -5,6 +5,13 @@ class EmbeddedBlockChangeHandler {
   setType(stateManager, contentReference, path, type) {
     const state = stateManager.getState(contentReference);
 
+    const referenceValue = getReferenceValue(state, path);
+    const referenceValueType = referenceValue ? referenceValue.Type : null;
+
+    if ((type === '' && (referenceValueType === null || referenceValueType === undefined)) || referenceValueType == type) {
+      return;
+    }
+
     let change = state.changes.find(c => c['$type'] == 'embeddedblock' && arrayEquals(path, c.path));
 
     if (!change) {
@@ -14,17 +21,7 @@ class EmbeddedBlockChangeHandler {
 
     change.Type = type;
 
-    const referenceValue = getReferenceValue(state, path);
-    const referenceValueType = referenceValue ? referenceValue.Type : null;
-
-    if ((type === '' && (referenceValueType === null || referenceValueType === undefined)) || referenceValueType == type) {
-      state.changes.splice(state.changes.indexOf(change), 1); // remove changes that didn't change anything
-    }
-
     stateManager.persist(state);
-
-    stateManager.triggerAnyStateChange();
-    stateManager.triggerStateChange(contentReference);
   }
   getIntermediateType(state, path) {
     const change = state.changes.find(c => c['$type'] == 'embeddedblock' && arrayEquals(c.path, path));

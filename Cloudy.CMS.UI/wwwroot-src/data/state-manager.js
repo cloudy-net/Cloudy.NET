@@ -6,6 +6,8 @@ const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16)
 
 const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
 
+const FIVE_MINUTES = 5 * 60 * 1000;
+
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
   schema = "1.6";
@@ -49,9 +51,6 @@ class StateManager {
     this.states.push(state);
     this.persist(state);
 
-    this.triggerAnyStateChange();
-    this.triggerStateChange(contentReference);
-
     return state;
   };
 
@@ -72,9 +71,6 @@ class StateManager {
     };
     this.states.push(state);
     this.persist(state);
-
-    this.triggerAnyStateChange();
-    this.triggerStateChange(contentReference);
 
     this.loadContentForState(contentReference);
 
@@ -152,6 +148,17 @@ class StateManager {
     this.replace(state);
   }
 
+  getOrCreateLatestChange(state, type, path) {
+    let change = state.changes.find(c => c['$type'] == type && arrayEquals(path, c.path));
+
+    if (!change || Date.now() - change.date > FIVE_MINUTES) {
+      change = { '$type': type, 'date': Date.now(), path };
+      state.changes.push(change);
+    }
+
+    return change;
+  }
+
   async save(contentReferences) {
     const states = contentReferences.map(c => this.getState(c));
     const response = await urlFetcher.fetch("/Admin/api/form/entity/save", {
@@ -190,17 +197,11 @@ class StateManager {
   replace(state) {
     this.states[this.states.findIndex(s => contentReferenceEquals(s.contentReference, state.contentReference))] = state;
     this.persist(state);
-
-    this.triggerAnyStateChange();
-    this.triggerStateChange(state.contentReference);
   }
 
   remove(contentReference) {
     this.states.splice(this.states.findIndex(s => contentReferenceEquals(s.contentReference, contentReference)), 1);
     this.unpersist(contentReference);
-
-    this.triggerAnyStateChange();
-    this.triggerStateChange(contentReference);
 
     return contentReference;
   };
@@ -215,9 +216,6 @@ class StateManager {
     state.changes.splice(0, state.changes.length);
 
     this.persist(state);
-
-    this.triggerAnyStateChange();
-    this.triggerStateChange(contentReference);
   }
 
   hasChanges(state, path = null) {
@@ -239,11 +237,17 @@ class StateManager {
       localStorage.removeItem(`cloudy:${JSON.stringify(state.contentReference)}`);
     }
     this.updateIndex();
+
+    this.triggerAnyStateChange();
+    this.triggerStateChange(state.contentReference);
   }
 
   unpersist(contentReference) {
     localStorage.removeItem(`cloudy:${JSON.stringify(contentReference)}`);
     this.updateIndex();
+
+    this.triggerAnyStateChange();
+    this.triggerStateChange(contentReference);
   }
 
   _onAnyStateChangeCallbacks = [];
