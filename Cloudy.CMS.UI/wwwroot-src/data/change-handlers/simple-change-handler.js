@@ -1,5 +1,5 @@
-import arrayEquals from "../../util/array-equals";
-import getReferenceValue from "../../util/get-reference-value";
+import arrayEquals from "../../util/array-equals.js";
+import getReferenceValue from "../../util/get-reference-value.js";
 
 class SimpleChangeHandler {
   registerChange(stateManager, contentReference, path, value) {
