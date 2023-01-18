@@ -13,4 +13,4 @@ obj
 *.user
 Logs
 .vscode
-Website.AspNetCore/data
+!Cloudy.CMS.UI/wwwroot-src/.vscode
