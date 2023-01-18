@@ -55,81 +55,81 @@ describe('simple-change-handler.js', () => {
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue, 'New value should be returned as an intermediate change has been registered');
     });
   });
-});
-describe('complex scenario', () => {
-  it('intermediate value should not be cleared when making a simple change after changing block type', () => {
-    const { contentReference } = stateManager.createStateForNewContent('page');
-    const newType = 'BlockType';
-    const blockName = 'Block';
-    const propertyName = 'TestProperty';
-    const initialValue = 'lorem';
-    const newValue = 'ipsum';
+  describe('complex scenario', () => {
+    it('intermediate value should not be cleared when making a simple change after changing block type', () => {
+      const { contentReference } = stateManager.createStateForNewContent('page');
+      const newType = 'BlockType';
+      const blockName = 'Block';
+      const propertyName = 'TestProperty';
+      const initialValue = 'lorem';
+      const newValue = 'ipsum';
 
-    stateManager.replace({
-      ...stateManager.getState(contentReference),
-      referenceValues: {
-        [blockName]: {
-          [propertyName]: initialValue
-        }
-      }
-    });
-
-    embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName], newType);
-    simpleChangeHandler.setValue(stateManager, contentReference, [blockName, propertyName], newValue);
-
-    assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
-    assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, propertyName]), newValue, 'New value expected');
-  });
-  it('intermediate value should be cleared when changing parent embedded block type', () => {
-    const { contentReference } = stateManager.createStateForNewContent('page');
-    const newType = 'BlockType';
-    const blockName = 'Block1';
-    const block2Name = 'Block2';
-    const propertyName = 'TestProperty';
-    const initialValue = 'lorem';
-    const newValue = 'ipsum';
-
-    stateManager.replace({
-      ...stateManager.getState(contentReference),
-      referenceValues: {
-        [blockName]: {
-          [block2Name]: {
+      stateManager.replace({
+        ...stateManager.getState(contentReference),
+        referenceValues: {
+          [blockName]: {
             [propertyName]: initialValue
           }
         }
-      }
+      });
+
+      embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName], newType);
+      simpleChangeHandler.setValue(stateManager, contentReference, [blockName, propertyName], newValue);
+
+      assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, propertyName]), newValue, 'New value expected');
     });
+    it('intermediate value should be cleared when changing parent embedded block type', () => {
+      const { contentReference } = stateManager.createStateForNewContent('page');
+      const newType = 'BlockType';
+      const blockName = 'Block1';
+      const block2Name = 'Block2';
+      const propertyName = 'TestProperty';
+      const initialValue = 'lorem';
+      const newValue = 'ipsum';
 
-    embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
-    simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
-
-    assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
-    assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue, 'New value expected');
-  });
-  it('intermediate value should be cleared when changing parents parents embedded block type', () => {
-    const { contentReference } = stateManager.createStateForNewContent('page');
-    const newType = 'BlockType';
-    const blockName = 'Block1';
-    const block2Name = 'Block2';
-    const propertyName = 'TestProperty';
-    const initialValue = 'lorem';
-    const newValue = 'ipsum';
-
-    stateManager.replace({
-      ...stateManager.getState(contentReference),
-      referenceValues: {
-        [blockName]: {
-          [block2Name]: {
-            [propertyName]: initialValue
+      stateManager.replace({
+        ...stateManager.getState(contentReference),
+        referenceValues: {
+          [blockName]: {
+            [block2Name]: {
+              [propertyName]: initialValue
+            }
           }
         }
-      }
+      });
+
+      embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
+      simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
+
+      assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue, 'New value expected');
     });
+    it('intermediate value should be cleared when changing parents parents embedded block type', () => {
+      const { contentReference } = stateManager.createStateForNewContent('page');
+      const newType = 'BlockType';
+      const blockName = 'Block1';
+      const block2Name = 'Block2';
+      const propertyName = 'TestProperty';
+      const initialValue = 'lorem';
+      const newValue = 'ipsum';
 
-    simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
-    embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
+      stateManager.replace({
+        ...stateManager.getState(contentReference),
+        referenceValues: {
+          [blockName]: {
+            [block2Name]: {
+              [propertyName]: initialValue
+            }
+          }
+        }
+      });
 
-    assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
-    assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null, 'Cleared value expected');
+      simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
+      embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
+
+      assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null, 'Cleared value expected');
+    });
   });
 });
