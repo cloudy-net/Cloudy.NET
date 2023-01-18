@@ -15,7 +15,7 @@ class EmbeddedBlockChangeHandler {
     const changes = state.changes.filter(c => c['$type'] == 'embeddedblock' && arrayEquals(c.path, path));
 
     if (changes.length) {
-      return changes.Type;
+      return changes[changes.length - 1].Type;
     }
 
     const referenceValue = getReferenceValue(state, path);
