@@ -9,6 +9,7 @@ namespace Cloudy.CMS.UI.List
     public record ListColumnDescriptor(
         string Name,
         string Label,
-        int Order
+        int Order,
+        bool Sortable
     );
 }

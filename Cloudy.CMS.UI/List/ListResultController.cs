@@ -46,7 +46,7 @@ namespace Cloudy.CMS.UI.List
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string entityType, string columns, [FromQuery(Name = "filters")]IDictionary<string, string> filters, int page, int pageSize, string search)
+        public async Task<ListResultResponse> ListResult(string entityType, string columns, [FromQuery(Name = "filters")]IDictionary<string, string> filters, int page, int pageSize, string search, string orderBy, string orderByDirection)
         {
             var columnNames = columns.Split(",");
             var type = EntityTypeProvider.Get(entityType);
@@ -87,6 +87,11 @@ namespace Cloudy.CMS.UI.List
 
             var totalCount = await dbSet.CountAsync().ConfigureAwait(false);
 
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                dbSet = dbSet.OrderBy($"{orderBy} == NULL").ThenBy($"{orderBy} {orderByDirection}");
+            }
+            
             dbSet = dbSet.Page(page, pageSize);
 
             var result = new List<ListRow>();

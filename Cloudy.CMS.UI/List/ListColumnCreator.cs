@@ -27,7 +27,7 @@ namespace Cloudy.CMS.UI.List
                     if (entityType.IsNameable)
                     {
                         var name = nameof(INameable.Name);
-                        columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), 0));
+                        columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), 0, false));
                     }
                     else
                     {
@@ -35,7 +35,7 @@ namespace Cloudy.CMS.UI.List
                         foreach(var primaryKeyProperty in PrimaryKeyPropertyGetter.GetFor(entityType.Type))
                         {
                             var name = primaryKeyProperty.Name;
-                            columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), order++));
+                            columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), order++, false));
                         }
                     }
                 }
@@ -54,7 +54,7 @@ namespace Cloudy.CMS.UI.List
                             humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                         }
 
-                        columns.Add(new ListColumnDescriptor(name, humanizedName, attribute.Order == -10000 ? order++ : attribute.Order));
+                        columns.Add(new ListColumnDescriptor(name, humanizedName, attribute.Order == -10000 ? order++ : attribute.Order, attribute.Sortable));
                     }
                 }
 
