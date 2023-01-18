@@ -67,7 +67,7 @@ class StateManager {
       nameHint,
       referenceValues: null,
       referenceDate: null,
-      changes: [],
+      changes: null,
     };
     this.states.push(state);
     this.persist(state);
