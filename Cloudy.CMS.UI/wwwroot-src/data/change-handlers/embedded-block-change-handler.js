@@ -4,30 +4,18 @@ import getReferenceValue from "../../util/get-reference-value.js";
 class EmbeddedBlockChangeHandler {
   setType(stateManager, contentReference, path, type) {
     const state = stateManager.getState(contentReference);
+    const change = stateManager.getOrCreateLatestChange(state, 'embeddedblock', path);
 
-    const referenceValue = getReferenceValue(state, path);
-    const referenceValueType = referenceValue ? referenceValue.Type : null;
-
-    if ((type === '' && (referenceValueType === null || referenceValueType === undefined)) || referenceValueType == type) {
-      return;
-    }
-
-    let change = state.changes.find(c => c['$type'] == 'embeddedblock' && arrayEquals(path, c.path));
-
-    if (!change) {
-      change = { '$type': 'embeddedblock', 'date': Date.now(), path };
-      state.changes.push(change);
-    }
-
+    change.date = Date.now();
     change.Type = type;
 
     stateManager.persist(state);
   }
   getIntermediateType(state, path) {
-    const change = state.changes.find(c => c['$type'] == 'embeddedblock' && arrayEquals(c.path, path));
+    const changes = state.changes.filter(c => c['$type'] == 'embeddedblock' && arrayEquals(c.path, path));
 
-    if (change) {
-      return change.Type;
+    if (changes.length) {
+      return changes.Type;
     }
 
     const referenceValue = getReferenceValue(state, path);
