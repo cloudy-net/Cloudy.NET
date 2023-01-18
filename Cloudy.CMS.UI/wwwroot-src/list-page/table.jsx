@@ -73,9 +73,9 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
   } else {
     content = <table class="table">
       <thead>
-        <tr>
+        <tr className={ orderByDirection === SORT_DIRECTION.ASCENDING && 'dropup' }>
           {columns.map(c => c.sortable 
-            ? <th role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
+            ? <th className={ orderBy === c.name && 'dropdown-toggle' } role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
             : <th>{c.label}</th>  
           )}
           <th style="width: 1%;"></th>
