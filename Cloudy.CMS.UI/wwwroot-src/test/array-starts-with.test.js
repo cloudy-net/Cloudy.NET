@@ -1,8 +1,4 @@
 import assert from 'assert';
-import { } from './polyfiller.js';
-import stateManager from '../data/state-manager.js';
-import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
-import embeddedBlockChangeHandler from '../data/change-handlers/embedded-block-change-handler.js';
 import arrayStartsWith from '../util/array-starts-with.js';
 
 describe('array-starts-with.js', () => {
