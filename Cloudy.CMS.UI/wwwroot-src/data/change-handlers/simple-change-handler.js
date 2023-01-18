@@ -5,7 +5,7 @@ import getReferenceValue from "../../util/get-reference-value.js";
 const UNCHANGED = {};
 
 class SimpleChangeHandler {
-  registerChange(stateManager, contentReference, path, value) {
+  setValue(stateManager, contentReference, path, value) {
     const state = stateManager.getState(contentReference);
     const change = stateManager.getOrCreateLatestChange(state, 'simple', path);
 

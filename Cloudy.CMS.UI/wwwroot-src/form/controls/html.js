@@ -40,7 +40,7 @@ const Control = function ({ name, path }) {
     const callback = () => {
       const value = this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, '');
       this.quill.root.innerHTMLValue = value;
-      simpleChangeHandler.registerChange(stateManager, contentReference, path, value);
+      simpleChangeHandler.setValue(stateManager, contentReference, path, value);
     };
 
     this.quill.on('text-change', callback);

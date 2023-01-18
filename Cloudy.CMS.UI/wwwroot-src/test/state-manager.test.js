@@ -29,7 +29,7 @@ describe('state-manager.js', () => {
         assert.equal(0, stateManager.getState(contentReference).changes.length);
         assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [propertyName]), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
 
-        simpleChangeHandler.registerChange(stateManager, contentReference, [propertyName], newValue);
+        simpleChangeHandler.setValue(stateManager, contentReference, [propertyName], newValue);
 
         assert.equal(1, stateManager.getState(contentReference).changes.length);
         assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [propertyName]), newValue, 'New value should be returned as an intermediate change has been registered');
@@ -56,7 +56,7 @@ describe('state-manager.js', () => {
         assert.equal(0, stateManager.getState(contentReference).changes.length);
         assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
 
-        simpleChangeHandler.registerChange(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
+        simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
 
         assert.equal(1, stateManager.getState(contentReference).changes.length);
         assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue, 'New value should be returned as an intermediate change has been registered');
@@ -82,7 +82,7 @@ describe('state-manager.js', () => {
       });
 
       embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName], newType);
-      simpleChangeHandler.registerChange(stateManager, contentReference, [blockName, propertyName], newValue);
+      simpleChangeHandler.setValue(stateManager, contentReference, [blockName, propertyName], newValue);
 
       assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, propertyName]), newValue, 'New value expected');
@@ -108,7 +108,7 @@ describe('state-manager.js', () => {
       });
 
       embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
-      simpleChangeHandler.registerChange(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
+      simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
 
       assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue, 'New value expected');
@@ -133,7 +133,7 @@ describe('state-manager.js', () => {
         }
       });
 
-      simpleChangeHandler.registerChange(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
+      simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
       embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
 
       assert.equal(2, stateManager.getState(contentReference).changes.length, 'Number of registered changes should be 2');

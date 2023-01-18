@@ -7,7 +7,7 @@ const Control = ({ name, path }) => {
   const { contentReference, state } = useContext(EntityContext);
 
   const onchange = event => {
-    simpleChangeHandler.registerChange(stateManager, contentReference, path, event.target.value)
+    simpleChangeHandler.setValue(stateManager, contentReference, path, event.target.value)
   };
   return html`<div>
       <input
