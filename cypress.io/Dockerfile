@@ -5,4 +5,4 @@ WORKDIR /App
 COPY ./ ./
 
 RUN npm install
-ENTRYPOINT sleep 10; $(npm bin)/cypress run --config baseUrl=http://cloudy:80,video=false 
+ENTRYPOINT $(npm bin)/cypress run --config baseUrl=http://cloudy:80,video=false 
