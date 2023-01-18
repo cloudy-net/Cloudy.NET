@@ -68,6 +68,7 @@ export default defineConfig({
         'media-picker/media-picker-menu.js',
         'components/*',
         'util/array-equals.js',
+        'util/array-starts-with.js',
         'util/get-reference-value.js',
         'util/url-fetcher.js',
         'util/debounce.js',

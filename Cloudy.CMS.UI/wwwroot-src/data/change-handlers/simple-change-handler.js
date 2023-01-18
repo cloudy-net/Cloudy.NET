@@ -1,5 +1,8 @@
 import arrayEquals from "../../util/array-equals.js";
+import arrayStartsWith from "../../util/array-starts-with.js";
 import getReferenceValue from "../../util/get-reference-value.js";
+
+const UNCHANGED = {};
 
 class SimpleChangeHandler {
   registerChange(stateManager, contentReference, path, value) {
@@ -12,13 +15,24 @@ class SimpleChangeHandler {
     stateManager.persist(state);
   }
   getIntermediateValue(state, path) {
-    const changes = state.changes.filter(c => c['$type'] == 'simple' && arrayEquals(c.path, path));
+    let value = UNCHANGED;
 
-    if(changes.length){
-      return changes[changes.length - 1].value;
+    for (var change of state.changes) {
+      if (change['$type'] == 'simple' && arrayEquals(path, change.path)) {
+        value = change.value;
+        continue;
+      }
+      if (change['$type'] == 'embeddedblock' && arrayStartsWith(path, change.path)) {
+        value = change.value;
+        continue;
+      }
     }
 
-    return getReferenceValue(state, path);
+    if (value == UNCHANGED) {
+      return getReferenceValue(state, path);
+    }
+
+    return value;
   }
 }
 
