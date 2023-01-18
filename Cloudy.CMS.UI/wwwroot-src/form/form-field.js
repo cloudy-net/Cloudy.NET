@@ -1,3 +1,4 @@
+import stateManager from '../data/state-manager.js';
 import { html, useContext } from '../preact-htm/standalone.module.js';
 import arrayEquals from '../util/array-equals.js';
 import EntityContext from './entity-context.js';
@@ -15,10 +16,9 @@ const FormField = ({ name, path, label, renderChrome, partial, settings }) => {
     }
 
     const { state } = useContext(EntityContext);
-    const simpleChange = state.simpleChanges.find(c => arrayEquals(c.path, path));
-
+    
     return html`<div class="mb-3">
-    <label for=${name} class="form-label">${label} ${simpleChange ? '*' : null}</label>
+    <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null}</label>
     <${fieldComponents[partial]} ...${{ name, label, path, settings }} />
     </div>`
 };

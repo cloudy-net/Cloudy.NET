@@ -28,7 +28,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var name = propertyDefinition.Name;
                 var humanizedName = Humanizer.Humanize(name);
 
-                if(propertyDefinition.Attributes.OfType<SelectAttribute>().Any() && humanizedName.EndsWith(" id"))
+                if(propertyDefinition.Attributes.OfType<ISelectAttribute>().Any() && humanizedName.EndsWith(" id"))
                 {
                     humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                 }
@@ -75,7 +75,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                     partialName = "date";
                 }
 
-                if (propertyDefinition.Attributes.Any(a => a is SelectAttribute))
+                if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any())
                 {
                     partialName = "selectone";
                 }

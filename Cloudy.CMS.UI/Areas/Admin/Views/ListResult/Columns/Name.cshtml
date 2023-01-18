@@ -11,7 +11,15 @@
 
 @if (Model.EntityType.IsImageable)
 {
-    <img class="list-image-in-name" src="@(((IImageable)Model.Instance).Image)" alt="" />
+    var imgSrc = ((IImageable)Model.Instance).Image;
+    if (string.IsNullOrEmpty(imgSrc))
+    {
+        <div class="list-image-in-name list-image-in-name--image-not-set"><span class="list-image-in-name--image-not-set__bg"></span></div>
+    }
+    else
+    {
+        <img class="list-image-in-name" src="@imgSrc" alt="" />
+    }
 }
 
 <a href="@editLink">@Model.Value</a>

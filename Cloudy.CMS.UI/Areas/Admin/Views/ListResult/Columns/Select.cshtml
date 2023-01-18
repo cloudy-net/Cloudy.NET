@@ -11,11 +11,12 @@
 @inject INameGetter NameGetter
 
 @{
-    var select = Model.PropertyDefinition.Attributes.OfType<SelectAttribute>().First();
+    var select = Model.PropertyDefinition.Attributes.OfType<ISelectAttribute>().FirstOrDefault();
     var type = EntityTypeProvider.Get(select.Type);
     var context = ContextCreator.CreateFor(type.Type);
 
-    if(Model.Value == null){
+    if (Model.Value == null)
+    {
         return;
     }
 

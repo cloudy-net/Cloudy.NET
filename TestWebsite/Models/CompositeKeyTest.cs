@@ -12,7 +12,7 @@ namespace TestWebsite.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SecondPrimaryKey { get; set; }
         [ListFilter]
-        [Select(typeof(CompositeKeyTest))]
+        [Select<CompositeKeyTest>]
         public Tuple<Guid, int> RelatedObject { get; set; }
     }
 }

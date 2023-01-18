@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldSupport.Select
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public class SelectAttribute : Attribute
-    {
-        public Type Type { get; }
+    public interface ISelectAttribute
+    { 
+        Type Type { get; }
+    }
 
-        public SelectAttribute(Type type)
-        {
-            Type = type;
-        }
+    [AttributeUsage(AttributeTargets.Property)]
+    public class SelectAttribute<T> : Attribute, ISelectAttribute
+    {
+        public Type Type => typeof(T);
     }
 }

@@ -1,45 +1,30 @@
-import arrayEquals from "../../util/array-equals";
-import getReferenceValue from "../../util/get-reference-value";
+import arrayEquals from "../../util/array-equals.js";
+import getReferenceValue from "../../util/get-reference-value.js";
 
 class EmbeddedBlockChangeHandler {
-  initState(state) {
-    state.embeddedBlockChanges = [];
-  }
-  nullState(state) {
-    state.embeddedBlockChanges = null;
-  }
-  discardChanges(state) {
-    state.embeddedBlockChanges.splice(0, state.embeddedBlockChanges.length);
-  }
-  hasChanges(state) {
-    return state.embeddedBlockChanges?.length;
-  }
   setType(stateManager, contentReference, path, type) {
     const state = stateManager.getState(contentReference);
-
-    let change = state.embeddedBlockChanges.find(f => arrayEquals(path, f.path));
-
-    if (!change) {
-      change = { path };
-      state.embeddedBlockChanges.push(change);
-    }
-
-    change.Type = type;
 
     const referenceValue = getReferenceValue(state, path);
     const referenceValueType = referenceValue ? referenceValue.Type : null;
 
     if ((type === '' && (referenceValueType === null || referenceValueType === undefined)) || referenceValueType == type) {
-      state.embeddedBlockChanges.splice(state.embeddedBlockChanges.indexOf(change), 1); // remove changes that didn't change anything
+      return;
     }
 
-    stateManager.persist(state);
+    let change = state.changes.find(c => c['$type'] == 'embeddedblock' && arrayEquals(path, c.path));
 
-    stateManager.triggerAnyStateChange();
-    stateManager.triggerStateChange(contentReference);
+    if (!change) {
+      change = { '$type': 'embeddedblock', 'date': Date.now(), path };
+      state.changes.push(change);
+    }
+
+    change.Type = type;
+
+    stateManager.persist(state);
   }
   getIntermediateType(state, path) {
-    const change = state.embeddedBlockChanges.find(c => arrayEquals(c.path, path));
+    const change = state.changes.find(c => c['$type'] == 'embeddedblock' && arrayEquals(c.path, path));
 
     if (change) {
       return change.Type;
