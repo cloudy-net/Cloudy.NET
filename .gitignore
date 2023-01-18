@@ -14,3 +14,4 @@ obj
 Logs
 .vscode
 !Cloudy.CMS.UI/wwwroot-src/.vscode
+Cloudy.CMS.UI/wwwroot-src/test/localStorage
