@@ -7,7 +7,7 @@ class EmbeddedBlockChangeHandler {
     const change = stateManager.getOrCreateLatestChange(state, 'embeddedblock', path);
 
     change.date = Date.now();
-    change.Type = type;
+    change.type = type;
 
     stateManager.persist(state);
   }
@@ -15,7 +15,7 @@ class EmbeddedBlockChangeHandler {
     const changes = state.changes.filter(c => c['$type'] == 'embeddedblock' && arrayEquals(c.path, path));
 
     if (changes.length) {
-      return changes[changes.length - 1].Type;
+      return changes[changes.length - 1].type;
     }
 
     const referenceValue = getReferenceValue(state, path);

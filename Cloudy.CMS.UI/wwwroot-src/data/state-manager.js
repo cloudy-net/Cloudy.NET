@@ -1,6 +1,7 @@
 import contentGetter from "./content-getter.js";
 import arrayEquals from "../util/array-equals.js";
 import urlFetcher from "../util/url-fetcher.js";
+import arrayStartsWith from "../util/array-starts-with.js";
 
 const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
@@ -149,7 +150,16 @@ class StateManager {
   }
 
   getOrCreateLatestChange(state, type, path) {
-    let change = state.changes.find(c => c['$type'] == type && arrayEquals(path, c.path));
+    let change = null;
+    
+    for(let c of state.changes){
+      if(c['$type'] == type && arrayEquals(path, c.path)){
+        change = c;
+      }
+      if(c['$type'] == 'embeddedblock' && arrayStartsWith(path, c.path) && !arrayEquals(path, c.path)){
+        change = null;
+      }
+    }
 
     if (!change || Date.now() - change.date > FIVE_MINUTES) {
       change = { '$type': type, 'date': Date.now(), path };
