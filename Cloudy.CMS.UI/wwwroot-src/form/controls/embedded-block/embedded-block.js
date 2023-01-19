@@ -18,7 +18,7 @@ const Control = ({ name, label, path, settings: { types } }) => {
     return html`<div class="mb-3">
       <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null} ${dropdown}</label>
       <fieldset class="m-2">
-        <${EmbeddedBlockFields} type=${type}/>
+        <${EmbeddedBlockFields} ...${{type, path}}/>
       <//>
     <//>`;
   }

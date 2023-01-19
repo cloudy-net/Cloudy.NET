@@ -1,7 +1,7 @@
 import { html, useEffect, useState } from '../../../preact-htm/standalone.module.js';
 import FormField from '../../form-field.js';
 
-const EmbeddedBlockFields = ({ type }) => {
+const EmbeddedBlockFields = ({ type, path }) => {
     const [loading, setLoading] = useState(true);
     const [fields, setFields] = useState();
     const [error, setError] = useState();
@@ -49,7 +49,7 @@ const EmbeddedBlockFields = ({ type }) => {
       return html`Loading ...`;
     }
 
-    return html`${fields.map(field => html`<${FormField} ...${field} path=${[field.name]} />`)}`;
+    return html`${fields.map(field => html`<${FormField} ...${field} path=${[...path, field.name]} />`)}`;
 };
 
 export default EmbeddedBlockFields;
