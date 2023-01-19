@@ -112,6 +112,7 @@ describe('simple-change-handler.js', () => {
       embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null);
       simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
+      assert.equal(stateManager.getState(contentReference).changes.length, 3);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue);
       embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName], newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null);
