@@ -18,6 +18,7 @@ export default ({ name, path, provider }) => {
     const text = await navigator.clipboard.readText();
 
     setValue(text);
+    simpleChangeHandler.setValue(stateManager, contentReference, path, text);
   };
 
   const onchange = newValue => {
