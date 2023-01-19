@@ -2,6 +2,7 @@ import contentGetter from "./content-getter.js";
 import arrayEquals from "../util/array-equals.js";
 import urlFetcher from "../util/url-fetcher.js";
 import arrayStartsWith from "../util/array-starts-with.js";
+import notificationManager from "../notification/notification-manager.js";
 
 const generateRandomString = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
@@ -151,17 +152,17 @@ class StateManager {
 
   getOrCreateLatestChange(state, type, path) {
     let change = null;
-    
-    for(let c of state.changes){
-      if(c['$type'] == type && arrayEquals(path, c.path)){
+
+    for (let c of state.changes) {
+      if (c['$type'] == type && arrayEquals(path, c.path)) {
         change = c;
         continue;
       }
-      if(c['$type'] == 'blocktype' && arrayStartsWith(path, c.path)){
+      if (c['$type'] == 'blocktype' && arrayStartsWith(path, c.path)) {
         change = null;
         continue;
       }
-      if(c['$type'] == 'simple' && arrayStartsWith(c.path, path)){
+      if (c['$type'] == 'simple' && arrayStartsWith(c.path, path)) {
         change = null;
         continue;
       }
@@ -182,9 +183,17 @@ class StateManager {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        changedEntities: states.map(state => ({
-          entityReference: state.contentReference,
-          entityChanges: state.changes,
+        entities: states.map(state => ({
+          reference: state.contentReference,
+          changes: state.changes.map(change => {
+            change.date = new Date(change.date);
+
+            if (change['$type'] == 'simple') {
+              change.value = JSON.stringify(change.value);
+            }
+
+            return change;
+          }),
         }))
       }),
     }, 'Could not save entity');
@@ -205,8 +214,8 @@ class StateManager {
       });
     }
 
-    for (let result of results.filter(r => r.success)) {
-      this.loadContentForState(result.contentReference);
+    for (let result of response.results.filter(r => r.success)) {
+      this.loadContentForState(result.entityReference);
     }
   }
 
