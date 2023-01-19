@@ -155,9 +155,11 @@ class StateManager {
     for(let c of state.changes){
       if(c['$type'] == type && arrayEquals(path, c.path)){
         change = c;
+        continue;
       }
-      if(c['$type'] == 'embeddedblock' && arrayStartsWith(path, c.path) && !arrayEquals(path, c.path)){
+      if(c['$type'] == 'embeddedblock' && arrayStartsWith(path, c.path)){
         change = null;
+        continue;
       }
     }
 
