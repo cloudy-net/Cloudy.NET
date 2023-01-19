@@ -3,7 +3,7 @@ import arrayEquals from "../util/array-equals.js";
 import urlFetcher from "../util/url-fetcher.js";
 import arrayStartsWith from "../util/array-starts-with.js";
 
-const generateNewContentKey = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
+const generateRandomString = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 
 const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
 
@@ -41,7 +41,7 @@ class StateManager {
   }
 
   createStateForNewContent(entityType) {
-    const contentReference = { newContentKey: generateNewContentKey(), keyValues: null, entityType };
+    const contentReference = { newContentKey: generateRandomString(), keyValues: null, entityType };
 
     const state = {
       contentReference,
