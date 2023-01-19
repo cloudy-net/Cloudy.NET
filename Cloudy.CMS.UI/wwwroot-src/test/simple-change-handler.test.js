@@ -7,6 +7,8 @@ import embeddedBlockChangeHandler from '../data/change-handlers/embedded-block-c
 describe('simple-change-handler.js', () => {
   describe('simple scenario', () => {
     it('intermediate value', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -24,6 +26,8 @@ describe('simple-change-handler.js', () => {
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [propertyName]), newValue, 'New value should be returned as an intermediate change has been registered');
     });
     it('intermediate value, deep path', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const blockName = 'Block1';
       const block2Name = 'Block2';
@@ -53,6 +57,8 @@ describe('simple-change-handler.js', () => {
   });
   describe('complex scenario', () => {
     it('simple change after changing block type', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block';
@@ -76,6 +82,8 @@ describe('simple-change-handler.js', () => {
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, propertyName]), newValue);
     });
     it('changing block type after simple change', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block1';
@@ -109,6 +117,8 @@ describe('simple-change-handler.js', () => {
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null);
     });
     it('intermediate value should be cleared when changing parents parents embedded block type', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block1';

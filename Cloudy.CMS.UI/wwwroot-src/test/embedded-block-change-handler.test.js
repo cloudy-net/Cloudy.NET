@@ -6,6 +6,8 @@ import embeddedBlockChangeHandler from '../data/change-handlers/embedded-block-c
 describe('embedded-block-change-handler.js', () => {
   describe('simple scenario', () => {
     it('intermediate value', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -25,6 +27,8 @@ describe('embedded-block-change-handler.js', () => {
       assert.equal(embeddedBlockChangeHandler.getIntermediateType(stateManager.getState(contentReference), [propertyName]), newValue);
     });
     it('clearing value', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -46,6 +50,8 @@ describe('embedded-block-change-handler.js', () => {
   });
   describe('complex scenario', () => {
     it('intermediate value', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
       const blockName = 'Block1';
       const nestedBlockName = 'Block2';
