@@ -161,6 +161,10 @@ class StateManager {
         change = null;
         continue;
       }
+      if(c['$type'] == 'simple' && arrayStartsWith(c.path, path)){
+        change = null;
+        continue;
+      }
     }
 
     if (!change || Date.now() - change.date > FIVE_MINUTES) {
