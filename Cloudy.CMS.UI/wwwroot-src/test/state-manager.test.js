@@ -55,7 +55,7 @@ describe('state-manager.js', () => {
     });
   });
   describe('complex scenario', () => {
-    it('should not merge with change if separated by block change', () => {
+    it('should not merge simple change if separated by block change', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -68,7 +68,7 @@ describe('state-manager.js', () => {
 
       assert.equal(state.changes.length, 3);
     });
-    it('should not merge with change if separated by nested block change', () => {
+    it('should not merge simple change if separated by nested block change', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -78,6 +78,32 @@ describe('state-manager.js', () => {
       ];
 
       stateManager.getOrCreateLatestChange(state, 'simple', ['blockName', 'nestedBlockName', 'propertyName']);
+
+      assert.equal(state.changes.length, 3);
+    });
+    it('should merge block type change if separated by irrelevant simple change', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
+      const state = stateManager.createStateForNewContent('page');
+      state.changes = [
+        { '$type': 'blocktype', date: Date.now(), path: ['blockName'], type: 'ipsum' },
+        { '$type': 'simple', date: Date.now(), path: ['propertyName'], value: 'lorem' },
+      ];
+
+      stateManager.getOrCreateLatestChange(state, 'blocktype', ['blockName']);
+
+      assert.equal(state.changes.length, 2);
+    });
+    it('should not merge block type change if separated by nested simple change', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
+      const state = stateManager.createStateForNewContent('page');
+      state.changes = [
+        { '$type': 'blocktype', date: Date.now(), path: ['blockName'], type: 'ipsum' },
+        { '$type': 'simple', date: Date.now(), path: ['blockName', 'propertyName'], value: 'lorem' },
+      ];
+
+      stateManager.getOrCreateLatestChange(state, 'blocktype', ['blockName']);
 
       assert.equal(state.changes.length, 3);
     });
