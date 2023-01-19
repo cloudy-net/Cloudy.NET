@@ -11,7 +11,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.6";
+  schema = "1.7";
   states = this.loadStates();
 
   loadStates() {
@@ -157,14 +157,14 @@ class StateManager {
         change = c;
         continue;
       }
-      if(c['$type'] == 'embeddedblock' && arrayStartsWith(path, c.path)){
+      if(c['$type'] == 'blocktype' && arrayStartsWith(path, c.path)){
         change = null;
         continue;
       }
     }
 
     if (!change || Date.now() - change.date > FIVE_MINUTES) {
-      change = { '$type': type, 'date': Date.now(), path };
+      change = { '$type': type, id: generateRandomString(), 'date': Date.now(), path };
       state.changes.push(change);
     }
 

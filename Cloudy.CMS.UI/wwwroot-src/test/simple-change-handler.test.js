@@ -2,7 +2,7 @@ import assert from 'assert';
 import { } from './polyfiller.js';
 import stateManager from '../data/state-manager.js';
 import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
-import embeddedBlockChangeHandler from '../data/change-handlers/embedded-block-change-handler.js';
+import blockTypeChangeHandler from '../data/change-handlers/block-type-change-handler.js';
 
 describe('simple-change-handler.js', () => {
   describe('simple scenario', () => {
@@ -77,7 +77,7 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName], newType);
+      blockTypeChangeHandler.setType(stateManager, contentReference, [blockName], newType);
       simpleChangeHandler.setValue(stateManager, contentReference, [blockName, propertyName], newValue);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, propertyName]), newValue);
     });
@@ -109,15 +109,15 @@ describe('simple-change-handler.js', () => {
 
       simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue);
-      embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
+      blockTypeChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null);
       simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
       assert.equal(stateManager.getState(contentReference).changes.length, 3);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), newValue);
-      embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName], newType);
+      blockTypeChangeHandler.setType(stateManager, contentReference, [blockName], newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null);
     });
-    it('intermediate value should be cleared when changing parents parents embedded block type', () => {
+    it('intermediate value should be cleared when changing parents parents block type', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
       const { contentReference } = stateManager.createStateForNewContent('page');
@@ -144,7 +144,7 @@ describe('simple-change-handler.js', () => {
       });
 
       simpleChangeHandler.setValue(stateManager, contentReference, [blockName, block2Name, propertyName], newValue);
-      embeddedBlockChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
+      blockTypeChangeHandler.setType(stateManager, contentReference, [blockName, block2Name], newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), [blockName, block2Name, propertyName]), null);
     });
   });

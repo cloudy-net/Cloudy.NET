@@ -22,7 +22,7 @@ class SimpleChangeHandler {
         value = change.value;
         continue;
       }
-      if (change['$type'] == 'embeddedblock' && arrayStartsWith(path, change.path)) {
+      if (change['$type'] == 'blocktype' && arrayStartsWith(path, change.path)) {
         value = change.value;
         continue;
       }

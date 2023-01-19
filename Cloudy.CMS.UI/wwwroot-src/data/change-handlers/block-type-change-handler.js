@@ -7,7 +7,7 @@ const UNCHANGED = {};
 class EmbeddedBlockChangeHandler {
   setType(stateManager, contentReference, path, type) {
     const state = stateManager.getState(contentReference);
-    const change = stateManager.getOrCreateLatestChange(state, 'embeddedblock', path);
+    const change = stateManager.getOrCreateLatestChange(state, 'blocktype', path);
 
     change.date = Date.now();
     change.type = type;
@@ -18,11 +18,11 @@ class EmbeddedBlockChangeHandler {
     let type = UNCHANGED;
 
     for (var change of state.changes) {
-      if (change['$type'] == 'embeddedblock' && arrayEquals(path, change.path)) {
+      if (change['$type'] == 'blocktype' && arrayEquals(path, change.path)) {
         type = change.type;
         continue;
       }
-      if (change['$type'] == 'embeddedblock' && arrayStartsWith(path, change.path)) {
+      if (change['$type'] == 'blocktype' && arrayStartsWith(path, change.path)) {
         type = null;
         continue;
       }

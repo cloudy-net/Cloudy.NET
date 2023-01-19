@@ -27,7 +27,7 @@ export default defineConfig({
           dest: 'data/change-handlers/',
         },
         {
-          src: 'data/change-handlers/embedded-block-change-handler.js',
+          src: 'data/change-handlers/block-type-change-handler.js',
           dest: 'data/change-handlers/',
         },
         {
@@ -61,7 +61,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'data/change-handlers/simple-change-handler.js',
-        'data/change-handlers/embedded-block-change-handler.js',
+        'data/change-handlers/block-type-change-handler.js',
         'data/state-manager.js',
         'form/entity-context.js',
         'form/form-field.js',
