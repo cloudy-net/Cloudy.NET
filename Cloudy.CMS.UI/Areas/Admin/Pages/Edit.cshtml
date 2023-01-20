@@ -49,7 +49,7 @@
                             @foreach(var route in routes)
                             {
                                 var url = "/" + route.Apply(((IRoutable)Model.Instance).UrlSegment);
-                                <li><a class="dropdown-item" href="@url">@url</a></li>
+                                <li><a class="dropdown-item" href="@url">🌎 @url</a></li>
                             }
                         </ul>
                     </div>
