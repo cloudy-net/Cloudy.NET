@@ -4,6 +4,7 @@ import EntityContext from '../entity-context.js';
 import simpleChangeHandler from '../../data/change-handlers/simple-change-handler.js';
 
 export default ({ name, path, settings }) => {
+    const [allOptions, setAllOptions] = useState([]);
     const [options, setOptions] = useState([]);
     const [optionGroups, setOptionGroups] = useState({});
     const [initialValue, setInitialValue] = useState();
@@ -13,9 +14,8 @@ export default ({ name, path, settings }) => {
         simpleChangeHandler.setValue(stateManager, contentReference, path, event.target.value)
     };
 
-    useEffect(function () {
+    useEffect(function() {
         setInitialValue(simpleChangeHandler.getIntermediateValue(state, path));
-
         (async () => {
             await fetch(
                 `/Admin/api/controls/customselect/list/${settings.factoryAssemblyQualifiedName}`,
@@ -35,16 +35,19 @@ export default ({ name, path, settings }) => {
                     });
                 });
 
+                setAllOptions(options);
                 setOptions(options.filter(option => !option.group));
                 setOptionGroups(optionGroups);
-
-                const preselectedOption = options.find(o => o.selected);
-                if (!initialValue && preselectedOption) {
-                    simpleChangeHandler.setValue(stateManager, contentReference, path, preselectedOption.value);
-                }
             });
         })();
     }, []);
+
+    useEffect(() => {
+        const preselectedOption = allOptions.find(o => o.selected);
+        if (preselectedOption && (!initialValue || initialValue != simpleChangeHandler.getIntermediateValue(state, path))) {
+            simpleChangeHandler.setValue(stateManager, contentReference, path, preselectedOption.value);
+        }
+    }, [allOptions]);
 
     return options.length || Object.keys(optionGroups).length
         ? html`<select id=${name} name=${name} onChange=${onChange} class="form-select">

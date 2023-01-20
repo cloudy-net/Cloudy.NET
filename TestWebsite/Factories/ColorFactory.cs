@@ -6,24 +6,23 @@ using System.Threading.Tasks;
 
 namespace TestWebsite.Factories
 {
-
     public interface IColorFactory : ICustomSelectFactory { }
 
     public class ColorFactory : IColorFactory
     {
         public async Task<IEnumerable<SelectListItem>> GetItems()
         {
-            var niceGrop = new SelectListGroup { Name = "Nice colors" };
-            var darkGrop = new SelectListGroup { Name = "Dark colors" };
+            var niceGroup = new SelectListGroup { Name = "Nice colors" };
+            var darkGroup = new SelectListGroup { Name = "Dark colors" };
             var brightGroup = new SelectListGroup { Name = "Bright colors" };
             var disabledGroup = new SelectListGroup { Name = "Disabled group", Disabled = true };
 
             return await Task.FromResult(new[]
             {
-                new SelectListItem { Text = "Red", Value = "#f56c42", Group = niceGrop },
-                new SelectListItem { Text = "Blue", Value = "#02081a", Group = niceGrop },
+                new SelectListItem { Text = "Red", Value = "#f56c42", Group = niceGroup },
+                new SelectListItem { Text = "Blue", Value = "#02081a", Group = niceGroup },
 
-                new SelectListItem { Text = "Black", Value = "#fff", Group = darkGrop },
+                new SelectListItem { Text = "Black", Value = "#fff", Group = darkGroup },
 
                 new SelectListItem { Text = "White (default item)", Value = "#000", Selected = true, Group = brightGroup },
 
