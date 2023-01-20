@@ -5,16 +5,16 @@
 @inject IServiceProvider serviceProvider
 
 @{
+    if (Model.Value == null)
+    {
+        return;
+    }
+
     var selectAttribute = Model.PropertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
     var factoryType = selectAttribute.GetType().GenericTypeArguments.FirstOrDefault();
     var factory = serviceProvider.GetService(factoryType) as ICustomSelectFactory;
     var items = await factory.GetItems();
     var friendlyValue = items.FirstOrDefault(x => x.Value == Model.Value?.ToString())?.Text;
-
-    if (Model.Value == null)
-    {
-        return;
-    }
 
     if (friendlyValue != null)
     {
