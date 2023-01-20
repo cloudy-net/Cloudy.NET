@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TestWebsite.Factories
 {
-    public class ColorFactory : ICustomSelectFactory
+
+    public interface IColorFactory : ICustomSelectFactory { }
+
+    public class ColorFactory : IColorFactory
     {
         public async Task<IEnumerable<SelectListItem>> GetItems()
         {

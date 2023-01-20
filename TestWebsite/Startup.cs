@@ -30,7 +30,7 @@ namespace TestWebsite
                 .UseInMemoryDatabase("cloudytest")
             );
 
-            services.AddSingleton(new ColorFactory());
+            services.AddSingleton<IColorFactory, ColorFactory>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

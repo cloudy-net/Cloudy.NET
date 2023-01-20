@@ -39,7 +39,7 @@ namespace TestWebsite.Models
         public IFrontpageBlock FrontpageBlock { get; set; }
 
         [ListColumn]
-        [CustomSelect<ColorFactory>]
+        [CustomSelect<IColorFactory>]
         public string Color { get; set; }
     }
 
