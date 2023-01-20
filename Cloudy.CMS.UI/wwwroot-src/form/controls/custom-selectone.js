@@ -37,6 +37,11 @@ export default ({ name, path, settings }) => {
 
                 setOptions(options.filter(option => !option.group));
                 setOptionGroups(optionGroups);
+
+                const preselectedOption = options.find(o => o.selected);
+                if (!initialValue && preselectedOption) {
+                    simpleChangeHandler.setValue(stateManager, contentReference, path, preselectedOption.value);
+                }
             });
         })();
     }, []);
