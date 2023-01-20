@@ -52,6 +52,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@preact-htm': preactLocation,
+      '@constants' : path.resolve(__dirname, './constants/constants.js'),
     }
   },
   server: {

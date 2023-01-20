@@ -32,5 +32,10 @@ namespace Cloudy.CMS.UI.List
         /// Sets whether the column is sortable.
         /// </summary>
         public bool Sortable { get; set; }
+
+        /// <summary>
+        /// Sets the column width.
+        /// </summary>
+        public ListingColumnWidth Width { get; set; }
     }
 }
