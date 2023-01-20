@@ -1,6 +1,5 @@
 import stateManager from '../data/state-manager.js';
 import { html, useContext } from '../preact-htm/standalone.module.js';
-import arrayEquals from '../util/array-equals.js';
 import EntityContext from './entity-context.js';
 import FieldComponentContext from "./field-component-context.js";
 
