@@ -1,0 +1,27 @@
+﻿@using Cloudy.CMS.UI.FieldSupport.CustomSelect;
+@using Cloudy.CMS.UI.List
+@model ListColumnViewModel
+
+@inject IServiceProvider serviceProvider
+
+@{
+    var selectAttribute = Model.PropertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
+    var factoryType = selectAttribute.GetType().GenericTypeArguments.FirstOrDefault();
+    var factory = serviceProvider.GetService(factoryType) as ICustomSelectFactory;
+    var items = await factory.GetItems();
+    var friendlyValue = items.FirstOrDefault(x => x.Value == Model.Value?.ToString())?.Text;
+
+    if (Model.Value == null)
+    {
+        return;
+    }
+
+    if (friendlyValue != null)
+    {
+        @friendlyValue
+    }
+    else
+    {
+        <i>Does not exist</i>
+    }
+}
