@@ -1,11 +1,7 @@
 import { useEffect, useState } from '@preact-htm';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
-
-const SORT_DIRECTION = {
-  ASCENDING: 'asc',
-  DESCENDING: 'desc',
-};
+import { COLUMN_WIDTH_CSS_CLASSES, LISTING_COLUMN_WIDTHS, SORT_DIRECTIONS } from '@constants';
 
 export default ({ entityType, columns: initialColumns, filters: listFilters, pageSize: initialPageSize, editLink, deleteLink }) => {
   const [pageSize, setPageSize] = useState(initialPageSize);
@@ -19,17 +15,25 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
   const [error, setError] = useState();
   const [retryError, setRetryError] = useState(0);
   const [search, setSearch] = useState('');
-  const [orderBy, setOrderBy] = useState((initialColumns.find(x => x.sortable) || {}).name || '');
-  const [orderByDirection, setOrderByDirection] = useState(SORT_DIRECTION.ASCENDING);
+  const [orderBy, setOrderBy] = useState('');
+  const [orderByDirection, setOrderByDirection] = useState(SORT_DIRECTIONS.ASCENDING);
+
+  const columnFn = {
+    isEqual: (width) => width === LISTING_COLUMN_WIDTHS.EQUAL,
+    isFill: (width) => width === LISTING_COLUMN_WIDTHS.FILL,
+    getColumnWidthStyle: (width) => columnFn.isEqual(width) && !columns.some(c => columnFn.isFill(c.width)) && columns.filter(c => columnFn.isEqual(c.width)).length > 1
+    ? { width: `${100 / (columns.filter(c => columnFn.isEqual(c.width)).length || 1)}% ` }
+    : {}
+  };
 
   const setSorting = (newOrderBy) => {
     if (newOrderBy == orderBy) {
-      setOrderByDirection(orderByDirection === SORT_DIRECTION.ASCENDING ? SORT_DIRECTION.DESCENDING : SORT_DIRECTION.ASCENDING);
-    } else setOrderByDirection(SORT_DIRECTION.ASCENDING);
+      setOrderByDirection(orderByDirection === SORT_DIRECTIONS.ASCENDING ? SORT_DIRECTIONS.DESCENDING : SORT_DIRECTIONS.ASCENDING);
+    } else setOrderByDirection(SORT_DIRECTIONS.ASCENDING);
 
     setOrderBy(newOrderBy);
   };
-  
+
   useEffect(function () {
     (async () => {
       setError(null);
@@ -71,29 +75,31 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
   if (loading) {
     content = <>Loading ...</>;
   } else {
-    content = <table class="table">
-      <thead>
-        <tr className={ orderByDirection === SORT_DIRECTION.ASCENDING && 'dropup' }>
-          {columns.map(c => c.sortable 
-            ? <th className={ orderBy === c.name && 'dropdown-toggle' } role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
-            : <th>{c.label}</th>  
-          )}
-          <th style="width: 1%;"></th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.items.map(d => <tr>
-          {columns.map((_, i) =>
-            <td dangerouslySetInnerHTML={{ __html: d.values[i] }}></td>
-          )}
-          <td>
-            <a class="me-2" href={`${editLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
-            <a href={`${deleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
-          </td>
-        </tr>)}
-        {[...new Array(pageSize - data.items.length)].map(() => <tr class="list-page-blank-row"><td>&nbsp;</td></tr>)}
-      </tbody>
-    </table>;
+    content = <div class="table-responsive">
+      <table class="table table--content-list">
+        <thead>
+          <tr className={`text-nowrap ${orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
+            {columns.map(c => c.sortable
+              ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
+              : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
+            )}
+            <th style="width: 1%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.items.map(d => <tr>
+            {columns.map((_, i) =>
+              <td dangerouslySetInnerHTML={{ __html: d.values[i] }}></td>
+            )}
+            <td>
+              <a class="me-2" href={`${editLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
+              <a href={`${deleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
+            </td>
+          </tr>)}
+          {[...new Array(pageSize - data.items.length)].map(() => <tr class="list-page-blank-row"><td>&nbsp;</td></tr>)}
+        </tbody>
+      </table>
+    </div>;
   }
 
   return <>

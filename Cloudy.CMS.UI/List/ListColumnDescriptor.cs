@@ -10,6 +10,7 @@ namespace Cloudy.CMS.UI.List
         string Name,
         string Label,
         int Order,
-        bool Sortable
+        bool Sortable,
+        ListingColumnWidth width
     );
 }

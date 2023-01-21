@@ -230,3 +230,9 @@ label {
 .information-missing {
     font-style: italic;
 }
+
+.table--content-list {
+    th.w-100 {
+        min-width: 200px;
+    }
+}
