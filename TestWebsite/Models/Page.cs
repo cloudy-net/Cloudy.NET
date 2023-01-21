@@ -5,6 +5,7 @@ using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.List;
 using Cloudy.CMS.UI.List.Filter;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TestWebsite.Factories;
@@ -41,6 +42,10 @@ namespace TestWebsite.Models
         [ListColumn]
         [CustomSelect<IColorFactory>]
         public string Color { get; set; }
+
+        [ListColumn]
+        [CustomSelect<IColorFactory>(Multi = true)]
+        public IList<string> Colors { get; set; }
     }
 
     public interface IFrontpageBlock { }

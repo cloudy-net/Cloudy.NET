@@ -26,6 +26,7 @@ namespace TestWebsite.Models
             modelBuilder.Entity<CompositeKeyTest>().HasKey(p => new { p.FirstPrimaryKey, p.SecondPrimaryKey });
             modelBuilder.Entity<CompositeKeyTest>().Property(p => p.RelatedObject).SerializeIntoJson();
             modelBuilder.Entity<Page>().Property(p => p.FrontpageBlock).JsonBlockConversion();
+            modelBuilder.Entity<Page>().Property(p => p.Colors).SerializeIntoJson();
         }
     }
 }

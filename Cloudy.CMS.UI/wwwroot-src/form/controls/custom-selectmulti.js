@@ -7,15 +7,15 @@ export default ({ name, path, settings }) => {
     const [allOptions, setAllOptions] = useState([]);
     const [options, setOptions] = useState([]);
     const [optionGroups, setOptionGroups] = useState({});
-    const [initialValue, setInitialValue] = useState();
+    const [initialValue, setInitialValue] = useState([]);
     const { contentReference, state } = useContext(EntityContext);
-
+    
     const onChange = event => {
-        simpleChangeHandler.setValue(stateManager, contentReference, path, event.target.value)
+        simpleChangeHandler.setValue(stateManager, contentReference, path, Array.from(event.target.options).filter(o  => o.selected).map(o => o.value))
     };
 
     useEffect(function() {
-        setInitialValue(simpleChangeHandler.getIntermediateValue(state, path));
+        setInitialValue(simpleChangeHandler.getIntermediateValue(state, path) || []);
         (async () => {
             await fetch(
                 `/Admin/api/controls/customselect/list/${settings.factoryAssemblyQualifiedName}`,
@@ -43,19 +43,19 @@ export default ({ name, path, settings }) => {
     }, []);
 
     useEffect(() => {
-        const preselectedOption = allOptions.find(o => o.selected);
-        if (preselectedOption && !initialValue && location.pathname.endsWith('New')) {
-            simpleChangeHandler.setValue(stateManager, contentReference, path, preselectedOption.value);
+        const preselectedOptions = allOptions.filter(o => o.selected);
+        if (preselectedOptions.length && !initialValue.length && location.pathname.endsWith('New')) {
+            simpleChangeHandler.setValue(stateManager, contentReference, path, preselectedOptions.map(o => o.value));
         }
     }, [allOptions]);
 
     return options.length || Object.keys(optionGroups).length
-        ? html`<select id=${name} name=${name} onChange=${onChange} class="form-select">
+        ? html`<select id=${name} name=${name} onChange=${onChange} class="form-select" multiple size="10">
             ${options.length
                 ? options.map((option, index) =>
                     html`<option
                         disabled=${option.disabled}
-                        selected=${initialValue == option.value}
+                        selected=${initialValue.includes(option.value)}
                         value=${option.value}
                         key=${index}>${option.text}
                     </option>`
@@ -70,7 +70,7 @@ export default ({ name, path, settings }) => {
                         ${optionGroups[optionGroup].options.map((option, optionIndex) => html`
                             <option
                                 disabled=${option.disabled}
-                                selected=${initialValue == option.value || (!initialValue && option.selected)}
+                                selected=${initialValue.includes(option.value) || (!initialValue.length && option.selected)}
                                 value=${option.value}
                                 key=${optionIndex}>${option.text}
                             </option>`

@@ -77,7 +77,9 @@ namespace Cloudy.CMS.UI.FieldSupport
 
         private static string GetPartialName(PropertyDefinitionDescriptor propertyDefinition, ReadOnlyCollection<string> uiHints)
         {
-            if (propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().Any()) return "custom-selectone";
+            var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
+            if (customSelectAttribute is not null) return customSelectAttribute.Multi ? "custom-selectmulti" : "custom-selectone";
+
             if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any()) return "selectone";
             
             if (propertyDefinition.Type == typeof(string)) return "text";

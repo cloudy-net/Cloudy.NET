@@ -14,7 +14,20 @@
     var factoryType = selectAttribute.GetType().GenericTypeArguments.FirstOrDefault();
     var factory = serviceProvider.GetService(factoryType) as ICustomSelectFactory;
     var items = await factory.GetItems();
-    var friendlyValue = items.FirstOrDefault(x => x.Value == Model.Value?.ToString())?.Text;
+
+    var friendlyValue = string.Empty;
+    if (selectAttribute.Multi)
+    {
+        var selectedValues = Model.Value as IList<string>;
+        if (selectedValues is not null)
+        {
+            friendlyValue = string.Join(", ", items.Where(i => selectedValues.Contains(i.Value)).Select(i => i.Text));
+        }
+    }
+    else
+    {
+        friendlyValue = items.FirstOrDefault(x => x.Value == Model.Value?.ToString())?.Text;   
+    }
 
     if (friendlyValue != null)
     {
