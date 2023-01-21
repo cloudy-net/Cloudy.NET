@@ -15,7 +15,7 @@
     var factory = serviceProvider.GetService(factoryType) as ICustomSelectFactory;
     var items = await factory.GetItems();
 
-    var friendlyValue = string.Empty;
+    string friendlyValue = null;
     if (selectAttribute.Multi)
     {
         var selectedValues = Model.Value as IList<string>;
