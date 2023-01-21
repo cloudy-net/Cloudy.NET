@@ -21,7 +21,7 @@
         var selectedValues = Model.Value as IList<string>;
         if (selectedValues is not null)
         {
-            friendlyValue = string.Join(", ", items.Where(i => selectedValues.Contains(i.Value)).Select(i => i.Text));
+            friendlyValue = string.Join(", ", items.Where(i => selectedValues.Contains(i.Value)).Select(i => i.Text).Order());
         }
     }
     else
