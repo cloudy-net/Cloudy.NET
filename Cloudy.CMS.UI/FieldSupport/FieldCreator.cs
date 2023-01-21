@@ -53,6 +53,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                     var factoryType = customSelectAttribute.GetType().GetGenericArguments().FirstOrDefault();
 
                     settings["factoryAssemblyQualifiedName"] = factoryType?.AssemblyQualifiedName;
+                    settings["isMultiSelect"] = customSelectAttribute.Multi;
                 }
 
                 if (partialName == null)
@@ -78,7 +79,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         private static string GetPartialName(PropertyDefinitionDescriptor propertyDefinition, ReadOnlyCollection<string> uiHints)
         {
             var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
-            if (customSelectAttribute is not null) return customSelectAttribute.Multi ? "custom-selectmulti" : "custom-selectone";
+            if (customSelectAttribute is not null) return "custom-select/custom-select";
 
             if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any()) return "selectone";
             
