@@ -1,10 +1,9 @@
 name: .NET
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
-    paths-ignore:
-      - '**/test-slack-post.yml'
 
 jobs:
   build:
@@ -35,4 +34,12 @@ jobs:
       env:
         NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
       run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
-
+      - name: Post to a Slack channel on failure
+        if: always() && job.status != 'success'
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: 'C04KXEF19PX'
+          slack-message: "Pipeline failed (status: ${{ job.status }})"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
