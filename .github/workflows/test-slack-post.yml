@@ -8,12 +8,12 @@ jobs:
 
     steps:
     
-      - name: Post to a Slack channel
+      - name: Post to a Slack channel on failure
+        if: always() && job.status != 'success'
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
           channel-id: 'C04KXEF19PX'
-          # For posting a simple plain text message
-          slack-message: "Hello world! ${{ job.status }}"
+          slack-message: "Pipeline failed (status: ${{ job.status }})"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
