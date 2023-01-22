@@ -3,8 +3,6 @@ import preact from '@preact/preset-vite';
 import path from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
-const preactLocation = path.join(path.resolve(__dirname), './preact-htm/standalone.module.js');
-
 export default defineConfig({
   plugins: [
     preact(),
@@ -51,7 +49,6 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@preact-htm': preactLocation,
       '@constants' : path.resolve(__dirname, './constants/constants.js'),
     }
   },
@@ -73,7 +70,7 @@ export default defineConfig({
         'util/get-reference-value.js',
         'util/url-fetcher.js',
         'util/debounce.js',
-        preactLocation,
+        'preact-htm/standalone.module.js',
       ],
       output: {
         entryFileNames: '[name].bundle.js',

@@ -1,4 +1,4 @@
-import { useEffect, useState } from '@preact-htm';
+import { useEffect, useState } from '../preact-htm/standalone.module';
 import FormField from './form-field';
 
 const FormFields = ({ type }) => {

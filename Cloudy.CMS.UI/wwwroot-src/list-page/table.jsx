@@ -1,4 +1,4 @@
-import { useEffect, useState } from '@preact-htm';
+import { useEffect, useState } from '../preact-htm/standalone.module';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
 import { COLUMN_WIDTH_CSS_CLASSES, LISTING_COLUMN_WIDTHS, SORT_DIRECTIONS } from '@constants';

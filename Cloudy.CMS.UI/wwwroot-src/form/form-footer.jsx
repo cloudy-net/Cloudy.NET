@@ -1,4 +1,4 @@
-import { useContext, useState } from '@preact-htm';
+import { useContext, useState } from '../preact-htm/standalone.module';
 import FormField from './form-field';
 import EntityContext from './entity-context';
 import stateManager from '../data/state-manager';

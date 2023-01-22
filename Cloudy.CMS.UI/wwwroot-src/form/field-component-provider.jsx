@@ -1,4 +1,4 @@
-import { useState, useEffect } from '@preact-htm';
+import { useState, useEffect } from '../preact-htm/standalone.module';
 import FieldComponentContext from "./field-component-context.js";
 
 export default ({ children }) => {

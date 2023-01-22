@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from '@preact-htm';
+import { useEffect, useRef, useState } from '../preact-htm/standalone.module';
 import SelectOneDropdown from './select-one-dropdown';
 
 export default ({ controlName, entityType, pageSize, value: initialValue, simpleKey, editLink, imageable }) => {

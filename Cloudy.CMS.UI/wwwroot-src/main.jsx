@@ -1,6 +1,6 @@
 import './main.scss'
 
-import { render } from '@preact-htm'
+import { render } from './preact-htm/standalone.module'
 import Table from './list-page/table'
 import Form from './form/form';
 

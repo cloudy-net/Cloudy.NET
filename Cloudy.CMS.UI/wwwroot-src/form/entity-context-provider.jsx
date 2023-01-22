@@ -1,4 +1,4 @@
-import { useState, useEffect } from '@preact-htm';
+import { useState, useEffect } from '../preact-htm/standalone.module';
 import EntityContext from "./entity-context";
 import stateManager from '../data/state-manager.js';
 
