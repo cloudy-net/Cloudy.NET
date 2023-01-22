@@ -18,14 +18,16 @@
         <link href="https://cdn.quilljs.com/1.2.6/quill.snow.css" rel="stylesheet">
         <script src="https://cdn.quilljs.com/1.2.6/quill.min.js"></script>
 
-        @if(viteBaseUri == null){
-            <link href="/_content/Cloudy.CMS.UI/index.css" rel="stylesheet">
-            <script async type="module" crossorigin="anonymous" src="/_content/Cloudy.CMS.UI/index.bundle.js"></script>
+        @if(viteBaseUri != null){
+            <script>window.viteDevServerIsRunning = true;</script>
+            <script type="module" src="@viteBaseUri/@@vite/client"></script>
+            <script type="module" src="@viteBaseUri/main.jsx"></script>
         }
         else
         {
-            <script type="module" src="@viteBaseUri/@@vite/client"></script>
-            <script type="module" src="@viteBaseUri/main.jsx"></script>
+            <link href="/_content/Cloudy.CMS.UI/index.css" rel="stylesheet">
+            <script>window.viteDevServerIsRunning = false;</script>
+            <script async type="module" crossorigin="anonymous" src="/_content/Cloudy.CMS.UI/index.bundle.js"></script>
         }
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>

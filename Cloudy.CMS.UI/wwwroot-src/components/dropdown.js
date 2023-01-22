@@ -1,5 +1,5 @@
 import { html, useEffect, useRef, useState } from "../preact-htm/standalone.module.js";
-import ClickOutsideDetector from "./click-outside-detector"
+import ClickOutsideDetector from "./click-outside-detector.js"
 
 const Dropdown = ({ text, className, button, children }) => {
   const [open, setOpen] = useState();

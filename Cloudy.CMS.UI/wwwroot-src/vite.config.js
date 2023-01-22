@@ -13,11 +13,23 @@ export default defineConfig({
           dest: 'form/',
         },
         {
+          src: 'form/field-component-context.js',
+          dest: 'form/',
+        },
+        {
           src: 'form/form-field.js',
           dest: 'form/',
         },
         {
           src: 'data/state-manager.js',
+          dest: 'data/',
+        },
+        {
+          src: 'data/content-getter.js',
+          dest: 'data/',
+        },
+        {
+          src: 'data/content-not-found.js',
           dest: 'data/',
         },
         {
@@ -41,6 +53,10 @@ export default defineConfig({
           dest: 'components/',
         },
         {
+          src: 'notification/notification-manager.js',
+          dest: 'notification/',
+        },
+        {
           src: 'node_modules/htm/preact/standalone.module.js',
           dest: 'preact-htm/',
         },
@@ -61,9 +77,13 @@ export default defineConfig({
         'data/change-handlers/simple-change-handler.js',
         'data/change-handlers/block-type-change-handler.js',
         'data/state-manager.js',
+        'data/content-getter.js',
+        'data/content-not-found.js',
+        'form/field-component-context.js',
         'form/entity-context.js',
         'form/form-field.js',
         'media-picker/media-picker-menu.js',
+        'notification/notification-manager.js',
         'components/*',
         'util/array-equals.js',
         'util/array-starts-with.js',
