@@ -1,8 +1,11 @@
 import EntityContext from "../form/entity-context";
 import { useContext, useState } from "../preact-htm/standalone.module";
+import stateManager from "./state-manager";
 
-const UndoHistory = () => {
+const ViewChanges = () => {
   const { state } = useContext(EntityContext);
+
+  const referenceChanges = stateManager.getReferenceChanges(state);
 
   const showChange = change => {
     return <>
@@ -13,7 +16,7 @@ const UndoHistory = () => {
   return <>
     <p><strong>Your changes:</strong></p>
     <ul>
-      {state.changes.map(change =>
+      {stateManager.getChanges(state).map(change =>
         <li>{showChange(change)}</li>
       )}
     </ul>
@@ -21,4 +24,4 @@ const UndoHistory = () => {
   </>
 };
 
-export default UndoHistory;
+export default ViewChanges;

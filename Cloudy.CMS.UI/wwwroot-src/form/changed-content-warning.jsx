@@ -1,4 +1,4 @@
-import UndoHistory from "../data/undo-history";
+import UndoHistory from "../data/view-changes";
 import { useContext, useState } from "../preact-htm/standalone.module";
 import EntityContext from "./entity-context";
 
