@@ -45,6 +45,7 @@ class StateManager {
     const contentReference = { newContentKey: generateRandomString(), keyValues: null, entityType };
 
     const state = {
+      new: true,
       contentReference,
       referenceValues: {},
       referenceDate: new Date(),

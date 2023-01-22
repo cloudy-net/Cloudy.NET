@@ -9,9 +9,7 @@ export default ({ name, path, settings }) => {
     const [options, setOptions] = useState([]);
     const [optionGroups, setOptionGroups] = useState({});
     const [initialValue, setInitialValue] = useState(settings.isMultiSelect ? [] : null);
-    const [isCreateMode, setIsCreateMode] = useState(location.pathname.endsWith('New'));
     const { contentReference, state } = useContext(EntityContext);
-
     const onChange = event => {
         settings.isMultiSelect
             ? simpleChangeHandler.setValue(stateManager, contentReference, path, Array.from(event.target.options).filter(o => o.selected).map(o => o.value))
@@ -19,7 +17,10 @@ export default ({ name, path, settings }) => {
     };
 
     useEffect(function () {
-        setInitialValue(simpleChangeHandler.getIntermediateValue(state, path) || settings.isMultiSelect ? [] : null);
+        let value = simpleChangeHandler.getIntermediateValue(state, path);
+        value = settings.isMultiSelect ? (!!value && value.length ? value : []) : null;
+        setInitialValue(value);
+
         (async () => {
             await fetch(
                 `/Admin/api/controls/customselect/list/${settings.factoryAssemblyQualifiedName}`,
@@ -47,7 +48,7 @@ export default ({ name, path, settings }) => {
     }, []);
 
     useEffect(() => {
-        if (isCreateMode) {
+        if (state.new) {
             const value = settings.isMultiSelect
                 ? allOptions.filter(o => o.selected).map(o => o.value)
                 : (allOptions.find(o => o.selected) || {}).value || null;
@@ -57,14 +58,14 @@ export default ({ name, path, settings }) => {
     }, [allOptions]);
 
     return html`
-        <select id=${name} name=${name} onChange=${onChange} class="form-select" multiple=${settings.isMultiSelect}>
+        <select id=${name} name=${name} onChange=${onChange} class="form-select" multiple=${settings.isMultiSelect} size=${settings.isMultiSelect ? "10" : null}>
             ${options.map((option, index) => html`
                 <${Option} 
                     option=${option} 
                     key=${index}
                     isMultiSelect=${settings.isMultiSelect}
                     initialValue=${initialValue}
-                    isCreateMode=${isCreateMode} />`)}
+                    preselect=${state.new} />`)}
 
             ${Object.keys(optionGroups).map((optionGroup, optionGroupIndex) => html`
                 <optgroup key=${optionGroupIndex} label=${optionGroup} disabled=${optionGroups[optionGroup].disabled}>
@@ -74,7 +75,7 @@ export default ({ name, path, settings }) => {
                             key=${index}
                             isMultiSelect=${settings.isMultiSelect}
                             initialValue=${initialValue}
-                            isCreateMode=${isCreateMode} />`)}
+                            preselect=${state.new} />`)}
                 </optgroup>`)}
         </select>`
 };

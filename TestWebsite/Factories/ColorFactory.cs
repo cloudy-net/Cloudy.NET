@@ -19,7 +19,7 @@ namespace TestWebsite.Factories
 
             return await Task.FromResult(new[]
             {
-                new SelectListItem { Text = "Red", Value = "#f56c42", Group = niceGroup },
+                new SelectListItem { Text = "Red", Value = "#f56c42", Selected = true, Group = niceGroup },
                 new SelectListItem { Text = "Blue", Value = "#02081a", Group = niceGroup },
 
                 new SelectListItem { Text = "Black", Value = "#fff", Group = darkGroup },
