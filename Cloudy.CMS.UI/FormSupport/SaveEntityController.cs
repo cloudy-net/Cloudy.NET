@@ -75,7 +75,7 @@ namespace Cloudy.CMS.UI.FormSupport
                     if (changedEntity.Remove)
                     {
                         context.Context.Remove(entity);
-                        result.Add(SaveEntityResult.SuccessResult(entityType.Name, keyValues));
+                        result.Add(SaveEntityResult.SuccessResult(entityType.Name, keyValues, null));
                         continue;
                     }
                 }
@@ -115,7 +115,7 @@ namespace Cloudy.CMS.UI.FormSupport
                     //await EntityUpdater.UpdateAsync(Entity).ConfigureAwait(false);
                 }
 
-                result.Add(SaveEntityResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(entity)));
+                result.Add(SaveEntityResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(entity), changedEntity.Reference.NewContentKey));
             }
 
             foreach(var context in contexts)
@@ -142,14 +142,15 @@ namespace Cloudy.CMS.UI.FormSupport
             public EntityReference EntityReference { get; private set; }
             public IDictionary<string, IEnumerable<string>> ValidationErrors { get; private set; }
 
-            public static SaveEntityResult SuccessResult(string entityTypeId, IEnumerable<object> keyValues)
+            public static SaveEntityResult SuccessResult(string entityType, IEnumerable<object> keyValues, string newContentKey)
             {
                 return new SaveEntityResult
                 {
                     Success = true,
                     EntityReference = new EntityReference
                     {
-                        EntityType = entityTypeId,
+                        NewContentKey = newContentKey,
+                        EntityType = entityType,
                         KeyValues = keyValues?.Select(k => JsonSerializer.SerializeToElement(k)).ToArray(),
                     },
                 };
@@ -260,6 +261,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
         public class EntityReference
         {
+            public string NewContentKey { get; set; }
             public JsonElement[] KeyValues { get; set; }
             [Required]
             public string EntityType { get; set; }
