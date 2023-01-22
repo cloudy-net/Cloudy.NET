@@ -3,6 +3,8 @@ name: .NET
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - '**/test-slack-post.yml'
 
 jobs:
   build:
