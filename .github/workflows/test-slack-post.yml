@@ -1,10 +1,6 @@
 name: Test slack message
 
-on:
-  push:
-    branches: [ master ]
-    paths-ignore:
-      - '**/test-slack-post.yml'
+on: workflow_dispatch
 
 jobs:
   build:
