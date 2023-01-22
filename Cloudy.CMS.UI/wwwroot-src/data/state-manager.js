@@ -232,6 +232,12 @@ class StateManager {
   };
 
   getState(contentReference) {
+    if(contentReference.newContentKey && contentReference.keyValues){
+      contentReference = {
+        ...contentReference,
+        keyValues: null,
+      };
+    }
     return this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
   }
 
