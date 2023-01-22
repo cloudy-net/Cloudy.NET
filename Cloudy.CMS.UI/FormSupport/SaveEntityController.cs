@@ -60,7 +60,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 contexts.Add(context);
 
-                var keyValues = PrimaryKeyConverter.Convert(changedEntity.Reference.KeyValues.Select(k => k.ToString()), entityType.Type);
+                var keyValues = changedEntity.Reference.KeyValues != null ? PrimaryKeyConverter.Convert(changedEntity.Reference.KeyValues.Select(k => k.ToString()), entityType.Type) : null;
 
                 object entity;
 

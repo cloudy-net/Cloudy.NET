@@ -251,6 +251,14 @@ class StateManager {
     return state.changes?.length;
   }
 
+  getChanges(state) {
+    return [];
+  }
+
+  getReferenceChanges(state) {
+    return [];
+  }
+
   updateIndex() {
     localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => this.hasChanges(state)).map(state => state.contentReference) }));
   }
