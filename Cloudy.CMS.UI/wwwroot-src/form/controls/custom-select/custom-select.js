@@ -2,7 +2,7 @@ import { html, useContext, useEffect, useState } from '../../../preact-htm/stand
 import stateManager from '../../../data/state-manager.js';
 import EntityContext from '../../entity-context.js';
 import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
-import Option from './option';
+import Option from './option.js';
 
 export default ({ name, path, settings }) => {
     const [allOptions, setAllOptions] = useState([]);
