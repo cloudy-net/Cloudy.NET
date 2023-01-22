@@ -16,7 +16,7 @@ const ViewChanges = () => {
   return <>
     <p><strong>Your changes:</strong></p>
     <ul>
-      {stateManager.getChanges(state).map(change =>
+      {stateManager.getMergedChanges(state).map(change =>
         <li>{showChange(change)}</li>
       )}
     </ul>

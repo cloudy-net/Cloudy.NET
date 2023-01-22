@@ -251,7 +251,7 @@ class StateManager {
     return state.changes?.length;
   }
 
-  getChanges(state) {
+  getMergedChanges(state) {
     return [];
   }
 
