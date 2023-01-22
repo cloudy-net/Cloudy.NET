@@ -1,5 +1,5 @@
 
-FROM cypress/included:3.4.1
+FROM cypress/included:12.3.0
 
 WORKDIR /App
 COPY ./ ./
