@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Cloudy.CMS.Routing;
 using Cloudy.CMS.UI;
 using System.Linq;
+using TestWebsite.Factories;
 
 namespace TestWebsite
 {
@@ -28,6 +29,8 @@ namespace TestWebsite
             services.AddDbContext<PageContext>(options => options
                 .UseInMemoryDatabase("cloudytest")
             );
+
+            services.AddSingleton<IColorFactory, ColorFactory>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

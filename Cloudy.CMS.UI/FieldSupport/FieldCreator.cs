@@ -1,14 +1,14 @@
 ﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.CMS.UI.FieldSupport.CustomSelect;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace Cloudy.CMS.UI.FieldSupport
 {
@@ -38,63 +38,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var type = propertyDefinition.Type;
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
 
-                string partialName = null;
-
-                if (propertyDefinition.Type == typeof(string))
-                {
-                    partialName = "text";
-                }
-
-                if (propertyDefinition.Type == typeof(bool))
-                {
-                    partialName = "checkbox";
-                }
-
-                if (propertyDefinition.Type == typeof(int))
-                {
-                    partialName = "number";
-                }
-
-                if (propertyDefinition.Type == typeof(double))
-                {
-                    partialName = "decimal";
-                }
-
-                if (propertyDefinition.Type == typeof(DateTime) || propertyDefinition.Type == typeof(DateTimeOffset))
-                {
-                    partialName = "datetime";
-                }
-
-                if (propertyDefinition.Type == typeof(TimeSpan) || propertyDefinition.Type == typeof(TimeOnly))
-                {
-                    partialName = "time";
-                }
-
-                if (propertyDefinition.Type == typeof(DateOnly))
-                {
-                    partialName = "date";
-                }
-
-                if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any())
-                {
-                    partialName = "selectone";
-                }
-
-                if (propertyDefinition.Attributes.Any(a => a is MediaPickerAttribute))
-                {
-                    partialName = "media-picker/media-picker";
-                }
-
-                if (propertyDefinition.Enum)
-                {
-                    partialName = "enumdropdown";
-                }
-
-                if (uiHints.Any())
-                {
-                    partialName = uiHints.First();
-                }
-
+                var partialName = GetPartialName(propertyDefinition, uiHints);
                 var settings = new Dictionary<string, object>();
 
                 if (propertyDefinition.Block)
@@ -103,7 +47,16 @@ namespace Cloudy.CMS.UI.FieldSupport
                     settings["types"] = EntityTypeProvider.GetAll().Select(t => t.Type).Where(t => t.IsAssignableTo(propertyDefinition.Type)).Select(t => t.Name).ToList().AsReadOnly();
                 }
 
-                if(partialName == null)
+                var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
+                if (customSelectAttribute is not null) 
+                {
+                    var factoryType = customSelectAttribute.GetType().GetGenericArguments().FirstOrDefault();
+
+                    settings["factoryAssemblyQualifiedName"] = factoryType?.AssemblyQualifiedName;
+                    settings["isMultiSelect"] = customSelectAttribute.Multi;
+                }
+
+                if (partialName == null)
                 {
                     partialName = "failed";
                 }
@@ -121,6 +74,30 @@ namespace Cloudy.CMS.UI.FieldSupport
             }
             
             return result;
+        }
+
+        private static string GetPartialName(PropertyDefinitionDescriptor propertyDefinition, ReadOnlyCollection<string> uiHints)
+        {
+            var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
+            if (customSelectAttribute is not null) return "custom-select/custom-select";
+
+            if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any()) return "selectone";
+            
+            if (propertyDefinition.Type == typeof(string)) return "text";
+            if (propertyDefinition.Type == typeof(bool)) return "checkbox";
+            if (propertyDefinition.Type == typeof(int)) return "number";
+            if (propertyDefinition.Type == typeof(double)) return "decimal";
+            if (propertyDefinition.Type == typeof(DateTime) || propertyDefinition.Type == typeof(DateTimeOffset)) return "datetime";
+            if (propertyDefinition.Type == typeof(TimeSpan) || propertyDefinition.Type == typeof(TimeOnly)) return "time";
+            if (propertyDefinition.Type == typeof(DateOnly)) return "date";
+
+            if (propertyDefinition.Attributes.Any(a => a is MediaPickerAttribute)) return "media-picker/media-picker";
+
+            if (propertyDefinition.Enum) return "enumdropdown";
+
+            if (uiHints.Any()) return uiHints.First();
+
+            return null;
         }
     }
 }

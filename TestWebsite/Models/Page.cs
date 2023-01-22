@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.UI.FieldSupport.CustomSelect;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.List;
@@ -7,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+using TestWebsite.Factories;
 
 namespace TestWebsite.Models
 {
@@ -37,6 +38,14 @@ namespace TestWebsite.Models
         //[Block(typeof(Page))]
         //public IList<LayoutItem> Test { get; set; }
         public IFrontpageBlock FrontpageBlock { get; set; }
+
+        [ListColumn]
+        [CustomSelect<IColorFactory>]
+        public string Color { get; set; }
+
+        [ListColumn]
+        [CustomSelect<IColorFactory>(Multi = true)]
+        public IList<string> Colors { get; set; }
     }
 
     public interface IFrontpageBlock { }
