@@ -1,5 +1,5 @@
 import UndoHistory from "../data/view-changes.js";
-import { useContext, useState } from "../preact-htm/standalone.module.js";
+import { html, useContext, useState } from "../preact-htm/standalone.module.js";
 import EntityContext from "./entity-context.js";
 
 
