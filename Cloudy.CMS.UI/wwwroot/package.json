@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "prepare": "copyfiles --flat node_modules/htm/preact/standalone.module.js preact-htm/",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "htm": "^3.1.1",
+    "preact": "^10.11.0"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "mocha": "^10.2.0",
+    "node-localstorage": "^2.2.1"
+  }
+}

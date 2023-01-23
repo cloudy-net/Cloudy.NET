@@ -95,10 +95,11 @@ export default defineConfig({
       output: {
         entryFileNames: '[name].bundle.js',
         assetFileNames: '[name].[ext]',
-        chunkFileNames: '[name].[ext]'
+        chunkFileNames: '[name].js'
       }
     },
     sourcemap: true,
-    outDir: '../wwwroot'
+    outDir: '../wwwroot',
+    target: 'esnext'
   }
 });

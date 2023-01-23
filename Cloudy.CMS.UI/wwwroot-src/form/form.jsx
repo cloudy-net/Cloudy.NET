@@ -1,4 +1,4 @@
-import FieldComponentProvider from './field-component-provider.jsx';
+import FieldComponentProvider from './field-component-provider.js';
 import EntityContextProvider from './entity-context-provider'
 import FormFields from './form-fields.jsx';
 import FormFooter from './form-footer.jsx';

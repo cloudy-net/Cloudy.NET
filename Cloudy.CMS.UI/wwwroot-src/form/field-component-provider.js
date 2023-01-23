@@ -1,5 +1,6 @@
-import { useState, useEffect } from '../preact-htm/standalone.module';
+import { html, useState, useEffect } from '../preact-htm/standalone.module';
 import FieldComponentContext from "./field-component-context.js";
+import text from './controls/text.js';
 
 export default ({ children }) => {
   const [components, setComponents] = useState();
@@ -19,9 +20,10 @@ export default ({ children }) => {
 
       var urls = await response.json();
 
-      const componentPromises = urls.map(url => ({ url, promise: import(/* @vite-ignore */ (window.viteDevServerIsRunning ? '../../' : './') + url) }));
+      const test = 'form/controls/text.js';
+      const componentPromises = urls.map(url => ({ url, promise: import(/* @vite-ignore */ (window.viteDevServerIsRunning ? '../../' : './') + test) }));
 
-      await Promise.all(componentPromises.map(c => c.promise));
+      await Promise.allSettled(componentPromises.map(c => c.promise));
 
       const result = {};
 
@@ -33,7 +35,7 @@ export default ({ children }) => {
     })();
   }, []);
 
-  return <FieldComponentContext.Provider value={components}>
-    {children}
-  </FieldComponentContext.Provider>;
+  return html`<${FieldComponentContext.Provider} value=${components}>
+    ${children}
+  <//>`;
 };

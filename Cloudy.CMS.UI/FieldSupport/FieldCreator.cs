@@ -61,7 +61,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                     partialName = "failed";
                 }
 
-                var partial = partialName != null ? (partialName.StartsWith('/') ? partialName : $"form/controls/{partialName}.js") : null;
+                var partial = partialName != null ? (partialName.StartsWith('/') ? partialName : $"../form/controls/{partialName}.js") : null;
 
                 var renderChrome = true;
 
