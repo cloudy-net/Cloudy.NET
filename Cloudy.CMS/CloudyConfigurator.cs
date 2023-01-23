@@ -44,5 +44,12 @@ namespace Cloudy.CMS
 
             return this;
         }
+
+        public CloudyConfigurator SetLicenseKey(string licenseKey)
+        {
+            Options.LicenseKey = licenseKey;
+
+            return this;
+        }
     }
 }

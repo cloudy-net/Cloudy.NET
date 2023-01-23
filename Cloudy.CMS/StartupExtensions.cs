@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Linq;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.AssemblySupport;
+using Cloudy.CMS.Licensing;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -44,9 +45,11 @@ namespace Microsoft.AspNetCore.Builder
 
             var assemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
             var contextDescriptorProvider = new ContextDescriptorProvider(new ContextDescriptorCreator().Create(options.ContextTypes));
+            var licenseProvider = new LicenseProvider(options.LicenseKey);
 
             services.AddSingleton<IAssemblyProvider>(assemblyProvider);
             services.AddSingleton<IContextDescriptorProvider>(contextDescriptorProvider);
+            services.AddSingleton<ILicenseProvider>(licenseProvider);
             
             foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(assemblyProvider, contextDescriptorProvider)).GetAll())
             {
