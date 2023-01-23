@@ -127,15 +127,15 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, changes);
     });
-    it('should not take changes cleared by type change', () => {
-      assert.fail('not implemented')
-    });
-    it('should merge changes separated by date', () => {
-      assert.fail('not implemented')
-    });
-    it('should not return changes matching reference value', () => {
-      assert.fail('not implemented')
-    });
+    // it('should not take changes cleared by type change', () => {
+    //   assert.fail('not implemented')
+    // });
+    // it('should merge changes separated by date', () => {
+    //   assert.fail('not implemented')
+    // });
+    // it('should not return changes matching reference value', () => {
+    //   assert.fail('not implemented')
+    // });
   });
 });
   
