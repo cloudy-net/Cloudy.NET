@@ -26,6 +26,8 @@ jobs:
       run: cd Cloudy.CMS.UI/wwwroot && npm ci
     - name: npm test
       run: cd Cloudy.CMS.UI/wwwroot && npm run test
+    - name: npm cleanup
+      run: cd Cloudy.CMS.UI/wwwroot && rm -rf test
     - name: dotnet build
       run: dotnet build --no-restore
     - name: dotnet test
