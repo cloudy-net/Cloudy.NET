@@ -22,8 +22,10 @@ jobs:
         dotnet-version: 7.0.x
     - name: dotnet restore
       run: dotnet restore
+    - name: npm install
+      run: cd Cloudy.CMS.UI/wwwroot && npm ci
     - name: npm test
-      run: cd Cloudy.CMS.UI/wwwroot && npm ci && npm run test
+      run: cd Cloudy.CMS.UI/wwwroot && npm run test
     - name: dotnet build
       run: dotnet build --no-restore
     - name: dotnet test
