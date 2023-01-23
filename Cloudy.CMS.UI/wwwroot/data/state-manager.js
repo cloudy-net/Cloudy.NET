@@ -259,7 +259,7 @@ class StateManager {
   }
 
   getMergedChanges(state) {
-    return [];
+    return [...state.changes];
   }
 
   getReferenceChanges(state) {
