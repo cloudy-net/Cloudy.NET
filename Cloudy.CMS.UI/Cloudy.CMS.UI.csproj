@@ -22,14 +22,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Remove="wwwroot-src\package-lock.json" />
-	  <Content Remove="wwwroot-src\package.json" />
-	  <Content Remove="wwwroot\index.html" />
+	  <Compile Remove="wwwroot-src\**" />
+	  <Content Remove="wwwroot-src\**" />
+	  <EmbeddedResource Remove="wwwroot-src\**" />
+	  <None Remove="wwwroot-src\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="wwwroot-src\package-lock.json" />
-	  <None Include="wwwroot-src\package.json" />
+	  <Content Remove="wwwroot\index.html" />
 	</ItemGroup>
 
 	<ItemGroup>
