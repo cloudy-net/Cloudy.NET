@@ -272,17 +272,15 @@ class StateManager {
   }
 
   hasChanges(state, path = null) {
-    if (path) {
-      return state.changes?.find(c => c.path == path);
-    }
+    const changes = this.getMergedChanges(state, path);
 
-    return state.changes?.length;
+    return changes.length;
   }
 
-  getMergedChanges(state) {
+  getMergedChanges(state, path = null) {
     const changes = {};
 
-    for (let change of state.changes) {
+    for (let change of state.changes.filter(change => path == null || change.path == path)) {
       if (change.$type == 'blocktype') {
         Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
       }
