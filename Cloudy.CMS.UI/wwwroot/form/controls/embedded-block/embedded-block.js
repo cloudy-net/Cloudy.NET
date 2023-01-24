@@ -13,7 +13,7 @@ const Control = ({ name, label, path, settings: { types } }) => {
 
   if (type) {
     const dropdown = html`<${Dropdown} text="More">
-      <a class="dropdown-item" onClick=${event => { blockTypeChangeHandler.setType(stateManager, contentReference, path, null); closeDropdown(event.target); }}>Remove</a>
+      <a class="dropdown-item" onClick=${event => { blockTypeChangeHandler.setType(contentReference, path, null); closeDropdown(event.target); }}>Remove</a>
     <//>`;
     return html`<div class="mb-3">
       <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null} ${dropdown}</label>
@@ -26,7 +26,7 @@ const Control = ({ name, label, path, settings: { types } }) => {
   return html`<div class="mb-3">
         <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null}</label>
         <${Dropdown} text="Add">
-          ${types.map(type => html`<a class="dropdown-item" onClick=${event => { blockTypeChangeHandler.setType(stateManager, contentReference, path, type); closeDropdown(event.target); }}>${type}</a>`)}
+          ${types.map(type => html`<a class="dropdown-item" onClick=${event => { blockTypeChangeHandler.setType(contentReference, path, type); closeDropdown(event.target); }}>${type}</a>`)}
         <//>
       <//>
     `;

@@ -3,7 +3,7 @@ import stateManager from "../state-manager.js";
 const UNCHANGED = {};
 
 class SimpleChangeHandler {
-  setValue(stateManager, contentReference, path, value) {
+  setValue(contentReference, path, value) {
     const state = stateManager.getState(contentReference);
     const change = stateManager.getOrCreateLatestChange(state, 'simple', path);
 

@@ -12,8 +12,8 @@ export default ({ name, path, settings }) => {
     const { contentReference, state } = useContext(EntityContext);
     const onChange = event => {
         settings.isMultiSelect
-            ? simpleChangeHandler.setValue(stateManager, contentReference, path, Array.from(event.target.options).filter(o => o.selected).map(o => o.value))
-            : simpleChangeHandler.setValue(stateManager, contentReference, path, event.target.value);
+            ? simpleChangeHandler.setValue(contentReference, path, Array.from(event.target.options).filter(o => o.selected).map(o => o.value))
+            : simpleChangeHandler.setValue(contentReference, path, event.target.value);
     };
 
     useEffect(function () {
@@ -53,7 +53,7 @@ export default ({ name, path, settings }) => {
                 ? allOptions.filter(o => o.selected).map(o => o.value)
                 : (allOptions.find(o => o.selected) || {}).value || null;
             
-            simpleChangeHandler.setValue(stateManager, contentReference, path, value);
+            simpleChangeHandler.setValue(contentReference, path, value);
         }
     }, [allOptions]);
 

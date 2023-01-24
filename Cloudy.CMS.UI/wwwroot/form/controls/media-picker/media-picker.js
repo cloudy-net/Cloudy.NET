@@ -18,12 +18,12 @@ export default ({ name, path, provider }) => {
     const text = await navigator.clipboard.readText();
 
     setValue(text);
-    simpleChangeHandler.setValue(stateManager, contentReference, path, text);
+    simpleChangeHandler.setValue(contentReference, path, text);
   };
 
   const onchange = newValue => {
     setValue(newValue != value ? newValue : null);
-    simpleChangeHandler.setValue(stateManager, contentReference, path, newValue);
+    simpleChangeHandler.setValue(contentReference, path, newValue);
   }
 
   return html`
@@ -40,7 +40,7 @@ export default ({ name, path, provider }) => {
     <${Dropdown} text="Other" className="ms-2">
       <a class="dropdown-item" onClick=${ event => { copy(); closeDropdown(event.target); } }>Copy</a>
       <a class="dropdown-item" onClick=${ event => { paste(); closeDropdown(event.target); } }>Paste</a>
-      <a class="dropdown-item" onClick=${ event => { setValue(''); simpleChangeHandler.setValue(stateManager, contentReference, path, ''); closeDropdown(event.target); } }>Clear</a>
+      <a class="dropdown-item" onClick=${ event => { setValue(''); simpleChangeHandler.setValue(contentReference, path, ''); closeDropdown(event.target); } }>Clear</a>
     <//>
   `;
 };

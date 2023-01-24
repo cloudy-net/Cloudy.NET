@@ -3,7 +3,7 @@ import stateManager from "../state-manager.js";
 const UNCHANGED = {};
 
 class EmbeddedBlockChangeHandler {
-  setType(stateManager, contentReference, path, type) {
+  setType(contentReference, path, type) {
     const state = stateManager.getState(contentReference);
     const change = stateManager.getOrCreateLatestChange(state, 'blocktype', path);
 
