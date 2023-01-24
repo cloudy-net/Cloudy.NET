@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare": "copyfiles --flat node_modules/htm/preact/standalone.module.js preact-htm/",
-    "test": "mocha"
+    "test": "mocha .test"
   },
   "dependencies": {
     "htm": "^3.1.1",
