@@ -213,7 +213,6 @@ class StateManager {
               path: change.path.split('.'),
             };
 
-
             if (change['$type'] == 'simple') {
               change.value = JSON.stringify(change.value);
             }
@@ -311,8 +310,6 @@ class StateManager {
 
   getReferenceValue(state, path) {
     let value = state.referenceValues;
-
-    
     let pathSegments = path.split('.');
 
     while (pathSegments.length) {
