@@ -16,8 +16,8 @@ const ViewChanges = () => {
   return html`
     <p><strong>Your changes:</strong></p>
     <ul>
-      {stateManager.getMergedChanges(state).map(change =>
-        <li>{showChange(change)}</li>
+      ${stateManager.getMergedChanges(state).map(change =>
+        html`<li>${showChange(change)}</li>`
       )}
     </ul>
     <p><button class="btn btn-primary" type="button">Discard incompatible changes</button></p>
