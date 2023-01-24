@@ -15,7 +15,7 @@ const Control = ({ name, path }) => {
         class="form-control"
         id=${`field-${name}`}
         name=${name}
-        defaultValue=${simpleChangeHandler.getIntermediateValue(state, path)}
+        value=${simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}
       >
       </select>

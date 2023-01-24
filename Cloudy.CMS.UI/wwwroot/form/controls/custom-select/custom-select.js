@@ -3,6 +3,7 @@ import stateManager from '../../../data/state-manager.js';
 import EntityContext from '../../entity-context.js';
 import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
 import Option from './option.js';
+import urlFetcher from '../../../util/url-fetcher.js';
 
 export default ({ name, path, settings }) => {
     const [allOptions, setAllOptions] = useState([]);
@@ -18,32 +19,33 @@ export default ({ name, path, settings }) => {
 
     useEffect(function () {
         let value = simpleChangeHandler.getIntermediateValue(state, path);
-        value = settings.isMultiSelect ? (!!value && value.length ? value : []) : null;
+        value = settings.isMultiSelect ? ((!!value && value.length) ? value : []) : null;
         setInitialValue(value);
+    }, [state]);
 
+    useEffect(function () {
         (async () => {
-            await fetch(
+            const options = await urlFetcher.fetch(
                 `/Admin/api/controls/customselect/list/${settings.factoryAssemblyQualifiedName}`,
                 {
                     credentials: 'include'
-                }
-            )
-            .then(r => r.json())
-            .then(options => {
-                const optionGroups = {};
-                options.filter(option => !!option.group).forEach(option => {
-                    if (!optionGroups[option.group.name]) optionGroups[option.group.name] = { disabled: option.group.disabled, options: [] };
-                    optionGroups[option.group.name].options.push({
-                        value: option.value,
-                        text: option.text,
-                        selected: option.selected,
-                    });
-                });
+                },
+                'Could not get select options'
+            );
 
-                setAllOptions(options);
-                setOptions(options.filter(option => !option.group));
-                setOptionGroups(optionGroups);
+            const optionGroups = {};
+            options.filter(option => !!option.group).forEach(option => {
+                if (!optionGroups[option.group.name]) optionGroups[option.group.name] = { disabled: option.group.disabled, options: [] };
+                optionGroups[option.group.name].options.push({
+                    value: option.value,
+                    text: option.text,
+                    selected: option.selected,
+                });
             });
+
+            setAllOptions(options);
+            setOptions(options.filter(option => !option.group));
+            setOptionGroups(optionGroups);
         })();
     }, []);
 
@@ -59,12 +61,15 @@ export default ({ name, path, settings }) => {
 
     return html`
         <select id=${name} name=${name} onChange=${onChange} class="form-select" multiple=${settings.isMultiSelect} size=${settings.isMultiSelect ? "10" : null}>
+            ${!settings.isMultiSelect && html`<${Option} 
+                option=${{}}
+                key=${-1} />`}
             ${options.map((option, index) => html`
                 <${Option} 
                     option=${option} 
                     key=${index}
                     isMultiSelect=${settings.isMultiSelect}
-                    initialValue=${initialValue}
+                    value=${initialValue}
                     preselect=${state.new} />`)}
 
             ${Object.keys(optionGroups).map((optionGroup, optionGroupIndex) => html`
@@ -74,7 +79,7 @@ export default ({ name, path, settings }) => {
                             option=${option} 
                             key=${index}
                             isMultiSelect=${settings.isMultiSelect}
-                            initialValue=${initialValue}
+                            value=${initialValue}
                             preselect=${state.new} />`)}
                 </optgroup>`)}
         </select>`
