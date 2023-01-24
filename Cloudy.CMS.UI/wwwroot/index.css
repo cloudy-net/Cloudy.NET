@@ -226,6 +226,22 @@ label {
 
 
 
+/* DIFF */
+
+.cloudy-ui-diff-insert {
+  background-color: #e6ffec;
+}
+span.cloudy-ui-diff-insert {
+  padding: 0 1px;
+}
+.cloudy-ui-diff-delete {
+  background-color: #ffebe9;
+}
+span.cloudy-ui-diff-delete {
+  padding: 0 1px;
+}
+
+
 /* INFORMATION MISSING */
 
 .information-missing {
