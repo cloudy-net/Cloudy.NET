@@ -1,10 +1,31 @@
 import contentGetter from "./content-getter.js";
-import arrayEquals from "../util/array-equals.js";
 import urlFetcher from "../util/url-fetcher.js";
 import notificationManager from "../notification/notification-manager.js";
 
 const generateRandomString = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
+const arrayEquals = (a, b) => {
+  if (a == null && b == null) {
+      return true;
+  }
 
+  if (a == null) {
+      return false;
+  }
+
+  if (b == null) {
+      return false;
+  }
+
+  if(!Array.isArray(a) || !Array.isArray(b)){
+      return false;
+  }
+
+  if(a.length != b.length){
+      return false;
+  }
+
+  return a.every((ai, i) => ai === b[i]);
+};
 const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
 
 const FIVE_MINUTES = 5 * 60 * 1000;

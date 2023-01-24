@@ -1,4 +1,3 @@
-import arrayEquals from "../../util/array-equals.js";
 import getReferenceValue from "../../util/get-reference-value.js";
 
 const UNCHANGED = {};
