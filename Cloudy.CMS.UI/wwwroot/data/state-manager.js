@@ -207,8 +207,12 @@ class StateManager {
         entities: states.map(state => ({
           reference: state.contentReference,
           changes: state.changes.map(change => {
-            change.date = new Date(change.date);
-            change.path = change.path.split('.');
+            change = {
+              ...change,
+              date: new Date(change.date),
+              path: change.path.split('.'),
+            };
+
 
             if (change['$type'] == 'simple') {
               change.value = JSON.stringify(change.value);
@@ -308,7 +312,7 @@ class StateManager {
   getReferenceValue(state, path) {
     let value = state.referenceValues;
 
-
+    
     let pathSegments = path.split('.');
 
     while (pathSegments.length) {
