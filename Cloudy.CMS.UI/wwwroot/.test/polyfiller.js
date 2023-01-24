@@ -1,5 +1,5 @@
 import { LocalStorage } from "node-localstorage";
 
-global.localStorage = new LocalStorage('./test/localStorage');
+global.localStorage = new LocalStorage('./.test/localStorage');
 
 export default true;
