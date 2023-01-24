@@ -22,9 +22,9 @@ describe('block-type-change-handler.js', () => {
         }
       });
 
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [propertyName]), initialValue);
-      blockTypeChangeHandler.setType(stateManager, contentReference, [propertyName], newValue);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [propertyName]), newValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), propertyName), initialValue);
+      blockTypeChangeHandler.setType(stateManager, contentReference, propertyName, newValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), propertyName), newValue);
     });
     it('clearing value', () => {
       global.localStorage.clear();
@@ -43,9 +43,9 @@ describe('block-type-change-handler.js', () => {
         }
       });
 
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [propertyName]), initialValue);
-      blockTypeChangeHandler.setType(stateManager, contentReference, [propertyName], newValue);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [propertyName]), newValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), propertyName), initialValue);
+      blockTypeChangeHandler.setType(stateManager, contentReference, propertyName, newValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), propertyName), newValue);
     });
   });
   describe('complex scenario', () => {
@@ -73,11 +73,11 @@ describe('block-type-change-handler.js', () => {
         }
       });
 
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [blockName]), initialType);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [blockName, nestedBlockName]), nestedBlockType);
-      blockTypeChangeHandler.setType(stateManager, contentReference, [blockName], newType);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [blockName]), newType);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), [blockName, nestedBlockName]), null);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), blockName), initialType);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), `${blockName}.${nestedBlockName}`), nestedBlockType);
+      blockTypeChangeHandler.setType(stateManager, contentReference, blockName, newType);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), blockName), newType);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(contentReference), `${blockName}.${nestedBlockName}`), null);
     });
   });
 });

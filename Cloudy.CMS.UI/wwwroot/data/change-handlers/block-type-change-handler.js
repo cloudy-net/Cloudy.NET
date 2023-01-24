@@ -18,11 +18,11 @@ class EmbeddedBlockChangeHandler {
     let type = UNCHANGED;
 
     for (var change of state.changes) {
-      if (change['$type'] == 'blocktype' && arrayEquals(path, change.path)) {
+      if (change['$type'] == 'blocktype' && path == change.path) {
         type = change.type;
         continue;
       }
-      if (change['$type'] == 'blocktype' && arrayStartsWith(path, change.path)) {
+      if (change['$type'] == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
         type = null;
         continue;
       }

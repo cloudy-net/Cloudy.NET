@@ -1,18 +1,21 @@
-const getReferenceValue = (state, [...path]) => {
+const getReferenceValue = (state, path) => {
     let value = state.referenceValues;
 
-    while(path.length){
+    
+    let pathSegments = path.split('.');
+
+    while(pathSegments.length){
         if(!value){
             return null;
         }
 
-        if(path.length > 1){
-            value = value[path[0]] ? value[path[0]].Value : null;
+        if(pathSegments.length > 1){
+            value = value[pathSegments[0]] ? value[pathSegments[0]].Value : null;
         } else {
-            value = value[path[0]];
+            value = value[pathSegments[0]];
         }
 
-        path = path.splice(1);
+        pathSegments = pathSegments.splice(1);
     }
 
     return value;

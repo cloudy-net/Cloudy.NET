@@ -12,7 +12,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.7";
+  schema = "1.8";
   states = this.loadStates();
 
   loadStates() {
@@ -155,15 +155,15 @@ class StateManager {
     let change = null;
 
     for (let c of state.changes) {
-      if (c['$type'] == type && arrayEquals(path, c.path)) {
+      if (c['$type'] == type && path == c.path) {
         change = c;
         continue;
       }
-      if (c['$type'] == 'blocktype' && arrayStartsWith(path, c.path)) {
+      if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
         change = null;
         continue;
       }
-      if (c['$type'] == 'simple' && arrayStartsWith(c.path, path)) {
+      if (c['$type'] == 'simple' && c.path.indexOf(`${path}.`) == 0) {
         change = null;
         continue;
       }
@@ -252,7 +252,7 @@ class StateManager {
 
   hasChanges(state, path = null) {
     if (path) {
-      return state.changes?.find(c => arrayEquals(c.path, path));
+      return state.changes?.find(c => c.path == path);
     }
 
     return state.changes?.length;
@@ -263,7 +263,7 @@ class StateManager {
 
     for (let change of state.changes) {
       if(change.$type == 'blocktype'){
-        Object.keys(changes).filter(path => arrayStartsWith(path, change.path) && !arrayEquals(path, change.path)).forEach(path => delete changes[path]);
+        Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
       }
 
       changes[change.path] = change;

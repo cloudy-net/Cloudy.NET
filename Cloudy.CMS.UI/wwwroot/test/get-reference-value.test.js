@@ -12,7 +12,7 @@ describe('get-reference-value.js', () => {
         [propertyName]: propertyValue
       }
     };
-    assert.equal(getReferenceValue(state, [propertyName]), propertyValue);
+    assert.equal(getReferenceValue(state, propertyName), propertyValue);
   });
   it('nested property', async () => {
     const blockName = 'dolor';
@@ -33,7 +33,7 @@ describe('get-reference-value.js', () => {
         }
       }
     };
-    assert.equal(getReferenceValue(state, [blockName, nestedBlockName, propertyName]), propertyValue);
+    assert.equal(getReferenceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
   });
   it('nested property in null block', async () => {
     const blockName = 'dolor';
@@ -50,6 +50,6 @@ describe('get-reference-value.js', () => {
         }
       }
     };
-    assert.equal(getReferenceValue(state, [blockName, nestedBlockName, propertyName]), propertyValue);
+    assert.equal(getReferenceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
   });
 });
