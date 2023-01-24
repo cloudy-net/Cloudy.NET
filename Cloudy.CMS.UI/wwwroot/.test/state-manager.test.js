@@ -160,9 +160,80 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, [changes[1]]);
     });
-    // it('should not return changes matching reference value', () => {
-    //   assert.fail('not implemented')
-    // });
+    it('should not return changes matching reference value', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
+      const state = stateManager.createStateForNewContent('page');
+
+      state.referenceValues = {
+        blockName: {
+          Value: {
+            propertyName: 'lorem'
+          }
+        }
+      }
+
+      const changes = [
+        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
+      ]
+
+      state.changes = [...changes];
+
+      const result = stateManager.getMergedChanges(state);
+
+      assert.deepEqual(result, []);
+    });
+  });
+  describe('getReferenceValue', () => {
+    it('simple property', async () => {
+      const propertyName = 'lorem';
+      const propertyValue = 'ipsum';
+  
+      const state = {
+        referenceValues: {
+          [propertyName]: propertyValue
+        }
+      };
+      assert.equal(stateManager.getReferenceValue(state, propertyName), propertyValue);
+    });
+    it('nested property', async () => {
+      const blockName = 'dolor';
+      const nestedBlockName = 'dolor';
+      const propertyName = 'lorem';
+      const propertyValue = 'ipsum';
+  
+      const state = {
+        referenceValues: {
+          [blockName]: {
+            Value: {
+              [nestedBlockName]: {
+                Value: {
+                  [propertyName]: propertyValue
+                }
+              }
+            }
+          }
+        }
+      };
+      assert.equal(stateManager.getReferenceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
+    });
+    it('nested property in null block', async () => {
+      const blockName = 'dolor';
+      const nestedBlockName = 'dolor';
+      const propertyName = 'lorem';
+      const propertyValue = null;
+  
+      const state = {
+        referenceValues: {
+          [blockName]: {
+            Value: {
+              [nestedBlockName]: null
+            }
+          }
+        }
+      };
+      assert.equal(stateManager.getReferenceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
+    });
   });
 });
   

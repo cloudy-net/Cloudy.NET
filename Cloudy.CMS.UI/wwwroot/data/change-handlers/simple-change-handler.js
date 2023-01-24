@@ -1,4 +1,4 @@
-import getReferenceValue from "../../util/get-reference-value.js";
+import stateManager from "../state-manager.js";
 
 const UNCHANGED = {};
 
@@ -27,7 +27,7 @@ class SimpleChangeHandler {
     }
 
     if (value == UNCHANGED) {
-      return getReferenceValue(state, path);
+      return stateManager.getReferenceValue(state, path);
     }
 
     return value;

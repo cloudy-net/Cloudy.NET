@@ -1,4 +1,4 @@
-import getReferenceValue from "../../util/get-reference-value.js";
+import stateManager from "../state-manager.js";
 
 const UNCHANGED = {};
 
@@ -27,7 +27,7 @@ class EmbeddedBlockChangeHandler {
     }
 
     if (type == UNCHANGED) {
-      const referenceValue = getReferenceValue(state, path);
+      const referenceValue = stateManager.getReferenceValue(state, path);
       return referenceValue ? referenceValue.Type : null;
     }
 

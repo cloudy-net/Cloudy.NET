@@ -5,23 +5,23 @@ import notificationManager from "../notification/notification-manager.js";
 const generateRandomString = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 const arrayEquals = (a, b) => {
   if (a == null && b == null) {
-      return true;
+    return true;
   }
 
   if (a == null) {
-      return false;
+    return false;
   }
 
   if (b == null) {
-      return false;
+    return false;
   }
 
-  if(!Array.isArray(a) || !Array.isArray(b)){
-      return false;
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    return false;
   }
 
-  if(a.length != b.length){
-      return false;
+  if (a.length != b.length) {
+    return false;
   }
 
   return a.every((ai, i) => ai === b[i]);
@@ -283,18 +283,43 @@ class StateManager {
     const changes = {};
 
     for (let change of state.changes) {
-      if(change.$type == 'blocktype'){
+      if (change.$type == 'blocktype') {
         Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
       }
 
       changes[change.path] = change;
     }
 
+    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getReferenceValue(state, change.path)).forEach(change => delete changes[change.path])
+
     return Object.values(changes);
   }
 
   getReferenceChanges(state) {
     return [];
+  }
+
+  getReferenceValue(state, path) {
+    let value = state.referenceValues;
+
+
+    let pathSegments = path.split('.');
+
+    while (pathSegments.length) {
+      if (!value) {
+        return null;
+      }
+
+      if (pathSegments.length > 1) {
+        value = value[pathSegments[0]] ? value[pathSegments[0]].Value : null;
+      } else {
+        value = value[pathSegments[0]];
+      }
+
+      pathSegments = pathSegments.splice(1);
+    }
+
+    return value;
   }
 
   updateIndex() {
