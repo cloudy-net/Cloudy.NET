@@ -22,19 +22,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="wwwroot-src\**" />
-	  <Content Remove="wwwroot-src\**" />
-	  <EmbeddedResource Remove="wwwroot-src\**" />
-	  <None Remove="wwwroot-src\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Remove="wwwroot\index.html" />
-	  <Content Remove="wwwroot\package-lock.json" />
-	  <Content Remove="wwwroot\package.json" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="6.2.22" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
@@ -48,6 +35,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\package-lock.json" />
+	  <Content Remove="wwwroot\package.json" />
 	  <None Include="wwwroot\package-lock.json" />
 	  <None Include="wwwroot\package.json" />
 	</ItemGroup>
