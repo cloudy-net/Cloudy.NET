@@ -7,7 +7,7 @@ const ChangedContentWarning = () => {
   const { state } = useContext(EntityContext);
   
   if(!state.newVersion){
-    return;
+    // return;
   }
 
   const [showHistory, setShowHistory] = useState();

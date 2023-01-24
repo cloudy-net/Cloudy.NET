@@ -52,8 +52,8 @@ const ViewChanges = () => {
         html`<li>${showChange(change)}</li>`
       )}
     </ul>
-    <p><button class="btn btn-primary" type="button">Discard incompatible changes</button></p>
-  `
+    `
+    // <p><button class="btn btn-primary" type="button">Discard incompatible changes</button></p>
 };
 
 export default ViewChanges;
