@@ -233,7 +233,7 @@ class StateManager {
   };
 
   getState(contentReference) {
-    if(contentReference.newContentKey && contentReference.keyValues){
+    if (contentReference.newContentKey && contentReference.keyValues) {
       contentReference = {
         ...contentReference,
         keyValues: null,
@@ -259,7 +259,17 @@ class StateManager {
   }
 
   getMergedChanges(state) {
-    return [...state.changes];
+    const changes = {};
+
+    for (let change of state.changes) {
+      if(change.$type == 'blocktype'){
+        Object.keys(changes).filter(path => arrayStartsWith(path, change.path) && !arrayEquals(path, change.path)).forEach(path => delete changes[path]);
+      }
+
+      changes[change.path] = change;
+    }
+
+    return Object.values(changes);
   }
 
   getReferenceChanges(state) {

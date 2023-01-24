@@ -128,7 +128,21 @@ describe('state-manager.js', () => {
       assert.deepEqual(result, changes);
     });
     // it('should not take changes cleared by type change', () => {
-    //   assert.fail('not implemented')
+    //   global.localStorage.clear();
+    //   stateManager.states = stateManager.loadStates();
+    //   const state = stateManager.createStateForNewContent('page');
+
+    //   const changes = [
+    //     { '$type': 'simple', date: Date.now(), path: ['blockName', 'propertyName'], value: 'lorem' },
+    //     { '$type': 'blocktype', date: Date.now(), path: ['blockName'], type: 'ipsum' },
+    //     { '$type': 'simple', date: Date.now(), path: ['blockName', 'propertyName'], value: 'dolor' },
+    //   ]
+
+    //   state.changes = [...changes];
+
+    //   const result = stateManager.getMergedChanges(state);
+
+    //   assert.deepEqual(result, [changes[1], changes[2]]);
     // });
     // it('should merge changes separated by date', () => {
     //   assert.fail('not implemented')
