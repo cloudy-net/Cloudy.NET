@@ -32,8 +32,6 @@ const getChangeBadge = () => {
 const ViewChanges = () => {
   const { state } = useContext(EntityContext);
 
-  const referenceChanges = stateManager.getReferenceChanges(state);
-
   const showChange = change => {
     const initialValue = stateManager.getReferenceValue(state, change.path);
     let result = (typeof initialValue == 'string' || initialValue == null) &&
