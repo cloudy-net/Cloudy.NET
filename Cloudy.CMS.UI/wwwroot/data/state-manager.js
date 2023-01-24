@@ -272,12 +272,20 @@ class StateManager {
   }
 
   hasChanges(state, path = null) {
+    if(state.changes == null){
+      return false;
+    }
+
     const changes = this.getMergedChanges(state, path);
 
     return changes.length;
   }
 
   getMergedChanges(state, path = null) {
+    if(state.changes == null){
+      return [];
+    }
+
     const changes = {};
 
     for (let change of state.changes.filter(change => path == null || change.path == path)) {
