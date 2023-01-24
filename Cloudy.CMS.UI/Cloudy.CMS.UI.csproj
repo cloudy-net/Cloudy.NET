@@ -30,6 +30,8 @@
 
 	<ItemGroup>
 	  <Content Remove="wwwroot\index.html" />
+	  <Content Remove="wwwroot\package-lock.json" />
+	  <Content Remove="wwwroot\package.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -46,7 +48,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\" />
+	  <None Include="wwwroot\package-lock.json" />
+	  <None Include="wwwroot\package.json" />
 	</ItemGroup>
 
 </Project>
