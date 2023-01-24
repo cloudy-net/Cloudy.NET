@@ -1,5 +1,4 @@
 import assert from 'assert';
-import arrayStartsWith from '../util/array-starts-with.js';
 import getReferenceValue from '../util/get-reference-value.js';
 
 describe('get-reference-value.js', () => {

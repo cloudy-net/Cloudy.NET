@@ -1,5 +1,4 @@
 import arrayEquals from "../../util/array-equals.js";
-import arrayStartsWith from "../../util/array-starts-with.js";
 import getReferenceValue from "../../util/get-reference-value.js";
 
 const UNCHANGED = {};
