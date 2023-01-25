@@ -6,7 +6,9 @@ import urlFetcher from '../../../util/url-fetcher.js';
 
 export default ({ name, path, settings }) => {
     const [options, setOptions] = useState([]);
+    const [placeholderItemText, setPlaceholderItemText] = useState(null);
     const [optionGroups, setOptionGroups] = useState({});
+
     const { contentReference, state } = useContext(EntityContext);
     const onChange = event => {
         settings.isMultiSelect
@@ -15,14 +17,20 @@ export default ({ name, path, settings }) => {
     };
 
     useEffect(function () {
+        
+        console.log(simpleChangeHandler.getIntermediateValue(state, path));
+
         (async () => {
-            const options = await urlFetcher.fetch(
-                `/Admin/api/controls/customselect/list/${settings.factoryAssemblyQualifiedName}`,
+            const responseData = await urlFetcher.fetch(
+                `/Admin/api/controls/customselect/list/?entityType=${settings.entityType}&propertyName=${settings.propertyName}`,
                 {
                     credentials: 'include'
                 },
                 'Could not get select options'
             );
+
+            const options = responseData.items;
+            setPlaceholderItemText(responseData.placeholderItemText);
 
             const optionGroups = {};
             options.filter(option => !!option.group).forEach(option => {
@@ -30,7 +38,6 @@ export default ({ name, path, settings }) => {
                 optionGroups[option.group.name].options.push({
                     value: option.value,
                     text: option.text,
-                    selected: option.selected,
                 });
             });
 
@@ -41,7 +48,9 @@ export default ({ name, path, settings }) => {
 
     return html`
         <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${onChange} class="form-select" multiple=${settings.isMultiSelect} size=${settings.isMultiSelect && "10"}>
-            ${!settings.isMultiSelect && html`<option value=""></option>`}
+            ${!settings.isMultiSelect && !!placeholderItemText && html`<option value="">${placeholderItemText}</option>`}
+
+            <!-- Add attributes selected and hidden is not default value is defined -->
             ${options.map((option) => html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
 
             ${Object.keys(optionGroups).map((optionGroup) => html`

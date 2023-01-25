@@ -21,7 +21,7 @@ namespace Cloudy.CMS.UI.FieldSupport
             foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(entityType))
             {
                 var displayAttribute = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
-
+                
                 var autoGenerate = displayAttribute?.GetAutoGenerateField();
                 var group = displayAttribute?.GetGroupName();
 
@@ -39,7 +39,10 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
 
                 var partialName = GetPartialName(propertyDefinition, uiHints);
-                var settings = new Dictionary<string, object>();
+                var settings = new Dictionary<string, object>() 
+                { 
+                    { "isRequired", propertyDefinition.Attributes.OfType<RequiredInputAttribute>().Any() }
+                };
 
                 if (propertyDefinition.Block)
                 {
@@ -50,9 +53,10 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
                 if (customSelectAttribute is not null) 
                 {
-                    var factoryType = customSelectAttribute.GetType().GetGenericArguments().FirstOrDefault();
+                    //var factoryType = customSelectAttribute.GetType().GetGenericArguments().FirstOrDefault();
 
-                    settings["factoryAssemblyQualifiedName"] = factoryType?.AssemblyQualifiedName;
+                    settings["entityType"] = entityType;
+                    settings["propertyName"] = name;
                     settings["isMultiSelect"] = customSelectAttribute.Multi;
                 }
 

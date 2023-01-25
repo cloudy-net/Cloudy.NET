@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.UI.FieldSupport;
 using Cloudy.CMS.UI.FieldSupport.CustomSelect;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
@@ -41,11 +42,28 @@ namespace TestWebsite.Models
 
         [ListColumn]
         [CustomSelect<IColorFactory>]
+        [Display(Prompt = "Pick something!")]
         public string Color { get; set; }
 
         [ListColumn]
+        [CustomSelect<IColorFactory>]
+        [Display(Prompt = "Pick something!")]
+        public string SecondColor { get; set; }
+
+        [ListColumn]
+        [RequiredInput]
+        [CustomSelect<IColorFactory>]
+        [Display(Prompt = "Pick something!")]
+        public string ThirdColor { get; set; }
+
+        [ListColumn]
+        [CustomSelect<IColorFactory>]
+        [Display(Prompt = "Pick something!")]
+        public string FourthColor { get; set; } = "#f56c43";
+
+        [ListColumn]
         [CustomSelect<IColorFactory>(Multi = true)]
-        public IList<string> Colors { get; set; }
+        public IList<string> Colors { get; set; } = new List<string> { "#fff", "#f56c42" };
     }
 
     public interface IFrontpageBlock { }
