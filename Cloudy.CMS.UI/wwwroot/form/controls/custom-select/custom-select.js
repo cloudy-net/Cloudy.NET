@@ -8,6 +8,7 @@ export default ({ name, path, settings }) => {
     const [options, setOptions] = useState([]);
     const [placeholderItemText, setPlaceholderItemText] = useState(null);
     const [optionGroups, setOptionGroups] = useState({});
+    const [hasInitialValue, setHasInitialValue] = useState({});
 
     const { contentReference, state } = useContext(EntityContext);
     const onChange = event => {
@@ -18,7 +19,7 @@ export default ({ name, path, settings }) => {
 
     useEffect(function () {
         
-        console.log(simpleChangeHandler.getIntermediateValue(state, path));
+        setHasInitialValue(!!simpleChangeHandler.getIntermediateValue(state, path));
 
         (async () => {
             const responseData = await urlFetcher.fetch(
@@ -48,9 +49,9 @@ export default ({ name, path, settings }) => {
 
     return html`
         <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${onChange} class="form-select" multiple=${settings.isMultiSelect} size=${settings.isMultiSelect && "10"}>
-            ${!settings.isMultiSelect && !!placeholderItemText && html`<option value="">${placeholderItemText}</option>`}
+        
+            ${!settings.isMultiSelect && !!placeholderItemText && html`<option selected=${!hasInitialValue} hidden=${hasInitialValue} value="">${placeholderItemText}</option>`}
 
-            <!-- Add attributes selected and hidden is not default value is defined -->
             ${options.map((option) => html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
 
             ${Object.keys(optionGroups).map((optionGroup) => html`
