@@ -37,7 +37,7 @@ namespace Cloudy.CMS.UI.FieldSupport.CustomSelect
             var customSelectFactory = serviceProvider.GetService(factoryType) as ICustomSelectFactory;
             var items = (await customSelectFactory.GetItems()).ToList();
 
-            var placeholderItemText = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault()?.Prompt;
+            var placeholderItemText = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault()?.GetPrompt();
 
             return Json(new { items, placeholderItemText }, new JsonSerializerOptions().CloudyDefault());
         }

@@ -47,7 +47,7 @@ namespace TestWebsite.Models
 
         [ListColumn]
         [CustomSelect<IColorFactory>]
-        [Display(Prompt = "Pick something!")]
+        [Display(Name = "This is the 2nd color prop", Description = "Nice colors, right?", Prompt = "Pick something!")]
         public string SecondColor { get; set; }
 
         [ListColumn]

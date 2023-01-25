@@ -34,6 +34,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 }
 
                 var label = displayAttribute?.GetName() ?? humanizedName;
+                var description = displayAttribute?.GetDescription();
 
                 var type = propertyDefinition.Type;
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
@@ -72,7 +73,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                     renderChrome = false;
                 }
 
-                result.Add(new FieldDescriptor(name, type, label, partial, autoGenerate, renderChrome, group, settings));
+                result.Add(new FieldDescriptor(name, type, label, description, partial, autoGenerate, renderChrome, group, settings));
             }
             
             return result;
