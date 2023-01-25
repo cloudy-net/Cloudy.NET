@@ -53,8 +53,6 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
                 if (customSelectAttribute is not null) 
                 {
-                    //var factoryType = customSelectAttribute.GetType().GetGenericArguments().FirstOrDefault();
-
                     settings["entityType"] = entityType;
                     settings["propertyName"] = name;
                     settings["isMultiSelect"] = customSelectAttribute.Multi;
