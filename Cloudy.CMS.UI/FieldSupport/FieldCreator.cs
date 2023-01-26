@@ -14,6 +14,18 @@ namespace Cloudy.CMS.UI.FieldSupport
 {
     public record FieldCreator(IPropertyDefinitionProvider PropertyDefinitionProvider, IHumanizer Humanizer, IEntityTypeProvider EntityTypeProvider) : IFieldCreator
     {
+        private static IEnumerable<KeyValuePair<string, object>> GetValidators(IEnumerable<Attribute> attributes)
+        {
+            var requiredAttribute = attributes.OfType<RequiredAttribute>().FirstOrDefault();
+            if (requiredAttribute is not null)
+            { 
+                yield return new KeyValuePair<string, object>(
+                    "required",
+                    new { message = requiredAttribute.ErrorMessage }
+                );
+            }
+        }
+
         public IEnumerable<FieldDescriptor> Create(string entityType)
         {
             var result = new List<FieldDescriptor>();
@@ -40,9 +52,10 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
 
                 var partialName = GetPartialName(propertyDefinition, uiHints);
+                var validators = GetValidators(propertyDefinition.Attributes).ToDictionary(x => x.Key, x => x.Value);
                 var settings = new Dictionary<string, object>()
                 {
-                    { "isRequired", propertyDefinition.Attributes.OfType<RequiredInputAttribute>().Any() }
+                    { "isRequired", propertyDefinition.Attributes.OfType<RequiredAttribute>().Any() }
                 };
 
                 if (propertyDefinition.Block)
@@ -72,7 +85,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                     renderChrome = false;
                 }
 
-                result.Add(new FieldDescriptor(name, type, label, description, partial, autoGenerate, renderChrome, group, settings));
+                result.Add(new FieldDescriptor(name, type, label, description, partial, autoGenerate, renderChrome, group, settings, validators));
             }
 
             return result;

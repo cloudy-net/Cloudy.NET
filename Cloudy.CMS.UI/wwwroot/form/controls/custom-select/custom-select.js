@@ -42,9 +42,9 @@ export default ({ name, path, settings }) => {
     }, []);
 
     return html`
-        <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(entityReference, path, e.target.value)} class="form-select">
+        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(entityReference, path, e.target.value)} class="form-select">
         
-            ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} hidden=${hasInitialValue} value="">${placeholderItemText}</option>` : null}
+            ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 
             ${options.map((option) => html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
 

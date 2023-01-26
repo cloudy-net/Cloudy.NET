@@ -19,6 +19,7 @@ namespace TestWebsite.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
         [ListColumn(Order = 0, Sortable = true, Width = ListingColumnWidth.Fill)]
+
         public string Name { get; set; }
 
         [Select<Page>]
@@ -42,13 +43,14 @@ namespace TestWebsite.Models
 
         [ListColumn]
         [CustomSelect<IColorFactory>]
-        [Display(Name = "This is the 2nd color prop", Prompt = "Pick something!")]
+        [Display(Name = "VALIDATION!", Prompt = "Pick something!")]
+        [Required(ErrorMessage = "This needs to have a value")]
         public string Color { get; set; }
 
         [ListColumn]
-        [RequiredInput]
         [CustomSelect<IColorFactory>]
         [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
+        [Required(ErrorMessage = "This ALSO needs to have a value")]
         public string SecondColor { get; set; }
 
         [ListColumn]
