@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Cloudy.CMS.PropertyDefinitionSupport;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
@@ -21,13 +22,15 @@ namespace Cloudy.CMS.UI.FormSupport
         IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         IEmbeddedBlockJsonConverterProvider ContentJsonConverterProvider { get; }
+        IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
 
-        public EntityGetterController(IPrimaryKeyConverter primaryKeyConverter, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider)
+        public EntityGetterController(IPrimaryKeyConverter primaryKeyConverter, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider, IPropertyDefinitionProvider propertyDefinitionProvider)
         {
             PrimaryKeyConverter = primaryKeyConverter;
             EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             ContentJsonConverterProvider = contentJsonConverterProvider;
+            PropertyDefinitionProvider = propertyDefinitionProvider;
         }
 
         [HttpPost]
@@ -54,7 +57,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
             var value = JsonSerializer.SerializeToDocument(entity, options);
 
-            return Json(new ResponseBody(value, new GetContentEntityType(new Dictionary<string, GetContentPropertyDefinition>()), new Dictionary<string, GetContentEntityType>()));
+            return Json(new ResponseBody(value, new GetContentEntityType(PropertyDefinitionProvider.GetFor(entityType.Name).ToDictionary(p => p.Name, p => new GetContentPropertyDefinition(p.Block))), new Dictionary<string, GetContentEntityType>()));
         }
 
         public class RequestBody
@@ -69,6 +72,6 @@ namespace Cloudy.CMS.UI.FormSupport
 
         public record GetContentEntityType(IDictionary<string, GetContentPropertyDefinition> Properties);
 
-        public record GetContentPropertyDefinition(bool Simple, string Type);
+        public record GetContentPropertyDefinition(bool Block);
     }
 }
