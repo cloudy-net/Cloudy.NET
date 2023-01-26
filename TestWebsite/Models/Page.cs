@@ -42,28 +42,18 @@ namespace TestWebsite.Models
 
         [ListColumn]
         [CustomSelect<IColorFactory>]
-        [Display(Prompt = "Pick something!")]
+        [Display(Name = "This is the 2nd color prop", Prompt = "Pick something!")]
         public string Color { get; set; }
-
-        [ListColumn]
-        [CustomSelect<IColorFactory>]
-        [Display(Name = "This is the 2nd color prop", Description = "Nice colors, right?", Prompt = "Pick something!")]
-        public string SecondColor { get; set; }
 
         [ListColumn]
         [RequiredInput]
         [CustomSelect<IColorFactory>]
-        [Display(Prompt = "Pick something!")]
-        public string ThirdColor { get; set; }
-
-        [ListColumn]
-        [CustomSelect<IColorFactory>]
-        [Display(Prompt = "Pick something!")]
-        public string FourthColor { get; set; } = "#f56c43";
+        [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
+        public string SecondColor { get; set; }
 
         [ListColumn]
         [CustomSelect<IColorFactory>(Multi = true)]
-        public IList<string> Colors { get; set; } = new List<string> { "#fff", "#f56c42" };
+        public IList<string> Colors { get; set; }
     }
 
     public interface IFrontpageBlock { }

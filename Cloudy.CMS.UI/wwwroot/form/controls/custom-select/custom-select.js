@@ -1,5 +1,4 @@
 import { html, useContext, useEffect, useState } from '../../../preact-htm/standalone.module.js';
-import stateManager from '../../../data/state-manager.js';
 import EntityContext from '../../entity-context.js';
 import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
 import urlFetcher from '../../../util/url-fetcher.js';
@@ -11,11 +10,6 @@ export default ({ name, path, settings }) => {
     const [hasInitialValue, setHasInitialValue] = useState({});
 
     const { contentReference, state } = useContext(EntityContext);
-    const onChange = event => {
-        settings.isMultiSelect
-            ? simpleChangeHandler.setValue(contentReference, path, [...event.target.options].filter(o => o.selected).map(o => o.value))
-            : simpleChangeHandler.setValue(contentReference, path, event.target.value);
-    };
 
     useEffect(function () {
         
@@ -48,9 +42,9 @@ export default ({ name, path, settings }) => {
     }, []);
 
     return html`
-        <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${onChange} class="form-select" multiple=${settings.isMultiSelect} size=${settings.isMultiSelect && "10"}>
+        <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(contentReference, path, e.target.value)} class="form-select">
         
-            ${!settings.isMultiSelect && !!placeholderItemText && html`<option selected=${!hasInitialValue} hidden=${hasInitialValue} value="">${placeholderItemText}</option>`}
+            ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} hidden=${hasInitialValue} value="">${placeholderItemText}</option>` : null}
 
             ${options.map((option) => html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
 

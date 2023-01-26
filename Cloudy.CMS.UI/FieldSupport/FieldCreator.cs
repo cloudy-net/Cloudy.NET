@@ -21,14 +21,14 @@ namespace Cloudy.CMS.UI.FieldSupport
             foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(entityType))
             {
                 var displayAttribute = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
-                
+
                 var autoGenerate = displayAttribute?.GetAutoGenerateField();
                 var group = displayAttribute?.GetGroupName();
 
                 var name = propertyDefinition.Name;
                 var humanizedName = Humanizer.Humanize(name);
 
-                if(propertyDefinition.Attributes.OfType<ISelectAttribute>().Any() && humanizedName.EndsWith(" id"))
+                if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any() && humanizedName.EndsWith(" id"))
                 {
                     humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                 }
@@ -40,8 +40,8 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
 
                 var partialName = GetPartialName(propertyDefinition, uiHints);
-                var settings = new Dictionary<string, object>() 
-                { 
+                var settings = new Dictionary<string, object>()
+                {
                     { "isRequired", propertyDefinition.Attributes.OfType<RequiredInputAttribute>().Any() }
                 };
 
@@ -52,11 +52,10 @@ namespace Cloudy.CMS.UI.FieldSupport
                 }
 
                 var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
-                if (customSelectAttribute is not null) 
+                if (customSelectAttribute is not null)
                 {
                     settings["entityType"] = entityType;
                     settings["propertyName"] = name;
-                    settings["isMultiSelect"] = customSelectAttribute.Multi;
                 }
 
                 if (partialName == null)
@@ -75,17 +74,19 @@ namespace Cloudy.CMS.UI.FieldSupport
 
                 result.Add(new FieldDescriptor(name, type, label, description, partial, autoGenerate, renderChrome, group, settings));
             }
-            
+
             return result;
         }
 
         private static string GetPartialName(PropertyDefinitionDescriptor propertyDefinition, ReadOnlyCollection<string> uiHints)
         {
             var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
-            if (customSelectAttribute is not null) return "custom-select/custom-select";
+            if (customSelectAttribute is not null) return customSelectAttribute.Multi
+                ? "custom-select/custom-select-list"
+                : "custom-select/custom-select";
 
             if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any()) return "selectone";
-            
+
             if (propertyDefinition.Type == typeof(string)) return "text";
             if (propertyDefinition.Type == typeof(bool)) return "checkbox";
             if (propertyDefinition.Type == typeof(int)) return "number";
