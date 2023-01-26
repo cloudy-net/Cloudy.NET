@@ -8,7 +8,7 @@ export default ({ name, path, settings }) => {
     const [optionGroups, setOptionGroups] = useState({});
     const [currentValues, setCurrentValues] = useState([]);
 
-    const { contentReference, state } = useContext(EntityContext);
+    const { entityReference, state } = useContext(EntityContext);
 
     useEffect(function () {
         setCurrentValues(simpleChangeHandler.getIntermediateValue(state, path) || []);
@@ -45,7 +45,7 @@ export default ({ name, path, settings }) => {
             : currentValues.filter(x => x !== e.target.value);
             
         setCurrentValues(newValues);
-        simpleChangeHandler.setValue(contentReference, path, newValues)
+        simpleChangeHandler.setValue(entityReference, path, newValues)
     };
 
     return html`
