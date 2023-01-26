@@ -22,9 +22,6 @@ const ValidationManager = {
   isInvalidForPath: (validationResults, path) => {
     return validationResults.some(vr => !vr.isValid && vr.path == path);
   },
-  hasValidatedForPath: (validationResults, path) => {
-    return validationResults.some(vr => vr.path == path);
-  },
   isInvalidForPathAndValidator: (validationResults, path, validatorName) => {
     return validationResults.some(vr => !vr.isValid && vr.path == path && vr.validatorName == validatorName);
   },

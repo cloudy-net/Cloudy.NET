@@ -21,7 +21,7 @@ namespace TestWebsite.Models
         [ListColumn(Order = 0, Sortable = true, Width = ListingColumnWidth.Fill)]
 
         [Required(ErrorMessage = "Enter a name, please")]
-        [MaxLength(4, ErrorMessage = "Too long!")]
+        [MaxLength(6, ErrorMessage = "Too long!")]
         public string Name { get; set; }
 
         [Select<Page>]
