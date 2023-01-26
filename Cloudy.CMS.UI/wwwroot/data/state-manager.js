@@ -66,7 +66,7 @@ class StateManager {
 
     const state = {
       new: true,
-      invalidFields: [],
+      validationResults: [],
       entityReference,
       source: {
         value: {},
@@ -89,7 +89,7 @@ class StateManager {
 
     const state = {
       new: false,
-      invalidFields: [],
+      validationResults: [],
       entityReference,
       loading: true,
       nameHint,

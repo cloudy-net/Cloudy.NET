@@ -1,27 +1,27 @@
-import stateManager from "./state-manager.js";
-import simpleChangeHandler from "./change-handlers/simple-change-handler.js";
 
 const ValidationManager = {
-  isValid: (validatorName, path, entityReference) => {
+  getValidationResults: (validators, path, currValidationResults, value) => {
 
-    let inValid = false;
+    let validationResults = currValidationResults.slice();
 
-    const state = stateManager.getState(entityReference);
-    const value = simpleChangeHandler.getIntermediateValue(state, path);
+    validators && Object.keys(validators).map(validatorName => {
 
-    if (validatorName == 'required' && !value) inValid = true;
-    // do other validation
+      let inValid = false;
+      if (validatorName == 'required' && !value) inValid = true;
 
-    if (inValid && !state.invalidFields.includes(path)) {
-      state.invalidFields.push(path);
-      stateManager.persist(state)
-    } else if (!inValid && state.invalidFields.includes(path)) {
-      state.invalidFields = state.invalidFields.filter(i => i !== path);
-      stateManager.persist(state)
-    }
+      //remove any existing VR for this path and validator
+      validationResults = validationResults.filter(vr => vr.path != path || vr.validatorName != validatorName);
 
-    return !inValid;
+      //add a new VR
+      validationResults.push({ path, validatorName, isValid: !inValid });
+    });
+
+    return validationResults;
   },
+  isInvalidForPathAndValidator: (validationResults, path, validatorName) => {
+    return validationResults.some(vr => !vr.isValid && vr.path == path && vr.validatorName == validatorName);
+  },
+  anyIsInvalid: (validationResults) => validationResults.some(vr => !vr.isValid),
 }
 
 export default ValidationManager;

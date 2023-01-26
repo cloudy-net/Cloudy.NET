@@ -1,6 +1,7 @@
 import { html, useContext, useState } from '../preact-htm/standalone.module.js';
 import EntityContext from './entity-context.js';
 import stateManager from '../data/state-manager.js';
+import ValidationManager from '../data/validation-manager.js';
 
 const FormFooter = ({ entityType }) => {
   const [saving, setSaving] = useState();
@@ -23,9 +24,10 @@ const FormFooter = ({ entityType }) => {
 
   return html`
   <div class="d-flex">
-    <button class="btn btn-primary" type="button" disabled=${state.invalidFields.length || !stateManager.hasChanges(state) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
+    <button class="btn btn-primary" type="button" disabled=${ValidationManager.anyIsInvalid(state.validationResults) || !stateManager.hasChanges(state) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
     <button class="btn btn-beta ms-auto" type="button" disabled=${!stateManager.hasChanges(state) || saving} onClick=${discard}>Discard changes</button>
   </div>
+  ${ValidationManager.anyIsInvalid(state.validationResults) ? html`<p style="color:red">Fix errors</p>` : null }
   `
 };
 

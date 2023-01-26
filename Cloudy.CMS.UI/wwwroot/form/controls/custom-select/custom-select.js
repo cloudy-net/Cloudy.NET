@@ -3,12 +3,12 @@ import EntityContext from '../../entity-context.js';
 import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
 import urlFetcher from '../../../util/url-fetcher.js';
 
-export default ({ name, path, settings }) => {
+export default ({ name, path, settings, validators }) => {
     const [options, setOptions] = useState([]);
     const [placeholderItemText, setPlaceholderItemText] = useState(null);
     const [optionGroups, setOptionGroups] = useState({});
     const [hasInitialValue, setHasInitialValue] = useState({});
-
+    
     const { entityReference, state } = useContext(EntityContext);
 
     useEffect(function () {
@@ -42,7 +42,7 @@ export default ({ name, path, settings }) => {
     }, []);
 
     return html`
-        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(entityReference, path, e.target.value)} class="form-select">
+        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValueAndValidate(entityReference, path, e.target.value, validators)} class="form-select">
         
             ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 
