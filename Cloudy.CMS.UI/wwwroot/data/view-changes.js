@@ -33,7 +33,7 @@ const ViewChanges = () => {
   const { state } = useContext(EntityContext);
 
   const showChange = change => {
-    const initialValue = stateManager.getReferenceValue(state, change.path);
+    const initialValue = stateManager.getSourceValue(state, change.path);
     let result = (typeof initialValue == 'string' || initialValue == null) &&
       (typeof change.value == 'string' || change.value == null) ?
       diff(initialValue || '', change.value || '', 0).map(buildDiff) :

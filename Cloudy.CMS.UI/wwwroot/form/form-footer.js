@@ -9,15 +9,15 @@ const FormFooter = ({ entityType }) => {
   const save = async () => {
     setSaving(true);
 
-    await stateManager.save([state.contentReference]);
+    await stateManager.save([state.entityReference]);
 
     setSaving(false);
   };
 
   const discard = async () => {
     stateManager.replace({ ...state, changes: [] });
-    if (state.contentReference.keyValues) {
-      stateManager.reloadContentForState(state.contentReference);
+    if (state.entityReference.keyValues) {
+      stateManager.reloadContentForState(state.entityReference);
     }
   };
 

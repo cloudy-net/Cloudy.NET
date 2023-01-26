@@ -9,7 +9,7 @@ export default ({ name, path, settings }) => {
     const [optionGroups, setOptionGroups] = useState({});
     const [hasInitialValue, setHasInitialValue] = useState({});
 
-    const { contentReference, state } = useContext(EntityContext);
+    const { entityReference, state } = useContext(EntityContext);
 
     useEffect(function () {
         
@@ -42,7 +42,7 @@ export default ({ name, path, settings }) => {
     }, []);
 
     return html`
-        <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(contentReference, path, e.target.value)} class="form-select">
+        <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(entityReference, path, e.target.value)} class="form-select">
         
             ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} hidden=${hasInitialValue} value="">${placeholderItemText}</option>` : null}
 

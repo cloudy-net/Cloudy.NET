@@ -3,30 +3,30 @@ import EntityContext from "./entity-context.js";
 import stateManager from '../data/state-manager.js';
 
 export default ({ entityType, keyValues, children }) => {
-  const [contentReference, setContentReference] = useState();
+  const [entityReference, setEntityReference] = useState();
   const [state, setState] = useState();
 
   useEffect(() => {
-    let contentReference;
+    let entityReference;
 
     if (keyValues) {
-      contentReference = { entityType, keyValues };
-      setContentReference(contentReference);
-      const state = stateManager.createOrUpdateStateForExistingContent(contentReference);
+      entityReference = { entityType, keyValues };
+      setEntityReference(entityReference);
+      const state = stateManager.createOrUpdateStateForExistingContent(entityReference);
       setState(state);
     } else {
       const state = stateManager.createStateForNewContent(entityType);
-      contentReference = state.contentReference
-      setContentReference(contentReference);
+      entityReference = state.entityReference
+      setEntityReference(entityReference);
       setState(state);
     }
 
-    const callback = () => setState({...stateManager.getState(contentReference)});
-    stateManager.onStateChange(contentReference, callback);
-    return () => stateManager.offStateChange(contentReference, callback);
+    const callback = () => setState({...stateManager.getState(entityReference)});
+    stateManager.onStateChange(entityReference, callback);
+    return () => stateManager.offStateChange(entityReference, callback);
   }, [keyValues]);
 
-  return html`<${EntityContext.Provider} value=${{ contentReference, state }}>
-    ${contentReference && state && !state.loading && children || 'Loading ...'}
+  return html`<${EntityContext.Provider} value=${{ entityReference, state }}>
+    ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

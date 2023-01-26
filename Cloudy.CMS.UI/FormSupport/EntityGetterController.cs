@@ -8,30 +8,34 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Cloudy.CMS.PropertyDefinitionSupport;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
     [Authorize("adminarea")]
     [Area("Admin")]
     [ResponseCache(NoStore = true)]
-    public class ContentGetterController : Controller
+    public class EntityGetterController : Controller
     {
         IPrimaryKeyConverter PrimaryKeyConverter { get; }
         IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         IEmbeddedBlockJsonConverterProvider ContentJsonConverterProvider { get; }
+        IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
 
-        public ContentGetterController(IPrimaryKeyConverter primaryKeyConverter, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider)
+        public EntityGetterController(IPrimaryKeyConverter primaryKeyConverter, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, IEmbeddedBlockJsonConverterProvider contentJsonConverterProvider, IPropertyDefinitionProvider propertyDefinitionProvider)
         {
             PrimaryKeyConverter = primaryKeyConverter;
             EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             ContentJsonConverterProvider = contentJsonConverterProvider;
+            PropertyDefinitionProvider = propertyDefinitionProvider;
         }
 
         [HttpPost]
-        [Route("/{area}/api/form/content/get")]
-        public async Task<ActionResult> Get([FromBody] GetContentRequestBody payload)
+        [Route("/{area}/api/form/entity/get")]
+        public async Task<ActionResult> Get([FromBody] RequestBody payload)
         {
             if (!ModelState.IsValid)
             {
@@ -41,24 +45,33 @@ namespace Cloudy.CMS.UI.FormSupport
             var entityType = EntityTypeProvider.Get(payload.EntityType);
             var keys = PrimaryKeyConverter.Convert(payload.KeyValues, entityType.Type);
             var context = ContextCreator.CreateFor(entityType.Type);
-            var content = await context.Context.FindAsync(entityType.Type, keys).ConfigureAwait(false);
+            var entity = await context.Context.FindAsync(entityType.Type, keys).ConfigureAwait(false);
 
-            if(content == null)
+            if(entity == null)
             {
                 return Json(new { NotFound = true });
             }
 
             var options = new JsonSerializerOptions();
             ContentJsonConverterProvider.GetAll().ToList().ForEach(options.Converters.Add);
-            return Json(content, options);
+
+            var value = JsonSerializer.SerializeToDocument(entity, options);
+
+            return Json(new ResponseBody(value, new GetContentEntityType(PropertyDefinitionProvider.GetFor(entityType.Name).ToDictionary(p => p.Name, p => new GetContentPropertyDefinition(p.Block))), new Dictionary<string, GetContentEntityType>()));
         }
 
-        public class GetContentRequestBody
+        public class RequestBody
         {
             [Required]
             public string[] KeyValues { get; set; }
             [Required]
             public string EntityType { get; set; }
         }
+
+        public record ResponseBody(JsonDocument Entity, GetContentEntityType Type, IDictionary<string, GetContentEntityType> SupportingTypes);
+
+        public record GetContentEntityType(IDictionary<string, GetContentPropertyDefinition> Properties);
+
+        public record GetContentPropertyDefinition(bool Block);
     }
 }

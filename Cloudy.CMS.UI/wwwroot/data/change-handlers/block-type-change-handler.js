@@ -3,8 +3,8 @@ import stateManager from "../state-manager.js";
 const UNCHANGED = {};
 
 class EmbeddedBlockChangeHandler {
-  setType(contentReference, path, type) {
-    const state = stateManager.getState(contentReference);
+  setType(entityReference, path, type) {
+    const state = stateManager.getState(entityReference);
     const change = stateManager.getOrCreateLatestChange(state, 'blocktype', path);
 
     change.date = Date.now();
@@ -27,8 +27,8 @@ class EmbeddedBlockChangeHandler {
     }
 
     if (type == UNCHANGED) {
-      const referenceValue = stateManager.getReferenceValue(state, path);
-      return referenceValue ? referenceValue.Type : null;
+      const sourceValue = stateManager.getSourceValue(state, path);
+      return sourceValue ? sourceValue.Type : null;
     }
 
     return type;

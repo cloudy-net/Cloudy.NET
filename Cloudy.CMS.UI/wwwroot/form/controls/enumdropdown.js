@@ -4,10 +4,10 @@ import EntityContext from '../entity-context.js';
 import simpleChangeHandler from '../../data/change-handlers/simple-change-handler.js';
 
 const Control = ({ name, path }) => {
-  const { contentReference, state } = useContext(EntityContext);
+  const { entityReference, state } = useContext(EntityContext);
 
   const onchange = event => {
-    simpleChangeHandler.setValue(contentReference, path, event.target.value)
+    simpleChangeHandler.setValue(entityReference, path, event.target.value)
   };
   return html`<div>
       <select
