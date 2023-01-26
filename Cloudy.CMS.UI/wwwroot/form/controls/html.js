@@ -14,7 +14,7 @@ document.addEventListener('click', function ({ target }) {
 });
 
 const Control = function ({ name, path }) {
-  const { contentReference, state } = useContext(EntityContext);
+  const { entityReference, state } = useContext(EntityContext);
 
   const ref = useRef(null);
 
@@ -40,7 +40,7 @@ const Control = function ({ name, path }) {
     const callback = () => {
       const value = this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, '');
       this.quill.root.innerHTMLValue = value;
-      simpleChangeHandler.setValue(contentReference, path, value);
+      simpleChangeHandler.setValue(entityReference, path, value);
     };
 
     this.quill.on('text-change', callback);
@@ -48,7 +48,7 @@ const Control = function ({ name, path }) {
     return () => {
       this.quill.off('text-change', callback);
     }
-  }, [contentReference]);
+  }, [entityReference]);
 
   useEffect(() => {
     const value = simpleChangeHandler.getIntermediateValue(state, path) || null;

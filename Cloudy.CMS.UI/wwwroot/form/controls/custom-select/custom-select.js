@@ -7,11 +7,11 @@ import urlFetcher from '../../../util/url-fetcher.js';
 export default ({ name, path, settings }) => {
     const [options, setOptions] = useState([]);
     const [optionGroups, setOptionGroups] = useState({});
-    const { contentReference, state } = useContext(EntityContext);
+    const { entityReference, state } = useContext(EntityContext);
     const onChange = event => {
         settings.isMultiSelect
-            ? simpleChangeHandler.setValue(contentReference, path, [...event.target.options].filter(o => o.selected).map(o => o.value))
-            : simpleChangeHandler.setValue(contentReference, path, event.target.value);
+            ? simpleChangeHandler.setValue(entityReference, path, [...event.target.options].filter(o => o.selected).map(o => o.value))
+            : simpleChangeHandler.setValue(entityReference, path, event.target.value);
     };
 
     useEffect(function () {

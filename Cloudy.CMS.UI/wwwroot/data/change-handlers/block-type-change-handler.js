@@ -3,8 +3,8 @@ import stateManager from "../state-manager.js";
 const UNCHANGED = {};
 
 class EmbeddedBlockChangeHandler {
-  setType(contentReference, path, type) {
-    const state = stateManager.getState(contentReference);
+  setType(entityReference, path, type) {
+    const state = stateManager.getState(entityReference);
     const change = stateManager.getOrCreateLatestChange(state, 'blocktype', path);
 
     change.date = Date.now();

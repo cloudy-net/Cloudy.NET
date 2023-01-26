@@ -9,13 +9,13 @@ describe('simple-change-handler.js', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
-      const { contentReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(contentReference),
+        ...stateManager.getState(entityReference),
         source: {
           value: {
             [propertyName]: initialValue
@@ -23,14 +23,14 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), propertyName), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
-      simpleChangeHandler.setValue(contentReference, propertyName, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), propertyName), newValue, 'New value should be returned as an intermediate change has been registered');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
+      simpleChangeHandler.setValue(entityReference, propertyName, newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), newValue, 'New value should be returned as an intermediate change has been registered');
     });
     it('intermediate value, deep path', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
-      const { contentReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewContent('page');
       const blockName = 'Block1';
       const block2Name = 'Block2';
       const propertyName = 'TestProperty';
@@ -38,7 +38,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(contentReference),
+        ...stateManager.getState(entityReference),
         source: {
           value: {
             [blockName]: {
@@ -54,16 +54,16 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${block2Name}.${propertyName}`), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
-      simpleChangeHandler.setValue(contentReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${block2Name}.${propertyName}`), newValue, 'New value should be returned as an intermediate change has been registered');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
+      simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue, 'New value should be returned as an intermediate change has been registered');
     });
   });
   describe('complex scenario', () => {
     it('simple change after changing block type', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
-      const { contentReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block';
       const propertyName = 'TestProperty';
@@ -71,7 +71,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(contentReference),
+        ...stateManager.getState(entityReference),
         source: {
           value: {
             [blockName]: {
@@ -83,14 +83,14 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      blockTypeChangeHandler.setType(contentReference, blockName, newType);
-      simpleChangeHandler.setValue(contentReference, `${blockName}.${propertyName}`, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${propertyName}`), newValue);
+      blockTypeChangeHandler.setType(entityReference, blockName, newType);
+      simpleChangeHandler.setValue(entityReference, `${blockName}.${propertyName}`, newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${propertyName}`), newValue);
     });
     it('changing block type after simple change', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
-      const { contentReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block1';
       const block2Name = 'Block2';
@@ -99,7 +99,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(contentReference),
+        ...stateManager.getState(entityReference),
         source: {
           value: {
             [blockName]: {
@@ -115,20 +115,20 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      simpleChangeHandler.setValue(contentReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
-      blockTypeChangeHandler.setType(contentReference, `${blockName}.${block2Name}`, newType);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${block2Name}.${propertyName}`), null);
-      simpleChangeHandler.setValue(contentReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(stateManager.getState(contentReference).changes.length, 3);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
-      blockTypeChangeHandler.setType(contentReference, blockName, newType);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${block2Name}.${propertyName}`), null);
+      simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
+      blockTypeChangeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
+      simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
+      assert.equal(stateManager.getState(entityReference).changes.length, 3);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
+      blockTypeChangeHandler.setType(entityReference, blockName, newType);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
     });
     it('intermediate value should be cleared when changing parents parents block type', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
-      const { contentReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block1';
       const block2Name = 'Block2';
@@ -137,7 +137,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(contentReference),
+        ...stateManager.getState(entityReference),
         source: {
           value: {
             [blockName]: {
@@ -153,9 +153,9 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      simpleChangeHandler.setValue(contentReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      blockTypeChangeHandler.setType(contentReference, `${blockName}.${block2Name}`, newType);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(contentReference), `${blockName}.${block2Name}.${propertyName}`), null);
+      simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
+      blockTypeChangeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
     });
   });
 });

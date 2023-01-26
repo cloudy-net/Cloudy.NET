@@ -3,8 +3,8 @@ import stateManager from "../state-manager.js";
 const UNCHANGED = {};
 
 class SimpleChangeHandler {
-  setValue(contentReference, path, value) {
-    const state = stateManager.getState(contentReference);
+  setValue(entityReference, path, value) {
+    const state = stateManager.getState(entityReference);
     const change = stateManager.getOrCreateLatestChange(state, 'simple', path);
 
     change.date = Date.now();

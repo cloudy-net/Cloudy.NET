@@ -26,13 +26,13 @@ const arrayEquals = (a, b) => {
 
   return a.every((ai, i) => ai === b[i]);
 };
-const contentReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
+const entityReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.9";
+  schema = "1.10";
   states = this.loadStates();
 
   loadStates() {
@@ -50,8 +50,8 @@ class StateManager {
 
     const result = [];
 
-    for (let contentReference of index.elements) {
-      result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(contentReference)}`), (key, value) => key == 'referenceDate' && value ? new Date(value) : value));
+    for (let entityReference of index.elements) {
+      result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(entityReference)}`), (key, value) => key == 'referenceDate' && value ? new Date(value) : value));
     }
 
     return result;
@@ -62,11 +62,11 @@ class StateManager {
   }
 
   createStateForNewContent(entityType) {
-    const contentReference = { newContentKey: generateRandomString(), keyValues: null, entityType };
+    const entityReference = { newContentKey: generateRandomString(), keyValues: null, entityType };
 
     const state = {
       new: true,
-      contentReference,
+      entityReference,
       source: {
         value: {},
         date:  new Date(),
@@ -79,15 +79,15 @@ class StateManager {
     return state;
   };
 
-  createOrUpdateStateForExistingContent(contentReference, nameHint) {
-    const existingState = this.getState(contentReference);
+  createOrUpdateStateForExistingContent(entityReference, nameHint) {
+    const existingState = this.getState(entityReference);
     if (existingState) {
-      this.reloadContentForState(contentReference);
+      this.reloadContentForState(entityReference);
       return existingState;
     }
 
     const state = {
-      contentReference,
+      entityReference,
       loading: true,
       nameHint,
       source: null,
@@ -96,13 +96,13 @@ class StateManager {
     this.states.push(state);
     this.persist(state);
 
-    this.loadContentForState(contentReference);
+    this.loadContentForState(entityReference);
 
     return state;
   };
 
-  reloadContentForState(contentReference) {
-    let state = this.getState(contentReference);
+  reloadContentForState(entityReference) {
+    let state = this.getState(entityReference);
 
     state = {
       ...state,
@@ -111,8 +111,8 @@ class StateManager {
     };
     this.replace(state);
 
-    contentGetter.get(contentReference).then(content => {
-      state = this.getState(contentReference);
+    contentGetter.get(entityReference).then(content => {
+      state = this.getState(entityReference);
 
       if (JSON.stringify(state.source.value) == JSON.stringify(content)) {
         state = {
@@ -145,8 +145,8 @@ class StateManager {
     });
   }
 
-  discardnewSource(contentReference) {
-    let state = this.getState(contentReference);
+  discardnewSource(entityReference) {
+    let state = this.getState(entityReference);
 
     state = {
       ...state,
@@ -156,10 +156,10 @@ class StateManager {
     this.replace(state);
   }
 
-  async loadContentForState(contentReference) {
-    const content = await contentGetter.get(contentReference);
+  async loadContentForState(entityReference) {
+    const content = await contentGetter.get(entityReference);
 
-    let state = this.getState(contentReference);
+    let state = this.getState(entityReference);
 
     state = {
       ...state,
@@ -201,15 +201,15 @@ class StateManager {
     return change;
   }
 
-  async save(contentReferences) {
-    const states = contentReferences.map(c => this.getState(c));
+  async save(entityReferences) {
+    const states = entityReferences.map(c => this.getState(c));
     const response = await urlFetcher.fetch("/Admin/api/form/entity/save", {
       credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         entities: states.map(state => ({
-          reference: state.contentReference,
+          reference: state.entityReference,
           changes: state.changes.map(change => {
             change = {
               ...change,
@@ -249,29 +249,29 @@ class StateManager {
   }
 
   replace(state) {
-    this.states[this.states.findIndex(s => contentReferenceEquals(s.contentReference, state.contentReference))] = state;
+    this.states[this.states.findIndex(s => entityReferenceEquals(s.entityReference, state.entityReference))] = state;
     this.persist(state);
   }
 
-  remove(contentReference) {
-    this.states.splice(this.states.findIndex(s => contentReferenceEquals(s.contentReference, contentReference)), 1);
-    this.unpersist(contentReference);
+  remove(entityReference) {
+    this.states.splice(this.states.findIndex(s => entityReferenceEquals(s.entityReference, entityReference)), 1);
+    this.unpersist(entityReference);
 
-    return contentReference;
+    return entityReference;
   };
 
-  getState(contentReference) {
-    if (contentReference.newContentKey && contentReference.keyValues) {
-      contentReference = {
-        ...contentReference,
+  getState(entityReference) {
+    if (entityReference.newContentKey && entityReference.keyValues) {
+      entityReference = {
+        ...entityReference,
         keyValues: null,
       };
     }
-    return this.states.find(s => contentReferenceEquals(s.contentReference, contentReference));
+    return this.states.find(s => entityReferenceEquals(s.entityReference, entityReference));
   }
 
-  discardChanges(contentReference, change) {
-    const state = this.getState(contentReference);
+  discardChanges(entityReference, change) {
+    const state = this.getState(entityReference);
 
     state.changes.splice(0, state.changes.length);
 
@@ -334,27 +334,27 @@ class StateManager {
   }
 
   updateIndex() {
-    localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => this.hasChanges(state)).map(state => state.contentReference) }));
+    localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => this.hasChanges(state)).map(state => state.entityReference) }));
   }
 
   persist(state) {
     if (this.hasChanges(state)) {
-      localStorage.setItem(`cloudy:${JSON.stringify(state.contentReference)}`, JSON.stringify(state));
+      localStorage.setItem(`cloudy:${JSON.stringify(state.entityReference)}`, JSON.stringify(state));
     } else {
-      localStorage.removeItem(`cloudy:${JSON.stringify(state.contentReference)}`);
+      localStorage.removeItem(`cloudy:${JSON.stringify(state.entityReference)}`);
     }
     this.updateIndex();
 
     this.triggerAnyStateChange();
-    this.triggerStateChange(state.contentReference);
+    this.triggerStateChange(state.entityReference);
   }
 
-  unpersist(contentReference) {
-    localStorage.removeItem(`cloudy:${JSON.stringify(contentReference)}`);
+  unpersist(entityReference) {
+    localStorage.removeItem(`cloudy:${JSON.stringify(entityReference)}`);
     this.updateIndex();
 
     this.triggerAnyStateChange();
-    this.triggerStateChange(contentReference);
+    this.triggerStateChange(entityReference);
   }
 
   _onAnyStateChangeCallbacks = [];
@@ -373,8 +373,8 @@ class StateManager {
 
   _onStateChangeCallbacks = {};
 
-  onStateChange(contentReference, callback) {
-    const key = JSON.stringify(contentReference);
+  onStateChange(entityReference, callback) {
+    const key = JSON.stringify(entityReference);
 
     if (!this._onStateChangeCallbacks[key]) {
       this._onStateChangeCallbacks[key] = [];
@@ -383,8 +383,8 @@ class StateManager {
     this._onStateChangeCallbacks[key].push(callback);
   }
 
-  offStateChange(contentReference, callback) {
-    const key = JSON.stringify(contentReference);
+  offStateChange(entityReference, callback) {
+    const key = JSON.stringify(entityReference);
 
     if (!this._onStateChangeCallbacks[key]) {
       this._onStateChangeCallbacks[key] = [];
@@ -393,8 +393,8 @@ class StateManager {
     this._onStateChangeCallbacks[key].splice(this._onStateChangeCallbacks[key].indexOf(callback), 1);
   }
 
-  triggerStateChange(contentReference) {
-    const key = JSON.stringify(contentReference);
+  triggerStateChange(entityReference) {
+    const key = JSON.stringify(entityReference);
 
     if (!this._onStateChangeCallbacks[key]) {
       this._onStateChangeCallbacks[key] = [];
