@@ -19,8 +19,8 @@ class SimpleChangeHandler {
 
     change.date = Date.now();
     change.value = value;
-    state.validationResults = ValidationManager.getValidationResults(validators, path, state.validationResults, value);
-    console.log('h', state.validationResults)
+    state.validationResults = ValidationManager.getValidationResults(validators, path, state.validationResults.slice(), value);
+    
     stateManager.persist(state);
   }
   getIntermediateValue(state, path) {

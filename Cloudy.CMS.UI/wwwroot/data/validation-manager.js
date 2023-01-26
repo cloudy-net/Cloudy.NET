@@ -1,8 +1,6 @@
 
 const ValidationManager = {
-  getValidationResults: (validators, path, currValidationResults, value) => {
-
-    let validationResults = currValidationResults.slice();
+  getValidationResults: (validators, path, validationResults, value) => {
 
     validators && Object.keys(validators).map(validatorName => {
 
