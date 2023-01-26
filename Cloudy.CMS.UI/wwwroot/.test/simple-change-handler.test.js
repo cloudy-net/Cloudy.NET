@@ -16,8 +16,10 @@ describe('simple-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [propertyName]: initialValue
+        source: {
+          value: {
+            [propertyName]: initialValue
+          }
         }
       });
 
@@ -37,12 +39,14 @@ describe('simple-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [blockName]: {
-            Value: {
-              [block2Name]: {
-                Value: {
-                  [propertyName]: initialValue
+        source: {
+          value: {
+            [blockName]: {
+              Value: {
+                [block2Name]: {
+                  Value: {
+                    [propertyName]: initialValue
+                  }
                 }
               }
             }
@@ -68,10 +72,12 @@ describe('simple-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [blockName]: {
-            Value: {
-              [propertyName]: initialValue
+        source: {
+          value: {
+            [blockName]: {
+              Value: {
+                [propertyName]: initialValue
+              }
             }
           }
         }
@@ -94,12 +100,14 @@ describe('simple-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [blockName]: {
-            Value: {
-              [block2Name]: {
-                Value: {
-                  [propertyName]: initialValue
+        source: {
+          value: {
+            [blockName]: {
+              Value: {
+                [block2Name]: {
+                  Value: {
+                    [propertyName]: initialValue
+                  }
                 }
               }
             }
@@ -130,12 +138,14 @@ describe('simple-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [blockName]: {
-            Value: {
-              [block2Name]: {
-                Value: {
-                  [propertyName]: initialValue
+        source: {
+          value: {
+            [blockName]: {
+              Value: {
+                [block2Name]: {
+                  Value: {
+                    [propertyName]: initialValue
+                  }
                 }
               }
             }

@@ -165,13 +165,15 @@ describe('state-manager.js', () => {
       stateManager.states = stateManager.loadStates();
       const state = stateManager.createStateForNewContent('page');
 
-      state.referenceValues = {
-        blockName: {
-          Value: {
-            propertyName: 'lorem'
+      state.source = {
+        value: {
+          blockName: {
+            Value: {
+              propertyName: 'lorem'
+            }
           }
         }
-      }
+      };
 
       const changes = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
@@ -184,56 +186,76 @@ describe('state-manager.js', () => {
       assert.deepEqual(result, []);
     });
   });
-  describe('getReferenceValue', () => {
+  describe('getSourceValue', () => {
     it('simple property', async () => {
       const propertyName = 'lorem';
       const propertyValue = 'ipsum';
-  
+
       const state = {
-        referenceValues: {
-          [propertyName]: propertyValue
+        source: {
+          value: {
+            [propertyName]: propertyValue
+          }
         }
       };
-      assert.equal(stateManager.getReferenceValue(state, propertyName), propertyValue);
+      assert.equal(stateManager.getSourceValue(state, propertyName), propertyValue);
     });
     it('nested property', async () => {
       const blockName = 'dolor';
       const nestedBlockName = 'dolor';
       const propertyName = 'lorem';
       const propertyValue = 'ipsum';
-  
+
       const state = {
-        referenceValues: {
-          [blockName]: {
-            Value: {
-              [nestedBlockName]: {
-                Value: {
-                  [propertyName]: propertyValue
+        source: {
+          value: {
+            [blockName]: {
+              Value: {
+                [nestedBlockName]: {
+                  Value: {
+                    [propertyName]: propertyValue
+                  }
                 }
               }
             }
           }
         }
       };
-      assert.equal(stateManager.getReferenceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
+      assert.equal(stateManager.getSourceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
     it('nested property in null block', async () => {
       const blockName = 'dolor';
       const nestedBlockName = 'dolor';
       const propertyName = 'lorem';
       const propertyValue = null;
-  
+
       const state = {
-        referenceValues: {
-          [blockName]: {
-            Value: {
-              [nestedBlockName]: null
+        source: {
+          value: {
+            [blockName]: {
+              Value: {
+                [nestedBlockName]: null
+              }
             }
           }
         }
       };
-      assert.equal(stateManager.getReferenceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
+      assert.equal(stateManager.getSourceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
+    });
+  });
+  describe('getReferenceChanges', () => {
+    it('simple property', async () => {
+      const propertyName = 'lorem';
+      const propertyValue = 'ipsum';
+
+      const state = {
+        source: {
+          value: {
+            [propertyName]: propertyValue
+          }
+        }
+      };
+      assert.equal(stateManager.getSourceValue(state, propertyName), propertyValue);
     });
   });
 });
-  

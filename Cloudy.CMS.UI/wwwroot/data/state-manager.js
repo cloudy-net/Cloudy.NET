@@ -32,7 +32,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.8";
+  schema = "1.9";
   states = this.loadStates();
 
   loadStates() {
@@ -67,8 +67,10 @@ class StateManager {
     const state = {
       new: true,
       contentReference,
-      referenceValues: {},
-      referenceDate: new Date(),
+      source: {
+        value: {},
+        date:  new Date(),
+      },
       changes: [],
     };
     this.states.push(state);
@@ -88,8 +90,7 @@ class StateManager {
       contentReference,
       loading: true,
       nameHint,
-      referenceValues: null,
-      referenceDate: null,
+      source: null,
       changes: null,
     };
     this.states.push(state);
@@ -105,34 +106,36 @@ class StateManager {
 
     state = {
       ...state,
-      loadingNewVersion: true,
-      newVersion: null,
+      loadingNewSource: true,
+      newSource: null,
     };
     this.replace(state);
 
     contentGetter.get(contentReference).then(content => {
       state = this.getState(contentReference);
 
-      if (JSON.stringify(state.referenceValues) == JSON.stringify(content)) {
+      if (JSON.stringify(state.source.value) == JSON.stringify(content)) {
         state = {
           ...state,
-          loadingNewVersion: false,
+          loadingNewSource: false,
         };
       } else {
         if (!this.hasChanges(state)) {
           state = {
             ...state,
-            loadingNewVersion: false,
-            referenceValues: content,
-            referenceDate: new Date(),
+            loadingNewSource: false,
+            source: {
+              value: content,
+              date:  new Date(),
+            },
           };
         } else {
           state = {
             ...state,
-            loadingNewVersion: false,
-            newVersion: {
-              referenceValues: content,
-              referenceDate: new Date(),
+            loadingNewSource: false,
+            newSource: {
+              value: content,
+              date:  new Date(),
             },
           };
         }
@@ -142,14 +145,13 @@ class StateManager {
     });
   }
 
-  discardNewVersion(contentReference) {
+  discardnewSource(contentReference) {
     let state = this.getState(contentReference);
 
     state = {
       ...state,
-      referenceValues: state.newVersion.referenceValues,
-      referenceDate: state.newVersion.referenceDate,
-      newVersion: null,
+      source: state.newSource,
+      newSource: null,
     };
     this.replace(state);
   }
@@ -163,8 +165,10 @@ class StateManager {
       ...state,
       loading: false,
       nameHint: null,
-      referenceValues: content,
-      referenceDate: new Date(),
+      source: {
+        value: content,
+        date:  new Date(),
+      },
       changes: [],
     };
 
@@ -299,7 +303,7 @@ class StateManager {
       changes[change.path] = change;
     }
 
-    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getReferenceValue(state, change.path)).forEach(change => delete changes[change.path])
+    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state, change.path)).forEach(change => delete changes[change.path])
 
     return Object.values(changes);
   }
@@ -308,8 +312,8 @@ class StateManager {
     return [];
   }
 
-  getReferenceValue(state, path) {
-    let value = state.referenceValues;
+  getSourceValue(state, path) {
+    let value = state.source.value;
     let pathSegments = path.split('.');
 
     while (pathSegments.length) {

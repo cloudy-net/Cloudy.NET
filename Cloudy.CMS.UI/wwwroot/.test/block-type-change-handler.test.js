@@ -15,9 +15,11 @@ describe('block-type-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [propertyName]: {
-            Type: initialValue
+        source: {
+          value: {
+            [propertyName]: {
+              Type: initialValue
+            }
           }
         }
       });
@@ -36,9 +38,11 @@ describe('block-type-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [propertyName]: {
-            Type: initialValue
+        source: {
+          value: {
+            [propertyName]: {
+              Type: initialValue
+            }
           }
         }
       });
@@ -61,12 +65,14 @@ describe('block-type-change-handler.js', () => {
 
       stateManager.replace({
         ...stateManager.getState(contentReference),
-        referenceValues: {
-          [blockName]: {
-            Type: initialType,
-            Value: {
-              [nestedBlockName]: {
-                Type: nestedBlockType
+        source: {
+          value: {
+            [blockName]: {
+              Type: initialType,
+              Value: {
+                [nestedBlockName]: {
+                  Type: nestedBlockType
+                }
               }
             }
           }

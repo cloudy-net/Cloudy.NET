@@ -27,7 +27,7 @@ class SimpleChangeHandler {
     }
 
     if (value == UNCHANGED) {
-      return stateManager.getReferenceValue(state, path);
+      return stateManager.getSourceValue(state, path);
     }
 
     return value;
