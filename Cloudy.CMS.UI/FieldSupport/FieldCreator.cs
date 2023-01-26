@@ -24,6 +24,15 @@ namespace Cloudy.CMS.UI.FieldSupport
                     new { message = requiredAttribute.ErrorMessage }
                 );
             }
+
+            var maxLengthAttribute = attributes.OfType<MaxLengthAttribute>().FirstOrDefault();
+            if (maxLengthAttribute is not null)
+            { 
+                yield return new KeyValuePair<string, object>(
+                    "maxLength",
+                    new { message = maxLengthAttribute.ErrorMessage, maxLength = maxLengthAttribute.Length }
+                );
+            }
         }
 
         public IEnumerable<FieldDescriptor> Create(string entityType)

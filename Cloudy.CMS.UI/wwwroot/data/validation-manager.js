@@ -4,8 +4,11 @@ const ValidationManager = {
 
     validators && Object.keys(validators).map(validatorName => {
 
+      const validator = validators[validatorName];
+
       let inValid = false;
       if (validatorName == 'required' && !value) inValid = true;
+      if (validatorName == 'maxLength' && !!value && value.length > validator.maxLength) inValid = true;
 
       //remove any existing VR for this path and validator
       validationResults = validationResults.filter(vr => vr.path != path || vr.validatorName != validatorName);
