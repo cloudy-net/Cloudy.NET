@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.UI.FieldSupport;
 using Cloudy.CMS.UI.FieldSupport.CustomSelect;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
@@ -41,7 +42,14 @@ namespace TestWebsite.Models
 
         [ListColumn]
         [CustomSelect<IColorFactory>]
+        [Display(Name = "This is the 2nd color prop", Prompt = "Pick something!")]
         public string Color { get; set; }
+
+        [ListColumn]
+        [RequiredInput]
+        [CustomSelect<IColorFactory>]
+        [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
+        public string SecondColor { get; set; }
 
         [ListColumn]
         [CustomSelect<IColorFactory>(Multi = true)]

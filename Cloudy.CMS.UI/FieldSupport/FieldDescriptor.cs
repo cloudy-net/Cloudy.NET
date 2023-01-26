@@ -10,6 +10,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         string Name,
         [property: JsonIgnore] Type Type,
         string Label,
+        string Description,
         string Partial,
         bool? AutoGenerate,
         bool RenderChrome,
