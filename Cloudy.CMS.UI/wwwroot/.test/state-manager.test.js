@@ -160,7 +160,7 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, [changes[1]]);
     });
-    it('should not return changes matching reference value', () => {
+    it('should not return changes matching source value', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -243,19 +243,8 @@ describe('state-manager.js', () => {
       assert.equal(stateManager.getSourceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
   });
-  describe('getReferenceChanges', () => {
-    it('simple property', async () => {
-      const propertyName = 'lorem';
-      const propertyValue = 'ipsum';
-
-      const state = {
-        source: {
-          value: {
-            [propertyName]: propertyValue
-          }
-        }
-      };
-      assert.equal(stateManager.getSourceValue(state, propertyName), propertyValue);
-    });
-  });
+  // describe('getSourceChanges', () => {
+  //   it('simple property', async () => {
+  //   });
+  // });
 });
