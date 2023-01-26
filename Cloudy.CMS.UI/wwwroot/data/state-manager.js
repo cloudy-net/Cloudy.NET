@@ -1,6 +1,6 @@
-import contentGetter from "./content-getter.js";
 import urlFetcher from "../util/url-fetcher.js";
 import notificationManager from "../notification/notification-manager.js";
+import ContentNotFound from "./content-not-found.js";
 
 const generateRandomString = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 const arrayEquals = (a, b) => {
@@ -69,7 +69,7 @@ class StateManager {
       entityReference,
       source: {
         value: {},
-        date:  new Date(),
+        date: new Date(),
       },
       changes: [],
     };
@@ -101,7 +101,7 @@ class StateManager {
     return state;
   };
 
-  reloadContentForState(entityReference) {
+  async reloadContentForState(entityReference) {
     let state = this.getState(entityReference);
 
     state = {
@@ -111,38 +111,52 @@ class StateManager {
     };
     this.replace(state);
 
-    contentGetter.get(entityReference).then(content => {
-      state = this.getState(entityReference);
+    const response = await urlFetcher.fetch(
+      `/Admin/api/form/entity/get`,
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entityReference)
+      },
+      `Could not get content ${JSON.stringify(entityReference.keyValues)} (${entityReference.entityType})`,
+      {
+        410: () => new ContentNotFound(entityReference)
+      }
+    );
 
-      if (JSON.stringify(state.source.value) == JSON.stringify(content)) {
+    const entity = response.entity.Value;
+
+    state = this.getState(entityReference);
+
+    if (JSON.stringify(state.source.value) == JSON.stringify(entity)) {
+      state = {
+        ...state,
+        loadingNewSource: false,
+      };
+    } else {
+      if (!this.hasChanges(state)) {
         state = {
           ...state,
           loadingNewSource: false,
+          source: {
+            value: entity,
+            date: new Date(),
+          },
         };
       } else {
-        if (!this.hasChanges(state)) {
-          state = {
-            ...state,
-            loadingNewSource: false,
-            source: {
-              value: content,
-              date:  new Date(),
-            },
-          };
-        } else {
-          state = {
-            ...state,
-            loadingNewSource: false,
-            newSource: {
-              value: content,
-              date:  new Date(),
-            },
-          };
-        }
+        state = {
+          ...state,
+          loadingNewSource: false,
+          newSource: {
+            value: entity,
+            date: new Date(),
+          },
+        };
       }
 
       this.replace(state);
-    });
+    }
   }
 
   discardnewSource(entityReference) {
@@ -157,7 +171,21 @@ class StateManager {
   }
 
   async loadContentForState(entityReference) {
-    const content = await contentGetter.get(entityReference);
+    const response = await urlFetcher.fetch(
+      `/Admin/api/form/entity/get`,
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entityReference)
+      },
+      `Could not get content ${JSON.stringify(entityReference.keyValues)} (${entityReference.entityType})`,
+      {
+        410: () => new ContentNotFound(entityReference)
+      }
+    );
+
+    const entity = response.entity.Value;
 
     let state = this.getState(entityReference);
 
@@ -166,8 +194,8 @@ class StateManager {
       loading: false,
       nameHint: null,
       source: {
-        value: content,
-        date:  new Date(),
+        value: entity,
+        date: new Date(),
       },
       changes: [],
     };
@@ -279,7 +307,7 @@ class StateManager {
   }
 
   hasChanges(state, path = null) {
-    if(state.changes == null){
+    if (state.changes == null) {
       return false;
     }
 
@@ -289,7 +317,7 @@ class StateManager {
   }
 
   getMergedChanges(state, path = null) {
-    if(state.changes == null){
+    if (state.changes == null) {
       return [];
     }
 
