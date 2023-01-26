@@ -26,6 +26,15 @@ const ValidationManager = {
     return validationResults.some(vr => !vr.isValid && vr.path == path && vr.validatorName == validatorName);
   },
   anyIsInvalid: (validationResults) => validationResults.some(vr => !vr.isValid),
+  getValidationClass: (validators, validationResults, path) => {
+
+    if (!validators || !Object.keys(validators)) return '';
+    if (!validationResults.some(vr => vr.path == path)) return '';
+
+    return validationResults.some(vr => !vr.isValid && vr.path == path)
+      ? 'is-invalid'
+      : 'is-valid';
+  }
 }
 
 export default ValidationManager;

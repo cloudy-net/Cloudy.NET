@@ -12,9 +12,8 @@ const Control = ({ name, path, validators }) => {
   };
   return html`
       <input
-        required
         type="text"
-        class=${`form-control ${ ValidationManager.isInvalidForPath(state.validationResults, path) ? 'is-invalid' : '' }`}
+        class=${`form-control ${ ValidationManager.getValidationClass(validators, state.validationResults, path) } `}
         id=${`field-${name}`}
         name=${name}
         value=${simpleChangeHandler.getIntermediateValue(state, path)}
