@@ -18,12 +18,12 @@ const FormField = ({ name, path, label, description, renderChrome, partial, sett
     const { entityReference, state } = useContext(EntityContext);
     
     return html`<div class=${`mb-3 ${ Object.keys(validators).length ? 'needs-validation was-validated' : ''} `}>
-        <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null}</label>
-        <${fieldComponents[partial]} ...${{ name, label, path, settings }} />
-        ${ !!description ? html`<small class="form-text text-muted">${description}</small>` : '' }
-        ${ Object.keys(validators).filter(v => !ValidationManager.isValid(v, path, entityReference)).map(v => html`
-            <div class="invalid-feedback">${ validators[v].message }</div>`
-        )} 
+    <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null}</label>
+    <${fieldComponents[partial]} ...${{ name, label, path, settings }} />
+    ${ !!description ? html`<small class="form-text text-muted">${description}</small>` : '' }
+    ${ Object.keys(validators).filter(v => !ValidationManager.isValid(v, path, entityReference)).map(v => html`
+        <div class="invalid-feedback">${ validators[v].message }</div>`
+    )} 
     </div>`
 };
 
