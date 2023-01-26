@@ -17,7 +17,7 @@ const FormField = ({ name, path, label, description, renderChrome, partial, sett
 
     const { state } = useContext(EntityContext);
 
-    return html`<div class=${`mb-3 ${ Object.keys(validators).length ? 'needs-validation' : '' } ${ ValidationManager.isInvalidForPath(state.validationResults, path) ? '' : '' } `}>
+    return html`<div class=${`mb-3 ${ Object.keys(validators).length ? 'needs-validation' : '' } `}>
     <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null}</label>
     <${fieldComponents[partial]} ...${{ name, label, path, settings, validators }} />
     ${ !!description ? html`<small class="form-text text-muted">${description}</small>` : '' }

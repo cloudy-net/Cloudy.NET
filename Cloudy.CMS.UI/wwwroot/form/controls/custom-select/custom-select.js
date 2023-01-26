@@ -2,6 +2,7 @@ import { html, useContext, useEffect, useState } from '../../../preact-htm/stand
 import EntityContext from '../../entity-context.js';
 import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
 import urlFetcher from '../../../util/url-fetcher.js';
+import ValidationManager from '../../../data/validation-manager.js';
 
 export default ({ name, path, settings, validators }) => {
     const [options, setOptions] = useState([]);
@@ -42,7 +43,7 @@ export default ({ name, path, settings, validators }) => {
     }, []);
 
     return html`
-        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValueAndValidate(entityReference, path, e.target.value, validators)} class="form-select">
+        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValueAndValidate(entityReference, path, e.target.value, validators)} class="form-select ${ ValidationManager.getValidationClass(validators, state.validationResults, path) }">
         
             ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 
