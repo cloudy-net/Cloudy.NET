@@ -3,16 +3,16 @@ import EntityContext from './entity-context.js';
 import stateManager from '../data/state-manager.js';
 import ValidationManager from '../data/validation-manager.js';
 
-const FormFooter = ({ entityType }) => {
+const FormFooter = ({ validateAll }) => {
   const [saving, setSaving] = useState();
   const { state } = useContext(EntityContext);
 
   const save = async () => {
-    setSaving(true);
-
-    await stateManager.save([state.entityReference]);
-
-    setSaving(false);
+    if (validateAll(state.entityReference)) {
+      setSaving(true);
+      await stateManager.save([state.entityReference]);
+      setSaving(false);
+    }
   };
 
   const discard = async () => {

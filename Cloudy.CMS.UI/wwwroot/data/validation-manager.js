@@ -1,5 +1,22 @@
+import stateManager from "./state-manager.js";
+import simpleChangeHandler from "./change-handlers/simple-change-handler.js";
 
 const ValidationManager = {
+  validateAll: (fields, entityReference) => {
+
+    const state = stateManager.getState(entityReference);
+    let validationResults = state.validationResults.slice();
+
+    fields.forEach(field => {
+      const value = simpleChangeHandler.getIntermediateValue(state, field.name);
+      validationResults = ValidationManager.getValidationResults(field.validators, field.name, validationResults, value);
+    })
+
+    state.validationResults = validationResults;
+    stateManager.persist(state);
+
+    return validationResults.every(vr => vr.isValid);
+  },
   getValidationResults: (validators, path, validationResults, value) => {
 
     validators && Object.keys(validators).map(validatorName => {

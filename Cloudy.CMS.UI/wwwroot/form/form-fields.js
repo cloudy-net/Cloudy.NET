@@ -1,34 +1,7 @@
-import { html, useEffect, useState } from '../preact-htm/standalone.module.js';
+import { html } from '../preact-htm/standalone.module.js';
 import FormField from './form-field.js';
 
-const FormFields = ({ type }) => {
-    const [loading, setLoading] = useState(true);
-    const [fields, setFields] = useState();
-    const [error, setError] = useState();
-    const [retryError, setRetryError] = useState(0);
-  
-    useEffect(function () {
-      (async () => {
-        setError(null);
-  
-        const response = await fetch(
-          `/Admin/api/form/fields?type=${type}`,
-          {
-            credentials: 'include'
-          }
-        );
-  
-        if (!response.ok) {
-          setError({ response, body: await response.text() });
-          return;
-        }
-  
-        var json = await response.json();
-  
-        setLoading(false);
-        setFields(json);
-      })();
-    }, []);
+const FormFields = ({ fields, error, loading }) => {
   
     let content;
   
