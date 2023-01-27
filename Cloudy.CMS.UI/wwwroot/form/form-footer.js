@@ -23,11 +23,14 @@ const FormFooter = ({ validateAll }) => {
   };
 
   return html`
-  <div class="d-flex">
-    <button class="btn btn-primary" type="button" disabled=${ValidationManager.anyIsInvalid(state.validationResults) || !stateManager.hasChanges(state) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
-    <button class="btn btn-beta ms-auto" type="button" disabled=${!stateManager.hasChanges(state) || saving} onClick=${discard}>Discard changes</button>
-  </div>
-  ${ValidationManager.anyIsInvalid(state.validationResults) ? html`<p style="color:red">Fix errors</p>` : null }
+    <div class="d-flex">
+      <button class="btn btn-primary" type="button" disabled=${ValidationManager.anyIsInvalid(state.validationResults) || !stateManager.hasChanges(state) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
+      <button class="btn btn-beta ms-auto" type="button" disabled=${!stateManager.hasChanges(state) || saving} onClick=${discard}>Discard changes</button>
+    </div>
+    ${ValidationManager.anyIsInvalid(state.validationResults) ? html`
+      <div class="alert alert-warning mt-3" role="alert">
+        The form contains validation errors that need to be reviewed before proceeding.
+      </div>` : null}
   `
 };
 
