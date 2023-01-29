@@ -1,12 +1,10 @@
-import arrayEquals from "../../util/array-equals.js";
-import arrayStartsWith from "../../util/array-starts-with.js";
-import getReferenceValue from "../../util/get-reference-value.js";
+import stateManager from "../state-manager.js";
 
 const UNCHANGED = {};
 
 class SimpleChangeHandler {
-  setValue(stateManager, contentReference, path, value) {
-    const state = stateManager.getState(contentReference);
+  setValue(entityReference, path, value) {
+    const state = stateManager.getState(entityReference);
     const change = stateManager.getOrCreateLatestChange(state, 'simple', path);
 
     change.date = Date.now();
@@ -18,18 +16,18 @@ class SimpleChangeHandler {
     let value = UNCHANGED;
 
     for (var change of state.changes) {
-      if (change['$type'] == 'simple' && arrayEquals(path, change.path)) {
+      if (change['$type'] == 'simple' && path == change.path) {
         value = change.value;
         continue;
       }
-      if (change['$type'] == 'blocktype' && arrayStartsWith(path, change.path)) {
+      if (change['$type'] == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
         value = change.value;
         continue;
       }
     }
 
     if (value == UNCHANGED) {
-      return getReferenceValue(state, path);
+      return stateManager.getSourceValue(state, path);
     }
 
     return value;

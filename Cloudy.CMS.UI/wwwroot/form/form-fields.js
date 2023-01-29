@@ -49,7 +49,7 @@ const FormFields = ({ type }) => {
       return 'Loading ...';
     }
 
-    return fields.map(field => html`<${FormField} ...${field} path=${[field.name]} />`)
+    return fields.map(field => html`<${FormField} ...${field} path=${field.name} />`)
 };
 
 export default FormFields;

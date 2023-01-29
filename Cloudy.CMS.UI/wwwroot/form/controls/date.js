@@ -4,10 +4,10 @@ import EntityContext from '../entity-context.js';
 import simpleChangeHandler from '../../data/change-handlers/simple-change-handler.js';
 
 const Control = ({ name, path }) => {
-  const { contentReference, state } = useContext(EntityContext);
+  const { entityReference, state } = useContext(EntityContext);
 
   const onchange = event => {
-    simpleChangeHandler.setValue(stateManager, contentReference, path, event.target.value)
+    simpleChangeHandler.setValue(entityReference, path, event.target.value)
   };
   return html`<div>
       <input
@@ -15,7 +15,7 @@ const Control = ({ name, path }) => {
         class="form-control"
         id=${`field-${name}`}
         name=${name}
-        defaultValue=${simpleChangeHandler.getIntermediateValue(state, path)}
+        value=${simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}
       />
     </div>`;

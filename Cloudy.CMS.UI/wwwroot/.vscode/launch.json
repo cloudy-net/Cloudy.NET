@@ -11,7 +11,7 @@
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
         "--colors",
-        "${workspaceFolder}/test/**/*.test.js",
+        "${workspaceFolder}/.test/**/*.test.js",
 
       ],
       "internalConsoleOptions": "openOnSessionStart",
