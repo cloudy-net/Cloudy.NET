@@ -12,6 +12,8 @@ const FormFooter = ({ validateAll }) => {
       setSaving(true);
       await stateManager.save([state.entityReference]);
       setSaving(false);
+    } else {
+      setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
     }
   };
 
@@ -24,7 +26,7 @@ const FormFooter = ({ validateAll }) => {
 
   return html`
     <div class="d-flex">
-      <button class="btn btn-primary" type="button" disabled=${ValidationManager.anyIsInvalid(state.validationResults) || !stateManager.hasChanges(state) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
+      <button class="btn btn-primary" type="button" disabled=${!stateManager.hasChanges(state) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
       <button class="btn btn-beta ms-auto" type="button" disabled=${!stateManager.hasChanges(state) || saving} onClick=${discard}>Discard changes</button>
     </div>
     ${ValidationManager.anyIsInvalid(state.validationResults) ? html`
