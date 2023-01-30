@@ -2,7 +2,7 @@ import { html, useContext, useState } from '../preact-htm/standalone.module.js';
 import EntityContext from './entity-context.js';
 import stateManager from '../data/state-manager.js';
 
-const FormFooter = ({ entityType }) => {
+const FormFooter = () => {
   const [saving, setSaving] = useState();
   const { state, mergedChanges } = useContext(EntityContext);
 
@@ -23,8 +23,8 @@ const FormFooter = ({ entityType }) => {
 
   return html`
   <div class="d-flex">
-    <button class="btn btn-primary" type="button" disabled=${!mergedChanges.find(change => change.path == path) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
-    <button class="btn btn-beta ms-auto" type="button" disabled=${!mergedChanges.find(change => change.path == path) || saving} onClick=${discard}>Discard changes</button>
+    <button class="btn btn-primary" type="button" disabled=${saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
+    <button class="btn btn-beta ms-auto" type="button" disabled=${!mergedChanges.length || saving} onClick=${discard}>Discard changes</button>
   </div>
   `
 };
