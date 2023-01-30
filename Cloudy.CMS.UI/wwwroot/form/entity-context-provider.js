@@ -26,7 +26,7 @@ export default ({ entityType, keyValues, children }) => {
     return () => stateManager.offStateChange(entityReference, callback);
   }, [keyValues]);
 
-  return html`<${EntityContext.Provider} value=${{ entityReference, state }}>
+  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges: state && stateManager.getMergedChanges(state) }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

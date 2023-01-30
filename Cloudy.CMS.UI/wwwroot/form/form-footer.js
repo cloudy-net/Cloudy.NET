@@ -5,7 +5,7 @@ import ValidationManager from '../data/validation-manager.js';
 
 const FormFooter = ({ validateAll }) => {
   const [saving, setSaving] = useState();
-  const { state } = useContext(EntityContext);
+  const { state, mergedChanges } = useContext(EntityContext);
 
   const save = async () => {
     if (validateAll(state.entityReference)) {
@@ -25,10 +25,10 @@ const FormFooter = ({ validateAll }) => {
   };
 
   return html`
-    <div class="d-flex">
-      <button class="btn btn-primary" type="button" disabled=${!stateManager.hasChanges(state) || saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
-      <button class="btn btn-beta ms-auto" type="button" disabled=${!stateManager.hasChanges(state) || saving} onClick=${discard}>Discard changes</button>
-    </div>
+  <div class="d-flex">
+    <button class="btn btn-primary" type="button" disabled=${saving} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
+    <button class="btn btn-beta ms-auto" type="button" disabled=${!mergedChanges.length || saving} onClick=${discard}>Discard changes</button>
+  </div>
     ${ValidationManager.anyIsInvalid(state.validationResults) ? html`
       <div class="alert alert-warning mt-3" role="alert">
         The form contains validation errors that need to be reviewed before proceeding.

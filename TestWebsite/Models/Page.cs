@@ -43,21 +43,7 @@ namespace TestWebsite.Models
         //public IList<LayoutItem> Test { get; set; }
         public IFrontpageBlock FrontpageBlock { get; set; }
 
-        [ListColumn]
-        [CustomSelect<IColorFactory>]
-        [Display(Name = "VALIDATION!", Prompt = "Pick something!")]
-        [Required(ErrorMessage = "This needs to have a value")]
-        public string Color { get; set; }
-
-        [ListColumn]
-        [CustomSelect<IColorFactory>]
-        [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
-        [Required(ErrorMessage = "This ALSO needs to have a value")]
-        public string SecondColor { get; set; }
-
-        [ListColumn]
-        [CustomSelect<IColorFactory>(Multi = true)]
-        public IList<string> Colors { get; set; }
+        //public string TestProperty { get; set; }
     }
 
     public interface IFrontpageBlock { }

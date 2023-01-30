@@ -30,7 +30,7 @@ const getChangeBadge = () => {
 };
 
 const ViewChanges = () => {
-  const { state } = useContext(EntityContext);
+  const { state, mergedChanges } = useContext(EntityContext);
 
   const showChange = change => {
     const initialValue = stateManager.getSourceValue(state, change.path);
@@ -48,7 +48,7 @@ const ViewChanges = () => {
   return html`
     <p><strong>Your changes:</strong></p>
     <ul>
-      ${stateManager.getMergedChanges(state).map(change =>
+      ${mergedChanges.map(change =>
         html`<li>${showChange(change)}</li>`
       )}
     </ul>

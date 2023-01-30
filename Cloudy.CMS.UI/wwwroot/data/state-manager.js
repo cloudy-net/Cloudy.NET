@@ -70,6 +70,7 @@ class StateManager {
       entityReference,
       source: {
         value: {},
+        properties: {},
         date: new Date(),
       },
       changes: [],
@@ -144,6 +145,7 @@ class StateManager {
           loadingNewSource: false,
           source: {
             value: entity,
+            properties: response.type.properties,
             date: new Date(),
           },
         };
@@ -154,6 +156,7 @@ class StateManager {
           newSource: {
             value: entity,
             date: new Date(),
+            properties: response.type.properties,
           },
         };
       }
@@ -198,6 +201,7 @@ class StateManager {
       nameHint: null,
       source: {
         value: entity,
+        properties: response.type.properties,
         date: new Date(),
       },
       changes: [],
@@ -309,24 +313,22 @@ class StateManager {
     this.persist(state);
   }
 
-  hasChanges(state, path = null) {
+  hasChanges(state) {
     if (state.changes == null) {
       return false;
     }
 
-    const changes = this.getMergedChanges(state, path);
-
-    return changes.length;
+    return state.changes.length;
   }
 
-  getMergedChanges(state, path = null) {
+  getMergedChanges(state) {
     if (state.changes == null) {
       return [];
     }
 
     const changes = {};
 
-    for (let change of state.changes.filter(change => path == null || change.path == path)) {
+    for (let change of state.changes) {
       if (change.$type == 'blocktype') {
         Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
       }
@@ -335,6 +337,11 @@ class StateManager {
     }
 
     Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state, change.path)).forEach(change => delete changes[change.path])
+    Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
+      const sourceValue = this.getSourceValue(state, change.path);
+
+      return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
+    }).forEach(change => delete changes[change.path])
 
     return Object.values(changes);
   }

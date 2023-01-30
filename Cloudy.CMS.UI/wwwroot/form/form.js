@@ -2,8 +2,8 @@ import FieldComponentProvider from './field-component-provider.js';
 import EntityContextProvider from './entity-context-provider.js'
 import FormFields from './form-fields.js';
 import FormFooter from './form-footer.js';
-import ChangedContentWarning from './changed-content-warning.js';
-import { html, useState,useEffect } from '../preact-htm/standalone.module.js';
+import Changes from './changes.js';
+import { html, useState, useEffect } from '../preact-htm/standalone.module.js';
 
 import ValidationManager from '../data/validation-manager.js';
 
