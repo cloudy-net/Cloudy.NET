@@ -81,7 +81,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         private static string GetPartialName(PropertyDefinitionDescriptor propertyDefinition, ReadOnlyCollection<string> uiHints)
         {
             var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
-            if (customSelectAttribute is not null) return customSelectAttribute.Multi
+            if (customSelectAttribute is not null) return propertyDefinition.List
                 ? "custom-select/custom-select-list"
                 : "custom-select/custom-select";
 

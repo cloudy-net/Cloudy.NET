@@ -51,7 +51,7 @@ namespace TestWebsite.Models
         public string SecondColor { get; set; }
 
         [ListColumn]
-        [CustomSelect<IColorFactory>(Multi = true)]
+        [CustomSelect<IColorFactory>]
         public IList<string> Colors { get; set; }
     }
 }
