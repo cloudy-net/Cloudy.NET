@@ -160,7 +160,7 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, [changes[1]]);
     });
-    it('should not return changes matching source value', () => {
+    it('should not return simple changes matching source', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -177,6 +177,29 @@ describe('state-manager.js', () => {
 
       const changes = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
+      ]
+
+      state.changes = [...changes];
+
+      const result = stateManager.getMergedChanges(state);
+
+      assert.deepEqual(result, []);
+    });
+    it('should not return block type changes matching source', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
+      const state = stateManager.createStateForNewContent('page');
+
+      state.source = {
+        value: {
+          blockName: {
+            Type: 'lorem'
+          }
+        }
+      };
+
+      const changes = [
+        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'lorem' },
       ]
 
       state.changes = [...changes];

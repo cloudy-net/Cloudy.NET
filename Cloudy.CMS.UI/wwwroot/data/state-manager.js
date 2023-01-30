@@ -332,6 +332,11 @@ class StateManager {
     }
 
     Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state, change.path)).forEach(change => delete changes[change.path])
+    Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
+      const sourceValue = this.getSourceValue(state, change.path);
+
+      return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
+    }).forEach(change => delete changes[change.path])
 
     return Object.values(changes);
   }
