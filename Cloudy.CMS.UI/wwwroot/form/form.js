@@ -37,7 +37,7 @@ function Form({ entityType, keyValues }) {
 
   return html`<${FieldComponentProvider}>
     <${EntityContextProvider} ...${{ entityType, keyValues }}>
-      <${Changes} />
+      <${ChangedContentWarning} />
       <${FormFields} ...${{ fields, error, loading }} />
       <${FormFooter} validateAll=${(entityReference) => ValidationManager.validateAll(fields, entityReference)} />
     <//>
