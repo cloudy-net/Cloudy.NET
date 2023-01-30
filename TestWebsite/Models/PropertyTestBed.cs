@@ -40,12 +40,13 @@ namespace TestWebsite.Models
         public string IgnoredProperty { get; set; }
 
         [ListColumn]
+        [Required]
         [CustomSelect<IColorFactory>]
         [Display(Prompt = "Pick something!")]
         public string Color { get; set; }
 
         [ListColumn]
-        [RequiredInput]
+        [Required]
         [CustomSelect<IColorFactory>]
         [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
         public string SecondColor { get; set; }

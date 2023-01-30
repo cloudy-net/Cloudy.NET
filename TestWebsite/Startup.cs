@@ -51,27 +51,27 @@ namespace TestWebsite
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), SecondPrimaryKey = 1 });
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("3fdb600b-e801-4588-9f6d-cf03df8180d8"), SecondPrimaryKey = 2, RelatedObject = new Tuple<Guid, int>(new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), 1) });
 
-                context.Pages.Add(new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Color = "", SecondColor = "", Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), UrlSegment = "loremipsum" });
-                context.Pages.Add(new Page { Id = new Guid("c31836f7-830e-44d3-b231-97d48cf44df3"), Color = "", SecondColor = "", Name = "esse ea Excepteur in minim dolore" });
-                context.Pages.Add(new Page { Id = new Guid("0c1c40a9-ee61-4071-a1e5-17a2079d882a"), Color = "", SecondColor = "", Name = "ut et occaecat ad sit" });
-                context.Pages.Add(new Page { Id = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), Color = "", SecondColor = "", Name = "eiusmod culpa aute Excepteur est" });
-                context.Pages.Add(new Page { Id = new Guid("cee2b628-71a8-43e9-88e4-ba51bcf3e940"), Color = "", SecondColor = "", Name = "laboris anim ut" });
-                context.Pages.Add(new Page { Id = new Guid("0ff35319-ad55-44e0-83b7-f1f8d7b93a41"), Color = "", SecondColor = "", Name = "officia veniam, Duis sint ullamco quis" });
-                context.Pages.Add(new Page { Id = new Guid("c9ad7601-d0a9-47e4-9515-a2048ba502ad"), Color = "", SecondColor = "", Name = "minim aliqua. et esse" });
-                context.Pages.Add(new Page { Id = new Guid("5dfd0c64-d1ec-48a4-b50d-5fab3f2606f6"), Color = "", SecondColor = "", Name = "Duis non deserunt cillum" });
-                context.Pages.Add(new Page { Id = new Guid("cf6053ac-bf4d-417c-90c7-ec8379e23d47"), Color = "", SecondColor = "", Name = "anim dolor irure ut" });
-                context.Pages.Add(new Page { Id = new Guid("5835789f-91b0-4b74-a399-1099b21a0b27"), Color = "", SecondColor = "", Name = "nulla dolore do cillum" });
-                context.Pages.Add(new Page { Id = new Guid("4fc870b6-b3d1-443e-acf5-8eab1ff1c4a4"), Color = "", SecondColor = "", Name = "nostrud nisi est" });
-                context.Pages.Add(new Page { Id = new Guid("2b8c9ecf-1b3c-4059-96ba-972e80ad2a98"), Color = "", SecondColor = "", Name = "nostrud ut voluptate sit eu" });
-                context.Pages.Add(new Page { Id = new Guid("4b3d6edc-6ce4-481a-b152-85e992490e6e"), Color = "", SecondColor = "", Name = "Lorem Duis esse" });
-                context.Pages.Add(new Page { Id = new Guid("447c9f5f-5ad2-470e-a562-1facb2df5741"), Color = "", SecondColor = "", Name = "mollit ea aliqua. elit, sed minim" });
-                context.Pages.Add(new Page { Id = new Guid("8f107afa-dc60-4916-8d57-0d262984d450"), Color = "", SecondColor = "", Name = "tempor consectetur incididunt mollit" });
-                context.Pages.Add(new Page { Id = new Guid("253b28a9-2bf6-4015-b249-f24a38232357"), Color = "", SecondColor = "", Name = "cillum eiusmod qui eu" });
-                context.Pages.Add(new Page { Id = new Guid("b7e84c3a-97dc-47d5-ae69-abc00a7487b9"), Color = "", SecondColor = "", Name = "consectetur nostrud Lorem" });
-                context.Pages.Add(new Page { Id = new Guid("6a7cd1b2-e262-48a4-9d80-7f722833a6a0"), Color = "", SecondColor = "", Name = "aliquip tempor" });
-                context.Pages.Add(new Page { Id = new Guid("28b2affa-6aa9-475d-ad85-a8bc223d965b"), Color = "", SecondColor = "", Name = "adipiscing aliquip dolore sit sunt Lorem" });
-                context.Pages.Add(new Page { Id = new Guid("2054a8df-b475-41c9-aeee-ad1a0c505eaa"), Color = "", SecondColor = "", Name = "aliqua. in veniam, in dolore" });
-                context.Pages.Add(new Page { Id = new Guid("7f77f50d-885c-446b-9a61-49d29e3cf2d2"), Color = "", SecondColor = "", Name = "ut reprehenderit" });
+                context.Pages.Add(new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), UrlSegment = "loremipsum" });
+                context.Pages.Add(new Page { Id = new Guid("c31836f7-830e-44d3-b231-97d48cf44df3"), Name = "esse ea Excepteur in minim dolore" });
+                context.Pages.Add(new Page { Id = new Guid("0c1c40a9-ee61-4071-a1e5-17a2079d882a"), Name = "ut et occaecat ad sit" });
+                context.Pages.Add(new Page { Id = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), Name = "eiusmod culpa aute Excepteur est" });
+                context.Pages.Add(new Page { Id = new Guid("cee2b628-71a8-43e9-88e4-ba51bcf3e940"), Name = "laboris anim ut" });
+                context.Pages.Add(new Page { Id = new Guid("0ff35319-ad55-44e0-83b7-f1f8d7b93a41"), Name = "officia veniam, Duis sint ullamco quis" });
+                context.Pages.Add(new Page { Id = new Guid("c9ad7601-d0a9-47e4-9515-a2048ba502ad"), Name = "minim aliqua. et esse" });
+                context.Pages.Add(new Page { Id = new Guid("5dfd0c64-d1ec-48a4-b50d-5fab3f2606f6"), Name = "Duis non deserunt cillum" });
+                context.Pages.Add(new Page { Id = new Guid("cf6053ac-bf4d-417c-90c7-ec8379e23d47"), Name = "anim dolor irure ut" });
+                context.Pages.Add(new Page { Id = new Guid("5835789f-91b0-4b74-a399-1099b21a0b27"), Name = "nulla dolore do cillum" });
+                context.Pages.Add(new Page { Id = new Guid("4fc870b6-b3d1-443e-acf5-8eab1ff1c4a4"), Name = "nostrud nisi est" });
+                context.Pages.Add(new Page { Id = new Guid("2b8c9ecf-1b3c-4059-96ba-972e80ad2a98"), Name = "nostrud ut voluptate sit eu" });
+                context.Pages.Add(new Page { Id = new Guid("4b3d6edc-6ce4-481a-b152-85e992490e6e"), Name = "Lorem Duis esse" });
+                context.Pages.Add(new Page { Id = new Guid("447c9f5f-5ad2-470e-a562-1facb2df5741"), Name = "mollit ea aliqua. elit, sed minim" });
+                context.Pages.Add(new Page { Id = new Guid("8f107afa-dc60-4916-8d57-0d262984d450"), Name = "tempor consectetur incididunt mollit" });
+                context.Pages.Add(new Page { Id = new Guid("253b28a9-2bf6-4015-b249-f24a38232357"), Name = "cillum eiusmod qui eu" });
+                context.Pages.Add(new Page { Id = new Guid("b7e84c3a-97dc-47d5-ae69-abc00a7487b9"), Name = "consectetur nostrud Lorem" });
+                context.Pages.Add(new Page { Id = new Guid("6a7cd1b2-e262-48a4-9d80-7f722833a6a0"), Name = "aliquip tempor" });
+                context.Pages.Add(new Page { Id = new Guid("28b2affa-6aa9-475d-ad85-a8bc223d965b"), Name = "adipiscing aliquip dolore sit sunt Lorem" });
+                context.Pages.Add(new Page { Id = new Guid("2054a8df-b475-41c9-aeee-ad1a0c505eaa"), Name = "aliqua. in veniam, in dolore" });
+                context.Pages.Add(new Page { Id = new Guid("7f77f50d-885c-446b-9a61-49d29e3cf2d2"), Name = "ut reprehenderit" });
 
                 context.SaveChanges();
             }
