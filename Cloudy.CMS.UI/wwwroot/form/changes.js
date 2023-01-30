@@ -17,7 +17,7 @@ const ChangedContentWarning = () => {
       true ?
       html`<div style="text-align: right;"><a tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>View changes</a></div>` :
       html`<div class="alert alert-info">
-        <strong>This entity has changed since you started editing.</strong><br/>
+        <strong>The source has changed since you started editing.</strong><br/>
         <a style="text-decoration: underline;" tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>Review the changes</a> before you continue.
       </div>`
     }
