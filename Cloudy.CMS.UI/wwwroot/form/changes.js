@@ -3,13 +3,9 @@ import { html, useContext, useState } from "../preact-htm/standalone.module.js";
 import EntityContext from "./entity-context.js";
 
 
-const ChangedContentWarning = () => {
-  const { state, mergedChanges } = useContext(EntityContext);
+const Changes = () => {
+  const { state, mergedChanges, modelChanges } = useContext(EntityContext);
   
-  if(!state.newVersion){
-    // return;
-  }
-
   const [showHistory, setShowHistory] = useState();
 
   return html`
@@ -25,4 +21,4 @@ const ChangedContentWarning = () => {
   `
 };
 
-export default ChangedContentWarning;
+export default Changes;

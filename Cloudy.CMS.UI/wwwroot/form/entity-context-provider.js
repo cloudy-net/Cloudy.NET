@@ -5,6 +5,7 @@ import stateManager from '../data/state-manager.js';
 export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();
   const [state, setState] = useState();
+  const [modelChanges, setModelChanges] = useState();
 
   useEffect(() => {
     let entityReference;
@@ -26,7 +27,11 @@ export default ({ entityType, keyValues, children }) => {
     return () => stateManager.offStateChange(entityReference, callback);
   }, [keyValues]);
 
-  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges: state && stateManager.getMergedChanges(state) }}>
+  useEffect(() => {
+    setModelChanges(stateManager.getModelChanges(state));
+  }, [state]);
+
+  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges: state && stateManager.getMergedChanges(state), modelChanges }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

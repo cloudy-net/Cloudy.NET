@@ -343,7 +343,7 @@ class StateManager {
     return Object.values(changes);
   }
 
-  getReferenceChanges(state) {
+  getModelChanges(state) {
     return [];
   }
 
