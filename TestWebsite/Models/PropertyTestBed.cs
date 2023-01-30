@@ -2,6 +2,11 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Cloudy.CMS.SingletonSupport;
+using Cloudy.CMS.UI.FieldSupport.CustomSelect;
+using Cloudy.CMS.UI.FieldSupport;
+using Cloudy.CMS.UI.List;
+using System.Collections.Generic;
+using TestWebsite.Factories;
 
 namespace TestWebsite.Models
 {
@@ -33,5 +38,20 @@ namespace TestWebsite.Models
         public bool? NullableCheckbox { get; set; }
         [Display(AutoGenerateField = false)]
         public string IgnoredProperty { get; set; }
+
+        [ListColumn]
+        [CustomSelect<IColorFactory>]
+        [Display(Prompt = "Pick something!")]
+        public string Color { get; set; }
+
+        [ListColumn]
+        [RequiredInput]
+        [CustomSelect<IColorFactory>]
+        [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
+        public string SecondColor { get; set; }
+
+        [ListColumn]
+        [CustomSelect<IColorFactory>(Multi = true)]
+        public IList<string> Colors { get; set; }
     }
 }

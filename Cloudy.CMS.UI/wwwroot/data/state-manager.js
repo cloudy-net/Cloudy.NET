@@ -69,6 +69,7 @@ class StateManager {
       entityReference,
       source: {
         value: {},
+        properties: {},
         date: new Date(),
       },
       changes: [],
@@ -141,6 +142,7 @@ class StateManager {
           loadingNewSource: false,
           source: {
             value: entity,
+            properties: response.type.properties,
             date: new Date(),
           },
         };
@@ -151,6 +153,7 @@ class StateManager {
           newSource: {
             value: entity,
             date: new Date(),
+            properties: response.type.properties,
           },
         };
       }
@@ -195,6 +198,7 @@ class StateManager {
       nameHint: null,
       source: {
         value: entity,
+        properties: response.type.properties,
         date: new Date(),
       },
       changes: [],

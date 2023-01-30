@@ -40,20 +40,7 @@ namespace TestWebsite.Models
         //public IList<LayoutItem> Test { get; set; }
         public IFrontpageBlock FrontpageBlock { get; set; }
 
-        [ListColumn]
-        [CustomSelect<IColorFactory>]
-        [Display(Name = "This is the 2nd color prop", Prompt = "Pick something!")]
-        public string Color { get; set; }
-
-        [ListColumn]
-        [RequiredInput]
-        [CustomSelect<IColorFactory>]
-        [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
-        public string SecondColor { get; set; }
-
-        [ListColumn]
-        [CustomSelect<IColorFactory>(Multi = true)]
-        public IList<string> Colors { get; set; }
+        //public string TestProperty { get; set; }
     }
 
     public interface IFrontpageBlock { }
