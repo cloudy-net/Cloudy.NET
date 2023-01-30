@@ -306,24 +306,22 @@ class StateManager {
     this.persist(state);
   }
 
-  hasChanges(state, path = null) {
+  hasChanges(state) {
     if (state.changes == null) {
       return false;
     }
 
-    const changes = this.getMergedChanges(state, path);
-
-    return changes.length;
+    return state.changes.length;
   }
 
-  getMergedChanges(state, path = null) {
+  getMergedChanges(state) {
     if (state.changes == null) {
       return [];
     }
 
     const changes = {};
 
-    for (let change of state.changes.filter(change => path == null || change.path == path)) {
+    for (let change of state.changes) {
       if (change.$type == 'blocktype') {
         Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
       }
