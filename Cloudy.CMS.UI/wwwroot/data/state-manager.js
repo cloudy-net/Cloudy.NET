@@ -343,8 +343,20 @@ class StateManager {
     return Object.values(changes);
   }
 
-  getModelChanges(state) {
-    return [];
+  getModelConflicts(state) {
+    if (!state.newSource) {
+      return [];
+    }
+
+    const conflicts = [];
+
+    for (let key of Object.keys(state.source.properties)) {
+      if(!state.newSource.properties[key]){
+        conflicts.push({ name: key, type: 'deleted' });
+      }
+    }
+
+    return conflicts;
   }
 
   getSourceValue(state, path) {

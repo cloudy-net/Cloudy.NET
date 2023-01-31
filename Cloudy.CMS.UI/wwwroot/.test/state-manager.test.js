@@ -266,8 +266,29 @@ describe('state-manager.js', () => {
       assert.equal(stateManager.getSourceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
   });
-  // describe('getSourceChanges', () => {
-  //   it('simple property', async () => {
-  //   });
-  // });
+  describe('getModelChanges', () => {
+    it('property deleted', async () => {
+      const propertyName = 'lorem';
+
+      const state = {
+        source: {
+          properties: {
+            [propertyName]: { block: false }
+          }
+        },
+        newSource: {
+          properties: {
+          }
+        }
+      };
+
+      const result = stateManager.getModelChanges(state);
+
+      const expected = [
+        { name: propertyName, type: 'deleted' },
+      ];
+
+      assert.deepEqual(result, expected);
+    });
+  });
 });
