@@ -349,10 +349,12 @@ class StateManager {
   }
 
   discardModelConflicts(state, modelConflicts) {
-    this.replace({
+    state = {
       ...state,
       changes: state.changes.filter(change => !modelConflicts.find(conflict => conflict.name == change.path)),
-    });
+    };
+
+    this.replace(state);
   }
 
   getSourceValue(state, path) {
