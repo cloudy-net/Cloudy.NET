@@ -48,7 +48,7 @@ const ViewChanges = () => {
   const showConflict = conflict => {
     const change = mergedChanges.find(change => change.path == conflict.name);
 
-    if (!change) { // modelConflicts and changes get out of sync when clearing
+    if (!change) { // modelConflicts and changes get briefly out of sync when clearing
       return;
     }
 
