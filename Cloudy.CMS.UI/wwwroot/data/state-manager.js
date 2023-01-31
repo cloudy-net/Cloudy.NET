@@ -162,17 +162,6 @@ class StateManager {
     }
   }
 
-  discardNewSource(entityReference) {
-    let state = this.getState(entityReference);
-
-    state = {
-      ...state,
-      source: state.newSource,
-      newSource: null,
-    };
-    this.replace(state);
-  }
-
   async loadContentForState(entityReference) {
     const response = await urlFetcher.fetch(
       `/Admin/api/form/entity/get`,
@@ -302,7 +291,7 @@ class StateManager {
     return this.states.find(s => entityReferenceEquals(s.entityReference, entityReference));
   }
 
-  discardChanges(entityReference, change) {
+  discardChanges(entityReference) {
     const state = this.getState(entityReference);
 
     state.changes.splice(0, state.changes.length);
