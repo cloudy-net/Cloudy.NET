@@ -162,7 +162,7 @@ class StateManager {
     }
   }
 
-  discardnewSource(entityReference) {
+  discardNewSource(entityReference) {
     let state = this.getState(entityReference);
 
     state = {
