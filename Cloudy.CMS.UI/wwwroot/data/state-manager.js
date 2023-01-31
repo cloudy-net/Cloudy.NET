@@ -359,6 +359,13 @@ class StateManager {
     return conflicts;
   }
 
+  discardModelConflicts(state, modelConflicts) {
+    this.replace({
+      ...state,
+      changes: state.changes.filter(change => !modelConflicts.find(conflict => conflict.name == change.path)),
+    });
+  }
+
   getSourceValue(state, path) {
     let value = state.source.value;
     let pathSegments = path.split('.');

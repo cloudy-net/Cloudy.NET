@@ -297,4 +297,38 @@ describe('state-manager.js', () => {
       assert.deepEqual(result, expected);
     });
   });
+  describe('discardModelConflicts', () => {
+    it('discards only changes with conflicts', async () => {
+      const propertyName = 'lorem';
+      const property2Name = 'ipsum';
+
+      const state = {
+        entityReference: {
+          keyValues: [1]
+        },
+        changes: [
+          { '$type': 'simple', date: Date.now(), path: [propertyName], value: '' },
+          { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
+        ]
+      };
+
+      stateManager.states.push(state);
+
+      const conflicts = [
+        { name: propertyName, type: 'deleted' },
+      ];
+
+      stateManager.discardModelConflicts(state, conflicts);
+
+      const expected = [
+        { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
+      ];
+
+      const result = stateManager.getState(state.entityReference).changes;
+
+      assert.equal(result.length, 1);
+      result[0].date = expected[0].date;
+      assert.deepEqual(result, expected);
+    });
+  });
 });
