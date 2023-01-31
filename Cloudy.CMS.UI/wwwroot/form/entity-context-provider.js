@@ -30,19 +30,26 @@ export default ({ entityType, keyValues, children }) => {
 
   useEffect(() => {
     if (!state) {
-      return;
-    }
-
-    setModelConflicts(stateManager.getModelConflicts(state));
-  }, [state]);
-
-  useEffect(() => {
-    if (!state) {
+      setMergedChanges([]);
       return;
     }
 
     setMergedChanges(stateManager.getMergedChanges(state));
   }, [state]);
+
+  useEffect(() => {
+    if (!state) {
+      setModelConflicts([]);
+      return;
+    }
+
+    if (!mergedChanges.length) {
+      setModelConflicts([]);
+      return;
+    }
+
+    setModelConflicts(stateManager.getModelConflicts(state, mergedChanges));
+  }, [state, mergedChanges]);
 
   return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges, modelConflicts }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}

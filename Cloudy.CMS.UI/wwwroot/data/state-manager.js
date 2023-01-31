@@ -343,7 +343,7 @@ class StateManager {
     return Object.values(changes);
   }
 
-  getModelConflicts(state) {
+  getModelConflicts(state, mergedChanges) {
     if (!state.newSource) {
       return [];
     }
@@ -351,7 +351,7 @@ class StateManager {
     const conflicts = [];
 
     for (let key of Object.keys(state.source.properties)) {
-      if(!state.newSource.properties[key]){
+      if(!state.newSource.properties[key] && mergedChanges.find(change => change.path == key)){
         conflicts.push({ name: key, type: 'deleted' });
       }
     }

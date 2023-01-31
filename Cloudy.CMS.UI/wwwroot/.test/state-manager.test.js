@@ -266,14 +266,16 @@ describe('state-manager.js', () => {
       assert.equal(stateManager.getSourceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
   });
-  describe('getModelChanges', () => {
-    it('property deleted', async () => {
+  describe('getModelConflicts', () => {
+    it('property deleted with pending change', async () => {
       const propertyName = 'lorem';
+      const property2Name = 'ipsum';
 
       const state = {
         source: {
           properties: {
-            [propertyName]: { block: false }
+            [propertyName]: { block: false },
+            [property2Name]: { block: false },
           }
         },
         newSource: {
@@ -282,7 +284,11 @@ describe('state-manager.js', () => {
         }
       };
 
-      const result = stateManager.getModelChanges(state);
+      const changes = [
+        { '$type': 'simple', date: Date.now(), path: [propertyName], value: '' },
+      ];
+
+      const result = stateManager.getModelConflicts(state, changes);
 
       const expected = [
         { name: propertyName, type: 'deleted' },
