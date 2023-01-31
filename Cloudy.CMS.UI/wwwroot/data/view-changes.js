@@ -47,6 +47,11 @@ const ViewChanges = () => {
 
   const showConflict = conflict => {
     const change = mergedChanges.find(change => change.path == conflict.name);
+
+    if (!change) { // modelConflicts and changes get out of sync when clearing
+      return;
+    }
+
     const initialValue = stateManager.getSourceValue(state, change.path);
     const result = (typeof initialValue == 'string' || initialValue == null) &&
       (typeof change.value == 'string' || change.value == null) ?
@@ -55,7 +60,7 @@ const ViewChanges = () => {
 
     return html`
       ${change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`)} was ${conflict.type}:
-      ${change['$type'] == 'simple' ? html` Changed to “${result}”` : ` Changed block type to “${change.type}”`}
+      ${change['$type'] == 'simple' ? html` Was “${result}”` : ` Block type was “${change.type}”`}
     `
   };
 
@@ -65,7 +70,7 @@ const ViewChanges = () => {
     };
 
     return html`
-      <p><strong>Conflicts:</strong></p>
+      <p><strong>Deleted properties with unsaved changes:</strong></p>
       <ul>
         ${modelConflicts.map(conflict => showConflict(conflict))}
       </ul>
