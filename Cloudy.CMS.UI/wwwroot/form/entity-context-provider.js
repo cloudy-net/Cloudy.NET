@@ -5,7 +5,7 @@ import stateManager from '../data/state-manager.js';
 export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();
   const [state, setState] = useState();
-  const [modelConflicts, setModelConflicts] = useState([]);
+  const [sourceConflicts, setSourceConflicts] = useState([]);
   const [mergedChanges, setMergedChanges] = useState([]);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default ({ entityType, keyValues, children }) => {
       setState(state);
     } else {
       const state = stateManager.createStateForNewContent(entityType);
-      entityReference = state.entityReference
+      entityReference = state.entityReference;
       setEntityReference(entityReference);
       setState(state);
     }
@@ -39,19 +39,19 @@ export default ({ entityType, keyValues, children }) => {
 
   useEffect(() => {
     if (!state) {
-      setModelConflicts([]);
+      setSourceConflicts([]);
       return;
     }
 
     if (!mergedChanges.length) {
-      setModelConflicts([]);
+      setSourceConflicts([]);
       return;
     }
 
-    setModelConflicts(stateManager.getSourceConflicts(state, mergedChanges));
+    setSourceConflicts(stateManager.getSourceConflicts(state, mergedChanges));
   }, [state, mergedChanges]);
 
-  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges, modelConflicts }}>
+  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges, sourceConflicts }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

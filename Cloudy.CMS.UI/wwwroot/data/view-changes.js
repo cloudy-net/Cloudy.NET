@@ -30,7 +30,7 @@ const getChangeBadge = () => {
 };
 
 const ViewChanges = () => {
-  const { state, mergedChanges, modelConflicts } = useContext(EntityContext);
+  const { state, mergedChanges, sourceConflicts } = useContext(EntityContext);
 
   const showChange = change => {
     const initialValue = stateManager.getSourceValue(state.source.value, change.path);
@@ -48,7 +48,7 @@ const ViewChanges = () => {
   const showConflict = conflict => {
     const change = mergedChanges.find(change => change.path == conflict.name);
 
-    if (!change) { // modelConflicts and changes get briefly out of sync when clearing
+    if (!change) { // sourceConflicts and changes get briefly out of sync when clearing
       return;
     }
 
@@ -64,15 +64,17 @@ const ViewChanges = () => {
     `
   };
 
-  if (modelConflicts.length) {
+  if (sourceConflicts.length) {
     const discardConflicts = () => {
-      stateManager.discardSourceConflicts(state, modelConflicts);
+      stateManager.discardSourceConflicts(state, sourceConflicts);
     };
+
+    console.log(sourceConflicts);
 
     return html`
       <p><strong>Deleted properties with unsaved changes:</strong></p>
       <ul>
-        ${modelConflicts.map(conflict => showConflict(conflict))}
+        ${sourceConflicts.map(conflict => showConflict(conflict))}
       </ul>
       <p><button class="btn btn-primary" type="button" onClick=${() => discardConflicts()}>Discard incompatible changes</button></p>
       `

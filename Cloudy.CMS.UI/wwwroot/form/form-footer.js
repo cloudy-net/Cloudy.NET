@@ -4,7 +4,7 @@ import stateManager from '../data/state-manager.js';
 
 const FormFooter = () => {
   const [saving, setSaving] = useState();
-  const { state, mergedChanges, modelConflicts } = useContext(EntityContext);
+  const { state, mergedChanges, sourceConflicts } = useContext(EntityContext);
 
   const save = async () => {
     setSaving(true);
@@ -23,7 +23,7 @@ const FormFooter = () => {
 
   return html`
   <div class="d-flex">
-    <button class="btn btn-primary" type="button" disabled=${saving || modelConflicts.length} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
+    <button class="btn btn-primary" type="button" disabled=${saving || sourceConflicts.length} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
     <button class="btn btn-beta ms-auto" type="button" disabled=${!mergedChanges.length || saving} onClick=${discard}>Discard changes</button>
   </div>
   `
