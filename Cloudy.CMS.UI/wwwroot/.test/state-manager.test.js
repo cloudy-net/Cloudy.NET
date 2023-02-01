@@ -316,7 +316,7 @@ describe('state-manager.js', () => {
       };
 
       const changes = [
-        { '$type': 'simple', date: Date.now(), path: [propertyName], value: '' },
+        { '$type': 'simple', date: Date.now(), path: propertyName, value: '' },
       ];
 
       const result = stateManager.getSourceConflicts(state, changes);
@@ -365,6 +365,41 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, expected);
     });
+    // it('property changed conflicts with pending change', async () => {
+    //   const propertyName = 'lorem';
+    //   const property2Name = 'ipsum';
+
+    //   const state = {
+    //     source: {
+    //       value: {
+    //         [propertyName]: 'loremipsum',
+    //       },
+    //       properties: {
+    //         [propertyName]: { block: false },
+    //       }
+    //     },
+    //     newSource: {
+    //       value: {
+    //         [propertyName]: 'lorem',
+    //       },
+    //       properties: {
+    //         [propertyName]: { block: false },
+    //       }
+    //     }
+    //   };
+
+    //   const changes = [
+    //     { '$type': 'simple', date: Date.now(), path: propertyName, value: 'loremipsumasd' },
+    //   ];
+
+    //   const result = stateManager.getSourceConflicts(state, changes);
+
+    //   const expected = [
+    //     { name: propertyName, type: 'pendingchange' },
+    //   ];
+
+    //   assert.deepEqual(result, expected);
+    // });
   });
   // describe('discardSourceConflicts', () => {
   //   it('discards only changes with conflicts', async () => {
@@ -376,8 +411,8 @@ describe('state-manager.js', () => {
   //         keyValues: [1]
   //       },
   //       changes: [
-  //         { '$type': 'simple', date: Date.now(), path: [propertyName], value: '' },
-  //         { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
+  //         { '$type': 'simple', date: Date.now(), path: propertyName, value: '' },
+  //         { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
   //       ]
   //     };
 
@@ -390,7 +425,7 @@ describe('state-manager.js', () => {
   //     stateManager.discardSourceConflicts(state, conflicts);
 
   //     const expected = [
-  //       { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
+  //       { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
   //     ];
 
   //     const result = stateManager.getState(state.entityReference).changes;

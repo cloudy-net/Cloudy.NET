@@ -61,7 +61,7 @@ describe('simple-change-handler.js', () => {
           }
         },
         changes: [
-          { '$type': 'simple', date: Date.now() - 10 * 60 * 1000, path: [propertyName], value: '' },
+          { '$type': 'simple', date: Date.now() - 10 * 60 * 1000, path: propertyName, value: '' },
         ]
       });
 
