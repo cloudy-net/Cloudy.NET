@@ -366,40 +366,87 @@ describe('state-manager.js', () => {
       assert.deepEqual(result, expected);
     });
     // it('property changed conflicts with pending change', async () => {
-    //   const propertyName = 'lorem';
-    //   const property2Name = 'ipsum';
+      // const blockName = 'lorem';
+      // const blockTypeName = 'ipsum';
+      // const propertyName = 'dolor';
+      // const property2Name = 'sit';
+      // const sourceValue = 'amet';
+      // const newSourceValue = 'adipiscing';
+      // const newValue = 'elit';
+      // const source2Value = 'durum';
+      // const newSource2Value = 'consectetur';
+      // const new2Value = 'et';
 
-    //   const state = {
-    //     source: {
-    //       value: {
-    //         [propertyName]: 'loremipsum',
-    //       },
-    //       properties: {
-    //         [propertyName]: { block: false },
-    //       }
-    //     },
-    //     newSource: {
-    //       value: {
-    //         [propertyName]: 'lorem',
-    //       },
-    //       properties: {
-    //         [propertyName]: { block: false },
-    //       }
-    //     }
-    //   };
+      // const state = {
+      //   source: {
+      //     value: {
+      //       [blockName]: {
+      //         Type: blockTypeName,
+      //         Value: {
+      //           [propertyName]: sourceValue,
+      //         }
+      //       },
+      //       [property2Name]: source2Value,
+      //     },
+      //     properties: [],
+      //   },
+      //   newSource: {
+      //     value: {
+      //       [blockName]: {
+      //         Type: blockTypeName,
+      //         Value: {
+      //           [propertyName]: newSourceValue,
+      //         }
+      //       },
+      //       [property2Name]: newSource2Value,
+      //     },
+      //     properties: [],
+      //   },
+      // };
+      
+      // const changes = [
+      //   { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
+      //   { '$type': 'simple', date: Date.now(), path: property2Name, value: new2Value },
+      // ];
 
-    //   const changes = [
-    //     { '$type': 'simple', date: Date.now(), path: propertyName, value: 'loremipsumasd' },
-    //   ];
+      // const result = stateManager.getSourceConflicts(state, changes);
 
-    //   const result = stateManager.getSourceConflicts(state, changes);
+      // const expected = [
+      //   { path: `${blockName}.${propertyName}`, type: 'pendingchangesourceconflict' },
+      // ];
 
-    //   const expected = [
-    //     { name: propertyName, type: 'pendingchange' },
-    //   ];
-
-    //   assert.deepEqual(result, expected);
+      // assert.deepEqual(result, expected);
     // });
+  });
+  describe('enumerateSourceProperties', () => {
+    it('lists simple and nested properties', async () => {
+      const blockName = 'lorem';
+      const blockTypeName = 'ipsum';
+      const propertyName = 'dolor';
+      const property2Name = 'sit';
+      const sourceValue = 'amet';
+      const source2Value = 'durum';
+
+      const source = {
+        [blockName]: {
+          Type: blockTypeName,
+          Value: {
+            [propertyName]: sourceValue,
+          }
+        },
+        [property2Name]: source2Value,
+      };
+
+      const result = stateManager.enumerateSourceProperties(source);
+      
+      const expected = [
+        blockName,
+        property2Name,
+        `${blockName}.${propertyName}`,
+      ];
+
+      assert.deepEqual(result, expected);
+    });
   });
   // describe('discardSourceConflicts', () => {
   //   it('discards only changes with conflicts', async () => {

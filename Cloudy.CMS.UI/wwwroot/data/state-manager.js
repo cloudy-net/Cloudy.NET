@@ -390,6 +390,37 @@ class StateManager {
     return result;
   }
 
+  enumerateSourceProperties(source) {
+    const cue = [{ target: source, path: '' }];
+    const result = [];
+
+    while (cue.length) {
+      const { target, path } = cue.shift();
+
+      for (let key of Object.keys(target)) {
+        const currentPath = path + (path ? '.' : '') + key;
+
+        result.push(currentPath);
+
+        if (!target[key]) {
+          continue;
+        }
+
+        if (!target[key].Type) {
+          continue;
+        }
+
+        if (!target[key].Value) {
+          continue;
+        }
+
+        cue.push({ target: target[key].Value, path: currentPath });
+      }
+    }
+
+    return result;
+  }
+
   discardSourceConflicts(state, modelConflicts) {
     state = {
       ...state,
