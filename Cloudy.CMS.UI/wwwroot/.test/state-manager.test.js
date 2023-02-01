@@ -322,7 +322,7 @@ describe('state-manager.js', () => {
       const result = stateManager.getSourceConflicts(state, changes);
 
       const expected = [
-        { name: propertyName, type: 'deleted' },
+        { path: propertyName, type: 'deleted' },
       ];
 
       assert.deepEqual(result, expected);
