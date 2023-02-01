@@ -322,9 +322,9 @@ class StateManager {
       changes[change.path] = change;
     }
 
-    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state, change.path)).forEach(change => delete changes[change.path])
+    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state.source.value, change.path)).forEach(change => delete changes[change.path])
     Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
-      const sourceValue = this.getSourceValue(state, change.path);
+      const sourceValue = this.getSourceValue(state.source.value, change.path);
 
       return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
     }).forEach(change => delete changes[change.path])
@@ -349,11 +349,32 @@ class StateManager {
     const newSourceBlockTypes = this.getSourceBlockTypes(state.newSource.value);
 
     for (let path of Object.keys(sourceBlockTypes)) {
-      if(!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]){
-        for(let change of mergedChanges.filter(change => change.path.indexOf(`${path}.`) == 0)){
+      if (!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]) {
+        for (let change of mergedChanges.filter(change => change.path.indexOf(`${path}.`) == 0)) {
           conflicts.push({ path: change.path, type: 'blockdeleted' });
         }
       }
+    }
+
+    const newSourceProperties = this.enumerateSourceProperties(state.source.value);
+
+    for (let path of newSourceProperties) {
+      const newSourceValue = this.getSourceValue(state.newSource.value, path);
+      const sourceValue = this.getSourceValue(state.source.value, path);
+
+      if (newSourceValue == sourceValue) {
+        continue;
+      }
+
+      if (Array.isArray(newSourceValue) && Array.isArray(sourceValue) && arrayEquals(newSourceValue, sourceValue)) {
+        continue;
+      }
+
+      if (!mergedChanges.find(change => change.path == path)) {
+        continue;
+      }
+
+      conflicts.push({ path: path, type: 'pendingchangesourceconflict' });
     }
 
     return conflicts;
@@ -400,13 +421,13 @@ class StateManager {
       for (let key of Object.keys(target)) {
         const currentPath = path + (path ? '.' : '') + key;
 
-        result.push(currentPath);
-
         if (!target[key]) {
+          result.push(currentPath);
           continue;
         }
 
         if (!target[key].Type) {
+          result.push(currentPath);
           continue;
         }
 
@@ -430,8 +451,7 @@ class StateManager {
     this.replace(state);
   }
 
-  getSourceValue(state, path) {
-    let value = state.source.value;
+  getSourceValue(value, path) {
     let pathSegments = path.split('.');
 
     while (pathSegments.length) {

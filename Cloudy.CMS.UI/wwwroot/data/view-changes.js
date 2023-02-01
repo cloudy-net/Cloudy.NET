@@ -33,7 +33,7 @@ const ViewChanges = () => {
   const { state, mergedChanges, modelConflicts } = useContext(EntityContext);
 
   const showChange = change => {
-    const initialValue = stateManager.getSourceValue(state, change.path);
+    const initialValue = stateManager.getSourceValue(state.source.value, change.path);
     const result = (typeof initialValue == 'string' || initialValue == null) &&
       (typeof change.value == 'string' || change.value == null) ?
       diff(initialValue || '', change.value || '', 0).map(buildDiff) :
@@ -52,7 +52,7 @@ const ViewChanges = () => {
       return;
     }
 
-    const initialValue = stateManager.getSourceValue(state, change.path);
+    const initialValue = stateManager.getSourceValue(state.source.value, change.path);
     const result = (typeof initialValue == 'string' || initialValue == null) &&
       (typeof change.value == 'string' || change.value == null) ?
       diff(initialValue || '', change.value || '', 0).map(buildDiff) :

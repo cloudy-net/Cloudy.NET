@@ -27,7 +27,7 @@ class EmbeddedBlockChangeHandler {
     }
 
     if (type == UNCHANGED) {
-      const sourceValue = stateManager.getSourceValue(state, path);
+      const sourceValue = stateManager.getSourceValue(state.source.value, path);
       return sourceValue ? sourceValue.Type : null;
     }
 
