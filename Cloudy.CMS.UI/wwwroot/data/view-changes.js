@@ -58,10 +58,24 @@ const ViewChanges = () => {
       diff(initialValue || '', change.value || '', 0).map(buildDiff) :
       change.value;
 
-    return html`
-      ${change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`)} was ${conflict.type}:
-      ${change['$type'] == 'simple' ? html` Was “${result}”` : ` Block type was “${change.type}”`}
-    `
+      const path = change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`);
+
+    if (conflict.type == 'deleted') {
+      return html`${path}: Was deleted`;
+    }
+    if (conflict.type == 'blockdeleted') {
+      return html`${path}: Block type was changed”`;
+    }
+    if (conflict.type == 'pendingchangesourceconflict') {
+      const newValue = stateManager.getSourceValue(state.newSource.value, change.path);
+      const sourceResult = (typeof initialValue == 'string' || initialValue == null) &&
+        (typeof newValue == 'string' || newValue == null) ?
+        diff(initialValue || '', newValue || '', 0).map(buildDiff) :
+        newValue;
+      return html`${path}: Was changed to “${sourceResult}”, you changed it to “${result}”`;
+    }
+
+    return '(Unknown change type)';
   };
 
   if (sourceConflicts.length) {
@@ -72,7 +86,7 @@ const ViewChanges = () => {
     console.log(sourceConflicts);
 
     return html`
-      <p><strong>Deleted properties with unsaved changes:</strong></p>
+      <p><strong>Conflicting source and/or model changes:</strong></p>
       <ul>
         ${sourceConflicts.map(conflict => showConflict(conflict))}
       </ul>
