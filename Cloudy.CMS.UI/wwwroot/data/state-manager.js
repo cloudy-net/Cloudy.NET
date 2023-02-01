@@ -165,17 +165,6 @@ class StateManager {
     }
   }
 
-  discardnewSource(entityReference) {
-    let state = this.getState(entityReference);
-
-    state = {
-      ...state,
-      source: state.newSource,
-      newSource: null,
-    };
-    this.replace(state);
-  }
-
   async loadContentForState(entityReference) {
     const response = await urlFetcher.fetch(
       `/Admin/api/form/entity/get`,
@@ -305,7 +294,7 @@ class StateManager {
     return this.states.find(s => entityReferenceEquals(s.entityReference, entityReference));
   }
 
-  discardChanges(entityReference, change) {
+  discardChanges(entityReference) {
     const state = this.getState(entityReference);
 
     state.changes.splice(0, state.changes.length);
@@ -336,9 +325,9 @@ class StateManager {
       changes[change.path] = change;
     }
 
-    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state, change.path)).forEach(change => delete changes[change.path])
+    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state.source.value, change.path)).forEach(change => delete changes[change.path])
     Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
-      const sourceValue = this.getSourceValue(state, change.path);
+      const sourceValue = this.getSourceValue(state.source.value, change.path);
 
       return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
     }).forEach(change => delete changes[change.path])
@@ -346,12 +335,126 @@ class StateManager {
     return Object.values(changes);
   }
 
-  getReferenceChanges(state) {
-    return [];
+  getSourceConflicts(state, mergedChanges) {
+    if (!state.newSource) {
+      return [];
+    }
+
+    const conflicts = [];
+
+    for (let key of Object.keys(state.source.properties)) {
+      if (!state.newSource.properties[key] && mergedChanges.find(change => change.path == key)) {
+        conflicts.push({ path: key, type: 'deleted' });
+      }
+    }
+
+    const sourceBlockTypes = this.getSourceBlockTypes(state.source.value);
+    const newSourceBlockTypes = this.getSourceBlockTypes(state.newSource.value);
+
+    for (let path of Object.keys(sourceBlockTypes)) {
+      if (!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]) {
+        for (let change of mergedChanges.filter(change => change.path.indexOf(`${path}.`) == 0)) {
+          conflicts.push({ path: change.path, type: 'blockdeleted' });
+        }
+      }
+    }
+
+    const newSourceProperties = this.enumerateSourceProperties(state.source.value);
+
+    for (let path of newSourceProperties) {
+      const newSourceValue = this.getSourceValue(state.newSource.value, path);
+      const sourceValue = this.getSourceValue(state.source.value, path);
+
+      if (newSourceValue == sourceValue) {
+        continue;
+      }
+
+      if (Array.isArray(newSourceValue) && Array.isArray(sourceValue) && arrayEquals(newSourceValue, sourceValue)) {
+        continue;
+      }
+
+      if (!mergedChanges.find(change => change.path == path)) {
+        continue;
+      }
+
+      conflicts.push({ path: path, type: 'pendingchangesourceconflict' });
+    }
+
+    return conflicts;
   }
 
-  getSourceValue(state, path) {
-    let value = state.source.value;
+  getSourceBlockTypes(source) {
+    const cue = [{ target: source, path: '' }];
+    const result = {};
+
+    while (cue.length) {
+      const { target, path } = cue.shift();
+
+      for (let key of Object.keys(target)) {
+        if (!target[key]) {
+          continue;
+        }
+
+        if (!target[key].Type) {
+          continue;
+        }
+
+        const currentPath = path + (path ? '.' : '') + key;
+
+        result[currentPath] = target[key].Type;
+
+        if (!target[key].Value) {
+          continue;
+        }
+
+        cue.push({ target: target[key].Value, path: currentPath });
+      }
+    }
+
+    return result;
+  }
+
+  enumerateSourceProperties(source) {
+    const cue = [{ target: source, path: '' }];
+    const result = [];
+
+    while (cue.length) {
+      const { target, path } = cue.shift();
+
+      for (let key of Object.keys(target)) {
+        const currentPath = path + (path ? '.' : '') + key;
+
+        if (!target[key]) {
+          result.push(currentPath);
+          continue;
+        }
+
+        if (!target[key].Type) {
+          result.push(currentPath);
+          continue;
+        }
+
+        if (!target[key].Value) {
+          continue;
+        }
+
+        cue.push({ target: target[key].Value, path: currentPath });
+      }
+    }
+
+    return result;
+  }
+
+  discardSourceConflicts(state, modelConflicts) {
+    state = {
+      ...state,
+      changes: state.changes.filter(change => !modelConflicts.find(conflict => conflict.name == change.path)),
+    };
+
+    this.replace(state);
+  }
+
+  getSourceValue(value, path) {
     let pathSegments = path.split('.');
 
     while (pathSegments.length) {

@@ -11,6 +11,10 @@ class SimpleChangeHandler {
     change.date = Date.now();
     change.value = value;
 
+    if (change.value == stateManager.getSourceValue(state.source.value, path) && state.changes.filter(change => change.path == path).length == 1) {
+      state.changes.splice(state.changes.indexOf(change), 1);
+    }
+
     stateManager.persist(state);
   }
   setValueAndValidate(entityReference, path, value, validators) {
@@ -38,7 +42,7 @@ class SimpleChangeHandler {
     }
 
     if (value == UNCHANGED) {
-      return stateManager.getSourceValue(state, path);
+      return stateManager.getSourceValue(state.source.value, path);
     }
 
     return value;

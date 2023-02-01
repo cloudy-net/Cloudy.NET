@@ -2,6 +2,5 @@
 {
     internal interface ICustomSelectAttribute 
     {
-        bool Multi { get; }
     }
 }
