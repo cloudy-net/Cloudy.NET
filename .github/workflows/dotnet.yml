@@ -44,16 +44,23 @@ jobs:
       uses: slackapi/slack-github-action@v1.23.0
       with:
         channel-id: 'C04KXEF19PX'
-        slack-message: "Pipeline run status: ${{ job.status }}"
         payload: |
           {
-            "text": "Pipeline run status: ${{ job.status }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Pipeline>"
+                  "text": "Pipeline run status: ${{ job.status }}"
+                },
+                { "type": "divider" },
+                {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Pipeline"
+                  },
+                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
                 }
               }
             ]
