@@ -54,14 +54,24 @@ jobs:
                   "text": "Pipeline run status: ${{ job.status }}"
                 }
               },
-              { "type": "divider" },
               {
-                "type": "button",
+                "type": "divider"
+              },
+              {
+                "type": "section",
                 "text": {
-                  "type": "plain_text",
-                  "text": "Pipeline"
+                  "type": "mrkdwn",
+                  "text": "Links"
                 },
-                "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Pipeline :arrow_upper_right:",
+                    "emoji": true
+                  },
+                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                }
               }
             ]
           }
