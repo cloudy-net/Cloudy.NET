@@ -48,7 +48,7 @@ export default ({ entityType, keyValues, children }) => {
       return;
     }
 
-    setModelConflicts(stateManager.getModelConflicts(state, mergedChanges));
+    setModelConflicts(stateManager.getSourceConflicts(state, mergedChanges));
   }, [state, mergedChanges]);
 
   return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges, modelConflicts }}>

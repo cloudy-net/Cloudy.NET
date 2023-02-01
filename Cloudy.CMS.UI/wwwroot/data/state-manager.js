@@ -332,7 +332,7 @@ class StateManager {
     return Object.values(changes);
   }
 
-  getModelConflicts(state, mergedChanges) {
+  getSourceConflicts(state, mergedChanges) {
     if (!state.newSource) {
       return [];
     }
@@ -340,15 +340,59 @@ class StateManager {
     const conflicts = [];
 
     for (let key of Object.keys(state.source.properties)) {
-      if(!state.newSource.properties[key] && mergedChanges.find(change => change.path == key)){
+      if (!state.newSource.properties[key] && mergedChanges.find(change => change.path == key)) {
         conflicts.push({ name: key, type: 'deleted' });
+      }
+    }
+
+    const sourceBlockTypes = this.getSourceBlockTypes(state.source.value);
+    const newSourceBlockTypes = this.getSourceBlockTypes(state.newSource.value);
+
+    const deletedBlocks = [];
+
+    for (let path of Object.keys(sourceBlockTypes)) {
+      if(!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]){
+        for(let change of mergedChanges.filter(change => change.path.indexOf(`${path}.`) == 0)){
+          conflicts.push({ path: change.path, type: 'blockdeleted' });
+        }
       }
     }
 
     return conflicts;
   }
 
-  discardModelConflicts(state, modelConflicts) {
+  getSourceBlockTypes(source) {
+    const cue = [{ target: source, path: '' }];
+    const result = {};
+
+    while (cue.length) {
+      const { target, path } = cue.shift();
+
+      for (let key of Object.keys(target)) {
+        if (!target[key]) {
+          continue;
+        }
+
+        if (!target[key].Type) {
+          continue;
+        }
+
+        const currentPath = path + (path ? '.' : '') + key;
+
+        result[currentPath] = target[key].Type;
+
+        if (!target[key].Value) {
+          continue;
+        }
+
+        cue.push({ target: target[key].Value, path: currentPath });
+      }
+    }
+
+    return result;
+  }
+
+  discardSourceConflicts(state, modelConflicts) {
     state = {
       ...state,
       changes: state.changes.filter(change => !modelConflicts.find(conflict => conflict.name == change.path)),

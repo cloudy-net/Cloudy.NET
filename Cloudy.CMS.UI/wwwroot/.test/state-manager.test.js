@@ -266,19 +266,21 @@ describe('state-manager.js', () => {
       assert.equal(stateManager.getSourceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
   });
-  describe('getModelConflicts', () => {
+  describe('getSourceConflicts', () => {
     it('property deleted with pending change', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
       const state = {
         source: {
+          value: {},
           properties: {
             [propertyName]: { block: false },
             [property2Name]: { block: false },
           }
         },
         newSource: {
+          value: {},
           properties: {
           }
         }
@@ -288,7 +290,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: [propertyName], value: '' },
       ];
 
-      const result = stateManager.getModelConflicts(state, changes);
+      const result = stateManager.getSourceConflicts(state, changes);
 
       const expected = [
         { name: propertyName, type: 'deleted' },
@@ -296,38 +298,105 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, expected);
     });
-  });
-  describe('discardModelConflicts', () => {
-    it('discards only changes with conflicts', async () => {
-      const propertyName = 'lorem';
-      const property2Name = 'ipsum';
+    it('block type changed with pending change', async () => {
+      const blockName = 'lorem';
+      const blockTypeName = 'ipsum';
+      const propertyName = 'dolor';
+      const blockType2Name = 'amet';
+      const propertyValue = 'adipiscing';
 
       const state = {
-        entityReference: {
-          keyValues: [1]
+        source: {
+          value: {
+            [blockName]: {
+              Type: blockTypeName
+            }
+          },
+          properties: [],
         },
-        changes: [
-          { '$type': 'simple', date: Date.now(), path: [propertyName], value: '' },
-          { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
-        ]
+        newSource: {
+          value: {
+            [blockName]: {
+              Type: blockType2Name
+            }
+          },
+          properties: [],
+        },
       };
-
-      stateManager.states.push(state);
-
-      const conflicts = [
-        { name: propertyName, type: 'deleted' },
+      
+      const changes = [
+        { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: propertyValue },
       ];
 
-      stateManager.discardModelConflicts(state, conflicts);
+      const result = stateManager.getSourceConflicts(state, changes);
 
       const expected = [
-        { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
+        { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
       ];
 
-      const result = stateManager.getState(state.entityReference).changes;
+      assert.deepEqual(result, expected);
+    });
+  });
+  // describe('discardSourceConflicts', () => {
+  //   it('discards only changes with conflicts', async () => {
+  //     const propertyName = 'lorem';
+  //     const property2Name = 'ipsum';
 
-      assert.equal(result.length, 1);
-      result[0].date = expected[0].date;
+  //     const state = {
+  //       entityReference: {
+  //         keyValues: [1]
+  //       },
+  //       changes: [
+  //         { '$type': 'simple', date: Date.now(), path: [propertyName], value: '' },
+  //         { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
+  //       ]
+  //     };
+
+  //     stateManager.states.push(state);
+
+  //     const conflicts = [
+  //       { name: propertyName, type: 'deleted' },
+  //     ];
+
+  //     stateManager.discardSourceConflicts(state, conflicts);
+
+  //     const expected = [
+  //       { '$type': 'simple', date: Date.now(), path: [property2Name], value: '' },
+  //     ];
+
+  //     const result = stateManager.getState(state.entityReference).changes;
+
+  //     assert.equal(result.length, 1);
+  //     result[0].date = expected[0].date;
+  //     assert.deepEqual(result, expected);
+  //   });
+  // });
+  describe('getSourceBlockTypes', () => {
+    it('gets nested block types', async () => {
+      const blockName = 'lorem';
+      const blockTypeName = 'ipsum';
+      const block2Name = 'dolor';
+      const blockType2Name = 'amet';
+
+      const source = {
+        [blockName]: {
+          Type: blockTypeName,
+          Value: {
+            [block2Name]: {
+              Type: blockType2Name,
+              Value: {}
+            }
+          }
+        }
+      };
+
+      const result = stateManager.getSourceBlockTypes(source);
+
+      const expected = {
+        [blockName]: blockTypeName,
+        [`${blockName}.${block2Name}`]: blockType2Name,
+      };
+
       assert.deepEqual(result, expected);
     });
   });

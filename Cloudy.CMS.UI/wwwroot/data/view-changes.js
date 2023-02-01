@@ -66,7 +66,7 @@ const ViewChanges = () => {
 
   if (modelConflicts.length) {
     const discardConflicts = () => {
-      stateManager.discardModelConflicts(state, modelConflicts);
+      stateManager.discardSourceConflicts(state, modelConflicts);
     };
 
     return html`
