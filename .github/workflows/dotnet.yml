@@ -52,16 +52,16 @@ jobs:
                 "text": {
                   "type": "mrkdwn",
                   "text": "Pipeline run status: ${{ job.status }}"
-                },
-                { "type": "divider" },
-                {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Pipeline"
-                  },
-                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
                 }
+              },
+              { "type": "divider" },
+              {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Pipeline"
+                },
+                "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
               }
             ]
           }
