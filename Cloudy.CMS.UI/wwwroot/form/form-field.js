@@ -14,10 +14,10 @@ const FormField = ({ name, path, label, description, renderChrome, partial, sett
         return html`<${fieldComponents[partial]} ...${{ name, label, path, settings }} />`;
     }
 
-    const { state } = useContext(EntityContext);
+    const { state, mergedChanges } = useContext(EntityContext);
     
     return html`<div class="mb-3">
-    <label for=${name} class="form-label">${label} ${stateManager.hasChanges(state, path) ? '*' : null}</label>
+    <label for=${name} class="form-label">${label} ${mergedChanges.find(change => change.path == path) ? '*' : null}</label>
     <${fieldComponents[partial]} ...${{ name, label, path, settings }} />
     ${ !!description ? html`<small class="form-text text-muted">${description}</small>` : '' }
     </div>`

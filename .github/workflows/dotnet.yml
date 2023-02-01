@@ -38,12 +38,12 @@ jobs:
       env:
         NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
       run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
-    - name: Post to a Slack channel on failure
-      if: always() && job.status != 'success'
+    - name: Post pipeline job status to Slack
+      if: always()
       id: slack
       uses: slackapi/slack-github-action@v1.23.0
       with:
         channel-id: 'C04KXEF19PX'
-        slack-message: "Pipeline failed (status: ${{ job.status }})"
+        slack-message: "Pipeline failed (status: ${{ job.status }})\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

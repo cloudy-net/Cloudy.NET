@@ -27,6 +27,47 @@ describe('simple-change-handler.js', () => {
       simpleChangeHandler.setValue(entityReference, propertyName, newValue);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), newValue, 'New value should be returned as an intermediate change has been registered');
     });
+    it('change should be deleted if it equals source', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
+      const { entityReference } = stateManager.createStateForNewContent('page');
+      const propertyName = 'TestProperty';
+      const initialValue = 'lorem';
+
+      stateManager.replace({
+        ...stateManager.getState(entityReference),
+        source: {
+          value: {
+            [propertyName]: initialValue
+          }
+        }
+      });
+
+      simpleChangeHandler.setValue(entityReference, propertyName, initialValue);
+      assert.equal(stateManager.getState(entityReference).changes.length, 0);
+    });
+    it('change should not be deleted if it equals source but previous changes exist', () => {
+      global.localStorage.clear();
+      stateManager.states = stateManager.loadStates();
+      const { entityReference } = stateManager.createStateForNewContent('page');
+      const propertyName = 'TestProperty';
+      const initialValue = 'lorem';
+
+      stateManager.replace({
+        ...stateManager.getState(entityReference),
+        source: {
+          value: {
+            [propertyName]: initialValue
+          }
+        },
+        changes: [
+          { '$type': 'simple', date: Date.now() - 10 * 60 * 1000, path: propertyName, value: '' },
+        ]
+      });
+
+      simpleChangeHandler.setValue(entityReference, propertyName, initialValue);
+      assert.equal(stateManager.getState(entityReference).changes.length, 2);
+    });
     it('intermediate value, deep path', () => {
       global.localStorage.clear();
       stateManager.states = stateManager.loadStates();
