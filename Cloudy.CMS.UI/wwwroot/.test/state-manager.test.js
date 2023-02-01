@@ -266,6 +266,35 @@ describe('state-manager.js', () => {
       assert.equal(stateManager.getSourceValue(state, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
   });
+  describe('getSourceBlockTypes', () => {
+    it('gets nested block types', async () => {
+      const blockName = 'lorem';
+      const blockTypeName = 'ipsum';
+      const block2Name = 'dolor';
+      const blockType2Name = 'amet';
+
+      const source = {
+        [blockName]: {
+          Type: blockTypeName,
+          Value: {
+            [block2Name]: {
+              Type: blockType2Name,
+              Value: {}
+            }
+          }
+        }
+      };
+
+      const result = stateManager.getSourceBlockTypes(source);
+
+      const expected = {
+        [blockName]: blockTypeName,
+        [`${blockName}.${block2Name}`]: blockType2Name,
+      };
+
+      assert.deepEqual(result, expected);
+    });
+  });
   describe('getSourceConflicts', () => {
     it('property deleted with pending change', async () => {
       const propertyName = 'lorem';
@@ -371,33 +400,4 @@ describe('state-manager.js', () => {
   //     assert.deepEqual(result, expected);
   //   });
   // });
-  describe('getSourceBlockTypes', () => {
-    it('gets nested block types', async () => {
-      const blockName = 'lorem';
-      const blockTypeName = 'ipsum';
-      const block2Name = 'dolor';
-      const blockType2Name = 'amet';
-
-      const source = {
-        [blockName]: {
-          Type: blockTypeName,
-          Value: {
-            [block2Name]: {
-              Type: blockType2Name,
-              Value: {}
-            }
-          }
-        }
-      };
-
-      const result = stateManager.getSourceBlockTypes(source);
-
-      const expected = {
-        [blockName]: blockTypeName,
-        [`${blockName}.${block2Name}`]: blockType2Name,
-      };
-
-      assert.deepEqual(result, expected);
-    });
-  });
 });
