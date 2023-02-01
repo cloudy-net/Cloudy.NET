@@ -348,8 +348,6 @@ class StateManager {
     const sourceBlockTypes = this.getSourceBlockTypes(state.source.value);
     const newSourceBlockTypes = this.getSourceBlockTypes(state.newSource.value);
 
-    const deletedBlocks = [];
-
     for (let path of Object.keys(sourceBlockTypes)) {
       if(!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]){
         for(let change of mergedChanges.filter(change => change.path.indexOf(`${path}.`) == 0)){
