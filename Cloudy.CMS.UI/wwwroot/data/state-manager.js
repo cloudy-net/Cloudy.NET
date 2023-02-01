@@ -341,7 +341,7 @@ class StateManager {
 
     for (let key of Object.keys(state.source.properties)) {
       if (!state.newSource.properties[key] && mergedChanges.find(change => change.path == key)) {
-        conflicts.push({ name: key, type: 'deleted' });
+        conflicts.push({ path: key, type: 'deleted' });
       }
     }
 
