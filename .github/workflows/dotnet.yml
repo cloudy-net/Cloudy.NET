@@ -51,7 +51,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "Pipeline run status: ${{ job.status }} ${{ (job.status == 'success' && ':white_check_mark:') || ':doh:' }}"
+                  "text": "Pipeline run status: ${{ job.status }} ${{ (job.status == 'success' && ':cat-smug:') || ':doh: <@devs>' }}"
                 }
               },
               {
