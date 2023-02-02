@@ -48,6 +48,14 @@ jobs:
           {
             "blocks": [
               {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "${{ github.event.repository.name }}",
+                  "emoji": true
+                }
+              },
+              {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
