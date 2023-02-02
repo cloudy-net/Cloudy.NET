@@ -15,20 +15,6 @@ const buildDiff = ([state, segment]) => {
   return segment;
 };
 
-const getChangeBadge = () => {
-  if (!initialValue && value) {
-    return html`<cloudy-ui-form-field-change-badge class=cloudy-ui-added title="This value has been added."><//>`;
-  }
-
-  if (initialValue && !value) {
-    return html`<cloudy-ui-form-field-change-badge class=cloudy-ui-removed title="This value has been removed."><//>`;
-  }
-
-  if (initialValue != value) {
-    return html`<cloudy-ui-form-field-change-badge class=cloudy-ui-modified title="This value has been modified."><//>`;
-  }
-};
-
 const ViewChanges = () => {
   const { state, mergedChanges, sourceConflicts } = useContext(EntityContext);
 
@@ -61,10 +47,10 @@ const ViewChanges = () => {
       const path = change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`);
 
     if (conflict.type == 'deleted') {
-      return html`${path}: Was deleted`;
+      return html`<tr><td>${path}<//><td>Property deleted<//><td>${result}<//><td><//><//>`;
     }
     if (conflict.type == 'blockdeleted') {
-      return html`${path}: Block type was changed”`;
+      return html`<tr><td>${path}<//><td>Block deleted<//><td>${result}<//><td><//><//>`;
     }
     if (conflict.type == 'pendingchangesourceconflict') {
       const newValue = stateManager.getSourceValue(state.newSource.value, change.path);
@@ -72,10 +58,10 @@ const ViewChanges = () => {
         (typeof newValue == 'string' || newValue == null) ?
         diff(initialValue || '', newValue || '', 0).map(buildDiff) :
         newValue;
-      return html`${path}: Was changed to “${sourceResult}”, you changed it to “${result}”`;
+      return html`<tr><td>${path}<//><td>${sourceResult}<//><td>${result}<//><td><//><//>`;
     }
 
-    return '(Unknown change type)';
+    return '<tr><td>(Unknown change type)<//><//>';
   };
 
   if (sourceConflicts.length) {
@@ -87,9 +73,14 @@ const ViewChanges = () => {
 
     return html`
       <p><strong>Conflicting source and/or model changes:</strong></p>
-      <ul>
-        ${sourceConflicts.map(conflict => showConflict(conflict))}
-      </ul>
+      <table class="table">
+        <thead>
+          <tr><th>Property<//><th>Source<//><th>Your changes<//><th>Action<//><//>
+        <//>
+        <tbody>
+          ${sourceConflicts.map(conflict => showConflict(conflict))}
+        <//>
+      <//>
       <p><button class="btn btn-primary" type="button" onClick=${() => discardConflicts()}>Discard incompatible changes</button></p>
       `
   }

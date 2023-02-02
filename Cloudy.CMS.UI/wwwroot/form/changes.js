@@ -6,7 +6,7 @@ import EntityContext from "./entity-context.js";
 const Changes = () => {
   const { mergedChanges, sourceConflicts } = useContext(EntityContext);
   
-  const [showHistory, setShowHistory] = useState();
+  const [showHistory, setShowHistory] = useState(true);
 
   return html`
     ${
