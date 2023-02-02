@@ -60,16 +60,6 @@ jobs:
                 "text": {
                   "type": "mrkdwn",
                   "text": "Pipeline run status: ${{ job.status }} ${{ (job.status == 'success' && ':cat-smug:') || ':doh: <@devs>' }}"
-                }
-              },
-              {
-                "type": "divider"
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Links"
                 },
                 "accessory": {
                   "type": "button",
@@ -80,6 +70,9 @@ jobs:
                   },
                   "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
                 }
+              },
+              {
+                "type": "divider"
               }
             ]
           }
