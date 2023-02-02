@@ -47,10 +47,10 @@ const ViewChanges = () => {
       const path = change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`);
 
     if (conflict.type == 'deleted') {
-      return html`<tr><td>${path}<//><td>Property deleted<//><td>${result}<//><td><//><//>`;
+      return html`<tr><td>${path}<//><td>Property deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
     }
     if (conflict.type == 'blockdeleted') {
-      return html`<tr><td>${path}<//><td>Block deleted<//><td>${result}<//><td><//><//>`;
+      return html`<tr><td>${path}<//><td>Block deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
     }
     if (conflict.type == 'pendingchangesourceconflict') {
       const newValue = stateManager.getSourceValue(state.newSource.value, change.path);
@@ -58,7 +58,14 @@ const ViewChanges = () => {
         (typeof newValue == 'string' || newValue == null) ?
         diff(initialValue || '', newValue || '', 0).map(buildDiff) :
         newValue;
-      return html`<tr><td>${path}<//><td>${sourceResult}<//><td>${result}<//><td><//><//>`;
+
+      const select = html`<select class="form-control form-control-sm" place>
+        <option value="" disabled selected hidden>Select action<//>
+        <option value="keep-source">Keep source<//>
+        <option value="keep-changes">Keep changes<//>
+      <//>`;
+
+      return html`<tr><td>${path}<//><td>${sourceResult}<//><td>${result}<//><td>${select}<//><//>`;
     }
 
     return '<tr><td>(Unknown change type)<//><//>';
