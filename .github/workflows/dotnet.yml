@@ -41,7 +41,7 @@ jobs:
   message:
     needs: [build]
     if: always() && !cancelled()
-    uses: cloudy-net/Cloudy.Licensing/.github/workflows/post-slack-workflow.yml@master
+    uses: cloudy-net/Cloudy.CMS/.github/workflows/post-slack-workflow.yml@master
     with:
       group-ping-id: S04MMQ5VABX
       repository-name: ${{ github.event.repository.name }}

@@ -1,0 +1,59 @@
+
+name: Post message to slack
+
+on:
+  workflow_call:
+    inputs:
+      group-ping-id:
+        type: string
+        default: ''
+      repository-name:
+        type: string
+        default: ''
+      channel-id:
+        type: string
+        default: ''
+      run-url:
+        type: string
+        default: ''
+      run-success:
+        type: boolean
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: true
+
+jobs:
+  message:
+    runs-on: ubuntu-latest
+    name: "Post to slack"
+    steps:
+    - name: "Post to slack"
+      uses: slackapi/slack-github-action@v1.23.0
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      with:
+        channel-id: ${{ inputs.channel-id }}
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*${{ inputs.repository-name }}* - Pipeline run status: ${{ (inputs.run-success && 'Success') || 'Failure' }} ${{ (inputs.run-success && ':cat-smug:') || ':doh: <!subteam^${{ inputs.group-ping-id }}>' }}"
+                },
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Pipeline :arrow_upper_right:",
+                    "emoji": true
+                  },
+                  "url": "${{ inputs.run-url }}"
+                }
+              },
+              {
+                "type": "divider"
+              }
+            ]
+          }
