@@ -1,10 +1,22 @@
-﻿@using Cloudy.CMS.Naming
+﻿@using Cloudy.CMS.Licensing;
+@using Cloudy.CMS.Naming
 @using System.Reflection
 @inject IHumanizer Humanizer
+@inject ILicenseProvider licenseProvider
 
 <div class="mt-4"></div>
 <div class="footer p-4 mt-auto">
     <div class="container">
-        @Humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name), @DateTime.Now.Year.
+        <div class="row">
+            <div class="col-12 col-lg-4 text-center text-lg-start">
+                @Humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name), @DateTime.Now.Year.
+            </div>
+            @if (!licenseProvider.IsValidLicense)
+            {
+                <div class="col-12 col-lg-8 text-center text-lg-end">
+                    Unlicensed version of <a href="https://www.cloudy.net/" target="_blank">Cloudy</a>, valid for non-commercial use only.
+                </div>
+            }
+        </div>
     </div>
 </div>
