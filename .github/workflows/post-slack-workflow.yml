@@ -34,7 +34,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*${{ github.event.repository.name }}* - Pipeline run status: ${{ (inputs.run-success && 'Success') || 'Failure' }} ${{ (inputs.run-success && ':cat-smug:') || ':doh: <!subteam^${{ inputs.group-ping-id }}>' }}"
+                  "text": "*${{ github.event.repository.name }}* - ${{ (inputs.run-success && 'Success') || 'Failure' }} ${{ (inputs.run-success && ':cat-smug:') || ':doh: <!subteam^${{ inputs.group-ping-id }}>' }}"
                 },
                 "accessory": {
                   "type": "button",
