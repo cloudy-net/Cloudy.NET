@@ -40,7 +40,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*${{ inputs.repository-name }}* - Pipeline run status: ${{ (inputs.run-success && 'Success') || 'Failure' }} ${{ (inputs.run-success && ':cat-smug:') || ':doh: <!subteam^${{ inputs.group-ping-id }}>' }}"
+                  "text": "*${{ github.event.repository.name }}* - Pipeline run status: ${{ (inputs.run-success && 'Success') || 'Failure' }} ${{ (inputs.run-success && ':cat-smug:') || ':doh: <!subteam^${{ inputs.group-ping-id }}>' }}"
                 },
                 "accessory": {
                   "type": "button",
@@ -49,7 +49,7 @@ jobs:
                     "text": "Pipeline :arrow_upper_right:",
                     "emoji": true
                   },
-                  "url": "${{ inputs.run-url }}"
+                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
                 }
               },
               {
