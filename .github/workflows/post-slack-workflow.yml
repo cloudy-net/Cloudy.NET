@@ -49,7 +49,7 @@ jobs:
                     "text": "Pipeline :arrow_upper_right:",
                     "emoji": true
                   },
-                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
                 }
               },
               {
