@@ -5,7 +5,7 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
-      - 'github/workflows/post-slack-workflow.yml'
+      - '.github/workflows/post-slack-workflow.yml'
 
 jobs:
   build:
