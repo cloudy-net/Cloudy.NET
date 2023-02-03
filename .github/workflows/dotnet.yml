@@ -46,9 +46,7 @@ jobs:
     uses: cloudy-net/Cloudy.CMS/.github/workflows/post-slack-workflow.yml@master
     with:
       group-ping-id: S04MMQ5VABX
-      repository-name: ${{ github.event.repository.name }}
       run-success: ${{ !contains(needs.*.result, 'failure') }}
       channel-id: C04KXEF19PX
-      run-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

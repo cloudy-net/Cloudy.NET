@@ -7,13 +7,7 @@ on:
       group-ping-id:
         type: string
         default: ''
-      repository-name:
-        type: string
-        default: ''
       channel-id:
-        type: string
-        default: ''
-      run-url:
         type: string
         default: ''
       run-success:
