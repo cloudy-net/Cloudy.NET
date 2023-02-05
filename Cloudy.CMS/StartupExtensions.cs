@@ -13,6 +13,7 @@ using System.Linq;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.AssemblySupport;
 using Cloudy.CMS.Licensing;
+using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -45,11 +46,12 @@ namespace Microsoft.AspNetCore.Builder
 
             var assemblyProvider = new AssemblyProvider(options.Assemblies.Select(a => new AssemblyWrapper(a)));
             var contextDescriptorProvider = new ContextDescriptorProvider(new ContextDescriptorCreator().Create(options.ContextTypes));
-            var licenseProvider = new LicenseProvider(options.LicenseKey);
 
+            services.AddHttpContextAccessor();
             services.AddSingleton<IAssemblyProvider>(assemblyProvider);
             services.AddSingleton<IContextDescriptorProvider>(contextDescriptorProvider);
-            services.AddSingleton<ILicenseProvider>(licenseProvider);
+            services.AddHttpClient<ILicenseValidator, LicenseValidator>(c => c.BaseAddress = new Uri("https://cloudy-licensing.azurewebsites.net/api"));
+            services.AddSingleton<ILicenseProvider>(sp => new LicenseProvider(sp.GetService<ILicenseValidator>(), options.LicenseKey));
             
             foreach (var injector in new DependencyInjectorProvider(new DependencyInjectorCreator(assemblyProvider, contextDescriptorProvider)).GetAll())
             {
