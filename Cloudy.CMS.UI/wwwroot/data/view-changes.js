@@ -78,7 +78,7 @@ const ViewChanges = () => {
 
     console.log(sourceConflicts);
 
-    return html`
+    return html`<div class="m-3">
       <p><strong>Conflicting source and/or model changes:</strong></p>
       <table class="table">
         <thead>
@@ -89,7 +89,7 @@ const ViewChanges = () => {
         <//>
       <//>
       <p><button class="btn btn-primary" type="button" onClick=${() => discardConflicts()}>Discard incompatible changes</button></p>
-      `
+      <//>`
   }
 
   return html`
