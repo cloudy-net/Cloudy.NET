@@ -253,3 +253,11 @@ span.cloudy-ui-diff-delete {
 .table--content-list th.w-100 {
     min-width: 200px;
 }
+
+
+
+/* ACTIONS */
+
+.strikethrough {
+  text-decoration: line-through;
+}
