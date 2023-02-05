@@ -15,6 +15,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         bool? AutoGenerate,
         bool RenderChrome,
         string Tab,
-        IDictionary<string, object> Settings
+        IDictionary<string, object> Settings,
+        IDictionary<string, object> Validators
     );
 }
