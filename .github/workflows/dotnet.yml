@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
+    paths-ignore:
+      - '.github/workflows/post-slack-workflow.yml'
 
 jobs:
   build:
@@ -38,12 +40,13 @@ jobs:
       env:
         NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
       run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_APIKEY --skip-duplicate
-    - name: Post pipeline job status to Slack
-      if: always()
-      id: slack
-      uses: slackapi/slack-github-action@v1.23.0
-      with:
-        channel-id: 'C04KXEF19PX'
-        slack-message: "Pipeline failed (status: ${{ job.status }})\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  message:
+    needs: [build]
+    if: always() && !cancelled()
+    uses: cloudy-net/Cloudy.CMS/.github/workflows/post-slack-workflow.yml@master
+    with:
+      group-ping-id: S04MMQ5VABX
+      run-success: ${{ !contains(needs.*.result, 'failure') }}
+      channel-id: C04KXEF19PX
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

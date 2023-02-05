@@ -9,5 +9,6 @@ namespace Cloudy.CMS
     {
         public ISet<Assembly> Assemblies { get; } = new HashSet<Assembly>();
         public ISet<Type> ContextTypes { get; } = new HashSet<Type>();
+        public string LicenseKey { get; set; }
     }
 }
