@@ -76,8 +76,6 @@ const ViewChanges = () => {
       stateManager.discardSourceConflicts(state, sourceConflicts);
     };
 
-    console.log(sourceConflicts);
-
     return html`<div class="m-3">
       <p><strong>Conflicting source and/or model changes:</strong></p>
       <table class="table">
