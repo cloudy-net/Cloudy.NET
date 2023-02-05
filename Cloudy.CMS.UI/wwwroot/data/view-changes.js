@@ -18,6 +18,7 @@ const buildDiff = ([state, segment]) => {
 
 const ViewChanges = () => {
   const { state, mergedChanges, sourceConflicts } = useContext(EntityContext);
+  const [actions, setActions] = useState({});
 
   const showChange = change => {
     const initialValue = stateManager.getSourceValue(state.source.value, change.path);
@@ -44,7 +45,7 @@ const ViewChanges = () => {
           <tr><th>Property<//><th>Source<//><th>Your changes<//><th>Action<//><//>
         <//>
         <tbody>
-          ${sourceConflicts.map(conflict => html`<${showConflict} conflict=${conflict}/>`)}
+          ${sourceConflicts.map(conflict => html`<${showConflict} conflict=${conflict} setAction=${(path, action) => setActions({ ...actions, [path]: action })}/>`)}
         <//>
       <//>
       <p><button class="btn btn-primary" type="button" onClick=${() => discardConflicts()}>Discard incompatible changes</button></p>

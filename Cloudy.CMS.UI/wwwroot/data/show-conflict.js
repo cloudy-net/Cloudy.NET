@@ -15,7 +15,7 @@ const buildDiff = ([state, segment]) => {
   return segment;
 };
 
-const ShowConflict = ({ conflict }) => {
+const ShowConflict = ({ conflict, setAction }) => {
   const { state, mergedChanges } = useContext(EntityContext);
   const change = mergedChanges.find(change => change.path == conflict.path);
 
@@ -32,10 +32,10 @@ const ShowConflict = ({ conflict }) => {
     const path = change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`);
 
   if (conflict.type == 'deleted') {
-    return html`<tr><td>${path}<//><td>Property deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
+    return html`<tr class="align-middle"><td>${path}<//><td>Property deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
   }
   if (conflict.type == 'blockdeleted') {
-    return html`<tr><td>${path}<//><td>Block deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
+    return html`<tr class="align-middle"><td>${path}<//><td>Block deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
   }
   if (conflict.type == 'pendingchangesourceconflict') {
     const newValue = stateManager.getSourceValue(state.newSource.value, change.path);
@@ -44,16 +44,16 @@ const ShowConflict = ({ conflict }) => {
       diff(initialValue || '', newValue || '', 0).map(buildDiff) :
       newValue;
 
-    const select = html`<select class="form-control form-control-sm" place>
+    const select = html`<select class="form-control form-control-sm" onChange=${event => setAction && setAction(change.path, event.target.value)}>
       <option value="" disabled selected hidden>Select action<//>
       <option value="keep-source">Keep source<//>
       <option value="keep-changes">Keep changes<//>
     <//>`;
 
-    return html`<tr><td>${path}<//><td>${sourceResult}<//><td>${result}<//><td>${select}<//><//>`;
+    return html`<tr class="align-middle"><td>${path}<//><td>${sourceResult}<//><td>${result}<//><td>${select}<//><//>`;
   }
 
-  return '<tr><td>(Unknown change type)<//><//>';
+  return '<tr class="align-middle"><td>(Unknown change type)<//><//>';
 };
 
 export default ShowConflict;
