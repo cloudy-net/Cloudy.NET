@@ -15,7 +15,7 @@ const buildDiff = ([state, segment]) => {
   return segment;
 };
 
-const ShowConflict = ({ conflict, setAction }) => {
+const ShowConflict = ({ conflict, actions, setAction }) => {
   const { state, mergedChanges } = useContext(EntityContext);
   const change = mergedChanges.find(change => change.path == conflict.path);
 
@@ -29,7 +29,7 @@ const ShowConflict = ({ conflict, setAction }) => {
     diff(initialValue || '', change.value || '', 0).map(buildDiff) :
     change.value;
 
-    const path = change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`);
+  const path = change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`);
 
   if (conflict.type == 'deleted') {
     return html`<tr class="align-middle"><td>${path}<//><td>Property deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
@@ -44,13 +44,13 @@ const ShowConflict = ({ conflict, setAction }) => {
       diff(initialValue || '', newValue || '', 0).map(buildDiff) :
       newValue;
 
-    const select = html`<select class="form-control form-control-sm" onChange=${event => setAction && setAction(change.path, event.target.value)}>
+    const select = html`<select class="form-control form-control-sm" value=${actions[change.path]} onChange=${event => setAction(change.path, event.target.value)}>
       <option value="" disabled selected hidden>Select action<//>
       <option value="keep-source">Keep source<//>
       <option value="keep-changes">Keep changes<//>
     <//>`;
 
-    return html`<tr class="align-middle"><td>${path}<//><td>${sourceResult}<//><td>${result}<//><td>${select}<//><//>`;
+    return html`<tr class="align-middle"><td>${path}<//><td class=${actions[change.path] == 'keep-changes' ? 'strikethrough' : null}>${sourceResult}<//><td class=${actions[change.path] == 'keep-source' ? 'strikethrough' : null}>${result}<//><td>${select}<//><//>`;
   }
 
   return '<tr class="align-middle"><td>(Unknown change type)<//><//>';
