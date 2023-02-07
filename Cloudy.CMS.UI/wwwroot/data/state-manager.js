@@ -32,7 +32,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 
 class StateManager {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.10";
+  schema = "1.11";
   states = this.loadStates();
 
   loadStates() {
