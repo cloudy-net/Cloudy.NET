@@ -1,4 +1,4 @@
-import UndoHistory from "../data/view-changes.js";
+import ViewChanges from "../data/view-changes.js";
 import { html, useContext, useState } from "../preact-htm/standalone.module.js";
 import EntityContext from "./entity-context.js";
 
@@ -19,7 +19,7 @@ const Changes = () => {
         ${mergedChanges.length ? html`<a tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>View changes</a>` : html`<div style="white-space: pre"> <//>`}
       </div>`
     }
-    ${showHistory && html`<${UndoHistory} />`}
+    ${showHistory && html`<${ViewChanges} />`}
   `
 };
 
