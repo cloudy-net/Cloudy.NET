@@ -1,7 +1,9 @@
-﻿namespace Cloudy.CMS.Licensing
+﻿using System.Threading.Tasks;
+
+namespace Cloudy.CMS.Licensing
 {
     public interface ILicenseProvider
     {
-        public bool IsValidLicense { get; }
+        Task<bool> IsValidLicenseAsync();
     }
 }

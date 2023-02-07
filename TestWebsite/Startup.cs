@@ -1,17 +1,14 @@
-﻿using System;
+﻿using Cloudy.CMS.Routing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Hosting;
-using TestWebsite.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Cloudy.CMS.Routing;
-using Cloudy.CMS.UI;
-using System.Linq;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 using TestWebsite.Factories;
+using TestWebsite.Models;
 
 namespace TestWebsite
 {
@@ -19,9 +16,11 @@ namespace TestWebsite
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            var builder = WebApplication.CreateBuilder();
+
 #pragma warning disable CS0618 // Type or member is obsolete
             services.AddCloudy(cloudy => cloudy
-                .SetLicenseKey("9efcf550-e086-4167-a056-301271411a5d")
+                .SetLicenseKey(builder.Configuration["LicenseKey"])
                 .AddAdmin(admin => admin.Unprotect())
                 .AddAzureMediaPicker()
                 .AddContext<PageContext>()

@@ -1,14 +1,18 @@
-﻿namespace Cloudy.CMS.Licensing
+﻿using System.Threading.Tasks;
+
+namespace Cloudy.CMS.Licensing
 {
     public class LicenseProvider : ILicenseProvider
     {
+        private readonly ILicenseValidator licenseValidator;
         private string licenseKey;
 
-        public LicenseProvider(string licenseKey)
+        internal LicenseProvider(ILicenseValidator licenseValidator, string licenseKey)
         {
+            this.licenseValidator = licenseValidator;
             this.licenseKey = licenseKey;
         }
 
-        public bool IsValidLicense => !string.IsNullOrEmpty(licenseKey);
+        public async Task<bool> IsValidLicenseAsync() => await licenseValidator.IsValidAsync(licenseKey);
     }
 }
