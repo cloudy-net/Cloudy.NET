@@ -445,13 +445,46 @@ class StateManager {
     return result;
   }
 
-  discardSourceConflicts(state, modelConflicts) {
+  discardSourceConflicts(state, actions) {
+    const changes = [...state.changes];
+
+    for (let path of Object.keys(actions)) {
+      const action = actions[path];
+
+      if (action != 'keep-source') {
+        continue;
+      }
+
+      for(let change of this.getAllChangesForPath(state, path)){
+        changes.splice(changes.indexOf(change), 1);
+      }
+    }
+
     state = {
       ...state,
-      changes: state.changes.filter(change => !modelConflicts.find(conflict => conflict.name == change.path)),
+      changes,
+      source: state.newSource,
+      newSource: null,
     };
 
     this.replace(state);
+  }
+
+  getAllChangesForPath(state, path) {
+    let changes = [];
+
+    for (let c of state.changes) {
+      if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
+        changes = [];
+        continue;
+      }
+      if (path == c.path) {
+        changes.push(c);
+        continue;
+      }
+    }
+
+    return changes;
   }
 
   getSourceValue(value, path) {
@@ -468,7 +501,7 @@ class StateManager {
         value = value[pathSegments[0]];
       }
 
-      pathSegments = pathSegments.splice(1);
+      pathSegments = pathSegments.splice(1); // returns tail, mutated array discarded
     }
 
     return value;

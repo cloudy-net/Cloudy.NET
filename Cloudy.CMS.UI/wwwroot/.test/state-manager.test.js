@@ -352,7 +352,7 @@ describe('state-manager.js', () => {
           properties: [],
         },
       };
-      
+
       const changes = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: propertyValue },
       ];
@@ -403,7 +403,7 @@ describe('state-manager.js', () => {
           properties: [],
         },
       };
-      
+
       const changes = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
         { '$type': 'simple', date: Date.now(), path: property2Name, value: new2Value },
@@ -439,7 +439,7 @@ describe('state-manager.js', () => {
       };
 
       const result = stateManager.enumerateSourceProperties(source);
-      
+
       const expected = [
         property2Name,
         `${blockName}.${propertyName}`,
@@ -448,38 +448,89 @@ describe('state-manager.js', () => {
       assert.deepEqual(result, expected);
     });
   });
-  // describe('discardSourceConflicts', () => {
-  //   it('discards only changes with conflicts', async () => {
-  //     const propertyName = 'lorem';
-  //     const property2Name = 'ipsum';
+  describe('getAllChangesForPath', () => {
+    it('gets all changes for path', async () => {
+      const propertyName = 'lorem';
+      const property2Name = 'ipsum';
 
-  //     const state = {
-  //       entityReference: {
-  //         keyValues: [1]
-  //       },
-  //       changes: [
-  //         { '$type': 'simple', date: Date.now(), path: propertyName, value: '' },
-  //         { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
-  //       ]
-  //     };
+      const state = {
+        entityReference: {
+          keyValues: [1]
+        },
+        changes: [
+          { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
+          { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
+          { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
+        ]
+      };
 
-  //     stateManager.states.push(state);
+      const expected = [
+        state.changes[0],
+        state.changes[1],
+      ];
 
-  //     const conflicts = [
-  //       { name: propertyName, type: 'deleted' },
-  //     ];
+      const result = stateManager.getAllChangesForPath(state, propertyName);
 
-  //     stateManager.discardSourceConflicts(state, conflicts);
+      assert.deepEqual(result, expected);
+    });
+    it('clears changes after block type change', async () => {
+      const propertyName = 'lorem';
+      const property2Name = 'ipsum';
 
-  //     const expected = [
-  //       { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
-  //     ];
+      const state = {
+        entityReference: {
+          keyValues: [1]
+        },
+        changes: [
+          { '$type': 'simple', date: Date.now() - 5000000, path: `${propertyName}.${property2Name}`, value: '' },
+          { '$type': 'simple', date: Date.now() - 4000000, path: `${propertyName}.${property2Name}`, value: '' },
+          { '$type': 'blocktype', date: Date.now() - 3000000, path: propertyName, type: '' },
+          { '$type': 'simple', date: Date.now() - 2000000, path: `${propertyName}.${property2Name}`, value: '' },
+          { '$type': 'simple', date: Date.now() - 1000000, path: `${propertyName}.${property2Name}`, value: '' },
+        ]
+      };
 
-  //     const result = stateManager.getState(state.entityReference).changes;
+      const expected = [
+        state.changes[3],
+        state.changes[4],
+      ];
 
-  //     assert.equal(result.length, 1);
-  //     result[0].date = expected[0].date;
-  //     assert.deepEqual(result, expected);
-  //   });
-  // });
+      const result = stateManager.getAllChangesForPath(state, `${propertyName}.${property2Name}`);
+
+      assert.deepEqual(result, expected);
+    });
+  });
+  describe('discardSourceConflicts', () => {
+    it('discards only changes with conflicts', async () => {
+      const propertyName = 'lorem';
+      const property2Name = 'ipsum';
+
+      const state = {
+        entityReference: {
+          keyValues: [1]
+        },
+        changes: [
+          { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
+          { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
+          { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
+        ]
+      };
+
+      stateManager.states.push(state);
+
+      const actions = {
+        [propertyName]: 'keep-source',
+      };
+
+      const expected = [
+        state.changes[2]
+      ];
+
+      stateManager.discardSourceConflicts(state, actions);
+
+      const result = stateManager.getState(state.entityReference).changes;
+
+      assert.deepEqual(result, expected);
+    });
+  });
 });

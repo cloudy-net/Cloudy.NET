@@ -5,7 +5,7 @@ import ShowConflict from "./show-conflict.js";
 import stateManager from "./state-manager.js";
 
 const ViewChanges = () => {
-  const { state, mergedChanges, sourceConflicts } = useContext(EntityContext);
+  const { state, mergedChanges, sourceConflicts, clearMergedChanges, clearSourceConflicts } = useContext(EntityContext);
   const [actions, setActions] = useState({});
   const [message, setMessage] = useState();
 
@@ -15,7 +15,10 @@ const ViewChanges = () => {
       return;
     }
 
-    stateManager.discardSourceConflicts(state, sourceConflicts, actions);
+    clearMergedChanges();
+    clearSourceConflicts();
+    stateManager.discardSourceConflicts(state, actions);
+
     setMessage('Applied actions and updated source.');
   };
 
@@ -32,6 +35,7 @@ const ViewChanges = () => {
         <//>
         <p>
           <button class="btn btn-primary me-2" type="button" onClick=${() => applyReconciliation()}>Apply</button>
+          <!--
           <button class="btn btn-beta me-2" type="button" onClick=${() => {
             const actions = {};
 
@@ -50,6 +54,7 @@ const ViewChanges = () => {
 
             setActions(actions);
           }}>Clear</button>
+          -->
           ${message && html`<div class="d-inline-block ms-2">${message}<//>`}
         </p>
       <//>`
