@@ -12,7 +12,6 @@ namespace TestWebsite.Factories
     {
         public async Task<IEnumerable<SelectListItem>> GetItems()
         {
-            var niceGroup = new SelectListGroup { Name = "Nice colors" };
             var brightGroup = new SelectListGroup { Name = "Bright colors" };
             var coolGroup = new SelectListGroup { Name = "Cool colors", Disabled = true };
 
@@ -22,7 +21,6 @@ namespace TestWebsite.Factories
                 new SelectListItem { Text = "Blue", Value = "#02081a" },
                 new SelectListItem { Text = "Red", Value = "#f56c43" },
 
-                new SelectListItem { Text = "Red", Value = "#f56c42", Group = niceGroup },
                 new SelectListItem { Text = "White (default item)", Value = "#000", Group = brightGroup },
 
                 new SelectListItem { Text = "Red", Value = "#f56c44", Disabled = true, Group = coolGroup },

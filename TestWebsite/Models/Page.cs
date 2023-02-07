@@ -1,15 +1,11 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.UI.FieldSupport;
-using Cloudy.CMS.UI.FieldSupport.CustomSelect;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.List;
 using Cloudy.CMS.UI.List.Filter;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TestWebsite.Factories;
 
 namespace TestWebsite.Models
 {
@@ -19,6 +15,9 @@ namespace TestWebsite.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
         [ListColumn(Order = 0, Sortable = true, Width = ListingColumnWidth.Fill)]
+
+        [Required(ErrorMessage = "Enter a name, please")]
+        [MaxLength(45, ErrorMessage = "Please enter a shorter name")]
         public string Name { get; set; }
 
         [Select<Page>]

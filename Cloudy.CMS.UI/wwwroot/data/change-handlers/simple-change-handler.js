@@ -1,4 +1,5 @@
 import stateManager from "../state-manager.js";
+import ValidationManager from "../validation-manager.js";
 
 const UNCHANGED = {};
 
@@ -14,6 +15,16 @@ class SimpleChangeHandler {
       state.changes.splice(state.changes.indexOf(change), 1);
     }
 
+    stateManager.persist(state);
+  }
+  setValueAndValidate(entityReference, path, value, validators) {
+    const state = stateManager.getState(entityReference);
+    const change = stateManager.getOrCreateLatestChange(state, 'simple', path);
+
+    change.date = Date.now();
+    change.value = value;
+    state.validationResults = ValidationManager.getValidationResults(validators, path, state.validationResults.slice(), value);
+    
     stateManager.persist(state);
   }
   getIntermediateValue(state, path) {

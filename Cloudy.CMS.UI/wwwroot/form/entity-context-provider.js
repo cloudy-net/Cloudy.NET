@@ -51,7 +51,10 @@ export default ({ entityType, keyValues, children }) => {
     setSourceConflicts(stateManager.getSourceConflicts(state, mergedChanges));
   }, [state, mergedChanges]);
 
-  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges, sourceConflicts }}>
+  const clearSourceConflicts = () => setSourceConflicts([]);
+  const clearMergedChanges = () => setMergedChanges([]);
+
+  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges, sourceConflicts, clearSourceConflicts, clearMergedChanges }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

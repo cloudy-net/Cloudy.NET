@@ -7,6 +7,7 @@ describe('Create test', () => {
     cy.visit('/Admin/New?EntityType=Page');
     cy.get('input[name="Name"]').type(uniqueName);
     cy.get('button.btn.btn-primary').contains('Save').click();
+    cy.get('.alert.alert-warning', { timeout: 1000 }).should('not.exist');
     cy.visit('/Admin/List?EntityType=Page');
     cy.get('.table-responsive ul.pagination a.page-link').not(':contains("Next")').last().click();
 
@@ -22,9 +23,12 @@ describe('Create test', () => {
 
     cy.get('input[name="Name"]').type(uniqueName);
     cy.get('button.btn.btn-primary').contains('Save').click();
+    cy.get('.alert.alert-warning', { timeout: 1000 }).should('not.exist');
+
 
     cy.get('input[name="Name"]').clear().type(modifiedUniqueName);
     cy.get('button.btn.btn-primary').contains('Save').click();
+    cy.get('.alert.alert-warning', { timeout: 1000 }).should('not.exist');
 
     cy.visit('/Admin/List?EntityType=Page');
     cy.get('.table-responsive ul.pagination a.page-link').not(':contains("Next")').last().click();

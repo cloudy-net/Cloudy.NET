@@ -2,13 +2,14 @@ import { html, useContext, useEffect, useState } from '../../../preact-htm/stand
 import EntityContext from '../../entity-context.js';
 import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
 import urlFetcher from '../../../util/url-fetcher.js';
+import ValidationManager from '../../../data/validation-manager.js';
 
-export default ({ name, path, settings }) => {
+export default ({ name, path, settings, validators }) => {
     const [options, setOptions] = useState([]);
     const [placeholderItemText, setPlaceholderItemText] = useState(null);
     const [optionGroups, setOptionGroups] = useState({});
     const [hasInitialValue, setHasInitialValue] = useState({});
-
+    
     const { entityReference, state } = useContext(EntityContext);
 
     useEffect(function () {
@@ -42,9 +43,9 @@ export default ({ name, path, settings }) => {
     }, []);
 
     return html`
-        <select id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(entityReference, path, e.target.value)} class="form-select">
+        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValueAndValidate(entityReference, path, e.target.value, validators)} class="form-select ${ ValidationManager.getValidationClass(validators, state.validationResults, path) }">
         
-            ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} hidden=${hasInitialValue} value="">${placeholderItemText}</option>` : null}
+            ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 
             ${options.map((option) => html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
 
