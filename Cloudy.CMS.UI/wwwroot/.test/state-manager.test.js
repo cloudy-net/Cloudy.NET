@@ -365,7 +365,7 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, expected);
     });
-    it('property changed conflicts with pending change', async () => {
+    it('changed property conflicts with pending change', async () => {
       const blockName = 'lorem';
       const blockTypeName = 'ipsum';
       const propertyName = 'dolor';
