@@ -377,6 +377,10 @@ class StateManager {
         continue;
       }
 
+      if (conflicts.find(conflict => conflict.path == path)) {
+        continue;
+      }
+
       conflicts.push({ path: path, type: 'pendingchangesourceconflict' });
     }
 

@@ -418,6 +418,48 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, expected);
     });
+    it('changed property conflicts with pending change and whole block changed', async () => {
+      const blockName = 'lorem';
+      const blockTypeName = 'ipsum';
+      const blockType2Name = 'salit';
+      const propertyName = 'dolor';
+      const sourceValue = 'amet';
+      const newValue = 'elit';
+
+      const state = {
+        source: {
+          value: {
+            [blockName]: {
+              Type: blockTypeName,
+              Value: {
+                [propertyName]: sourceValue,
+              }
+            },
+          },
+          properties: [],
+        },
+        newSource: {
+          value: {
+            [blockName]: {
+              Type: blockType2Name
+            },
+          },
+          properties: [],
+        },
+      };
+
+      const changes = [
+        { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
+      ];
+
+      const result = stateManager.getSourceConflicts(state, changes);
+
+      const expected = [
+        { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
+      ];
+
+      assert.deepEqual(result, expected);
+    });
   });
   describe('enumerateSourceProperties', () => {
     it('lists simple and nested properties', async () => {
