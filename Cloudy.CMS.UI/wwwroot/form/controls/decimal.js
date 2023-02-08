@@ -7,10 +7,7 @@ const Control = ({ name, path }) => {
   const { entityReference, state } = useContext(EntityContext);
 
   const onchange = event => {
-    let value = (event.target.value || '').replace(',', '.');
-    if (!!value && !isNaN(value)) {
-      simpleChangeHandler.setValue(entityReference, path, parseFloat(value))
-    }
+    simpleChangeHandler.setValue(entityReference, path, event.target.value)
   };
   return html`<div>
       <input
