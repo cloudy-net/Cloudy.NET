@@ -53,8 +53,8 @@ export default ({ name, path, settings }) => {
             <div class="card-body">
                 ${options.map((option, index) => html`
                     <div class="form-check">
-                        <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" value="${option.value}" id="cb-${index}" />
-                        <label class="form-check-label" for="cb-${index}">${option.text}</label>
+                        <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" value="${option.value}" id="cb-${name}-${index}" />
+                        <label class="form-check-label" for="cb-${name}-${index}">${option.text}</label>
                     </div>`)
                 }
 
@@ -63,8 +63,8 @@ export default ({ name, path, settings }) => {
                     
                     ${optionGroups[optionGroup].options.map((option, index) => html`
                         <div class="form-check">
-                            <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" id="cb-${optionGroupIndex}-${index}" value=${option.value}>${option.text}</option>
-                            <label class="form-check-label" for="cb-${optionGroupIndex}-${index}">${option.text}</label>
+                            <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" id="cb-${name}-${optionGroupIndex}-${index}" value=${option.value}>${option.text}</option>
+                            <label class="form-check-label" for="cb-${name}-${optionGroupIndex}-${index}">${option.text}</label>
                         </div>
                     `)}
                 `)}
