@@ -26,9 +26,7 @@ describe('Create test', () => {
     };
 
     Object.keys(fieldsAndValues).map(
-      key => {
-        cy.get(`input[name="${key}"]`).type(fieldsAndValues[key]);
-      }
+      key => cy.get(`input[name="${key}"]`).clear().type(fieldsAndValues[key])
     );
 
     cy.get('input[name="Checkbox"]').click()

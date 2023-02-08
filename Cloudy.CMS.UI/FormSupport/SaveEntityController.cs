@@ -9,11 +9,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Text.Json.Serialization;
+using Cloudy.CMS.UI.Serialization;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
@@ -88,13 +88,13 @@ namespace Cloudy.CMS.UI.FormSupport
                     throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.Reference.EntityType}!");
                 }
 
-                foreach(var change in changedEntity.Changes)
+                foreach (var change in changedEntity.Changes)
                 {
-                    if(change is SimpleChange simpleChange)
+                    if (change is SimpleChange simpleChange)
                     {
                         UpdateSimpleField(entity, change.Path, simpleChange.Value);
                     }
-                    if(change is BlockTypeChange blockTypeChange)
+                    if (change is BlockTypeChange blockTypeChange)
                     {
                         UpdateBlockType(entity, change.Path, blockTypeChange.Type);
                     }
@@ -118,7 +118,7 @@ namespace Cloudy.CMS.UI.FormSupport
                 result.Add(SaveEntityResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(entity), changedEntity.Reference.NewContentKey));
             }
 
-            foreach(var context in contexts)
+            foreach (var context in contexts)
             {
                 await context.Context.SaveChangesAsync().ConfigureAwait(false);
             }
@@ -171,6 +171,13 @@ namespace Cloudy.CMS.UI.FormSupport
             }
         }
 
+
+        private static JsonSerializerOptions JsonSerializerOptions => new JsonSerializerOptions
+        {
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
+            Converters = { new DateOnlyJsonConverter(), new TimeOnlyJsonConverter() }
+        };
+
         private void UpdateSimpleField(object target, IEnumerable<string> path, string value)
         {
             var entityType = EntityTypeProvider.Get(target.GetType());
@@ -184,7 +191,8 @@ namespace Cloudy.CMS.UI.FormSupport
 
             if (!path.Any())
             {
-                property.GetSetMethod().Invoke(target, new object[] { JsonSerializer.Deserialize(value, property.PropertyType) });
+                property.GetSetMethod().Invoke(target, new object[] { JsonSerializer.Deserialize(value, property.PropertyType, JsonSerializerOptions)});
+
                 return;
             }
 
