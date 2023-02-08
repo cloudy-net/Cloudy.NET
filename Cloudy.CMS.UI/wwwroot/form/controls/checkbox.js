@@ -7,13 +7,13 @@ const Control = ({ name, path }) => {
   const { entityReference, state } = useContext(EntityContext);
 
   const onchange = event => {
-    simpleChangeHandler.setValue(entityReference, path, event.target.value)
+    simpleChangeHandler.setValue(entityReference, path, event.target.checked)
   };
-  return html`<div>
+  return html`<div class="form-check">
       <input
-        type="text"
-        class="form-control"
-        id=${`field-${name}`}
+        type="checkbox"
+        class="form-check-input"
+        id=${name}
         name=${name}
         value=${simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}

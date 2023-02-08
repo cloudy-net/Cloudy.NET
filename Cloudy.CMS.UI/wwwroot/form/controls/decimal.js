@@ -11,10 +11,11 @@ const Control = ({ name, path }) => {
   };
   return html`<div>
       <input
-        type="text"
+        type="number"
+        step="any"
         pattern="[0-9]+(.[0-9]+?)?"
         class="form-control"
-        id=${`field-${name}`}
+        id=${name}
         name=${name}
         value=${simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}

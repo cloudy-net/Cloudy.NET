@@ -11,9 +11,9 @@ const Control = ({ name, path }) => {
   };
   return html`<div>
       <input
-        type="text"
+        type="date"
         class="form-control"
-        id=${`field-${name}`}
+        id=${name}
         name=${name}
         value=${simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}
