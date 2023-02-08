@@ -449,7 +449,7 @@ class StateManager {
     return result;
   }
 
-  discardSourceConflicts(state, actions) {
+  discardSourceConflicts(state, conflicts, actions) {
     const changes = [...state.changes];
 
     for (let path of Object.keys(actions)) {
@@ -459,7 +459,17 @@ class StateManager {
         continue;
       }
 
-      for(let change of this.getAllChangesForPath(state, path)){
+      for(let change of this.getAllChangesForPath(changes, path)){
+        changes.splice(changes.indexOf(change), 1);
+      }
+    }
+
+    for(let conflict of conflicts) {
+      if(conflict.type != 'blockdeleted'){
+        continue;
+      }
+
+      for(let change of this.getAllChangesForPath(changes, conflict.path)){
         changes.splice(changes.indexOf(change), 1);
       }
     }
@@ -474,21 +484,21 @@ class StateManager {
     this.replace(state);
   }
 
-  getAllChangesForPath(state, path) {
-    let changes = [];
+  getAllChangesForPath(changes, path) {
+    let result = [];
 
-    for (let c of state.changes) {
+    for (let c of changes) {
       if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
-        changes = [];
+        result = [];
         continue;
       }
       if (path == c.path) {
-        changes.push(c);
+        result.push(c);
         continue;
       }
     }
 
-    return changes;
+    return result;
   }
 
   getSourceValue(value, path) {

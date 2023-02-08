@@ -511,7 +511,7 @@ describe('state-manager.js', () => {
         state.changes[1],
       ];
 
-      const result = stateManager.getAllChangesForPath(state, propertyName);
+      const result = stateManager.getAllChangesForPath(state.changes, propertyName);
 
       assert.deepEqual(result, expected);
     });
@@ -537,13 +537,13 @@ describe('state-manager.js', () => {
         state.changes[4],
       ];
 
-      const result = stateManager.getAllChangesForPath(state, `${propertyName}.${property2Name}`);
+      const result = stateManager.getAllChangesForPath(state.changes, `${propertyName}.${property2Name}`);
 
       assert.deepEqual(result, expected);
     });
   });
   describe('discardSourceConflicts', () => {
-    it('discards only changes with conflicts', async () => {
+    it('discards changes when action is keep-source', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
@@ -568,7 +568,36 @@ describe('state-manager.js', () => {
         state.changes[2]
       ];
 
-      stateManager.discardSourceConflicts(state, actions);
+      stateManager.discardSourceConflicts(state, [], actions);
+
+      const result = stateManager.getState(state.entityReference).changes;
+
+      assert.deepEqual(result, expected);
+    });
+    it('discards changes when block is deleted', async () => {
+      const blockName = 'lorem';
+      const propertyName = 'ipsum';
+
+      const state = {
+        entityReference: {
+          keyValues: [1]
+        },
+        changes: [
+          { '$type': 'simple', date: Date.now() - 2000000, path: `${blockName}.${propertyName}`, value: '' },
+          { '$type': 'simple', date: Date.now() - 1000000, path: `${blockName}.${propertyName}`, value: '' },
+        ]
+      };
+
+      stateManager.states.push(state);
+
+      const conflicts = [
+        { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
+      ];
+
+      const expected = [
+      ];
+
+      stateManager.discardSourceConflicts(state, conflicts, {});
 
       const result = stateManager.getState(state.entityReference).changes;
 

@@ -17,7 +17,7 @@ const ViewChanges = () => {
 
     clearMergedChanges();
     clearSourceConflicts();
-    stateManager.discardSourceConflicts(state, actions);
+    stateManager.discardSourceConflicts(state, sourceConflicts, actions);
 
     setMessage('Applied actions and updated source.');
   };
