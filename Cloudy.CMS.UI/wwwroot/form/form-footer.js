@@ -2,10 +2,11 @@ import { html, useContext, useState } from '../preact-htm/standalone.module.js';
 import EntityContext from './entity-context.js';
 import stateManager from '../data/state-manager.js';
 import ValidationManager from '../data/validation-manager.js';
+import changeManager from '../data/change-manager.js';
 
 const FormFooter = ({ validateAll }) => {
   const [saving, setSaving] = useState();
-  const { state, changes } = useContext(EntityContext);
+  const { state } = useContext(EntityContext);
 
   const save = async () => {
     if (validateAll(state.entityReference)) {
@@ -18,7 +19,8 @@ const FormFooter = ({ validateAll }) => {
   };
 
   const discard = async () => {
-    stateManager.replace({ ...state, history: [] });
+    changeManager.discardChanges(state);
+    stateManager.replace(state);
     if (state.entityReference.keyValues) {
       stateManager.reloadContentForState(state.entityReference);
     }
@@ -27,7 +29,7 @@ const FormFooter = ({ validateAll }) => {
   return html`
   <div class="d-flex">
     <button class="btn btn-primary" type="button" disabled=${saving || state.conflicts.length} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
-    <button class="btn btn-beta ms-auto" type="button" disabled=${!changes.length || saving} onClick=${discard}>Discard changes</button>
+    <button class="btn btn-beta ms-auto" type="button" disabled=${!state.changes.length || saving} onClick=${discard}>Discard changes</button>
   </div>
     ${ValidationManager.anyIsInvalid(state.validationResults) ? html`
       <div class="alert alert-warning mt-3" role="alert">

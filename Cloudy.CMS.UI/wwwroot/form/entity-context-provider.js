@@ -7,7 +7,6 @@ import stateEvents from '../data/state-events.js';
 export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();
   const [state, setState] = useState();
-  const [changes, setChanges] = useState([]);
 
   useEffect(() => {
     let entityReference;
@@ -29,18 +28,7 @@ export default ({ entityType, keyValues, children }) => {
     return () => stateEvents.offStateChange(entityReference, callback);
   }, [keyValues]);
 
-  useEffect(() => {
-    if (!state) {
-      setChanges([]);
-      return;
-    }
-
-    setChanges(changeManager.getChanges(state));
-  }, [state]);
-
-  const clearChanges = () => setChanges([]);
-
-  return html`<${EntityContext.Provider} value=${{ entityReference, state, changes, clearChanges }}>
+  return html`<${EntityContext.Provider} value=${{ entityReference, state }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

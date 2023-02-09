@@ -43,7 +43,7 @@ export default ({ name, path, settings, validators }) => {
     }, []);
 
     return html`
-        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValueAndValidate(entityReference, path, e.target.value, validators)} class="form-select ${ ValidationManager.getValidationClass(validators, state.validationResults, path) }">
+        <select required=${settings.isRequired} id=${name} name=${name} value=${simpleChangeHandler.getIntermediateValue(state, path)} onChange=${e => simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)} class="form-select ${ ValidationManager.getValidationClass(validators, state.validationResults, path) }">
         
             ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 

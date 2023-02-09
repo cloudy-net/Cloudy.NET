@@ -17,8 +17,8 @@ const buildDiff = ([state, segment]) => {
 };
 
 const ShowConflict = ({ conflict, actions, setAction }) => {
-  const { state, changes } = useContext(EntityContext);
-  const change = changes.find(change => change.path == conflict.path);
+  const { state } = useContext(EntityContext);
+  const change = state.changes.find(change => change.path == conflict.path);
 
   if (!change) { // sourceConflicts and changes get briefly out of sync when clearing
     return;

@@ -1,6 +1,3 @@
-import stateManager from "./state-manager.js";
-import statePersister from "./state-persister.js";
-
 const FIVE_MINUTES = 5 * 60 * 1000;
 
 class ChangeManager {
@@ -30,12 +27,9 @@ class ChangeManager {
     return change;
   }
 
-  discardChanges(entityReference) {
-    const state = stateManager.getState(entityReference);
-
-    state.history.splice(0, state.history.length);
-
-    statePersister.persist(state);
+  discardChanges(state) {
+    state.history = [];
+    state.changes = [];
   }
 
   hasChanges(state) {

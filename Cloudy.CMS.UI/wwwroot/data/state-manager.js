@@ -51,6 +51,7 @@ class StateManager {
       },
       history: [],
       conflicts: [],
+      changes: [],
     };
     this.states.push(state);
     statePersister.persist(state);
@@ -74,6 +75,7 @@ class StateManager {
       source: null,
       history: null,
       conflicts: null,
+      changes: null,
     };
     this.states.push(state);
     statePersister.persist(state);
@@ -141,6 +143,8 @@ class StateManager {
           conflicts: conflictManager.getSourceConflicts(state, changes),
         };
       }
+      
+      state.changes = changeManager.getChanges(state);
 
       this.replace(state);
     }
@@ -178,6 +182,8 @@ class StateManager {
       conflicts: [],
     };
 
+    state.changes = changeManager.getChanges(state);
+    
     this.replace(state);
   }
 

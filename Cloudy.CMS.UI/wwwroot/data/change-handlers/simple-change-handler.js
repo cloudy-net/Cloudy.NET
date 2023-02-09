@@ -6,7 +6,7 @@ import ValidationManager from "../validation-manager.js";
 const UNCHANGED = {};
 
 class SimpleChangeHandler {
-  setValue(entityReference, path, value) {
+  setValue(entityReference, path, value, validators) {
     const state = stateManager.getState(entityReference);
     const change = changeManager.getOrCreateLatestChange(state, 'simple', path);
 
@@ -17,16 +17,12 @@ class SimpleChangeHandler {
       state.history.splice(state.history.indexOf(change), 1);
     }
 
-    statePersister.persist(state);
-  }
-  setValueAndValidate(entityReference, path, value, validators) {
-    const state = stateManager.getState(entityReference);
-    const change = changeManager.getOrCreateLatestChange(state, 'simple', path);
+    if (validators && validators.length) {
+      state.validationResults = ValidationManager.getValidationResults(validators, path, state.validationResults.slice(), value);
+    }
 
-    change.date = Date.now();
-    change.value = value;
-    state.validationResults = ValidationManager.getValidationResults(validators, path, state.validationResults.slice(), value);
-    
+    state.changes = changeManager.getChanges(state);
+
     statePersister.persist(state);
   }
   getIntermediateValue(state, path) {

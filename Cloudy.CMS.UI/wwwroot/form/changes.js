@@ -4,7 +4,7 @@ import EntityContext from "./entity-context.js";
 
 
 const Changes = () => {
-  const { state, changes } = useContext(EntityContext);
+  const { state } = useContext(EntityContext);
   
   const [showHistory, setShowHistory] = useState();
 
@@ -16,7 +16,7 @@ const Changes = () => {
         <a style="text-decoration: underline;" tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>Review the changes</a> before you continue.
       </div>` :
       html`<div style="text-align: right;">
-        ${changes.length ? html`<a tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>View changes</a>` : html`<div style="white-space: pre"> <//>`}
+        ${state.changes.length ? html`<a tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>View changes</a>` : html`<div style="white-space: pre"> <//>`}
       </div>`
     }
     ${showHistory && html`<${ViewChanges} />`}

@@ -25,6 +25,7 @@ class StatePersister {
       const state = JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(entityReference)}`), (key, value) => key == 'referenceDate' && value ? new Date(value) : value);
 
       state.conflicts = [];
+      state.changes = [];
 
       result.push(state);
     }
@@ -40,6 +41,7 @@ class StatePersister {
     state = {...state};
 
     delete state['conflicts'];
+    delete state['changes'];
 
     if (changeManager.hasChanges(state)) {
       localStorage.setItem(`cloudy:${JSON.stringify(state.entityReference)}`, JSON.stringify(state));

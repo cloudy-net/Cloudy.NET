@@ -11,6 +11,8 @@ class EmbeddedBlockChangeHandler {
 
     change.date = Date.now();
     change.type = type;
+    
+    state.changes = changeManager.getChanges(state);
 
     statePersister.persist(state);
   }

@@ -8,7 +8,7 @@ const Control = ({ name, path, validators }) => {
   const { entityReference, state } = useContext(EntityContext);
 
   const onchange = event => {
-    simpleChangeHandler.setValueAndValidate(entityReference, path, event.target.value, validators)
+    simpleChangeHandler.setValue(entityReference, path, event.target.value, validators)
   };
   return html`
       <input
