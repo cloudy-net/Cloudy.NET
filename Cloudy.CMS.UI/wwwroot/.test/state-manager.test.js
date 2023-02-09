@@ -2,54 +2,56 @@ import assert from 'assert';
 import { } from './polyfiller.js';
 import stateManager from '../data/state-manager.js';
 import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
+import changeManager from '../data/change-manager.js';
+import statePersister from '../data/state-persister.js';
 
 describe('state-manager.js', () => {
   describe('simple scenario', () => {
     it('should merge simple change if < 5 min old', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
+      changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
 
       assert.equal(state.changes.length, 1);
     });
     it('should not merge simple change if > 5 min old', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'simple', date: Date.now() - 1000000, path: 'propertyName', value: 'lorem' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
+      changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
 
       assert.equal(state.changes.length, 2);
     });
     it('should merge block type change if < 5 min old', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', value: 'lorem' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
       assert.equal(state.changes.length, 1);
     });
     it('should not merge block type change if > 5 min old', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'blocktype', date: Date.now() - 1000000, path: 'blockName', value: 'lorem' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
       assert.equal(state.changes.length, 2);
     });
@@ -57,53 +59,53 @@ describe('state-manager.js', () => {
   describe('complex scenario', () => {
     it('should not merge simple change if separated by block change', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
+      changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
 
       assert.equal(state.changes.length, 3);
     });
     it('should not merge simple change if separated by nested block change', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.nestedBlockName.propertyName', value: 'lorem' },
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'simple', 'blockName.nestedBlockName.propertyName');
+      changeManager.getOrCreateLatestChange(state, 'simple', 'blockName.nestedBlockName.propertyName');
 
       assert.equal(state.changes.length, 3);
     });
     it('should merge block type change if separated by irrelevant simple change', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
         { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
       assert.equal(state.changes.length, 2);
     });
     it('should not merge block type change if separated by nested simple change', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
       state.changes = [
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
       ];
 
-      stateManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
       assert.equal(state.changes.length, 3);
     });
@@ -112,7 +114,7 @@ describe('state-manager.js', () => {
   describe('getMergedChanges', () => {
     it('should return changes', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
 
       const changes = [
@@ -123,13 +125,13 @@ describe('state-manager.js', () => {
 
       state.changes = [...changes];
 
-      const result = stateManager.getMergedChanges(state);
+      const result = changeManager.getMergedChanges(state);
 
       assert.deepEqual(result, changes);
     });
     it('should not take changes cleared by type change', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
 
       const changes = [
@@ -140,13 +142,13 @@ describe('state-manager.js', () => {
 
       state.changes = [...changes];
 
-      const result = stateManager.getMergedChanges(state);
+      const result = changeManager.getMergedChanges(state);
 
       assert.deepEqual(result, [changes[1], changes[2]]);
     });
     it('should merge changes on same path', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
 
       const changes = [
@@ -156,13 +158,13 @@ describe('state-manager.js', () => {
 
       state.changes = [...changes];
 
-      const result = stateManager.getMergedChanges(state);
+      const result = changeManager.getMergedChanges(state);
 
       assert.deepEqual(result, [changes[1]]);
     });
     it('should not return simple changes matching source', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
 
       state.source = {
@@ -181,13 +183,13 @@ describe('state-manager.js', () => {
 
       state.changes = [...changes];
 
-      const result = stateManager.getMergedChanges(state);
+      const result = changeManager.getMergedChanges(state);
 
       assert.deepEqual(result, []);
     });
     it('should not return block type changes matching source', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
 
       state.source = {
@@ -204,7 +206,7 @@ describe('state-manager.js', () => {
 
       state.changes = [...changes];
 
-      const result = stateManager.getMergedChanges(state);
+      const result = changeManager.getMergedChanges(state);
 
       assert.deepEqual(result, []);
     });
@@ -221,7 +223,7 @@ describe('state-manager.js', () => {
           }
         }
       };
-      assert.equal(stateManager.getSourceValue(state.source.value, propertyName), propertyValue);
+      assert.equal(changeManager.getSourceValue(state.source.value, propertyName), propertyValue);
     });
     it('nested property', async () => {
       const blockName = 'dolor';
@@ -244,7 +246,7 @@ describe('state-manager.js', () => {
           }
         }
       };
-      assert.equal(stateManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
+      assert.equal(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
     it('nested property in null block', async () => {
       const blockName = 'dolor';
@@ -263,7 +265,7 @@ describe('state-manager.js', () => {
           }
         }
       };
-      assert.equal(stateManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
+      assert.equal(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
     });
   });
   describe('getSourceBlockTypes', () => {
@@ -285,7 +287,7 @@ describe('state-manager.js', () => {
         }
       };
 
-      const result = stateManager.getSourceBlockTypes(source);
+      const result = changeManager.getSourceBlockTypes(source);
 
       const expected = {
         [blockName]: blockTypeName,
@@ -319,7 +321,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: propertyName, value: '' },
       ];
 
-      const result = stateManager.getSourceConflicts(state, changes);
+      const result = changeManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: propertyName, type: 'deleted' },
@@ -357,7 +359,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: propertyValue },
       ];
 
-      const result = stateManager.getSourceConflicts(state, changes);
+      const result = changeManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -409,7 +411,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: property2Name, value: new2Value },
       ];
 
-      const result = stateManager.getSourceConflicts(state, changes);
+      const result = changeManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: property2Name, type: 'pendingchangesourceconflict' },
@@ -452,7 +454,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
       ];
 
-      const result = stateManager.getSourceConflicts(state, changes);
+      const result = changeManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -480,7 +482,7 @@ describe('state-manager.js', () => {
         [property2Name]: source2Value,
       };
 
-      const result = stateManager.enumerateSourceProperties(source);
+      const result = changeManager.enumerateSourceProperties(source);
 
       const expected = [
         property2Name,
@@ -511,7 +513,7 @@ describe('state-manager.js', () => {
         state.changes[1],
       ];
 
-      const result = stateManager.getAllChangesForPath(state.changes, propertyName);
+      const result = changeManager.getAllChangesForPath(state.changes, propertyName);
 
       assert.deepEqual(result, expected);
     });
@@ -537,7 +539,7 @@ describe('state-manager.js', () => {
         state.changes[4],
       ];
 
-      const result = stateManager.getAllChangesForPath(state.changes, `${propertyName}.${property2Name}`);
+      const result = changeManager.getAllChangesForPath(state.changes, `${propertyName}.${property2Name}`);
 
       assert.deepEqual(result, expected);
     });
@@ -568,7 +570,7 @@ describe('state-manager.js', () => {
         state.changes[2]
       ];
 
-      stateManager.discardSourceConflicts(state, [], actions);
+      changeManager.discardSourceConflicts(state, [], actions);
 
       const result = stateManager.getState(state.entityReference).changes;
 
@@ -597,7 +599,35 @@ describe('state-manager.js', () => {
       const expected = [
       ];
 
-      stateManager.discardSourceConflicts(state, conflicts, {});
+      changeManager.discardSourceConflicts(state, conflicts, {});
+
+      const result = stateManager.getState(state.entityReference).changes;
+
+      assert.deepEqual(result, expected);
+    });
+    it('discards changes when property is deleted', async () => {
+      const propertyName = 'ipsum';
+
+      const state = {
+        entityReference: {
+          keyValues: [1]
+        },
+        changes: [
+          { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
+          { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
+        ]
+      };
+
+      stateManager.states.push(state);
+
+      const conflicts = [
+        { path: propertyName, type: 'deleted' },
+      ];
+
+      const expected = [
+      ];
+
+      changeManager.discardSourceConflicts(state, conflicts, {});
 
       const result = stateManager.getState(state.entityReference).changes;
 

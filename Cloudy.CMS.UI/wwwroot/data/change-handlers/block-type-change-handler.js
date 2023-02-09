@@ -1,16 +1,18 @@
+import changeManager from "../change-manager.js";
 import stateManager from "../state-manager.js";
+import statePersister from "../state-persister.js";
 
 const UNCHANGED = {};
 
 class EmbeddedBlockChangeHandler {
   setType(entityReference, path, type) {
     const state = stateManager.getState(entityReference);
-    const change = stateManager.getOrCreateLatestChange(state, 'blocktype', path);
+    const change = changeManager.getOrCreateLatestChange(state, 'blocktype', path);
 
     change.date = Date.now();
     change.type = type;
 
-    stateManager.persist(state);
+    statePersister.persist(state);
   }
   getIntermediateType(state, path) {
     let type = UNCHANGED;
@@ -27,7 +29,7 @@ class EmbeddedBlockChangeHandler {
     }
 
     if (type == UNCHANGED) {
-      const sourceValue = stateManager.getSourceValue(state.source.value, path);
+      const sourceValue = changeManager.getSourceValue(state.source.value, path);
       return sourceValue ? sourceValue.Type : null;
     }
 

@@ -1,5 +1,6 @@
 import stateManager from "./state-manager.js";
 import simpleChangeHandler from "./change-handlers/simple-change-handler.js";
+import statePersister from "./state-persister.js";
 
 const ValidationManager = {
   validateAll: (fields, entityReference) => {
@@ -13,7 +14,7 @@ const ValidationManager = {
     })
 
     state.validationResults = validationResults;
-    stateManager.persist(state);
+    statePersister.persist(state);
 
     return validationResults.every(vr => vr.isValid);
   },

@@ -1,6 +1,8 @@
 import { useState, useEffect, html } from '../preact-htm/standalone.module.js';
 import EntityContext from "./entity-context.js";
 import stateManager from '../data/state-manager.js';
+import changeManager from '../data/change-manager.js';
+import stateEvents from '../data/state-events.js';
 
 export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();
@@ -24,8 +26,8 @@ export default ({ entityType, keyValues, children }) => {
     }
 
     const callback = () => setState({ ...stateManager.getState(entityReference) });
-    stateManager.onStateChange(entityReference, callback);
-    return () => stateManager.offStateChange(entityReference, callback);
+    stateEvents.onStateChange(entityReference, callback);
+    return () => stateEvents.offStateChange(entityReference, callback);
   }, [keyValues]);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default ({ entityType, keyValues, children }) => {
       return;
     }
 
-    setMergedChanges(stateManager.getMergedChanges(state));
+    setMergedChanges(changeManager.getMergedChanges(state));
   }, [state]);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default ({ entityType, keyValues, children }) => {
       return;
     }
 
-    setSourceConflicts(stateManager.getSourceConflicts(state, mergedChanges));
+    setSourceConflicts(changeManager.getSourceConflicts(state, mergedChanges));
   }, [state, mergedChanges]);
 
   const clearSourceConflicts = () => setSourceConflicts([]);

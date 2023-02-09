@@ -1,5 +1,6 @@
 import EntityContext from "../form/entity-context.js";
 import { html, useContext } from "../preact-htm/standalone.module.js";
+import changeManager from "./change-manager.js";
 import diff from "./diff.js";
 import stateManager from "./state-manager.js";
 
@@ -23,7 +24,7 @@ const ShowConflict = ({ conflict, actions, setAction }) => {
     return;
   }
 
-  const initialValue = stateManager.getSourceValue(state.source.value, change.path);
+  const initialValue = changeManager.getSourceValue(state.source.value, change.path);
   const result = (typeof initialValue == 'string' || initialValue == null) &&
     (typeof change.value == 'string' || change.value == null) ?
     diff(initialValue || '', change.value || '', 0).map(buildDiff) :
@@ -38,7 +39,7 @@ const ShowConflict = ({ conflict, actions, setAction }) => {
     return html`<tr class="align-middle"><td>${path}<//><td>Block deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
   }
   if (conflict.type == 'pendingchangesourceconflict') {
-    const newValue = stateManager.getSourceValue(state.newSource.value, change.path);
+    const newValue = changeManager.getSourceValue(state.newSource.value, change.path);
     const sourceResult = (typeof initialValue == 'string' || initialValue == null) &&
       (typeof newValue == 'string' || newValue == null) ?
       diff(initialValue || '', newValue || '', 0).map(buildDiff) :

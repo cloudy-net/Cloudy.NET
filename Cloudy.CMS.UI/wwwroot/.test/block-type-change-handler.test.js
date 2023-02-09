@@ -2,12 +2,13 @@ import assert from 'assert';
 import { } from './polyfiller.js';
 import stateManager from '../data/state-manager.js';
 import blockTypeChangeHandler from '../data/change-handlers/block-type-change-handler.js';
+import statePersister from '../data/state-persister.js';
 
 describe('block-type-change-handler.js', () => {
   describe('simple scenario', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -30,7 +31,7 @@ describe('block-type-change-handler.js', () => {
     });
     it('clearing value', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -55,7 +56,7 @@ describe('block-type-change-handler.js', () => {
   describe('complex scenario', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const blockName = 'Block1';
       const nestedBlockName = 'Block2';

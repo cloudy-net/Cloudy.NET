@@ -3,12 +3,13 @@ import { } from './polyfiller.js';
 import stateManager from '../data/state-manager.js';
 import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
 import blockTypeChangeHandler from '../data/change-handlers/block-type-change-handler.js';
+import statePersister from '../data/state-persister.js';
 
 describe('simple-change-handler.js', () => {
   describe('simple scenario', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -29,7 +30,7 @@ describe('simple-change-handler.js', () => {
     });
     it('change should be deleted if it equals source', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -48,7 +49,7 @@ describe('simple-change-handler.js', () => {
     });
     it('change should not be deleted if it equals source but previous changes exist', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
@@ -70,7 +71,7 @@ describe('simple-change-handler.js', () => {
     });
     it('intermediate value, deep path', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const blockName = 'Block1';
       const block2Name = 'Block2';
@@ -103,7 +104,7 @@ describe('simple-change-handler.js', () => {
   describe('complex scenario', () => {
     it('simple change after changing block type', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block';
@@ -130,7 +131,7 @@ describe('simple-change-handler.js', () => {
     });
     it('changing block type after simple change', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block1';
@@ -168,7 +169,7 @@ describe('simple-change-handler.js', () => {
     });
     it('intermediate value should be cleared when changing parents parents block type', () => {
       global.localStorage.clear();
-      stateManager.states = stateManager.loadStates();
+      stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
       const newType = 'BlockType';
       const blockName = 'Block1';

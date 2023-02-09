@@ -1,6 +1,8 @@
 import urlFetcher from "../util/url-fetcher.js";
 import notificationManager from "../notification/notification-manager.js";
 import ContentNotFound from "./content-not-found.js";
+import statePersister from "./state-persister.js";
+import changeManager from "./change-manager.js";
 
 const generateRandomString = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 const arrayEquals = (a, b) => {
@@ -28,37 +30,11 @@ const arrayEquals = (a, b) => {
 };
 const entityReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
 
-const FIVE_MINUTES = 5 * 60 * 1000;
-
 class StateManager {
-  indexStorageKey = "cloudy:statesIndex";
-  schema = "1.11";
-  states = this.loadStates();
-
-  loadStates() {
-    let index = JSON.parse(localStorage.getItem(this.indexStorageKey) || JSON.stringify({ schema: this.schema, elements: [] }));
-
-    if (index.schema != this.schema) {
-      if (confirm(`Warning: The state schema has changed (new version: ${this.schema}, old version: ${index.schema}).\n\nThis means the format of local state has changed, and your local changes are no longer understood by the Admin UI.\n\nYou are required to clear your local changes to avoid any strange bugs.\n\nPress OK to continue, or cancel to do the necessary schema changes manually to your localStorage (not supported officially).`)) {
-        Object.keys(localStorage)
-          .filter(key => key.startsWith("cloudy:"))
-          .forEach(key => localStorage.removeItem(key));
-
-        return [];
-      }
-    }
-
-    const result = [];
-
-    for (let entityReference of index.elements) {
-      result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(entityReference)}`), (key, value) => key == 'referenceDate' && value ? new Date(value) : value));
-    }
-
-    return result;
-  }
+  states = statePersister.loadStates();
 
   getAll() {
-    return this.states.filter(state => this.hasChanges(state));
+    return this.states.filter(state => changeManager.hasChanges(state));
   }
 
   createStateForNewContent(entityType) {
@@ -76,7 +52,7 @@ class StateManager {
       changes: [],
     };
     this.states.push(state);
-    this.persist(state);
+    statePersister.persist(state);
 
     return state;
   };
@@ -98,7 +74,7 @@ class StateManager {
       changes: null,
     };
     this.states.push(state);
-    this.persist(state);
+    statePersister.persist(state);
 
     this.loadContentForState(entityReference);
 
@@ -139,7 +115,7 @@ class StateManager {
         loadingNewSource: false,
       };
     } else {
-      if (!this.hasChanges(state)) {
+      if (!changeManager.hasChanges(state)) {
         state = {
           ...state,
           loadingNewSource: false,
@@ -199,32 +175,6 @@ class StateManager {
     this.replace(state);
   }
 
-  getOrCreateLatestChange(state, type, path) {
-    let change = null;
-
-    for (let c of state.changes) {
-      if (c['$type'] == type && path == c.path) {
-        change = c;
-        continue;
-      }
-      if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
-        change = null;
-        continue;
-      }
-      if (c['$type'] == 'simple' && c.path.indexOf(`${path}.`) == 0) {
-        change = null;
-        continue;
-      }
-    }
-
-    if (!change || Date.now() - change.date > FIVE_MINUTES) {
-      change = { '$type': type, id: generateRandomString(), 'date': Date.now(), path };
-      state.changes.push(change);
-    }
-
-    return change;
-  }
-
   async save(entityReferences) {
     const states = entityReferences.map(c => this.getState(c));
     const response = await urlFetcher.fetch("/Admin/api/form/entity/save", {
@@ -274,7 +224,7 @@ class StateManager {
 
   replace(state) {
     this.states[this.states.findIndex(s => entityReferenceEquals(s.entityReference, state.entityReference))] = state;
-    this.persist(state);
+    statePersister.persist(state);
   }
 
   remove(entityReference) {
@@ -292,303 +242,6 @@ class StateManager {
       };
     }
     return this.states.find(s => entityReferenceEquals(s.entityReference, entityReference));
-  }
-
-  discardChanges(entityReference) {
-    const state = this.getState(entityReference);
-
-    state.changes.splice(0, state.changes.length);
-
-    this.persist(state);
-  }
-
-  hasChanges(state) {
-    if (state.changes == null) {
-      return false;
-    }
-
-    return state.changes.length;
-  }
-
-  getMergedChanges(state) {
-    if (state.changes == null) {
-      return [];
-    }
-
-    const changes = {};
-
-    for (let change of state.changes) {
-      if (change.$type == 'blocktype') {
-        Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
-      }
-
-      changes[change.path] = change;
-    }
-
-    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state.source.value, change.path)).forEach(change => delete changes[change.path])
-    Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
-      const sourceValue = this.getSourceValue(state.source.value, change.path);
-
-      return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
-    }).forEach(change => delete changes[change.path])
-
-    return Object.values(changes);
-  }
-
-  getSourceConflicts(state, mergedChanges) {
-    if (!state.newSource) {
-      return [];
-    }
-
-    const conflicts = [];
-
-    for (let key of Object.keys(state.source.properties)) {
-      if (!state.newSource.properties[key] && mergedChanges.find(change => change.path == key)) {
-        conflicts.push({ path: key, type: 'deleted' });
-      }
-    }
-
-    const sourceBlockTypes = this.getSourceBlockTypes(state.source.value);
-    const newSourceBlockTypes = this.getSourceBlockTypes(state.newSource.value);
-
-    for (let path of Object.keys(sourceBlockTypes)) {
-      if (!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]) {
-        for (let change of mergedChanges.filter(change => change.path.indexOf(`${path}.`) == 0)) {
-          conflicts.push({ path: change.path, type: 'blockdeleted' });
-        }
-      }
-    }
-
-    const newSourceProperties = this.enumerateSourceProperties(state.source.value);
-
-    for (let path of newSourceProperties) {
-      const newSourceValue = this.getSourceValue(state.newSource.value, path);
-      const sourceValue = this.getSourceValue(state.source.value, path);
-
-      if (newSourceValue == sourceValue) {
-        continue;
-      }
-
-      if (Array.isArray(newSourceValue) && Array.isArray(sourceValue) && arrayEquals(newSourceValue, sourceValue)) {
-        continue;
-      }
-
-      if (!mergedChanges.find(change => change.path == path)) {
-        continue;
-      }
-
-      if (conflicts.find(conflict => conflict.path == path)) {
-        continue;
-      }
-
-      conflicts.push({ path: path, type: 'pendingchangesourceconflict' });
-    }
-
-    return conflicts;
-  }
-
-  getSourceBlockTypes(source) {
-    const cue = [{ target: source, path: '' }];
-    const result = {};
-
-    while (cue.length) {
-      const { target, path } = cue.shift();
-
-      for (let key of Object.keys(target)) {
-        if (!target[key]) {
-          continue;
-        }
-
-        if (!target[key].Type) {
-          continue;
-        }
-
-        const currentPath = path + (path ? '.' : '') + key;
-
-        result[currentPath] = target[key].Type;
-
-        if (!target[key].Value) {
-          continue;
-        }
-
-        cue.push({ target: target[key].Value, path: currentPath });
-      }
-    }
-
-    return result;
-  }
-
-  enumerateSourceProperties(source) {
-    const cue = [{ target: source, path: '' }];
-    const result = [];
-
-    while (cue.length) {
-      const { target, path } = cue.shift();
-
-      for (let key of Object.keys(target)) {
-        const currentPath = path + (path ? '.' : '') + key;
-
-        if (!target[key]) {
-          result.push(currentPath);
-          continue;
-        }
-
-        if (!target[key].Type) {
-          result.push(currentPath);
-          continue;
-        }
-
-        if (!target[key].Value) {
-          continue;
-        }
-
-        cue.push({ target: target[key].Value, path: currentPath });
-      }
-    }
-
-    return result;
-  }
-
-  discardSourceConflicts(state, conflicts, actions) {
-    const changes = [...state.changes];
-
-    for (let path of Object.keys(actions)) {
-      const action = actions[path];
-
-      if (action != 'keep-source') {
-        continue;
-      }
-
-      for(let change of this.getAllChangesForPath(changes, path)){
-        changes.splice(changes.indexOf(change), 1);
-      }
-    }
-
-    for(let conflict of conflicts) {
-      if(conflict.type != 'blockdeleted'){
-        continue;
-      }
-
-      for(let change of this.getAllChangesForPath(changes, conflict.path)){
-        changes.splice(changes.indexOf(change), 1);
-      }
-    }
-
-    state = {
-      ...state,
-      changes,
-      source: state.newSource,
-      newSource: null,
-    };
-
-    this.replace(state);
-  }
-
-  getAllChangesForPath(changes, path) {
-    let result = [];
-
-    for (let c of changes) {
-      if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
-        result = [];
-        continue;
-      }
-      if (path == c.path) {
-        result.push(c);
-        continue;
-      }
-    }
-
-    return result;
-  }
-
-  getSourceValue(value, path) {
-    let pathSegments = path.split('.');
-
-    while (pathSegments.length) {
-      if (!value) {
-        return null;
-      }
-
-      if (pathSegments.length > 1) {
-        value = value[pathSegments[0]] ? value[pathSegments[0]].Value : null;
-      } else {
-        value = value[pathSegments[0]];
-      }
-
-      pathSegments = pathSegments.splice(1); // returns tail, mutated array discarded
-    }
-
-    return value;
-  }
-
-  updateIndex() {
-    localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: this.states.filter(state => this.hasChanges(state)).map(state => state.entityReference) }));
-  }
-
-  persist(state) {
-    if (this.hasChanges(state)) {
-      localStorage.setItem(`cloudy:${JSON.stringify(state.entityReference)}`, JSON.stringify(state));
-    } else {
-      localStorage.removeItem(`cloudy:${JSON.stringify(state.entityReference)}`);
-    }
-    this.updateIndex();
-
-    this.triggerAnyStateChange();
-    this.triggerStateChange(state.entityReference);
-  }
-
-  unpersist(entityReference) {
-    localStorage.removeItem(`cloudy:${JSON.stringify(entityReference)}`);
-    this.updateIndex();
-
-    this.triggerAnyStateChange();
-    this.triggerStateChange(entityReference);
-  }
-
-  _onAnyStateChangeCallbacks = [];
-
-  onAnyStateChange(callback) {
-    this._onAnyStateChangeCallbacks.push(callback);
-  }
-
-  offAnyStateChange(callback) {
-    this._onAnyStateChangeCallbacks.splice(this._onAnyStateChangeCallbacks.indexOf(callback), 1);
-  }
-
-  triggerAnyStateChange() {
-    this._onAnyStateChangeCallbacks.forEach(callback => callback());
-  }
-
-  _onStateChangeCallbacks = {};
-
-  onStateChange(entityReference, callback) {
-    const key = JSON.stringify(entityReference);
-
-    if (!this._onStateChangeCallbacks[key]) {
-      this._onStateChangeCallbacks[key] = [];
-    }
-
-    this._onStateChangeCallbacks[key].push(callback);
-  }
-
-  offStateChange(entityReference, callback) {
-    const key = JSON.stringify(entityReference);
-
-    if (!this._onStateChangeCallbacks[key]) {
-      this._onStateChangeCallbacks[key] = [];
-    }
-
-    this._onStateChangeCallbacks[key].splice(this._onStateChangeCallbacks[key].indexOf(callback), 1);
-  }
-
-  triggerStateChange(entityReference) {
-    const key = JSON.stringify(entityReference);
-
-    if (!this._onStateChangeCallbacks[key]) {
-      this._onStateChangeCallbacks[key] = [];
-    }
-
-    this._onStateChangeCallbacks[key].forEach(callback => callback());
   }
 }
 
