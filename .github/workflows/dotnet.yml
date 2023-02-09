@@ -45,7 +45,7 @@ jobs:
     if: always() && !cancelled()
     uses: cloudy-net/Cloudy.CMS/.github/workflows/post-slack-workflow.yml@master
     with:
-      group-ping-id: S04MMQ5VABX
+      group-ping-id: 'S04MMQ5VABX|devs'
       run-success: ${{ !contains(needs.*.result, 'failure') }}
       channel-id: C04KXEF19PX
     secrets:
