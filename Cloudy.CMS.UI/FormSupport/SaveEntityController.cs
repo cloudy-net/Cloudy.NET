@@ -271,9 +271,6 @@ namespace Cloudy.CMS.UI.FormSupport
         [JsonDerivedType(typeof(BlockTypeChange), typeDiscriminator: "blocktype")]
         public abstract class EntityChange
         {
-            [Required]
-            public string Id { get; set; }
-            [Required]
             public DateTime Date { get; set; }
             [Required]
             public string[] Path { get; set; }
