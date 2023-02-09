@@ -1,5 +1,4 @@
 import changeManager from "./change-manager.js";
-import stateManager from "./state-manager.js";
 
 class ConflictManager {
   getSourceConflicts(state, mergedChanges) {
@@ -86,7 +85,7 @@ class ConflictManager {
       newSource: null,
     };
 
-    stateManager.replace(state);
+    return state;
   }
 
   getSourceBlockTypes(source) {

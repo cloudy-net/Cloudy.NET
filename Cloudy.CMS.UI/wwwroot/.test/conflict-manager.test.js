@@ -1,6 +1,5 @@
 import assert from 'assert';
 import { } from './polyfiller.js';
-import stateManager from '../data/state-manager.js';
 import conflictManager from '../data/conflict-manager.js';
 
 describe('conflict-manager.js', () => {
@@ -234,9 +233,6 @@ describe('conflict-manager.js', () => {
       const property2Name = 'ipsum';
 
       const state = {
-        entityReference: {
-          keyValues: [1]
-        },
         changes: [
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
@@ -258,9 +254,6 @@ describe('conflict-manager.js', () => {
       const property2Name = 'ipsum';
 
       const state = {
-        entityReference: {
-          keyValues: [1]
-        },
         changes: [
           { '$type': 'simple', date: Date.now() - 5000000, path: `${propertyName}.${property2Name}`, value: '' },
           { '$type': 'simple', date: Date.now() - 4000000, path: `${propertyName}.${property2Name}`, value: '' },
@@ -286,17 +279,12 @@ describe('conflict-manager.js', () => {
       const property2Name = 'ipsum';
 
       const state = {
-        entityReference: {
-          keyValues: [1]
-        },
         changes: [
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
         ]
       };
-
-      stateManager.states.push(state);
 
       const actions = {
         [propertyName]: 'keep-source',
@@ -306,9 +294,7 @@ describe('conflict-manager.js', () => {
         state.changes[2]
       ];
 
-      conflictManager.discardSourceConflicts(state, [], actions);
-
-      const result = stateManager.getState(state.entityReference).changes;
+      const result = conflictManager.discardSourceConflicts(state, [], actions).changes;
 
       assert.deepEqual(result, expected);
     });
@@ -317,16 +303,11 @@ describe('conflict-manager.js', () => {
       const propertyName = 'ipsum';
 
       const state = {
-        entityReference: {
-          keyValues: [1]
-        },
         changes: [
           { '$type': 'simple', date: Date.now() - 2000000, path: `${blockName}.${propertyName}`, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: `${blockName}.${propertyName}`, value: '' },
         ]
       };
-
-      stateManager.states.push(state);
 
       const conflicts = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -335,9 +316,7 @@ describe('conflict-manager.js', () => {
       const expected = [
       ];
 
-      conflictManager.discardSourceConflicts(state, conflicts, {});
-
-      const result = stateManager.getState(state.entityReference).changes;
+      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).changes;
 
       assert.deepEqual(result, expected);
     });
@@ -345,16 +324,11 @@ describe('conflict-manager.js', () => {
       const propertyName = 'ipsum';
 
       const state = {
-        entityReference: {
-          keyValues: [1]
-        },
         changes: [
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
         ]
       };
-
-      stateManager.states.push(state);
 
       const conflicts = [
         { path: propertyName, type: 'deleted' },
@@ -363,9 +337,7 @@ describe('conflict-manager.js', () => {
       const expected = [
       ];
 
-      conflictManager.discardSourceConflicts(state, conflicts, {});
-
-      const result = stateManager.getState(state.entityReference).changes;
+      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).changes;
 
       assert.deepEqual(result, expected);
     });
