@@ -149,8 +149,8 @@ describe('conflict-manager.js', () => {
       const result = conflictManager.getSourceConflicts(state, history);
 
       const expected = [
-        { path: property2Name, type: 'pendingchange.sourceconflict' },
-        { path: `${blockName}.${propertyName}`, type: 'pendingchange.sourceconflict' },
+        { path: property2Name, type: 'pendingchangesourceconflict' },
+        { path: `${blockName}.${propertyName}`, type: 'pendingchangesourceconflict' },
       ];
 
       assert.deepEqual(result, expected);
@@ -228,7 +228,7 @@ describe('conflict-manager.js', () => {
     });
   });
   describe('getAllChangesForPath', () => {
-    it('gets all change.s for path', async () => {
+    it('gets all changes for path', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
@@ -249,7 +249,7 @@ describe('conflict-manager.js', () => {
 
       assert.deepEqual(result, expected);
     });
-    it('clears change.s after block type change', async () => {
+    it('clears changes after block type change', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
@@ -274,7 +274,7 @@ describe('conflict-manager.js', () => {
     });
   });
   describe('discardSourceConflicts', () => {
-    it('discards change.s when action is keep-source', async () => {
+    it('discards changes when action is keep-source', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
@@ -298,7 +298,7 @@ describe('conflict-manager.js', () => {
 
       assert.deepEqual(result, expected);
     });
-    it('discards change.s when block is deleted', async () => {
+    it('discards changes when block is deleted', async () => {
       const blockName = 'lorem';
       const propertyName = 'ipsum';
 
@@ -320,7 +320,7 @@ describe('conflict-manager.js', () => {
 
       assert.deepEqual(result, expected);
     });
-    it('discards change.s when property is deleted', async () => {
+    it('discards changes when property is deleted', async () => {
       const propertyName = 'ipsum';
 
       const state = {

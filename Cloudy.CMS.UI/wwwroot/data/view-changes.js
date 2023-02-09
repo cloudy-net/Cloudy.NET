@@ -25,10 +25,10 @@ const ViewChanges = () => {
 
   if (state.conflicts.length) {
     return html`<div class="m-3">
-        <p><strong>Conflicting source and/or model change.s:</strong></p>
+        <p><strong>Conflicting source and/or model changes:</strong></p>
         <table class="table">
           <thead>
-            <tr><th>Property<//><th>Source<//><th>Your change.s<//><th>Action<//><//>
+            <tr><th>Property<//><th>Source<//><th>Your changes<//><th>Action<//><//>
           <//>
           <tbody>
             ${state.conflicts.map(conflict => html`<${ShowConflict} conflict=${conflict} actions=${actions} setAction=${(path, action) => setActions({ ...actions, [path]: action })}/>`)}
@@ -40,16 +40,16 @@ const ViewChanges = () => {
           <button class="btn btn-beta me-2" type="button" onClick=${() => {
             const actions = {};
 
-            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
+            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')){
               actions[conflict.path] = 'keep-source';
             }
 
             setActions(actions);
-          }}>Discard all change.s</button>
+          }}>Discard all changes</button>
           <button class="btn btn-beta" type="button" onClick=${() => {
             const actions = {};
 
-            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
+            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')){
               actions[conflict.path] = '';
             }
 
@@ -87,12 +87,12 @@ const ViewChanges = () => {
   };
 
   return html`
-    <p><strong>Your change.s:</strong></p>
+    <p><strong>Your changes:</strong></p>
     <ul>
       ${changes.map(change => html`<li>${showChange(change)}</li>`)}
     </ul>
     `
-  // <p><button class="btn btn-primary" type="button">Discard incompatible change.s</button></p>
+  // <p><button class="btn btn-primary" type="button">Discard incompatible changes</button></p>
 };
 
 export default ViewChanges;

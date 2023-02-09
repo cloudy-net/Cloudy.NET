@@ -47,7 +47,7 @@ describe('simple-change-handler.js', () => {
       simpleChangeHandler.setValue(entityReference, propertyName, initialValue);
       assert.equal(stateManager.getState(entityReference).history.length, 0);
     });
-    it('change should not be deleted if it equals source but previous change.s exist', () => {
+    it('change should not be deleted if it equals source but previous changes exist', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');

@@ -47,7 +47,7 @@ class ConflictManager {
         continue;
       }
 
-      conflicts.push({ path: path, type: 'pendingchange.sourceconflict' });
+      conflicts.push({ path: path, type: 'pendingchangesourceconflict' });
     }
 
     return conflicts;

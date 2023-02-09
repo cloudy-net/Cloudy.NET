@@ -111,7 +111,7 @@ describe('state-manager.js', () => {
   });
 
   describe('getChanges', () => {
-    it('should return change.s', () => {
+    it('should return changes', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -128,7 +128,7 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, history);
     });
-    it('should not take change.s cleared by type change', () => {
+    it('should not take changes cleared by type change', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -145,7 +145,7 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, [history[1], history[2]]);
     });
-    it('should merge change.s on same path', () => {
+    it('should merge changes on same path', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -161,7 +161,7 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, [history[1]]);
     });
-    it('should not return simple change.s matching source', () => {
+    it('should not return simple changes matching source', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');
@@ -186,7 +186,7 @@ describe('state-manager.js', () => {
 
       assert.deepEqual(result, []);
     });
-    it('should not return block type change.s matching source', () => {
+    it('should not return block type changes matching source', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewContent('page');

@@ -20,7 +20,7 @@ const ShowConflict = ({ conflict, actions, setAction }) => {
   const { state, changes } = useContext(EntityContext);
   const change = changes.find(change => change.path == conflict.path);
 
-  if (!change) { // sourceConflicts and change.s get briefly out of sync when clearing
+  if (!change) { // sourceConflicts and changes get briefly out of sync when clearing
     return;
   }
 
@@ -38,7 +38,7 @@ const ShowConflict = ({ conflict, actions, setAction }) => {
   if (conflict.type == 'blockdeleted') {
     return html`<tr class="align-middle"><td>${path}<//><td>Block deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
   }
-  if (conflict.type == 'pendingchange.sourceconflict') {
+  if (conflict.type == 'pendingchangesourceconflict') {
     const newValue = changeManager.getSourceValue(state.newSource.value, change.path);
     const sourceResult = (typeof initialValue == 'string' || initialValue == null) &&
       (typeof newValue == 'string' || newValue == null) ?
@@ -48,10 +48,10 @@ const ShowConflict = ({ conflict, actions, setAction }) => {
     const select = html`<select class="form-control form-control-sm" value=${actions[change.path]} onChange=${event => setAction(change.path, event.target.value)}>
       <option value="" disabled selected hidden>Select action<//>
       <option value="keep-source">Keep source<//>
-      <option value="keep-change.s">Keep change.s<//>
+      <option value="keep-changes">Keep changes<//>
     <//>`;
 
-    return html`<tr class="align-middle"><td>${path}<//><td class=${actions[change.path] == 'keep-change.s' ? 'strikethrough' : null}>${sourceResult}<//><td class=${actions[change.path] == 'keep-source' ? 'strikethrough' : null}>${result}<//><td>${select}<//><//>`;
+    return html`<tr class="align-middle"><td>${path}<//><td class=${actions[change.path] == 'keep-changes' ? 'strikethrough' : null}>${sourceResult}<//><td class=${actions[change.path] == 'keep-source' ? 'strikethrough' : null}>${result}<//><td>${select}<//><//>`;
   }
 
   return '<tr class="align-middle"><td>(Unknown change type)<//><//>';

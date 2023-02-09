@@ -13,10 +13,10 @@ const Changes = () => {
       state.conflicts.length ?
       html`<div class="alert alert-info">
         <strong>The source and/or model has changed since you started editing.</strong><br/>
-        <a style="text-decoration: underline;" tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>Review the change.s</a> before you continue.
+        <a style="text-decoration: underline;" tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>Review the changes</a> before you continue.
       </div>` :
       html`<div style="text-align: right;">
-        ${changes.length ? html`<a tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>View change.s</a>` : html`<div style="white-space: pre"> <//>`}
+        ${changes.length ? html`<a tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>View changes</a>` : html`<div style="white-space: pre"> <//>`}
       </div>`
     }
     ${showHistory && html`<${ViewChanges} />`}
