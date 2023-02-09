@@ -24,9 +24,9 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), initialValue);
       simpleChangeHandler.setValue(entityReference, propertyName, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), newValue, 'New value should be returned as an intermediate change has been registered');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), newValue);
     });
     it('change should be deleted if it equals source', () => {
       global.localStorage.clear();
@@ -45,9 +45,9 @@ describe('simple-change-handler.js', () => {
       });
 
       simpleChangeHandler.setValue(entityReference, propertyName, initialValue);
-      assert.equal(stateManager.getState(entityReference).changes.length, 0);
+      assert.equal(stateManager.getState(entityReference).history.length, 0);
     });
-    it('change should not be deleted if it equals source but previous changes exist', () => {
+    it('change should not be deleted if it equals source but previous change.s exist', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const { entityReference } = stateManager.createStateForNewContent('page');
@@ -61,13 +61,13 @@ describe('simple-change-handler.js', () => {
             [propertyName]: initialValue
           }
         },
-        changes: [
+        history: [
           { '$type': 'simple', date: Date.now() - 10 * 60 * 1000, path: propertyName, value: '' },
         ]
       });
 
       simpleChangeHandler.setValue(entityReference, propertyName, initialValue);
-      assert.equal(stateManager.getState(entityReference).changes.length, 2);
+      assert.equal(stateManager.getState(entityReference).history.length, 2);
     });
     it('intermediate value, deep path', () => {
       global.localStorage.clear();
@@ -96,9 +96,9 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), initialValue, 'Initial value should be returned as there are no intermediate changes registered');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), initialValue);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue, 'New value should be returned as an intermediate change has been registered');
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
     });
   });
   describe('complex scenario', () => {
@@ -162,7 +162,7 @@ describe('simple-change-handler.js', () => {
       blockTypeChangeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(stateManager.getState(entityReference).changes.length, 3);
+      assert.equal(stateManager.getState(entityReference).history.length, 3);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
       blockTypeChangeHandler.setType(entityReference, blockName, newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);

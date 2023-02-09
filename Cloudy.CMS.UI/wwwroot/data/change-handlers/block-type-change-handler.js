@@ -17,7 +17,7 @@ class EmbeddedBlockChangeHandler {
   getIntermediateType(state, path) {
     let type = UNCHANGED;
 
-    for (var change of state.changes) {
+    for (var change of state.history) {
       if (change['$type'] == 'blocktype' && path == change.path) {
         type = change.type;
         continue;

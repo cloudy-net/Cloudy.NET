@@ -12,7 +12,7 @@ const ViewChanges = () => {
   const [message, setMessage] = useState();
 
   const applyReconciliation = () => {
-    if (sourceConflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict' && !actions[conflict.path]).length) {
+    if (sourceConflicts.filter(conflict => conflict.type == '.' && !actions[conflict.path]).length) {
       setMessage('Please select actions for all conflicts');
       return;
     }
@@ -26,10 +26,10 @@ const ViewChanges = () => {
 
   if (sourceConflicts.length) {
     return html`<div class="m-3">
-        <p><strong>Conflicting source and/or model changes:</strong></p>
+        <p><strong>Conflicting source and/or model change.s:</strong></p>
         <table class="table">
           <thead>
-            <tr><th>Property<//><th>Source<//><th>Your changes<//><th>Action<//><//>
+            <tr><th>Property<//><th>Source<//><th>Your change.s<//><th>Action<//><//>
           <//>
           <tbody>
             ${sourceConflicts.map(conflict => html`<${ShowConflict} conflict=${conflict} actions=${actions} setAction=${(path, action) => setActions({ ...actions, [path]: action })}/>`)}
@@ -41,16 +41,16 @@ const ViewChanges = () => {
           <button class="btn btn-beta me-2" type="button" onClick=${() => {
             const actions = {};
 
-            for(let conflict of sourceConflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')){
+            for(let conflict of sourceConflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
               actions[conflict.path] = 'keep-source';
             }
 
             setActions(actions);
-          }}>Discard all changes</button>
+          }}>Discard all change.s</button>
           <button class="btn btn-beta" type="button" onClick=${() => {
             const actions = {};
 
-            for(let conflict of sourceConflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')){
+            for(let conflict of sourceConflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
               actions[conflict.path] = '';
             }
 
@@ -88,12 +88,12 @@ const ViewChanges = () => {
   };
 
   return html`
-    <p><strong>Your changes:</strong></p>
+    <p><strong>Your change.s:</strong></p>
     <ul>
       ${mergedChanges.map(change => html`<li>${showChange(change)}</li>`)}
     </ul>
     `
-  // <p><button class="btn btn-primary" type="button">Discard incompatible changes</button></p>
+  // <p><button class="btn btn-primary" type="button">Discard incompatible change.s</button></p>
 };
 
 export default ViewChanges;

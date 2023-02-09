@@ -13,8 +13,8 @@ class SimpleChangeHandler {
     change.date = Date.now();
     change.value = value;
 
-    if (change.value == changeManager.getSourceValue(state.source.value, path) && state.changes.filter(change => change.path == path).length == 1) {
-      state.changes.splice(state.changes.indexOf(change), 1);
+    if (change.value == changeManager.getSourceValue(state.source.value, path) && state.history.filter(change => change.path == path).length == 1) {
+      state.history.splice(state.history.indexOf(change), 1);
     }
 
     statePersister.persist(state);
@@ -32,7 +32,7 @@ class SimpleChangeHandler {
   getIntermediateValue(state, path) {
     let value = UNCHANGED;
 
-    for (var change of state.changes) {
+    for (var change of state.history) {
       if (change['$type'] == 'simple' && path == change.path) {
         value = change.value;
         continue;

@@ -52,11 +52,11 @@ describe('conflict-manager.js', () => {
         }
       };
 
-      const changes = [
+      const history = [
         { '$type': 'simple', date: Date.now(), path: propertyName, value: '' },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, history);
 
       const expected = [
         { path: propertyName, type: 'deleted' },
@@ -90,11 +90,11 @@ describe('conflict-manager.js', () => {
         },
       };
 
-      const changes = [
+      const history = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: propertyValue },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, history);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -141,16 +141,16 @@ describe('conflict-manager.js', () => {
         },
       };
 
-      const changes = [
+      const history = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
         { '$type': 'simple', date: Date.now(), path: property2Name, value: new2Value },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, history);
 
       const expected = [
-        { path: property2Name, type: 'pendingchangesourceconflict' },
-        { path: `${blockName}.${propertyName}`, type: 'pendingchangesourceconflict' },
+        { path: property2Name, type: 'pendingchange.sourceconflict' },
+        { path: `${blockName}.${propertyName}`, type: 'pendingchange.sourceconflict' },
       ];
 
       assert.deepEqual(result, expected);
@@ -185,11 +185,11 @@ describe('conflict-manager.js', () => {
         },
       };
 
-      const changes = [
+      const history = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, history);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -228,12 +228,12 @@ describe('conflict-manager.js', () => {
     });
   });
   describe('getAllChangesForPath', () => {
-    it('gets all changes for path', async () => {
+    it('gets all change.s for path', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
       const state = {
-        changes: [
+        history: [
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
@@ -241,20 +241,20 @@ describe('conflict-manager.js', () => {
       };
 
       const expected = [
-        state.changes[0],
-        state.changes[1],
+        state.history[0],
+        state.history[1],
       ];
 
-      const result = conflictManager.getAllChangesForPath(state.changes, propertyName);
+      const result = conflictManager.getAllChangesForPath(state.history, propertyName);
 
       assert.deepEqual(result, expected);
     });
-    it('clears changes after block type change', async () => {
+    it('clears change.s after block type change', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
       const state = {
-        changes: [
+        history: [
           { '$type': 'simple', date: Date.now() - 5000000, path: `${propertyName}.${property2Name}`, value: '' },
           { '$type': 'simple', date: Date.now() - 4000000, path: `${propertyName}.${property2Name}`, value: '' },
           { '$type': 'blocktype', date: Date.now() - 3000000, path: propertyName, type: '' },
@@ -264,22 +264,22 @@ describe('conflict-manager.js', () => {
       };
 
       const expected = [
-        state.changes[3],
-        state.changes[4],
+        state.history[3],
+        state.history[4],
       ];
 
-      const result = conflictManager.getAllChangesForPath(state.changes, `${propertyName}.${property2Name}`);
+      const result = conflictManager.getAllChangesForPath(state.history, `${propertyName}.${property2Name}`);
 
       assert.deepEqual(result, expected);
     });
   });
   describe('discardSourceConflicts', () => {
-    it('discards changes when action is keep-source', async () => {
+    it('discards change.s when action is keep-source', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
 
       const state = {
-        changes: [
+        history: [
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
@@ -291,19 +291,19 @@ describe('conflict-manager.js', () => {
       };
 
       const expected = [
-        state.changes[2]
+        state.history[2]
       ];
 
-      const result = conflictManager.discardSourceConflicts(state, [], actions).changes;
+      const result = conflictManager.discardSourceConflicts(state, [], actions).history;
 
       assert.deepEqual(result, expected);
     });
-    it('discards changes when block is deleted', async () => {
+    it('discards change.s when block is deleted', async () => {
       const blockName = 'lorem';
       const propertyName = 'ipsum';
 
       const state = {
-        changes: [
+        history: [
           { '$type': 'simple', date: Date.now() - 2000000, path: `${blockName}.${propertyName}`, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: `${blockName}.${propertyName}`, value: '' },
         ]
@@ -316,15 +316,15 @@ describe('conflict-manager.js', () => {
       const expected = [
       ];
 
-      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).changes;
+      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).history;
 
       assert.deepEqual(result, expected);
     });
-    it('discards changes when property is deleted', async () => {
+    it('discards change.s when property is deleted', async () => {
       const propertyName = 'ipsum';
 
       const state = {
-        changes: [
+        history: [
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
         ]
@@ -337,7 +337,7 @@ describe('conflict-manager.js', () => {
       const expected = [
       ];
 
-      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).changes;
+      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).history;
 
       assert.deepEqual(result, expected);
     });

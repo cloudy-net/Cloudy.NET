@@ -18,7 +18,7 @@ const FormFooter = ({ validateAll }) => {
   };
 
   const discard = async () => {
-    stateManager.replace({ ...state, changes: [] });
+    stateManager.replace({ ...state, history: [] });
     if (state.entityReference.keyValues) {
       stateManager.reloadContentForState(state.entityReference);
     }
@@ -27,7 +27,7 @@ const FormFooter = ({ validateAll }) => {
   return html`
   <div class="d-flex">
     <button class="btn btn-primary" type="button" disabled=${saving || sourceConflicts.length} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
-    <button class="btn btn-beta ms-auto" type="button" disabled=${!mergedChanges.length || saving} onClick=${discard}>Discard changes</button>
+    <button class="btn btn-beta ms-auto" type="button" disabled=${!mergedChanges.length || saving} onClick=${discard}>Discard change.s</button>
   </div>
     ${ValidationManager.anyIsInvalid(state.validationResults) ? html`
       <div class="alert alert-warning mt-3" role="alert">

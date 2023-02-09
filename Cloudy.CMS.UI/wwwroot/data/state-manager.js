@@ -49,7 +49,7 @@ class StateManager {
         properties: {},
         date: new Date(),
       },
-      changes: [],
+      history: [],
     };
     this.states.push(state);
     statePersister.persist(state);
@@ -71,7 +71,7 @@ class StateManager {
       loading: true,
       nameHint,
       source: null,
-      changes: null,
+      history: null,
     };
     this.states.push(state);
     statePersister.persist(state);
@@ -169,7 +169,7 @@ class StateManager {
         properties: response.type.properties,
         date: new Date(),
       },
-      changes: [],
+      history: [],
     };
 
     this.replace(state);
@@ -184,7 +184,7 @@ class StateManager {
       body: JSON.stringify({
         entities: states.map(state => ({
           reference: state.entityReference,
-          changes: state.changes.map(change => {
+          history: state.history.map(change => {
             change = {
               ...change,
               date: new Date(change.date),

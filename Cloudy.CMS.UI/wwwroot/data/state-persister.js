@@ -4,13 +4,13 @@ import stateManager from "./state-manager.js";
 
 class StatePersister {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.11";
+  schema = "1.12";
 
   loadStates() {
     let index = JSON.parse(localStorage.getItem(this.indexStorageKey) || JSON.stringify({ schema: this.schema, elements: [] }));
 
     if (index.schema != this.schema) {
-      if (confirm(`Warning: The state schema has changed (new version: ${this.schema}, old version: ${index.schema}).\n\nThis means the format of local state has changed, and your local changes are no longer understood by the Admin UI.\n\nYou are required to clear your local changes to avoid any strange bugs.\n\nPress OK to continue, or cancel to do the necessary schema changes manually to your localStorage (not supported officially).`)) {
+      if (confirm(`Warning: The state schema has changed (new version: ${this.schema}, old version: ${index.schema}).\n\nThis means the format of local state has changed, and your local change.s are no longer understood by the Admin UI.\n\nYou are required to clear your local change.s to avoid any strange bugs.\n\nPress OK to continue, or cancel to do the necessary schema change.s manually to your localStorage (not supported officially).`)) {
         Object.keys(localStorage)
           .filter(key => key.startsWith("cloudy:"))
           .forEach(key => localStorage.removeItem(key));

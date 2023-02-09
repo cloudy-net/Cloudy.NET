@@ -47,14 +47,14 @@ class ConflictManager {
         continue;
       }
 
-      conflicts.push({ path: path, type: 'pendingchangesourceconflict' });
+      conflicts.push({ path: path, type: 'pendingchange.sourceconflict' });
     }
 
     return conflicts;
   }
 
   discardSourceConflicts(state, conflicts, actions) {
-    const changes = [...state.changes];
+    const history = [...state.history];
 
     for (let path of Object.keys(actions)) {
       const action = actions[path];
@@ -63,8 +63,8 @@ class ConflictManager {
         continue;
       }
 
-      for(let change of this.getAllChangesForPath(changes, path)){
-        changes.splice(changes.indexOf(change), 1);
+      for(let change of this.getAllChangesForPath(history, path)){
+        history.splice(history.indexOf(change), 1);
       }
     }
 
@@ -73,14 +73,14 @@ class ConflictManager {
         continue;
       }
 
-      for(let change of this.getAllChangesForPath(changes, conflict.path)){
-        changes.splice(changes.indexOf(change), 1);
+      for(let change of this.getAllChangesForPath(history, conflict.path)){
+        history.splice(history.indexOf(change), 1);
       }
     }
 
     state = {
       ...state,
-      changes,
+      history,
       source: state.newSource,
       newSource: null,
     };
@@ -150,10 +150,10 @@ class ConflictManager {
     return result;
   }
 
-  getAllChangesForPath(changes, path) {
+  getAllChangesForPath(history, path) {
     let result = [];
 
-    for (let c of changes) {
+    for (let c of history) {
       if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
         result = [];
         continue;
