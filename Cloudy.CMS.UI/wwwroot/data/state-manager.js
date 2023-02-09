@@ -50,6 +50,7 @@ class StateManager {
         date: new Date(),
       },
       history: [],
+      conflicts: [],
     };
     this.states.push(state);
     statePersister.persist(state);
@@ -72,6 +73,7 @@ class StateManager {
       nameHint,
       source: null,
       history: null,
+      conflicts: null,
     };
     this.states.push(state);
     statePersister.persist(state);
@@ -113,6 +115,7 @@ class StateManager {
       state = {
         ...state,
         loadingNewSource: false,
+        conflicts: [],
       };
     } else {
       if (!changeManager.hasChanges(state)) {
@@ -124,6 +127,7 @@ class StateManager {
             properties: response.type.properties,
             date: new Date(),
           },
+          conflicts: [],
         };
       } else {
         state = {
@@ -134,6 +138,7 @@ class StateManager {
             date: new Date(),
             properties: response.type.properties,
           },
+          conflicts: conflictManager.getSourceConflicts(state, changes),
         };
       }
 
@@ -170,6 +175,7 @@ class StateManager {
         date: new Date(),
       },
       history: [],
+      conflicts: [],
     };
 
     this.replace(state);

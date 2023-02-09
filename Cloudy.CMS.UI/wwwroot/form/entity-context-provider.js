@@ -3,12 +3,10 @@ import EntityContext from "./entity-context.js";
 import stateManager from '../data/state-manager.js';
 import changeManager from '../data/change-manager.js';
 import stateEvents from '../data/state-events.js';
-import conflictManager from '../data/conflict-manager.js';
 
 export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();
   const [state, setState] = useState();
-  const [sourceConflicts, setSourceConflicts] = useState([]);
   const [changes, setChanges] = useState([]);
 
   useEffect(() => {
@@ -40,24 +38,9 @@ export default ({ entityType, keyValues, children }) => {
     setChanges(changeManager.getChanges(state));
   }, [state]);
 
-  useEffect(() => {
-    if (!state) {
-      setSourceConflicts([]);
-      return;
-    }
-
-    if (!changes.length) {
-      setSourceConflicts([]);
-      return;
-    }
-
-    setSourceConflicts(conflictManager.getSourceConflicts(state, changes));
-  }, [state, changes]);
-
-  const clearSourceConflicts = () => setSourceConflicts([]);
   const clearChanges = () => setChanges([]);
 
-  return html`<${EntityContext.Provider} value=${{ entityReference, state, changes, sourceConflicts, clearSourceConflicts, clearChanges }}>
+  return html`<${EntityContext.Provider} value=${{ entityReference, state, changes, clearChanges }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

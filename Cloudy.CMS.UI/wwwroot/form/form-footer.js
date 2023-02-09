@@ -5,7 +5,7 @@ import ValidationManager from '../data/validation-manager.js';
 
 const FormFooter = ({ validateAll }) => {
   const [saving, setSaving] = useState();
-  const { state, changes, sourceConflicts } = useContext(EntityContext);
+  const { state, changes } = useContext(EntityContext);
 
   const save = async () => {
     if (validateAll(state.entityReference)) {
@@ -26,7 +26,7 @@ const FormFooter = ({ validateAll }) => {
 
   return html`
   <div class="d-flex">
-    <button class="btn btn-primary" type="button" disabled=${saving || sourceConflicts.length} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
+    <button class="btn btn-primary" type="button" disabled=${saving || state.conflicts.length} onClick=${save}>${saving ? 'Saving ...' : 'Save'}</button>
     <button class="btn btn-beta ms-auto" type="button" disabled=${!changes.length || saving} onClick=${discard}>Discard change.s</button>
   </div>
     ${ValidationManager.anyIsInvalid(state.validationResults) ? html`

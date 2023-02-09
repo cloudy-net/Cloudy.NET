@@ -4,13 +4,13 @@ import EntityContext from "./entity-context.js";
 
 
 const Changes = () => {
-  const { changes, sourceConflicts } = useContext(EntityContext);
+  const { state, changes } = useContext(EntityContext);
   
   const [showHistory, setShowHistory] = useState();
 
   return html`
     ${
-      sourceConflicts.length ?
+      state.conflicts.length ?
       html`<div class="alert alert-info">
         <strong>The source and/or model has changed since you started editing.</strong><br/>
         <a style="text-decoration: underline;" tabIndex="0" onClick=${() => setShowHistory(!showHistory)}>Review the change.s</a> before you continue.

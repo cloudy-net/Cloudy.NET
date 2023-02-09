@@ -7,24 +7,23 @@ import ShowConflict from "./show-conflict.js";
 import stateManager from "./state-manager.js";
 
 const ViewChanges = () => {
-  const { state, changes, sourceConflicts, clearChanges, clearSourceConflicts } = useContext(EntityContext);
+  const { state, changes, clearChanges } = useContext(EntityContext);
   const [actions, setActions] = useState({});
   const [message, setMessage] = useState();
 
   const applyReconciliation = () => {
-    if (sourceConflicts.filter(conflict => conflict.type == '.' && !actions[conflict.path]).length) {
+    if (state.conflicts.filter(conflict => conflict.type == '.' && !actions[conflict.path]).length) {
       setMessage('Please select actions for all conflicts');
       return;
     }
 
     clearChanges();
-    clearSourceConflicts();
-    stateManager.replace(conflictManager.discardSourceConflicts(state, sourceConflicts, actions));
+    stateManager.replace(conflictManager.discardSourceConflicts(state, state.conflicts, actions));
 
     setMessage('Applied actions and updated source.');
   };
 
-  if (sourceConflicts.length) {
+  if (state.conflicts.length) {
     return html`<div class="m-3">
         <p><strong>Conflicting source and/or model change.s:</strong></p>
         <table class="table">
@@ -32,7 +31,7 @@ const ViewChanges = () => {
             <tr><th>Property<//><th>Source<//><th>Your change.s<//><th>Action<//><//>
           <//>
           <tbody>
-            ${sourceConflicts.map(conflict => html`<${ShowConflict} conflict=${conflict} actions=${actions} setAction=${(path, action) => setActions({ ...actions, [path]: action })}/>`)}
+            ${state.conflicts.map(conflict => html`<${ShowConflict} conflict=${conflict} actions=${actions} setAction=${(path, action) => setActions({ ...actions, [path]: action })}/>`)}
           <//>
         <//>
         <p>
@@ -41,7 +40,7 @@ const ViewChanges = () => {
           <button class="btn btn-beta me-2" type="button" onClick=${() => {
             const actions = {};
 
-            for(let conflict of sourceConflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
+            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
               actions[conflict.path] = 'keep-source';
             }
 
@@ -50,7 +49,7 @@ const ViewChanges = () => {
           <button class="btn btn-beta" type="button" onClick=${() => {
             const actions = {};
 
-            for(let conflict of sourceConflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
+            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchange.sourceconflict')){
               actions[conflict.path] = '';
             }
 

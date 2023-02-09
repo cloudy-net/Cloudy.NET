@@ -4,7 +4,7 @@ import stateManager from "./state-manager.js";
 
 class StatePersister {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.12";
+  schema = "1.13";
 
   loadStates() {
     let index = JSON.parse(localStorage.getItem(this.indexStorageKey) || JSON.stringify({ schema: this.schema, elements: [] }));
@@ -33,6 +33,10 @@ class StatePersister {
   }
 
   persist(state) {
+    state = {...state};
+
+    delete state['conflicts'];
+
     if (changeManager.hasChanges(state)) {
       localStorage.setItem(`cloudy:${JSON.stringify(state.entityReference)}`, JSON.stringify(state));
     } else {
