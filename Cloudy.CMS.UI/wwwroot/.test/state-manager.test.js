@@ -4,6 +4,7 @@ import stateManager from '../data/state-manager.js';
 import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
 import changeManager from '../data/change-manager.js';
 import statePersister from '../data/state-persister.js';
+import conflictManager from '../data/conflict-manager.js';
 
 describe('state-manager.js', () => {
   describe('simple scenario', () => {
@@ -287,7 +288,7 @@ describe('state-manager.js', () => {
         }
       };
 
-      const result = changeManager.getSourceBlockTypes(source);
+      const result = conflictManager.getSourceBlockTypes(source);
 
       const expected = {
         [blockName]: blockTypeName,
@@ -321,7 +322,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: propertyName, value: '' },
       ];
 
-      const result = changeManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: propertyName, type: 'deleted' },
@@ -359,7 +360,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: propertyValue },
       ];
 
-      const result = changeManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -411,7 +412,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: property2Name, value: new2Value },
       ];
 
-      const result = changeManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: property2Name, type: 'pendingchangesourceconflict' },
@@ -454,7 +455,7 @@ describe('state-manager.js', () => {
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
       ];
 
-      const result = changeManager.getSourceConflicts(state, changes);
+      const result = conflictManager.getSourceConflicts(state, changes);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -482,7 +483,7 @@ describe('state-manager.js', () => {
         [property2Name]: source2Value,
       };
 
-      const result = changeManager.enumerateSourceProperties(source);
+      const result = conflictManager.enumerateSourceProperties(source);
 
       const expected = [
         property2Name,
@@ -513,7 +514,7 @@ describe('state-manager.js', () => {
         state.changes[1],
       ];
 
-      const result = changeManager.getAllChangesForPath(state.changes, propertyName);
+      const result = conflictManager.getAllChangesForPath(state.changes, propertyName);
 
       assert.deepEqual(result, expected);
     });
@@ -539,7 +540,7 @@ describe('state-manager.js', () => {
         state.changes[4],
       ];
 
-      const result = changeManager.getAllChangesForPath(state.changes, `${propertyName}.${property2Name}`);
+      const result = conflictManager.getAllChangesForPath(state.changes, `${propertyName}.${property2Name}`);
 
       assert.deepEqual(result, expected);
     });
@@ -570,7 +571,7 @@ describe('state-manager.js', () => {
         state.changes[2]
       ];
 
-      changeManager.discardSourceConflicts(state, [], actions);
+      conflictManager.discardSourceConflicts(state, [], actions);
 
       const result = stateManager.getState(state.entityReference).changes;
 
@@ -599,7 +600,7 @@ describe('state-manager.js', () => {
       const expected = [
       ];
 
-      changeManager.discardSourceConflicts(state, conflicts, {});
+      conflictManager.discardSourceConflicts(state, conflicts, {});
 
       const result = stateManager.getState(state.entityReference).changes;
 
@@ -627,7 +628,7 @@ describe('state-manager.js', () => {
       const expected = [
       ];
 
-      changeManager.discardSourceConflicts(state, conflicts, {});
+      conflictManager.discardSourceConflicts(state, conflicts, {});
 
       const result = stateManager.getState(state.entityReference).changes;
 

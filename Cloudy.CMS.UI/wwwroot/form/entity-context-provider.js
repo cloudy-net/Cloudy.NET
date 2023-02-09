@@ -3,6 +3,7 @@ import EntityContext from "./entity-context.js";
 import stateManager from '../data/state-manager.js';
 import changeManager from '../data/change-manager.js';
 import stateEvents from '../data/state-events.js';
+import conflictManager from '../data/conflict-manager.js';
 
 export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();
@@ -50,7 +51,7 @@ export default ({ entityType, keyValues, children }) => {
       return;
     }
 
-    setSourceConflicts(changeManager.getSourceConflicts(state, mergedChanges));
+    setSourceConflicts(conflictManager.getSourceConflicts(state, mergedChanges));
   }, [state, mergedChanges]);
 
   const clearSourceConflicts = () => setSourceConflicts([]);

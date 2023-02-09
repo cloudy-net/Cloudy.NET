@@ -1,6 +1,7 @@
 import EntityContext from "../form/entity-context.js";
 import { html, useContext, useState } from "../preact-htm/standalone.module.js";
 import changeManager from "./change-manager.js";
+import conflictManager from "./conflict-manager.js";
 import diff from "./diff.js";
 import ShowConflict from "./show-conflict.js";
 import stateManager from "./state-manager.js";
@@ -18,7 +19,7 @@ const ViewChanges = () => {
 
     clearMergedChanges();
     clearSourceConflicts();
-    changeManager.discardSourceConflicts(state, sourceConflicts, actions);
+    conflictManager.discardSourceConflicts(state, sourceConflicts, actions);
 
     setMessage('Applied actions and updated source.');
   };
