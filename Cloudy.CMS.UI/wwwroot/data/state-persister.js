@@ -22,7 +22,11 @@ class StatePersister {
     const result = [];
 
     for (let entityReference of index.elements) {
-      result.push(JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(entityReference)}`), (key, value) => key == 'referenceDate' && value ? new Date(value) : value));
+      const state = JSON.parse(localStorage.getItem(`cloudy:${JSON.stringify(entityReference)}`), (key, value) => key == 'referenceDate' && value ? new Date(value) : value);
+
+      state.conflicts = [];
+
+      result.push(state);
     }
 
     return result;
