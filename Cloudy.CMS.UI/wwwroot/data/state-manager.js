@@ -190,7 +190,7 @@ class StateManager {
       body: JSON.stringify({
         entities: states.map(state => ({
           reference: state.entityReference,
-          history: state.history.map(change => {
+          changes: state.history.map(change => {
             change = {
               ...change,
               date: new Date(change.date),
