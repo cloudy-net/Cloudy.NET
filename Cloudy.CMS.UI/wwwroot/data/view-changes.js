@@ -7,7 +7,7 @@ import ShowConflict from "./show-conflict.js";
 import stateManager from "./state-manager.js";
 
 const ViewChanges = () => {
-  const { state, mergedChanges, sourceConflicts, clearMergedChanges, clearSourceConflicts } = useContext(EntityContext);
+  const { state, changes, sourceConflicts, clearChanges, clearSourceConflicts } = useContext(EntityContext);
   const [actions, setActions] = useState({});
   const [message, setMessage] = useState();
 
@@ -17,7 +17,7 @@ const ViewChanges = () => {
       return;
     }
 
-    clearMergedChanges();
+    clearChanges();
     clearSourceConflicts();
     stateManager.replace(conflictManager.discardSourceConflicts(state, sourceConflicts, actions));
 
@@ -90,7 +90,7 @@ const ViewChanges = () => {
   return html`
     <p><strong>Your change.s:</strong></p>
     <ul>
-      ${mergedChanges.map(change => html`<li>${showChange(change)}</li>`)}
+      ${changes.map(change => html`<li>${showChange(change)}</li>`)}
     </ul>
     `
   // <p><button class="btn btn-primary" type="button">Discard incompatible change.s</button></p>

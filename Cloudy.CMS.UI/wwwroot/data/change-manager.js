@@ -46,7 +46,7 @@ class ChangeManager {
     return state.history.length;
   }
 
-  getMergedChanges(state) {
+  getChanges(state) {
     if (state.history == null) {
       return [];
     }

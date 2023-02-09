@@ -7,7 +7,7 @@ import closeDropdown from '../../../components/close-dropdown.js';
 import blockTypeChangeHandler from '../../../data/change-handlers/block-type-change-handler.js';
 
 const Control = ({ name, label, path, settings: { types } }) => {
-  const { entityReference, state, mergedChanges } = useContext(EntityContext);
+  const { entityReference, state, changes } = useContext(EntityContext);
 
   const type = blockTypeChangeHandler.getIntermediateType(state, path);
 
@@ -16,7 +16,7 @@ const Control = ({ name, label, path, settings: { types } }) => {
       <a class="dropdown-item" onClick=${event => { blockTypeChangeHandler.setType(entityReference, path, null); closeDropdown(event.target); }}>Remove</a>
     <//>`;
     return html`<div class="mb-3">
-      <label for=${name} class="form-label">${label} ${mergedChanges.find(change => change.path == path) ? '*' : null} ${dropdown}</label>
+      <label for=${name} class="form-label">${label} ${changes.find(change => change.path == path) ? '*' : null} ${dropdown}</label>
       <fieldset class="m-2">
         <${EmbeddedBlockFields} ...${{type, path}}/>
       <//>
@@ -24,7 +24,7 @@ const Control = ({ name, label, path, settings: { types } }) => {
   }
 
   return html`<div class="mb-3">
-        <label for=${name} class="form-label">${label} ${mergedChanges.find(change => change.path == path) ? '*' : null}</label>
+        <label for=${name} class="form-label">${label} ${changes.find(change => change.path == path) ? '*' : null}</label>
         <${Dropdown} text="Add">
           ${types.map(type => html`<a class="dropdown-item" onClick=${event => { blockTypeChangeHandler.setType(entityReference, path, type); closeDropdown(event.target); }}>${type}</a>`)}
         <//>

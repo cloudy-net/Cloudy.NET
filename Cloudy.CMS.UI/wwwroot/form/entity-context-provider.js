@@ -9,7 +9,7 @@ export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();
   const [state, setState] = useState();
   const [sourceConflicts, setSourceConflicts] = useState([]);
-  const [mergedChanges, setMergedChanges] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   useEffect(() => {
     let entityReference;
@@ -33,11 +33,11 @@ export default ({ entityType, keyValues, children }) => {
 
   useEffect(() => {
     if (!state) {
-      setMergedChanges([]);
+      setChanges([]);
       return;
     }
 
-    setMergedChanges(changeManager.getMergedChanges(state));
+    setChanges(changeManager.getChanges(state));
   }, [state]);
 
   useEffect(() => {
@@ -46,18 +46,18 @@ export default ({ entityType, keyValues, children }) => {
       return;
     }
 
-    if (!mergedChanges.length) {
+    if (!changes.length) {
       setSourceConflicts([]);
       return;
     }
 
-    setSourceConflicts(conflictManager.getSourceConflicts(state, mergedChanges));
-  }, [state, mergedChanges]);
+    setSourceConflicts(conflictManager.getSourceConflicts(state, changes));
+  }, [state, changes]);
 
   const clearSourceConflicts = () => setSourceConflicts([]);
-  const clearMergedChanges = () => setMergedChanges([]);
+  const clearChanges = () => setChanges([]);
 
-  return html`<${EntityContext.Provider} value=${{ entityReference, state, mergedChanges, sourceConflicts, clearSourceConflicts, clearMergedChanges }}>
+  return html`<${EntityContext.Provider} value=${{ entityReference, state, changes, sourceConflicts, clearSourceConflicts, clearChanges }}>
     ${entityReference && state && !state.loading && children || 'Loading ...'}
   <//>`;
 };

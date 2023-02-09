@@ -110,7 +110,7 @@ describe('state-manager.js', () => {
     });
   });
 
-  describe('getMergedChanges', () => {
+  describe('getChanges', () => {
     it('should return change.s', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
@@ -124,7 +124,7 @@ describe('state-manager.js', () => {
 
       state.history = [...history];
 
-      const result = changeManager.getMergedChanges(state);
+      const result = changeManager.getChanges(state);
 
       assert.deepEqual(result, history);
     });
@@ -141,7 +141,7 @@ describe('state-manager.js', () => {
 
       state.history = [...history];
 
-      const result = changeManager.getMergedChanges(state);
+      const result = changeManager.getChanges(state);
 
       assert.deepEqual(result, [history[1], history[2]]);
     });
@@ -157,7 +157,7 @@ describe('state-manager.js', () => {
 
       state.history = [...history];
 
-      const result = changeManager.getMergedChanges(state);
+      const result = changeManager.getChanges(state);
 
       assert.deepEqual(result, [history[1]]);
     });
@@ -182,7 +182,7 @@ describe('state-manager.js', () => {
 
       state.history = [...history];
 
-      const result = changeManager.getMergedChanges(state);
+      const result = changeManager.getChanges(state);
 
       assert.deepEqual(result, []);
     });
@@ -205,7 +205,7 @@ describe('state-manager.js', () => {
 
       state.history = [...history];
 
-      const result = changeManager.getMergedChanges(state);
+      const result = changeManager.getChanges(state);
 
       assert.deepEqual(result, []);
     });
