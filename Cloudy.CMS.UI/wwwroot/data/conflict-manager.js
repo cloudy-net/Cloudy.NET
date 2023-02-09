@@ -154,7 +154,7 @@ class ConflictManager {
     let result = [];
 
     for (let c of history) {
-      if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
+      if (c.$type == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
         result = [];
         continue;
       }

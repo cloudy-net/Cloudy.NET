@@ -81,7 +81,7 @@ const ViewChanges = () => {
 
     return html`
       ${change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`)}:
-      ${change['$type'] == 'simple' ? html` Changed to “${result}”` : ` Changed block type to “${change.type}”`}
+      ${change.$type == 'simple' ? html` Changed to “${result}”` : ` Changed block type to “${change.type}”`}
     `
   };
 

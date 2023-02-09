@@ -29,11 +29,11 @@ class SimpleChangeHandler {
     let value = UNCHANGED;
 
     for (var change of state.history) {
-      if (change['$type'] == 'simple' && path == change.path) {
+      if (change.$type == 'simple' && path == change.path) {
         value = change.value;
         continue;
       }
-      if (change['$type'] == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
+      if (change.$type == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
         value = change.value;
         continue;
       }

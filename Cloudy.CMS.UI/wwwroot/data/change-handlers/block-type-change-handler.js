@@ -11,7 +11,7 @@ class EmbeddedBlockChangeHandler {
 
     change.date = Date.now();
     change.type = type;
-    
+
     state.changes = changeManager.getChanges(state);
 
     statePersister.persist(state);
@@ -20,11 +20,11 @@ class EmbeddedBlockChangeHandler {
     let type = UNCHANGED;
 
     for (var change of state.history) {
-      if (change['$type'] == 'blocktype' && path == change.path) {
+      if (change.$type == 'blocktype' && path == change.path) {
         type = change.type;
         continue;
       }
-      if (change['$type'] == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
+      if (change.$type == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
         type = null;
         continue;
       }

@@ -5,15 +5,15 @@ class ChangeManager {
     let change = null;
 
     for (let c of state.history) {
-      if (c['$type'] == type && path == c.path) {
+      if (c.$type == type && path == c.path) {
         change = c;
         continue;
       }
-      if (c['$type'] == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
+      if (c.$type == 'blocktype' && path.indexOf(`${c.path}.`) == 0) {
         change = null;
         continue;
       }
-      if (c['$type'] == 'simple' && c.path.indexOf(`${path}.`) == 0) {
+      if (c.$type == 'simple' && c.path.indexOf(`${path}.`) == 0) {
         change = null;
         continue;
       }
