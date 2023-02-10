@@ -1,7 +1,7 @@
 import changeManager from "./change-manager.js";
 
 class ConflictManager {
-  getSourceConflicts(state, changes) {
+  getSourceConflicts(state) {
     if (!state.newSource) {
       return [];
     }
@@ -9,7 +9,7 @@ class ConflictManager {
     const conflicts = [];
 
     for (let key of Object.keys(state.source.properties)) {
-      if (!state.newSource.properties[key] && changes.find(change => change.path == key)) {
+      if (!state.newSource.properties[key] && state.changes.find(change => change.path == key)) {
         conflicts.push({ path: key, type: 'deleted' });
       }
     }
@@ -19,7 +19,7 @@ class ConflictManager {
 
     for (let path of Object.keys(sourceBlockTypes)) {
       if (!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]) {
-        for (let change of changes.filter(change => change.path.indexOf(`${path}.`) == 0)) {
+        for (let change of state.changes.filter(change => change.path.indexOf(`${path}.`) == 0)) {
           conflicts.push({ path: change.path, type: 'blockdeleted' });
         }
       }
@@ -39,7 +39,7 @@ class ConflictManager {
         continue;
       }
 
-      if (!changes.find(change => change.path == path)) {
+      if (!state.changes.find(change => change.path == path)) {
         continue;
       }
 

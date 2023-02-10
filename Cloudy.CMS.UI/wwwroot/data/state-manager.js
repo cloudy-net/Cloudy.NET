@@ -145,7 +145,7 @@ class StateManager {
             date: new Date(),
             properties: response.type.properties,
           },
-          conflicts: conflictManager.getSourceConflicts(state, changes),
+          conflicts: conflictManager.getSourceConflicts(state),
           changes,
         };
       }

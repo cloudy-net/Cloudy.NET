@@ -52,11 +52,11 @@ describe('conflict-manager.js', () => {
         }
       };
 
-      const history = [
+      state.changes = [
         { '$type': 'simple', date: Date.now(), path: propertyName, value: '' },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, history);
+      const result = conflictManager.getSourceConflicts(state);
 
       const expected = [
         { path: propertyName, type: 'deleted' },
@@ -90,11 +90,11 @@ describe('conflict-manager.js', () => {
         },
       };
 
-      const history = [
+      state.changes = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: propertyValue },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, history);
+      const result = conflictManager.getSourceConflicts(state);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
@@ -141,12 +141,12 @@ describe('conflict-manager.js', () => {
         },
       };
 
-      const history = [
+      state.changes = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
         { '$type': 'simple', date: Date.now(), path: property2Name, value: new2Value },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, history);
+      const result = conflictManager.getSourceConflicts(state);
 
       const expected = [
         { path: property2Name, type: 'pendingchangesourceconflict' },
@@ -185,11 +185,11 @@ describe('conflict-manager.js', () => {
         },
       };
 
-      const history = [
+      state.changes = [
         { '$type': 'simple', date: Date.now(), path: `${blockName}.${propertyName}`, value: newValue },
       ];
 
-      const result = conflictManager.getSourceConflicts(state, history);
+      const result = conflictManager.getSourceConflicts(state);
 
       const expected = [
         { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
