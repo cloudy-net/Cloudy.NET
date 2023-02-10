@@ -53,7 +53,7 @@ class ConflictManager {
     return conflicts;
   }
 
-  discardSourceConflicts(state, conflicts, actions) {
+  resolveConflicts(state, conflicts, actions) {
     const history = [...state.history];
 
     for (let path of Object.keys(actions)) {

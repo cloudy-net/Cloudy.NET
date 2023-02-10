@@ -273,7 +273,7 @@ describe('conflict-manager.js', () => {
       assert.deepEqual(result, expected);
     });
   });
-  describe('discardSourceConflicts', () => {
+  describe('resolveConflicts', () => {
     it('discards changes when action is keep-source', async () => {
       const propertyName = 'lorem';
       const property2Name = 'ipsum';
@@ -294,7 +294,7 @@ describe('conflict-manager.js', () => {
         state.history[2]
       ];
 
-      const result = conflictManager.discardSourceConflicts(state, [], actions).history;
+      const result = conflictManager.resolveConflicts(state, [], actions).history;
 
       assert.deepEqual(result, expected);
     });
@@ -316,7 +316,7 @@ describe('conflict-manager.js', () => {
       const expected = [
       ];
 
-      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).history;
+      const result = conflictManager.resolveConflicts(state, conflicts, {}).history;
 
       assert.deepEqual(result, expected);
     });
@@ -337,7 +337,7 @@ describe('conflict-manager.js', () => {
       const expected = [
       ];
 
-      const result = conflictManager.discardSourceConflicts(state, conflicts, {}).history;
+      const result = conflictManager.resolveConflicts(state, conflicts, {}).history;
 
       assert.deepEqual(result, expected);
     });

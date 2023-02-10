@@ -17,7 +17,7 @@ const ViewChanges = () => {
       return;
     }
 
-    stateManager.replace(conflictManager.discardSourceConflicts(state, state.conflicts, actions));
+    stateManager.replace(conflictManager.resolveConflicts(state, state.conflicts, actions));
 
     setMessage('Applied actions and updated source.');
   };
