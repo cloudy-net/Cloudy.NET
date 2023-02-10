@@ -11,7 +11,7 @@ describe('Edit test', () => {
     
     // Modify name
     cy.get('input[name="Name"]').clear().type('Hi!... cypress was here!');
-    cy.wait(100);
+    cy.wait(1000);
 
     // Save and await request
     cy.get('button.btn.btn-primary').contains('Save').click()
@@ -19,14 +19,15 @@ describe('Edit test', () => {
     
     // Modify name
     cy.get('input[name="Name"]').type(' - Yet again!');
-    cy.wait(100);
+    cy.wait(1000);
 
     // Save and await request
     cy.get('button.btn.btn-primary').contains('Save').click();
     cy.wait('@saving')
 
-    // Reload and assert
-    cy.reload();
+    // Revisit and assert
+    cy.visit('/Admin/List?EntityType=Page');
+    cy.get('table.table--content-list td a').first().click();
     cy.get('input[name="Name"]').invoke('val').should('include', '... cypress was here! - Yet again!')
   })
 })
