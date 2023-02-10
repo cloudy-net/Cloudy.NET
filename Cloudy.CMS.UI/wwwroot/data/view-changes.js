@@ -17,7 +17,14 @@ const ViewChanges = () => {
       return;
     }
 
-    stateManager.replace(conflictManager.resolveConflicts(state, actions));
+    const newState = conflictManager.resolveConflicts(state, actions);
+
+    if(!newState){
+      setMessage('All conflicts could not be resolved.');
+      return;
+    }
+
+    stateManager.replace(newState);
 
     setMessage('Resolved conflicts.');
   };
