@@ -32,14 +32,6 @@ class ChangeManager {
     state.changes = [];
   }
 
-  hasChanges(state) {
-    if (state.history == null) {
-      return false;
-    }
-
-    return state.history.length;
-  }
-
   getChanges(state) {
     if (state.history == null) {
       return [];

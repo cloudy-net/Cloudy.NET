@@ -35,7 +35,7 @@ class StateManager {
   states = statePersister.loadStates();
 
   getAll() {
-    return this.states.filter(state => changeManager.hasChanges(state));
+    return this.states.filter(state => state.changes.length);
   }
 
   createStateForNewContent(entityType) {
