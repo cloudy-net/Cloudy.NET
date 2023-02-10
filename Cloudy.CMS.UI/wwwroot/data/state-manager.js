@@ -142,7 +142,7 @@ class StateManager {
             properties: response.type.properties,
           },
         };
-        state.conflicts = conflictManager.getSourceConflicts(state);
+        state.conflicts = conflictManager.getConflicts(state);
       }
 
       this.replace(state);

@@ -1,7 +1,7 @@
 import changeManager from "./change-manager.js";
 
 class ConflictManager {
-  getSourceConflicts(state) {
+  getConflicts(state) {
     if (!state.newSource) {
       return [];
     }
