@@ -78,6 +78,10 @@ class ConflictManager {
       }
     }
 
+    if(state.conflicts.filter(conflict => !actions[conflict.path] && conflict.type != 'blockdeleted' && conflict.type != 'deleted').length){
+      return;
+    }
+
     state = {
       ...state,
       history,
