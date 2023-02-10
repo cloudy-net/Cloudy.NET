@@ -53,7 +53,7 @@ class ConflictManager {
     return conflicts;
   }
 
-  resolveConflicts(state, conflicts, actions) {
+  resolveConflicts(state, actions) {
     const history = [...state.history];
 
     for (let path of Object.keys(actions)) {
@@ -68,7 +68,7 @@ class ConflictManager {
       }
     }
 
-    for(let conflict of conflicts) {
+    for(let conflict of state.conflicts) {
       if(conflict.type != 'blockdeleted' && conflict.type != 'deleted'){
         continue;
       }

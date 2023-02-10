@@ -17,7 +17,7 @@ const ViewChanges = () => {
       return;
     }
 
-    stateManager.replace(conflictManager.resolveConflicts(state, state.conflicts, actions));
+    stateManager.replace(conflictManager.resolveConflicts(state, actions));
 
     setMessage('Applied actions and updated source.');
   };
@@ -37,23 +37,23 @@ const ViewChanges = () => {
           <button class="btn btn-primary me-2" type="button" onClick=${() => applyReconciliation()}>Apply</button>
           <!--
           <button class="btn btn-beta me-2" type="button" onClick=${() => {
-            const actions = {};
+        const actions = {};
 
-            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')){
-              actions[conflict.path] = 'keep-source';
-            }
+        for (let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')) {
+          actions[conflict.path] = 'keep-source';
+        }
 
-            setActions(actions);
-          }}>Discard all changes</button>
+        setActions(actions);
+      }}>Discard all changes</button>
           <button class="btn btn-beta" type="button" onClick=${() => {
-            const actions = {};
+        const actions = {};
 
-            for(let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')){
-              actions[conflict.path] = '';
-            }
+        for (let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')) {
+          actions[conflict.path] = '';
+        }
 
-            setActions(actions);
-          }}>Clear</button>
+        setActions(actions);
+      }}>Clear</button>
           -->
           ${message && html`<div class="d-inline-block ms-2">${message}<//>`}
         </p>

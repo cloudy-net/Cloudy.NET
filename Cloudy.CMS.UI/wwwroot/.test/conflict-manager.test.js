@@ -283,7 +283,8 @@ describe('conflict-manager.js', () => {
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now(), path: property2Name, value: '' },
-        ]
+        ],
+        conflicts: [],
       };
 
       const actions = {
@@ -294,7 +295,7 @@ describe('conflict-manager.js', () => {
         state.history[2]
       ];
 
-      const result = conflictManager.resolveConflicts(state, [], actions).history;
+      const result = conflictManager.resolveConflicts(state, actions).history;
 
       assert.deepEqual(result, expected);
     });
@@ -306,17 +307,16 @@ describe('conflict-manager.js', () => {
         history: [
           { '$type': 'simple', date: Date.now() - 2000000, path: `${blockName}.${propertyName}`, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: `${blockName}.${propertyName}`, value: '' },
+        ],
+        conflicts: [
+          { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
         ]
       };
-
-      const conflicts = [
-        { path: `${blockName}.${propertyName}`, type: 'blockdeleted' },
-      ];
 
       const expected = [
       ];
 
-      const result = conflictManager.resolveConflicts(state, conflicts, {}).history;
+      const result = conflictManager.resolveConflicts(state, {}).history;
 
       assert.deepEqual(result, expected);
     });
@@ -327,17 +327,16 @@ describe('conflict-manager.js', () => {
         history: [
           { '$type': 'simple', date: Date.now() - 2000000, path: propertyName, value: '' },
           { '$type': 'simple', date: Date.now() - 1000000, path: propertyName, value: '' },
+        ],
+        conflicts: [
+          { path: propertyName, type: 'deleted' },
         ]
       };
-
-      const conflicts = [
-        { path: propertyName, type: 'deleted' },
-      ];
 
       const expected = [
       ];
 
-      const result = conflictManager.resolveConflicts(state, conflicts, {}).history;
+      const result = conflictManager.resolveConflicts(state, {}).history;
 
       assert.deepEqual(result, expected);
     });
