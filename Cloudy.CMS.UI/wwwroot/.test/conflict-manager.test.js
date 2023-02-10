@@ -333,12 +333,10 @@ describe('conflict-manager.js', () => {
         ]
       };
 
-      const expected = [
-      ];
+      const result = conflictManager.resolveConflicts(state, {});
 
-      const result = conflictManager.resolveConflicts(state, {}).history;
-
-      assert.deepEqual(result, expected);
+      assert.deepEqual(result.history, []);
+      assert.deepEqual(result.changes, []);
     });
   });
 });

@@ -85,6 +85,8 @@ class ConflictManager {
       newSource: null,
     };
 
+    state.changes = changeManager.getChanges(state);
+
     return state;
   }
 
