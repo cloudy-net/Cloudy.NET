@@ -114,17 +114,14 @@ class StateManager {
 
     state = this.getState(entityReference);
 
-    const changes = changeManager.getChanges(state);
-
     if (JSON.stringify(state.source.value) == JSON.stringify(entity)) {
       state = {
         ...state,
         loadingNewSource: false,
         conflicts: [],
-        changes,
       };
     } else {
-      if (!changeManager.hasChanges(state)) {
+      if (!state.changes.length) {
         state = {
           ...state,
           loadingNewSource: false,
@@ -134,7 +131,6 @@ class StateManager {
             date: new Date(),
           },
           conflicts: [],
-          changes,
         };
       } else {
         state = {
@@ -145,9 +141,8 @@ class StateManager {
             date: new Date(),
             properties: response.type.properties,
           },
-          conflicts: conflictManager.getSourceConflicts(state),
-          changes,
         };
+        state.conflicts = conflictManager.getSourceConflicts(state);
       }
 
       this.replace(state);
