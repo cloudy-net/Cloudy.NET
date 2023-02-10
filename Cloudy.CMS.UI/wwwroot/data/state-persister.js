@@ -34,16 +34,16 @@ class StatePersister {
   }
 
   updateIndex() {
-    localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: stateManager.states.filter(state => state.changes.length).map(state => state.entityReference) }));
+    localStorage.setItem(this.indexStorageKey, JSON.stringify({ schema: this.schema, elements: stateManager.states.filter(state => state.changes && state.changes.length).map(state => state.entityReference) }));
   }
 
   persist(state) {
     state = { ...state };
 
-    if (state.changes.length) {
+    if (state.changes && state.changes.length) {
       delete state['conflicts'];
       delete state['changes'];
-
+      
       localStorage.setItem(`cloudy:${JSON.stringify(state.entityReference)}`, JSON.stringify(state));
     } else {
       localStorage.removeItem(`cloudy:${JSON.stringify(state.entityReference)}`);
