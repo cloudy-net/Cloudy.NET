@@ -29,6 +29,6 @@ export default ({ entityType, keyValues, children }) => {
   }, [keyValues]);
 
   return html`<${EntityContext.Provider} value=${{ entityReference, state }}>
-    ${entityReference && state && !state.loading && children || 'Loading ...'}
+    ${entityReference && state && !state.loading && children}
   <//>`;
 };

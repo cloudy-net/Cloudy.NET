@@ -8,6 +8,11 @@ const FormFooter = ({ validateAll }) => {
   const [saving, setSaving] = useState();
   const { state } = useContext(EntityContext);
 
+  if(state.conflicts.length) {
+    return;
+  }
+
+
   const save = async () => {
     if (validateAll(state.entityReference)) {
       setSaving(true);
