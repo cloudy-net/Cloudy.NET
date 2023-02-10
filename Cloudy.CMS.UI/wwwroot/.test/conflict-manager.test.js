@@ -295,9 +295,10 @@ describe('conflict-manager.js', () => {
         state.history[2]
       ];
 
-      const result = conflictManager.resolveConflicts(state, actions).history;
+      const result = conflictManager.resolveConflicts(state, actions);
 
-      assert.deepEqual(result, expected);
+      assert.deepEqual(result.history, expected);
+      assert.deepEqual(result.changes, expected);
     });
     it('discards changes when block is deleted', async () => {
       const blockName = 'lorem';
@@ -313,12 +314,10 @@ describe('conflict-manager.js', () => {
         ]
       };
 
-      const expected = [
-      ];
+      const result = conflictManager.resolveConflicts(state, {});
 
-      const result = conflictManager.resolveConflicts(state, {}).history;
-
-      assert.deepEqual(result, expected);
+      assert.deepEqual(result.history, []);
+      assert.deepEqual(result.changes, []);
     });
     it('discards changes when property is deleted', async () => {
       const propertyName = 'ipsum';

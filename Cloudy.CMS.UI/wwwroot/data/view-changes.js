@@ -11,7 +11,7 @@ const ViewChanges = () => {
   const [actions, setActions] = useState({});
   const [message, setMessage] = useState();
 
-  const applyReconciliation = () => {
+  const resolve = () => {
     if (state.conflicts.filter(conflict => conflict.type == '.' && !actions[conflict.path]).length) {
       setMessage('Please select actions for all conflicts');
       return;
@@ -19,7 +19,7 @@ const ViewChanges = () => {
 
     stateManager.replace(conflictManager.resolveConflicts(state, actions));
 
-    setMessage('Applied actions and updated source.');
+    setMessage('Resolved conflicts.');
   };
 
   if (state.conflicts.length) {
@@ -34,7 +34,7 @@ const ViewChanges = () => {
           <//>
         <//>
         <p>
-          <button class="btn btn-primary me-2" type="button" onClick=${() => applyReconciliation()}>Apply</button>
+          <button class="btn btn-primary me-2" type="button" onClick=${() => resolve()}>Apply</button>
           <!--
           <button class="btn btn-beta me-2" type="button" onClick=${() => {
         const actions = {};

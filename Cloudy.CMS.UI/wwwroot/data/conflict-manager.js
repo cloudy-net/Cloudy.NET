@@ -90,6 +90,7 @@ class ConflictManager {
     };
 
     state.changes = changeManager.getChanges(state);
+    state.conflicts = this.getConflicts(state);
 
     return state;
   }
