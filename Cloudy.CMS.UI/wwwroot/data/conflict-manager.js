@@ -78,6 +78,14 @@ class ConflictManager {
       }
     }
 
+    state = {
+      ...state,
+      history,
+    };
+
+    state.changes = changeManager.getChanges(state);
+    state.conflicts = this.getConflicts(state);
+
     if(state.conflicts.filter(conflict => !actions[conflict.path] && conflict.type != 'blockdeleted' && conflict.type != 'deleted').length){
       return;
     }
