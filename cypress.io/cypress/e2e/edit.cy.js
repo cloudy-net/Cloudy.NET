@@ -11,7 +11,6 @@ describe('Edit test', () => {
     
     // Modify name
     cy.get('input[name="Name"]').clear().type('Hi!... cypress was here!');
-    cy.wait(1000);
 
     // Save and await request
     cy.get('button.btn.btn-primary').contains('Save').click()
@@ -20,7 +19,6 @@ describe('Edit test', () => {
     
     // Modify name
     cy.get('input[name="Name"]').type(' - Yet again!');
-    cy.wait(1000);
 
     // Save and await request
     cy.get('button.btn.btn-primary').contains('Save').click();
