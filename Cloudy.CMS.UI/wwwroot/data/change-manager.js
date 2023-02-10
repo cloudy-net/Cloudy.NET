@@ -47,7 +47,7 @@ class ChangeManager {
       changes[change.path] = change;
     }
 
-    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state.source.value, change.path)).forEach(change => delete changes[change.path])
+    Object.values(changes).filter(change => change.$type == 'simple').filter(change => state.source && (change.value == this.getSourceValue(state.source.value, change.path))).forEach(change => delete changes[change.path])
     Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
       const sourceValue = this.getSourceValue(state.source.value, change.path);
 
