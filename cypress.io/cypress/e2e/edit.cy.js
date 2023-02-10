@@ -7,8 +7,8 @@ describe('Edit test', () => {
     cy.get('button.btn.btn-primary').contains('Save').click()
     cy.get('input[name="Name"]').type(' - Yet again!');
     cy.get('button.btn.btn-primary').contains('Save').click();
-
+    cy.wait(2000)
     cy.reload();
-    cy.get('input[name="Name"]', {timeout:10000}).invoke('val').should('include', '... cypress was here! - Yet again!')
+    cy.get('input[name="Name"]').invoke('val').should('include', '... cypress was here! - Yet again!')
   })
 })
