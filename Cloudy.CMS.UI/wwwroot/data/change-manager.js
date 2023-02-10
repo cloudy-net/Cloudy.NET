@@ -37,24 +37,24 @@ class ChangeManager {
       return [];
     }
 
-    const history = {};
+    const changes = {};
 
     for (let change of state.history) {
       if (change.$type == 'blocktype') {
-        Object.keys(history).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete history[path]);
+        Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
       }
 
-      history[change.path] = change;
+      changes[change.path] = change;
     }
 
-    Object.values(history).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state.source.value, change.path)).forEach(change => delete history[change.path])
-    Object.values(history).filter(change => change.$type == 'blocktype').filter(change => {
+    Object.values(changes).filter(change => change.$type == 'simple').filter(change => change.value == this.getSourceValue(state.source.value, change.path)).forEach(change => delete changes[change.path])
+    Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
       const sourceValue = this.getSourceValue(state.source.value, change.path);
 
       return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
-    }).forEach(change => delete history[change.path])
+    }).forEach(change => delete changes[change.path])
 
-    return Object.values(history);
+    return Object.values(changes);
   }
 
   getSourceValue(value, path) {
