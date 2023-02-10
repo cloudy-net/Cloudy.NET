@@ -114,11 +114,14 @@ class StateManager {
 
     state = this.getState(entityReference);
 
+    const changes = changeManager.getChanges(state);
+
     if (JSON.stringify(state.source.value) == JSON.stringify(entity)) {
       state = {
         ...state,
         loadingNewSource: false,
         conflicts: [],
+        changes,
       };
     } else {
       if (!changeManager.hasChanges(state)) {
@@ -131,6 +134,7 @@ class StateManager {
             date: new Date(),
           },
           conflicts: [],
+          changes,
         };
       } else {
         state = {
@@ -142,10 +146,9 @@ class StateManager {
             properties: response.type.properties,
           },
           conflicts: conflictManager.getSourceConflicts(state, changes),
+          changes,
         };
       }
-      
-      state.changes = changeManager.getChanges(state);
 
       this.replace(state);
     }
@@ -189,7 +192,14 @@ class StateManager {
   }
 
   async save(entityReferences) {
+    await Promise.allSettled(entityReferences.map(entityReference => this.reloadContentForState(entityReference)));
+    
     const states = entityReferences.map(c => this.getState(c));
+
+    if(states.filter(state => state.conflicts.length).length){
+      return;
+    }
+
     const response = await urlFetcher.fetch("/Admin/api/form/entity/save", {
       credentials: "include",
       method: "POST",
