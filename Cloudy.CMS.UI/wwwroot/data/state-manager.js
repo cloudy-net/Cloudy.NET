@@ -60,7 +60,7 @@ class StateManager {
     return state;
   };
 
-  createOrUpdateStateForExistingContent(entityReference, nameHint) {
+  createOrUpdateStateForExistingEntity(entityReference, nameHint) {
     const existingState = this.getState(entityReference);
     if (existingState) {
       this.reloadContentForState(entityReference);

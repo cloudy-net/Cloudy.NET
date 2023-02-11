@@ -14,7 +14,7 @@ export default ({ entityType, keyValues, children }) => {
     if (keyValues) {
       entityReference = { entityType, keyValues };
       setEntityReference(entityReference);
-      const state = stateManager.createOrUpdateStateForExistingContent(entityReference);
+      const state = stateManager.createOrUpdateStateForExistingEntity(entityReference);
       setState(state);
     } else {
       const state = stateManager.createStateForNewEntity(entityType);
