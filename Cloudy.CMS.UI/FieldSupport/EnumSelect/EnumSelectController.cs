@@ -35,26 +35,36 @@ namespace Cloudy.CMS.UI.FieldSupport.Select
                 .FirstOrDefault(x => x.Name == propertyName);
             
             var enumValues = Enum.GetValues(propertyDefinition.Type);
-            var selectItems = new List<object>();
+            var selectItems = new List<SelectItem>();
 
             foreach (var enumValue in enumValues)
             {
                 var name = Enum.GetName(propertyDefinition.Type, enumValue);
-                var displayName = propertyDefinition.Type.GetMember(name)
+                var displayAttribute = propertyDefinition.Type.GetMember(name)
                     .FirstOrDefault()
                     .GetCustomAttributes(false)
                     .OfType<DisplayAttribute>()
-                    .FirstOrDefault()?
-                    .GetName();
+                    .FirstOrDefault();
 
-                selectItems.Add(new
+                var displayName = displayAttribute?.GetName() ?? name;
+                var order = displayAttribute?.GetOrder() ?? int.MaxValue;
+
+                selectItems.Add(new SelectItem
                 {
-                    text = displayName ?? name,
-                    value = ((int)enumValue).ToString()
+                    Order = order,
+                    Text = displayName,
+                    Value = ((int)enumValue).ToString()
                 });
             }
 
-            return Json(selectItems, new JsonSerializerOptions().CloudyDefault());
+            return Json(selectItems.OrderBy(x => x.Order).ThenBy(x => x.Text).ToArray(), new JsonSerializerOptions().CloudyDefault());
         }
+    }
+
+    internal class SelectItem
+    { 
+        public int Order { get; set; }
+        public string Text { get; set; }
+        public string Value { get; set; }
     }
 }
