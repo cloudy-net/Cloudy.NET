@@ -63,7 +63,7 @@ class StateManager {
   createOrUpdateStateForExistingEntity(entityReference, nameHint) {
     const existingState = this.getState(entityReference);
     if (existingState) {
-      this.reloadContentForState(entityReference);
+      this.reloadEntityForState(entityReference);
       return existingState;
     }
 
@@ -86,7 +86,7 @@ class StateManager {
     return state;
   };
 
-  async reloadContentForState(entityReference) {
+  async reloadEntityForState(entityReference) {
     let state = this.getState(entityReference);
 
     state = {
@@ -188,7 +188,7 @@ class StateManager {
 
   async save(state) {
     if(!state.new) {
-      await this.reloadContentForState(state.entityReference);
+      await this.reloadEntityForState(state.entityReference);
     }
 
     if(state.conflicts.length){

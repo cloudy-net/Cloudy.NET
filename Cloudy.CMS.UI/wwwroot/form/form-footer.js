@@ -26,8 +26,8 @@ const FormFooter = ({ validateAll }) => {
   const discard = async () => {
     changeManager.discardChanges(state);
     stateManager.replace(state);
-    if (state.entityReference.keyValues) {
-      stateManager.reloadContentForState(state.entityReference);
+    if (!state.new) {
+      stateManager.reloadEntityForState(state.entityReference);
     }
   };
 
