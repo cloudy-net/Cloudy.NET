@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text.Json;
@@ -38,9 +39,17 @@ namespace Cloudy.CMS.UI.FieldSupport.Select
 
             foreach (var enumValue in enumValues)
             {
+                var name = Enum.GetName(propertyDefinition.Type, enumValue);
+                var displayName = propertyDefinition.Type.GetMember(name)
+                    .FirstOrDefault()
+                    .GetCustomAttributes(false)
+                    .OfType<DisplayAttribute>()
+                    .FirstOrDefault()?
+                    .GetName();
+
                 selectItems.Add(new
                 {
-                    text = Enum.GetName(propertyDefinition.Type, enumValue),
+                    text = displayName ?? name,
                     value = ((int)enumValue).ToString()
                 });
             }
