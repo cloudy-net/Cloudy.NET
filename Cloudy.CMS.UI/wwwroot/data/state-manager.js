@@ -187,7 +187,7 @@ class StateManager {
   }
 
   async save(entityReferences) {
-    await Promise.allSettled(entityReferences.map(entityReference => this.reloadContentForState(entityReference)));
+    await Promise.allSettled(entityReferences.map(c => this.getState(c)).filter(state => !state.new).map(state => this.reloadContentForState(state.reference)));
     
     const states = entityReferences.map(c => this.getState(c));
 
