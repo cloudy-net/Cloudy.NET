@@ -9,7 +9,7 @@ describe('block-type-change-handler.js', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const { entityReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewEntity('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
       const newValue = 'ipsum';
@@ -32,7 +32,7 @@ describe('block-type-change-handler.js', () => {
     it('clearing value', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const { entityReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewEntity('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
       const newValue = null;
@@ -57,7 +57,7 @@ describe('block-type-change-handler.js', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const { entityReference } = stateManager.createStateForNewContent('page');
+      const { entityReference } = stateManager.createStateForNewEntity('page');
       const blockName = 'Block1';
       const nestedBlockName = 'Block2';
       const initialType = 'lorem';

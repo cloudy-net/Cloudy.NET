@@ -38,7 +38,7 @@ class StateManager {
     return this.states.filter(state => state.changes.length);
   }
 
-  createStateForNewContent(entityType) {
+  createStateForNewEntity(entityType) {
     const entityReference = { newContentKey: generateRandomString(), keyValues: null, entityType };
 
     const state = {

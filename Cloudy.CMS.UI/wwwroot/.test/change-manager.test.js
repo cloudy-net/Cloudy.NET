@@ -9,7 +9,7 @@ describe('state-manager.js', () => {
     it('should merge simple change if < 5 min old', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
       ];
@@ -21,7 +21,7 @@ describe('state-manager.js', () => {
     it('should not merge simple change if > 5 min old', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'simple', date: Date.now() - 1000000, path: 'propertyName', value: 'lorem' },
       ];
@@ -33,7 +33,7 @@ describe('state-manager.js', () => {
     it('should merge block type change if < 5 min old', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', value: 'lorem' },
       ];
@@ -45,7 +45,7 @@ describe('state-manager.js', () => {
     it('should not merge block type change if > 5 min old', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'blocktype', date: Date.now() - 1000000, path: 'blockName', value: 'lorem' },
       ];
@@ -59,7 +59,7 @@ describe('state-manager.js', () => {
     it('should not merge simple change if separated by block change', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
@@ -72,7 +72,7 @@ describe('state-manager.js', () => {
     it('should not merge simple change if separated by nested block change', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.nestedBlockName.propertyName', value: 'lorem' },
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
@@ -85,7 +85,7 @@ describe('state-manager.js', () => {
     it('should merge block type change if separated by irrelevant simple change', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
         { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
@@ -98,7 +98,7 @@ describe('state-manager.js', () => {
     it('should not merge block type change if separated by nested simple change', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
       state.history = [
         { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
@@ -114,7 +114,7 @@ describe('state-manager.js', () => {
     it('should return changes', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
 
       const history = [
         { '$type': 'simple', date: Date.now(), path: 'property1Name', value: 'lorem' },
@@ -131,7 +131,7 @@ describe('state-manager.js', () => {
     it('should not take changes cleared by type change', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
 
       const history = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
@@ -148,7 +148,7 @@ describe('state-manager.js', () => {
     it('should merge changes on same path', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
 
       const history = [
         { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
@@ -164,7 +164,7 @@ describe('state-manager.js', () => {
     it('should not return simple changes matching source', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
 
       state.source = {
         value: {
@@ -189,7 +189,7 @@ describe('state-manager.js', () => {
     it('should not return block type changes matching source', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewContent('page');
+      const state = stateManager.createStateForNewEntity('page');
 
       state.source = {
         value: {
