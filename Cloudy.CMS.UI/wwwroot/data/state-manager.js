@@ -81,7 +81,7 @@ class StateManager {
     this.states.push(state);
     statePersister.persist(state);
 
-    this.loadContentForState(entityReference);
+    this.loadEntityForState(entityReference);
 
     return state;
   };
@@ -149,7 +149,7 @@ class StateManager {
     }
   }
 
-  async loadContentForState(entityReference) {
+  async loadEntityForState(entityReference) {
     const response = await urlFetcher.fetch(
       `/Admin/api/form/entity/get`,
       {
@@ -209,7 +209,7 @@ class StateManager {
       notificationManager.addNotification((item) => item.setText(`Error saving:`, errors));
     }
 
-    this.loadContentForState(result.entityReference);
+    this.loadEntityForState(result.entityReference);
 
     return result;
   }
