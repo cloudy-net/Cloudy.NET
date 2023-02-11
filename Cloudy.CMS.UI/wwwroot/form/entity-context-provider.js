@@ -17,7 +17,25 @@ export default ({ entityType, keyValues, children }) => {
       const state = stateManager.createOrUpdateStateForExistingEntity(entityReference);
       setState(state);
     } else {
-      const state = stateManager.createStateForNewEntity(entityType);
+      const searchParams = new URLSearchParams(window.location.search);
+      const newEntityKey = searchParams.get('newEntityKey');
+
+      let state = stateManager.getState({
+        entityType: searchParams.get('EntityType'),
+        newEntityKey, // may be null, resulting in null state
+      });
+      
+      // if state doesn't exist, either because the new entity key has already been
+      // saved into a real, existing entity, or that the key is missing from the query
+      // string, we create a new state with accompanying new entity key
+
+      if(!state) {
+        state = stateManager.createStateForNewEntity(entityType);
+        
+        searchParams.set("newEntityKey", state.entityReference.newEntityKey);
+        history.replaceState({}, null, `${location.pathname}?${searchParams}`);
+      }
+
       entityReference = state.entityReference;
       setEntityReference(entityReference);
       setState(state);
