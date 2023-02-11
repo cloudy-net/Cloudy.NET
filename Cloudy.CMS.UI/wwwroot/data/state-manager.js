@@ -29,7 +29,7 @@ const arrayEquals = (a, b) => {
 
   return a.every((ai, i) => ai === b[i]);
 };
-const entityReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newContentKey == b.newContentKey && a.entityType == b.entityType;
+const entityReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newEntityKey == b.newEntityKey && a.entityType == b.entityType;
 
 class StateManager {
   states = statePersister.loadStates();
@@ -39,7 +39,7 @@ class StateManager {
   }
 
   createStateForNewEntity(entityType) {
-    const entityReference = { newContentKey: generateRandomString(), keyValues: null, entityType };
+    const entityReference = { newEntityKey: generateRandomString(), keyValues: null, entityType };
 
     const state = {
       new: true,
@@ -257,7 +257,7 @@ class StateManager {
   };
 
   getState(entityReference) {
-    if (entityReference.newContentKey && entityReference.keyValues) {
+    if (entityReference.newEntityKey && entityReference.keyValues) {
       entityReference = {
         ...entityReference,
         keyValues: null,

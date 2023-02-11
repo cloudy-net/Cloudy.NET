@@ -4,7 +4,7 @@ import stateManager from "./state-manager.js";
 
 class StatePersister {
   indexStorageKey = "cloudy:statesIndex";
-  schema = "1.13";
+  schema = "1.14";
 
   loadStates() {
     let index = JSON.parse(localStorage.getItem(this.indexStorageKey) || JSON.stringify({ schema: this.schema, elements: [] }));
