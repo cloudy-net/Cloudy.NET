@@ -1,7 +1,7 @@
-﻿class ContentNotFound extends Error {
+﻿class EntityNotFound extends Error {
     constructor(entityReference) {
         super(`Content ${JSON.stringify(entityReference.keyValues)} of type ${entityReference.entityTypeId} not found`);
     }
 }
 
-export default ContentNotFound;
+export default EntityNotFound;

@@ -1,6 +1,6 @@
 import urlFetcher from "../util/url-fetcher.js";
 import notificationManager from "../notification/notification-manager.js";
-import ContentNotFound from "./content-not-found.js";
+import EntityNotFound from "./entity-not-found.js";
 import statePersister from "./state-persister.js";
 import changeManager from "./change-manager.js";
 import conflictManager from "./conflict-manager.js";
@@ -106,7 +106,7 @@ class StateManager {
       },
       `Could not get content ${JSON.stringify(entityReference.keyValues)} (${entityReference.entityType})`,
       {
-        410: () => new ContentNotFound(entityReference)
+        410: () => new EntityNotFound(entityReference)
       }
     );
 
@@ -158,9 +158,9 @@ class StateManager {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(entityReference)
       },
-      `Could not get content ${JSON.stringify(entityReference.keyValues)} (${entityReference.entityType})`,
+      `Could not get entity ${JSON.stringify(entityReference.keyValues)} (${entityReference.entityType})`,
       {
-        410: () => new ContentNotFound(entityReference)
+        410: () => new EntityNotFound(entityReference)
       }
     );
 
