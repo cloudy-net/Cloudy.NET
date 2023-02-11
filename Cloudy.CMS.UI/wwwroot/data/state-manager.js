@@ -104,7 +104,7 @@ class StateManager {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(entityReference)
       },
-      `Could not get content ${JSON.stringify(entityReference.keyValues)} (${entityReference.entityType})`,
+      `Could not get entity ${JSON.stringify(entityReference.keyValues)} (${entityReference.entityType})`,
       {
         410: () => new EntityNotFound(entityReference)
       }
