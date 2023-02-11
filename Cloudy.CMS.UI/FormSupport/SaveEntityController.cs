@@ -175,7 +175,7 @@ namespace Cloudy.CMS.UI.FormSupport
         private static JsonSerializerOptions JsonSerializerOptions => new JsonSerializerOptions
         {
             NumberHandling = JsonNumberHandling.AllowReadingFromString,
-            Converters = { new DateOnlyJsonConverter(), new TimeOnlyJsonConverter() }
+            Converters = { new DateOnlyJsonConverter(), new TimeOnlyJsonConverter(), new JsonStringEnumConverter() }
         };
 
         private void UpdateSimpleField(object target, IEnumerable<string> path, string value)

@@ -54,5 +54,7 @@ namespace TestWebsite.Models
         [ListColumn]
         [CustomSelect<IColorFactory>]
         public IList<string> Colors { get; set; }
+
+        public Category Category { get; set; }
     }
 }

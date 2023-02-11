@@ -18,7 +18,7 @@ export default ({ name, path, settings, validators }) => {
 
         (async () => {
             const responseData = await urlFetcher.fetch(
-                `/Admin/api/controls/customselect/list/?entityType=${settings.entityType}&propertyName=${settings.propertyName}`,
+                `/Admin/api/controls/customselect/list/?entityType=${entityReference.entityType}&propertyName=${name}`,
                 {
                     credentials: 'include'
                 },

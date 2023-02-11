@@ -3,7 +3,7 @@ import EntityContext from '../../entity-context.js';
 import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
 import urlFetcher from '../../../util/url-fetcher.js';
 
-export default ({ name, path, settings }) => {
+export default ({ name, path }) => {
     const [options, setOptions] = useState([]);
     const [optionGroups, setOptionGroups] = useState({});
     const [currentValues, setCurrentValues] = useState([]);
@@ -15,7 +15,7 @@ export default ({ name, path, settings }) => {
 
         (async () => {
             const responseData = await urlFetcher.fetch(
-                `/Admin/api/controls/customselect/list/?entityType=${settings.entityType}&propertyName=${settings.propertyName}`,
+                `/Admin/api/controls/customselect/list/?entityType=${entityReference.entityType}&propertyName=${name}`,
                 {
                     credentials: 'include'
                 },

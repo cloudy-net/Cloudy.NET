@@ -73,13 +73,6 @@ namespace Cloudy.CMS.UI.FieldSupport
                     settings["types"] = EntityTypeProvider.GetAll().Select(t => t.Type).Where(t => t.IsAssignableTo(propertyDefinition.Type)).Select(t => t.Name).ToList().AsReadOnly();
                 }
 
-                var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
-                if (customSelectAttribute is not null)
-                {
-                    settings["entityType"] = entityType;
-                    settings["propertyName"] = name;
-                }
-
                 if (partialName == null)
                 {
                     partialName = "failed";
