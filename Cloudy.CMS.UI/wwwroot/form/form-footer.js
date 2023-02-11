@@ -16,7 +16,7 @@ const FormFooter = ({ validateAll }) => {
   const save = async () => {
     if (validateAll(state.entityReference)) {
       setSaving(true);
-      await stateManager.save([state.entityReference]);
+      await stateManager.save(state);
       setSaving(false);
     } else {
       setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);

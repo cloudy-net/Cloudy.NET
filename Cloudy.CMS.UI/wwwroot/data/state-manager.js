@@ -186,14 +186,36 @@ class StateManager {
     this.replace(state);
   }
 
-  async save(entityReferences) {
-    await Promise.allSettled(entityReferences.map(c => this.getState(c)).filter(state => !state.new).map(state => this.reloadContentForState(state.reference)));
-    
-    const states = entityReferences.map(c => this.getState(c));
+  async save(state) {
+    if(!state.new) {
+      await this.reloadContentForState(state.entityReference);
+    }
 
-    if(states.filter(state => state.conflicts.length).length){
+    if(state.conflicts.length){
       return;
     }
+
+    const result = (await this.saveInternal([state.entityReference]))[0];
+
+    if (result.success) {
+      notificationManager.addNotification((item) => item.setText('Entity has been saved.'));
+    } else {
+      var errors = document.createElement("ul");
+      Object.entries(result.validationErrors).forEach(error => {
+        var item = document.createElement("li");
+        item.innerText = `${error[0]}: ${error[1]}`;
+        errors.append(item);
+      });
+      notificationManager.addNotification((item) => item.setText(`Error saving:`, errors));
+    }
+
+    this.loadContentForState(result.entityReference);
+
+    return result;
+  }
+
+  async saveInternal(entityReferences) {
+    const states = entityReferences.map(c => this.getState(c));
 
     const response = await urlFetcher.fetch("/Admin/api/form/entity/save", {
       credentials: "include",
@@ -219,25 +241,7 @@ class StateManager {
       }),
     }, 'Could not save entity');
 
-    const success = response.results.every(r => r.success);
-
-    if (success) {
-      notificationManager.addNotification((item) => item.setText('Entity has been saved.'));
-    } else {
-      response.results.filter(r => !r.success).forEach(result => {
-        var errors = document.createElement("ul");
-        Object.entries(result.validationErrors).forEach(error => {
-          var item = document.createElement("li");
-          item.innerText = `${error[0]}: ${error[1]}`;
-          errors.append(item);
-        });
-        notificationManager.addNotification((item) => item.setText(`Error saving:`, errors));
-      });
-    }
-
-    for (let result of response.results.filter(r => r.success)) {
-      this.loadContentForState(result.entityReference);
-    }
+    return response.results;
   }
 
   replace(state) {
