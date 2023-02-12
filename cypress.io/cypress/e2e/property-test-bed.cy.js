@@ -17,7 +17,7 @@ describe('Property test bed - Create', () => {
       'NullableDateTime': '2023-03-02T14:53:21',
       'DateTimeOffset': '2023-03-02T14:53:21',
       'NullableDateTimeOffset': '2023-04-02T14:53:21',
-      'DateTimeWithDate': '2023-08-02T14:53:21',
+      'DateTimeWithDate': '2023-08-02',
       'DateTimeOffsetWithDate': '2023-09-02T14:53:21',
       'DateTimeWithTime': '2023-09-02T14:53:21',
       'DateTimeOffsetWithTime': '2023-09-02T14:53:21',
