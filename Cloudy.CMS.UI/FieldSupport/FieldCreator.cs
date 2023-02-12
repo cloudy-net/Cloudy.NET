@@ -1,4 +1,5 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.Naming;
 using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.UI.FieldSupport.CustomSelect;
@@ -18,7 +19,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         {
             var requiredAttribute = attributes.OfType<RequiredAttribute>().FirstOrDefault();
             if (requiredAttribute is not null)
-            { 
+            {
                 yield return new KeyValuePair<string, object>(
                     "required",
                     new { message = requiredAttribute.ErrorMessage }
@@ -27,7 +28,7 @@ namespace Cloudy.CMS.UI.FieldSupport
 
             var maxLengthAttribute = attributes.OfType<MaxLengthAttribute>().FirstOrDefault();
             if (maxLengthAttribute is not null)
-            { 
+            {
                 yield return new KeyValuePair<string, object>(
                     "maxLength",
                     new { message = maxLengthAttribute.ErrorMessage, maxLength = maxLengthAttribute.Length }
@@ -42,30 +43,37 @@ namespace Cloudy.CMS.UI.FieldSupport
             foreach (var propertyDefinition in PropertyDefinitionProvider.GetFor(entityType))
             {
                 var displayAttribute = propertyDefinition.Attributes.OfType<DisplayAttribute>().FirstOrDefault();
-
-                var autoGenerate = displayAttribute?.GetAutoGenerateField();
-                var group = displayAttribute?.GetGroupName();
-
-                var name = propertyDefinition.Name;
-                var humanizedName = Humanizer.Humanize(name);
-
-                if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any() && humanizedName.EndsWith(" id"))
-                {
-                    humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
-                }
-
-                var label = displayAttribute?.GetName() ?? humanizedName;
-                var description = displayAttribute?.GetDescription();
-
-                var type = propertyDefinition.Type;
-                var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
-
-                var partialName = GetPartialName(propertyDefinition, uiHints);
-                var validators = GetValidators(propertyDefinition.Attributes).ToDictionary(x => x.Key, x => x.Value);
                 var settings = new Dictionary<string, object>()
                 {
                     { "isRequired", propertyDefinition.Attributes.OfType<RequiredAttribute>().Any() }
                 };
+
+                var autoGenerate = displayAttribute?.GetAutoGenerateField();
+                var group = displayAttribute?.GetGroupName();
+                var name = propertyDefinition.Name;
+                var humanizedName = Humanizer.Humanize(name);
+
+                var selectAttribute = propertyDefinition.Attributes.OfType<ISelectAttribute>().FirstOrDefault();
+                if (selectAttribute is not null)
+                {
+                    var referencedType = selectAttribute.GetType().GetGenericArguments().FirstOrDefault();
+
+                    settings["simpleKey"] = true; // TODO: Check up on this
+                    settings["referencedTypeName"] = referencedType.Name;
+                    settings["imageable"] = typeof(IImageable).IsAssignableFrom(referencedType);
+
+                    if (humanizedName.EndsWith(" id"))
+                    {
+                        humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
+                    }
+                }
+
+                var label = displayAttribute?.GetName() ?? humanizedName;
+                var description = displayAttribute?.GetDescription();
+                var type = propertyDefinition.Type;
+                var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
+                var partialName = GetPartialName(propertyDefinition, uiHints);
+                var validators = GetValidators(propertyDefinition.Attributes).ToDictionary(x => x.Key, x => x.Value);
 
                 if (propertyDefinition.Block)
                 {
