@@ -37,7 +37,7 @@ export default ({ name, path, settings, validators }) => {
                 setPreview({ notFound: true });
                 return;
             }
-            console.log(preview);
+            
             var json = await response.json();
             setPreview(json);
         })();
