@@ -199,17 +199,10 @@ class StateManager {
 
     if (result.success) {
       notificationManager.addNotification((item) => item.setText('Entity has been saved.'));
-    } else {
-      var errors = document.createElement("ul");
-      Object.entries(result.validationErrors).forEach(error => {
-        var item = document.createElement("li");
-        item.innerText = `${error[0]}: ${error[1]}`;
-        errors.append(item);
-      });
-      notificationManager.addNotification((item) => item.setText(`Error saving:`, errors));
-    }
 
-    this.loadEntityForState(result.entityReference);
+      this.remove(state.entityReference);
+      this.createOrUpdateStateForExistingEntity(result.entityReference);
+    }
 
     return result;
   }
@@ -251,18 +244,12 @@ class StateManager {
 
   remove(entityReference) {
     this.states.splice(this.states.findIndex(s => entityReferenceEquals(s.entityReference, entityReference)), 1);
-    this.unpersist(entityReference);
+    statePersister.unpersist(entityReference);
 
     return entityReference;
   };
 
   getState(entityReference) {
-    if (entityReference.newEntityKey && entityReference.keyValues) {
-      entityReference = {
-        ...entityReference,
-        keyValues: null,
-      };
-    }
     return this.states.find(s => entityReferenceEquals(s.entityReference, entityReference));
   }
 }

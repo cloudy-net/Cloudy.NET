@@ -1,48 +1,30 @@
 class StateEvents {
-  _onAnyStateChangeCallbacks = [];
+  _onEntityReferenceChangeCallbacks = [];
 
-  onAnyStateChange(callback) {
-    this._onAnyStateChangeCallbacks.push(callback);
+  onEntityReferenceChange(callback) {
+    this._onEntityReferenceChangeCallbacks.push(callback);
   }
 
-  offAnyStateChange(callback) {
-    this._onAnyStateChangeCallbacks.splice(this._onAnyStateChangeCallbacks.indexOf(callback), 1);
+  offEntityReferenceChange(callback) {
+    this._onEntityReferenceChangeCallbacks.splice(this._onEntityReferenceChangeCallbacks.indexOf(callback), 1);
   }
 
-  triggerAnyStateChange() {
-    this._onAnyStateChangeCallbacks.forEach(callback => callback());
+  triggerEntityReferenceChange(entityReference) {
+    this._onEntityReferenceChangeCallbacks.forEach(callback => callback(entityReference));
+  }
+  
+  _onStateChangeCallbacks = [];
+
+  onStateChange(callback) {
+    this._onStateChangeCallbacks.push(callback);
   }
 
-  _onStateChangeCallbacks = {};
-
-  onStateChange(entityReference, callback) {
-    const key = JSON.stringify(entityReference);
-
-    if (!this._onStateChangeCallbacks[key]) {
-      this._onStateChangeCallbacks[key] = [];
-    }
-
-    this._onStateChangeCallbacks[key].push(callback);
+  offStateChange(callback) {
+    this._onStateChangeCallbacks.splice(this._onStateChangeCallbacks.indexOf(callback), 1);
   }
 
-  offStateChange(entityReference, callback) {
-    const key = JSON.stringify(entityReference);
-
-    if (!this._onStateChangeCallbacks[key]) {
-      this._onStateChangeCallbacks[key] = [];
-    }
-
-    this._onStateChangeCallbacks[key].splice(this._onStateChangeCallbacks[key].indexOf(callback), 1);
-  }
-
-  triggerStateChange(entityReference) {
-    const key = JSON.stringify(entityReference);
-
-    if (!this._onStateChangeCallbacks[key]) {
-      this._onStateChangeCallbacks[key] = [];
-    }
-
-    this._onStateChangeCallbacks[key].forEach(callback => callback());
+  triggerStateChange(state) {
+    this._onStateChangeCallbacks.forEach(callback => callback(state));
   }
 }
 

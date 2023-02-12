@@ -38,28 +38,26 @@ class StatePersister {
   }
 
   persist(state) {
-    state = { ...state };
-
     if (state.changes && state.changes.length) {
-      delete state['conflicts'];
-      delete state['changes'];
-      
-      localStorage.setItem(`cloudy:${JSON.stringify(state.entityReference)}`, JSON.stringify(state));
+      const persistingState = { ...state };
+
+      delete persistingState['conflicts'];
+      delete persistingState['changes'];
+
+      localStorage.setItem(`cloudy:${JSON.stringify(persistingState.entityReference)}`, JSON.stringify(persistingState));
     } else {
       localStorage.removeItem(`cloudy:${JSON.stringify(state.entityReference)}`);
     }
     this.updateIndex();
 
-    stateEvents.triggerAnyStateChange();
-    stateEvents.triggerStateChange(state.entityReference);
+    stateEvents.triggerStateChange(state);
   }
 
   unpersist(entityReference) {
     localStorage.removeItem(`cloudy:${JSON.stringify(entityReference)}`);
     this.updateIndex();
 
-    stateEvents.triggerAnyStateChange();
-    stateEvents.triggerStateChange(entityReference);
+    stateEvents.triggerStateChange(null);
   }
 }
 

@@ -24,14 +24,14 @@ export default ({ entityType, keyValues, children }) => {
         entityType: searchParams.get('EntityType'),
         newEntityKey, // may be null, resulting in null state
       });
-      
+
       // if state doesn't exist, either because the new entity key has already been
       // saved into a real, existing entity, or that the key is missing from the query
       // string, we create a new state with accompanying new entity key
 
-      if(!state) {
+      if (!state) {
         state = stateManager.createStateForNewEntity(entityType);
-        
+
         searchParams.set("newEntityKey", state.entityReference.newEntityKey);
         history.replaceState({}, null, `${location.pathname}?${searchParams}`);
       }
@@ -41,9 +41,14 @@ export default ({ entityType, keyValues, children }) => {
       setState(state);
     }
 
-    const callback = () => setState({ ...stateManager.getState(entityReference) });
-    stateEvents.onStateChange(entityReference, callback);
-    return () => stateEvents.offStateChange(entityReference, callback);
+    const stateChange = state => setState({ ...state });
+    stateEvents.onStateChange(stateChange);
+    const entityReferenceChange = entityReference => setEntityReference(entityReference);
+    stateEvents.onEntityReferenceChange(entityReferenceChange);
+    return () => {
+      stateEvents.offStateChange(stateChange);
+      stateEvents.offEntityReferenceChange(entityReferenceChange);
+    };
   }, [keyValues]);
 
   return html`<${EntityContext.Provider} value=${{ entityReference, state }}>
