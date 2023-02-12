@@ -14,6 +14,7 @@ describe('Page - Edit', () => {
 
     // Save and await request
     cy.clickSave();
+    cy.wait(2000);
     
     // Modify name
     cy.typeName(' - Yet again!');
