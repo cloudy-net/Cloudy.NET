@@ -35,6 +35,10 @@ Cypress.Commands.add('verifyNoValidationError', () => {
     cy.get('.alert.alert-warning').should('not.exist');
 })
 
+Cypress.Commands.add('verifyValidationError', () => { 
+    cy.get('.alert.alert-warning').should('exist');
+})
+
 Cypress.Commands.add('clickSave', () => { 
     cy.get('button.btn.btn-primary').contains('Save').click();
 })
