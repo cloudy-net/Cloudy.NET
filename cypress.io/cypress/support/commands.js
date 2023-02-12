@@ -23,3 +23,26 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+Cypress.Commands.add('typeName', (value, clear) => { 
+    clear 
+        ? cy.get('input[name="Name"]').clear().type(value)
+        : cy.get('input[name="Name"]').type(value) ;
+})
+
+Cypress.Commands.add('verifyNoValidationError', () => { 
+    cy.get('.alert.alert-warning').should('not.exist');
+})
+
+Cypress.Commands.add('clickSave', () => { 
+    cy.get('button.btn.btn-primary').contains('Save').click();
+})
+
+Cypress.Commands.add('saveSpy', () => { 
+    cy.intercept('POST', '/Admin/api/form/entity/save', cy.spy().as('saving'))
+})
+
+Cypress.Commands.add('getSpy', () => { 
+    cy.intercept('POST', '/Admin/api/form/entity/get', cy.spy().as('getting'))
+})

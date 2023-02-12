@@ -1,29 +1,26 @@
 
-describe('Edit test', () => {
+describe('Page - Edit', () => {
   it('Visit existing entity. Save twice.', () => {
 
-    // Add alias for save request
-    cy.intercept('POST', '/Admin/api/form/entity/save').as('saving')
+    // Add spy for save request
+    cy.saveSpy();
 
     // Visist first page
     cy.visit('/Admin/List?EntityType=Page');
     cy.get('table.table--content-list td a').first().click();
     
     // Modify name
-    cy.get('input[name="Name"]').clear().type('Hi!... cypress was here!');
+    cy.typeName('Hi!... cypress was here!', true);
 
     // Save and await request
-    cy.get('button.btn.btn-primary').contains('Save').click()
-    cy.wait('@saving')
-    cy.wait(1000);
+    cy.clickSave();
     
     // Modify name
-    cy.get('input[name="Name"]').type(' - Yet again!');
+    cy.typeName(' - Yet again!');
 
     // Save and await request
-    cy.get('button.btn.btn-primary').contains('Save').click();
-    cy.wait('@saving')
-    cy.wait(1000);
+    cy.clickSave();
+    cy.get('@saving').should('have.been.calledTwice');
 
     // Revisit and assert
     cy.reload();

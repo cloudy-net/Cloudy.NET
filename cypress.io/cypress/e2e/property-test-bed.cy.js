@@ -1,14 +1,12 @@
 
-describe('Create test', () => {
+describe('Property test bed - Create', () => {
   it('Test all props', () => {
 
-    // Add alias for save/get request
-    cy.intercept('POST', '/Admin/api/form/entity/save').as('saving')
-    //cy.intercept('POST', '/Admin/api/form/entity/get').as('getting')
+    // Add spy for save/get request
+    //cy.getSpy();
+    cy.saveSpy();
 
     cy.visit('/Admin/List?EntityType=PropertyTestBed');
-
-    const uniqueName = `${Date.now()}_Cypress was here!`
 
     const fieldsAndValues = {
       'Integer': '5',
@@ -44,8 +42,8 @@ describe('Create test', () => {
     
     cy.get('select[name="Category"]').select('2');
 
-    cy.get('button.btn.btn-primary').contains('Save').click();
-    cy.wait('@saving')
-    //cy.wait('@getting')
+    cy.clickSave();
+    cy.get('@saving').should('have.been.calledOnce');
+    //cy.get('@getting').should('have.been.calledOnce');
   })
 })
