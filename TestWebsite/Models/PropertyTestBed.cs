@@ -22,13 +22,9 @@ namespace TestWebsite.Models
         public DateTime? NullableDateTime { get; set; }
         public DateTimeOffset DateTimeOffset { get; set; }
         public DateTimeOffset? NullableDateTimeOffset { get; set; }
-        [UIHint("date")]
         public DateTime DateTimeWithDate { get; set; }
-        [UIHint("date")]
         public DateTimeOffset DateTimeOffsetWithDate { get; set; }
-        [UIHint("time")]
         public DateTime DateTimeWithTime { get; set; }
-        [UIHint("time")]
         public DateTimeOffset DateTimeOffsetWithTime { get; set; }
         public DateOnly DateOnly { get; set; }
         public DateOnly? NullableDateOnly { get; set; }
