@@ -4,6 +4,7 @@ import EntityNotFound from "./entity-not-found.js";
 import statePersister from "./state-persister.js";
 import changeManager from "./change-manager.js";
 import conflictManager from "./conflict-manager.js";
+import stateEvents from "./state-events.js";
 
 const generateRandomString = () => (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'); // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
 const arrayEquals = (a, b) => {
@@ -201,7 +202,12 @@ class StateManager {
       notificationManager.addNotification((item) => item.setText('Entity has been saved.'));
 
       this.remove(state.entityReference);
-      this.createOrUpdateStateForExistingEntity(result.entityReference);
+
+      const entityReference = result.entityReference;
+
+      this.createOrUpdateStateForExistingEntity(entityReference);
+      stateEvents.triggerEntityReferenceChange(entityReference);
+      stateEvents.triggerStateChange(this.getState(entityReference));
     }
 
     return result;

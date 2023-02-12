@@ -43,7 +43,16 @@ export default ({ entityType, keyValues, children }) => {
 
     const stateChange = state => setState({ ...state });
     stateEvents.onStateChange(stateChange);
-    const entityReferenceChange = entityReference => setEntityReference(entityReference);
+    const entityReferenceChange = entityReference => {
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.delete("newEntityKey");
+      searchParams.delete("keys");
+      for(let key of entityReference.keyValues){
+        searchParams.append("keys", key);
+      }
+      history.replaceState({}, null, `/Admin/Edit?${searchParams}`);
+      setEntityReference(entityReference);
+    };
     stateEvents.onEntityReferenceChange(entityReferenceChange);
     return () => {
       stateEvents.offStateChange(stateChange);
