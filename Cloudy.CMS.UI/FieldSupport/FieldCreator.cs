@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Cloudy.CMS.UI.FieldSupport
 {
@@ -58,7 +59,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 {
                     var referencedType = selectAttribute.Type;
 
-                    settings["simpleKey"] = true; // TODO: Check up on this
+                    settings["simpleKey"] = !propertyDefinition.Type.IsAssignableTo(typeof(ITuple));
                     settings["referencedTypeName"] = referencedType.Name;
                     settings["imageable"] = typeof(IImageable).IsAssignableFrom(referencedType);
 
