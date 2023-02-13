@@ -64,7 +64,7 @@ export default ({ entityType, pageSize: initialPageSize, value, onSelect, simple
       ${data.items.map(item =>
         html`<div class="dropdown-item-outer">
             ${imageable ? html`<div class="dropdown-image-outer">
-              ${item.image ? html`<img class="dropdown-image" src={item.image} />` : null}
+              ${item.image ? html`<img class="dropdown-image" src=${item.image} />` : null}
             </div>` : null}
 
             <a class=${`dropdown-item ${item.reference == value ? 'active' : ''}`} onClick=${() => { onSelect(item); setOpen(false); }}>
