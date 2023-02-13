@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Cloudy.CMS.PropertyDefinitionSupport
 {
@@ -28,7 +29,7 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
                 list = true;
             }
 
-            var block = type != typeof(string) && (type.IsClass || type.IsInterface);
+            var block = type != typeof(string) && (type.IsClass || type.IsInterface) && !type.IsAssignableTo(typeof(ITuple));
 
             return new PropertyDefinitionDescriptor(
                 property.Name,
