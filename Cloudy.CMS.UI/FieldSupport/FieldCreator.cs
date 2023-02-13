@@ -56,7 +56,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var selectAttribute = propertyDefinition.Attributes.OfType<ISelectAttribute>().FirstOrDefault();
                 if (selectAttribute is not null)
                 {
-                    var referencedType = selectAttribute.GetType().GetGenericArguments().FirstOrDefault();
+                    var referencedType = selectAttribute.Type;
 
                     settings["simpleKey"] = true; // TODO: Check up on this
                     settings["referencedTypeName"] = referencedType.Name;
