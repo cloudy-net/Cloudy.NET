@@ -112,7 +112,7 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
               <a href=${`${deleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
             </td>
           </tr>`)}
-          ${[...new Array(pageSize - data.items.length)].map(() => html`<tr class="list-page-blank-row"><td>&nbsp;</td></tr>`)}
+          ${[...new Array(pageSize - data.items.length)].map(() => html`<tr class="list-page-blank-row"><td dangerouslySetInnerHTML=${{ __html: '&nbsp;' }} /></tr>`)}
         </tbody>
       </table>
     </div>`;

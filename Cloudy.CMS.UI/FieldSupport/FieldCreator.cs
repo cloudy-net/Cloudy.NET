@@ -23,7 +23,7 @@ namespace Cloudy.CMS.UI.FieldSupport
             {
                 yield return new KeyValuePair<string, object>(
                     "required",
-                    new { message = requiredAttribute.ErrorMessage }
+                    new { message = requiredAttribute.ErrorMessage ?? "This field is required" }
                 );
             }
 

@@ -35,6 +35,9 @@ namespace TestWebsite.Models
         [Display(AutoGenerateField = false)]
         public string IgnoredProperty { get; set; }
 
+        [Required]
+        public string Name { get; set; }
+
         [ListColumn]
         [Required]
         [CustomSelect<IColorFactory>]
@@ -44,7 +47,7 @@ namespace TestWebsite.Models
         [ListColumn]
         [Required]
         [CustomSelect<IColorFactory>]
-        [Display(Description = "This is required but validation is yet to come...", Prompt = "Pick something!")]
+        [Display(Description = "Sub label", Prompt = "Pick something!")]
         public string SecondColor { get; set; }
 
         [ListColumn]

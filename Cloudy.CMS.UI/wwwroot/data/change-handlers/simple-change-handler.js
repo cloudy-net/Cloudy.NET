@@ -17,7 +17,7 @@ class SimpleChangeHandler {
       state.history.splice(state.history.indexOf(change), 1);
     }
 
-    if (validators && validators.length) {
+    if (validators && Object.keys(validators).length) {
       state.validationResults = ValidationManager.getValidationResults(validators, path, state.validationResults.slice(), value);
     }
 

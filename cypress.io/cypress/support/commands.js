@@ -33,9 +33,13 @@ Cypress.Commands.add('typeName', (value, clear) => {
 
 Cypress.Commands.add('verifyNoValidationError', () => { 
     cy.get('.alert.alert-warning').should('not.exist');
+    cy.get('.is-invalid').should('not.exist');
+    cy.get('.invalid-feedback').should('not.exist');
 })
 
 Cypress.Commands.add('verifyValidationError', () => { 
+    cy.get('.alert.alert-warning').should('exist');
+    cy.get('.is-invalid').should('exist');
     cy.get('.alert.alert-warning').should('exist');
 })
 
