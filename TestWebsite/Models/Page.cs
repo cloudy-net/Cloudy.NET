@@ -23,8 +23,8 @@ namespace TestWebsite.Models
         [Select<Page>]
         public Guid? Parent { get; set; }
         public string UrlSegment { get; set; }
-        [UIHint("textarea")]
-        public string Description { get; set; }
+        //[UIHint("textarea")]
+        //public string Description { get; set; }
         [ListFilter]
         [ListColumn]
         [Select<Page>]
