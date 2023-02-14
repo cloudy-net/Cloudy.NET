@@ -19,6 +19,7 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     [Authorize("adminarea")]
     [Area("Admin")]
+    [ResponseCache(NoStore = true)]
     public class SaveEntityController : Controller
     {
         IEntityTypeProvider EntityTypeProvider { get; }

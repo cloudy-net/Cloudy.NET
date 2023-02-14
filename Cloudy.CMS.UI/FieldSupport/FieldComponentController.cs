@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldSupport
 {
+    [ResponseCache(NoStore = true)]
     public record FieldComponentController(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider)
     {
         [HttpGet]
