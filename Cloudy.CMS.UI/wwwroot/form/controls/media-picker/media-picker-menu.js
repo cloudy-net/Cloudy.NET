@@ -51,11 +51,11 @@ export default ({ provider, value, onSelect }) => {
   if (loading) {
     return html`
       <div>
-        ${[...new Array(pageSize)].map((_, i) => html`<div><a class="dropdown-item disabled">${i == 0 ? 'Loading ...' : html`<span dangerouslySetInnerHTML=${{__html: '&nbsp;'}} />`}</a></div>`)}
+        ${[...new Array(pageSize)].map((_, i) => html`<div><a class="dropdown-item disabled">${i == 0 ? 'Loading ...' : html`<span class="nbsp" />`}</a></div>`)}
       </div>
 
       <ul class="pagination pagination-sm m-0 mt-2 invisible">
-        <li class="page-item"><a class="page-link" dangerouslySetInnerHTML=${{__html: '&nbsp;'}} /></li>
+        <li class="page-item"><a class="page-link nbsp" /></li>
       </ul>
     `;
   }
@@ -133,7 +133,7 @@ export default ({ provider, value, onSelect }) => {
       )}
     </div>
     <div>
-      ${[...new Array(pageSize - items.length)].map(() => html`<div><a class="dropdown-item disabled" dangerouslySetInnerHTML=${{__html: '&nbsp;'}} /></div>`)}
+      ${[...new Array(pageSize - items.length)].map(() => html`<div><a class="dropdown-item disabled nbsp" /></div>`)}
     </div>
     <div class="media-picker-footer">
       <ul class="pagination pagination-sm">

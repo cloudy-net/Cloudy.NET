@@ -72,7 +72,7 @@ export default ({ entityType, pageSize: initialPageSize, value, onSelect, simple
             </a>
           </div>`
       )}
-      ${[...new Array(pageSize - data.items.length)].map(() => html`<div><a class="dropdown-item disabled" dangerouslySetInnerHTML=${{__html: '&nbsp;'}}></a></div>`)}
+      ${[...new Array(pageSize - data.items.length)].map(() => html`<div><a class="dropdown-item disabled nbsp"></a></div>`)}
       <nav>
         <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
           <li class="page-item"><a class=${`page-link ${page == 1 ? 'disabled' : ''}`} onClick=${() => setPage(Math.max(1, page - 1))} title="Previous" dangerouslySetInnerHTML=${{__html: '&laquo;'}}></a></li>

@@ -263,3 +263,11 @@ span.cloudy-ui-diff-delete {
 .strikethrough {
   text-decoration: line-through;
 }
+
+
+
+/* UTILITIES */
+
+.nbsp::before {
+  content: "\00a0";
+}
