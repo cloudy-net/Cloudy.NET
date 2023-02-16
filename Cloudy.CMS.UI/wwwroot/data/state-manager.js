@@ -205,6 +205,8 @@ class StateManager {
 
       const entityReference = result.entityReference;
 
+      entityReference.keyValues = entityReference.keyValues.map(v => `${v}`);
+
       this.createOrUpdateStateForExistingEntity(entityReference);
       stateEvents.triggerEntityReferenceChange(entityReference);
       stateEvents.triggerStateChange(this.getState(entityReference));
