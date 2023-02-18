@@ -7,7 +7,7 @@ namespace TestWebsite.Models
     public class PageTree : IHierarchy<int>
     {
         public string? ParentType { get; set; }
-        public int? ParentId { get; set; }
+        public int ParentId { get; set; }
         public string EntityType { get; set; }
         public int EntityId { get; set; }
         public string? Name { get; set; }

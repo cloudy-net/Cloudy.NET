@@ -9,7 +9,7 @@ namespace Cloudy.CMS.EntitySupport
     public interface IHierarchy<TKeyType>
     {
         public string? ParentType { get; set; }
-        public TKeyType? ParentId { get; set; }
+        public TKeyType ParentId { get; set; }
         public string EntityType { get; set; }
         public TKeyType EntityId { get; set; }
         public string? Name { get; set; }
