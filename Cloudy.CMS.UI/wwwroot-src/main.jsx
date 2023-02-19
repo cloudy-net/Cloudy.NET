@@ -1,3 +1,5 @@
+import './main.scss'
+
 import html from '@src/html-init.js';
 import { render } from 'preact'
 import Table from './list-page/table.js'
