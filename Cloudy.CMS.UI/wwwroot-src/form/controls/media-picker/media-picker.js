@@ -17,7 +17,7 @@ export default ({ name, path, provider, dependencies }) => {
 
   const onchange = newValue => {
     setValue(newValue != value ? newValue : null);
-    context.impleChangeHandler.setValue(entityReference, path, newValue);
+    dependencies.simpleChangeHandler.setValue(entityReference, path, newValue);
   }
 
   return dependencies.html`
@@ -28,13 +28,13 @@ export default ({ name, path, provider, dependencies }) => {
     </div>`}
 
     <${dependencies.Dropdown} text="Add">
-      <${MediaPickerMenu} provider=${provider} value=${value} context=${dependencies} onSelect=${onchange} />
+      <${MediaPickerMenu} provider=${provider} value=${value} onSelect=${onchange} dependencies=${dependencies} />
     <//>
 
     <${dependencies.Dropdown} text="Other" className="ms-2">
       <a class="dropdown-item" onClick=${ event => { copy(); dependencies.closeDropdown(event.target); } }>Copy</a>
       <a class="dropdown-item" onClick=${ event => { paste(); dependencies.closeDropdown(event.target); } }>Paste</a>
-      <a class="dropdown-item" onClick=${ event => { setValue(null); dependencies.simpleChangeHandler.setValue(entityReference, path, null); closeDropdown(event.target); } }>Clear</a>
+      <a class="dropdown-item" onClick=${ event => { setValue(null); dependencies.simpleChangeHandler.setValue(entityReference, path, null); dependencies.closeDropdown(event.target); } }>Clear</a>
     <//>
   `;
 };

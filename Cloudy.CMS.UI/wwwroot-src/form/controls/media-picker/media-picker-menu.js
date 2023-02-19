@@ -122,7 +122,7 @@ export default ({ provider, value, onSelect, dependencies }) => {
               <span class="media-picker-icon">📁</span>
               ${item.name}
             </a>` :
-            dependencies.html`<a class=${"dropdown-item" + (item.value == value ? " active" : "")} onClick=${event => { onSelect(item.value == value ? null : item.value); closeDropdown(event.target); }} tabIndex="0">
+            dependencies.html`<a class=${"dropdown-item" + (item.value == value ? " active" : "")} onClick=${event => { onSelect(item.value == value ? null : item.value); dependencies.closeDropdown(event.target); }} tabIndex="0">
               <span class="media-picker-icon">📄</span>
               ${item.name}
             </a>`}

@@ -46,7 +46,7 @@ const EmbeddedBlockFields = ({ type, path, dependencies }) => {
       return dependencies.html`Loading ...`;
     }
 
-    return dependencies.html`${fields.map(field => dependencies.html`<${dependencies.FormField} ...${field} path=${`${path}.${field.name}`} />`)}`;
+    return dependencies.html`${fields.map(field => dependencies.html`<${dependencies.FormField} ...${field} path=${`${path}.${field.name}`} dependencies=${dependencies} />`)}`;
 };
 
 export default EmbeddedBlockFields;
