@@ -1,4 +1,5 @@
-import { html, useContext, useState } from '../preact-htm/standalone.module.js';
+import html from '@src/html-init.js';
+import { useContext, useState } from 'preact/hooks';
 import EntityContext from './entity-context.js';
 import stateManager from '../data/state-manager.js';
 import ValidationManager from '../data/validation-manager.js';

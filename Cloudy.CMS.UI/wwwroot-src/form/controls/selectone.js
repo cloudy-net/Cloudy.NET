@@ -1,20 +1,17 @@
-import { html, useContext, useEffect, useState } from '../../preact-htm/standalone.module.js';
-import EntityContext from '../entity-context.js';
-import simpleChangeHandler from '../../data/change-handlers/simple-change-handler.js';
 import SelectOneDropdown from './select-one-dropdown.js';
 
-export default ({ name, path, settings, validators }) => {
-    const [value, setValue] = useState();
-    const [preview, setPreview] = useState();
-    const { entityReference, state } = useContext(EntityContext);
+export default ({ name, path, settings, validators, dependencies }) => {
+    const [value, setValue] = dependencies.useState();
+    const [preview, setPreview] = dependencies.useState();
+    const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
 
     const onChange = (newValue) => {
         setValue(newValue);
-        simpleChangeHandler.setValue(entityReference, path, newValue, validators)
+        dependencies.simpleChangeHandler.setValue(entityReference, path, newValue, validators)
     };
 
-    useEffect(() => {
-        const value = simpleChangeHandler.getIntermediateValue(state, path);
+    dependencies.useEffect(() => {
+        const value = dependencies.simpleChangeHandler.getIntermediateValue(state, path);
         setValue(value);
 
         (async () => {
@@ -43,28 +40,29 @@ export default ({ name, path, settings, validators }) => {
         })();
     }, []);
 
-    return html`
+    return dependencies.html`
         <input type="hidden" class="form-control" name=${name} value=${value} />
 
-        ${value && !preview && html`<div class=${`input-group mb-3 select-one ${settings.imageable ? ' imageable' : ''}`}>
+        ${value && !preview && dependencies.html`<div class=${`input-group mb-3 select-one ${settings.imageable ? ' imageable' : ''}`}>
             <span class="input-group-text" ></span>
             <div class="form-control">&nbsp;</div>
         </div>`}
 
-        ${preview && preview.notFound ? html`<div class=${`input-group mb-3 select-one ${settings.imageable ? ' imageable' : ''}`}>
+        ${preview && preview.notFound ? dependencies.html`<div class=${`input-group mb-3 select-one ${settings.imageable ? ' imageable' : ''}`}>
             <div class="form-control"><span class="information-missing">Could not find <code>${settings.simpleKey ? value : JSON.parse(value).join(', ')}</code></span></div>
             <button class="btn btn-beta" type="button" onClick=${() => { onChange(null); setPreview(null); }}>Remove</button>
         </div>` : null}
 
-        ${preview && !preview.notFound ? html`<div class=${`input-group mb-3 select-one ${settings.imageable ? ' imageable' : ''}`}>
+        ${preview && !preview.notFound ? dependencies.html`<div class=${`input-group mb-3 select-one ${settings.imageable ? ' imageable' : ''}`}>
             <span class="input-group-text" ></span>
-            ${preview.image && html`<img src=${preview.image} class="select-one-preview-image" alt="" />`}
+            ${preview.image && dependencies.html`<img src=${preview.image} class="select-one-preview-image" alt="" />`}
             <div class="form-control">${preview.name}</div>
             <a class="btn btn-beta" href=${`/Admin/Edit?EntityType=${settings.referencedTypeName}&${settings.simpleKey ? `keys=${preview.reference}` : preview.reference.map(key => `keys=${key}`).join('&')}`} target="_blank">Edit</a>
             <button class="btn btn-beta" type="button" onClick=${() => { onChange(null); setPreview(null); }}>Remove</button>
         </div>` : null}
 
         <${SelectOneDropdown} 
+            dependencies=${dependencies}
             entityType=${settings.referencedTypeName}
             pageSize=${10}
             value=${value}

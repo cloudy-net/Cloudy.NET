@@ -1,18 +1,17 @@
-import { html, useRef, useEffect, useState } from '../../preact-htm/standalone.module.js';
 import SearchBox from "../../components/search-box.js";
 
-export default ({ entityType, pageSize: initialPageSize, value, onSelect, simpleKey, imageable }) => {
-  const [pageSize, setPageSize] = useState(initialPageSize);
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState();
-  const [pages, setPages] = useState();
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState();
-  const [filter, setFilter] = useState('');
-  const [open, setOpen] = useState();
-  const ref = useRef(null);
+export default ({ entityType, pageSize: initialPageSize, value, onSelect, simpleKey, imageable, dependencies }) => {
+  const [pageSize, setPageSize] = dependencies.useState(initialPageSize);
+  const [page, setPage] = dependencies.useState(1);
+  const [pageCount, setPageCount] = dependencies.useState();
+  const [pages, setPages] = dependencies.useState();
+  const [loading, setLoading] = dependencies.useState(true);
+  const [data, setData] = dependencies.useState();
+  const [filter, setFilter] = dependencies.useState('');
+  const [open, setOpen] = dependencies.useState();
+  const ref = dependencies.useRef(null);
 
-  useEffect(function () {
+  dependencies.useEffect(function () {
     if (!open) {
       return;
     }
@@ -34,7 +33,7 @@ export default ({ entityType, pageSize: initialPageSize, value, onSelect, simple
       });
   }, [page, pageSize, open, filter]);
 
-  useEffect(() => {
+  dependencies.useEffect(() => {
     const callback = event => {
       if (!ref.current) {
         return;
@@ -50,21 +49,21 @@ export default ({ entityType, pageSize: initialPageSize, value, onSelect, simple
 
   const render = () => {
     if (loading) {
-      return html`Loading ...`;
+      return dependencies.html`Loading ...`;
     }
 
     if (!data) {
-      return html`Could not load data`;
+      return dependencies.html`Could not load data`;
     }
 
-    return html`
+    return dependencies.html`
       <div class="mx-2 mb-2">
         <${SearchBox} small=${true} callback=${value => setFilter(value)} />
       </div>
       ${data.items.map(item =>
-        html`<div class="dropdown-item-outer">
-            ${imageable ? html`<div class="dropdown-image-outer">
-              ${item.image ? html`<img class="dropdown-image" src=${item.image} />` : null}
+        dependencies.html`<div class="dropdown-item-outer">
+            ${imageable ? dependencies.html`<div class="dropdown-image-outer">
+              ${item.image ? dependencies.html`<img class="dropdown-image" src=${item.image} />` : null}
             </div>` : null}
 
             <a class=${`dropdown-item ${item.reference == value ? 'active' : ''}`} onClick=${() => { onSelect(item); setOpen(false); }}>
@@ -72,18 +71,18 @@ export default ({ entityType, pageSize: initialPageSize, value, onSelect, simple
             </a>
           </div>`
       )}
-      ${[...new Array(pageSize - data.items.length)].map(() => html`<div><a class="dropdown-item disabled nbsp"></a></div>`)}
+      ${[...new Array(pageSize - data.items.length)].map(() => dependencies.html`<div><a class="dropdown-item disabled nbsp"></a></div>`)}
       <nav>
         <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
           <li class="page-item"><a class=${`page-link ${page == 1 ? 'disabled' : ''}`} onClick=${() => setPage(Math.max(1, page - 1))} title="Previous" dangerouslySetInnerHTML=${{__html: '&laquo;'}}></a></li>
-          ${pages.map((_, i) => html`<li class=${`page-item ${page == i + 1 ? 'active' : ''}`}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
+          ${pages.map((_, i) => dependencies.html`<li class=${`page-item ${page == i + 1 ? 'active' : ''}`}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
           <li class="page-item"><a class=${`page-link ${page == pageCount ? 'disabled' : ''}`} onClick=${() => setPage(Math.min(pageCount, page + 1))} title="Next" dangerouslySetInnerHTML=${{__html: '&raquo;'}}></a></li>
         </ul>
       </nav>
       `;
   };
 
-  return html`<div class="dropdown d-inline-block" ref=${ref}>
+  return dependencies.html`<div class="dropdown d-inline-block" ref=${ref}>
     <button class="btn btn-beta btn-sm dropdown-toggle" type="button" aria-expanded=${open} onClick=${() => setOpen(!open)}>
       Add
     </button>

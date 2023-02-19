@@ -3,7 +3,8 @@ import EntityContextProvider from './entity-context-provider.js'
 import FormFields from './form-fields.js';
 import FormFooter from './form-footer.js';
 import Changes from './changes.js';
-import { html, useState, useEffect } from '../preact-htm/standalone.module.js';
+import html from '@src/html-init.js';
+import { useState, useEffect } from 'preact/hooks';
 
 import ValidationManager from '../data/validation-manager.js';
 

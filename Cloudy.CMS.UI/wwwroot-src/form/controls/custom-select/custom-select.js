@@ -1,23 +1,18 @@
-import { html, useContext, useEffect, useState } from '../../../preact-htm/standalone.module.js';
-import EntityContext from '../../entity-context.js';
-import simpleChangeHandler from '../../../data/change-handlers/simple-change-handler.js';
-import urlFetcher from '../../../util/url-fetcher.js';
-import ValidationManager from '../../../data/validation-manager.js';
 
-export default ({ name, path, settings, validators }) => {
-    const [options, setOptions] = useState([]);
-    const [placeholderItemText, setPlaceholderItemText] = useState(null);
-    const [optionGroups, setOptionGroups] = useState({});
-    const [hasInitialValue, setHasInitialValue] = useState({});
+export default ({ name, path, settings, validators, dependencies }) => {
+    const [options, setOptions] = dependencies.useState([]);
+    const [placeholderItemText, setPlaceholderItemText] = dependencies.useState(null);
+    const [optionGroups, setOptionGroups] = dependencies.useState({});
+    const [hasInitialValue, setHasInitialValue] = dependencies.useState({});
     
-    const { entityReference, state } = useContext(EntityContext);
+    const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
 
-    useEffect(function () {
+    dependencies.useEffect(function () {
         
-        setHasInitialValue(!!simpleChangeHandler.getIntermediateValue(state, path));
+        setHasInitialValue(!!dependencies.simpleChangeHandler.getIntermediateValue(state, path));
 
         (async () => {
-            const responseData = await urlFetcher.fetch(
+            const responseData = await dependencies.urlFetcher.fetch(
                 `/Admin/api/controls/customselect/list/?entityType=${entityReference.entityType}&propertyName=${name}`,
                 {
                     credentials: 'include'
@@ -42,22 +37,22 @@ export default ({ name, path, settings, validators }) => {
         })();
     }, []);
 
-    return html`
+    return dependencies.html`
         <select required=${settings.isRequired}
                 id=${name}
                 name=${name}
-                value=${simpleChangeHandler.getIntermediateValue(state, path)}
-                onChange=${e => simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
-                class="form-select ${ ValidationManager.getValidationClass(state.validationResults, path) }">
+                value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
+                onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
+                class="form-select ${ dependencies.ValidationManager.getValidationClass(state.validationResults, path) }">
         
-            ${!!placeholderItemText ? html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
+            ${!!placeholderItemText ? dependencies.html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 
-            ${options.map((option) => html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
+            ${options.map((option) => dependencies.html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
 
-            ${Object.keys(optionGroups).map((optionGroup) => html`
+            ${Object.keys(optionGroups).map((optionGroup) => dependencies.html`
                 <optgroup label=${optionGroup} disabled=${optionGroups[optionGroup].disabled}>
                     ${optionGroups[optionGroup].options.map((option) =>
-                        html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
+                        dependencies.html`<option disabled=${option.disabled} value=${option.value}>${option.text}</option>`)}
                 </optgroup>`)}
         </select>`
 };

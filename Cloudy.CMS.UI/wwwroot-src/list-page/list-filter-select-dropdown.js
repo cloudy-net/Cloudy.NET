@@ -1,4 +1,6 @@
-import { html, useEffect, useRef, useState } from "../preact-htm/standalone.module.js";
+import html from '@src/html-init.js';
+import { useEffect, useRef, useState} from 'preact/hooks';
+
 import SelectEntityMenu from "../components/select-entity-menu.js";
 
 export default ({ label, entityType, onSelect, simpleKey }) => {

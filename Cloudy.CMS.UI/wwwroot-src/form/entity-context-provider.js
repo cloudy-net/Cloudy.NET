@@ -1,4 +1,5 @@
-import { useState, useEffect, html } from '../preact-htm/standalone.module.js';
+import html from '@src/html-init.js';
+import { useState, useEffect } from 'preact/hooks';
 import EntityContext from "./entity-context.js";
 import stateManager from '../data/state-manager.js';
 import changeManager from '../data/change-manager.js';

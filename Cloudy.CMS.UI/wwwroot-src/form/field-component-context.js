@@ -1,4 +1,4 @@
-import { createContext } from '../preact-htm/standalone.module.js';
+import { createContext } from 'preact';
 
 const FieldComponentContext = createContext();
 

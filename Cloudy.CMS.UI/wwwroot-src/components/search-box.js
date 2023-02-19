@@ -1,5 +1,7 @@
 import debounce from "../util/debounce.js";
-import { html, useEffect, useMemo, useRef } from "../preact-htm/standalone.module.js";
+
+import { useEffect, useMemo, useRef } from 'preact/hooks';
+import html from '@src/html-init.js';
 
 export default ({ callback, floating, small }) => {
   const debouncedResults = useMemo(() => {

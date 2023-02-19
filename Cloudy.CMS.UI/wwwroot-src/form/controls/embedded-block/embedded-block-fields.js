@@ -1,13 +1,12 @@
-import { html, useEffect, useState } from '../../../preact-htm/standalone.module.js';
 import FormField from '../../form-field.js';
 
-const EmbeddedBlockFields = ({ type, path }) => {
-    const [loading, setLoading] = useState(true);
-    const [fields, setFields] = useState();
-    const [error, setError] = useState();
-    const [retryError, setRetryError] = useState(0);
+const EmbeddedBlockFields = ({ type, path, dependencies }) => {
+    const [loading, setLoading] = dependencies.useState(true);
+    const [fields, setFields] = dependencies.useState();
+    const [error, setError] = dependencies.useState();
+    const [retryError, setRetryError] = dependencies.useState(0);
   
-    useEffect(function () {
+    dependencies.useEffect(function () {
       (async () => {
         setError(null);
   
@@ -33,23 +32,23 @@ const EmbeddedBlockFields = ({ type, path }) => {
     let content;
   
     if (error) {
-      content = html`
+      content = dependencies.html`
         <div class="alert alert-primary">
           <p>
             There was an error (<code>${error.response.status}${error.response.statusText ? " " + error.response.statusText : ""}</code>)
             loading the block field types${error.body ? ":" : "."}
           </p>
-          ${error.body ? html`<small><pre>{error.body}</pre></small>` : ""}
+          ${error.body ? dependencies.html`<small><pre>{error.body}</pre></small>` : ""}
           <p class="mb-0"><button class="btn btn-primary" onClick=${() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
         </div>
       `;
     }
   
     if (loading) {
-      return html`Loading ...`;
+      return dependencies.html`Loading ...`;
     }
 
-    return html`${fields.map(field => html`<${FormField} ...${field} path=${`${path}.${field.name}`} />`)}`;
+    return dependencies.html`${fields.map(field => dependencies.html`<${FormField} ...${field} path=${`${path}.${field.name}`} />`)}`;
 };
 
 export default EmbeddedBlockFields;

@@ -1,19 +1,18 @@
-import { useState, html, useEffect } from '../../../preact-htm/standalone.module.js';
 import closeDropdown from "../../../components/close-dropdown.js";
 
-export default ({ provider, value, onSelect }) => {
-  const [pageSize] = useState(10);
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState();
-  const [pages, setPages] = useState();
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState();
-  const [pathSegments, setPathSegments] = useState([]);
-  const [error, setError] = useState();
-  const [retryError, setRetryError] = useState(0);
-  const [refresh, setRefresh] = useState(0);
+export default ({ provider, value, onSelect, dependencies }) => {
+  const [pageSize] = dependencies.useState(10);
+  const [page, setPage] = dependencies.useState(1);
+  const [pageCount, setPageCount] = dependencies.useState();
+  const [pages, setPages] = dependencies.useState();
+  const [loading, setLoading] = dependencies.useState(true);
+  const [data, setData] = dependencies.useState();
+  const [pathSegments, setPathSegments] = dependencies.useState([]);
+  const [error, setError] = dependencies.useState();
+  const [retryError, setRetryError] = dependencies.useState(0);
+  const [refresh, setRefresh] = dependencies.useState(0);
 
-  useEffect(function () {
+  dependencies.useEffect(function () {
     (async () => {
       var response = await fetch(
         `/Admin/api/controls/mediapicker/list?provider=${provider}&path=${pathSegments.length ? encodeURIComponent(pathSegments.join('/')) + '/' : ''}`,
@@ -39,19 +38,19 @@ export default ({ provider, value, onSelect }) => {
   }, [pathSegments, retryError, refresh]);
 
   if (error) {
-    return html`
+    return dependencies.html`
       <div class="alert alert-primary mx-2">
         <p>There was an error (<code>${error.response.status}${error.response.statusText ? " " + error.response.statusText : ""}</code>) loading your list${error.body ? ":" : "."}</p>
-        ${error.body ? html`<small><pre>${error.body}</pre></small>` : ""}
+        ${error.body ? dependencies.html`<small><pre>${error.body}</pre></small>` : ""}
         <p class="mb-0"><button class="btn btn-primary" onClick=${() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
       </div>
     `;
   }
 
   if (loading) {
-    return html`
+    return dependencies.html`
       <div>
-        ${[...new Array(pageSize)].map((_, i) => html`<div><a class="dropdown-item disabled">${i == 0 ? 'Loading ...' : html`<span class="nbsp" />`}</a></div>`)}
+        ${[...new Array(pageSize)].map((_, i) => dependencies.html`<div><a class="dropdown-item disabled">${i == 0 ? 'Loading ...' : dependencies.html`<span class="nbsp" />`}</a></div>`)}
       </div>
 
       <ul class="pagination pagination-sm m-0 mt-2 invisible">
@@ -102,15 +101,15 @@ export default ({ provider, value, onSelect }) => {
     input.click();
   }
 
-  return html`
+  return dependencies.html`
     <div class="media-picker-header">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a onClick=${() => setPathSegments([])}>Root</a></li>
         ${pathSegments.map((segment, i) =>
-          html`<li class=${'breadcrumb-item' + (i == pathSegments.length - 1 ? ' active' : '')}>
+          dependencies.html`<li class=${'breadcrumb-item' + (i == pathSegments.length - 1 ? ' active' : '')}>
             ${i < pathSegments.length - 1 ?
-              html`<a onClick=${() => setPathSegments(pathSegments.slice(0, i + 1))}>${segment}</a>` :
-              html`${segment}`}
+              dependencies.html`<a onClick=${() => setPathSegments(pathSegments.slice(0, i + 1))}>${segment}</a>` :
+              dependencies.html`${segment}`}
           </li>`
         )}
 
@@ -119,13 +118,13 @@ export default ({ provider, value, onSelect }) => {
     </div>
     <div>
       ${items.map(item =>
-        html`<div>
+        dependencies.html`<div>
           ${item.type == 'folder' ?
-            html`<a class="dropdown-item" onClick=${event => { pushPathSegment(item.value); setTimeout(() => event.target.blur(), 0) }} tabIndex="0">
+          dependencies.html`<a class="dropdown-item" onClick=${event => { pushPathSegment(item.value); setTimeout(() => event.target.blur(), 0) }} tabIndex="0">
               <span class="media-picker-icon">📁</span>
               ${item.name}
             </a>` :
-            html`<a class=${"dropdown-item" + (item.value == value ? " active" : "")} onClick=${event => { onSelect(item.value == value ? null : item.value); closeDropdown(event.target); }} tabIndex="0">
+            dependencies.html`<a class=${"dropdown-item" + (item.value == value ? " active" : "")} onClick=${event => { onSelect(item.value == value ? null : item.value); closeDropdown(event.target); }} tabIndex="0">
               <span class="media-picker-icon">📄</span>
               ${item.name}
             </a>`}
@@ -133,12 +132,12 @@ export default ({ provider, value, onSelect }) => {
       )}
     </div>
     <div>
-      ${[...new Array(pageSize - items.length)].map(() => html`<div><a class="dropdown-item disabled nbsp" /></div>`)}
+      ${[...new Array(pageSize - items.length)].map(() => dependencies.html`<div><a class="dropdown-item disabled nbsp" /></div>`)}
     </div>
     <div class="media-picker-footer">
       <ul class="pagination pagination-sm">
         <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))} title="Previous" tabindex="0" dangerouslySetInnerHTML=${{__html: '&laquo;'}} /></li>
-        ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)} tabindex="0">${i + 1}</a></li>`)}
+        ${pages.map((_, i) => dependencies.html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)} tabindex="0">${i + 1}</a></li>`)}
         <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))} title="Next" tabindex="0" dangerouslySetInnerHTML=${{__html: '&raquo;'}} /></li>
         <li class="ms-auto">
           <div class="btn-group">

@@ -1,6 +1,9 @@
-import { html, render } from './preact-htm/standalone.module.js'
+import html from '@src/html-init.js';
+import { render } from 'preact'
 import Table from './list-page/table.js'
 import Form from './form/form.js';
+
+window.viteIsLoaded = true;
 
 document.querySelectorAll('.list-page-table').forEach(element =>
   render(html`<${Table} ...${JSON.parse(element.getAttribute('settings') || '{}')} />`, element)

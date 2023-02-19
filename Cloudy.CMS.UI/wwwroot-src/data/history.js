@@ -1,5 +1,6 @@
 import EntityContext from "../form/entity-context.js";
-import { html, useContext, useState } from "../preact-htm/standalone.module.js";
+import html from '@src/html-init.js';
+import { useContext } from 'preact/hooks';
 import changeManager from "./change-manager.js";
 import diff from "./diff.js";
 

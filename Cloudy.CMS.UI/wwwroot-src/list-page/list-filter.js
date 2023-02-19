@@ -1,4 +1,4 @@
-import { html } from "../preact-htm/standalone.module.js";
+import html from '@src/html-init.js';
 import ListFilterSelectDropdown from "./list-filter-select-dropdown.js";
 
 export default ({ name, label, select, selectType, simpleKey, filter }) => {

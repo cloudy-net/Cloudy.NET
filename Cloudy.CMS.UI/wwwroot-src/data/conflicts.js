@@ -1,5 +1,6 @@
 import EntityContext from "../form/entity-context.js";
-import { html, useContext, useState } from "../preact-htm/standalone.module.js";
+import html from '@src/html-init.js';
+import { useContext, useState  } from 'preact/hooks';
 import conflictManager from "./conflict-manager.js";
 import ShowConflict from "./show-conflict.js";
 import stateManager from "./state-manager.js";

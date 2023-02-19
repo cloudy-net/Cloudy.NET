@@ -1,4 +1,5 @@
-import { html, useEffect, useRef } from "../preact-htm/standalone.module.js";
+import html from '@src/html-init.js';
+import { useEffect, useRef } from 'preact/hooks';
 
 export default ({ onClickOutside, children }) => {
     const ref = useRef(null);

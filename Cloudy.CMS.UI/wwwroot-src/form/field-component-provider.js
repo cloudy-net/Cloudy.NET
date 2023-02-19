@@ -1,4 +1,5 @@
-import { html, useState, useEffect } from '../preact-htm/standalone.module.js';
+import html from '@src/html-init.js';
+import { useState, useEffect } from 'preact/hooks';
 import FieldComponentContext from "./field-component-context.js";
 
 export default ({ children }) => {
@@ -18,8 +19,7 @@ export default ({ children }) => {
       }
 
       var urls = await response.json();
-
-      const componentPromises = urls.map(url => ({ url, promise: import(url) }));
+      const componentPromises = urls.map(url => ({ url, promise: import(/* @vite-ignore */ (window.viteDevServerIsRunning ? '../../' : './') + url) }));
 
       await Promise.allSettled(componentPromises.map(c => c.promise));
 

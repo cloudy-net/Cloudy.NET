@@ -1,4 +1,5 @@
-import { html, useContext } from '../preact-htm/standalone.module.js';
+import html from '@src/html-init.js';
+import { useContext } from 'preact/hooks';
 import EntityContext from './entity-context.js';
 import FormField from './form-field.js';
 

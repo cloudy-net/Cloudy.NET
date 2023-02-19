@@ -1,6 +1,7 @@
 import Conflicts from "../data/conflicts.js";
 import History from "../data/history.js";
-import { html, useContext, useState } from "../preact-htm/standalone.module.js";
+import html from '@src/html-init.js';
+import { useContext, useState } from 'preact/hooks';
 import EntityContext from "./entity-context.js";
 
 

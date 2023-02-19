@@ -1,4 +1,5 @@
-import { html, useEffect, useState } from '../preact-htm/standalone.module.js';
+import html from '@src/html-init.js';
+import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box.js';
 import ListFilter from './list-filter.js';
 
