@@ -14,6 +14,8 @@ namespace TestWebsite.Models
         public PageContext(DbContextOptions<PageContext> options) : base(options) { }
 
         public DbSet<Page> Pages { get; set; }
+        public DbSet<PageTree> PageTree { get; set; }
+        public DbSet<StartPage> StartPages { get; set; }
         public DbSet<CompositeKeyTest> CompositeKeyTests { get; set; }
         public DbSet<SimpleKeyTest> SimpleKeyTests { get; set; }
         public DbSet<PropertyTestBed> PropertyTestBeds { get; set; }

@@ -21,8 +21,9 @@ namespace TestWebsite.Models
         [MaxLength(45, ErrorMessage = "Please enter a shorter name")]
         public string Name { get; set; }
 
+        public string ParentType { get; set; }
         [Select<Page>]
-        public Guid? Parent { get; set; }
+        public Guid? ParentId { get; set; }
         public int? SortIndex { get; set; }
         public string SortOrder { get; set; }
 

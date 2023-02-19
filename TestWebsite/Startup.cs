@@ -51,7 +51,9 @@ namespace TestWebsite
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), SecondPrimaryKey = 1 });
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("3fdb600b-e801-4588-9f6d-cf03df8180d8"), SecondPrimaryKey = 2, RelatedObject = new Tuple<Guid, int>(new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), 1) });
 
-                context.Pages.Add(new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), UrlSegment = "lorem" });
+                var page = new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), UrlSegment = "lorem" };
+
+                context.Pages.Add(page);
                 context.Pages.Add(new Page { Id = new Guid("c31836f7-830e-44d3-b231-97d48cf44df3"), Name = "esse ea Excepteur in minim dolore" });
                 context.Pages.Add(new Page { Id = new Guid("0c1c40a9-ee61-4071-a1e5-17a2079d882a"), Name = "ut et occaecat ad sit" });
                 context.Pages.Add(new Page { Id = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), Name = "eiusmod culpa aute Excepteur est" });
@@ -72,6 +74,25 @@ namespace TestWebsite
                 context.Pages.Add(new Page { Id = new Guid("28b2affa-6aa9-475d-ad85-a8bc223d965b"), Name = "adipiscing aliquip dolore sit sunt Lorem" });
                 context.Pages.Add(new Page { Id = new Guid("2054a8df-b475-41c9-aeee-ad1a0c505eaa"), Name = "aliqua. in veniam, in dolore" });
                 context.Pages.Add(new Page { Id = new Guid("7f77f50d-885c-446b-9a61-49d29e3cf2d2"), Name = "ut reprehenderit" });
+
+                var start = new StartPage { Id = new Guid("80ebf6bb-9dfa-4edf-bc2e-165422da08a3"), Name = "Start" };
+
+                context.StartPages.Add(start);
+
+                context.PageTree.Add(new PageTree { 
+                    Id = new Guid("01890840-911d-42a4-98de-ffc421225a35"),
+                    EntityType = nameof(StartPage),
+                    EntityId = start.Id,
+                    UrlPath = "/",
+                    Name = start.Name,
+                });
+                context.PageTree.Add(new PageTree {
+                    Id = new Guid("5b832eb9-9c48-4871-96b3-ed48bfcb9a21"),
+                    EntityType = nameof(Page),
+                    EntityId = page.Id,
+                    UrlPath = $"/{page.UrlSegment}",
+                    Name = page.Name,
+                });
 
                 context.SaveChanges();
             }
