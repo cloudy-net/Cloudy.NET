@@ -1,5 +1,3 @@
-import SearchBox from "../../components/search-box.js";
-
 export default ({ entityType, pageSize: initialPageSize, value, onSelect, simpleKey, imageable, dependencies }) => {
   const [pageSize, setPageSize] = dependencies.useState(initialPageSize);
   const [page, setPage] = dependencies.useState(1);
@@ -58,7 +56,7 @@ export default ({ entityType, pageSize: initialPageSize, value, onSelect, simple
 
     return dependencies.html`
       <div class="mx-2 mb-2">
-        <${SearchBox} small=${true} callback=${value => setFilter(value)} />
+        <${dependencies.SearchBox} small=${true} callback=${value => setFilter(value)} />
       </div>
       ${data.items.map(item =>
         dependencies.html`<div class="dropdown-item-outer">

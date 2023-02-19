@@ -1,5 +1,3 @@
-import closeDropdown from "../../../components/close-dropdown.js";
-import Dropdown from "../../../components/dropdown.js";
 import MediaPickerMenu from "./media-picker-menu.js";
 
 export default ({ name, path, provider, dependencies }) => {
@@ -29,13 +27,13 @@ export default ({ name, path, provider, dependencies }) => {
       <img class="media-picker-preview-image" src=${value} />
     </div>`}
 
-    <${Dropdown} text="Add">
+    <${dependencies.Dropdown} text="Add">
       <${MediaPickerMenu} provider=${provider} value=${value} context=${dependencies} onSelect=${onchange} />
     <//>
 
-    <${Dropdown} text="Other" className="ms-2">
-      <a class="dropdown-item" onClick=${ event => { copy(); closeDropdown(event.target); } }>Copy</a>
-      <a class="dropdown-item" onClick=${ event => { paste(); closeDropdown(event.target); } }>Paste</a>
+    <${dependencies.Dropdown} text="Other" className="ms-2">
+      <a class="dropdown-item" onClick=${ event => { copy(); dependencies.closeDropdown(event.target); } }>Copy</a>
+      <a class="dropdown-item" onClick=${ event => { paste(); dependencies.closeDropdown(event.target); } }>Paste</a>
       <a class="dropdown-item" onClick=${ event => { setValue(null); dependencies.simpleChangeHandler.setValue(entityReference, path, null); closeDropdown(event.target); } }>Clear</a>
     <//>
   `;

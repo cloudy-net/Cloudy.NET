@@ -1,5 +1,3 @@
-import closeDropdown from "../../../components/close-dropdown.js";
-
 export default ({ provider, value, onSelect, dependencies }) => {
   const [pageSize] = dependencies.useState(10);
   const [page, setPage] = dependencies.useState(1);
@@ -96,7 +94,7 @@ export default ({ provider, value, onSelect, dependencies }) => {
       const json = await response.json();
 
       onSelect(json.path);
-      closeDropdown(element);
+      dependencies.closeDropdown(element);
     };
     input.click();
   }

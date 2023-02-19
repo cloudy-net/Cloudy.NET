@@ -1,5 +1,3 @@
-import FormField from '../../form-field.js';
-
 const EmbeddedBlockFields = ({ type, path, dependencies }) => {
     const [loading, setLoading] = dependencies.useState(true);
     const [fields, setFields] = dependencies.useState();
@@ -48,7 +46,7 @@ const EmbeddedBlockFields = ({ type, path, dependencies }) => {
       return dependencies.html`Loading ...`;
     }
 
-    return dependencies.html`${fields.map(field => dependencies.html`<${FormField} ...${field} path=${`${path}.${field.name}`} />`)}`;
+    return dependencies.html`${fields.map(field => dependencies.html`<${dependencies.FormField} ...${field} path=${`${path}.${field.name}`} />`)}`;
 };
 
 export default EmbeddedBlockFields;
