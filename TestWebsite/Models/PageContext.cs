@@ -29,6 +29,8 @@ namespace TestWebsite.Models
             modelBuilder.Entity<CompositeKeyTest>().Property(p => p.RelatedObject).SerializeIntoJson();
             modelBuilder.Entity<Page>().Property(p => p.FrontpageBlock).JsonBlockConversion();
             modelBuilder.Entity<PropertyTestBed>().Property(p => p.Colors).SerializeIntoJson();
+            modelBuilder.Entity<PageTree>().Property(p => p.Ancestors).SerializeIntoJson();
+            modelBuilder.Entity<PageTree>().Property(p => p.Children).SerializeIntoJson();
         }
     }
 }
