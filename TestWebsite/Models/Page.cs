@@ -1,4 +1,5 @@
 ﻿using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.EntitySupport.HierarchySupport;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.List;
@@ -22,6 +23,9 @@ namespace TestWebsite.Models
 
         [Select<Page>]
         public Guid? Parent { get; set; }
+        public int? SortIndex { get; set; }
+        public string SortOrder { get; set; }
+
         public string UrlSegment { get; set; }
         //[UIHint("textarea")]
         //public string Description { get; set; }

@@ -1,5 +1,4 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntitySupport.Internal;
 using Cloudy.CMS.ContextSupport;
 using Cloudy.CMS.SingletonSupport;
 using System;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Cloudy.CMS.AssemblySupport;
 using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.CMS.EntitySupport.HierarchySupport.Internal;
 
 namespace Cloudy.CMS.EntityTypeSupport
 {
