@@ -21,7 +21,7 @@ const Control = ({ name, label, path, settings: { types }, dependencies }) => {
   return dependencies.html`<div class="mb-3">
         <label for=${name} class="form-label">${label} ${state.changes.find(change => change.path == path) ? '*' : null}</label>
         <${dependencies.Dropdown} text="Add">
-          ${types.map(type => dependencies.html`<a class="dropdown-item" onClick=${event => { dependencies.blockTypeChangeHandler.setType(entityReference, path, type); closeDropdown(event.target); }}>${type}</a>`)}
+          ${types.map(type => dependencies.html`<a class="dropdown-item" onClick=${event => { dependencies.blockTypeChangeHandler.setType(entityReference, path, type); dependencies.closeDropdown(event.target); }}>${type}</a>`)}
         <//>
       <//>
     `;
