@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<DefaultItemExcludes>$(DefaultItemExcludes);wwwroot\.gitignore</DefaultItemExcludes>
+		<DefaultItemExcludes>$(DefaultItemExcludes);wwwroot\.gitignore;wwwroot\index.html;wwwroot-src\**\*</DefaultItemExcludes>
 	</PropertyGroup>
 
 	<ItemGroup>
