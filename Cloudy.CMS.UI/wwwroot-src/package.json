@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "npm run build",
-    "test": "mocha"
+    "test": "mocha .test"
   },
   "dependencies": {
     "htm": "^3.1.1",
