@@ -3,12 +3,12 @@ describe('Property test bed - Create', () => {
   it('Test all props', () => {
 
     // Add spy for save/get request
-    //cy.getSpy();
     cy.saveSpy();
 
     cy.visit('/Admin/List?EntityType=PropertyTestBed');
 
     const fieldsAndValues = {
+      'Name': 'some-name',
       'Integer': '5',
       'NullableInteger': 10,
       'Double': 5.2,
@@ -42,8 +42,7 @@ describe('Property test bed - Create', () => {
     
     cy.get('select[name="Category"]').select('2');
 
-    // cy.clickSave();
-    // cy.get('@saving').should('have.been.calledOnce');
-    //cy.get('@getting').should('have.been.calledOnce');
+    cy.clickSave();
+    cy.get('@saving').should('have.been.calledOnce');
   })
 })
