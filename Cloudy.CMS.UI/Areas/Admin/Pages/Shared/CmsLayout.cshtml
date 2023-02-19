@@ -18,11 +18,100 @@
         <link href="https://cdn.quilljs.com/1.2.6/quill.snow.css" rel="stylesheet">
         <script async src="https://cdn.quilljs.com/1.2.6/quill.min.js"></script>
 
-        <link href="/_content/Cloudy.CMS.UI/index.css" rel="stylesheet">
-        <script async type="module" crossorigin="anonymous" src="/_content/Cloudy.CMS.UI/main.js"></script>
+        @if (viteBaseUri != null)
+        {
+            <script>window.viteDevServerIsRunning = true;</script>
+            <script type="module" src="@viteBaseUri/@@vite/client"></script>
+            <script type="module" src="@viteBaseUri/main.jsx"></script>
+        }
+        else
+        {
+            <link href="/_content/Cloudy.CMS.UI/index.css" rel="stylesheet">
+            <script>window.viteDevServerIsRunning = false;</script>
+            <script async type="module" crossorigin="anonymous" src="/_content/Cloudy.CMS.UI/index.bundle.js"></script>
+        }
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
+        @if (viteBaseUri != null)
+        {
+            <style>
+                .vite-loading {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 10;
+                    background: white;
+                }
+                .vite-alert {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    z-index: 20;
+                    transform: translate(-50%, -50%);
+                    width: 500px;
+                    max-width: 80vw;
+                    box-shadow: rgba(255, 255, 255, 0.75) 0 0 0 5px;
+                }
+            </style>
+            <div class="vite-loading"></div>
+            <div class="alert alert-primary vite-alert" style="display: none;">
+                <h1 class="h3">Vite is configured but not started.</h1>
+                <p>Please go to <code>wwwroot-src/</code> and <code>npm run dev</code></p>
+                <p>To disable Vite and load frontend assets normally, remove the configuration setting <code>ViteBaseUri</code>.</p>
+                <button class="btn btn-primary" onclick="location.reload();">Reload page</button>
+            </div>
+            <script>
+            window.addEventListener('load', () => {
+                if (!window.viteIsLoaded) {
+                    document.querySelector('.vite-alert').style = '';
+                    let hasFailed = false;
+                        
+                    const checkStarted = async () => {
+                        let response = null;
+
+                        try {
+                            response = await fetch("@viteBaseUri");
+                        } catch {
+                        }
+
+                        if (response && response.ok) {
+                            if(hasFailed) {
+                                location.reload();
+
+                                return;
+                            }
+                        } else {
+                            hasFailed = true;
+                        }
+
+
+                        setTimeout(checkStarted, 3000);
+                    };
+
+                    checkStarted();
+
+                    const checkError = () => {
+                    if (document.querySelector("vite-error-overlay")) {
+                            document.querySelector('.vite-alert').remove();
+                            document.querySelector('.vite-loading').remove();
+
+                            return;
+                        }
+
+                        setTimeout(checkError, 100);
+                    };
+
+                    checkError();
+                } else {
+                    document.querySelector('.vite-loading').remove();
+                }
+            });
+            </script>
+        }
         @RenderBody()
     </body>
 </html>
