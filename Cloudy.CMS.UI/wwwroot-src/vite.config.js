@@ -8,6 +8,10 @@ export default defineConfig({
     preact(),
     viteStaticCopy({
       targets: [
+        {
+          src: 'form/controls',
+          dest: 'form/',
+        },
       ],
     }),
   ],
