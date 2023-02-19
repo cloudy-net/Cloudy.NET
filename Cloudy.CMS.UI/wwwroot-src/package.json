@@ -4,16 +4,24 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prepare": "copyfiles --flat node_modules/htm/preact/standalone.module.js preact-htm/",
-    "test": "mocha .test"
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "npm run build",
+    "test": "mocha"
   },
   "dependencies": {
     "htm": "^3.1.1",
     "preact": "^10.11.0"
   },
   "devDependencies": {
+    "@preact/preset-vite": "^2.4.0",
     "copyfiles": "^2.4.1",
     "mocha": "^10.2.0",
-    "node-localstorage": "^2.2.1"
+    "node-localstorage": "^2.2.1",
+    "sass": "^1.55.0",
+    "vite": "^3.1.3",
+    "vite-plugin-static-copy": "^0.13.0"
   }
 }
