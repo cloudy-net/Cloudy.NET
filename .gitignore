@@ -13,4 +13,4 @@ obj
 *.user
 Logs
 .vscode
-!Cloudy.CMS.UI/wwwroot/.vscode
+!Cloudy.CMS.UI/wwwroot-src/.vscode
