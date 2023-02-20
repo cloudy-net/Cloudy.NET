@@ -15,13 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: npm install
-      run: cd Cloudy.CMS.UI/wwwroot-src && npm ci
-    - name: npm test
-      run: cd Cloudy.CMS.UI/wwwroot-src && npm run test
-    - name: npm cleanup
-      run: cd Cloudy.CMS.UI/wwwroot-src && rm -rf .test
-
     - name: Run Cypress tests
       run: docker-compose up --abort-on-container-exit
     
@@ -31,6 +24,12 @@ jobs:
         dotnet-version: 7.0.x
     - name: dotnet restore
       run: dotnet restore
+    - name: npm install
+      run: cd Cloudy.CMS.UI/wwwroot-src && npm ci
+    - name: npm test
+      run: cd Cloudy.CMS.UI/wwwroot-src && npm run test
+    - name: npm cleanup
+      run: cd Cloudy.CMS.UI/wwwroot-src && rm -rf .test
     - name: dotnet build
       run: dotnet build --no-restore
     - name: dotnet test

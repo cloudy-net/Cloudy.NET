@@ -1,18 +1,23 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
-
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /App
+EXPOSE 80
 
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /App
 COPY ./ ./
-
 WORKDIR /App/TestWebsite
-
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
-WORKDIR /App/TestWebsite
-COPY --from=build-env /App/TestWebsite/out .
-ENTRYPOINT ["dotnet", "TestWebsite.dll"]
+FROM node:18 as buildjs
+WORKDIR /App
+COPY ./Cloudy.CMS.UI ./
+WORKDIR /App/wwwroot-src
+RUN npm ci
+RUN npm install
 
-EXPOSE 80
+FROM base AS final
+WORKDIR /App
+COPY --from=build /App/TestWebsite/out .
+COPY --from=buildjs /App/wwwroot ./wwwroot/_content/Cloudy.CMS.UI/
+ENTRYPOINT ["dotnet", "TestWebsite.dll"]
