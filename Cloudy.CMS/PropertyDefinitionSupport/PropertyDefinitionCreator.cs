@@ -11,6 +11,11 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
         public PropertyDefinitionDescriptor Create(PropertyInfo property)
         {
             var type = property.PropertyType;
+
+            var attributes = new List<Attribute>(property.GetCustomAttributes(true).OfType<Attribute>());
+
+            attributes.AddRange(GetInterfaceAttributes(property));
+
             var nullable = false;
 
             var nullableType = Nullable.GetUnderlyingType(type);
@@ -36,12 +41,32 @@ namespace Cloudy.CMS.PropertyDefinitionSupport
                 type,
                 property.GetValue,
                 property.SetValue,
-                property.GetCustomAttributes(),
+                attributes,
                 nullable,
                 list,
                 type.IsEnum,
                 block
             );
+        }
+
+        IEnumerable<Attribute> GetInterfaceAttributes(PropertyInfo property)
+        {
+            var result = new List<Attribute>();
+
+            foreach (var @interface in property.DeclaringType.GetInterfaces())
+            {
+                var interfaceProperty = @interface.GetProperty(property.Name);
+
+                if (interfaceProperty != null)
+                {
+                    foreach(var attribute in interfaceProperty.GetCustomAttributes(true).OfType<Attribute>())
+                    {
+                        result.Add(attribute);
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -10,9 +10,13 @@ namespace Cloudy.CMS.EntitySupport.HierarchySupport
 {
     public interface IHierarchical<T> : IHierarchicalMarkerInterface
     {
+        [Display(AutoGenerateField = false)]
         public string ParentType { get; set; }
+        [Display(AutoGenerateField = false)]
         public T ParentId { get; set; }
+        [Display(AutoGenerateField = false)]
         public int? SortIndex { get; set; }
+        [Display(AutoGenerateField = false)]
         public string SortOrder { get; set; }
     }
 }

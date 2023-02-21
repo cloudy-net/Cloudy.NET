@@ -51,10 +51,13 @@ namespace TestWebsite
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), SecondPrimaryKey = 1 });
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("3fdb600b-e801-4588-9f6d-cf03df8180d8"), SecondPrimaryKey = 2, RelatedObject = new Tuple<Guid, int>(new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), 1) });
 
-                var page = new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), UrlSegment = "lorem" };
+                var page1 = new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), UrlSegment = "lorem" };
 
-                context.Pages.Add(page);
-                context.Pages.Add(new Page { Id = new Guid("c31836f7-830e-44d3-b231-97d48cf44df3"), Name = "esse ea Excepteur in minim dolore" });
+                context.Pages.Add(page1);
+
+                var page2 = new Page { Id = new Guid("c31836f7-830e-44d3-b231-97d48cf44df3"), Name = "esse ea Excepteur in minim dolore", UrlSegment = "ipsum" };
+
+                context.Pages.Add(page2);
                 context.Pages.Add(new Page { Id = new Guid("0c1c40a9-ee61-4071-a1e5-17a2079d882a"), Name = "ut et occaecat ad sit" });
                 context.Pages.Add(new Page { Id = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), Name = "eiusmod culpa aute Excepteur est" });
                 context.Pages.Add(new Page { Id = new Guid("cee2b628-71a8-43e9-88e4-ba51bcf3e940"), Name = "laboris anim ut" });
@@ -89,9 +92,16 @@ namespace TestWebsite
                 context.PageTree.Add(new PageTree {
                     Id = new Guid("5b832eb9-9c48-4871-96b3-ed48bfcb9a21"),
                     EntityType = nameof(Page),
-                    EntityId = page.Id,
-                    UrlPath = $"/{page.UrlSegment}",
-                    Name = page.Name,
+                    EntityId = page1.Id,
+                    UrlPath = $"/{page1.UrlSegment}",
+                    Name = page1.Name,
+                });
+                context.PageTree.Add(new PageTree {
+                    Id = new Guid("325d14a8-dbc7-4887-b919-0f04f2bfe262"),
+                    EntityType = nameof(Page),
+                    EntityId = page2.Id,
+                    UrlPath = $"/{page1.UrlSegment}/{page2.UrlSegment}",
+                    Name = page2.Name,
                 });
 
                 context.SaveChanges();
@@ -108,7 +118,7 @@ namespace TestWebsite
                 endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
                 endpoints.MapGet("/pages", async c => await c.Response.WriteAsJsonAsync(c.RequestServices.GetService<PageContext>().Pages));
                 
-                endpoints.MapGet("/pages/{route:contentroute}", async c => 
+                endpoints.MapGet("/pages/{route:contentroute(PageTree)}", async c => 
                     await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute<Page>().Name}")
                 );
                 
