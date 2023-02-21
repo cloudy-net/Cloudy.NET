@@ -11,8 +11,7 @@ const Control = ({ name, path, dependencies }) => {
         step="any"
         pattern="[0-9]+(.[0-9]+?)?"
         class="form-control"
-        id=${name}
-        name=${name}
+        id=${dependencies.componentContextProvider.getIndentifier(path)}
         value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}
       />

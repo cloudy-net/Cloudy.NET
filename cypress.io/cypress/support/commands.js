@@ -27,8 +27,8 @@
 
 Cypress.Commands.add('typeName', (value, clear) => { 
     clear 
-        ? cy.get('input[name="Name"]').clear().type(value, { delay: 0, force: true })
-        : cy.get('input[name="Name"]').type(value, { delay: 0, force: true }) ;
+        ? cy.get('input[id="cld-Name"]').clear().type(value, { delay: 0, force: true })
+        : cy.get('input[id="cld-Name"]').type(value, { delay: 0, force: true }) ;
 })
 
 Cypress.Commands.add('verifyNoValidationError', () => { 

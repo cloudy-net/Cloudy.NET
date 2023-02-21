@@ -9,6 +9,7 @@ import Dropdown from './components/dropdown.js';
 import FormField from './form/form-field.js';
 import closeDropdown from './components/close-dropdown.js';
 import SearchBox from './components/search-box';
+import componentContextProvider from './data/component-context-provider.js';
 
 const dependencies = { 
   html,
@@ -24,7 +25,8 @@ const dependencies = {
   useRef,
   urlFetcher,
   ValidationManager,
-  blockTypeChangeHandler
+  blockTypeChangeHandler,
+  componentContextProvider,
 };
 
 export default dependencies;

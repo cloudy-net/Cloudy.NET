@@ -22,8 +22,8 @@ describe('Required validation', () => {
 
   it('Fires for empty select value', () => {
     cy.visit('/Admin/List?entityType=PropertyTestBed');
-    cy.get('select[name="Color"]').select('');
-    cy.get('select[name="SecondColor"]').select('');
+    cy.get('select[id="cld-Color"]').select('');
+    cy.get('select[id="cld-SecondColor"]').select('');
     cy.clickSave();
     cy.verifyValidationError();
     cy.get('@saving').should('not.have.been.called');
@@ -32,8 +32,8 @@ describe('Required validation', () => {
   it('Not fire when select has value', () => {
     cy.visit('/Admin/List?entityType=PropertyTestBed');
     cy.typeName('a');
-    cy.get('select[name="Color"]').select('#fff');
-    cy.get('select[name="SecondColor"]').select('#f56c43');
+    cy.get('select[id="cld-Color"]').select('#fff');
+    cy.get('select[id="cld-SecondColor"]').select('#f56c43');
     cy.clickSave();
     cy.verifyNoValidationError();
     cy.get('@saving').should('have.been.calledOnce');
@@ -47,8 +47,8 @@ describe('Required validation', () => {
     cy.get('@saving').should('not.have.been.called');
 
     cy.typeName('a');
-    cy.get('select[name="Color"]').select('#fff');
-    cy.get('select[name="SecondColor"]').select('#f56c43');
+    cy.get('select[id="cld-Color"]').select('#fff');
+    cy.get('select[id="cld-SecondColor"]').select('#f56c43');
 
     cy.verifyNoValidationError();
     cy.clickSave();

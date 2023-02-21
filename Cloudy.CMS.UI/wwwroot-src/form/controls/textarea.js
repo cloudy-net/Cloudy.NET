@@ -9,8 +9,7 @@ const Control = ({ name, path, dependencies }) => {
       <textarea
         type="text"
         class="form-control"
-        id=${`field-${name}`}
-        name=${name}
+        id=${dependencies.componentContextProvider.getIndentifier(path)}
         value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}
       />

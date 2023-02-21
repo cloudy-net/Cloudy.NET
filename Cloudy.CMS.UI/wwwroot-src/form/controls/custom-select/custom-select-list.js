@@ -49,8 +49,8 @@ export default ({ name, path, dependencies }) => {
             <div class="card-body">
                 ${options.map((option, index) => dependencies.html`
                     <div class="form-check">
-                        <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" value="${option.value}" id="cb-${name}-${index}" />
-                        <label class="form-check-label" for="cb-${name}-${index}">${option.text}</label>
+                        <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" value="${option.value}" id="${dependencies.componentContextProvider.getIndentifier(path)}-${index}" />
+                        <label class="form-check-label" for="${dependencies.componentContextProvider.getIndentifier(path)}-${index}">${option.text}</label>
                     </div>`)
                 }
 
@@ -59,8 +59,8 @@ export default ({ name, path, dependencies }) => {
                     
                     ${optionGroups[optionGroup].options.map((option, index) => dependencies.html`
                         <div class="form-check">
-                            <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" id="cb-${name}-${optionGroupIndex}-${index}" value=${option.value}>${option.text}</option>
-                            <label class="form-check-label" for="cb-${name}-${optionGroupIndex}-${index}">${option.text}</label>
+                            <input onChange=${onChange} checked=${currentValues.includes(option.value)} disabled=${option.disabled} class="form-check-input" type="checkbox" id="${dependencies.componentContextProvider.getIndentifier(path)}-${optionGroupIndex}-${index}" value=${option.value}>${option.text}</option>
+                            <label class="form-check-label" for="${dependencies.componentContextProvider.getIndentifier(path)}-${optionGroupIndex}-${index}">${option.text}</label>
                         </div>
                     `)}
                 `)}

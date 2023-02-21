@@ -18,8 +18,7 @@ export default ({ name, path, validators, dependencies }) => {
   }, []);
   
   return dependencies.html`<div>
-  <select id=${name}
-          name=${name}
+  <select id=${dependencies.componentContextProvider.getIndentifier(path)}
           class="form-select"
           value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
           onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}>

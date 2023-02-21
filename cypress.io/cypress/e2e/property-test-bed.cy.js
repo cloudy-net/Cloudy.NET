@@ -8,39 +8,39 @@ describe('Property test bed - Create', () => {
     cy.visit('/Admin/List?EntityType=PropertyTestBed');
 
     const fieldsAndValues = {
-      'Name': 'some-name',
-      'Integer': '5',
-      'NullableInteger': 10,
-      'Double': 5.2,
-      'NullableDouble': 5.3,
-      'DateTime': '2023-01-02T14:53:21',
-      'NullableDateTime': '2023-03-02T14:53:21',
-      'DateTimeOffset': '2023-03-02T14:53:21',
-      'NullableDateTimeOffset': '2023-04-02T14:53:21',
-      'DateTimeWithDate': '2023-08-02T14:53:21',
-      'DateTimeOffsetWithDate': '2023-09-02T14:53:21',
-      'DateTimeWithTime': '2023-09-02T14:53:21',
-      'DateTimeOffsetWithTime': '2023-09-02T14:53:21',
-      'DateOnly': '2023-09-02',
-      'NullableDateOnly': '2023-09-02',
-      'TimeOnly': '12:45',
-      'NullableTimeOnly': '12:43',
+      'cld-Name': 'some-name',
+      'cld-Integer': '5',
+      'cld-NullableInteger': 10,
+      'cld-Double': 5.2,
+      'cld-NullableDouble': 5.3,
+      'cld-DateTime': '2023-01-02T14:53:21',
+      'cld-NullableDateTime': '2023-03-02T14:53:21',
+      'cld-DateTimeOffset': '2023-03-02T14:53:21',
+      'cld-NullableDateTimeOffset': '2023-04-02T14:53:21',
+      'cld-DateTimeWithDate': '2023-08-02T14:53:21',
+      'cld-DateTimeOffsetWithDate': '2023-09-02T14:53:21',
+      'cld-DateTimeWithTime': '2023-09-02T14:53:21',
+      'cld-DateTimeOffsetWithTime': '2023-09-02T14:53:21',
+      'cld-DateOnly': '2023-09-02',
+      'cld-NullableDateOnly': '2023-09-02',
+      'cld-TimeOnly': '12:45',
+      'cld-NullableTimeOnly': '12:43',
     };
 
     Object.keys(fieldsAndValues).map(
-      key => cy.get(`input[name="${key}"]`).clear().type(fieldsAndValues[key], { delay: 0 })
+      key => cy.get(`input[id="${key}"]`).clear().type(fieldsAndValues[key], { delay: 0 })
     );
 
-    cy.get('input[name="Checkbox"]').click()
-    cy.get('input[name="NullableCheckbox"]').click()
+    cy.get('input[id="cld-Checkbox"]').click()
+    cy.get('input[id="cld-NullableCheckbox"]').click()
 
-    cy.get('select[name="Color"]').select('#fff');
-    cy.get('select[name="SecondColor"]').select('#f56c43');
+    cy.get('select[id="cld-Color"]').select('#fff');
+    cy.get('select[id="cld-SecondColor"]').select('#f56c43');
 
-    cy.get('input[id="cb-Colors-0-0"]').click()
-    cy.get('input[id="cb-Colors-2"]').click()
+    cy.get('input[id="cld-Colors-0-0"]').click()
+    cy.get('input[id="cld-Colors-2"]').click()
     
-    cy.get('select[name="Category"]').select('2');
+    cy.get('select[id="cld-Category"]').select('2');
 
     cy.clickSave();
     cy.get('@saving').should('have.been.calledOnce');

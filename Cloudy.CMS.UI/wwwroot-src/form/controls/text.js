@@ -6,8 +6,7 @@ const Control = ({ name, path, validators, dependencies }) => {
       <input
         type="text"
         class=${`form-control ${ dependencies.ValidationManager.getValidationClass(state.validationResults, path) } `}
-        id=${`field-${name}`}
-        name=${name}
+        id=${dependencies.componentContextProvider.getIndentifier(path)}
         value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${(e) => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
       />`;

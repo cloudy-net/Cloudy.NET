@@ -31,6 +31,6 @@ describe('Page - Edit', () => {
     cy.get('@saving').should('have.been.calledTwice');
 
     // Revisit and assert
-    cy.get('input[name="Name"]').invoke('val').should('include', '... cypress was here! - Yet again!')
+    cy.get('input[id="cld-Name"]').invoke('val').should('include', '... cypress was here! - Yet again!')
   })
 })
