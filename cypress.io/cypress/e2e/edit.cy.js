@@ -20,6 +20,7 @@ describe('Page - Edit', () => {
 
     // Save and await request
     cy.clickSave();
+    cy.wait(2000);
     cy.get('@saving').should('have.been.calledTwice');
 
     // Revisit and assert
