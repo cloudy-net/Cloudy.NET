@@ -36,6 +36,7 @@ describe('Page - Create', () => {
     cy.clickSave();
     cy.verifyNoValidationError();
 
+    cy.wait(2000);
     cy.typeName(modifiedUniqueName, true);
     cy.clickSave();
 
