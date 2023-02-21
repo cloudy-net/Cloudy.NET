@@ -7,6 +7,7 @@ describe('Page - Edit', () => {
 
     // Visist first page
     cy.visit('/Admin/List?EntityType=Page');
+    cy.wait(1000);
     cy.get('table.table--content-list td a').first().click();
     
     // Modify name
@@ -20,6 +21,7 @@ describe('Page - Edit', () => {
 
     // Save and await request
     cy.clickSave();
+    cy.wait(1000);
     cy.get('@saving').should('have.been.calledTwice');
 
     // Revisit and assert
