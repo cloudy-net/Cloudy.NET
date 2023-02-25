@@ -43,9 +43,7 @@ namespace Cloudy.CMS.UI.EntityTypeList
                 await GetLink(entityType).ToListAsync()
             ));
 
-            var x = await Task.WhenAll(entityTypeItems);
-
-            return x.ToList();
+            return await Task.WhenAll(entityTypeItems);
         }
 
         private async IAsyncEnumerable<Link> GetLink(EntityTypeDescriptor entityType)
@@ -57,8 +55,8 @@ namespace Cloudy.CMS.UI.EntityTypeList
                 yield return new Link
                 {
                     Action = "List",
-                    Text = action,
                     EntityTypeName = entityType.Name,
+                    Text = action,
                 };
             }
             else
@@ -66,15 +64,15 @@ namespace Cloudy.CMS.UI.EntityTypeList
                 yield return new Link
                 {
                     Action = "List",
-                    Text = "List all",
                     EntityTypeName = entityType.Name,
+                    Text = "List all",
                 };
 
                 yield return new Link
                 {
                     Action = "New",
-                    Text = "New",
                     EntityTypeName = entityType.Name,
+                    Text = "New",
                 };
             }
         }
