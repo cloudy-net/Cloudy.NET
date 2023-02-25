@@ -1,14 +1,6 @@
 ﻿@page
-@using Cloudy.CMS.EntityTypeSupport
-@using Cloudy.CMS.EntityTypeSupport.Naming
-@using System.ComponentModel.DataAnnotations
-@using System.Reflection
-@using Cloudy.CMS.EntitySupport.PrimaryKey;
-@using Cloudy.CMS.SingletonSupport;
+
 @model Cloudy.CMS.UI.Areas.Admin.Pages.IndexModel
-@inject IEntityTypeProvider EntityTypeProvider
-@inject IEntityTypeNameProvider EntityTypeNameProvider
-@inject ISingletonGetter SingletonGetter
 
 @await Html.PartialAsync("Shared/Nav")
 
@@ -27,42 +19,7 @@
 </div>
 
 <div class="container">
-    <div class="row">
-        @foreach (var entityType in EntityTypeProvider.GetAll().Where(t => t.IsIndependent))
-        {
-            var name = EntityTypeNameProvider.Get(entityType.Type);
-            var description = entityType.Type.GetCustomAttribute<DisplayAttribute>()?.Description;
-            <div class="col-sm-4 mb-4 d-flex">
-                <div class="card w-100" style="min-height: 200px;">
-                    <div class="card-body">
-                        <h5 class="card-title">@name.PluralName</h5>
-                        @if (description != null)
-                        {
-                            <p class="card-text">@description</p>
-                        }
-                    </div>
-                    <div class="card-footer">
-                        @if (entityType.IsSingleton)
-                        {
-                            if (await SingletonGetter.Get(entityType.Type) != null)
-                            {
-                                <a class="btn btn-primary" href="@Url.Page("List", new { area = "Admin", entityType = entityType.Name })">Edit</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" href="@Url.Page("List", new { area = "Admin", entityType = entityType.Name })">New</a>
-                            }
-                        }
-                        else
-                        {
-                            <a class="btn btn-primary" href="@Url.Page("List", new { area = "Admin", EntityType = entityType.Name })">List all</a>
-                            <a class="btn btn-beta" href="@Url.Page("New", new { area = "Admin", EntityType = entityType.Name })">New</a>
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+    <div class="row entity-type-list"></div>
 </div>
 
 @await Html.PartialAsync("Shared/Footer")
