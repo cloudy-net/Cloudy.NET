@@ -52,24 +52,29 @@ namespace Cloudy.CMS.UI.EntityTypeList
         {
             if (entityType.IsSingleton)
             {
+                var action = await singletonGetter.Get(entityType.Type) is null ? "New" : "Edit";
+
                 yield return new Link
                 {
-                    Url = $"/Admin/List?EntityType={entityType.Name}",
-                    Text = await singletonGetter.Get(entityType.Type) is null ? "New" : "Edit",
+                    Action = "List",
+                    Text = action,
+                    EntityTypeName = entityType.Name,
                 };
             }
             else
             {
                 yield return new Link
                 {
-                    Url = $"/Admin/List?EntityType={entityType.Name}",
+                    Action = "List",
                     Text = "List all",
+                    EntityTypeName = entityType.Name,
                 };
 
                 yield return new Link
                 {
-                    Url = $"/Admin/New?EntityType={entityType.Name}",
+                    Action = "New",
                     Text = "New",
+                    EntityTypeName = entityType.Name,
                 };
             }
         }
@@ -77,7 +82,8 @@ namespace Cloudy.CMS.UI.EntityTypeList
         public class Link
         {
             public string Text { get; set; }
-            public string Url { get; set; }
+            public string Action { get; set; }
+            public string EntityTypeName { get; set; }
         };
 
         public record EntityTypeItem(

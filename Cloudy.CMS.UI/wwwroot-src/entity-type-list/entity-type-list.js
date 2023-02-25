@@ -21,7 +21,9 @@ export default () => {
         </div>
         <div class="card-footer">
           {entityType.links.map((link, index) => <>
-            <a class={`btn ${index === 0 ? 'btn-primary' : 'btn-beta'}`} href={link.url}>{link.text}</a>&nbsp;
+            <a class={`btn ${index === 0 ? 'btn-primary' : 'btn-beta'}`} href={`/Admin/${link.action}?EntityType=${link.entityTypeName}`}>
+              {link.text}
+            </a>&nbsp;
           </>)}
         </div>
       </div>
