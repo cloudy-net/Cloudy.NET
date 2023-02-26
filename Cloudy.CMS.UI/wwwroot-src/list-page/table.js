@@ -55,11 +55,11 @@ export default ({ entityType  }) => {
   };
 
   useEffect(function () {
+    setSettings({ loading: true });
     (async () => {
       await fetch(`/Admin/api/list/settings?entityTypeName=${entityType}`, { credentials: 'include' })
         .then(r => r.json())
         .then(r => {
-          console.log(r.redirectUrl)
           if (r.redirectUrl) {
             window.location.href = r.redirectUrl;
             return;
@@ -70,7 +70,7 @@ export default ({ entityType  }) => {
           setSettings(r);
         });
     })();
-  }, []);
+  }, [entityType]);
 
   useEffect(function () {
     if (settings.loading) return;
@@ -130,8 +130,8 @@ export default ({ entityType  }) => {
               html`<td dangerouslySetInnerHTML=${{ __html: d.values[i] }}></td>`
             )}
             <td>
-              <a class="me-2" href=${`${settings.editLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
-              <a href=${`${settings.deleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
+              <a class="me-2" href=${`${settings.editLink}?${d.keys.map(k => `keys=${k}`).join('&')}`}>Edit</a>
+              <a href=${`${settings.deleteLink}?${d.keys.map(k  => `keys=${k}`).join('&')}`}>Delete</a>
             </td>
           </tr>`)}
           ${[...new Array(pageSize - data.items.length)].map(() => html`<tr class="list-page-blank-row"><td class="nbsp" /></tr>`)}

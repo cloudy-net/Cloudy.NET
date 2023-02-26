@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/Edit/{EntityType}"
 @using Cloudy.CMS.EntitySupport;
 @using Cloudy.CMS.Naming
 @using Cloudy.CMS.Routing;
@@ -9,8 +9,6 @@
 
 @inject INameGetter NameGetter
 @inject IContentRouteMatcher ContentRouteMatcher
-
-@await Html.PartialAsync("Shared/Nav")
 
 <div class="container">
     <nav aria-label="breadcrumb">
@@ -67,5 +65,3 @@
         </div>
     </div>
 </div>
-
-@await Html.PartialAsync("Shared/Footer")

@@ -2,7 +2,7 @@ import './main.scss'
 
 import html from '@src/html-init.js';
 import { render } from 'preact'
-import Router from 'preact-router';
+import { Router, Route } from 'preact-router';
 
 import Table from './list-page/table.js'
 import Form from './form/form.js';
@@ -19,7 +19,9 @@ if (document.getElementById('app')) {
       <Header />
       <Router>
         <EntityTypeList path="/Admin/" />
-        <Table path="/Admin/List/:entityType?" />
+        <Table path="/Admin/List/:entityType" />
+        <Form path="/Admin/New/:entityType" />
+        <Form path="/Admin/Edit/:entityType" />
       </Router>
       <Footer />
     </>

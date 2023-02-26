@@ -14,7 +14,6 @@ namespace Cloudy.CMS.UI.List
     [ResponseCache(NoStore = true)]
     public class LayoutHeaderController : Controller
     {
-        private readonly LinkGenerator linkGenerator;
         private readonly IHumanizer humanizer;
         private readonly IEntityTypeProvider entityTypeProvider;
         private readonly IEntityTypeNameProvider entityTypeNameProvider;
@@ -22,13 +21,11 @@ namespace Cloudy.CMS.UI.List
         public LayoutHeaderController(
             IHumanizer humanizer,
             IEntityTypeProvider entityTypeProvider,
-            IEntityTypeNameProvider entityTypeNameProvider,
-            LinkGenerator linkGenerator)
+            IEntityTypeNameProvider entityTypeNameProvider)
         {
             this.humanizer = humanizer;
             this.entityTypeProvider = entityTypeProvider;
             this.entityTypeNameProvider = entityTypeNameProvider;
-            this.linkGenerator = linkGenerator;
         }
 
         [HttpGet]
@@ -55,7 +52,7 @@ namespace Cloudy.CMS.UI.List
                 yield return new EntityTypeLink
                 {
                     Text = entityType.IsSingleton ? name.Name : name.PluralName,
-                    Url = linkGenerator.GetPathByPage("/List", null, new { Area = "Admin", EntityType = entityType.Name })
+                    Url = $"/Admin/List/{entityType.Name}"
                 };
             }
         }
