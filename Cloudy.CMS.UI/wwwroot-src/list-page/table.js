@@ -20,13 +20,16 @@ export const LISTING_COLUMN_WIDTHS = {
   EQUAL: 'Equal',
 };
 
-export default ({ entityType, columns: initialColumns, filters: listFilters, pageSize: initialPageSize, editLink, deleteLink }) => {
-  const [pageSize, setPageSize] = useState(initialPageSize);
+export default ({ entityType  }) => {
+  
+  const [settings, setSettings] = useState({ loading: true });
+  const [pageSize, setPageSize] = useState();
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [pages, setPages] = useState();
-  const [columns, setColumns] = useState(initialColumns);
-  const [filters, setFilters] = useState({});
+  const [columns, setColumns] = useState();
+  const [filterOptions, setFilterOptions] = useState([]);
+  const [filters, setFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const [error, setError] = useState();
@@ -53,8 +56,26 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
 
   useEffect(function () {
     (async () => {
-      setError(null);
+      await fetch(`/Admin/api/list/settings?entityTypeName=${entityType}`, { credentials: 'include' })
+        .then(r => r.json())
+        .then(r => {
+          console.log(r.redirectUrl)
+          if (r.redirectUrl) {
+            window.location.href = r.redirectUrl;
+            return;
+          }
+          setPageSize(r.pageSize);
+          setColumns(r.columns);
+          setFilterOptions(r.filters);
+          setSettings(r);
+        });
+    })();
+  }, []);
 
+  useEffect(function () {
+    if (settings.loading) return;
+    (async () => {
+      setError(null);
       const response = await fetch(
         `/Admin/api/list/result?entityType=${entityType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`,
         {
@@ -75,7 +96,7 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
       setPageCount(pageCount);
       setPages([...Array(pageCount)]);
     })();
-  }, [page, pageSize, columns, filters, retryError, search, orderBy, orderByDirection]);
+  }, [settings, page, pageSize, columns, filters, retryError, search, orderBy, orderByDirection]);
 
   let content = null;
 
@@ -109,8 +130,8 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
               html`<td dangerouslySetInnerHTML=${{ __html: d.values[i] }}></td>`
             )}
             <td>
-              <a class="me-2" href=${`${editLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
-              <a href=${`${deleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
+              <a class="me-2" href=${`${settings.editLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Edit</a>
+              <a href=${`${settings.deleteLink}${d.keys.map(k => `&keys=${k}`).join('&')}`}>Delete</a>
             </td>
           </tr>`)}
           ${[...new Array(pageSize - data.items.length)].map(() => html`<tr class="list-page-blank-row"><td class="nbsp" /></tr>`)}
@@ -119,33 +140,46 @@ export default ({ entityType, columns: initialColumns, filters: listFilters, pag
     </div>`;
   }
 
-  return html`
-    <div class="list-page-header m-2">
-      <div class="list-page-search">
-        <${SearchBox} callback=${value => setSearch(value)} floating=${listFilters.length} />
+  return <>
+      <div class="container">
+        <h1 class="h2 mb-3">
+          Listing {settings.entityTypePluralName}
+          &nbsp;<a class="btn btn-sm btn-primary" href={`/Admin/New/${entityType}`}>New</a>
+        </h1>
       </div>
-      ${listFilters.map(c => html`<${ListFilter} ...${c} filter=${(key, value) => {
-        if (!value) {
-          var newFilters = { ...filters };
+      <div class="container">
+        <div class="card">
+          <div class="card-body" style="min-height: 500px;">
+            <div class="list-page-header m-2">
+              <div class="list-page-search">
+                <SearchBox callback={value => setSearch(value)} floating={filters.length} />
+              </div>
+              {filterOptions.map(c => html`<${ListFilter} ...${c} filter=${(key, value) => {
+                if (!value) {
+                  var newFilters = { ...filters };
 
-          delete newFilters[key];
+                  delete newFilters[key];
 
-          setFilters(newFilters);
-          return;
-        }
+                  setFilters(newFilters);
+                  return;
+                }
 
-        setFilters({ ...filters, [key]: value });
-      }} />`)}
-    </div>
-    <div class="table-responsive">
-      ${content}
-      ${pages && html`<nav>
-        <ul class="pagination justify-content-center">
-          <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))}>Previous</a></li>
-          ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
-          <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
-        </ul>
-      </nav>`}
-    </div>
-  `;
+                setFilters({ ...filters, [key]: value });
+              }} />`)}
+            </div>
+            <div class="table-responsive">
+              {content}
+              {pages && html`<nav>
+                <ul class="pagination justify-content-center">
+                  <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))}>Previous</a></li>
+                  ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
+                  <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
+                </ul>
+              </nav>`}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  ;
 }
