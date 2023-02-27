@@ -20,6 +20,9 @@ using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.FieldSupport.CustomSelect;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.DependencyInjection;
+using Cloudy.CMS.Naming;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -27,21 +30,30 @@ namespace Cloudy.CMS.UI.List
     [ResponseCache(NoStore = true)]
     public class ListResultController : Controller
     {
+        INameGetter NameGetter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
-        ICompositeViewEngine CompositeViewEngine { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IReferenceDeserializer ReferenceDeserializer { get; }
+        IServiceProvider ServiceProvider { get; }
 
-        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, IReferenceDeserializer referenceDeserializer)
+        public ListResultController(
+            IPropertyDefinitionProvider propertyDefinitionProvider,
+            IEntityTypeProvider entityTypeProvider,
+            IContextCreator contextCreator,
+            IPrimaryKeyGetter primaryKeyGetter,
+            IReferenceDeserializer referenceDeserializer,
+            IServiceProvider serviceProvider,
+            INameGetter nameGetter)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
-            CompositeViewEngine = compositeViewEngine;
             PrimaryKeyGetter = primaryKeyGetter;
             ReferenceDeserializer = referenceDeserializer;
+            ServiceProvider = serviceProvider;
+            NameGetter = nameGetter;
         }
 
         [HttpGet]
@@ -99,7 +111,7 @@ namespace Cloudy.CMS.UI.List
 
             await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
             {
-                var columnValues = new List<string>();
+                var columnInfos = new List<ColumnInfo>();
 
                 foreach(var propertyDefinition in selectedPropertyDefinitions)
                 {
@@ -131,30 +143,20 @@ namespace Cloudy.CMS.UI.List
                     {
                         partialViewName = $"Columns/{uiHint}";
                     }
-
-                    var viewResult = CompositeViewEngine.FindView(ControllerContext, partialViewName, false);
-
-                    if (!viewResult.Success)
-                    {
-                        throw new InvalidOperationException($"The partial view '{partialViewName}' was not found. The following locations were searched:{Environment.NewLine}{string.Join(Environment.NewLine, viewResult.SearchedLocations)}");
-                    }
-
-                    var view = viewResult.View;
-
-                    using (var writer = new StringWriter())
-                    using (view as IDisposable)
-                    {
-                        var viewData = new ViewDataDictionary(ViewData) { Model = new ListColumnViewModel(type, instance, propertyDefinition, propertyDefinition.Getter(instance)) };
-
-                        var viewContext = new ViewContext(ControllerContext, view, viewData, TempData, writer, new HtmlHelperOptions());
-                        await view.RenderAsync(viewContext).ConfigureAwait(false);
-                        columnValues.Add(writer.ToString().Trim());
-                    }
+                    
+                    columnInfos.Add(
+                        new ColumnInfo(
+                            await GetFriendlyValue(propertyDefinition, instance),
+                            partialViewName,
+                            type.IsImageable,
+                            type.IsImageable ? ((IImageable)instance).Image : string.Empty
+                        )
+                    );
                 }
 
                 result.Add(new ListRow(
                     PrimaryKeyGetter.Get(instance),
-                    columnValues
+                    columnInfos
                 ));
             }
 
@@ -164,6 +166,44 @@ namespace Cloudy.CMS.UI.List
             );
         }
 
+        private async Task<object> GetFriendlyValue(PropertyDefinitionDescriptor propertyDefinition, object instance)
+        {
+            var value = propertyDefinition.Getter(instance);
+            if (value is null) return null;
+
+            var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
+            if (customSelectAttribute is not null)
+            {
+                var factoryType = customSelectAttribute.GetType().GenericTypeArguments.FirstOrDefault();
+                var factory = ServiceProvider.GetService(factoryType) as ICustomSelectFactory;
+                var items = await factory.GetItems();
+
+                if (propertyDefinition.List)
+                {
+                    var selectedValues = value as IList<string>;
+                    return selectedValues is null ? string.Empty : string.Join(", ", items.Where(i => selectedValues?.Contains(i.Value) ?? false).Select(i => i.Text).Order());
+                }
+                else
+                {
+                    return items.FirstOrDefault(x => x.Value == value.ToString())?.Text;
+                }
+            }
+
+            var selectAttribute = propertyDefinition.Attributes.OfType<ISelectAttribute>().FirstOrDefault();
+            if (selectAttribute is not null)
+            {
+                if (value.Equals(Activator.CreateInstance(value.GetType()))) return null;
+
+                var type = EntityTypeProvider.Get(selectAttribute.Type);
+                var context = ContextCreator.CreateFor(type.Type);
+                var relatedInstance = await context.Context.FindAsync(type.Type, value).ConfigureAwait(false);
+                var name = NameGetter.GetName(relatedInstance);
+                return new { name = name ?? "Does not exist", image = (relatedInstance as IImageable)?.Image };
+            }
+
+            return value;
+        }
+
         public record ListResultResponse(
             IEnumerable<ListRow> Items,
             int TotalCount
@@ -171,7 +211,14 @@ namespace Cloudy.CMS.UI.List
 
         public record ListRow(
             IEnumerable<object> Keys,
-            IEnumerable<string> Values
+            IEnumerable<ColumnInfo> Values
+        );
+
+        public record ColumnInfo(
+            object Value,
+            string Partial,
+            bool IsImageable,
+            string Image
         );
     }
 }
