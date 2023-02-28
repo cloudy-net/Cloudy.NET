@@ -1,25 +1,22 @@
 ﻿using Cloudy.CMS.ContextSupport;
+using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.EntitySupport.PrimaryKey;
+using Cloudy.CMS.EntitySupport.Reference;
 using Cloudy.CMS.EntityTypeSupport;
+using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.CMS.UI.FieldSupport;
+using Cloudy.CMS.UI.FieldSupport.CustomSelect;
+using Cloudy.CMS.UI.FieldSupport.Select;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Threading.Tasks;
-using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntitySupport.Reference;
 using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Authorization;
-using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.UI.FieldSupport.Select;
-using Cloudy.CMS.UI.FieldSupport.CustomSelect;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -27,33 +24,39 @@ namespace Cloudy.CMS.UI.List
     [ResponseCache(NoStore = true)]
     public class ListResultController : Controller
     {
+        IFieldFriendlyValueProvider FieldFriendlyValueProvider { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
-        ICompositeViewEngine CompositeViewEngine { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IReferenceDeserializer ReferenceDeserializer { get; }
 
-        public ListResultController(IPropertyDefinitionProvider propertyDefinitionProvider, IEntityTypeProvider entityTypeProvider, IContextCreator contextCreator, ICompositeViewEngine compositeViewEngine, IPrimaryKeyGetter primaryKeyGetter, IReferenceDeserializer referenceDeserializer)
+        public ListResultController(
+            IPropertyDefinitionProvider propertyDefinitionProvider,
+            IEntityTypeProvider entityTypeProvider,
+            IContextCreator contextCreator,
+            IPrimaryKeyGetter primaryKeyGetter,
+            IReferenceDeserializer referenceDeserializer,
+            IFieldFriendlyValueProvider fieldFriendlyValueProvider)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
-            CompositeViewEngine = compositeViewEngine;
             PrimaryKeyGetter = primaryKeyGetter;
             ReferenceDeserializer = referenceDeserializer;
+            FieldFriendlyValueProvider = fieldFriendlyValueProvider;
         }
 
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string entityType, string columns, [FromQuery(Name = "filters")]IDictionary<string, string> filters, int page, int pageSize, string search, string orderBy, string orderByDirection)
+        public async Task<ListResultResponse> ListResult(string entityType, string columns, [FromQuery(Name = "filters")] IDictionary<string, string> filters, int page, int pageSize, string search, string orderBy, string orderByDirection)
         {
             var columnNames = columns.Split(",");
             var type = EntityTypeProvider.Get(entityType);
             var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name);
             var selectedPropertyDefinitions = columnNames.Select(n => propertyDefinitions.First(p => n == p.Name));
-            
+
             var context = ContextCreator.CreateFor(type.Type);
 
             var dbSet = (IQueryable)context.GetDbSet(type.Type);
@@ -70,7 +73,7 @@ namespace Cloudy.CMS.UI.List
                 var queries = new List<string>();
                 var values = new List<object>();
 
-                foreach(var filter in filters)
+                foreach (var filter in filters)
                 {
                     queries.Add($"{filter.Key} == @{i++}");
 
@@ -92,16 +95,16 @@ namespace Cloudy.CMS.UI.List
             {
                 dbSet = dbSet.OrderBy($"{orderBy} == NULL").ThenBy($"{orderBy} {orderByDirection}");
             }
-            
+
             dbSet = dbSet.Page(page, pageSize);
 
             var result = new List<ListRow>();
 
             await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
             {
-                var columnValues = new List<string>();
+                var columnInfos = new List<ColumnInfo>();
 
-                foreach(var propertyDefinition in selectedPropertyDefinitions)
+                foreach (var propertyDefinition in selectedPropertyDefinitions)
                 {
                     var partialViewName = $"Columns/text";
 
@@ -127,34 +130,22 @@ namespace Cloudy.CMS.UI.List
 
                     var uiHint = propertyDefinition.Attributes.OfType<ListColumnAttribute>().FirstOrDefault()?.UIHint;
 
-                    if(uiHint != null)
+                    if (uiHint != null)
                     {
                         partialViewName = $"Columns/{uiHint}";
                     }
 
-                    var viewResult = CompositeViewEngine.FindView(ControllerContext, partialViewName, false);
-
-                    if (!viewResult.Success)
-                    {
-                        throw new InvalidOperationException($"The partial view '{partialViewName}' was not found. The following locations were searched:{Environment.NewLine}{string.Join(Environment.NewLine, viewResult.SearchedLocations)}");
-                    }
-
-                    var view = viewResult.View;
-
-                    using (var writer = new StringWriter())
-                    using (view as IDisposable)
-                    {
-                        var viewData = new ViewDataDictionary(ViewData) { Model = new ListColumnViewModel(type, instance, propertyDefinition, propertyDefinition.Getter(instance)) };
-
-                        var viewContext = new ViewContext(ControllerContext, view, viewData, TempData, writer, new HtmlHelperOptions());
-                        await view.RenderAsync(viewContext).ConfigureAwait(false);
-                        columnValues.Add(writer.ToString().Trim());
-                    }
+                    columnInfos.Add(new ColumnInfo(
+                        await FieldFriendlyValueProvider.GetFriendlyValue(propertyDefinition, instance),
+                        partialViewName,
+                        type.IsImageable,
+                        type.IsImageable ? ((IImageable)instance).Image : string.Empty
+                    ));
                 }
 
                 result.Add(new ListRow(
                     PrimaryKeyGetter.Get(instance),
-                    columnValues
+                    columnInfos
                 ));
             }
 
@@ -171,7 +162,14 @@ namespace Cloudy.CMS.UI.List
 
         public record ListRow(
             IEnumerable<object> Keys,
-            IEnumerable<string> Values
+            IEnumerable<ColumnInfo> Values
+        );
+
+        public record ColumnInfo(
+            object Value,
+            string Partial,
+            bool IsImageable,
+            string Image
         );
     }
 }

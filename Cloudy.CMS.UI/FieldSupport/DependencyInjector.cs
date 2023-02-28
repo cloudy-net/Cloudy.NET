@@ -1,10 +1,5 @@
 ﻿using Cloudy.CMS.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FieldSupport
 {
@@ -14,6 +9,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         {
             services.AddSingleton<IFieldCreator, FieldCreator>();
             services.AddSingleton<IFieldProvider, FieldProvider>();
+            services.AddScoped<IFieldFriendlyValueProvider, FieldFriendlyValueProvider>();
         }
     }
 }

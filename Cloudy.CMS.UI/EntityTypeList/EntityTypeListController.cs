@@ -1,8 +1,10 @@
 ﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntityTypeSupport.Naming;
+using Cloudy.CMS.Naming;
 using Cloudy.CMS.SingletonSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,15 +21,18 @@ namespace Cloudy.CMS.UI.EntityTypeList
         private readonly IEntityTypeNameProvider entityTypeNameProvider;
         private readonly IEntityTypeProvider entityTypeProvider;
         private readonly ISingletonGetter singletonGetter;
+        private readonly INameGetter nameGetter;
 
         public EntityTypeListController(
             IEntityTypeProvider entityTypeProvider,
             IEntityTypeNameProvider entityTypeNameProvider,
-            ISingletonGetter singletonGetter)
+            ISingletonGetter singletonGetter,
+            INameGetter nameGetter)
         {
             this.entityTypeProvider = entityTypeProvider;
             this.entityTypeNameProvider = entityTypeNameProvider;
             this.singletonGetter = singletonGetter;
+            this.nameGetter = nameGetter;
         }
 
         [HttpGet]
@@ -36,12 +41,19 @@ namespace Cloudy.CMS.UI.EntityTypeList
         public async Task<IEnumerable<EntityTypeItem>> ListResult()
         {
             var entityTypes = entityTypeProvider.GetAll().Where(t => t.IsIndependent);
-            var entityTypeItems = entityTypes.Select(async entityType => new EntityTypeItem(
-                entityTypeNameProvider.Get(entityType.Type).PluralName,
-                entityType.Type.GetCustomAttribute<DisplayAttribute>()?.Description,
-                entityType.IsSingleton,
-                await GetLink(entityType).ToListAsync()
-            ));
+            var entityTypeItems = entityTypes.Select(async entityType =>
+            {
+                var name = entityTypeNameProvider.Get(entityType.Type);
+
+                return new EntityTypeItem(
+                    name.PluralName,
+                    entityType.Name,
+                    name.Name,
+                    entityType.Type.GetCustomAttribute<DisplayAttribute>()?.Description,
+                    entityType.IsSingleton,
+                    await GetLink(entityType).ToListAsync()
+                );
+            });
 
             return await Task.WhenAll(entityTypeItems);
         }
@@ -86,6 +98,8 @@ namespace Cloudy.CMS.UI.EntityTypeList
 
         public record EntityTypeItem(
             string PluralName,
+            string EntityTypeName,
+            string Name,
             string Description,
             bool IsSingleton,
             IEnumerable<Link> Links
