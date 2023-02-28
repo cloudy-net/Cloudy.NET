@@ -19,5 +19,5 @@ RUN npm install
 FROM base AS final
 WORKDIR /App
 COPY --from=build /App/TestWebsite/out .
-COPY --from=buildjs /App/wwwroot-src/dist ./wwwroot/
+COPY --from=buildjs /App/wwwroot ./wwwroot/
 ENTRYPOINT ["dotnet", "TestWebsite.dll"]
