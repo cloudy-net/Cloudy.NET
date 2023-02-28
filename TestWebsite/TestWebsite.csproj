@@ -6,7 +6,31 @@
 		<NoWarn>CS1998</NoWarn>
 	</PropertyGroup>
 
+	<!-- Can be used for publishing on local and run on IIS -->
+	<!--<PropertyGroup>
+		<SpaRoot>..\Cloudy.CMS.UI\wwwroot-src\</SpaRoot>
+	</PropertyGroup>
+
+	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+		
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+		<ItemGroup>
+			<DistFiles Include="$(SpaRoot)dist\**"/>
+			<DistFiles>
+				<PublishPath>$([System.String]::Copy('%(RelativeDir)').Replace($(SpaRoot)dist, 'wwwroot'))</PublishPath>
+			</DistFiles>
+			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+				<RelativePath>%(DistFiles.PublishPath)%(DistFiles.FileName)%(DistFiles.Extension)</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<ExcludeFromSingleFile>True</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+	</Target>-->
+
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.3" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
 	</ItemGroup>
 

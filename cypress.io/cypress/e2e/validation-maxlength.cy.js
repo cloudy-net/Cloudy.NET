@@ -3,7 +3,7 @@ describe('MaxLength validation', () => {
 
   beforeEach(() => {
     cy.saveSpy();
-    cy.visit('/Admin/New?EntityType=Page');
+    cy.visit('/Admin/New/Page');
   })
   
   it('Fire when a too long name is entered', () => {

@@ -17,11 +17,15 @@ function Form({ entityTypeName, mode }) {
   const [loaded, setLoaded] = useState(false);
   const [keyValues, setKeyValues] = useState(null);
   const [entityType, setEntityType] = useState({});
-  const { getEntityTypeByTypeName } = useContext(EntityTypesContext);
+  const { entityTypes, getEntityTypeByTypeName } = useContext(EntityTypesContext);
+
+  useEffect(() => {
+    if (entityTypes.length) {
+      setEntityType(getEntityTypeByTypeName(entityTypeName));
+    }
+  }, [entityTypes]);
 
   useEffect(function () {
-
-    setEntityType(getEntityTypeByTypeName(entityTypeName));
 
     let keyValuesFromUrl = new URL(document.location).searchParams.getAll('keys');
     if (keyValuesFromUrl && keyValuesFromUrl.length) {
@@ -54,7 +58,7 @@ function Form({ entityTypeName, mode }) {
   const NewHeader = () => <div class="container">
     <h1 class="h2 mb-3">
         { entityType.name }&nbsp;
-        <a class="btn btn-sm btn-beta" href="/Admin">Back</a>
+        <a class="btn btn-sm btn-beta" href="/Admin/">Back</a>
     </h1>
   </div>;
 

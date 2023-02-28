@@ -7,7 +7,7 @@ describe('Page - Edit', () => {
     cy.wait(2000);
 
     // Visist first page
-    cy.visit('/Admin/List?EntityType=Page');
+    cy.visit('/Admin/List/Page');
     cy.wait(2000);
     cy.get('table.table--content-list td a').first().click();
     

@@ -4,8 +4,8 @@ import html from '@src/html-init.js';
 import { render } from 'preact'
 import { Router, Route } from 'preact-router';
 
-import Table from './list-page/table.js'
-import Form from './form/form.js';
+import Table from './list-page/table'
+import Form from './form/form';
 import EntityTypeList from './entity-type-list/entity-type-list';
 
 import Header from './layout/header';

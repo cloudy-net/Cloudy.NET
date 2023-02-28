@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using System;
 using TestWebsite.Factories;
 using TestWebsite.Models;
@@ -29,6 +30,11 @@ namespace TestWebsite
             services.AddDbContext<PageContext>(options => options
                 .UseInMemoryDatabase("cloudytest")
             );
+
+            builder.Services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "../Cloudy.CMS.UI/wwwroot-src";
+            });
 
             services.AddSingleton<IColorFactory, ColorFactory>();
         }
@@ -82,7 +88,7 @@ namespace TestWebsite
 
                 context.StartPages.Add(start);
 
-                context.PageTree.Add(new PageTree { 
+                context.PageTree.Add(new PageTree {
                     Id = new Guid("01890840-911d-42a4-98de-ffc421225a35"),
                     EntityType = nameof(StartPage),
                     EntityId = start.Id,
@@ -115,15 +121,52 @@ namespace TestWebsite
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-                endpoints.MapGet("/", async c => c.Response.Redirect("/Admin"));
+                endpoints.MapGet("/", async c => c.Response.Redirect("/Admin/"));
                 endpoints.MapGet("/pages", async c => await c.Response.WriteAsJsonAsync(c.RequestServices.GetService<PageContext>().Pages));
-                
-                endpoints.MapGet("/pages/{route:contentroute(PageTree)}", async c => 
+
+                endpoints.MapGet("/pages/{route:contentroute(PageTree)}", async c =>
                     await c.Response.WriteAsync($"Hello {c.GetContentFromContentRoute<Page>().Name}")
                 );
-                
+
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Index" });
             });
+
+            var spaPath = "/Admin";
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+
+                app.MapWhen(y => y.Request.Path.StartsWithSegments(spaPath), client =>
+                {
+                    client.UseSpa(spa => spa.UseProxyToSpaDevelopmentServer("https://localhost:5001/"));
+                });
+            }
+            else
+            {
+                app.UseHttpsRedirection();
+
+                app.Map(new PathString(spaPath), client =>
+                {
+                    client.UseSpa(spa =>
+                    {
+                        spa.Options.SourcePath = "../Cloudy.CMS.UI/wwwroot-src/dist";
+
+                        spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
+                        {
+                            OnPrepareResponse = ctx =>
+                            {
+                                var headers = ctx.Context.Response.GetTypedHeaders();
+                                headers.CacheControl = new CacheControlHeaderValue
+                                {
+                                    NoCache = true,
+                                    NoStore = true,
+                                    MustRevalidate = true
+                                };
+                            }
+                        };
+                    });
+                });
+            }
         }
     }
 }

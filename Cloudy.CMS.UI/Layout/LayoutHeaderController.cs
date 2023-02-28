@@ -1,6 +1,7 @@
 ﻿using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntityTypeSupport.Naming;
 using Cloudy.CMS.Naming;
+using Cloudy.CMS.UI.Layout;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -52,7 +53,7 @@ namespace Cloudy.CMS.UI.List
                 yield return new EntityTypeLink
                 {
                     Text = entityType.IsSingleton ? name.Name : name.PluralName,
-                    Url = $"/Admin/List/{entityType.Name}"
+                    Url = UrlBuilder.Build(keys: null, "Admin", "List", entityType.Name)
                 };
             }
         }
