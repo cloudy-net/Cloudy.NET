@@ -1,22 +1,14 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useContext } from 'preact/hooks';
+import EntityTypesContext from '../form/entity-types-context';
 
 export default () => {
+  const { entityTypes } = useContext(EntityTypesContext);
 
-  const [entityTypes, setEntityTypes] = useState([]);
-
-  useEffect(function () {
-    (async () => {
-      await fetch('/Admin/api/entity-type-list/result', { credentials: 'include' })
-        .then(r => r.json())
-        .then(json => setEntityTypes(json));
-    })();
-  }, []);
-
-  return <>
+  const Table = () => <>
     <div class="container">
-        <h1 class="h2 mb-3">
-            What to edit?
-        </h1>
+      <h1 class="h2 mb-3">
+        What to edit?
+      </h1>
     </div>
     <div class="container">
       <div class="row">
@@ -40,4 +32,6 @@ export default () => {
       </div>
     </div>
   </>
+
+  return <Table />;
 }

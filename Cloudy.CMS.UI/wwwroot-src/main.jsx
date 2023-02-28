@@ -11,20 +11,22 @@ import EntityTypeList from './entity-type-list/entity-type-list';
 import Header from './layout/header';
 import Footer from './layout/footer';
 
+import EntityTypesProvider from './form/entity-types-provider';
+
 window.viteIsLoaded = true;
 
 if (document.getElementById('app')) {
   const Main = () => (
-    <>
+    <EntityTypesProvider>
       <Header />
       <Router>
         <EntityTypeList path="/Admin/" />
         <Table path="/Admin/List/:entityType" />
-        <Form path="/Admin/New/:entityType" />
-        <Form path="/Admin/Edit/:entityType" />
+        <Form path="/Admin/New/:entityType" mode="new" />
+        <Form path="/Admin/Edit/:entityType" mode="edit"  />
       </Router>
       <Footer />
-    </>
+    </EntityTypesProvider>
   );
 
   render(<Main />, document.getElementById('app'));

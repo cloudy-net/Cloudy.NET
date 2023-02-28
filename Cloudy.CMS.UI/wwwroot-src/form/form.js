@@ -8,7 +8,7 @@ import { useState, useEffect } from 'preact/hooks';
 
 import ValidationManager from '../data/validation-manager.js';
 
-function Form({ entityType }) {
+function Form({ entityType, mode }) {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const [fields, setFields] = useState();
@@ -45,7 +45,15 @@ function Form({ entityType }) {
     })();
   }, []);
 
+  const NewHeader = () => <div class="container">
+  <h1 class="h2 mb-3">
+      New @Model.EntityTypeName.LowerCaseName
+      <a class="btn btn-sm btn-beta" href="#">Back</a>
+  </h1>
+</div>;
+  
   return loaded && html`<${FieldComponentProvider}>
+    ${ mode === 'new' ? <NewHeader/> : <div>edit</div> }
     <${EntityContextProvider} ...${{ entityType, keyValues }}>
       <${Changes} />
       <${FormFields} ...${{ fields, error, loading }} />
