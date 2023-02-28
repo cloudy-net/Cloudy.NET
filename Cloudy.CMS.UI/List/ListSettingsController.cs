@@ -63,17 +63,17 @@ namespace Cloudy.CMS.UI.List
 
             return listSettings;
         }
+    }
 
-        public class ListSettings
-        {
-            public IEnumerable<ListColumnDescriptor> Columns { get; set; }
-            public IEnumerable<ListFilterDescriptor> Filters { get; set; }
-            public string EntityTypeName { get; set; }
-            public string EntityTypePluralName { get; set; }
-            public int PageSize => 15;
-            public string RedirectUrl { get; set; }
-            public string EditLink { get; set; }
-            public string DeleteLink { get; set; }
-        }
+    public class ListSettings
+    {
+        public IEnumerable<ListColumnDescriptor> Columns { get; set; }
+        public IEnumerable<ListFilterDescriptor> Filters { get; set; }
+        public string EntityTypeName { get; set; }
+        public string EntityTypePluralName { get; set; }
+        public int PageSize => 15;
+        public string RedirectUrl { get; set; }
+        public string EditLink { get; set; }
+        public string DeleteLink { get; set; }
     }
 }
