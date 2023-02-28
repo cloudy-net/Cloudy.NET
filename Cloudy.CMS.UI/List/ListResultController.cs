@@ -1,28 +1,22 @@
 ﻿using Cloudy.CMS.ContextSupport;
+using Cloudy.CMS.EntitySupport;
+using Cloudy.CMS.EntitySupport.PrimaryKey;
+using Cloudy.CMS.EntitySupport.Reference;
 using Cloudy.CMS.EntityTypeSupport;
+using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.CMS.UI.FieldSupport;
+using Cloudy.CMS.UI.FieldSupport.CustomSelect;
+using Cloudy.CMS.UI.FieldSupport.Select;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Threading.Tasks;
-using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntitySupport.Reference;
 using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Authorization;
-using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.UI.FieldSupport.Select;
-using Cloudy.CMS.UI.FieldSupport.CustomSelect;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.Extensions.DependencyInjection;
-using Cloudy.CMS.Naming;
+using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.List
 {
@@ -30,13 +24,12 @@ namespace Cloudy.CMS.UI.List
     [ResponseCache(NoStore = true)]
     public class ListResultController : Controller
     {
-        INameGetter NameGetter { get; }
+        IFieldFriendlyValueProvider FieldFriendlyValueProvider { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IReferenceDeserializer ReferenceDeserializer { get; }
-        IServiceProvider ServiceProvider { get; }
 
         public ListResultController(
             IPropertyDefinitionProvider propertyDefinitionProvider,
@@ -44,28 +37,26 @@ namespace Cloudy.CMS.UI.List
             IContextCreator contextCreator,
             IPrimaryKeyGetter primaryKeyGetter,
             IReferenceDeserializer referenceDeserializer,
-            IServiceProvider serviceProvider,
-            INameGetter nameGetter)
+            IFieldFriendlyValueProvider fieldFriendlyValueProvider)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             PrimaryKeyGetter = primaryKeyGetter;
             ReferenceDeserializer = referenceDeserializer;
-            ServiceProvider = serviceProvider;
-            NameGetter = nameGetter;
+            FieldFriendlyValueProvider = fieldFriendlyValueProvider;
         }
 
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/result")]
-        public async Task<ListResultResponse> ListResult(string entityType, string columns, [FromQuery(Name = "filters")]IDictionary<string, string> filters, int page, int pageSize, string search, string orderBy, string orderByDirection)
+        public async Task<ListResultResponse> ListResult(string entityType, string columns, [FromQuery(Name = "filters")] IDictionary<string, string> filters, int page, int pageSize, string search, string orderBy, string orderByDirection)
         {
             var columnNames = columns.Split(",");
             var type = EntityTypeProvider.Get(entityType);
             var propertyDefinitions = PropertyDefinitionProvider.GetFor(type.Name);
             var selectedPropertyDefinitions = columnNames.Select(n => propertyDefinitions.First(p => n == p.Name));
-            
+
             var context = ContextCreator.CreateFor(type.Type);
 
             var dbSet = (IQueryable)context.GetDbSet(type.Type);
@@ -82,7 +73,7 @@ namespace Cloudy.CMS.UI.List
                 var queries = new List<string>();
                 var values = new List<object>();
 
-                foreach(var filter in filters)
+                foreach (var filter in filters)
                 {
                     queries.Add($"{filter.Key} == @{i++}");
 
@@ -104,7 +95,7 @@ namespace Cloudy.CMS.UI.List
             {
                 dbSet = dbSet.OrderBy($"{orderBy} == NULL").ThenBy($"{orderBy} {orderByDirection}");
             }
-            
+
             dbSet = dbSet.Page(page, pageSize);
 
             var result = new List<ListRow>();
@@ -113,7 +104,7 @@ namespace Cloudy.CMS.UI.List
             {
                 var columnInfos = new List<ColumnInfo>();
 
-                foreach(var propertyDefinition in selectedPropertyDefinitions)
+                foreach (var propertyDefinition in selectedPropertyDefinitions)
                 {
                     var partialViewName = $"Columns/text";
 
@@ -139,19 +130,17 @@ namespace Cloudy.CMS.UI.List
 
                     var uiHint = propertyDefinition.Attributes.OfType<ListColumnAttribute>().FirstOrDefault()?.UIHint;
 
-                    if(uiHint != null)
+                    if (uiHint != null)
                     {
                         partialViewName = $"Columns/{uiHint}";
                     }
-                    
-                    columnInfos.Add(
-                        new ColumnInfo(
-                            await GetFriendlyValue(propertyDefinition, instance),
-                            partialViewName,
-                            type.IsImageable,
-                            type.IsImageable ? ((IImageable)instance).Image : string.Empty
-                        )
-                    );
+
+                    columnInfos.Add(new ColumnInfo(
+                        await FieldFriendlyValueProvider.GetFriendlyValue(propertyDefinition, instance),
+                        partialViewName,
+                        type.IsImageable,
+                        type.IsImageable ? ((IImageable)instance).Image : string.Empty
+                    ));
                 }
 
                 result.Add(new ListRow(
@@ -164,44 +153,6 @@ namespace Cloudy.CMS.UI.List
                 result,
                 totalCount
             );
-        }
-
-        private async Task<object> GetFriendlyValue(PropertyDefinitionDescriptor propertyDefinition, object instance)
-        {
-            var value = propertyDefinition.Getter(instance);
-            if (value is null) return null;
-
-            var customSelectAttribute = propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().FirstOrDefault();
-            if (customSelectAttribute is not null)
-            {
-                var factoryType = customSelectAttribute.GetType().GenericTypeArguments.FirstOrDefault();
-                var factory = ServiceProvider.GetService(factoryType) as ICustomSelectFactory;
-                var items = await factory.GetItems();
-
-                if (propertyDefinition.List)
-                {
-                    var selectedValues = value as IList<string>;
-                    return selectedValues is null ? string.Empty : string.Join(", ", items.Where(i => selectedValues?.Contains(i.Value) ?? false).Select(i => i.Text).Order());
-                }
-                else
-                {
-                    return items.FirstOrDefault(x => x.Value == value.ToString())?.Text;
-                }
-            }
-
-            var selectAttribute = propertyDefinition.Attributes.OfType<ISelectAttribute>().FirstOrDefault();
-            if (selectAttribute is not null)
-            {
-                if (value.Equals(Activator.CreateInstance(value.GetType()))) return null;
-
-                var type = EntityTypeProvider.Get(selectAttribute.Type);
-                var context = ContextCreator.CreateFor(type.Type);
-                var relatedInstance = await context.Context.FindAsync(type.Type, value).ConfigureAwait(false);
-                var name = NameGetter.GetName(relatedInstance);
-                return new { name = name ?? "Does not exist", image = (relatedInstance as IImageable)?.Image };
-            }
-
-            return value;
         }
 
         public record ListResultResponse(
