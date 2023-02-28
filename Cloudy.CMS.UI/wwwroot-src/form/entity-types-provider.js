@@ -16,7 +16,9 @@ export default ({ children }) => {
     })();
   }, []);
 
-  return <EntityTypesContext.Provider value={{entityTypes}}>
+  const getEntityTypeByTypeName = (entityTypeName) => entityTypes.find(et => et.entityTypeName === entityTypeName);
+
+  return <EntityTypesContext.Provider value={{entityTypes, getEntityTypeByTypeName}}>
     {children}
   </EntityTypesContext.Provider>;
 };

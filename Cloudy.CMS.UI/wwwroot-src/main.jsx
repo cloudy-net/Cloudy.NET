@@ -22,8 +22,8 @@ if (document.getElementById('app')) {
       <Router>
         <EntityTypeList path="/Admin/" />
         <Table path="/Admin/List/:entityType" />
-        <Form path="/Admin/New/:entityType" mode="new" />
-        <Form path="/Admin/Edit/:entityType" mode="edit"  />
+        <Form path="/Admin/New/:entityTypeName" mode="new" />
+        <Form path="/Admin/Edit/:entityTypeName" mode="edit"  />
       </Router>
       <Footer />
     </EntityTypesProvider>

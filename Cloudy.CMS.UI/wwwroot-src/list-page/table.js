@@ -2,6 +2,7 @@ import html from '@src/html-init.js';
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box.js';
 import ListFilter from './list-filter.js';
+import Card from '@src/layout/card.jsx';
 
 export const SORT_DIRECTIONS = {
   ASCENDING: 'asc',
@@ -100,12 +101,12 @@ export default ({ entityType }) => {
 
   let content = null;
 
-  const GetColumnComponent = ({partial, isImageable, image, value, keys}) => {
+  const GetColumnComponent = ({ partial, isImageable, image, value, keys }) => {
     switch (partial) {
       case 'Columns/name':
         return <>
-          { isImageable && image && <img class="list-image-in-name" src={image} alt="" />}
-          { isImageable && !image && <div class="list-image-in-name list-image-in-name--image-not-set"><span class="list-image-in-name--image-not-set__bg"></span></div>}
+          {isImageable && image && <img class="list-image-in-name" src={image} alt="" />}
+          {isImageable && !image && <div class="list-image-in-name list-image-in-name--image-not-set"><span class="list-image-in-name--image-not-set__bg"></span></div>}
           <a href={`${settings.editLink}?${keys.map(k => `keys=${k}`).join('&')}`}>{value}</a>
         </>;
       case 'Columns/image':
@@ -113,7 +114,7 @@ export default ({ entityType }) => {
       case 'Columns/text':
         return <>{value}</>;
       case 'Columns/select':
-        return value && <>{ value.image && <img class="list-image-in-name" src={value.image} alt="" /> }{value.name}</>;
+        return value && <>{value.image && <img class="list-image-in-name" src={value.image} alt="" />}{value.name}</>;
       case 'Columns/customselect':
         return <>{value}</>;
     }
@@ -165,39 +166,35 @@ export default ({ entityType }) => {
         &nbsp;<a class="btn btn-sm btn-primary" href={`/Admin/New/${entityType}`}>New</a>
       </h1>
     </div>
-    <div class="container">
-      <div class="card">
-        <div class="card-body" style="min-height: 500px;">
-          <div class="list-page-header m-2">
-            <div class="list-page-search">
-              <SearchBox callback={value => setSearch(value)} floating={filters.length} />
-            </div>
-            {filterOptions.map(c => html`<${ListFilter} ...${c} filter=${(key, value) => {
-              if (!value) {
-                var newFilters = { ...filters };
-
-                delete newFilters[key];
-
-                setFilters(newFilters);
-                return;
-              }
-
-              setFilters({ ...filters, [key]: value });
-            }} />`)}
-          </div>
-          <div class="table-responsive">
-            {content}
-            {pages && html`<nav>
-                <ul class="pagination justify-content-center">
-                  <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))}>Previous</a></li>
-                  ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
-                  <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
-                </ul>
-              </nav>`}
-          </div>
+    <Card>
+      <div class="list-page-header m-2">
+        <div class="list-page-search">
+          <SearchBox callback={value => setSearch(value)} floating={filters.length} />
         </div>
+        {filterOptions.map(c => html`<${ListFilter} ...${c} filter=${(key, value) => {
+          if (!value) {
+            var newFilters = { ...filters };
+
+            delete newFilters[key];
+
+            setFilters(newFilters);
+            return;
+          }
+
+          setFilters({ ...filters, [key]: value });
+        }} />`)}
       </div>
-    </div>
+      <div class="table-responsive">
+        {content}
+        {pages && html`<nav>
+          <ul class="pagination justify-content-center">
+            <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))}>Previous</a></li>
+            ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
+            <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
+          </ul>
+        </nav>`}
+      </div>
+    </Card>
   </>
     ;
 }
