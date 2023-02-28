@@ -19,7 +19,7 @@ export default ({ children }) => {
       }
 
       var urls = await response.json();
-      const componentPromises = urls.map(url => ({ url, promise: import(/* @vite-ignore */ (window.viteDevServerIsRunning ? '../../' : './') + url) }));
+      const componentPromises = urls.map(url => ({ url, promise: import(url) }));
 
       await Promise.allSettled(componentPromises.map(c => c.promise));
 

@@ -5,7 +5,7 @@ describe('Property test bed - Create', () => {
     // Add spy for save/get request
     cy.saveSpy();
 
-    cy.visit('/Admin/List?EntityType=PropertyTestBed');
+    cy.visit('/Admin/List/PropertyTestBed');
 
     const fieldsAndValues = {
       'cld-Name': 'some-name',

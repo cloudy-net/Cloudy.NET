@@ -11,7 +11,7 @@ describe('Page - Create', () => {
 
     const uniqueName = `${Date.now()}_Cypress was here!`
 
-    cy.visit('/Admin/New?EntityType=Page');
+    cy.visit('/Admin/New/Page');
     cy.typeName(uniqueName);
     cy.clickSave();
 
@@ -19,7 +19,7 @@ describe('Page - Create', () => {
     cy.get('@getting').should('have.been.calledOnce');
     cy.verifyNoValidationError();
 
-    cy.visit('/Admin/List?EntityType=Page');
+    cy.visit('/Admin/List/Page');
     cy.get('.table-responsive ul.pagination a.page-link').not(':contains("Next")').last().click();
 
     cy.get('a').contains(uniqueName).should('exist');
@@ -30,7 +30,7 @@ describe('Page - Create', () => {
     const uniqueName = `${Date.now()}_Cypress was here!`
     const modifiedUniqueName = `${uniqueName} - Yet again!`;
 
-    cy.visit('/Admin/New?EntityType=Page');
+    cy.visit('/Admin/New/Page');
 
     cy.typeName(uniqueName);
     cy.clickSave();
@@ -44,7 +44,7 @@ describe('Page - Create', () => {
     cy.get('@getting').should('have.been.calledThrice');
     cy.verifyNoValidationError();
     
-    cy.visit('/Admin/List?EntityType=Page');
+    cy.visit('/Admin/List/Page');
     cy.get('.table-responsive ul.pagination a.page-link').not(':contains("Next")').last().click();
 
     cy.get('a').contains(modifiedUniqueName).should('exist');
