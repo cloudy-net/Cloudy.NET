@@ -6,11 +6,7 @@ using Cloudy.CMS.UI.List.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.DynamicLinq;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.List
@@ -19,8 +15,6 @@ namespace Cloudy.CMS.UI.List
     [ResponseCache(NoStore = true)]
     public class ListSettingsController : Controller
     {
-        private readonly LinkGenerator linkGenerator;
-
         IEntityTypeProvider EntityTypeProvider { get; }
         IListColumnProvider ListColumnProvider { get; }
         IListFilterProvider ListFilterProvider { get; }
@@ -28,9 +22,8 @@ namespace Cloudy.CMS.UI.List
         IContextCreator ContextCreator { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
 
-        public ListSettingsController(LinkGenerator linkGenerator, IEntityTypeProvider entityTypeProvider, IListColumnProvider listColumnProvider, IListFilterProvider listFilterProvider, IEntityTypeNameProvider entityTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter)
+        public ListSettingsController(IEntityTypeProvider entityTypeProvider, IListColumnProvider listColumnProvider, IListFilterProvider listFilterProvider, IEntityTypeNameProvider entityTypeNameProvider, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter)
         {
-            this.linkGenerator = linkGenerator;
             EntityTypeProvider = entityTypeProvider;
             ListColumnProvider = listColumnProvider;
             ListFilterProvider = listFilterProvider;
@@ -58,12 +51,14 @@ namespace Cloudy.CMS.UI.List
 
             if (entityType.IsSingleton)
             {
-                var context = ContextCreator.CreateFor(entityType.Type);
-                var entity = await ((IQueryable)context.GetDbSet(entityType.Type)).Cast<object>().FirstOrDefaultAsync();
-                
-                listSettings.RedirectUrl =  entity is null
-                    ? linkGenerator.GetPathByPage("/New", null, new { Area = "Admin", EntityType = entityTypeName })
-                    : linkGenerator.GetPathByPage("/Edit", null, new { Area = "Admin", EntityType = entityTypeName, keys = PrimaryKeyGetter.Get(entity) });
+                //var context = ContextCreator.CreateFor(entityType.Type);
+                //var entity = await ((IQueryable)context.GetDbSet(entityType.Type)).Cast<object>().FirstOrDefaultAsync();
+
+                // Fix - Does not work without Razor pages
+
+                //listSettings.RedirectUrl = entity is null
+                //    ? LinkGenerator.GetPathByPage("/New", null, new { Area = "Admin", EntityType = entityTypeName })
+                //    : LinkGenerator.GetPathByPage("/Edit", null, new { Area = "Admin", EntityType = entityTypeName, keys = PrimaryKeyGetter.Get(entity) });
             }
 
             return listSettings;
