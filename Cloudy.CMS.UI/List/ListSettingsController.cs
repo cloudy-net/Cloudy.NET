@@ -2,11 +2,14 @@
 using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.EntityTypeSupport.Naming;
+using Cloudy.CMS.UI.Layout;
 using Cloudy.CMS.UI.List.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.List
@@ -45,20 +48,18 @@ namespace Cloudy.CMS.UI.List
                 Filters = ListFilterProvider.Get(entityType.Type),
                 EntityTypeName = entityTypeName,
                 EntityTypePluralName = EntityTypeNameProvider.Get(entityType.Type).PluralName,
-                EditLink = $"/Admin/Edit/{entityTypeName}",
-                DeleteLink = $"/Admin/Delete/{entityTypeName}"
+                EditLink = UrlBuilder.Build(keys: null, "Admin", "Edit", entityTypeName),
+                DeleteLink = UrlBuilder.Build(keys: null, "Admin", "Delete", entityTypeName)
             };
 
             if (entityType.IsSingleton)
             {
-                //var context = ContextCreator.CreateFor(entityType.Type);
-                //var entity = await ((IQueryable)context.GetDbSet(entityType.Type)).Cast<object>().FirstOrDefaultAsync();
-
-                // Fix - Does not work without Razor pages
-
-                //listSettings.RedirectUrl = entity is null
-                //    ? LinkGenerator.GetPathByPage("/New", null, new { Area = "Admin", EntityType = entityTypeName })
-                //    : LinkGenerator.GetPathByPage("/Edit", null, new { Area = "Admin", EntityType = entityTypeName, keys = PrimaryKeyGetter.Get(entity) });
+                var context = ContextCreator.CreateFor(entityType.Type);
+                var entity = await ((IQueryable)context.GetDbSet(entityType.Type)).Cast<object>().FirstOrDefaultAsync();
+                
+                listSettings.RedirectUrl = entity is null
+                    ? UrlBuilder.Build(keys: null, "Admin", "New", entityTypeName)
+                    : UrlBuilder.Build(keys: PrimaryKeyGetter.Get(entity), "Admin", "Edit", entityTypeName);
             }
 
             return listSettings;
