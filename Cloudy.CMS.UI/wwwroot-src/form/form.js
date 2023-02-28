@@ -52,13 +52,21 @@ function Form({ entityTypeName, mode }) {
   }, []);
 
   const NewHeader = () => <div class="container">
-  <h1 class="h2 mb-3">
-      { entityType.name }&nbsp;
-      <a class="btn btn-sm btn-beta" href="/Admin">Back</a>
-  </h1>
-</div>;
+    <h1 class="h2 mb-3">
+        { entityType.name }&nbsp;
+        <a class="btn btn-sm btn-beta" href="/Admin">Back</a>
+    </h1>
+  </div>;
+
+  const EditHeader = () => <div class="container">
+    <h1 class="h2 mb-3">
+        { entityType.name }&nbsp;
+        <a class="btn btn-sm btn-beta" href={`/Admin/List/${entityTypeName}`}>Back</a>&nbsp;
+        <a class="btn btn-sm btn-primary" href={`/Admin/New/${entityTypeName}`}>New</a>
+    </h1>
+  </div>;
   
-  return loaded && html`${ mode === 'new' ? <NewHeader/> : <div>edit</div> }
+  return loaded && html`${ mode === 'new' ? <NewHeader/> : <EditHeader /> }
     <${Card}>
       <${FieldComponentProvider}>
         <${EntityContextProvider} ...${{ entityType : entityTypeName, keyValues }}>

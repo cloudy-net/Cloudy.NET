@@ -41,7 +41,7 @@ namespace Cloudy.CMS.UI.List
         }
 
 
-        private string GetBrandName() => "SPA - " + humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name);
+        private string GetBrandName() => humanizer.Humanize(Assembly.GetEntryAssembly().GetName().Name);
 
         private IEnumerable<EntityTypeLink> GetEntityTypeLinks()
         {
