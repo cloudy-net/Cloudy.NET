@@ -37,5 +37,8 @@ namespace Microsoft.AspNetCore.Builder
 
             return configurator;
         }
+
+        public static IApplicationBuilder UseCloudy(this IApplicationBuilder applicationBuilder) => applicationBuilder
+            .UseRewriter(new RewriteOptions().AddRewrite("^Admin/(?!api).*", "/Admin/Index", true));
     }
 }

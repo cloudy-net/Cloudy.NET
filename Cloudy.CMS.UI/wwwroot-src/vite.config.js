@@ -1,14 +1,11 @@
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import path from 'path';
-import mkcert from 'vite-plugin-mkcert';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
-export default ({ mode }) => {
-  return defineConfig({
-    base: mode === 'development' ? '/Admin/' : '/',
+export default () =>
+  defineConfig({
     plugins: [
-      mkcert(),
       preact(),
       viteStaticCopy({
         targets: [
@@ -25,14 +22,6 @@ export default ({ mode }) => {
       }
     },
     server: {
-      https: true,
-      port: 5001,
-      proxy: {
-        '^/Admin/api/.*': {
-          changeOrigin: true,
-          target: 'http://localhost:5000/'
-        }
-      },
     },
     build: {
       rollupOptions: {
@@ -45,7 +34,6 @@ export default ({ mode }) => {
         }
       },
       sourcemap: true,
-      outDir: 'dist'
+      outDir: '../wwwroot'
     }
   });
-};

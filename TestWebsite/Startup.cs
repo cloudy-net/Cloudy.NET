@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
 using System;
 using TestWebsite.Factories;
 using TestWebsite.Models;
@@ -31,11 +31,6 @@ namespace TestWebsite
                 .UseInMemoryDatabase("cloudytest")
             );
 
-            builder.Services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "../Cloudy.CMS.UI/wwwroot-src";
-            });
-
             services.AddSingleton<IColorFactory, ColorFactory>();
         }
 
@@ -45,6 +40,8 @@ namespace TestWebsite
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCloudy();
 
             // seed with some data
             using (var scope = app.ApplicationServices.CreateScope())
@@ -131,41 +128,13 @@ namespace TestWebsite
                 endpoints.MapControllerRoute(null, "/controllertest/{route:contentroute}", new { controller = "Page", action = "Index" });
             });
 
-            var spaPath = "/Admin";
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.MapWhen(y => y.Request.Path.StartsWithSegments(spaPath), client =>
-                {
-                    client.UseSpa(spa => spa.UseProxyToSpaDevelopmentServer("https://localhost:5001/"));
-                });
             }
             else
             {
                 app.UseHttpsRedirection();
-
-                app.Map(new PathString(spaPath), client =>
-                {
-                    client.UseSpa(spa =>
-                    {
-                        spa.Options.SourcePath = "../Cloudy.CMS.UI/wwwroot-src/dist";
-
-                        spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
-                        {
-                            OnPrepareResponse = ctx =>
-                            {
-                                var headers = ctx.Context.Response.GetTypedHeaders();
-                                headers.CacheControl = new CacheControlHeaderValue
-                                {
-                                    NoCache = true,
-                                    NoStore = true,
-                                    MustRevalidate = true
-                                };
-                            }
-                        };
-                    });
-                });
             }
         }
     }
