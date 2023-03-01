@@ -6,7 +6,7 @@ namespace Cloudy.CMS.UI.Layout
     {
         public static string Build(object[] keys, params string[] paths)
         {
-            var url = $"/{string.Join("/", paths)}";
+            var url = $"/Admin/{string.Join("/", paths)}";
 
             if (keys is not null && keys.Any())
             {

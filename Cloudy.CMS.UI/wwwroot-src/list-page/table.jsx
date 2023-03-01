@@ -1,3 +1,4 @@
+import { route } from 'preact-router';
 import html from '@src/html-init.js';
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box.js';
@@ -62,7 +63,7 @@ export default ({ entityType }) => {
         .then(r => r.json())
         .then(r => {
           if (r.redirectUrl) {
-            window.location.href = r.redirectUrl;
+            route(r.redirectUrl);
             return;
           }
           setPageSize(r.pageSize);

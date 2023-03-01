@@ -53,7 +53,7 @@ namespace Cloudy.CMS.UI.List
                 yield return new EntityTypeLink
                 {
                     Text = entityType.IsSingleton ? name.Name : name.PluralName,
-                    Url = UrlBuilder.Build(keys: null, "Admin", "List", entityType.Name)
+                    Url = UrlBuilder.Build(keys: null, "List", entityType.Name)
                 };
             }
         }

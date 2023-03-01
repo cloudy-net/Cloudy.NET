@@ -48,8 +48,8 @@ namespace Cloudy.CMS.UI.List
                 Filters = ListFilterProvider.Get(entityType.Type),
                 EntityTypeName = entityTypeName,
                 EntityTypePluralName = EntityTypeNameProvider.Get(entityType.Type).PluralName,
-                EditLink = UrlBuilder.Build(keys: null, "Admin", "Edit", entityTypeName),
-                DeleteLink = UrlBuilder.Build(keys: null, "Admin", "Delete", entityTypeName)
+                EditLink = UrlBuilder.Build(keys: null, "Edit", entityTypeName),
+                DeleteLink = UrlBuilder.Build(keys: null, "Delete", entityTypeName)
             };
 
             if (entityType.IsSingleton)
@@ -58,8 +58,8 @@ namespace Cloudy.CMS.UI.List
                 var entity = await ((IQueryable)context.GetDbSet(entityType.Type)).Cast<object>().FirstOrDefaultAsync();
                 
                 listSettings.RedirectUrl = entity is null
-                    ? UrlBuilder.Build(keys: null, "Admin", "New", entityTypeName)
-                    : UrlBuilder.Build(keys: PrimaryKeyGetter.Get(entity), "Admin", "Edit", entityTypeName);
+                    ? UrlBuilder.Build(keys: null, "New", entityTypeName)
+                    : UrlBuilder.Build(keys: PrimaryKeyGetter.Get(entity), "Edit", entityTypeName);
             }
 
             return listSettings;
