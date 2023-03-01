@@ -64,7 +64,7 @@ function Form({ entityTypeName, mode }) {
     </h1>
   </div>;
 
-  const EditHeader = () => {
+  const EditHeader = (fields) => {
     const [instanceName, setInstanceName] = useState();
     const { entityReference, state } = useContext(EntityContext);
 
@@ -82,7 +82,7 @@ function Form({ entityTypeName, mode }) {
   return loaded && html`
     <${FieldComponentProvider}>
       <${EntityContextProvider} ...${{ entityType: entityTypeName, keyValues }}>
-        ${mode === 'new' ? <NewHeader /> : <EditHeader />}
+        ${mode === 'new' ? <NewHeader /> : <EditHeader fields={fields} />}
         <${Card}>
           <${Changes} />
           <${FormFields} ...${{ fields, error, loading }} />
