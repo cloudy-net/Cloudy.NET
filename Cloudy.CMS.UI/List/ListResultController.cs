@@ -137,7 +137,7 @@ namespace Cloudy.CMS.UI.List
 
                     columnInfos.Add(new ColumnInfo(
                         await FieldFriendlyValueProvider.GetFriendlyValue(propertyDefinition, instance),
-                        partialViewName,
+                        $"{partialViewName}.js",
                         type.IsImageable,
                         type.IsImageable ? ((IImageable)instance).Image : string.Empty
                     ));
