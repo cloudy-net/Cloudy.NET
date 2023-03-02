@@ -4,11 +4,10 @@ import FormFields from './form-fields.js';
 import FormFooter from './form-footer.js';
 import Changes from './changes.js';
 import html from '@src/html-init.js';
-import EntityContext from './entity-context.js';
-import EntityTypesContext from '@src/form/entity-types-context';
 import Card from '@src/layout/card.jsx';
-import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
-import { useState, useEffect, useContext } from 'preact/hooks';
+import NewHeader from './form-header-new.jsx';
+import EditHeader from './form-header-edit.jsx';
+import { useState, useEffect } from 'preact/hooks';
 
 import ValidationManager from '../data/validation-manager.js';
 
@@ -18,14 +17,6 @@ function Form({ entityTypeName, mode }) {
   const [fields, setFields] = useState();
   const [loaded, setLoaded] = useState(false);
   const [keyValues, setKeyValues] = useState(null);
-  const [entityType, setEntityType] = useState({});
-  const { entityTypes, getEntityTypeByTypeName } = useContext(EntityTypesContext);
-
-  useEffect(() => {
-    if (entityTypes.length) {
-      setEntityType(getEntityTypeByTypeName(entityTypeName));
-    }
-  }, [entityTypes]);
 
   useEffect(function () {
 
@@ -57,40 +48,17 @@ function Form({ entityTypeName, mode }) {
     })();
   }, []);
 
-  const NewHeader = () => <div class="container">
-    <h1 class="h2 mb-3">
-      {entityType.name}&nbsp;
-      <a class="btn btn-sm btn-beta" href="/Admin/">Back</a>
-    </h1>
-  </div>;
-
-  const EditHeader = (fields) => {
-    const [instanceName, setInstanceName] = useState();
-    const { entityReference, state } = useContext(EntityContext);
-
-    useEffect(() => setInstanceName(simpleChangeHandler.getIntermediateValue(state, 'Name')), [entityReference]);
-
-    return <div class="container">
-      <h1 class="h2 mb-3">
-        { instanceName || entityType.name}&nbsp;
-        <a class="btn btn-sm btn-beta" href={`/Admin/List/${entityTypeName}`}>Back</a>&nbsp;
-        <a class="btn btn-sm btn-primary" href={`/Admin/New/${entityTypeName}`}>New</a>
-      </h1>
-    </div>
-  };
-
   return loaded && html`
     <${FieldComponentProvider}>
       <${EntityContextProvider} ...${{ entityType: entityTypeName, keyValues }}>
-        ${mode === 'new' ? <NewHeader /> : <EditHeader fields={fields} />}
+        <${mode === 'new' ? NewHeader : EditHeader} ...${{ entityTypeName, keyValues }} />
         <${Card}>
           <${Changes} />
           <${FormFields} ...${{ fields, error, loading }} />
           <${FormFooter} validateAll=${(entityReference) => ValidationManager.validateAll(fields, entityReference)} />
         </>
       </>
-    </>
-  `
+    </>`;
 };
 
 export default Form;
