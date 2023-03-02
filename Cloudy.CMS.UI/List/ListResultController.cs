@@ -132,7 +132,7 @@ namespace Cloudy.CMS.UI.List
 
                     if (uiHint != null)
                     {
-                        partialViewName = $"Columns/{uiHint}";
+                        partialViewName = uiHint;
                     }
 
                     columnInfos.Add(new ColumnInfo(

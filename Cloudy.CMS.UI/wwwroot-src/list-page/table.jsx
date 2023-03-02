@@ -4,6 +4,8 @@ import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box.js';
 import ListFilter from './list-filter.js';
 import Card from '@src/layout/card.jsx';
+import ColumnComponentProvider from './column-component-provider';
+import TableBody from './table-body';
 
 export const SORT_DIRECTIONS = {
   ASCENDING: 'asc',
@@ -102,26 +104,6 @@ export default ({ entityType }) => {
 
   let content = null;
 
-  const GetColumnComponent = ({ partial, isImageable, image, value, keys }) => {
-    switch (partial) {
-      case 'Columns/name':
-        return <>
-          {isImageable && image && <img class="list-image-in-name" src={image} alt="" />}
-          {isImageable && !image && <div class="list-image-in-name list-image-in-name--image-not-set"><span class="list-image-in-name--image-not-set__bg"></span></div>}
-          <a href={`${settings.editLink}?${keys.map(k => `keys=${k}`).join('&')}`}>{value}</a>
-        </>;
-      case 'Columns/image':
-        return value && <img class="list-image" src={value} alt="" />;
-      case 'Columns/text':
-        return <>{value}</>;
-      case 'Columns/select':
-        return value && <>{value.image && <img class="list-image-in-name" src={value.image} alt="" />}{value.name}</>;
-      case 'Columns/customselect':
-        return <>{value}</>;
-    }
-    return <div></div>;
-  };
-
   if (error) {
     content = <div class="alert alert-primary">
       <p>There was an error (<code>{error.response.status}{error.response.statusText ? " " + error.response.statusText : ""}</code>) loading your list{error.body ? ":" : "."}</p>
@@ -144,18 +126,9 @@ export default ({ entityType }) => {
             <th style="width: 1%;"></th>
           </tr>
         </thead>
-        <tbody>
-          {data.items.map(d => <tr>
-            {columns.map((_, i) =>
-              html`<td><${GetColumnComponent} keys=${d.keys} ...${d.values[i]} /></td>`
-            )}
-            <td>
-              <a class="me-2" href={`${settings.editLink}?${d.keys.map(k => `keys=${k}`).join('&')}`}>Edit</a>
-              <a href={`${settings.deleteLink}?${d.keys.map(k => `keys=${k}`).join('&')}`}>Delete</a>
-            </td>
-          </tr>)}
-          {[...new Array(pageSize - data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
-        </tbody>
+        { html`<${ColumnComponentProvider} componentPartials=${[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
+          <${TableBody} ...${{ items: data.items, columns, pageSize, settings}} />
+        </>`}
       </table>
     </div>;
   }
