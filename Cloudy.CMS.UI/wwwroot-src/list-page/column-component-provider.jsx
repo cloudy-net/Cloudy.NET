@@ -23,7 +23,7 @@ export default ({ children, componentPartials }) => {
 
       setComponents(result);
     })();
-  }, []);
+  }, [componentPartials]);
 
   return <ColumnComponentContext.Provider value={components}>
     {children}

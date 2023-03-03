@@ -8,7 +8,9 @@ const TableBody = ({ items, columns, pageSize, settings }) => {
     return components && <tbody>
       {items.map(d => <tr>
         {columns.map((_, i) =>
-          html`<td><${components[d.values[i].partial]} ...${{ keys: d.keys, ...d.values[i], settings }} dependencies=${{ html }} /></td>`
+          d.values[i]
+            && Object.keys(components).includes(d.values[i].partial)
+            && html`<td><${components[d.values[i].partial]} ...${{ keys: d.keys, ...d.values[i], settings }} dependencies=${{ html }} /></td>`
         )}
         <td>
           <a class="me-2" href={`${settings.editLink}?${d.keys.map(k => `keys=${k}`).join('&')}`}>Edit</a>
