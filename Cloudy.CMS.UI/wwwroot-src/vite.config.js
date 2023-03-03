@@ -13,6 +13,10 @@ export default () =>
             src: 'form/controls',
             dest: 'form/',
           },
+          {
+            src: 'list-page/columns',
+            dest: './',
+          },
         ],
       }),
     ],

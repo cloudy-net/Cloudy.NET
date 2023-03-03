@@ -7,6 +7,7 @@ import { Router, Route } from 'preact-router';
 import Table from './list-page/table'
 import Form from './form/form';
 import EntityTypeList from './entity-type-list/entity-type-list';
+import Delete from './layout/delete'
 
 import Header from './layout/header';
 import Footer from './layout/footer';
@@ -22,8 +23,9 @@ if (document.getElementById('app')) {
       <Router>
         <EntityTypeList path="/Admin/" />
         <Table path="/Admin/List/:entityType" />
-        <Form path="/Admin/New/:entityTypeName" mode="new" />
-        <Form path="/Admin/Edit/:entityTypeName" mode="edit"  />
+        <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
+        <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" />
+        <Delete path="/Admin/Delete/:entityTypeName" />
       </Router>
       <Footer />
     </EntityTypesProvider>

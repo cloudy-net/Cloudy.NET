@@ -51,7 +51,7 @@ export default ({ entityType, keyValues, children }) => {
       for(let key of entityReference.keyValues){
         searchParams.append("keys", key);
       }
-      history.replaceState({}, null, `/Admin/Edit?${searchParams}`);
+      history.replaceState({}, null, `${window.location.pathname}?${searchParams}`);
       setEntityReference(entityReference);
     };
     stateEvents.onEntityReferenceChange(entityReferenceChange);

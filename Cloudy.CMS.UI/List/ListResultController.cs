@@ -106,38 +106,38 @@ namespace Cloudy.CMS.UI.List
 
                 foreach (var propertyDefinition in selectedPropertyDefinitions)
                 {
-                    var partialViewName = $"Columns/text";
+                    var partialViewName = $"columns/text";
 
                     if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any())
                     {
-                        partialViewName = "Columns/select";
+                        partialViewName = "columns/select";
                     }
 
                     if (propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().Any())
                     {
-                        partialViewName = "Columns/customselect";
+                        partialViewName = "columns/customselect";
                     }
 
                     if (type.Type.IsAssignableTo(typeof(INameable)) && propertyDefinition.Name == nameof(INameable.Name))
                     {
-                        partialViewName = "Columns/name";
+                        partialViewName = "columns/name";
                     }
 
                     if (type.Type.IsAssignableTo(typeof(IImageable)) && propertyDefinition.Name == nameof(IImageable.Image))
                     {
-                        partialViewName = "Columns/image";
+                        partialViewName = "columns/image";
                     }
 
                     var uiHint = propertyDefinition.Attributes.OfType<ListColumnAttribute>().FirstOrDefault()?.UIHint;
 
                     if (uiHint != null)
                     {
-                        partialViewName = $"Columns/{uiHint}";
+                        partialViewName = uiHint;
                     }
 
                     columnInfos.Add(new ColumnInfo(
                         await FieldFriendlyValueProvider.GetFriendlyValue(propertyDefinition, instance),
-                        partialViewName,
+                        $"{partialViewName}.js",
                         type.IsImageable,
                         type.IsImageable ? ((IImageable)instance).Image : string.Empty
                     ));
