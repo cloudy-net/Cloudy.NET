@@ -10,8 +10,8 @@ export default () =>
       viteStaticCopy({
         targets: [
           {
-            src: 'form/controls',
-            dest: 'form/',
+            src: 'controls',
+            dest: '',
           },
           {
             src: 'list-page/columns',
