@@ -1,7 +1,7 @@
 import './main.scss'
 
 import { render } from 'preact'
-import { Router, Route } from 'preact-router';
+import { Router } from 'preact-router';
 
 import Table from './list-page/table'
 import Form from './form/form';
