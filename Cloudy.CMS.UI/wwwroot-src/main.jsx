@@ -1,6 +1,5 @@
 import './main.scss'
 
-import html from '@src/html-init.js';
 import { render } from 'preact'
 import { Router, Route } from 'preact-router';
 
