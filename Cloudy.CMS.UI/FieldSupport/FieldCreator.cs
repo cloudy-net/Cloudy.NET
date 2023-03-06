@@ -111,7 +111,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 ? "custom-select/custom-select-list"
                 : "custom-select/custom-select";
 
-            if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any()) return "selectone";
+            if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any()) return "select-one/select-one";
             if (propertyDefinition.Attributes.Any(a => a is MediaPickerAttribute)) return "media-picker/media-picker";
             if (propertyDefinition.Type == typeof(string)) return "text";
             if (propertyDefinition.Type == typeof(bool)) return "checkbox";
