@@ -120,7 +120,7 @@ namespace Cloudy.CMS.UI.FieldSupport
             if (propertyDefinition.Type == typeof(DateTime) || propertyDefinition.Type == typeof(DateTimeOffset)) return "datetime";
             if (propertyDefinition.Type == typeof(TimeSpan) || propertyDefinition.Type == typeof(TimeOnly)) return "time";
             if (propertyDefinition.Type == typeof(DateOnly)) return "date";
-            if (propertyDefinition.Enum) return "enumdropdown";
+            if (propertyDefinition.Enum) return "enum-dropdown";
 
             return null;
         }
