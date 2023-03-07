@@ -18,7 +18,7 @@ namespace Cloudy.CMS.Naming
                 word = word[..index];
             }
 
-            if (word.Any(c => char.IsDigit(c)))
+            if (word.Any(char.IsDigit))
             {
                 return word + suffix;
             }
@@ -39,6 +39,11 @@ namespace Cloudy.CMS.Naming
             }
 
             word = word + "s";
+
+            if(word == "Persons")
+            {
+                word = "People";
+            }
 
             return word + suffix;
         }
