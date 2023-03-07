@@ -5,15 +5,13 @@ export default () => {
   const { entityTypes } = useContext(EntityTypesContext);
 
   const Table = () => <>
-    <div class="container">
       <h1 class="h2 mb-3">
         What to edit?
       </h1>
-    </div>
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         {entityTypes.map(entityType =>
-          <div class="col-sm-4 mb-4 d-flex">
+          <div class="col-md-4 mb-4 d-flex">
             <div class="card w-100" style="min-height: 200px;">
               <div class="card-body">
                 <h5 class="card-title">{entityType.pluralName}</h5>

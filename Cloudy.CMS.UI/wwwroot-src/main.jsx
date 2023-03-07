@@ -12,6 +12,7 @@ import Header from './layout/header';
 import Footer from './layout/footer';
 
 import EntityTypesProvider from './form/entity-types-provider';
+import LayoutLeftPanel from './layout/layout-left-panel';
 
 window.viteIsLoaded = true;
 
@@ -19,13 +20,19 @@ if (document.getElementById('app')) {
   const Main = () => (
     <EntityTypesProvider>
       <Header />
-      <Router>
-        <EntityTypeList path="/Admin/" />
-        <Table path="/Admin/List/:entityType" />
-        <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
-        <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" />
-        <Delete path="/Admin/Delete/:entityTypeName" />
-      </Router>
+      <div class="container">
+        <div class="layout">
+          <LayoutLeftPanel />
+          <div className="layout-main-panel">
+            <Router>
+              <EntityTypeList path="/Admin/" />
+              <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
+              <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" />
+              <Delete path="/Admin/Delete/:entityTypeName" />
+            </Router>
+          </div>
+        </div>
+      </div>
       <Footer />
     </EntityTypesProvider>
   );
