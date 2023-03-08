@@ -18,9 +18,11 @@ export default () => {
       </ul>
     </div>
 
-    
     <Router>
       <Table path="/Admin/List/:entityType" />
+      <Table path="/Admin/Edit/:entityType" />
+      <Table path="/Admin/New/:entityType" />
+      <Table path="/Admin/Delete/:entityType" />
     </Router>
   </div>
 }
