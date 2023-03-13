@@ -5,9 +5,6 @@ export default () => {
   const { entityTypes } = useContext(EntityTypesContext);
 
   const Table = () => <>
-      <h1 class="h2 mb-3">
-        What to edit?
-      </h1>
     <div class="container-fluid">
       <div class="row">
         {entityTypes.map(entityType =>

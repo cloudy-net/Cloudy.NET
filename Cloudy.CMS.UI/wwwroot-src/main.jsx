@@ -5,11 +5,10 @@ import { Router } from 'preact-router';
 
 import Table from './list-page/table'
 import Form from './form/form';
-import EntityTypeList from './entity-type-list/entity-type-list';
+import Dashboard from './layout/dashboard';
 import Delete from './layout/delete'
 
-import Header from './layout/header';
-import Footer from './layout/footer';
+import Navbar from './layout/navbar';
 
 import EntityTypesProvider from './form/entity-types-provider';
 import LayoutLeftPanel from './layout/layout-left-panel';
@@ -19,21 +18,23 @@ window.viteIsLoaded = true;
 if (document.getElementById('app')) {
   const Main = () => (
     <EntityTypesProvider>
-      <Header />
-      <div class="container">
-        <div class="layout">
-          <LayoutLeftPanel />
-          <div className="layout-main-panel">
-            <Router>
-              <EntityTypeList path="/Admin/" />
-              <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
-              <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" />
-              <Delete path="/Admin/Delete/:entityTypeName" />
-            </Router>
-          </div>
+      <div class="layout">
+        <Router>
+          <LayoutLeftPanel path="/Admin/List/:entityTypeName" mode="new" />
+          <LayoutLeftPanel path="/Admin/New/:entityTypeName" mode="new" />
+          <LayoutLeftPanel path="/Admin/Edit/:entityTypeName" mode="edit" />
+          <LayoutLeftPanel path="/Admin/Delete/:entityTypeName" />
+        </Router>
+        <div className="layout-main-panel">
+          <Navbar />
+          <Router>
+            <Dashboard path="/Admin/" />
+            <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
+            <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" />
+            <Delete path="/Admin/Delete/:entityTypeName" />
+          </Router>
         </div>
       </div>
-      <Footer />
     </EntityTypesProvider>
   );
 
