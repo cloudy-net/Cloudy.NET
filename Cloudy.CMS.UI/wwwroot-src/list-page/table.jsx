@@ -3,7 +3,6 @@ import html from '@src/html-init.js';
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box.js';
 import ListFilter from './list-filter.js';
-import Card from '@src/layout/card.jsx';
 import ColumnComponentProvider from './column-component-provider';
 import TableBody from './table-body';
 
@@ -119,11 +118,11 @@ export default ({ entityType }) => {
       <table class="table table--content-list">
         <thead>
           <tr className={`text-nowrap ${orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
+            <th></th>
             {columns.map(c => c.sortable
               ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
               : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
             )}
-            <th style="width: 1%;"></th>
           </tr>
         </thead>
         {html`<${ColumnComponentProvider} componentPartials=${[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
