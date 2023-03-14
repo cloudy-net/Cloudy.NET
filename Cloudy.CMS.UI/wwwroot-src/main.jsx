@@ -29,6 +29,7 @@ if (document.getElementById('app')) {
           <Navbar />
           <Router>
             <Dashboard path="/Admin/" />
+            <Dashboard path="/Admin/List/:entityTypeName" />
             <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
             <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" />
             <Delete path="/Admin/Delete/:entityTypeName" />
