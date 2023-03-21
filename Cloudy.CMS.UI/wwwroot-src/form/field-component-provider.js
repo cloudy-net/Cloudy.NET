@@ -23,7 +23,7 @@ export default ({ children }) => {
         ? url.startsWith('/') ? window.location.origin : '../../' 
         : url.startsWith('/') ? '' : './';
 
-      const componentPromises = urls.map(url => ({url, promise: import(`${getUrlPrefix(url)}${url}`)}));
+      const componentPromises = urls.map(url => ({url, promise: import(/* @vite-ignore */ `${getUrlPrefix(url)}${url}`)}));
 
       await Promise.allSettled(componentPromises.map(c => c.promise));
 

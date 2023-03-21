@@ -3,7 +3,6 @@ import html from '@src/html-init.js';
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box.js';
 import ListFilter from './list-filter.js';
-import Card from '@src/layout/card.jsx';
 import ColumnComponentProvider from './column-component-provider';
 import TableBody from './table-body';
 
@@ -119,56 +118,48 @@ export default ({ entityType }) => {
       <table class="table table--content-list">
         <thead>
           <tr className={`text-nowrap ${orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
+            <th></th>
             {columns.map(c => c.sortable
               ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
               : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
             )}
-            <th style="width: 1%;"></th>
           </tr>
         </thead>
-        { html`<${ColumnComponentProvider} componentPartials=${[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
-          <${TableBody} ...${{ items: data.items, columns, pageSize, settings}} />
+        {html`<${ColumnComponentProvider} componentPartials=${[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
+          <${TableBody} ...${{ items: data.items, columns, pageSize, settings }} />
         </>`}
       </table>
     </div>;
   }
 
   return <>
-    <div class="container">
-      <h1 class="h2 mb-3">
-        Listing {settings.entityTypePluralName}
-        &nbsp;<a class="btn btn-sm btn-primary" href={`/Admin/New/${entityType}`}>New</a>
-      </h1>
-    </div>
-    <Card>
-      <div class="list-page-header m-2">
-        <div class="list-page-search">
-          <SearchBox callback={value => setSearch(value)} floating={filters.length} />
-        </div>
-        {filterOptions.map(c => html`<${ListFilter} ...${c} filter=${(key, value) => {
-          if (!value) {
-            var newFilters = { ...filters };
-
-            delete newFilters[key];
-
-            setFilters(newFilters);
-            return;
-          }
-
-          setFilters({ ...filters, [key]: value });
-        }} />`)}
+    <div class="list-page-header m-2">
+      <div class="list-page-search">
+        <SearchBox callback={value => setSearch(value)} floating={filters.length} />
       </div>
-      <div class="table-responsive">
-        {content}
-        {pages && html`<nav>
+      {filterOptions.map(c => html`<${ListFilter} ...${c} filter=${(key, value) => {
+        if (!value) {
+          var newFilters = { ...filters };
+
+          delete newFilters[key];
+
+          setFilters(newFilters);
+          return;
+        }
+
+        setFilters({ ...filters, [key]: value });
+      }} />`)}
+    </div>
+    <div class="table-responsive">
+      {content}
+      {pages && html`<nav>
           <ul class="pagination justify-content-center">
             <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))}>Previous</a></li>
             ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
             <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
           </ul>
         </nav>`}
-      </div>
-    </Card>
+    </div>
   </>
     ;
 }

@@ -11,21 +11,12 @@ import { useState, useEffect } from 'preact/hooks';
 
 import ValidationManager from '../data/validation-manager.js';
 
-function Form({ entityTypeName, mode }) {
+function Form({ entityTypeName, mode, keyValues }) {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const [fields, setFields] = useState();
-  const [loaded, setLoaded] = useState(false);
-  const [keyValues, setKeyValues] = useState(null);
 
   useEffect(function () {
-
-    let keyValuesFromUrl = new URL(document.location).searchParams.getAll('keys');
-    if (keyValuesFromUrl && keyValuesFromUrl.length) {
-      setKeyValues(keyValuesFromUrl);
-    }
-    setLoaded(true);
-
     (async () => {
       setError(null);
 
@@ -48,7 +39,7 @@ function Form({ entityTypeName, mode }) {
     })();
   }, []);
 
-  return loaded && html`
+  return keyValues && html`
     <${FieldComponentProvider}>
       <${EntityContextProvider} ...${{ entityType: entityTypeName, keyValues }}>
         <${mode === 'new' ? NewHeader : EditHeader} ...${{ entityTypeName, keyValues }} />

@@ -33,6 +33,28 @@ label {
   }
 }
 
+
+
+/* LAYOUT */
+
+.layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.layout-left-panel {
+  flex: 0 0 250px;
+  overflow: auto;
+}
+
+.layout-main-panel {
+  flex: 1 1 0;
+  overflow: auto;
+}
+
+
+
 /* DROPDOWNS */
 
 .dropdown-menu {

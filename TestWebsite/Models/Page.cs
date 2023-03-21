@@ -11,12 +11,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TestWebsite.Models
 {
     [Display(Description = "Create pages for your website.")]
-    public class Page : INameable, IRoutable, IImageable, IHierarchical<Guid?>
+    public class Page : INameable, IRoutable, /*IImageable,*/ IHierarchical<Guid?>
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
-        [ListColumn(Order = 0, Sortable = true, Width = ListingColumnWidth.Fill)]
 
+        [ListColumn(Order = 0, Sortable = true, Width = ListingColumnWidth.Fill)]
         [Required(ErrorMessage = "Enter a name, please")]
         [MaxLength(45, ErrorMessage = "Please enter a shorter name")]
         [UIHint("/components/my-awesome-component.js")]
@@ -32,7 +32,6 @@ namespace TestWebsite.Models
         //[UIHint("textarea")]
         //public string Description { get; set; }
         [ListFilter]
-        [ListColumn]
         [Select<Page>]
         public Guid? RelatedPageId { get; set; }
         [MediaPicker("azure")]
