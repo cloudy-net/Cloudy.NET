@@ -72,6 +72,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var label = displayAttribute?.GetName() ?? humanizedName;
                 var description = displayAttribute?.GetDescription();
                 var type = propertyDefinition.Type;
+
                 var uiHints = propertyDefinition.Attributes.OfType<UIHintAttribute>().Select(a => a.UIHint).ToList().AsReadOnly();
                 var partialName = GetPartialName(propertyDefinition, uiHints);
                 var validators = GetValidators(propertyDefinition.Attributes).ToDictionary(x => x.Key, x => x.Value);
@@ -89,6 +90,13 @@ namespace Cloudy.CMS.UI.FieldSupport
 
                 var partial = partialName != null ? (partialName.StartsWith('/') ? partialName : $"controls/{partialName}.js") : null;
 
+                string listPartial = null;
+
+                if (propertyDefinition.List)
+                {
+                    listPartial = "controls/sortable/sortable.js";
+                }
+
                 var renderChrome = true;
 
                 if (uiHints.Contains("nochrome") || propertyDefinition.Block)
@@ -96,7 +104,7 @@ namespace Cloudy.CMS.UI.FieldSupport
                     renderChrome = false;
                 }
 
-                result.Add(new FieldDescriptor(name, type, label, description, partial, autoGenerate, renderChrome, group, settings, validators));
+                result.Add(new FieldDescriptor(name, type, label, description, partial, listPartial, autoGenerate, renderChrome, group, settings, validators));
             }
 
             return result;

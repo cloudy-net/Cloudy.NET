@@ -21,6 +21,7 @@ namespace TestWebsite.Models
         [Required(ErrorMessage = "Enter a name, please")]
         [MaxLength(45, ErrorMessage = "Please enter a shorter name")]
         public string Name { get; set; }
+        public IList<IFrontpageBlock> Blocks { get; set; }
 
         public string ParentType { get; set; }
         [Select<Page>]
@@ -42,7 +43,6 @@ namespace TestWebsite.Models
         public Category? Category { get; set; }
         //[Block(typeof(Page))]
         //public IList<LayoutItem> Test { get; set; }
-        public IList<IFrontpageBlock> Blocks { get; set; }
 
         //public string TestProperty { get; set; }
     }
