@@ -37,6 +37,8 @@ namespace TestWebsite.Models
 
         [Required]
         public string Name { get; set; }
+        [UIHint("/components/my-awesome-component.js")]
+        public string CustomComponent { get; set; }
 
         [ListColumn]
         [Required]

@@ -19,7 +19,6 @@ namespace TestWebsite.Models
         [ListColumn(Order = 0, Sortable = true, Width = ListingColumnWidth.Fill)]
         [Required(ErrorMessage = "Enter a name, please")]
         [MaxLength(45, ErrorMessage = "Please enter a shorter name")]
-        [UIHint("/components/my-awesome-component.js")]
         public string Name { get; set; }
 
         public string ParentType { get; set; }
