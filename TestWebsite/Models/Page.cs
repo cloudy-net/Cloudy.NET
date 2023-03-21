@@ -5,6 +5,7 @@ using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.List;
 using Cloudy.CMS.UI.List.Filter;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -41,7 +42,7 @@ namespace TestWebsite.Models
         public Category? Category { get; set; }
         //[Block(typeof(Page))]
         //public IList<LayoutItem> Test { get; set; }
-        public IFrontpageBlock FrontpageBlock { get; set; }
+        public IList<IFrontpageBlock> Blocks { get; set; }
 
         //public string TestProperty { get; set; }
     }
