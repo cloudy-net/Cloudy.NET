@@ -18,10 +18,16 @@ function Form({ entityTypeName, mode }) {
   const [keyValues, setKeyValues] = useState(null);
 
   useEffect(function () {
-    let keyValuesFromUrl = new URL(document.location).searchParams.getAll('keys');
+    const keyValuesFromUrl = new URL(document.location).searchParams.getAll('keys');
     if (keyValuesFromUrl && keyValuesFromUrl.length) {
       setKeyValues(keyValuesFromUrl);
+    } else {
+      setKeyValues(null);
     }
+
+    return () => {
+
+    };
   })();
 
   useEffect(function () {
@@ -47,7 +53,7 @@ function Form({ entityTypeName, mode }) {
     })();
   }, []);
 
-  return html`
+  return keyValues && html`
     <${FieldComponentProvider}>
       <${EntityContextProvider} ...${{ entityType: entityTypeName, keyValues }}>
         <${mode === 'new' ? NewHeader : EditHeader} ...${{ entityTypeName, keyValues }} />
