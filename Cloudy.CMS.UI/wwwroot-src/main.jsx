@@ -12,12 +12,15 @@ import Navbar from './layout/navbar';
 
 import EntityTypesProvider from './form/entity-types-provider';
 import LayoutLeftPanel from './layout/layout-left-panel';
+import { useState } from 'preact/hooks';
 
 window.viteIsLoaded = true;
 
 if (document.getElementById('app')) {
-  const Main = () => (
-    <EntityTypesProvider>
+  const Main = () => {
+    const [keyValues, setKeyValues] = useState(null);
+    
+    return <EntityTypesProvider>
       <div class="layout">
         <Router>
           <LayoutLeftPanel path="/Admin/List/:entityTypeName" mode="new" />
@@ -27,17 +30,17 @@ if (document.getElementById('app')) {
         </Router>
         <div className="layout-main-panel">
           <Navbar />
-          <Router>
+          <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
             <Dashboard path="/Admin/" />
             <Dashboard path="/Admin/List/:entityTypeName" />
-            <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
-            <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" />
+            <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" keyValues={keyValues} />
+            <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
             <Delete path="/Admin/Delete/:entityTypeName" />
           </Router>
         </div>
       </div>
     </EntityTypesProvider>
-  );
+  };
 
   render(<Main />, document.getElementById('app'));
 }

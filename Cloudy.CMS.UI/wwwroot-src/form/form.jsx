@@ -11,24 +11,10 @@ import { useState, useEffect } from 'preact/hooks';
 
 import ValidationManager from '../data/validation-manager.js';
 
-function Form({ entityTypeName, mode }) {
+function Form({ entityTypeName, mode, keyValues }) {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const [fields, setFields] = useState();
-  const [keyValues, setKeyValues] = useState(null);
-
-  useEffect(function () {
-    const keyValuesFromUrl = new URL(document.location).searchParams.getAll('keys');
-    if (keyValuesFromUrl && keyValuesFromUrl.length) {
-      setKeyValues(keyValuesFromUrl);
-    } else {
-      setKeyValues(null);
-    }
-
-    return () => {
-
-    };
-  })();
 
   useEffect(function () {
     (async () => {
