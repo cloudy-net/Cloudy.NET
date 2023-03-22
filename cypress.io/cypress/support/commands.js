@@ -25,10 +25,16 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 
-Cypress.Commands.add('typeName', (value, clear) => { 
-    clear 
-        ? cy.get('input[id="cld-Name"]').clear().type(value, { delay: 0, force: true })
-        : cy.get('input[id="cld-Name"]').type(value, { delay: 0, force: true }) ;
+Cypress.Commands.add('typeName', (value, clear) => {
+    const input = cy.get('input[id="cld-Name"]');
+
+    if(clear || !value){
+        input.clear();
+    }
+
+    if(value){
+        input.type(value, { delay: 0, force: true });
+    }
 })
 
 Cypress.Commands.add('verifyNoValidationError', () => { 
