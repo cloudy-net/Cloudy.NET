@@ -7,6 +7,7 @@ describe('Required validation', () => {
 
   it('Fires for empty input value', () => {
     cy.visit('/Admin/New/Page');
+    cy.wait(1000);
     cy.clickSave();
     cy.verifyValidationError();
     cy.get('@saving').should('not.have.been.called');
@@ -14,6 +15,7 @@ describe('Required validation', () => {
 
   it('Not fire when input has value', () => {
     cy.visit('/Admin/New/Page');
+    cy.wait(1000);
     cy.typeName('a');
     cy.clickSave();
     cy.verifyNoValidationError();
@@ -22,6 +24,7 @@ describe('Required validation', () => {
 
   it('Fires for empty select value', () => {
     cy.visit('/Admin/List/PropertyTestBed');
+    cy.wait(1000);
     cy.get('select[id="cld-Color"]').select('');
     cy.get('select[id="cld-SecondColor"]').select('');
     cy.clickSave();
@@ -31,6 +34,7 @@ describe('Required validation', () => {
 
   it('Not fire when select has value', () => {
     cy.visit('/Admin/List/PropertyTestBed');
+    cy.wait(1000);
     cy.typeName('a');
     cy.get('select[id="cld-Color"]').select('#fff');
     cy.get('select[id="cld-SecondColor"]').select('#f56c43');
@@ -42,7 +46,9 @@ describe('Required validation', () => {
   it('Validation error goes away after setting value', () => {
     cy.visit('/Admin/New/PropertyTestBed');
     cy.wait(1000);
+    cy.typeName('');
     cy.clickSave();
+    cy.wait(1000);
     cy.verifyValidationError();
     cy.get('@saving').should('not.have.been.called');
 
