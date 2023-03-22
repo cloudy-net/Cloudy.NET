@@ -24,7 +24,7 @@ const Control = ({ name, path, validators, dependencies }) => {
             style="background: lightblue"
             type="text"
             class=${`my-awesome-input form-control ${dependencies.ValidationManager.getValidationClass(state.validationResults, path)} `}
-            id=${dependencies.componentContextProvider.getIndentifier(path)}
+            id=${dependencies.componentContextProvider.getIdentifier(path)}
             value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
             onInput=${(e) => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
           />`;
