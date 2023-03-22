@@ -13,6 +13,7 @@ import ValidationManager from '../data/validation-manager.js';
 
 function Form({ entityTypeName, mode, keyValues }) {
   const [error, setError] = useState();
+  const [retryError, setRetryError] = useState(0);
   const [loading, setLoading] = useState(true);
   const [fields, setFields] = useState();
 
@@ -37,7 +38,18 @@ function Form({ entityTypeName, mode, keyValues }) {
       setLoading(false);
       setFields(json);
     })();
-  }, []);
+  }, [retryError]);
+
+  if (error) {
+    return <div class="alert alert-primary">
+      <p>
+        There was an error (<code>{error.response.status}{error.response.statusText ? " " + error.response.statusText : ""}</code>)
+        loading the entity field types{error.body ? ":" : "."}
+      </p>
+      {error.body ? <small><pre>{error.body}</pre></small> : ""}
+      <p class="mb-0"><button class="btn btn-primary" onClick={() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
+    </div>
+  }
 
   return keyValues && html`
     <${FieldComponentProvider}>
