@@ -10,7 +10,7 @@ const Control = ({ name, path, dependencies }) => {
         type="number"
         pattern="[0-9]+"
         class="form-control"
-        id=${dependencies.componentContextProvider.getIndentifier(path)}
+        id=${dependencies.componentContextProvider.getIdentifier(path)}
         value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}
       />

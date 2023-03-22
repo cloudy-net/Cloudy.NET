@@ -39,7 +39,7 @@ export default ({ name, path, settings, validators, dependencies }) => {
 
     return dependencies.html`
         <select required=${settings.isRequired}
-                id=${dependencies.componentContextProvider.getIndentifier(path)}
+                id=${dependencies.componentContextProvider.getIdentifier(path)}
                 value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
                 onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
                 class="form-select ${ dependencies.ValidationManager.getValidationClass(state.validationResults, path) }">

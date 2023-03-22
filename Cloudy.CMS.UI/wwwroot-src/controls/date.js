@@ -9,7 +9,7 @@ const Control = ({ name, path, dependencies }) => {
       <input
         type="date"
         class="form-control"
-        id=${dependencies.componentContextProvider.getIndentifier(path)}
+        id=${dependencies.componentContextProvider.getIdentifier(path)}
         value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
         onInput=${onchange}
       />

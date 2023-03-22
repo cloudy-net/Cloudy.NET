@@ -41,7 +41,7 @@ export default ({ name, path, settings, validators, dependencies }) => {
     }, []);
 
     return dependencies.html`
-        <input type="hidden" class="form-control" name=${dependencies.componentContextProvider.getIndentifier(path)} value=${value} />
+        <input type="hidden" class="form-control" name=${dependencies.componentContextProvider.getIdentifier(path)} value=${value} />
 
         ${value && !preview && dependencies.html`<div class=${`input-group mb-3 select-one ${settings.imageable ? ' imageable' : ''}`}>
             <span class="input-group-text" ></span>

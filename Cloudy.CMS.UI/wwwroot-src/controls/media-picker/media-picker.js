@@ -31,7 +31,7 @@ export default ({ name, path, provider, dependencies }) => {
   }
 
   return html`
-    <input type="hidden" class="form-control" name=${dependencies.componentContextProvider.getIndentifier(path)} value=${value} />
+    <input type="hidden" class="form-control" name=${dependencies.componentContextProvider.getIdentifier(path)} value=${value} />
 
     ${value && html`<div class="mb-2">
       <img class="media-picker-preview-image" src=${value} />
