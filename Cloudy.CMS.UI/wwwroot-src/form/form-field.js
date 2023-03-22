@@ -1,7 +1,7 @@
 import html from '@src/html-init.js';
 import { useContext } from 'preact/hooks';
-import EntityContext from './entity-context.js';
-import FieldComponentContext from "./field-component-context.js";
+import EntityContext from './contexts/entity-context';
+import FieldComponentContext from "./contexts/field-component-context";
 import ValidationManager from '../data/validation-manager.js';
 
 const FormField = ({ name, path, label, description, renderChrome, partial, settings, validators, dependencies }) => {

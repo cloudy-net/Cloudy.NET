@@ -10,7 +10,7 @@ import Delete from './layout/delete'
 
 import Navbar from './layout/navbar';
 
-import EntityTypesProvider from './form/entity-types-provider';
+import EntityTypesProvider from './form/contexts/entity-types-provider';
 import LayoutLeftPanel from './layout/layout-left-panel';
 import { useState } from 'preact/hooks';
 

@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useContext } from 'preact/hooks';
-import EntityContext from '@src/form/entity-context.js';
+import EntityContext from '@src/form/contexts/entity-context';
 import simpleChangeHandler from '@src/data/change-handlers/simple-change-handler.js';
 
 const EditHeader = ({ entityTypeName, keyValues }) => {

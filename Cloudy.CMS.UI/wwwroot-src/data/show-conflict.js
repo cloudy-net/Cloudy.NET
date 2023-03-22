@@ -1,9 +1,8 @@
 import html from '@src/html-init.js';
 import { useContext } from 'preact/hooks';
-import EntityContext from "../form/entity-context.js";
+import EntityContext from "../form/contexts/entity-context";
 import changeManager from "./change-manager.js";
 import diff from "./diff.js";
-import stateManager from "./state-manager.js";
 
 const buildDiff = ([state, segment]) => {
   if (state == diff.INSERT) {

@@ -1,6 +1,6 @@
 import html from '@src/html-init.js';
 import { useContext, useState } from 'preact/hooks';
-import EntityContext from './entity-context.js';
+import EntityContext from './contexts/entity-context';
 import stateManager from '../data/state-manager.js';
 import ValidationManager from '../data/validation-manager.js';
 import changeManager from '../data/change-manager.js';

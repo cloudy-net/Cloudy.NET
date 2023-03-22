@@ -1,9 +1,9 @@
 import html from '@src/html-init.js';
 import { useState, useEffect } from 'preact/hooks';
 import EntityContext from "./entity-context.js";
-import stateManager from '../data/state-manager.js';
-import changeManager from '../data/change-manager.js';
-import stateEvents from '../data/state-events.js';
+import stateManager from '../../data/state-manager.js';
+import changeManager from '../../data/change-manager.js';
+import stateEvents from '../../data/state-events.js';
 
 export default ({ entityType, keyValues, children }) => {
   const [entityReference, setEntityReference] = useState();

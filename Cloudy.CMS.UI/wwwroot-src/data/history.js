@@ -1,4 +1,4 @@
-import EntityContext from "../form/entity-context.js";
+import EntityContext from "../form/contexts/entity-context";
 import html from '@src/html-init.js';
 import { useContext } from 'preact/hooks';
 import changeManager from "./change-manager.js";

@@ -1,6 +1,6 @@
 import html from '@src/html-init.js';
 import { useContext, useEffect, useState, useRef } from 'preact/hooks';
-import EntityContext from './form/entity-context.js';
+import EntityContext from './form/contexts/entity-context';
 import ValidationManager from './data/validation-manager.js';
 import urlFetcher from './util/url-fetcher.js';
 import simpleChangeHandler from './data/change-handlers/simple-change-handler.js';

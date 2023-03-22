@@ -1,7 +1,7 @@
 import html from '@src/html-init.js';
 import { useContext } from 'preact/hooks';
 import dependencies from '../dependencies.js';
-import EntityContext from './entity-context.js';
+import EntityContext from './contexts/entity-context.js';
 import FormField from './form-field.js';
 
 const FormFields = ({ fields, error, loading }) => {

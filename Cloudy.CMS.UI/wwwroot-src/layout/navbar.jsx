@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "preact/hooks";
-import EntityTypesContext from "../form/entity-types-context";
+import EntityTypesContext from "../form/contexts/entity-types-context";
 
 const Navbar = ({ }) => {
     const { entityTypes } = useContext(EntityTypesContext);

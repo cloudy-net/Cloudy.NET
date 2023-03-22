@@ -1,5 +1,5 @@
 import { useContext } from 'preact/hooks';
-import EntityTypesContext from '@src/form/entity-types-context';
+import EntityTypesContext from '@src/form/contexts/entity-types-context';
 
 export default () => {
   const { entityTypes } = useContext(EntityTypesContext);

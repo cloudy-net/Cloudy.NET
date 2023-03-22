@@ -2,7 +2,7 @@ import Conflicts from "../data/conflicts.js";
 import History from "../data/history.js";
 import html from '@src/html-init.js';
 import { useContext, useState } from 'preact/hooks';
-import EntityContext from "./entity-context.js";
+import EntityContext from "./contexts/entity-context";
 
 
 const Changes = () => {
