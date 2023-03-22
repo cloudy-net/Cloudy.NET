@@ -11,7 +11,7 @@ export default ({ entityType, keyValues, children }) => {
   useEffect(() => {
     let entityReference;
 
-    if (keyValues) {
+    if (keyValues && keyValues.length) {
       entityReference = { entityType, keyValues };
       setEntityReference(entityReference);
       const state = stateManager.createOrUpdateStateForExistingEntity(entityReference);

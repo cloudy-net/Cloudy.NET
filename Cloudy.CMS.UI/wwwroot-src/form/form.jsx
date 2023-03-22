@@ -51,7 +51,7 @@ function Form({ entityTypeName, mode, keyValues }) {
     </div>
   }
 
-  return keyValues && html`
+  return html`
     <${FieldComponentProvider}>
       <${EntityContextProvider} ...${{ entityType: entityTypeName, keyValues }}>
         <${mode === 'new' ? NewHeader : EditHeader} ...${{ entityTypeName, keyValues }} />

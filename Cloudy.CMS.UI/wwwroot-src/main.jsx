@@ -33,7 +33,7 @@ if (document.getElementById('app')) {
           <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
             <Dashboard path="/Admin/" />
             <Dashboard path="/Admin/List/:entityTypeName" />
-            <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" keyValues={keyValues} />
+            <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
             <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
             <Delete path="/Admin/Delete/:entityTypeName" />
           </Router>
