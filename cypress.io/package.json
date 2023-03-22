@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cypress run --config baseUrl=http://localhost:65248/"
   },
   "author": "",
   "license": "ISC",
