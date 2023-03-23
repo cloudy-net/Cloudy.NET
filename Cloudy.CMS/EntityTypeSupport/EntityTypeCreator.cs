@@ -46,7 +46,7 @@ namespace Cloudy.CMS.EntityTypeSupport
                 ));
             }
 
-            var propertyBlockTypes = result.SelectMany(t => t.Type.GetProperties())
+            var propertyReferencedBlockTypes = result.SelectMany(t => t.Type.GetProperties())
                 .Where(p => p.GetGetMethod() != null && p.GetSetMethod() != null)
                 .Select(p => p.PropertyType)
                 .Select(propertyType => propertyType.IsGenericType && propertyType  .GetGenericTypeDefinition() == typeof(IList<>) ? propertyType.GetGenericArguments().Single() : propertyType)
@@ -56,7 +56,7 @@ namespace Cloudy.CMS.EntityTypeSupport
             var blockTypes = AssemblyProvider.GetAll()
                 .SelectMany(a => a.Types)
                 .Where(t => !t.IsAbstract && !t.IsInterface)
-                .Where(t => propertyBlockTypes.Any(b => t.IsAssignableTo(b)))
+                .Where(t => propertyReferencedBlockTypes.Any(b => t.IsAssignableTo(b)))
                 .Select(t => new EntityTypeDescriptor(t.Name, t));
 
             result.AddRange(blockTypes);
