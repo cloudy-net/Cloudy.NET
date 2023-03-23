@@ -13,7 +13,7 @@ const FormField = ({ name, path, label, description, renderChrome, partial, sett
     }
 
     if (!renderChrome) {
-        return html`<${fieldComponents[partial]} ...${{ name, label, path, settings, dependencies }} />`;
+        return html`<${fieldComponents[partial]} ...${{ name, label, path, settings, validators, dependencies }} />`;
     }
 
     const { state } = useContext(EntityContext);
