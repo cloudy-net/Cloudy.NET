@@ -1,5 +1,5 @@
-import FieldComponentProvider from './contexts/field-component-provider.js';
-import EntityContextProvider from './contexts/entity-context-provider.js'
+import FieldComponentProvider from './contexts/field-component-provider';
+import EntityContextProvider from './contexts/entity-context-provider'
 import FormFields from './form-fields';
 import FormFooter from './form-footer';
 import Changes from './changes';
