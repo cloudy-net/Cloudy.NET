@@ -2,7 +2,7 @@ import EntityContext from "../form/contexts/entity-context";
 import html from '@src/html-init.js';
 import { useContext, useState  } from 'preact/hooks';
 import conflictManager from "./conflict-manager.js";
-import ShowConflict from "./show-conflict.js";
+import ShowConflict from "./show-conflict";
 import stateManager from "./state-manager.js";
 
 const Conflicts = () => {
