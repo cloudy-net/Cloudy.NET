@@ -1,4 +1,3 @@
-import html from '@src/html-init.js';
 import { useEffect, useRef } from 'preact/hooks';
 
 export default ({ onClickOutside, children }) => {
@@ -21,5 +20,5 @@ export default ({ onClickOutside, children }) => {
       return () => document.removeEventListener('click', callback);
     }, []);
   
-    return html`<div style="display: inline-block;" ref=${ref}>${children}</div>`;
+    return <div style="display: inline-block;" ref={ref}>{children}</div>;
   };

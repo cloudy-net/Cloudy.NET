@@ -1,4 +1,3 @@
-import html from '@src/html-init.js';
 import { useState, useEffect } from 'preact/hooks';
 import FieldComponentContext from "./field-component-context.js";
 
@@ -37,7 +36,7 @@ export default ({ children }) => {
     })();
   }, []);
 
-  return html`<${FieldComponentContext.Provider} value=${components}>
-    ${children}
-  <//>`;
+  return <FieldComponentContext.Provider value={components}>
+    {children}
+  </FieldComponentContext.Provider>;
 };

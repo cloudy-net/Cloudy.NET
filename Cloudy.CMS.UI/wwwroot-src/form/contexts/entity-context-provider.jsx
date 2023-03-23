@@ -1,4 +1,3 @@
-import html from '@src/html-init.js';
 import { useState, useEffect } from 'preact/hooks';
 import EntityContext from "./entity-context.js";
 import stateManager from '../../data/state-manager.js';
@@ -60,7 +59,7 @@ export default ({ entityType, keyValues, children }) => {
     };
   }, [keyValues]);
 
-  return html`<${EntityContext.Provider} value=${{ entityReference, state }}>
-    ${entityReference && state && !state.loading && children}
-  <//>`;
+  return <EntityContext.Provider value={{ entityReference, state }}>
+    {entityReference && state && !state.loading && children}
+  </EntityContext.Provider>;
 };

@@ -1,4 +1,3 @@
-import html from '@src/html-init.js';
 import { useContext } from 'preact/hooks';
 import EntityContext from "../form/contexts/entity-context";
 import changeManager from "./change-manager.js";
@@ -6,11 +5,11 @@ import diff from "./diff.js";
 
 const buildDiff = ([state, segment]) => {
   if (state == diff.INSERT) {
-    return html`<span class=cloudy-ui-diff-insert>${segment}</span>`;
+    return <span class="cloudy-ui-diff-insert">{segment}</span>;
   }
 
   if (state == diff.DELETE) {
-    return html`<span class=cloudy-ui-diff-delete>${segment}</span>`;
+    return <span class="cloudy-ui-diff-delete">{segment}</span>;
   }
 
   return segment;
@@ -30,13 +29,13 @@ const ShowConflict = ({ conflict, actions, setAction }) => {
     diff(initialValue || '', change.value || '', 0).map(buildDiff) :
     change.value;
 
-  const path = change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`);
+  const path = change.path.split('.').map((p, i) => <>{i ? ' » ' : null} <span>{p}</span></>);
 
   if (conflict.type == 'deleted') {
-    return html`<tr class="align-middle"><td>${path}<//><td>Property deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
+    return <tr class="align-middle"><td>{path}</td><td>Property deleted</td><td>{result}</td><td>Will be deleted</td></tr>;
   }
   if (conflict.type == 'blockdeleted') {
-    return html`<tr class="align-middle"><td>${path}<//><td>Block deleted<//><td>${result}<//><td>Will be deleted<//><//>`;
+    return <tr class="align-middle"><td>{path}</td><td>Block deleted</td><td>{result}</td><td>Will be deleted</td></tr>;
   }
   if (conflict.type == 'pendingchangesourceconflict') {
     const newValue = changeManager.getSourceValue(state.newSource.value, change.path);
@@ -45,16 +44,16 @@ const ShowConflict = ({ conflict, actions, setAction }) => {
       diff(initialValue || '', newValue || '', 0).map(buildDiff) :
       newValue;
 
-    const select = html`<select class="form-control form-control-sm" value=${actions[change.path]} onChange=${event => setAction(change.path, event.target.value)}>
-      <option value="" disabled selected hidden>Select action<//>
-      <option value="keep-source">Keep source<//>
-      <option value="keep-changes">Keep changes<//>
-    <//>`;
+    const select = <select class="form-control form-control-sm" value={actions[change.path]} onChange={event => setAction(change.path, event.target.value)}>
+      <option value="" disabled selected hidden>Select action</option>
+      <option value="keep-source">Keep source</option>
+      <option value="keep-changes">Keep changes</option>
+    </select>;
 
-    return html`<tr class="align-middle"><td>${path}<//><td class=${actions[change.path] == 'keep-changes' ? 'strikethrough' : null}>${sourceResult}<//><td class=${actions[change.path] == 'keep-source' ? 'strikethrough' : null}>${result}<//><td>${select}<//><//>`;
+    return <tr class="align-middle"><td>{path}</td><td class={actions[change.path] == 'keep-changes' ? 'strikethrough' : null}>{sourceResult}</td><td class={actions[change.path] == 'keep-source' ? 'strikethrough' : null}>{result}</td><td>{select}</td></tr>;
   }
 
-  return '<tr class="align-middle"><td>(Unknown change type)<//><//>';
+  return <tr class="align-middle"><td>(Unknown change type)</td></tr>;
 };
 
 export default ShowConflict;

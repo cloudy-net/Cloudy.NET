@@ -1,4 +1,3 @@
-import html from '@src/html-init.js';
 import { useContext, useState } from 'preact/hooks';
 import EntityContext from './contexts/entity-context';
 import stateManager from '../data/state-manager.js';
@@ -9,7 +8,7 @@ const FormFooter = ({ validateAll }) => {
   const [saving, setSaving] = useState();
   const { state } = useContext(EntityContext);
 
-  if(state.conflicts.length) {
+  if (state.conflicts.length) {
     return;
   }
 
@@ -32,16 +31,16 @@ const FormFooter = ({ validateAll }) => {
     }
   };
 
-  return html`
-  <div class="d-flex">
-    <button class="btn btn-primary" type="button" disabled=${saving || state.conflicts.length} onClick=${save}>Save</button>
-    <button class="btn btn-beta ms-auto" type="button" disabled=${!state.changes.length || saving} onClick=${discard}>Discard changes</button>
-  </div>
-    ${ValidationManager.anyIsInvalid(state.validationResults) ? html`
+  return <>
+    <div class="d-flex">
+      <button class="btn btn-primary" type="button" disabled={saving || state.conflicts.length} onClick={save}>Save</button>
+      <button class="btn btn-beta ms-auto" type="button" disabled={!state.changes.length || saving} onClick={discard}>Discard changes</button>
+    </div>
+    {ValidationManager.anyIsInvalid(state.validationResults) &&
       <div class="alert alert-warning mt-3" role="alert">
         The form contains validation errors that need to be reviewed before proceeding.
-      </div>` : null}
-  `
+      </div>}
+  </>
 };
 
 export default FormFooter;

@@ -1,5 +1,4 @@
 import EntityContext from "../form/contexts/entity-context";
-import html from '@src/html-init.js';
 import { useContext, useState  } from 'preact/hooks';
 import conflictManager from "./conflict-manager.js";
 import ShowConflict from "./show-conflict";
@@ -28,41 +27,21 @@ const Conflicts = () => {
     setMessage('Resolved conflicts.');
   };
 
-  return html`<div class="m-3">
+  return <div class="m-3">
         <p><strong>Conflicting source and/or model changes:</strong></p>
         <table class="table">
           <thead>
-            <tr><th>Property<//><th>Source<//><th>Your changes<//><th>Action<//><//>
-          <//>
+            <tr><th>Property</th><th>Source</th><th>Your changes</th><th>Action</th></tr>
+          </thead>
           <tbody>
-            ${state.conflicts.map(conflict => html`<${ShowConflict} conflict=${conflict} actions=${actions} setAction=${(path, action) => setActions({ ...actions, [path]: action })}/>`)}
-          <//>
-        <//>
+            ${state.conflicts.map(conflict => <ShowConflict conflict={conflict} actions={actions} setAction={(path, action) => setActions({ ...actions, [path]: action })}/>)}
+          </tbody>
+        </table>
         <p>
-          <button class="btn btn-primary me-2" type="button" onClick=${() => resolve()}>Apply</button>
-          <!--
-          <button class="btn btn-beta me-2" type="button" onClick=${() => {
-      const actions = {};
-
-      for (let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')) {
-        actions[conflict.path] = 'keep-source';
-      }
-
-      setActions(actions);
-    }}>Discard all changes</button>
-          <button class="btn btn-beta" type="button" onClick=${() => {
-      const actions = {};
-
-      for (let conflict of state.conflicts.filter(conflict => conflict.type == 'pendingchangesourceconflict')) {
-        actions[conflict.path] = '';
-      }
-
-      setActions(actions);
-    }}>Clear</button>
-          -->
-          ${message && html`<div class="d-inline-block ms-2">${message}<//>`}
+          <button class="btn btn-primary me-2" type="button" onClick={() => resolve()}>Apply</button>
+          {message && <div class="d-inline-block ms-2">{message}</div>}
         </p>
-      <//>`;
+      </div>;
 };
 
 export default Conflicts;

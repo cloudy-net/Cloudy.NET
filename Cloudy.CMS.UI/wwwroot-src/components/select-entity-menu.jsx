@@ -1,4 +1,3 @@
-import html from '@src/html-init.js';
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from "./search-box";
 
@@ -39,37 +38,36 @@ export default ({ entityType, simpleKey, value, onSelect }) => {
   }, [page, pageSize, filter, retryError]);
 
   if (error) {
-    return html`<>
+    return <>
       <div class="alert alert-primary mx-2">
-        <p>There was an error (<code>${error.response.status}${error.response.statusText ? " " + error.response.statusText : ""}</code>) loading your list${error.body ? ":" : "."}</p>
-        ${error.body ? html`<small><pre>${error.body}</pre></small>` : ""}
-        <p class="mb-0"><button class="btn btn-primary" onClick=${() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
+        <p>There was an error (<code>{error.response.status}{error.response.statusText ? " " + error.response.statusText : ""}</code>) loading your list{error.body ? ":" : "."}</p>
+        {error.body ? <small><pre>{error.body}</pre></small> : ""}
+        <p class="mb-0"><button class="btn btn-primary" onClick={() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
       </div>
-    </>`;
+    </>;
   }
 
   if (loading) {
-    return html`Loading ...`;
+    return <>Loading ...</>;
   }
 
-  return html`
-    <div class="mx-2">
-      <${SearchBox} small=${true} callback=${value => setFilter(value)} />
-    </div>
+  return <><div class="mx-2">
+    <SearchBox small={true} callback={value => setFilter(value)} />
+  </div>
     <div>
-      ${data.items.map(item =>
-        html`<div><a class=${"dropdown-item" + (item.reference == value ? " active" : "")} onClick=${() => { onSelect(item.reference == value ? null : item); }} tabIndex="0">${item.name}</a></div>`
+      {data.items.map(item =>
+        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item.reference == value ? null : item); }} tabIndex="0">{item.name}</a></div>
       )}
     </div>
     <div>
-      ${[...new Array(pageSize - data.items.length)].map(() => html`<div><a class="dropdown-item disabled">&nbsp;</a></div>`)}
+      {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
     </div>
     <nav>
       <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
-        <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
-        ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
-        <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
+        <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
+        {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
+        <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
       </ul>
     </nav>
-  `;
+  </>;
 };

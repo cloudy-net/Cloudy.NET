@@ -1,8 +1,7 @@
-import html from '@src/html-init.js';
 import { useContext } from 'preact/hooks';
 import dependencies from '../dependencies.js';
 import EntityContext from './contexts/entity-context.js';
-import FormField from './form-field.js';
+import FormField from './form-field';
 
 const FormFields = ({ fields, error, loading }) => {
   const { state } = useContext(EntityContext);
@@ -15,7 +14,7 @@ const FormFields = ({ fields, error, loading }) => {
     return;
   }
 
-  return fields.map(field => html`<${FormField} ...${field} path=${field.name} dependencies=${dependencies} />`)
+  return fields.map(field => <FormField {...field} path={field.name} dependencies={dependencies} />)
 };
 
 export default FormFields;

@@ -1,5 +1,4 @@
 import EntityContext from "../form/contexts/entity-context";
-import html from '@src/html-init.js';
 import { useContext } from 'preact/hooks';
 import changeManager from "./change-manager.js";
 import diff from "./diff.js";
@@ -9,11 +8,11 @@ const ViewChanges = () => {
 
   const buildDiff = ([state, segment]) => {
     if (state == diff.INSERT) {
-      return html`<span class=cloudy-ui-diff-insert>${segment}</span>`;
+      return <span class="cloudy-ui-diff-insert">{segment}</span>;
     }
 
     if (state == diff.DELETE) {
-      return html`<span class=cloudy-ui-diff-delete>${segment}</span>`;
+      return <span class="cloudy-ui-diff-delete">{segment}</span>;
     }
 
     return segment;
@@ -26,18 +25,18 @@ const ViewChanges = () => {
       diff(initialValue || '', change.value || '', 0).map(buildDiff) :
       change.value;
 
-    return html`
-      ${change.path.split('.').map((p, i) => html`${i ? ' » ' : null} <span>${p}</span>`)}:
-      ${change.$type == 'simple' ? html` Changed to “${result}”` : ` Changed block type to “${change.type}”`}
-    `
+    return <>
+      {change.path.split('.').map((p, i) => <>{i ? ' » ' : null} <span>{p}</span></>)}:
+      {change.$type == 'simple' ? ` Changed to “${result}”` : ` Changed block type to “${change.type}”`}
+    </>;
   };
 
-  return html`
+  return <>
     <p><strong>Your changes:</strong></p>
     <ul>
-      ${state.changes.map(change => html`<li>${showChange(change)}</li>`)}
+      {state.changes.map(change => <li>{showChange(change)}</li>)}
     </ul>
-    `
+  </>;
 };
 
 export default ViewChanges;
