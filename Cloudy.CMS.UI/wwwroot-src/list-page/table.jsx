@@ -1,7 +1,7 @@
 import { route } from 'preact-router';
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box';
-import ListFilter from './list-filter.js';
+import ListFilter from './list-filter';
 import ColumnComponentProvider from './column-component-provider';
 import TableBody from './table-body';
 
