@@ -1,4 +1,4 @@
-import html from '@src/html-init.js';
+import html from '@src/util/html.js';
 import { useContext } from 'preact/hooks';
 import ColumnComponentContext from './column-component-context.jsx';
 

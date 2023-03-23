@@ -1,4 +1,4 @@
-import html from '@src/html-init.js';
+import html from '@src/util/html.js';
 import { useContext } from 'preact/hooks';
 import EntityContext from './contexts/entity-context';
 import FieldComponentContext from "./contexts/field-component-context";
