@@ -51,17 +51,16 @@ function Form({ entityTypeName, mode, keyValues }) {
     </div>
   }
 
-  return html`
-    <${FieldComponentProvider}>
-      <${EntityContextProvider} ...${{ entityType: entityTypeName, keyValues }}>
-        <${mode === 'new' ? NewHeader : EditHeader} ...${{ entityTypeName, keyValues }} />
-        <${Card}>
-          <${Changes} />
-          <${FormFields} ...${{ fields, error, loading }} />
-          <${FormFooter} validateAll=${(entityReference) => ValidationManager.validateAll(fields, entityReference)} />
-        </>
-      </>
-    </>`;
+  return <FieldComponentProvider>
+    <EntityContextProvider {...{ entityType: entityTypeName, keyValues }}>
+      {mode === 'new' ? <NewHeader {...{ entityTypeName, keyValues }} /> : <EditHeader {...{ entityTypeName, keyValues }} />}
+      <Card>
+        <Changes />
+        <FormFields {...{ fields, error, loading }} />
+        <FormFooter validateAll={(entityReference) => ValidationManager.validateAll(fields, entityReference)} />
+      </Card>
+    </EntityContextProvider>
+  </FieldComponentProvider>;
 };
 
 export default Form;
