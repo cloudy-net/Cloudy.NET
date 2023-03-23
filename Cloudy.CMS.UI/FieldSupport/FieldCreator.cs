@@ -94,7 +94,7 @@ namespace Cloudy.CMS.UI.FieldSupport
 
                 if (propertyDefinition.List)
                 {
-                    listPartial = "controls/sortable/sortable.js";
+                    listPartial = "controls/generic-list/generic-list.js";
                 }
 
                 var renderChrome = true;

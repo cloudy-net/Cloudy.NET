@@ -12,7 +12,7 @@ namespace Cloudy.CMS.UI.FieldSupport
         string Label,
         string Description,
         string Partial,
-        string SortablePartial,
+        string ListPartial,
         bool? AutoGenerate,
         bool RenderChrome,
         string Tab,
