@@ -2,7 +2,7 @@ import FieldComponentProvider from './contexts/field-component-provider.js';
 import EntityContextProvider from './contexts/entity-context-provider.js'
 import FormFields from './form-fields.js';
 import FormFooter from './form-footer.js';
-import Changes from './changes.js';
+import Changes from './changes';
 import Card from '@src/layout/card.jsx';
 import NewHeader from './form-header-new.jsx';
 import EditHeader from './form-header-edit.jsx';
