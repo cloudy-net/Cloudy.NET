@@ -1,5 +1,4 @@
 import { route } from 'preact-router';
-import html from '@src/html-init.js';
 import { useState, useEffect } from "preact/hooks";
 
 const Delete = ({ entityTypeName }) => {
@@ -46,7 +45,7 @@ const Delete = ({ entityTypeName }) => {
                                 (with:
                                 {Object
                                     .keys(viewData.primaryKeysWithValues)
-                                    .map((key, index) => html`${!!index && ','} ${key} <code>${viewData.primaryKeysWithValues[key]}</code>`)
+                                    .map((key, index) => <>{!!index && ','} {key} <code>{viewData.primaryKeysWithValues[key]}</code></>)
                                 }
                                 )
                             </li>
