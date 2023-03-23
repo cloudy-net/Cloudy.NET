@@ -1,6 +1,6 @@
 import html from '@src/html-init.js';
 import { useEffect, useState } from 'preact/hooks';
-import SearchBox from "./search-box.js";
+import SearchBox from "./search-box";
 
 export default ({ entityType, simpleKey, value, onSelect }) => {
   const [pageSize] = useState(10);
