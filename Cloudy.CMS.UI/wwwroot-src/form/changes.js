@@ -1,4 +1,4 @@
-import Conflicts from "../data/conflicts.js";
+import Conflicts from "../data/conflicts";
 import History from "../data/history.js";
 import html from '@src/html-init.js';
 import { useContext, useState } from 'preact/hooks';
