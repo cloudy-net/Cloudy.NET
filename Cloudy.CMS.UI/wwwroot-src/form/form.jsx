@@ -1,6 +1,6 @@
 import FieldComponentProvider from './contexts/field-component-provider.js';
 import EntityContextProvider from './contexts/entity-context-provider.js'
-import FormFields from './form-fields.js';
+import FormFields from './form-fields';
 import FormFooter from './form-footer.js';
 import Changes from './changes';
 import Card from '@src/layout/card.jsx';
