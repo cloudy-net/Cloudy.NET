@@ -1,5 +1,4 @@
 import { route } from 'preact-router';
-import html from '@src/html-init.js';
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box.js';
 import ListFilter from './list-filter.js';
@@ -125,9 +124,9 @@ export default ({ entityType }) => {
             )}
           </tr>
         </thead>
-        {html`<${ColumnComponentProvider} componentPartials=${[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
-          <${TableBody} ...${{ items: data.items, columns, pageSize, settings }} />
-        </>`}
+        <ColumnComponentProvider componentPartials={[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
+          <TableBody {...{ items: data.items, columns, pageSize, settings }} />
+        </ColumnComponentProvider>
       </table>
     </div>;
   }
@@ -137,7 +136,7 @@ export default ({ entityType }) => {
       <div class="list-page-search">
         <SearchBox callback={value => setSearch(value)} floating={filters.length} />
       </div>
-      {filterOptions.map(c => html`<${ListFilter} ...${c} filter=${(key, value) => {
+      {filterOptions.map(c => <ListFilter {...c} filter={(key, value) => {
         if (!value) {
           var newFilters = { ...filters };
 
@@ -148,17 +147,17 @@ export default ({ entityType }) => {
         }
 
         setFilters({ ...filters, [key]: value });
-      }} />`)}
+      }} />)}
     </div>
     <div class="table-responsive">
       {content}
-      {pages && html`<nav>
+      {pages && <nav>
           <ul class="pagination justify-content-center">
-            <li class="page-item"><a class=${"page-link" + (page == 1 ? " disabled" : "")} onClick=${() => setPage(Math.max(1, page - 1))}>Previous</a></li>
-            ${pages.map((_, i) => html`<li class=${"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick=${() => setPage(i + 1)}>${i + 1}</a></li>`)}
-            <li class="page-item"><a class=${"page-link" + (page == pageCount ? " disabled" : "")} onClick=${() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
+            <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))}>Previous</a></li>
+            {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
+            <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
           </ul>
-        </nav>`}
+        </nav>}
     </div>
   </>
     ;
