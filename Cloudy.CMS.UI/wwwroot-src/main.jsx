@@ -18,7 +18,7 @@ window.viteIsLoaded = true;
 
 if (document.getElementById('app')) {
   const Main = () => {
-    const [keyValues, setKeyValues] = useState(null);
+    const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
     
     return <EntityTypesProvider>
       <div class="layout">
