@@ -34,7 +34,7 @@ const Conflicts = () => {
             <tr><th>Property</th><th>Source</th><th>Your changes</th><th>Action</th></tr>
           </thead>
           <tbody>
-            ${state.conflicts.map(conflict => <ShowConflict conflict={conflict} actions={actions} setAction={(path, action) => setActions({ ...actions, [path]: action })}/>)}
+            {state.conflicts.map(conflict => <ShowConflict conflict={conflict} actions={actions} setAction={(path, action) => setActions({ ...actions, [path]: action })}/>)}
           </tbody>
         </table>
         <p>
