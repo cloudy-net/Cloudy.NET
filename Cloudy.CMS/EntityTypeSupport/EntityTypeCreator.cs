@@ -8,6 +8,7 @@ using System.Reflection;
 using Cloudy.CMS.AssemblySupport;
 using Cloudy.CMS.PropertyDefinitionSupport;
 using Cloudy.CMS.EntitySupport.HierarchySupport.Internal;
+using System.Runtime.CompilerServices;
 
 namespace Cloudy.CMS.EntityTypeSupport
 {
@@ -45,15 +46,17 @@ namespace Cloudy.CMS.EntityTypeSupport
                 ));
             }
 
-            var explicitBlockTypes = result.SelectMany(t => t.Type.GetProperties())
+            var propertyBlockTypes = result.SelectMany(t => t.Type.GetProperties())
                 .Where(p => p.GetGetMethod() != null && p.GetSetMethod() != null)
-                .Where(p => p.PropertyType != typeof(string) && (p.PropertyType.IsClass || p.PropertyType.IsInterface))
-                .Select(p => p.PropertyType).ToList().AsReadOnly();
+                .Select(p => p.PropertyType)
+                .Select(propertyType => propertyType.IsGenericType && propertyType  .GetGenericTypeDefinition() == typeof(IList<>) ? propertyType.GetGenericArguments().Single() : propertyType)
+                .Where(propertyType => propertyType != typeof(string) && !propertyType.IsAssignableTo(typeof(ITuple)) && (propertyType.IsClass || propertyType.IsInterface))
+                .ToList().AsReadOnly();
 
             var blockTypes = AssemblyProvider.GetAll()
                 .SelectMany(a => a.Types)
                 .Where(t => !t.IsAbstract && !t.IsInterface)
-                .Where(t => explicitBlockTypes.Any(b => t.IsAssignableTo(b)))
+                .Where(t => propertyBlockTypes.Any(b => t.IsAssignableTo(b)))
                 .Select(t => new EntityTypeDescriptor(t.Name, t));
 
             result.AddRange(blockTypes);
