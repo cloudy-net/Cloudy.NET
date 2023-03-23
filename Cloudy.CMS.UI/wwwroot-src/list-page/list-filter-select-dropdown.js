@@ -1,7 +1,7 @@
 import html from '@src/html-init.js';
 import { useEffect, useRef, useState} from 'preact/hooks';
 
-import SelectEntityMenu from "../components/select-entity-menu.js";
+import SelectEntityMenu from "../components/select-entity-menu";
 
 export default ({ label, entityType, onSelect, simpleKey }) => {
   const [value, setValue] = useState();
