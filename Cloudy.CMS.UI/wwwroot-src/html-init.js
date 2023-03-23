@@ -1,5 +1,5 @@
 import { h } from 'preact'
-import htm from 'https://unpkg.com/htm?module';
+import htm from 'htm';
 
 const html = htm.bind(h);
 
