@@ -1,5 +1,5 @@
 import Conflicts from "../data/conflicts";
-import History from "../data/history.js";
+import History from "../data/history";
 import html from '@src/html-init.js';
 import { useContext, useState } from 'preact/hooks';
 import EntityContext from "./contexts/entity-context";
