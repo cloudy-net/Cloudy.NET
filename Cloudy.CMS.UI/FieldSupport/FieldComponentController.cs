@@ -11,12 +11,18 @@ namespace Cloudy.CMS.UI.FieldSupport
     [ResponseCache(NoStore = true)]
     public record FieldComponentController(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider)
     {
+        IEnumerable<string> Values { get; } = EntityTypeProvider.GetAll()
+            .SelectMany(c => FieldProvider.Get(c.Name))
+            .SelectMany(f => new List<string> { f.Partial, f.ListPartial })
+            .Where(p => p != null)
+            .Distinct();
+
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/form/fields/components")]
         public object Get()
         {
-            return EntityTypeProvider.GetAll().SelectMany(c => FieldProvider.Get(c.Name)).Select(f => f.Partial).Where(p => p != null).Distinct();
+            return Values;
         }
     }
 }

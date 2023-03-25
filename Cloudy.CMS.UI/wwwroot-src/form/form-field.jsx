@@ -13,7 +13,7 @@ const FormField = ({ name, path, label, description, renderChrome, partial, list
     }
 
     const control = listPartial ?
-        <>List</> :
+        html`<${fieldComponents[listPartial]} ...${{ name, label, path, settings, validators, dependencies }} />` :
         html`<${fieldComponents[partial]} ...${{ name, label, path, settings, validators, dependencies }} />`;
 
     if (!renderChrome) {
