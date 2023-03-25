@@ -95,6 +95,11 @@ namespace Cloudy.CMS.UI.FieldSupport
                 if (propertyDefinition.List)
                 {
                     listPartial = "controls/generic-list/generic-list.js";
+
+                    if (propertyDefinition.Block)
+                    {
+                        listPartial = "controls/embedded-block-list/embedded-block-list.js";
+                    }
                 }
 
                 var renderChrome = true;
