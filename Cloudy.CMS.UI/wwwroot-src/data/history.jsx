@@ -19,15 +19,18 @@ const ViewChanges = () => {
   };
 
   const showChange = change => {
-    const initialValue = changeManager.getSourceValue(state.source.value, change.path);
-    const result = (typeof initialValue == 'string' || initialValue == null) &&
-      (typeof change.value == 'string' || change.value == null) ?
-      diff(initialValue || '', change.value || '', 0).map(buildDiff) :
-      change.value;
+    const getDiff = () => {
+      const initialValue = changeManager.getSourceValue(state.source.value, change.path);
+      const result = (typeof initialValue == 'string' || initialValue == null) &&
+        (typeof change.value == 'string' || change.value == null) ?
+        diff(initialValue || '', change.value || '', 0).map(buildDiff) :
+        change.value;
+      return result;
+    }
 
     return <>
       {change.path.split('.').map((p, i) => <>{i ? ' » ' : null} <span>{p}</span></>)}:
-      {change.$type == 'simple' ? <> Changed to “{result}”</> : ` Changed block type to “${change.type}”`}
+      {change.$type == 'simple' ? <> Changed to “{getDiff()}”</> : ` Changed block type to “${change.type}”`}
     </>;
   };
 
