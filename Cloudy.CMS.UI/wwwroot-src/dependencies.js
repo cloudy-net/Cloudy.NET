@@ -5,6 +5,7 @@ import ValidationManager from './data/validation-manager.js';
 import urlFetcher from './util/url-fetcher.js';
 import simpleChangeHandler from './data/change-handlers/simple-change-handler.js';
 import blockTypeChangeHandler from './data/change-handlers/block-type-change-handler.js';
+import EmbeddedBlockListHandler from './data/change-handlers/embedded-block-list-handler.js';
 import Dropdown from './components/dropdown';
 import FormField from './form/form-field';
 import closeDropdown from './components/close-dropdown.js';
@@ -26,6 +27,7 @@ const dependencies = {
   urlFetcher,
   ValidationManager,
   blockTypeChangeHandler,
+  embeddedBlockListHandler: EmbeddedBlockListHandler,
   componentContextProvider,
 };
 
