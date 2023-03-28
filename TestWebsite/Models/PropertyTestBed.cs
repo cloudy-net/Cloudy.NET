@@ -3,13 +3,14 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.UI.FieldSupport.CustomSelect;
-using Cloudy.CMS.UI.FieldSupport;
 using Cloudy.CMS.UI.List;
 using System.Collections.Generic;
 using TestWebsite.Factories;
+using TestWebsite.Constants;
 
 namespace TestWebsite.Models
 {
+    [Display(GroupName = General.GroupNames.Test)]
     public class PropertyTestBed : ISingleton
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

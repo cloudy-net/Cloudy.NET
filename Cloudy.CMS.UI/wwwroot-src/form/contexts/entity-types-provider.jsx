@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'preact/hooks';
+import groupby from '@src/util/groupby';
 import EntityTypesContext from './entity-types-context';
 
 export default ({ children }) => {
   const [entityTypes, setEntityTypes] = useState([]);
+  const [groupedEntityTypes, setGroupedEntityTypes] = useState([]);
 
   useEffect(function () {
     (async () => {
@@ -12,11 +14,14 @@ export default ({ children }) => {
         throw { response, body: await response.text() };
       }
 
-      setEntityTypes(await response.json());
+      const json = await response.json();
+
+      setEntityTypes(json);
+      setGroupedEntityTypes(groupby(json, 'groupName'));
     })();
   }, []);
 
-  return <EntityTypesContext.Provider value={{ entityTypes }}>
+  return <EntityTypesContext.Provider value={{ entityTypes, groupedEntityTypes }}>
     {children}
   </EntityTypesContext.Provider>;
 };

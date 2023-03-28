@@ -8,10 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TestWebsite.Constants;
 
 namespace TestWebsite.Models
 {
-    [Display(Description = "Create pages for your website.")]
+    [Display(Description = "Create pages for your website.", GroupName = General.GroupNames.Page)]
     public class Page : INameable, IRoutable, /*IImageable,*/ IHierarchical<Guid?>
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

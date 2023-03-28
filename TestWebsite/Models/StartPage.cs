@@ -3,10 +3,13 @@ using Cloudy.CMS.EntitySupport.HierarchySupport;
 using Cloudy.CMS.SingletonSupport;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using System;
+using System.ComponentModel.DataAnnotations;
+using TestWebsite.Constants;
 
 namespace TestWebsite.Models
 {
     [AllowedChildren<Page>]
+    [Display(GroupName = General.GroupNames.Page)]
     public class StartPage : INameable, IRoutable, IHierarchical<Guid?>, ISingleton
     {
         public Guid? Id { get; set; }

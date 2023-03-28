@@ -1,9 +1,12 @@
 ﻿using Cloudy.CMS.EntitySupport.HierarchySupport;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using TestWebsite.Constants;
 
 namespace TestWebsite.Models
 {
+    [Display(GroupName = General.GroupNames.Page)]
     public class PageTree : IHierarchyNode<Guid?>
     {
         public Guid? Id { get; set; }

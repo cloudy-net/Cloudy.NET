@@ -43,12 +43,14 @@ namespace Cloudy.CMS.UI.EntityTypeList
             var entityTypeItems = entityTypes.Select(async entityType =>
             {
                 var name = entityTypeNameProvider.Get(entityType.Type);
+                var displayAttribute = entityType.Type.GetCustomAttribute<DisplayAttribute>();
 
                 return new EntityTypeItem(
                     name.PluralName,
                     entityType.Name,
                     name.Name,
-                    entityType.Type.GetCustomAttribute<DisplayAttribute>()?.Description,
+                    displayAttribute?.Description,
+                    displayAttribute?.GroupName,
                     entityType.IsSingleton,
                     await GetLink(entityType).ToListAsync()
                 );
@@ -100,6 +102,7 @@ namespace Cloudy.CMS.UI.EntityTypeList
             string EntityTypeName,
             string Name,
             string Description,
+            string GroupName,
             bool IsSingleton,
             IEnumerable<Link> Links
         );
