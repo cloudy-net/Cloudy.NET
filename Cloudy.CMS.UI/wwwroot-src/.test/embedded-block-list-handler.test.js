@@ -4,7 +4,7 @@ import stateManager from '../data/state-manager.js';
 import statePersister from '../data/state-persister.js';
 import embeddedBlockListHandler from '../data/change-handlers/embedded-block-list-handler.js';
 
-describe('embedded-block-list-change-handler.js', () => {
+describe('embedded-block-list-handler.js', () => {
   it('intermediate value', () => {
     global.localStorage.clear();
     stateManager.states = statePersister.loadStates();
