@@ -15,13 +15,13 @@ describe('embedded-block-list-change-handler.js', () => {
       ...stateManager.getState(entityReference),
       source: {
         value: {
-          [propertyName]: []
+          [propertyName]: [{}, {}]
         }
       }
     });
 
-    assert.equal(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName).length, 0);
-    embeddedBlockListHandler.add(entityReference, propertyName);
-    assert.equal(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName).length, 1);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), ['0', '1']);
+    const item = embeddedBlockListHandler.add(entityReference, propertyName);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), ['0', '1', item.key]);
   });
 });

@@ -3,8 +3,6 @@ import changeManager from "../change-manager.js";
 import stateManager from "../state-manager.js";
 import statePersister from "../state-persister.js";
 
-const UNCHANGED = {};
-
 class EmbeddedBlockListHandler {
   add(entityReference, path, type) {
     const state = stateManager.getState(entityReference);
@@ -17,16 +15,14 @@ class EmbeddedBlockListHandler {
     state.changes = changeManager.getChanges(state);
 
     statePersister.persist(state);
+
+    return change;
   }
   getIntermediateValue(state, path) {
-    let value = UNCHANGED;
+    let value = changeManager.getSourceValue(state.source.value, path).map((value, key) => `${key}`) || [];
 
     for (var change of state.history) {
       if (change.$type == 'embeddedblocklist.add' && path == change.path) {
-        if(value == UNCHANGED){
-          value = [];
-        }
-
         value.push(change.key);
         continue;
       }
@@ -34,10 +30,6 @@ class EmbeddedBlockListHandler {
       //   value = change.value;
       //   continue;
       // }
-    }
-
-    if (value == UNCHANGED) {
-      return changeManager.getSourceValue(state.source.value, path);
     }
 
     return value;
