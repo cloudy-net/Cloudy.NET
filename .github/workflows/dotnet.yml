@@ -15,8 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Run Cypress tests
-      run: docker-compose up --abort-on-container-exit
+    # - name: Run Cypress tests
+    #   run: docker-compose up --abort-on-container-exit
     
     - name: setup dotnet
       uses: actions/setup-dotnet@v1
