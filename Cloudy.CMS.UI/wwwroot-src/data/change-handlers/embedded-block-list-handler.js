@@ -19,17 +19,17 @@ class EmbeddedBlockListHandler {
     return change;
   }
   getIntermediateValue(state, path) {
-    let value = changeManager.getSourceValue(state.source.value, path).map((value, key) => `${key}`) || [];
+    let value = (changeManager.getSourceValue(state.source.value, path) || []).map((value, key) => ({ key: `${key}`, type: value.type }));
 
     for (var change of state.history) {
       if (change.$type == 'embeddedblocklist.add' && path == change.path) {
-        value.push(change.key);
+        value.push({ key: change.key, type: change.type });
         continue;
       }
-      // if (change.$type == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
-      //   value = change.value;
-      //   continue;
-      // }
+      if (change.$type == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {
+        value = null;
+        continue;
+      }
     }
 
     return value;

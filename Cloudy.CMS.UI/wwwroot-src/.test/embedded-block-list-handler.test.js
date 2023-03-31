@@ -10,18 +10,19 @@ describe('embedded-block-list-handler.js', () => {
     stateManager.states = statePersister.loadStates();
     const { entityReference } = stateManager.createStateForNewEntity('page');
     const propertyName = 'TestProperty';
+    const blockType = 'BlockType';
 
     stateManager.replace({
       ...stateManager.getState(entityReference),
       source: {
         value: {
-          [propertyName]: [{}, {}]
+          [propertyName]: [{ type: blockType }, { type: blockType }]
         }
       }
     });
 
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), ['0', '1']);
-    const item = embeddedBlockListHandler.add(entityReference, propertyName);
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), ['0', '1', item.key]);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }]);
+    const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }, { key: item.key, type: blockType }]);
   });
 });
