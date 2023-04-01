@@ -4,7 +4,7 @@
     {
         public static class GroupNames
         {
-            public const string Page = "Page";
+            public const string Page = "Pages";
             public const string Settings = "Settings";
             public const string Test = "Test";
         }

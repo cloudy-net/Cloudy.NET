@@ -1,23 +1,27 @@
 import { useContext } from "preact/hooks";
 import EntityTypesContext from "../form/contexts/entity-types-context";
 import { ReactComponent as DashboardIcon } from "../assets/icon-dashboard.svg";
+import { ReactComponent as EntityTypeIcon } from "../assets/icon-entity-type.svg";
+import { ReactComponent as Cloud } from "../assets/cloud.svg";
+import { ReactComponent as Caret } from "../assets/caret.svg";
+import { Link } from "preact-router/match";
 
 const MainMenu = () => {
   const { groupedEntityTypes } = useContext(EntityTypesContext);
 
   return <div className="main-menu">
-    <div className="main-menu-cloud">☁</div>
+    <Cloud className="main-menu-cloud" />
     <ul className="main-menu-items">
       <li className="main-menu-item">
-        <a className="main-menu-item-button active" tabIndex="0"><DashboardIcon className="main-menu-item-icon" /> Dashboard</a>
+        <Link activeClassName="active" className="main-menu-item-button" href="/Admin"><DashboardIcon className="main-menu-item-icon" /> Dashboard</Link>
       </li>
       {Object.keys(groupedEntityTypes).sort().map(key => <>
         <li className="main-menu-item">
-          <a className="main-menu-item-button" tabIndex="0">{key}</a>
+          <a className="main-menu-item-button" tabIndex="0"><EntityTypeIcon className="main-menu-item-icon" /> {key} <Caret className="main-menu-item-caret" /></a>
           <ul class="main-menu-sub-items">
             {groupedEntityTypes[key].map(entityType =>
               <li className="main-menu-sub-item">
-                <a className="main-menu-sub-item-button" tabIndex="0">{entityType.pluralName}</a>
+                <Link activeClassName="active" class="main-menu-sub-item-button" href={`/Admin/List/${entityType.entityTypeName}`}>{entityType.pluralName}</Link>
               </li>
             )}
           </ul>

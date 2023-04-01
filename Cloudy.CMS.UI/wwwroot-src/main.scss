@@ -60,20 +60,26 @@ label {
 /* MAIN MENU */
 
 .main-menu {
-  flex: 0 0 250px;
+  flex: 0 0 200px;
   overflow: auto;
   background: #0D1520;
   color: #B9D6F2;
 }
 
+.main-menu-cloud {
+  margin: 16px auto 16px;
+  display: block;
+}
+
 .main-menu-items {
-  list-style-type: none;
   margin: 0 8px;
   padding: 0;
+  list-style-type: none;
 }
 .main-menu-item-button {
-  display: block;
-  padding: 10px 12px 12px;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px 12px;
   color: inherit;
   text-decoration: none;
 
@@ -82,20 +88,59 @@ label {
     border-radius: 8px;
     color: white;
   }
+
+  &:hover {
+    color: white;
+  }
 }
+
 .main-menu-item-icon {
   display: inline-block;
   width: 16px;
   height: 16px;
-  margin-top: -1px;
+  margin-top: 2px;
+  margin-right: 6px;
+  stroke: #B9D6F2;
+
+  .main-menu-item-button:hover & {
+    stroke: white;
+  }
+
+  .main-menu-item-button.active & {
+    stroke: #1F91FF;
+  }
+}
+
+.main-menu-item-caret {
+  margin-left: auto;
 }
 
 .main-menu-sub-items {
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
+
 .main-menu-sub-item-button {
-  color: inherit;
+  margin: 5px 5px 5px 23px;
+  display: flex;
+  align-items: center;
+  padding: 3px 14px 3px;
   text-decoration: none;
+  color: inherit;
+
+  &.active {
+    background: rgba(white, 0.2);
+    border-radius: 8px;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 5px;
+    border-radius: 8px;
+  }
+
+  &:hover {
+    color: white;
+  }
 }
 
 
