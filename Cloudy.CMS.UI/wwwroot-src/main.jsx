@@ -12,6 +12,7 @@ import Navbar from './layout/navbar';
 import EntityTypesProvider from './form/contexts/entity-types-provider';
 import LayoutLeftPanel from './layout/layout-left-panel';
 import { useState } from 'preact/hooks';
+import MainMenu from './layout/main-menu';
 
 window.viteIsLoaded = true;
 
@@ -21,6 +22,7 @@ if (document.getElementById('app')) {
     
     return <EntityTypesProvider>
       <div class="layout">
+        <MainMenu />
         <Router>
           <LayoutLeftPanel path="/Admin/List/:entityTypeName" mode="new" />
           <LayoutLeftPanel path="/Admin/New/:entityTypeName" mode="new" />

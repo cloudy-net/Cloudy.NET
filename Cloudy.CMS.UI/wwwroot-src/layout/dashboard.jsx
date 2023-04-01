@@ -4,8 +4,6 @@ import EntityTypesContext from '@src/form/contexts/entity-types-context';
 export default () => {
   const { groupedEntityTypes } = useContext(EntityTypesContext);
 
-  console.log(groupedEntityTypes);
-
   const Table = () => <>
     <div class="container-fluid">
       {Object.keys(groupedEntityTypes).sort().map(key => <>

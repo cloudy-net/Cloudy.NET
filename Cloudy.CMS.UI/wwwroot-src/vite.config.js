@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import path from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import svgr from 'vite-plugin-svgr'
 
 export default () =>
   defineConfig({
@@ -19,6 +20,7 @@ export default () =>
           },
         ],
       }),
+      svgr(),
     ],
     resolve: {
       alias: {
