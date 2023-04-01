@@ -113,6 +113,12 @@ label {
 
 .main-menu-item-caret {
   margin-left: auto;
+  transform: rotate3d(1, 0, 0, 0deg);
+  transition: transform 0.2s;
+
+  &.expanded {
+    transform: rotate3d(1, 0, 0, 180deg);
+  }
 }
 
 .main-menu-sub-items {
