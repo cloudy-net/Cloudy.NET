@@ -156,13 +156,13 @@ label {
   grid-row: navbar;
   grid-column: navbar;
   display: flex;
+  padding: 16px;
   align-items: center;
   border-bottom: 1px solid #B9D6F2;
 }
 
 .navbar-title {
   padding: 16px;
-  padding-left: 32px;
   font-size: 26px;
   font-weight: bold;
 }
@@ -172,13 +172,22 @@ label {
   text-align: center;
 }
 
+.navbar-notification-button {
+  padding: 16px;
+}
+
 .navbar-notification-icon {
-  margin-right: 32px;
   stroke: #9996A7;
 
-  &:hover {
+  .navbar-notification-button:hover & {
     stroke: darken(#9996A7, 7%);
   }
+}
+
+.navbar-profile-button {
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 
@@ -431,6 +440,7 @@ span.cloudy-ui-diff-delete {
   &:visited {
     color: darken($main-green, 7%);
   }
+
   &:active,
   &:visited:hover,
   &:visited:focus {

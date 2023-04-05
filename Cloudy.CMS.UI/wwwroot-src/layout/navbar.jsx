@@ -24,8 +24,8 @@ const Navbar = ({ }) => {
         Unlicensed version.<br/><a className="text-link" href="https://www.cloudy.net/" target="_blank">Click here</a> to purchase a license.
       </div>
     }
-    <a className="navbar-notification-icon" tabIndex="0"><NotificationIcon /></a>
-
+    <a className="navbar-notification-button" tabIndex="0"><NotificationIcon className="navbar-notification-icon" /></a>
+    <a className="navbar-profile-button" tabIndex="0">Alfred Pennyworth <span className="navbar-profile-picture"></span></a>
   </div>
 }
 
