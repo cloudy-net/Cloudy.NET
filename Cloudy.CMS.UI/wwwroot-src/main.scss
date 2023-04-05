@@ -162,12 +162,14 @@ label {
 }
 
 .navbar-title {
+  margin-top: -2px;
   padding: 16px;
   font-size: 26px;
   font-weight: bold;
 }
 
 .navbar-license-nag {
+  margin-top: -2px;
   flex: 1;
   text-align: center;
 }
@@ -185,6 +187,7 @@ label {
 }
 
 .navbar-profile-button {
+  margin-top: -5px;
   padding: 16px;
   font-size: 18px;
   font-weight: 500;
