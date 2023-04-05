@@ -180,6 +180,7 @@ label {
 
 .navbar-notification-icon {
   stroke: #9996A7;
+  vertical-align: middle;
 
   .navbar-notification-button:hover & {
     stroke: darken(#9996A7, 7%);
@@ -187,7 +188,7 @@ label {
 }
 
 .navbar-profile-button {
-  margin-top: -5px;
+  margin-top: -2px;
   padding: 16px;
   font-size: 18px;
   font-weight: 500;
