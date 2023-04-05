@@ -10,7 +10,7 @@ import Delete from './layout/delete'
 import Navbar from './layout/navbar';
 
 import EntityTypesProvider from './form/contexts/entity-types-provider';
-import LayoutLeftPanel from './layout/layout-left-panel';
+import NavigationPanel from './layout/navigation-panel';
 import { useState } from 'preact/hooks';
 import MainMenu from './layout/main-menu';
 
@@ -19,18 +19,18 @@ window.viteIsLoaded = true;
 if (document.getElementById('app')) {
   const Main = () => {
     const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
-    
+
     return <EntityTypesProvider>
       <div class="layout">
         <MainMenu />
+        <Navbar />
         <Router>
-          <LayoutLeftPanel path="/Admin/List/:entityTypeName" mode="new" />
-          <LayoutLeftPanel path="/Admin/New/:entityTypeName" mode="new" />
-          <LayoutLeftPanel path="/Admin/Edit/:entityTypeName" mode="edit" />
-          <LayoutLeftPanel path="/Admin/Delete/:entityTypeName" />
+          <NavigationPanel path="/Admin/List/:entityTypeName" mode="new" />
+          <NavigationPanel path="/Admin/New/:entityTypeName" mode="new" />
+          <NavigationPanel path="/Admin/Edit/:entityTypeName" mode="edit" />
+          <NavigationPanel path="/Admin/Delete/:entityTypeName" />
         </Router>
         <div className="layout-main-panel">
-          <Navbar />
           <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
             <Dashboard path="/Admin/" />
             <Dashboard path="/Admin/List/:entityTypeName" />

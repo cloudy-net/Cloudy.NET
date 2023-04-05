@@ -38,8 +38,6 @@
 	<ItemGroup>
 	  <Content Remove="wwwroot\package-lock.json" />
 	  <Content Remove="wwwroot\package.json" />
-	  <None Include="wwwroot\package-lock.json" />
-	  <None Include="wwwroot\package.json" />
 	</ItemGroup>
 
 </Project>

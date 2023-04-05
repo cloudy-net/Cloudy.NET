@@ -2,7 +2,7 @@ import Router from 'preact-router';
 import Table from '../list-page/table';
 
 export default () => {
-  return <div class="layout-left-panel">
+  return <div class="layout-navigation-panel">
     <Router>
       <Table path="/Admin/List/:entityType" />
       <Table path="/Admin/Edit/:entityType" />
