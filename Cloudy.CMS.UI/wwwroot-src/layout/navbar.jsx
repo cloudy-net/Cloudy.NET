@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "preact/hooks";
 import EntityTypesContext from "../form/contexts/entity-types-context";
+import { ReactComponent as NotificationIcon } from "../assets/icon-notification.svg";
 
 const Navbar = ({ }) => {
   const { entityTypes } = useContext(EntityTypesContext);
@@ -19,10 +20,11 @@ const Navbar = ({ }) => {
       Dashboard
     </div>
     {!settings.isValidLicense ||1 &&
-      <div class="navbar-license-nag text-links">
-        Unlicensed version.<br/><a href="https://www.cloudy.net/" target="_blank">Click here</a> to purchase a license.
+      <div class="navbar-license-nag">
+        Unlicensed version.<br/><a className="text-link" href="https://www.cloudy.net/" target="_blank">Click here</a> to purchase a license.
       </div>
     }
+    <a className="navbar-notification-icon" tabIndex="0"><NotificationIcon /></a>
 
   </div>
 }

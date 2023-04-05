@@ -23,22 +23,6 @@ label {
   display: block;
 }
 
-.text-links a {
-  cursor: pointer;
-  color: $main-green;
-
-  &:hover,
-  &:focus,
-  &:visited {
-    color: darken($main-green, 7%);
-  }
-  &:active,
-  &:visited:hover,
-  &:visited:focus {
-    color: $main-green;
-  }
-}
-
 
 
 /* LAYOUT */
@@ -186,6 +170,10 @@ label {
 .navbar-license-nag {
   flex: 1;
   text-align: center;
+}
+
+.navbar-notification-icon {
+  margin-right: 32px;
 }
 
 
@@ -422,6 +410,27 @@ span.cloudy-ui-diff-delete {
 
 .strikethrough {
   text-decoration: line-through;
+}
+
+
+
+/* TEXT LINKS */
+
+.text-links a,
+.text-link {
+  cursor: pointer;
+  color: $main-green;
+
+  &:hover,
+  &:focus,
+  &:visited {
+    color: darken($main-green, 7%);
+  }
+  &:active,
+  &:visited:hover,
+  &:visited:focus {
+    color: $main-green;
+  }
 }
 
 
