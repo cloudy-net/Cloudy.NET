@@ -1,6 +1,8 @@
 /* VARIABLES */
 
 $main-green: #18AF79;
+$main-blue: #B9D6F2;
+$text-color: #2B2D37;
 
 
 
@@ -13,6 +15,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+  color: $text-color;
 }
 
 a {
@@ -21,6 +24,26 @@ a {
 
 label {
   display: block;
+}
+
+
+
+/* BUTTON RESET */
+
+.button-reset {
+  display: inline-block;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 
@@ -200,32 +223,42 @@ label {
 
 .dropdown-menu {
   width: 300px;
-}
-
-.dropdown-item-outer {
-  display: flex;
-}
-
-.dropdown-image-outer {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-}
-
-.dropdown-image {
-  display: block;
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
+  padding: 5px 0;
+  border: solid 1px $main-blue;
+  border-radius: 8px;
+  background: white;
+  box-shadow: rgba(#6D7696, 0.2) 0px 0px 10px 0px;
 }
 
 .dropdown-item {
+  display: flex;
+  padding: 0 15px;
+  color: $text-color;
+  text-decoration: none;
+
+  &:hover {
+    background: lighten($main-blue, 14%);
+  }
+}
+
+.dropdown-item-icon {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.dropdown-item-text {
+  display: block;
+  padding: 10px 0;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.dropdown-image-outer+.dropdown-item {
-  padding-left: 10px;
+.dropdown-separator {
+  margin: 5px 0;
+  border-bottom: 1px solid $main-blue;
 }
 
 

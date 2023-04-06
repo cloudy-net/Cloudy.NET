@@ -1,6 +1,14 @@
 import { useContext, useEffect, useState } from "preact/hooks";
 import EntityTypesContext from "../form/contexts/entity-types-context";
 import { ReactComponent as NotificationIcon } from "../assets/icon-notification.svg";
+import Dropdown from "../components/dropdown";
+import DropdownItem from "../components/dropdown-item";
+import DropdownSeparator from "../components/dropdown-separator";
+import { ReactComponent as HelpIcon } from "../assets/icon-help.svg";
+import { ReactComponent as ChatIcon } from "../assets/icon-chat.svg";
+import { ReactComponent as LogoutIcon } from "../assets/icon-logout.svg";
+
+
 
 const Navbar = ({ }) => {
   const { entityTypes } = useContext(EntityTypesContext);
@@ -24,8 +32,15 @@ const Navbar = ({ }) => {
         Unlicensed version.<br/><a className="text-link" href="https://www.cloudy.net/" target="_blank">Click here</a> to purchase a license.
       </div>
     }
-    <a className="navbar-notification-button" tabIndex="0"><NotificationIcon className="navbar-notification-icon" /></a>
-    <a className="navbar-profile-button" tabIndex="0">Alfred Pennyworth <span className="navbar-profile-picture"></span></a>
+    <Dropdown className="button-reset navbar-notification-button" contents={<NotificationIcon className="navbar-notification-icon" />}>
+      This is the dropdown
+    </Dropdown>
+    <Dropdown className="button-reset navbar-profile-button" contents={<>Alfred Pennyworth <span className="navbar-profile-picture"></span></>}>
+      <DropdownItem href="https://www.cloudy.net/resources/docs" icon={<HelpIcon/>} text="Tutorials and FAQ" />
+      <DropdownItem href="https://github.com/cloudy-net/Cloudy.CMS/issues/new/choose" icon={<ChatIcon/>} text="Support" />
+      <DropdownSeparator />
+      <DropdownItem href="/Admin/Logout" icon={<LogoutIcon/>} text="Logout" />
+    </Dropdown>
   </div>
 }
 
