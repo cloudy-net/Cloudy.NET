@@ -5,31 +5,26 @@ export default () => {
   const { groupedEntityTypes } = useContext(EntityTypesContext);
 
   const Table = () => <>
-    <div class="container-fluid">
-      {Object.keys(groupedEntityTypes).sort().map(key => <>
-        { key != 'null' && <div className="row"><div className="col-12"><h2>{ key }</h2></div></div>}
-        <div class="row">
-          {groupedEntityTypes[key].map(entityType =>
-            <div class="col-md-4 mb-4 d-flex">
-              <div class="card w-100" style="min-height: 200px;">
-                <div class="card-body">
-                  <h5 class="card-title">{entityType.pluralName}</h5>
-                  <p class="card-text">{entityType.description}</p>
-                </div>
-                <div class="card-footer">
-                  {entityType.links.map((link, index) => <>
-                    <a class={`btn ${index === 0 ? 'btn-primary' : 'btn-beta'}`} href={`/Admin/${link.action}/${link.entityTypeName}`}>
-                      {link.text}
-                    </a>&nbsp;
-                  </>)}
-                </div>
-              </div>
+    {Object.keys(groupedEntityTypes).sort().map(key => <>
+      {key != 'null' && <h2 class="card-group-heading">{key}</h2>}
+      <div class="cards">
+        {groupedEntityTypes[key].map(entityType =>
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">{entityType.pluralName}</h3>
+              <p class="card-text">{entityType.description}</p>
             </div>
-          )}
-        </div>
-        { key != 'null' && <div className="row"><div className="col-12"><hr/></div></div> }
-      </>)}
-    </div>
+            <div class="card-buttons">
+              {entityType.links.map((link, index) => <>
+                <a class={`card-button ${index === 0 ? 'primary' : ''}`} href={`/Admin/${link.action}/${link.entityTypeName}`}>
+                  {link.text}
+                </a>
+              </>)}
+            </div>
+          </div>
+        )}
+      </div>
+    </>)}
   </>
 
   return <Table />;
