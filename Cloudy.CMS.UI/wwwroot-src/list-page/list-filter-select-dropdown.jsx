@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState} from 'preact/hooks';
+import Dropdown from '../components/dropdown';
 
 import SelectEntityMenu from "../components/select-entity-menu";
 
@@ -22,12 +23,9 @@ export default ({ label, entityType, onSelect, simpleKey }) => {
   }, []);
 
   return <div class="dropdown d-inline-block list-filter" ref={ref}>
-    <div class="form-floating">
-      <button class="form-select text-start" onClick={() => setOpen(!open)}>{value && value.name}</button>
-      <label>{label}</label>
-    </div>
-    <div class={"dropdown-menu" + (open ? " show" : "")}>
+    {label}
+    <Dropdown contents={value && value.name}>
       <SelectEntityMenu entityType={entityType} simpleKey={simpleKey} value={value && value.reference} onSelect={item => { setValue(item); onSelect(item && item.reference); }} />
-    </div>
+    </Dropdown>
   </div>;
 };
