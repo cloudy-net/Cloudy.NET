@@ -63,7 +63,7 @@ label {
   &.show-navigation-panel {
     grid-template-columns: 200px 250px 1fr;
     grid-template-areas:
-      "main-menu navigation-panel navbar"
+      "main-menu navbar navbar"
       "main-menu navigation-panel main-panel";
   }
 }
