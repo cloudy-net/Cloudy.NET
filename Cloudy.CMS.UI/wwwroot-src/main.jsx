@@ -19,9 +19,12 @@ window.viteIsLoaded = true;
 if (document.getElementById('app')) {
   const Main = () => {
     const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
+    const [showNavigationPanel, setShowNavigationPanel] = useState(false);
 
     return <EntityTypesProvider>
-      <div class="layout">
+      
+      <Router onChange={event => setShowNavigationPanel(event.url != "/Admin")}/>
+      <div class={"layout" + (showNavigationPanel ? ' show-navigation-panel' : '')}>
         <MainMenu />
         <Navbar />
         <Router>
