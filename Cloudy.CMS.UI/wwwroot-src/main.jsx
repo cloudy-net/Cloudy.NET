@@ -16,38 +16,33 @@ import MainMenu from './layout/main-menu';
 
 window.viteIsLoaded = true;
 
-if (document.getElementById('app')) {
-  const Main = () => {
-    const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
-    const [showNavigationPanel, setShowNavigationPanel] = useState(false);
+const Main = () => {
+  const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
+  const [showNavigationPanel, setShowNavigationPanel] = useState(false);
+  const [expandedNavigationPanel, setExpandedNavigationPanel] = useState(false);
 
-    return <EntityTypesProvider>
-      
-      <Router onChange={event => setShowNavigationPanel(event.url != "/Admin")}/>
-      <div class={"layout" + (showNavigationPanel ? ' show-navigation-panel' : '')}>
-        <MainMenu />
-        <Navbar />
-        <Router>
-          <NavigationPanel path="/Admin/List/:entityTypeName" mode="new" />
-          <NavigationPanel path="/Admin/New/:entityTypeName" mode="new" />
-          <NavigationPanel path="/Admin/Edit/:entityTypeName" mode="edit" />
-          <NavigationPanel path="/Admin/Delete/:entityTypeName" />
-        </Router>
-        <div className="layout-main-panel">
-          <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
-            <Dashboard path="/Admin/" />
-            <Dashboard path="/Admin/List/:entityTypeName" />
-            <Form key={'form-new'} path="/Admin/New/:entityTypeName" mode="new" />
-            <Form key={'form-edit'} path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
-            <Delete path="/Admin/Delete/:entityTypeName" />
-          </Router>
-        </div>
-      </div>
-    </EntityTypesProvider>
-  };
+  return <EntityTypesProvider>
+    <Router onChange={event => { setShowNavigationPanel(event.url != "/Admin"); setExpandedNavigationPanel(event.url.indexOf('/Admin/List/') == 0); }} />
+    <div class={"layout" + (expandedNavigationPanel ? ' expanded-navigation-panel' : showNavigationPanel ? ' show-navigation-panel' : '')}>
+      <MainMenu />
+      <Navbar />
+      <Router>
+        <NavigationPanel path="/Admin/List/:entityTypeName" mode="new" />
+        <NavigationPanel path="/Admin/New/:entityTypeName" mode="new" />
+        <NavigationPanel path="/Admin/Edit/:entityTypeName" mode="edit" />
+        <NavigationPanel path="/Admin/Delete/:entityTypeName" />
+      </Router>
+      <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
+        <div className="layout-main-panel" path="/Admin/"><Dashboard /></div>
+        <div className="layout-main-panel" path="/Admin/New/:entityTypeName"><Form key={'form-new'} mode="new" /></div>
+        <div className="layout-main-panel" path="/Admin/Edit/:entityTypeName"><Form key={'form-edit'} mode="edit" keyValues={keyValues} /></div>
+        <div className="layout-main-panel" path="/Admin/Delete/:entityTypeName"><Delete /></div>
+      </Router>
+    </div>
+  </EntityTypesProvider>
+};
 
-  render(<Main />, document.getElementById('app'));
-}
+render(<Main />, document.getElementById('app'));
 
 document.addEventListener('keydown', event => {
   if (event.key != 'Enter') {

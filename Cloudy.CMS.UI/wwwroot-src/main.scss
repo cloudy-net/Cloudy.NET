@@ -52,19 +52,24 @@ label {
 
 .layout {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 200px 250px 1fr;
   grid-template-rows: 80px 1fr;
   grid-template-areas:
-    "main-menu navbar"
-    "main-menu main-panel";
+    "main-menu navbar navbar"
+    "main-menu main-panel main-panel";
   width: 100vw;
   height: 100vh;
 
   &.show-navigation-panel {
-    grid-template-columns: 200px 250px 1fr;
     grid-template-areas:
       "main-menu navbar navbar"
       "main-menu navigation-panel main-panel";
+  }
+
+  &.expanded-navigation-panel {
+    grid-template-areas:
+      "main-menu navbar navbar"
+      "main-menu navigation-panel navigation-panel";
   }
 }
 
