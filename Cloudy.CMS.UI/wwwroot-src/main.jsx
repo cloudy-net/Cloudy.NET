@@ -3,26 +3,20 @@ import './main.scss'
 import { render } from 'preact'
 import { Router } from 'preact-router';
 
-import Form from './form/form';
-import Dashboard from './layout/dashboard';
-import Delete from './layout/delete'
-
-import Navbar from './layout/navbar';
-
 import EntityTypesProvider from './form/contexts/entity-types-provider';
-import NavigationPanel from './layout/navigation-panel';
 import { useState } from 'preact/hooks';
-import MainMenu from './layout/main-menu';
+import DashboardView from './views/dashboard-view';
 
 window.viteIsLoaded = true;
 
 const Main = () => {
   const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
-  const [showNavigationPanel, setShowNavigationPanel] = useState(false);
-  const [expandedNavigationPanel, setExpandedNavigationPanel] = useState(false);
 
   return <EntityTypesProvider>
-    <Router onChange={event => { setShowNavigationPanel(event.url != "/Admin"); setExpandedNavigationPanel(event.url.indexOf('/Admin/List/') == 0); }} />
+    <Router>
+      <DashboardView path="/Admin" />
+    </Router>
+    {/* 
     <div class={"layout" + (expandedNavigationPanel ? ' expanded-navigation-panel' : showNavigationPanel ? ' show-navigation-panel' : '')}>
       <MainMenu />
       <Navbar />
@@ -39,6 +33,7 @@ const Main = () => {
         <div className="layout-main-panel" path="/Admin/Delete/:entityTypeName"><Delete /></div>
       </Router>
     </div>
+     */}
   </EntityTypesProvider>
 };
 
