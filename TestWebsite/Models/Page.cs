@@ -1,5 +1,4 @@
 ﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntitySupport.HierarchySupport;
 using Cloudy.CMS.UI.FieldSupport.MediaPicker;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using Cloudy.CMS.UI.List;
@@ -13,7 +12,7 @@ using TestWebsite.Constants;
 namespace TestWebsite.Models
 {
     [Display(Description = "Create pages for your website.", GroupName = General.GroupNames.Page)]
-    public class Page : INameable, IRoutable, /*IImageable,*/ IHierarchical<Guid?>
+    public class Page : INameable, IRoutable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
@@ -24,28 +23,18 @@ namespace TestWebsite.Models
         public string Name { get; set; }
         public IList<IFrontpageBlock> Blocks { get; set; }
 
-        public string ParentType { get; set; }
-        [Select<Page>]
-        public Guid? ParentId { get; set; }
-        public int? SortIndex { get; set; }
-        public string SortOrder { get; set; }
-
         public string UrlSegment { get; set; }
-        //[UIHint("textarea")]
-        //public string Description { get; set; }
+        [UIHint("textarea")]
+        public string Description { get; set; }
         [ListFilter]
         [Select<Page>]
         public Guid? RelatedPageId { get; set; }
-        [MediaPicker("azure")]
-        public string Image { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
         [ListFilter]
         public Category? Category { get; set; }
         //[Block(typeof(Page))]
         //public IList<LayoutItem> Test { get; set; }
-
-        //public string TestProperty { get; set; }
     }
 
     public interface IFrontpageBlock { }

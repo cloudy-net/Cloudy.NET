@@ -37,5 +37,10 @@ namespace Cloudy.CMS.UI.List
         /// Sets the column width.
         /// </summary>
         public ListingColumnWidth Width { get; set; }
+
+        /// <summary>
+        /// Sets whether the column should be shown in the compact view of the navigation panel. Default false.
+        /// </summary>
+        public bool? ShowInCompactView { get; set; }
     }
 }
