@@ -8,6 +8,7 @@ import { useState } from 'preact/hooks';
 import DashboardView from './views/dashboard-view';
 import EditView from './views/edit-view';
 import ListView from './views/list-view';
+import EntityListContextProvider from './list-page/entity-list-context-provider';
 
 window.viteIsLoaded = true;
 
@@ -15,11 +16,13 @@ const Main = () => {
   const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
 
   return <EntityTypesProvider>
-    <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
-      <DashboardView path="/Admin" />
-      <ListView path="/Admin/List/:entityTypeName" />
-      <EditView path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
-    </Router>
+    <EntityListContextProvider>
+      <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
+        <DashboardView path="/Admin" />
+        <ListView path="/Admin/List/:entityTypeName" />
+        <EditView path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
+      </Router>
+    </EntityListContextProvider>
     {/* 
     <div class={"layout" + (expandedNavigationPanel ? ' expanded-navigation-panel' : showNavigationPanel ? ' show-navigation-panel' : '')}>
       <MainMenu />
