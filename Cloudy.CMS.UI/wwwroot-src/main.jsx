@@ -8,7 +8,7 @@ import { useState } from 'preact/hooks';
 import DashboardView from './views/dashboard-view';
 import EditView from './views/edit-view';
 import ListView from './views/list-view';
-import EntityListContextProvider from './list-page/entity-list-context-provider';
+import EntityListContextProvider from './entity-list/entity-list-context-provider';
 
 window.viteIsLoaded = true;
 

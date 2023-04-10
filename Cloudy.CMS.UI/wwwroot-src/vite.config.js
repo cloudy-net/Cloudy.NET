@@ -15,7 +15,7 @@ export default () =>
             dest: '',
           },
           {
-            src: 'list-page/columns',
+            src: 'entity-list/columns',
             dest: './',
           },
         ],

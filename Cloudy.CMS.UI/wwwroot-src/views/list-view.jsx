@@ -1,6 +1,6 @@
 import MainMenu from "../layout/main-menu";
 import Navbar from "../layout/navbar";
-import ListPage from "../list-page/list-page";
+import ListPage from "../entity-list/list-page";
 
 const ListView = ({ entityTypeName }) => {
   return <div class="layout">

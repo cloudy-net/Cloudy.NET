@@ -1,6 +1,6 @@
 import html from '@src/util/html.js';
 import { useContext } from 'preact/hooks';
-import ColumnComponentContext from './column-component-context.jsx';
+import ColumnComponentContext from './column-component-context';
 
 const TableBody = ({ items, columns, pageSize, settings }) => {
     const components = useContext(ColumnComponentContext);

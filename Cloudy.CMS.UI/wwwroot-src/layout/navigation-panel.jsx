@@ -1,5 +1,5 @@
 import Router from 'preact-router';
-import Table from '../list-page/table';
+import Table from '../entity-list/table';
 
 export default () => {
   return <div class="layout-navigation-panel">
