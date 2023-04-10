@@ -23,14 +23,10 @@ export const LISTING_COLUMN_WIDTHS = {
 };
 
 export default ({ entityType }) => {
-
-  const [settings, setSettings] = useState({ loading: true });
-  const [pageSize, setPageSize] = useState();
+  const [settings, setSettings] = useState({ loading: true, filters: [] });
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [pages, setPages] = useState();
-  const [columns, setColumns] = useState();
-  const [filterOptions, setFilterOptions] = useState([]);
   const [filters, setFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
@@ -43,8 +39,8 @@ export default ({ entityType }) => {
   const columnFn = {
     isEqual: (width) => width === LISTING_COLUMN_WIDTHS.EQUAL,
     isFill: (width) => width === LISTING_COLUMN_WIDTHS.FILL,
-    getColumnWidthStyle: (width) => columnFn.isEqual(width) && !columns.some(c => columnFn.isFill(c.width)) && columns.filter(c => columnFn.isEqual(c.width)).length > 1
-      ? { width: `${100 / (columns.filter(c => columnFn.isEqual(c.width)).length || 1)}% ` }
+    getColumnWidthStyle: (width) => columnFn.isEqual(width) && !settings.columns.some(c => columnFn.isFill(c.width)) && settings.columns.filter(c => columnFn.isEqual(c.width)).length > 1
+      ? { width: `${100 / (settings.columns.filter(c => columnFn.isEqual(c.width)).length || 1)}% ` }
       : {}
   };
 
@@ -57,20 +53,18 @@ export default ({ entityType }) => {
   };
 
   useEffect(function () {
-    setSettings({ loading: true });
+    setSettings({ loading: true, filters: [] });
     (async () => {
-      await fetch(`/Admin/api/list/settings?entityTypeName=${entityType}`, { credentials: 'include' })
-        .then(r => r.json())
-        .then(r => {
-          if (r.redirectUrl) {
-            route(r.redirectUrl);
-            return;
-          }
-          setPageSize(r.pageSize);
-          setColumns(r.columns);
-          setFilterOptions(r.filters);
-          setSettings(r);
-        });
+      const response = await fetch(`/Admin/api/list/settings?entityTypeName=${entityType}`, { credentials: 'include' });
+
+      const json = await response.json();
+
+      if (json.jsonedirectUrl) {
+        route(json.redirectUrl);
+        return;
+      }
+
+      setSettings(json);
     })();
   }, [entityType]);
 
@@ -79,7 +73,7 @@ export default ({ entityType }) => {
     (async () => {
       setError(null);
       const response = await fetch(
-        `/Admin/api/list/result?entityType=${entityType}&columns=${columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`,
+        `/Admin/api/list/result?entityType=${entityType}&columns=${settings.columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${settings.pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`,
         {
           credentials: 'include'
         }
@@ -94,11 +88,11 @@ export default ({ entityType }) => {
 
       setLoading(false);
       setData(json);
-      const pageCount = Math.ceil(json.totalCount / pageSize);
+      const pageCount = Math.ceil(json.totalCount / settings.pageSize);
       setPageCount(pageCount);
       setPages([...Array(pageCount)]);
     })();
-  }, [settings, page, pageSize, columns, filters, retryError, search, orderBy, orderByDirection]);
+  }, [settings, page, filters, retryError, search, orderBy, orderByDirection]);
 
   let content = null;
 
@@ -118,14 +112,14 @@ export default ({ entityType }) => {
         <thead>
           <tr className={`text-nowrap ${orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
             <th></th>
-            {columns.map(c => c.sortable
+            {settings.columns.map(c => c.sortable
               ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
               : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
             )}
           </tr>
         </thead>
         <ColumnComponentProvider componentPartials={[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
-          <TableBody {...{ items: data.items, columns, pageSize, settings }} />
+          <TableBody {...{ items: data.items, settings }} />
         </ColumnComponentProvider>
       </table>
     </div>;
@@ -136,7 +130,7 @@ export default ({ entityType }) => {
       <div class="list-page-search">
         <SearchBox callback={value => setSearch(value)} floating={filters.length} />
       </div>
-      {filterOptions.map(c => <ListFilter {...c} filter={(key, value) => {
+      {settings.filters.map(c => <ListFilter {...c} filter={(key, value) => {
         if (!value) {
           var newFilters = { ...filters };
 
