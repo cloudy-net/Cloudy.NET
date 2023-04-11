@@ -10,33 +10,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FieldSupport
+namespace Cloudy.CMS.UI.List
 {
-    public interface IFieldFriendlyValueProvider
+
+    public record ColumnValueProvider(IContextCreator ContextCreator, IEntityTypeProvider EntityTypeProvider, INameGetter NameGetter, IServiceProvider ServiceProvider) : IColumnValueProvider
     {
-        Task<object> GetFriendlyValue(PropertyDefinitionDescriptor propertyDefinition, object instance);
-    }
-
-    public class FieldFriendlyValueProvider : IFieldFriendlyValueProvider
-    {
-        private readonly IContextCreator contextCreator;
-        private readonly IEntityTypeProvider entityTypeProvider;
-        private readonly INameGetter nameGetter;
-        private readonly IServiceProvider serviceProvider;
-
-        public FieldFriendlyValueProvider(
-            IContextCreator contextCreator,
-            IEntityTypeProvider entityTypeProvider,
-            INameGetter nameGetter,
-            IServiceProvider serviceProvider)
-        {
-            this.contextCreator = contextCreator;
-            this.entityTypeProvider = entityTypeProvider;
-            this.nameGetter = nameGetter;
-            this.serviceProvider = serviceProvider;
-        }
-
-        public async Task<object> GetFriendlyValue(PropertyDefinitionDescriptor propertyDefinition, object instance)
+        public async Task<object> Get(PropertyDefinitionDescriptor propertyDefinition, object instance)
         {
             var value = propertyDefinition.Getter(instance);
             if (value is null) return null;
@@ -60,10 +39,10 @@ namespace Cloudy.CMS.UI.FieldSupport
         {
             if (value.Equals(Activator.CreateInstance(value.GetType()))) return null;
 
-            var type = entityTypeProvider.Get(selectAttribute.Type);
-            var context = contextCreator.CreateFor(type.Type);
+            var type = EntityTypeProvider.Get(selectAttribute.Type);
+            var context = ContextCreator.CreateFor(type.Type);
             var relatedInstance = await context.Context.FindAsync(type.Type, value).ConfigureAwait(false);
-            var name = nameGetter.GetName(relatedInstance);
+            var name = NameGetter.GetName(relatedInstance);
             return new { name = name ?? "Does not exist", image = (relatedInstance as IImageable)?.Image };
         }
 
@@ -73,16 +52,16 @@ namespace Cloudy.CMS.UI.FieldSupport
             object value)
         {
             var factoryType = customSelectAttribute.GetType().GenericTypeArguments.FirstOrDefault();
-            var factory = serviceProvider.GetService(factoryType) as ICustomSelectFactory;
+            var factory = ServiceProvider.GetService(factoryType) as ICustomSelectFactory;
             var items = await factory.GetItems();
 
             if (propertyDefinition.List)
             {
                 var selectedValues = value as IList<string>;
-                
+
                 return selectedValues is null ? string.Empty : string.Join(", ", items.Where(i => selectedValues?.Contains(i.Value) ?? false).Select(i => i.Text).Order());
             }
-            
+
             return items.FirstOrDefault(x => x.Value == value.ToString())?.Text;
         }
     }

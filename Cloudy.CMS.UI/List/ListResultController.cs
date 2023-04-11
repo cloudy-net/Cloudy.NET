@@ -4,7 +4,6 @@ using Cloudy.CMS.EntitySupport.PrimaryKey;
 using Cloudy.CMS.EntitySupport.Reference;
 using Cloudy.CMS.EntityTypeSupport;
 using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FieldSupport;
 using Cloudy.CMS.UI.FieldSupport.CustomSelect;
 using Cloudy.CMS.UI.FieldSupport.Select;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +23,7 @@ namespace Cloudy.CMS.UI.List
     [ResponseCache(NoStore = true)]
     public class ListResultController : Controller
     {
-        IFieldFriendlyValueProvider FieldFriendlyValueProvider { get; }
+        IColumnValueProvider ColumnValueProvider { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IEntityTypeProvider EntityTypeProvider { get; }
         IContextCreator ContextCreator { get; }
@@ -37,14 +36,14 @@ namespace Cloudy.CMS.UI.List
             IContextCreator contextCreator,
             IPrimaryKeyGetter primaryKeyGetter,
             IReferenceDeserializer referenceDeserializer,
-            IFieldFriendlyValueProvider fieldFriendlyValueProvider)
+            IColumnValueProvider columnValueProvider)
         {
             PropertyDefinitionProvider = propertyDefinitionProvider;
             EntityTypeProvider = entityTypeProvider;
             ContextCreator = contextCreator;
             PrimaryKeyGetter = primaryKeyGetter;
             ReferenceDeserializer = referenceDeserializer;
-            FieldFriendlyValueProvider = fieldFriendlyValueProvider;
+            ColumnValueProvider = columnValueProvider;
         }
 
         [HttpGet]
@@ -98,25 +97,18 @@ namespace Cloudy.CMS.UI.List
 
             dbSet = dbSet.Page(page, pageSize);
 
-            var result = new List<ListRow>();
+            var result = new List<ListItem>();
 
             await foreach (var instance in (IAsyncEnumerable<object>)dbSet)
             {
-                var columnInfos = new List<ColumnInfo>();
+                var value = new Dictionary<string, object>();
 
                 foreach (var propertyDefinition in selectedPropertyDefinitions)
                 {
-                    columnInfos.Add(new ColumnInfo(
-                        await FieldFriendlyValueProvider.GetFriendlyValue(propertyDefinition, instance),
-                        type.IsImageable,
-                        type.IsImageable ? ((IImageable)instance).Image : string.Empty
-                    ));
+                    value[propertyDefinition.Name] = await ColumnValueProvider.Get(propertyDefinition, instance);
                 }
 
-                result.Add(new ListRow(
-                    PrimaryKeyGetter.Get(instance),
-                    columnInfos
-                ));
+                result.Add(new ListItem(PrimaryKeyGetter.Get(instance), value));
             }
 
             return new ListResultResponse(
@@ -126,19 +118,13 @@ namespace Cloudy.CMS.UI.List
         }
 
         public record ListResultResponse(
-            IEnumerable<ListRow> Items,
+            IEnumerable<ListItem> Items,
             int TotalCount
         );
 
-        public record ListRow(
+        public record ListItem(
             IEnumerable<object> Keys,
-            IEnumerable<ColumnInfo> Values
-        );
-
-        public record ColumnInfo(
-            object Value,
-            bool IsImageable,
-            string Image
+            IDictionary<string, object> Value
         );
     }
 }

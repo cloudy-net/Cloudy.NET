@@ -111,10 +111,10 @@ export default ({ entityType }) => {
         </thead>
         <tbody>
           {data.items.map(d => <tr>
-            {settings[entityType].columns.map((column, i) =>
-              d.values[i]
+            {settings[entityType].columns.map((column) =>
+              d.value[column.name]
               && Object.keys(components).includes(column.partial)
-              && html`<td><${components[column.partial]} ...${{ keys: d.keys, ...d.values[i], settings: settings[entityType] }} dependencies=${{ html }} /></td>`
+              && html`<td><${components[column.partial]} ...${{ keys: d.keys, value: d.value[column.name], settings: settings[entityType] }} dependencies=${{ html }} /></td>`
             )}
           </tr>)}
           {[...new Array(settings[entityType].pageSize - data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
