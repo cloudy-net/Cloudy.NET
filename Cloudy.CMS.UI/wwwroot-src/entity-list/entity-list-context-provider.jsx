@@ -1,19 +1,18 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import EntityListContext from "./entity-list-context.js";
 
 export default ({ children }) => {
-  const [lists, setLists] = useState({});
+  const [settings, setSettings] = useState({ loading: true });
 
-  const getOrUpdateList = (entityTypeName, generateFunction) => {
-    const list = lists[entityTypeName];
-
-    if (list) {
-      return list.data;
-    }
-
-    return setLists({ ...lists, [entityTypeName]: { data: generateFunction() } });
-  };
-  return <EntityListContext.Provider value={{ getOrUpdateList }}>
+  useEffect(function () {
+    (async () => {
+      const response = await fetch(`/Admin/api/list/settings`, { credentials: 'include' });
+      const json = await response.json();
+      setSettings(json);
+    })();
+  }, []);
+  
+  return <EntityListContext.Provider value={{ settings }}>
     {children}
   </EntityListContext.Provider>;
 };

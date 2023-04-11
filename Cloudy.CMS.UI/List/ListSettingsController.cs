@@ -38,31 +38,36 @@ namespace Cloudy.CMS.UI.List
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/list/settings")]
-        public async Task<ListSettings> Settings([FromQuery] string entityTypeName)
+        public async Task<IDictionary<string, ListSettings>> Settings()
         {
-            var entityType = EntityTypeProvider.Get(entityTypeName);
+            var result = new Dictionary<string, ListSettings>();
 
-            var listSettings = new ListSettings
+            foreach (var entityType in EntityTypeProvider.GetAll())
             {
-                Columns = ListColumnProvider.Get(entityType.Type),
-                Filters = ListFilterProvider.Get(entityType.Type),
-                EntityTypeName = entityTypeName,
-                EntityTypePluralName = EntityTypeNameProvider.Get(entityType.Type).PluralName,
-                EditLink = UrlBuilder.Build(keys: null, "Edit", entityTypeName),
-                DeleteLink = UrlBuilder.Build(keys: null, "Delete", entityTypeName)
-            };
+                var listSettings = new ListSettings
+                {
+                    Columns = ListColumnProvider.Get(entityType.Type),
+                    Filters = ListFilterProvider.Get(entityType.Type),
+                    EntityTypeName = entityType.Name,
+                    EntityTypePluralName = EntityTypeNameProvider.Get(entityType.Type).PluralName,
+                    EditLink = UrlBuilder.Build(keys: null, "Edit", entityType.Name),
+                    DeleteLink = UrlBuilder.Build(keys: null, "Delete", entityType.Name)
+                };
 
-            if (entityType.IsSingleton)
-            {
-                var context = ContextCreator.CreateFor(entityType.Type);
-                var entity = await ((IQueryable)context.GetDbSet(entityType.Type)).Cast<object>().FirstOrDefaultAsync();
-                
-                listSettings.RedirectUrl = entity is null
-                    ? UrlBuilder.Build(keys: null, "New", entityTypeName)
-                    : UrlBuilder.Build(keys: PrimaryKeyGetter.Get(entity), "Edit", entityTypeName);
+                if (entityType.IsSingleton)
+                {
+                    var context = ContextCreator.CreateFor(entityType.Type);
+                    var entity = await ((IQueryable)context.GetDbSet(entityType.Type)).Cast<object>().FirstOrDefaultAsync();
+
+                    listSettings.RedirectUrl = entity is null
+                        ? UrlBuilder.Build(keys: null, "New", entityType.Name)
+                        : UrlBuilder.Build(keys: PrimaryKeyGetter.Get(entity), "Edit", entityType.Name);
+                }
+
+                result[entityType.Name] = listSettings;
             }
 
-            return listSettings;
+            return result;
         }
     }
 

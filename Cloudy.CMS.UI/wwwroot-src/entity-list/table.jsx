@@ -1,9 +1,10 @@
 import { route } from 'preact-router';
-import { useEffect, useState } from 'preact/hooks';
+import { useContext, useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
 import ColumnComponentProvider from './column-component-provider';
 import TableBody from './table-body';
+import EntityListContext from './entity-list-context';
 
 export const SORT_DIRECTIONS = {
   ASCENDING: 'asc',
@@ -23,7 +24,7 @@ export const LISTING_COLUMN_WIDTHS = {
 };
 
 export default ({ entityType }) => {
-  const [settings, setSettings] = useState({ loading: true, filters: [] });
+  const { settings } = useContext(EntityListContext);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [pages, setPages] = useState();
@@ -35,6 +36,17 @@ export default ({ entityType }) => {
   const [search, setSearch] = useState('');
   const [orderBy, setOrderBy] = useState('');
   const [orderByDirection, setOrderByDirection] = useState(SORT_DIRECTIONS.ASCENDING);
+
+  if(settings.loading) {
+    return <>Loading settings</>;
+  }
+  if(!settings[entityType]){
+    return <>No such entity type found</>;
+  }
+  if (settings[entityType].redirectUrl) {
+    route(settings[entityType].redirectUrl);
+    return;
+  }
 
   const columnFn = {
     isEqual: (width) => width === LISTING_COLUMN_WIDTHS.EQUAL,
@@ -53,31 +65,12 @@ export default ({ entityType }) => {
   };
 
   useEffect(function () {
-    setSettings({ loading: true, filters: [] });
-    (async () => {
-      const response = await fetch(`/Admin/api/list/settings?entityTypeName=${entityType}`, { credentials: 'include' });
-
-      const json = await response.json();
-
-      if (json.jsonedirectUrl) {
-        route(json.redirectUrl);
-        return;
-      }
-
-      setSettings(json);
-    })();
-  }, [entityType]);
-
-  useEffect(function () {
     if (settings.loading) return;
     (async () => {
       setError(null);
-      const response = await fetch(
-        `/Admin/api/list/result?entityType=${entityType}&columns=${settings.columns.map(c => c.name).join(',')}&${Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&")}&pageSize=${settings.pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`,
-        {
-          credentials: 'include'
-        }
-      );
+      const filterComponent = Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&");
+      const url = `/Admin/api/list/result?entityType=${entityType}&columns=${settings[entityType].columns.map(c => c.name).join(',')}&${filterComponent}&pageSize=${settings[entityType].pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`;
+      const response = await fetch(url, { credentials: 'include' });
 
       if (!response.ok) {
         setError({ response, body: await response.text() });
@@ -88,7 +81,7 @@ export default ({ entityType }) => {
 
       setLoading(false);
       setData(json);
-      const pageCount = Math.ceil(json.totalCount / settings.pageSize);
+      const pageCount = Math.ceil(json.totalCount / settings[entityType].pageSize);
       setPageCount(pageCount);
       setPages([...Array(pageCount)]);
     })();
@@ -112,14 +105,14 @@ export default ({ entityType }) => {
         <thead>
           <tr className={`text-nowrap ${orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
             <th></th>
-            {settings.columns.map(c => c.sortable
+            {settings[entityType].columns.map(c => c.sortable
               ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
               : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
             )}
           </tr>
         </thead>
         <ColumnComponentProvider componentPartials={[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
-          <TableBody {...{ items: data.items, settings }} />
+          <TableBody {...{ items: data.items, settings, entityType }} />
         </ColumnComponentProvider>
       </table>
     </div>;
@@ -130,7 +123,7 @@ export default ({ entityType }) => {
       <div class="list-page-search">
         <SearchBox callback={value => setSearch(value)} floating={filters.length} />
       </div>
-      {settings.filters.map(c => <ListFilter {...c} filter={(key, value) => {
+      {settings[entityType].filters.map(c => <ListFilter {...c} filter={(key, value) => {
         if (!value) {
           var newFilters = { ...filters };
 
@@ -146,12 +139,12 @@ export default ({ entityType }) => {
     <div class="table-responsive">
       {content}
       {pages && <nav>
-          <ul class="pagination justify-content-center">
-            <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))}>Previous</a></li>
-            {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
-            <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
-          </ul>
-        </nav>}
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))}>Previous</a></li>
+          {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
+          <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
+        </ul>
+      </nav>}
     </div>
   </>
     ;

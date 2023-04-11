@@ -2,19 +2,19 @@ import html from '@src/util/html.js';
 import { useContext } from 'preact/hooks';
 import ColumnComponentContext from './column-component-context';
 
-const TableBody = ({ items, settings }) => {
+const TableBody = ({ items, settings, entityType }) => {
     const components = useContext(ColumnComponentContext);
 
     return components && <tbody>
       {items.map(d => <tr>
         <td><input type="checkbox"/></td>
-        {settings.columns.map((_, i) =>
+        {settings[entityType].columns.map((_, i) =>
           d.values[i]
             && Object.keys(components).includes(d.values[i].partial)
-            && html`<td><${components[d.values[i].partial]} ...${{ keys: d.keys, ...d.values[i], settings }} dependencies=${{ html }} /></td>`
+            && html`<td><${components[d.values[i].partial]} ...${{ keys: d.keys, ...d.values[i], settings: settings[entityType] }} dependencies=${{ html }} /></td>`
         )}
       </tr>)}
-      {[...new Array(settings.pageSize - items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
+      {[...new Array(settings[entityType].pageSize - items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
     </tbody>
   };
 
