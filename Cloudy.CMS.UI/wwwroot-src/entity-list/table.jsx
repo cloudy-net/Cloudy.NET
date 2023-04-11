@@ -2,9 +2,8 @@ import { route } from 'preact-router';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
-import ColumnComponentProvider from './column-component-provider';
-import TableBody from './table-body';
 import EntityListContext from './entity-list-context';
+import html from '@src/util/html.js';
 
 export const SORT_DIRECTIONS = {
   ASCENDING: 'asc',
@@ -24,7 +23,7 @@ export const LISTING_COLUMN_WIDTHS = {
 };
 
 export default ({ entityType }) => {
-  const { settings } = useContext(EntityListContext);
+  const { settings, components } = useContext(EntityListContext);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
   const [pages, setPages] = useState();
@@ -37,10 +36,10 @@ export default ({ entityType }) => {
   const [orderBy, setOrderBy] = useState('');
   const [orderByDirection, setOrderByDirection] = useState(SORT_DIRECTIONS.ASCENDING);
 
-  if(settings.loading) {
+  if (settings.$loading) {
     return <>Loading settings</>;
   }
-  if(!settings[entityType]){
+  if (!settings[entityType]) {
     return <>No such entity type found</>;
   }
   if (settings[entityType].redirectUrl) {
@@ -65,7 +64,7 @@ export default ({ entityType }) => {
   };
 
   useEffect(function () {
-    if (settings.loading) return;
+    if (settings.$loading) return;
     (async () => {
       setError(null);
       const filterComponent = Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&");
@@ -104,16 +103,22 @@ export default ({ entityType }) => {
       <table class="table table--content-list">
         <thead>
           <tr className={`text-nowrap ${orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
-            <th></th>
             {settings[entityType].columns.map(c => c.sortable
               ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
               : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
             )}
           </tr>
         </thead>
-        <ColumnComponentProvider componentPartials={[... new Set(data.items.map(i => i.values.map(v => v.partial)).flat(1))]}>
-          <TableBody {...{ items: data.items, settings, entityType }} />
-        </ColumnComponentProvider>
+        <tbody>
+          {data.items.map(d => <tr>
+            {settings[entityType].columns.map((column, i) =>
+              d.values[i]
+              && Object.keys(components).includes(column.partial)
+              && html`<td><${components[column.partial]} ...${{ keys: d.keys, ...d.values[i], settings: settings[entityType] }} dependencies=${{ html }} /></td>`
+            )}
+          </tr>)}
+          {[...new Array(settings[entityType].pageSize - data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
+        </tbody>
       </table>
     </div>;
   }

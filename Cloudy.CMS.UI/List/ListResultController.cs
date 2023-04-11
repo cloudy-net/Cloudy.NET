@@ -106,38 +106,8 @@ namespace Cloudy.CMS.UI.List
 
                 foreach (var propertyDefinition in selectedPropertyDefinitions)
                 {
-                    var partialViewName = $"columns/text";
-
-                    if (propertyDefinition.Attributes.OfType<ISelectAttribute>().Any())
-                    {
-                        partialViewName = "columns/select";
-                    }
-
-                    if (propertyDefinition.Attributes.OfType<ICustomSelectAttribute>().Any())
-                    {
-                        partialViewName = "columns/customselect";
-                    }
-
-                    if (type.Type.IsAssignableTo(typeof(INameable)) && propertyDefinition.Name == nameof(INameable.Name))
-                    {
-                        partialViewName = "columns/name";
-                    }
-
-                    if (type.Type.IsAssignableTo(typeof(IImageable)) && propertyDefinition.Name == nameof(IImageable.Image))
-                    {
-                        partialViewName = "columns/image";
-                    }
-
-                    var uiHint = propertyDefinition.Attributes.OfType<ListColumnAttribute>().FirstOrDefault()?.UIHint;
-
-                    if (uiHint != null)
-                    {
-                        partialViewName = uiHint;
-                    }
-
                     columnInfos.Add(new ColumnInfo(
                         await FieldFriendlyValueProvider.GetFriendlyValue(propertyDefinition, instance),
-                        $"{partialViewName}.js",
                         type.IsImageable,
                         type.IsImageable ? ((IImageable)instance).Image : string.Empty
                     ));
@@ -167,7 +137,6 @@ namespace Cloudy.CMS.UI.List
 
         public record ColumnInfo(
             object Value,
-            string Partial,
             bool IsImageable,
             string Image
         );

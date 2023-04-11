@@ -46,8 +46,8 @@ namespace Cloudy.CMS.UI.List
             {
                 var listSettings = new ListSettings
                 {
-                    Columns = ListColumnProvider.Get(entityType.Type),
-                    Filters = ListFilterProvider.Get(entityType.Type),
+                    Columns = ListColumnProvider.Get(entityType.Type) ?? Enumerable.Empty<ListColumnDescriptor>(),
+                    Filters = ListFilterProvider.Get(entityType.Type) ?? Enumerable.Empty<ListFilterDescriptor>(),
                     EntityTypeName = entityType.Name,
                     EntityTypePluralName = EntityTypeNameProvider.Get(entityType.Type).PluralName,
                     EditLink = UrlBuilder.Build(keys: null, "Edit", entityType.Name),
