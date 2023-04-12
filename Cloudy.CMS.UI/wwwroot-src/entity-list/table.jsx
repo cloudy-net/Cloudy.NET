@@ -100,7 +100,7 @@ export default ({ entityType, expanded }) => {
               <td></td>
           )}
         </tr>)}
-        {[...new Array(settings[entityType].pageSize - result.data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
+        {[...new Array(settings[entityType].pageSize - result.data.items.length)].map(() => <tr class="blank-row"><td /></tr>)}
       </tbody>
     </table>;
   }

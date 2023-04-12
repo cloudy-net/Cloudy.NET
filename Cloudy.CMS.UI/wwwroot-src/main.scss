@@ -391,6 +391,14 @@ label {
     color: inherit;
     text-decoration: none;
   }
+
+  .blank-row td {
+    visibility: hidden;
+
+    &::before {
+      content: "\00a0";
+    }
+  }
 }
 
 
