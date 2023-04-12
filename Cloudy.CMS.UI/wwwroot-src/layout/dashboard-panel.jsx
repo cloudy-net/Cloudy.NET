@@ -4,7 +4,7 @@ import EntityTypesContext from '@src/form/contexts/entity-types-context';
 export default () => {
   const { groupedEntityTypes } = useContext(EntityTypesContext);
 
-  const Table = () => <div class="cards-outer">
+  const Table = () => <div class="dashboard">
     {Object.keys(groupedEntityTypes).sort().map(key => <>
       {key != 'null' && <h2 class="card-group-heading">{key}</h2>}
       <div class="cards">
