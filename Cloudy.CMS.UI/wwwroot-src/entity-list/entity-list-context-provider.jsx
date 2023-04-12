@@ -17,6 +17,10 @@ export default ({ children }) => {
 
   useEffect(() => {
     (async () => {
+      if (settings.$loading) {
+        return;
+      }
+
       const getUrlPrefix = (url) => /* @vite-ignore */ window.viteDevServerIsRunning
         ? url.startsWith("/") ? window.location.origin : "./"
         : url.startsWith("/") ? "" : "./";

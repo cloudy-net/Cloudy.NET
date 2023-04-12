@@ -12,6 +12,7 @@ namespace Cloudy.CMS.UI.List
         string Partial,
         int Order,
         bool Sortable,
-        ListingColumnWidth width
+        ListingColumnWidth width,
+        bool ShowInCompactView
     );
 }

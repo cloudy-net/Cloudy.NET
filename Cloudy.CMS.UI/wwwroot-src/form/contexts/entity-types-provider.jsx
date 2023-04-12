@@ -3,7 +3,7 @@ import groupby from '@src/util/groupby';
 import EntityTypesContext from './entity-types-context';
 
 export default ({ children }) => {
-  const [entityTypes, setEntityTypes] = useState([]);
+  const [entityTypes, setEntityTypes] = useState({});
   const [groupedEntityTypes, setGroupedEntityTypes] = useState([]);
 
   useEffect(function () {
@@ -16,7 +16,13 @@ export default ({ children }) => {
 
       const json = await response.json();
 
-      setEntityTypes(json);
+      const result = {};
+
+      for(let type of json) {
+        result[type.name] = type;
+      }
+
+      setEntityTypes(result);
       setGroupedEntityTypes(groupby(json, 'groupName'));
     })();
   }, []);

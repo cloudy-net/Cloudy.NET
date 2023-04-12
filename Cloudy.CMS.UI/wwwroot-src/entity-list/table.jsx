@@ -22,7 +22,7 @@ export const LISTING_COLUMN_WIDTHS = {
   EQUAL: 'Equal',
 };
 
-export default ({ entityType }) => {
+export default ({ entityType, expanded }) => {
   const { settings, components, getResult, loadResult, parameters, updateParameter } = useContext(EntityListContext);
   const result = getResult(entityType);
 
@@ -86,7 +86,7 @@ export default ({ entityType }) => {
       <table class="table table--content-list">
         <thead>
           <tr className={`text-nowrap ${parameters[entityType].orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
-            {settings[entityType].columns.map(c => c.sortable
+            {settings[entityType].columns.filter(column => expanded || column.showInCompactView).map(c => c.sortable
               ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${parameters[entityType].orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
               : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
             )}
@@ -94,7 +94,7 @@ export default ({ entityType }) => {
         </thead>
         <tbody>
           {result.data.items.map(d => <tr>
-            {settings[entityType].columns.map((column) =>
+            {settings[entityType].columns.filter(column => expanded || column.showInCompactView).map((column) =>
               d.value[column.name]
               && Object.keys(components).includes(column.partial)
               && html`<td><${components[column.partial]} ...${{ keys: d.keys, value: d.value[column.name], settings: settings[entityType] }} dependencies=${{ html }} /></td>`

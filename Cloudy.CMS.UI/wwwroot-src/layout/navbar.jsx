@@ -10,9 +10,7 @@ import { ReactComponent as LogoutIcon } from "../assets/icon-logout.svg";
 
 
 
-const Navbar = ({ }) => {
-  const { entityTypes } = useContext(EntityTypesContext);
-
+const Navbar = ({ title }) => {
   const [settings, setSettings] = useState(null);
 
   useEffect(function () {
@@ -25,7 +23,7 @@ const Navbar = ({ }) => {
 
   return settings && <div class="navbar">
     <div class="navbar-title">
-      Dashboard
+      { title || "Dashboard" }
     </div>
     {!settings.isValidLicense ||1 &&
       <div class="navbar-license-nag">

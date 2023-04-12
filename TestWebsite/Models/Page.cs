@@ -17,20 +17,23 @@ namespace TestWebsite.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
 
-        [ListColumn(Order = 0, Sortable = true, Width = ListingColumnWidth.Fill)]
+        [ListColumn]
         [Required(ErrorMessage = "Enter a name, please")]
         [MaxLength(45, ErrorMessage = "Please enter a shorter name")]
         public string Name { get; set; }
         public IList<IFrontpageBlock> Blocks { get; set; }
 
+        [ListColumn]
         public string UrlSegment { get; set; }
         [UIHint("textarea")]
         public string Description { get; set; }
+        [ListColumn]
         [ListFilter]
         [Select<Page>]
         public Guid? RelatedPageId { get; set; }
         [UIHint("html")]
         public string MainBody { get; set; }
+        [ListColumn]
         [ListFilter]
         public Category? Category { get; set; }
         //[Block(typeof(Page))]

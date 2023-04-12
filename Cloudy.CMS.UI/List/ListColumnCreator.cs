@@ -29,7 +29,7 @@ namespace Cloudy.CMS.UI.List
                     if (entityType.IsNameable)
                     {
                         var name = nameof(INameable.Name);
-                        columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), GetPartial(entityType.Type, allProperties.First(p => p.Name == name)), 0, false, ListingColumnWidth.Default));
+                        columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), GetPartial(entityType.Type, allProperties.First(p => p.Name == name)), 0, false, ListingColumnWidth.Default, true));
                     }
                     else
                     {
@@ -37,7 +37,7 @@ namespace Cloudy.CMS.UI.List
                         foreach(var primaryKeyProperty in PrimaryKeyPropertyGetter.GetFor(entityType.Type))
                         {
                             var name = primaryKeyProperty.Name;
-                            columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), GetPartial(entityType.Type, allProperties.First(p => p.Name == name)), order++, false, ListingColumnWidth.Default));
+                            columns.Add(new ListColumnDescriptor(name, Humanizer.Humanize(name), GetPartial(entityType.Type, allProperties.First(p => p.Name == name)), order++, false, ListingColumnWidth.Default, true));
                         }
                     }
                 }
@@ -56,7 +56,7 @@ namespace Cloudy.CMS.UI.List
                             humanizedName = humanizedName.Substring(0, humanizedName.Length - " id".Length);
                         }
 
-                        columns.Add(new ListColumnDescriptor(name, humanizedName, GetPartial(entityType.Type, propertyDefinition), attribute.Order == -10000 ? order++ : attribute.Order, attribute.Sortable, attribute.Width));
+                        columns.Add(new ListColumnDescriptor(name, humanizedName, GetPartial(entityType.Type, propertyDefinition), attribute.Order == -10000 ? order++ : attribute.Order, attribute.Sortable, attribute.Width, attribute.ShowInCompactView ?? entityType.IsNameable && propertyDefinition.Name == nameof(INameable.Name) || false));
                     }
                 }
 
