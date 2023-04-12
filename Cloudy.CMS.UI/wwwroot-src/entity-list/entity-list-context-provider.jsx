@@ -4,9 +4,10 @@ import EntityListContext from "./entity-list-context.js";
 export default ({ children }) => {
   const [settings, setSettings] = useState({ $loading: true });
   const [components, setComponents] = useState({ $loading: true });
+  const [parameters, setParameters] = useState({ $loading: true });
   const [results, setResults] = useState({ data: {} });
 
-  useEffect(function () {
+  useEffect(() => {
     (async () => {
       const response = await fetch(`/Admin/api/list/settings`, { credentials: "include" });
       const json = await response.json();
@@ -16,10 +17,6 @@ export default ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      if (settings.$loading) {
-        return;
-      }
-
       const getUrlPrefix = (url) => /* @vite-ignore */ window.viteDevServerIsRunning
         ? url.startsWith("/") ? window.location.origin : "./"
         : url.startsWith("/") ? "" : "./";
@@ -29,39 +26,41 @@ export default ({ children }) => {
       await Promise.allSettled(componentPromises.map(c => c.promise));
 
       const result = {};
-
       for (let c of componentPromises) {
         result[c.url] = (await c.promise).default;
       }
-
       setComponents(result);
-    })();
-  }, [settings]);
 
-  const getResult = entityType => {
-    let result = results[entityType];
-
-    if(!result){
-      result = results[entityType] = {
-        $loading: true,
-        data: null,
+      setParameters(Object.fromEntries(Object.keys(settings).map(entityType => [entityType, {
         page: 1,
         pages: [],
         filters: [],
         search: "",
         orderBy: "",
         orderByDirection: "asc",
+      }])));
+    })();
+  }, [settings]);
+
+  const getResult = entityType => {
+    let result = results[entityType];
+
+    if (!result) {
+      result = results[entityType] = {
+        $loading: true,
+        data: null,
+        error: null,
       }
     }
 
     return result;
   };
 
-  const loadResult = async (entityType, page, filters, search, orderBy, orderByDirection) => {
-    const filterComponent = Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&");
-    const url = `/Admin/api/list/result?entityType=${entityType}&columns=${settings[entityType].columns.map(c => c.name).join(",")}&${filterComponent}&pageSize=${settings[entityType].pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`;
+  const loadResult = async (entityType) => {
+    const filterComponent = Object.entries(parameters[entityType].filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&");
+    const url = `/Admin/api/list/result?entityType=${entityType}&columns=${settings[entityType].columns.map(c => c.name).join(",")}&${filterComponent}&pageSize=${settings[entityType].pageSize}&page=${parameters[entityType].page}&search=${parameters[entityType].search}&orderBy=${parameters[entityType].orderBy}&orderByDirection=${parameters[entityType].orderByDirection}`;
 
-    if(results[entityType].url == url){
+    if (results[entityType].url == url) {
       return results[entityType];
     }
 
@@ -76,18 +75,21 @@ export default ({ children }) => {
         url,
         data: response.ok && body,
         error: !response.ok && { response, body },
-        page,
         pageCount,
         pages: [...Array(pageCount)],
-        filters,
-        search,
-        orderBy,
-        orderByDirection,
       }
-    })
-  }
+    });
+  };
 
-  return <EntityListContext.Provider value={{ settings, components, results, getResult, loadResult }}>
+  const updateParameter = (entityType, parameter) => setParameters({
+    ...parameters,
+    [entityType]: {
+      ...parameters[entityType],
+      ...parameter,
+    },
+  });
+
+  return <EntityListContext.Provider value={{ settings, components, results, getResult, loadResult, parameters, updateParameter }}>
     {children}
   </EntityListContext.Provider>;
 };
