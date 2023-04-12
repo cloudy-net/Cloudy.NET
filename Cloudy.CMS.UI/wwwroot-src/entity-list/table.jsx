@@ -82,31 +82,30 @@ export default ({ entityType, expanded }) => {
   if (result.$loading) {
     content = 'Loading ...';
   } else {
-    content = <div class="table-responsive">
-      <table class="table table--content-list">
-        <thead>
-          <tr className={`text-nowrap ${parameters[entityType].orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
-            {settings[entityType].columns.filter(column => expanded || column.showInCompactView).map(c => c.sortable
-              ? <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${parameters[entityType].orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th>
-              : <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {result.data.items.map(d => <tr>
-            {settings[entityType].columns.filter(column => expanded || column.showInCompactView).map((column) =>
-              d.value[column.name]
-              && Object.keys(components).includes(column.partial)
-              && html`<td><${components[column.partial]} ...${{ keys: d.keys, value: d.value[column.name], settings: settings[entityType] }} dependencies=${{ html }} /></td>`
-            )}
-          </tr>)}
-          {[...new Array(settings[entityType].pageSize - result.data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
-        </tbody>
-      </table>
-    </div>;
+    content = <table class={(expanded ? 'expanded' : 'compact') + '-entity-list-table'}>
+      <thead>
+        <tr className={`text-nowrap ${parameters[entityType].orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
+          {settings[entityType].columns.filter(column => expanded || column.showInCompactView).map(c =>
+            c.sortable ?
+              <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${parameters[entityType].orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th> :
+              <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
+          )}
+        </tr>
+      </thead>
+      <tbody>
+        {result.data.items.map(d => <tr>
+          {settings[entityType].columns.filter(column => expanded || column.showInCompactView).map((column) =>
+            d.value[column.name] && Object.keys(components).includes(column.partial) ?
+              html`<td><${components[column.partial]} ...${{ keys: d.keys, value: d.value[column.name], settings: settings[entityType] }} dependencies=${{ html }} /></td>` :
+              <td></td>
+          )}
+        </tr>)}
+        {[...new Array(settings[entityType].pageSize - result.data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
+      </tbody>
+    </table>;
   }
 
-  return <>
+  return <div class={"layout-navigation-panel" + (expanded ? " expanded" : "")}>
     <div class="list-page-header m-2">
       <div class="list-page-search">
         <SearchBox callback={value => updateParameter(entityType, { search: value })} floating={parameters[entityType].filters.length} />
@@ -128,11 +127,11 @@ export default ({ entityType, expanded }) => {
       {content}
       {result.pages && <nav>
         <ul class="pagination justify-content-center">
-          <li class="page-item"><a class={"page-link" + (result.page == 1 ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.max(1, result.page - 1) })}>Previous</a></li>
-          {result.pages.map((_, i) => <li class={"page-item" + (result.page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => updateParameter(entityType, { page: i + 1 })}>{i + 1}</a></li>)}
-          <li class="page-item"><a class={"page-link" + (result.page == result.pageCount ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.min(result.pageCount, result.page + 1) })}>Next</a></li>
+          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == 1 ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.max(1, parameters[entityType].page - 1) })}>Previous</a></li>
+          {result.pages.map((_, i) => <li class={"page-item" + (parameters[entityType].page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => updateParameter(entityType, { page: i + 1 })}>{i + 1}</a></li>)}
+          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == result.pageCount ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.min(result.pageCount, parameters[entityType].page + 1) })}>Next</a></li>
         </ul>
       </nav>}
     </div>
-  </>;
+  </div>;
 }

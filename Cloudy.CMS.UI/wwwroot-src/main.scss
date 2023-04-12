@@ -77,6 +77,10 @@ label {
   grid-row: navigation-panel;
   grid-column: navigation-panel;
   overflow: auto;
+
+  &.expanded {
+    padding: 32px 32px;
+  }
 }
 
 .layout-main-panel {
@@ -86,7 +90,6 @@ label {
   flex-direction: column;
   flex: 1 1 0;
   overflow: auto;
-  padding: 32px 32px;
 }
 
 
@@ -324,6 +327,65 @@ label {
   line-height: 1;
   color: $main-green;
   text-decoration: none;
+}
+
+
+
+/* ENTITY LIST TABLE */
+
+.expanded-entity-list-table {
+  & {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+  }
+
+  tr {}
+
+  th {
+    padding: 8px 4px;
+    text-align: left;
+    font-weight: normal;
+
+    &:first-child {
+      padding-left: 24px;
+    }
+
+    &:last-child {
+      padding-right: 24px;
+    }
+  }
+
+  td {
+    padding: 8px 4px;
+    border-top: solid 1px $main-blue;
+    border-bottom: solid 1px $main-blue;
+    background: white;
+    cursor: default;
+    transition: background 0.1s;
+
+    &:first-child {
+      padding-left: 24px;
+      border-left: solid 1px $main-blue;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+
+    &:last-child {
+      padding-right: 24px;
+      border-right: solid 1px $main-blue;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+  }
+
+  tr:has(.name-link:hover) td {
+    background: lighten($main-blue, 12%);
+  }
+
+  .name-link {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 
