@@ -23,18 +23,14 @@ export const LISTING_COLUMN_WIDTHS = {
 };
 
 export default ({ entityType }) => {
-  const { settings, components } = useContext(EntityListContext);
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState();
-  const [pages, setPages] = useState();
-  const [filters, setFilters] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState();
-  const [error, setError] = useState();
-  const [retryError, setRetryError] = useState(0);
-  const [search, setSearch] = useState('');
-  const [orderBy, setOrderBy] = useState('');
-  const [orderByDirection, setOrderByDirection] = useState(SORT_DIRECTIONS.ASCENDING);
+  const { settings, components, getResult, loadResult } = useContext(EntityListContext);
+  const result = getResult(entityType);
+
+  const [page, setPage] = useState(result.page);
+  const [filters, setFilters] = useState(result.filters);
+  const [search, setSearch] = useState(result.search);
+  const [orderBy, setOrderBy] = useState(result.orderBy);
+  const [orderByDirection, setOrderByDirection] = useState(result.orderByDirection);
 
   if (settings.$loading) {
     return <>Loading settings</>;
@@ -64,39 +60,23 @@ export default ({ entityType }) => {
   };
 
   useEffect(function () {
-    if (settings.$loading) return;
-    (async () => {
-      setError(null);
-      const filterComponent = Object.entries(filters).map(([key, value]) => `filters[${key}]=${encodeURIComponent(Array.isArray(value) ? JSON.stringify(value) : value)}`).join("&");
-      const url = `/Admin/api/list/result?entityType=${entityType}&columns=${settings[entityType].columns.map(c => c.name).join(',')}&${filterComponent}&pageSize=${settings[entityType].pageSize}&page=${page}&search=${search}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`;
-      const response = await fetch(url, { credentials: 'include' });
-
-      if (!response.ok) {
-        setError({ response, body: await response.text() });
-        return;
-      }
-
-      var json = await response.json();
-
-      setLoading(false);
-      setData(json);
-      const pageCount = Math.ceil(json.totalCount / settings[entityType].pageSize);
-      setPageCount(pageCount);
-      setPages([...Array(pageCount)]);
-    })();
-  }, [settings, page, filters, retryError, search, orderBy, orderByDirection]);
+    if(settings.$loading) {
+      return;
+    }
+    loadResult(entityType, page, filters, search, orderBy, orderByDirection);
+  }, [entityType, settings, page, filters, search, orderBy, orderByDirection]);
 
   let content = null;
 
-  if (error) {
+  if (result.error) {
     content = <div class="alert alert-primary">
-      <p>There was an error (<code>{error.response.status}{error.response.statusText ? " " + error.response.statusText : ""}</code>) loading your list{error.body ? ":" : "."}</p>
-      {error.body ? <small><pre>{error.body}</pre></small> : ""}
+      <p>There was an error (<code>{result.error.response.status}{result.error.response.statusText ? " " + result.error.response.statusText : ""}</code>) loading your list{result.error.body ? ":" : "."}</p>
+      {result.error.body ? <small><pre>{result.error.body}</pre></small> : ""}
       <p class="mb-0"><button class="btn btn-primary" onClick={() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
     </div>;
   }
 
-  if (loading) {
+  if (result.$loading) {
     content = 'Loading ...';
   } else {
     content = <div class="table-responsive">
@@ -110,14 +90,14 @@ export default ({ entityType }) => {
           </tr>
         </thead>
         <tbody>
-          {data.items.map(d => <tr>
+          {result.data.items.map(d => <tr>
             {settings[entityType].columns.map((column) =>
               d.value[column.name]
               && Object.keys(components).includes(column.partial)
               && html`<td><${components[column.partial]} ...${{ keys: d.keys, value: d.value[column.name], settings: settings[entityType] }} dependencies=${{ html }} /></td>`
             )}
           </tr>)}
-          {[...new Array(settings[entityType].pageSize - data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
+          {[...new Array(settings[entityType].pageSize - result.data.items.length)].map(() => <tr class="list-page-blank-row"><td class="nbsp" /></tr>)}
         </tbody>
       </table>
     </div>;
@@ -143,14 +123,13 @@ export default ({ entityType }) => {
     </div>
     <div class="table-responsive">
       {content}
-      {pages && <nav>
+      {result.pages && <nav>
         <ul class="pagination justify-content-center">
-          <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))}>Previous</a></li>
-          {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
-          <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))}>Next</a></li>
+          <li class="page-item"><a class={"page-link" + (result.page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, result.page - 1))}>Previous</a></li>
+          {result.pages.map((_, i) => <li class={"page-item" + (result.page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
+          <li class="page-item"><a class={"page-link" + (result.page == result.pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(result.pageCount, result.page + 1))}>Next</a></li>
         </ul>
       </nav>}
     </div>
-  </>
-    ;
+  </>;
 }
