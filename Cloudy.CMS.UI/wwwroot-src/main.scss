@@ -478,6 +478,10 @@ label {
   display: flex;
   padding: 0;
   list-style-type: none;
+
+  &.expanded {
+    justify-content: center;
+  }
 }
 
 .page-item {
