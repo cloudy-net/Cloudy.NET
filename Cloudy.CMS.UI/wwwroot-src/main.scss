@@ -153,6 +153,7 @@ label {
   margin-left: auto;
   transform: rotate3d(1, 0, 0, 0deg);
   transition: transform 0.2s;
+  stroke: white;
 
   &.expanded {
     transform: rotate3d(1, 0, 0, 180deg);
