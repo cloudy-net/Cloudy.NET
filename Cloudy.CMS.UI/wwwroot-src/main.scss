@@ -3,6 +3,7 @@
 $main-green: #18AF79;
 $main-blue: #B9D6F2;
 $text-color: #2B2D37;
+$light-gray: #F4F8FC;
 
 
 
@@ -10,7 +11,7 @@ $text-color: #2B2D37;
 
 body {
   margin: 0;
-  background: rgba(0, 0, 0, 0.045);
+  background: white;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -77,9 +78,11 @@ label {
   grid-row: navigation-panel;
   grid-column: navigation-panel;
   overflow: auto;
+  background: $light-gray;
 
   &.expanded {
     padding: 32px 32px;
+    background: transparent;
   }
 }
 
@@ -465,6 +468,61 @@ label {
   height: 100%;
   border-radius: 5px;
   background: #f2f2f2;
+}
+
+
+
+/* PAGINATION */
+
+.pagination {
+  display: flex;
+  padding: 0;
+  list-style-type: none;
+}
+
+.page-item {
+  color: rgba($text-color, 0.5);
+  line-height: 1;
+
+  &.active,
+  &:hover {
+    color: inherit;
+  }
+}
+
+.page-link {
+  position: relative;
+  top: -1px;
+  display: block;
+  padding: 5px 8px;
+
+  .page-item.active & {
+    background: $light-gray;
+    border-radius: 5px;
+  }
+}
+
+.page-next-caret {
+  margin-top: 2px;
+  margin-left: 5px;
+  display: block;
+  stroke: rgba($text-color, 0.5);
+  
+  .page-item:hover & {
+    stroke: $text-color;
+  }
+}
+
+.page-previous-caret {
+  margin-top: 2px;
+  margin-right: 5px;
+  display: block;
+  stroke: rgba($text-color, 0.5);
+  transform: rotate3d(0, 1, 0, -180deg);
+  
+  .page-item:hover & {
+    stroke: $text-color;
+  }
 }
 
 

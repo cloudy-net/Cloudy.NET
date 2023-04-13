@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "preact/hooks";
-import EntityTypesContext from "../form/contexts/entity-types-context";
+import { useEffect, useState } from "preact/hooks";
 import { ReactComponent as NotificationIcon } from "../assets/icon-notification.svg";
 import Dropdown from "../components/dropdown";
 import DropdownItem from "../components/dropdown-item";

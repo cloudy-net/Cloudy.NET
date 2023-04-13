@@ -3,7 +3,7 @@ import EntityTypesContext from "../form/contexts/entity-types-context";
 import { ReactComponent as DashboardIcon } from "../assets/icon-dashboard.svg";
 import { ReactComponent as EntityTypeIcon } from "../assets/icon-entity-type.svg";
 import { ReactComponent as Cloud } from "../assets/cloud.svg";
-import { ReactComponent as Caret } from "../assets/caret.svg";
+import { ReactComponent as Caret } from "../assets/caret-vertical.svg";
 import { Link } from "preact-router/match";
 
 const MainMenu = () => {

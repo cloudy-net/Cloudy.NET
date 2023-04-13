@@ -4,6 +4,7 @@ import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
 import EntityListContext from './entity-list-context';
 import html from '@src/util/html.js';
+import { ReactComponent as Caret } from "../assets/caret-horizontal.svg";
 
 export const SORT_DIRECTIONS = {
   ASCENDING: 'asc',
@@ -126,10 +127,10 @@ export default ({ entityType, expanded }) => {
     <div class="table-responsive">
       {content}
       {result.pages && <nav>
-        <ul class="pagination justify-content-center">
-          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == 1 ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.max(1, parameters[entityType].page - 1) })}>Previous</a></li>
+        <ul class={"pagination" + (expanded ? " expanded" : "")}>
+          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == 1 ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.max(1, parameters[entityType].page - 1) })} title="Previous"><Caret class="page-previous-caret" /></a></li>
           {result.pages.map((_, i) => <li class={"page-item" + (parameters[entityType].page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => updateParameter(entityType, { page: i + 1 })}>{i + 1}</a></li>)}
-          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == result.pageCount ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.min(result.pageCount, parameters[entityType].page + 1) })}>Next</a></li>
+          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == result.pageCount ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.min(result.pageCount, parameters[entityType].page + 1) })} title="Next"><Caret class="page-next-caret" /></a></li>
         </ul>
       </nav>}
     </div>
