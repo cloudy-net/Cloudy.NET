@@ -5,6 +5,12 @@ import ListFilter from './list-filter';
 import EntityListContext from './entity-list-context';
 import html from '@src/util/html.js';
 import { ReactComponent as Caret } from "../assets/caret-horizontal.svg";
+import { ReactComponent as Kebab } from "../assets/kebab.svg";
+import { ReactComponent as Edit } from "../assets/icon-edit.svg";
+import { ReactComponent as Trash } from "../assets/icon-trash.svg";
+import Dropdown from '../components/dropdown';
+import DropdownItem from '../components/dropdown-item';
+import arrayEquals from '../util/array-equals';
 
 export const SORT_DIRECTIONS = {
   ASCENDING: 'asc',
@@ -23,7 +29,7 @@ export const LISTING_COLUMN_WIDTHS = {
   EQUAL: 'Equal',
 };
 
-export default ({ entityType }) => {
+export default ({ entityType, keyValues }) => {
   const { settings, components, getResult, loadResult, parameters, updateParameter } = useContext(EntityListContext);
   const result = getResult(entityType);
 
@@ -83,31 +89,25 @@ export default ({ entityType }) => {
   if (result.$loading) {
     content = 'Loading ...';
   } else {
-    content = <table class="expanded-entity-list-table">
-      <thead>
-        <tr className={`text-nowrap ${parameters[entityType].orderByDirection === SORT_DIRECTIONS.ASCENDING ? 'dropup' : ''}`}>
-          {settings[entityType].columns.map(c =>
-            c.sortable ?
-              <th style={columnFn.getColumnWidthStyle(c.width)} className={`${COLUMN_WIDTH_CSS_CLASSES[c.width]} ${parameters[entityType].orderBy === c.name ? 'dropdown-toggle' : ''}`} role="button" onClick={() => setSorting(c.name)}>{c.label}</th> :
-              <th style={columnFn.getColumnWidthStyle(c.width)} className={COLUMN_WIDTH_CSS_CLASSES[c.width]}>{c.label}</th>
-          )}
-        </tr>
-      </thead>
-      <tbody>
-        {result.data.items.map(d => <tr>
-          {settings[entityType].columns.map((column) =>
-            d.value[column.name] && Object.keys(components).includes(column.partial) ?
-              html`<td><${components[column.partial]} ...${{ keys: d.keys, value: d.value[column.name], settings: settings[entityType] }} dependencies=${{ html }} /></td>` :
-              <td></td>
-          )}
-        </tr>)}
-        {[...new Array(settings[entityType].pageSize - result.data.items.length)].map(() => <tr class="blank-row"><td /></tr>)}
-      </tbody>
-    </table>;
+    content = <>
+      {result.data.items.map(d =>
+        settings[entityType].columns.filter(column => column.showInCompactView).map((column) =>
+          d.value[column.name] && Object.keys(components).includes(column.partial) ?
+            <div class={"compact-entity-list-item" + (arrayEquals(keyValues, d.keys) ? " active" : "")}>
+              {html`<${components[column.partial]} ...${{ keys: d.keys, value: d.value[column.name], settings: settings[entityType] }} dependencies=${{ html }} />`}
+              <Dropdown className="compact-entity-list-item-menu" contents={<Kebab />}>
+                <DropdownItem href={`${settings[entityType].editLink}?${d.keys.map(k => `keys=${k}`).join('&')}`} text="Edit" icon={<Edit />} />
+                <DropdownItem text="Delete" icon={<Trash />} />
+              </Dropdown>
+            </div> :
+            <></>
+        )
+      )}
+    </>;
   }
 
-  return <div class={"layout-navigation-panel expanded"}>
-    <div class="list-page-header m-2">
+  return <div class="layout-navigation-panel">
+    <div class="list-page-header">
       <div class="list-page-search">
         <SearchBox callback={value => updateParameter(entityType, { search: value })} floating={parameters[entityType].filters.length} />
       </div>
@@ -124,15 +124,13 @@ export default ({ entityType }) => {
         updateParameter(entityType, { filters: { ...parameters[entityType].filters, [key]: value } });
       }} />)}
     </div>
-    <div class="table-responsive">
-      {content}
-      {result.pages && <nav>
-        <ul class="pagination expanded">
-          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == 1 ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.max(1, parameters[entityType].page - 1) })} title="Previous"><Caret class="page-previous-caret" /></a></li>
-          {result.pages.map((_, i) => <li class={"page-item" + (parameters[entityType].page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => updateParameter(entityType, { page: i + 1 })}>{i + 1}</a></li>)}
-          <li class="page-item"><a class={"page-link" + (parameters[entityType].page == result.pageCount ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.min(result.pageCount, parameters[entityType].page + 1) })} title="Next"><Caret class="page-next-caret" /></a></li>
-        </ul>
-      </nav>}
-    </div>
+    {content}
+    {result.pages && <nav>
+      <ul class="pagination">
+        <li class="page-item"><a class={"page-link" + (parameters[entityType].page == 1 ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.max(1, parameters[entityType].page - 1) })} title="Previous"><Caret class="page-previous-caret" /></a></li>
+        {result.pages.map((_, i) => <li class={"page-item" + (parameters[entityType].page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => updateParameter(entityType, { page: i + 1 })}>{i + 1}</a></li>)}
+        <li class="page-item"><a class={"page-link" + (parameters[entityType].page == result.pageCount ? " disabled" : "")} onClick={() => updateParameter(entityType, { page: Math.min(result.pageCount, parameters[entityType].page + 1) })} title="Next"><Caret class="page-next-caret" /></a></li>
+      </ul>
+    </nav>}
   </div>;
 }

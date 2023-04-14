@@ -1,3 +1,4 @@
+import arrayEquals from "../util/array-equals.js";
 import changeManager from "./change-manager.js";
 
 class ConflictManager {

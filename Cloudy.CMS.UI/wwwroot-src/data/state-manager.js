@@ -6,30 +6,8 @@ import changeManager from "./change-manager.js";
 import conflictManager from "./conflict-manager.js";
 import stateEvents from "./state-events.js";
 import generateRandomString from "../util/generate-random-string.js";
+import arrayEquals from "../util/array-equals.js";
 
-const arrayEquals = (a, b) => {
-  if (a == null && b == null) {
-    return true;
-  }
-
-  if (a == null) {
-    return false;
-  }
-
-  if (b == null) {
-    return false;
-  }
-
-  if (!Array.isArray(a) || !Array.isArray(b)) {
-    return false;
-  }
-
-  if (a.length != b.length) {
-    return false;
-  }
-
-  return a.every((ai, i) => ai === b[i]);
-};
 const entityReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newEntityKey == b.newEntityKey && a.entityType == b.entityType;
 
 class StateManager {
