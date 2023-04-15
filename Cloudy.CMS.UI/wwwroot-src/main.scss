@@ -448,9 +448,14 @@ label {
   justify-self: center;
 }
 
+
+
+/* COMPACT LIST SEARCH */
+
 .compact-list-search {
   position: relative;
 }
+
 .compact-list-search-input {
   display: block;
   padding: 10px;
@@ -461,12 +466,13 @@ label {
   background: white;
   color: lighten($text-color, 20%);
   font-size: 14px;
-  
+
   .compact-list-search:hover &,
   .compact-list-search:has(.compact-list-search-input:focus) & {
     color: $text-color;
   }
 }
+
 .compact-list-search-icon {
   position: absolute;
   top: 50%;
@@ -477,6 +483,43 @@ label {
   .compact-list-search:hover &,
   .compact-list-search:has(.compact-list-search-input:focus) & {
     stroke: $text-color;
+  }
+}
+
+
+
+/* COMPACT LIST FILTERS */
+
+.compact-list-filter-button {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+
+  &:hover {
+    background: rgba(black, 0.1);
+  }
+}
+
+.compact-list-filter-button-icon {
+  width: 14px;
+}
+
+.compact-list-filter-button-text {
+  flex-grow: 1;
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.compact-list-filter-button-caret {
+  padding-right: 5px;
+  stroke: $text-color;
+  transform: rotate3d(1, 0, 0, 0deg);
+  transition: transform 0.2s;
+
+  &.open {
+    transform: rotate3d(1, 0, 0, 180deg);
   }
 }
 

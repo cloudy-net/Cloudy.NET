@@ -5,10 +5,12 @@ import ListFilter from './list-filter';
 import EntityListContext from './entity-list-context';
 import html from '@src/util/html.js';
 import { ReactComponent as Caret } from "../assets/caret-horizontal.svg";
+import { ReactComponent as VerticalCaret } from "../assets/caret-vertical.svg";
 import { ReactComponent as Kebab } from "../assets/kebab.svg";
 import { ReactComponent as Edit } from "../assets/icon-edit.svg";
 import { ReactComponent as Trash } from "../assets/icon-trash.svg";
 import { ReactComponent as Search } from "../assets/icon-search.svg";
+import { ReactComponent as Filter } from "../assets/icon-filter.svg";
 import Dropdown from '../components/dropdown';
 import DropdownItem from '../components/dropdown-item';
 import arrayEquals from '../util/array-equals';
@@ -33,6 +35,8 @@ export const LISTING_COLUMN_WIDTHS = {
 export default ({ entityType, keyValues }) => {
   const { settings, components, getResult, loadResult, parameters, updateParameter } = useContext(EntityListContext);
   const result = getResult(entityType);
+
+  const [filtersOpen, setFiltersOpen] = useState();
 
   if (settings.$loading) {
     return <>Loading settings</>;
@@ -112,19 +116,27 @@ export default ({ entityType, keyValues }) => {
       <SearchBox className="compact-list-search-input" callback={value => updateParameter(entityType, { search: value })} />
       <Search className="compact-list-search-icon" />
     </div>
-    <div class="list-page-header">
-      {settings[entityType].filters.map(c => <ListFilter {...c} filter={(key, value) => {
-        if (!value) {
-          var newFilters = { ...parameters[entityType].filters };
+    <div class="compact-list-filter-panel">
+      <a className="compact-list-filter-button" tabIndex="1" onClick={() => setFiltersOpen(!filtersOpen)}>
+        <Filter className="compact-list-filter-button-icon" />
+        <span className="compact-list-filter-button-text">Filters</span>
+        <VerticalCaret className={"compact-list-filter-button-caret" + (filtersOpen ? " open" : "")} />
+      </a>
+      {filtersOpen &&
+        <div className="compact-list-filters">
+          {settings[entityType].filters.map(c => <ListFilter {...c} filter={(key, value) => {
+            if (!value) {
+              var newFilters = { ...parameters[entityType].filters };
 
-          delete newFilters[key];
+              delete newFilters[key];
 
-          updateParameter(entityType, { filters: newFilters });
-          return;
-        }
+              updateParameter(entityType, { filters: newFilters });
+              return;
+            }
 
-        updateParameter(entityType, { filters: { ...parameters[entityType].filters, [key]: value } });
-      }} />)}
+            updateParameter(entityType, { filters: { ...parameters[entityType].filters, [key]: value } });
+          }} />)}
+        </div>}
     </div>
     {content}
     {result.pages && <nav>

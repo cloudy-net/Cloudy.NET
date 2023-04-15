@@ -1,7 +1,7 @@
 import debounce from "../util/debounce.js";
 import { useEffect, useMemo, useRef } from 'preact/hooks';
 
-export default ({ callback, className }) => {
+export default ({ callback, className, autoFocus }) => {
   const debouncedResults = useMemo(() => {
     return debounce(event => callback(event.target.value), 250);
   }, []);
@@ -19,7 +19,9 @@ export default ({ callback, className }) => {
       return;
     }
 
-    ref.current.focus();
+    if (autoFocus) {
+      ref.current.focus();
+    }
   }, []);
 
   return <input class={className} type="text" placeholder="Search" onInput={debouncedResults} ref={ref} />;

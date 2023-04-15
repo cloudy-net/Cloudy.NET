@@ -109,7 +109,7 @@ export default ({ entityType }) => {
   return <div class={"layout-navigation-panel expanded"}>
     <div class="list-page-header m-2">
       <div class="list-page-search">
-        <SearchBox callback={value => updateParameter(entityType, { search: value })} floating={parameters[entityType].filters.length} />
+        <SearchBox callback={value => updateParameter(entityType, { search: value })} floating={parameters[entityType].filters.length} autoFocus={true} />
       </div>
       {settings[entityType].filters.map(c => <ListFilter {...c} filter={(key, value) => {
         if (!value) {
