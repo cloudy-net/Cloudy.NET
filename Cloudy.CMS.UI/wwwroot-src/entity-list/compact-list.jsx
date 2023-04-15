@@ -11,6 +11,7 @@ import { ReactComponent as Edit } from "../assets/icon-edit.svg";
 import { ReactComponent as Trash } from "../assets/icon-trash.svg";
 import { ReactComponent as Search } from "../assets/icon-search.svg";
 import { ReactComponent as Filter } from "../assets/icon-filter.svg";
+import { ReactComponent as FilterActive } from "../assets/icon-filter-active.svg";
 import Dropdown from '../components/dropdown';
 import DropdownItem from '../components/dropdown-item';
 import arrayEquals from '../util/array-equals';
@@ -111,6 +112,8 @@ export default ({ entityType, keyValues }) => {
     </>;
   }
 
+  const activeFilters = Object.keys(parameters[entityType].filters).length;
+
   return <div class="layout-navigation-panel">
     <div class="compact-list-search">
       <SearchBox className="compact-list-search-input" callback={value => updateParameter(entityType, { search: value })} />
@@ -118,8 +121,8 @@ export default ({ entityType, keyValues }) => {
     </div>
     <div class="compact-list-filter-panel">
       <a className="compact-list-filter-button" tabIndex="1" onClick={() => setFiltersOpen(!filtersOpen)}>
-        <Filter className="compact-list-filter-button-icon" />
-        <span className="compact-list-filter-button-text">Filters</span>
+        {activeFilters ? <FilterActive className="compact-list-filter-button-icon" /> : <Filter className="compact-list-filter-button-icon" />}
+        <span className="compact-list-filter-button-text">Filters {activeFilters ? `(${activeFilters} active)` : ''}</span>
         <VerticalCaret className={"compact-list-filter-button-caret" + (filtersOpen ? " open" : "")} />
       </a>
       {filtersOpen &&
