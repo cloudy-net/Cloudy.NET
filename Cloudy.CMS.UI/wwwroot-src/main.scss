@@ -441,7 +441,7 @@ label {
   margin-left: auto;
   border: none;
   background: transparent;
-  padding: 0 4px 0 16px;
+  padding: 1px 4px 1px 16px;
   vertical-align: middle;
   cursor: pointer;
   line-height: 0;
@@ -524,7 +524,7 @@ label {
   padding: 0;
   list-style-type: none;
 
-  &.expanded {
+  &.compact {
     justify-content: center;
   }
 }
@@ -548,6 +548,10 @@ label {
   .page-item.active & {
     background: $light-gray;
     border-radius: 5px;
+
+    .pagination.compact & {
+      background: white;
+    }
   }
 }
 
