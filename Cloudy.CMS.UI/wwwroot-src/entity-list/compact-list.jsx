@@ -8,6 +8,7 @@ import { ReactComponent as Caret } from "../assets/caret-horizontal.svg";
 import { ReactComponent as Kebab } from "../assets/kebab.svg";
 import { ReactComponent as Edit } from "../assets/icon-edit.svg";
 import { ReactComponent as Trash } from "../assets/icon-trash.svg";
+import { ReactComponent as Search } from "../assets/icon-search.svg";
 import Dropdown from '../components/dropdown';
 import DropdownItem from '../components/dropdown-item';
 import arrayEquals from '../util/array-equals';
@@ -107,10 +108,11 @@ export default ({ entityType, keyValues }) => {
   }
 
   return <div class="layout-navigation-panel">
+    <div class="compact-list-search">
+      <SearchBox className="compact-list-search-input" callback={value => updateParameter(entityType, { search: value })} />
+      <Search className="compact-list-search-icon" />
+    </div>
     <div class="list-page-header">
-      <div class="list-page-search">
-        <SearchBox callback={value => updateParameter(entityType, { search: value })} floating={parameters[entityType].filters.length} />
-      </div>
       {settings[entityType].filters.map(c => <ListFilter {...c} filter={(key, value) => {
         if (!value) {
           var newFilters = { ...parameters[entityType].filters };

@@ -448,6 +448,38 @@ label {
   justify-self: center;
 }
 
+.compact-list-search {
+  position: relative;
+}
+.compact-list-search-input {
+  display: block;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 5px;
+  background: white;
+  color: lighten($text-color, 20%);
+  font-size: 14px;
+  
+  .compact-list-search:hover &,
+  .compact-list-search:has(.compact-list-search-input:focus) & {
+    color: $text-color;
+  }
+}
+.compact-list-search-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translate(0, -50%);
+  stroke: lighten($text-color, 20%);
+
+  .compact-list-search:hover &,
+  .compact-list-search:has(.compact-list-search-input:focus) & {
+    stroke: $text-color;
+  }
+}
+
 
 
 /* LIST PAGE */
