@@ -286,6 +286,12 @@ label {
   &:hover {
     background: lighten($main-blue, 14%);
   }
+  &.active {
+    background: lighten($main-blue, 5%);
+    &:hover {
+      background: lighten($main-blue, 2%);
+    }
+  }
 }
 
 .dropdown-item-icon {
@@ -487,13 +493,13 @@ label {
 
 
 
-/* COMPACT LIST SEARCH */
+/* SEARCH BOX */
 
-.compact-list-search {
+.search-box {
   position: relative;
 }
 
-.compact-list-search-input {
+.search-box-input {
   display: block;
   padding: 10px;
   width: 100%;
@@ -504,21 +510,21 @@ label {
   color: lighten($text-color, 20%);
   font-size: 14px;
 
-  .compact-list-search:hover &,
-  .compact-list-search:has(.compact-list-search-input:focus) & {
+  .search-box:hover &,
+  .search-box:has(.search-box-input:focus) & {
     color: $text-color;
   }
 }
 
-.compact-list-search-icon {
+.search-box-icon {
   position: absolute;
   top: 50%;
   right: 12px;
   transform: translate(0, -50%);
   stroke: lighten($text-color, 20%);
 
-  .compact-list-search:hover &,
-  .compact-list-search:has(.compact-list-search-input:focus) & {
+  .search-box:hover &,
+  .search-box:has(.search-box-input:focus) & {
     stroke: $text-color;
   }
 }

@@ -1,7 +1,7 @@
 import closeDropdown from "./close-dropdown";
 
-export default ({ href, target, onClick, icon, text }) => <a
-  className="dropdown-item"
+export default ({ href, target, onClick, icon, text, active }) => <a
+  className={"dropdown-item" + (active ? " active" : "")}
   href={href}
   onClick={event => {
     if(onClick) {

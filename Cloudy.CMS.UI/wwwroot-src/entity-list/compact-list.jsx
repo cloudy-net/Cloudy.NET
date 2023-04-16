@@ -9,7 +9,6 @@ import { ReactComponent as VerticalCaret } from "../assets/caret-vertical.svg";
 import { ReactComponent as Kebab } from "../assets/kebab.svg";
 import { ReactComponent as Edit } from "../assets/icon-edit.svg";
 import { ReactComponent as Trash } from "../assets/icon-trash.svg";
-import { ReactComponent as Search } from "../assets/icon-search.svg";
 import { ReactComponent as Filter } from "../assets/icon-filter.svg";
 import { ReactComponent as FilterActive } from "../assets/icon-filter-active.svg";
 import Dropdown from '../components/dropdown';
@@ -96,10 +95,7 @@ export default ({ entityType, keyValues }) => {
 
   return <div class="layout-navigation-panel">
     <div className="compact-entity-list-header">
-      <div class="compact-list-search">
-        <SearchBox className="compact-list-search-input" callback={value => updateParameter(entityType, { search: value })} />
-        <Search className="compact-list-search-icon" />
-      </div>
+      <SearchBox callback={value => updateParameter(entityType, { search: value })} />
       <div class="compact-list-filter-panel">
         <a className="compact-list-filter-button" tabIndex="1" onClick={() => setFiltersOpen(!filtersOpen)}>
           {activeFilters ? <FilterActive className="compact-list-filter-button-icon" /> : <Filter className="compact-list-filter-button-icon" />}
