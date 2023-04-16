@@ -78,8 +78,6 @@ label {
   grid-row: navigation-panel;
   grid-column: navigation-panel;
   overflow: auto;
-  background: $light-gray;
-  padding: 10px;
 
   &.expanded {
     padding: 32px 32px;
@@ -240,7 +238,35 @@ label {
 
 
 
-/* DROPDOWNS */
+/* DROPDOWN */
+
+.dropdown-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  border: solid 1px $main-blue;
+  border-radius: 5px;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.1s;
+
+  &:hover,
+  &:focus {
+    border-color: $text-color;
+  }
+}
+
+.dropdown-button-text {
+  flex-grow: 1;
+}
+
+.dropdown-button-caret {
+  margin-left: 10px;
+  stroke: $text-color;
+}
 
 .dropdown-menu {
   max-width: 300px;
@@ -408,6 +434,17 @@ label {
 
 /* COMPACT ENTITY LIST */
 
+.compact-entity-list-header {
+  background: $light-gray;
+  padding: 10px;
+  border-bottom: 2px solid rgba(black, 0.1);
+}
+
+.compact-entity-list-items {
+  background: $light-gray;
+  padding: 10px;
+}
+
 .compact-entity-list-item {
   & {
     display: flex;
@@ -490,8 +527,11 @@ label {
 
 /* COMPACT LIST FILTERS */
 
+.compact-list-filter-panel {
+  margin-top: 5px;
+}
+
 .compact-list-filter-button {
-  margin: 5px 0;
   display: flex;
   align-items: center;
   padding: 5px;
@@ -521,6 +561,10 @@ label {
   &.open {
     transform: rotate3d(1, 0, 0, 180deg);
   }
+}
+
+.compact-list-filters {
+  margin-top: 5px;
 }
 
 
@@ -599,7 +643,7 @@ label {
   padding: 0;
   list-style-type: none;
 
-  &.compact {
+  &.center {
     justify-content: center;
   }
 }

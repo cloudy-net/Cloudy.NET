@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from "./search-box";
+import closeDropdown from './close-dropdown';
+import DropdownItem from './dropdown-item';
 
 export default ({ entityType, simpleKey, value, onSelect }) => {
   const [pageSize] = useState(10);
@@ -51,23 +53,22 @@ export default ({ entityType, simpleKey, value, onSelect }) => {
     return <>Loading ...</>;
   }
 
-  return <><div class="mx-2">
+  return <div style="width: 300px; max-width: 100%;">
     <SearchBox small={true} callback={value => setFilter(value)} />
-  </div>
     <div>
       {data.items.map(item =>
-        <div><a class={"dropdown-item" + (item.reference == value ? " active" : "")} onClick={() => { onSelect(item.reference == value ? null : item); }} tabIndex="0">{item.name}</a></div>
+        <div><DropdownItem text={item.name} active={item.reference == value} onClick={() => onSelect(item.reference == value ? null : item)} /></div>
       )}
     </div>
     <div>
-      {[...new Array(pageSize - data.items.length)].map(() => <div><a class="dropdown-item disabled">&nbsp;</a></div>)}
+      {[...new Array(pageSize - data.items.length)].map(() => <DropdownItem disabled={true} text={<>&nbsp;</>}/>)}
     </div>
     <nav>
-      <ul class="pagination pagination-sm justify-content-center m-0 mt-2">
+      <ul class="pagination center">
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
         {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
         <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
       </ul>
     </nav>
-  </>;
+  </div>;
 };

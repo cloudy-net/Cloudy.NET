@@ -2,6 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { usePopper } from "react-popper";
 import ClickOutsideDetector from "./click-outside-detector"
 import { createRef } from "preact";
+import { ReactComponent as Caret } from "../assets/caret-vertical.svg";
 
 const Dropdown = ({ className, contents, children }) => {
   const ref = createRef();
@@ -27,10 +28,12 @@ const Dropdown = ({ className, contents, children }) => {
     }
   }, [open]);
 
-  return <div class="dropdown" ref={ref}>
-    <ClickOutsideDetector onClickOutside={() => setOpen(false)}>
-      {<button className={className} type="button" aria-expanded={open} ref={setReferenceElement} onClick={() => setOpen(!open)}>{contents}</button>}
-
+  return <div ref={ref}>
+    <ClickOutsideDetector onClickOutside={() => setOpen(false)} className="dropdown">
+      {<button className={className || "dropdown-button"} type="button" aria-expanded={open} ref={setReferenceElement} onClick={() => setOpen(!open)}>
+        {!className ? <span className="dropdown-button-text">{contents}</span> : contents}
+        {!className ? <Caret className="dropdown-button-caret" /> : ''}
+      </button>}
       {open && <div className="dropdown-menu" ref={setPopperElement} style={styles.popper} {...attributes.popper}>
         {children}
       </div>}
