@@ -16,6 +16,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+  font-size: 14px;
   color: $text-color;
 }
 
@@ -462,7 +463,6 @@ label {
     border-radius: 4px;
     cursor: default;
     transition: background 0.1s;
-    font-size: 14px;
   }
 
   &.active {
@@ -555,7 +555,6 @@ label {
 .compact-list-filter-button-text {
   flex-grow: 1;
   padding: 0 10px;
-  font-size: 14px;
 }
 
 .compact-list-filter-button-caret {
@@ -762,7 +761,6 @@ label {
   margin-bottom: 0.5rem;
   background: rgba(0, 0, 0, 0.03);
   padding: 0.5rem;
-  font-size: 14px;
 }
 
 .media-picker-header .breadcrumb {
@@ -790,7 +788,6 @@ label {
   margin-bottom: -0.5rem;
   background: rgba(0, 0, 0, 0.03);
   padding: 0.5rem;
-  font-size: 14px;
 }
 
 .media-picker-footer .pagination {
