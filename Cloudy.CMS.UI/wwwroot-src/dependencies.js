@@ -7,6 +7,8 @@ import simpleChangeHandler from './data/change-handlers/simple-change-handler.js
 import blockTypeChangeHandler from './data/change-handlers/block-type-change-handler.js';
 import EmbeddedBlockListHandler from './data/change-handlers/embedded-block-list-handler.js';
 import Dropdown from './components/dropdown';
+import DropdownItem from './components/dropdown-item';
+import DropdownSeparator from './components/dropdown-separator';
 import FormField from './form/form-field';
 import closeDropdown from './components/close-dropdown.js';
 import SearchBox from './components/search-box';
@@ -15,6 +17,8 @@ import componentContextProvider from './data/component-context-provider.js';
 const dependencies = { 
   html,
   Dropdown,
+  DropdownItem,
+  DropdownSeparator,
   FormField,
   closeDropdown,
   SearchBox,

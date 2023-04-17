@@ -36,7 +36,9 @@ input,
 button,
 textarea,
 select {
+  color: inherit;
   font-family: inherit;
+  font-size: inherit;
 }
 
 
@@ -44,19 +46,48 @@ select {
 /* BUTTON RESET */
 
 .button-reset {
+  margin: 0;
   display: inline-block;
   border: none;
   padding: 0;
-  margin: 0;
-  text-decoration: none;
   background: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
+  text-decoration: none;
   cursor: pointer;
   text-align: center;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+
+
+/* BUTTON */
+
+.button {
+  display: inline-block;
+  padding: 8px 10px;
+  border: solid 1px $main-blue;
+  border-radius: 4px;
+  background: none;
+  line-height: 1;
+  color: $text-color;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.1s;
+
+  &:hover,
+  &:focus {
+    background: rgba($main-blue, 0.3);
+  }
+
+  &.primary {
+    border-color: $main-green;
+    color: $main-green;
+
+    &:hover,
+    &:focus {
+      background: rgba($main-green, 0.1);
+    }
+  }
 }
 
 
@@ -254,7 +285,7 @@ select {
 
 .dropdown {
   display: inline-block;
-  
+
   &.fullwidth {
     display: block;
   }
@@ -306,8 +337,10 @@ select {
   &:hover {
     background: lighten($main-blue, 14%);
   }
+
   &.active {
     background: lighten($main-blue, 5%);
+
     &:hover {
       background: lighten($main-blue, 2%);
     }
@@ -380,16 +413,6 @@ select {
   gap: 10px;
 }
 
-.card-button {
-  display: inline-block;
-  padding: 10px;
-  border: solid 1px $main-green;
-  border-radius: 8px;
-  line-height: 1;
-  color: $main-green;
-  text-decoration: none;
-}
-
 
 
 /* EXPANDED ENTITY LIST TABLE */
@@ -439,7 +462,7 @@ select {
   }
 
   tr:has(.name-link:hover) td {
-    background: lighten($main-blue, 12%);
+    background: rgba($main-blue, 0.3);
   }
 
   .name-link {
@@ -753,12 +776,12 @@ select {
 
 .form-body {
   flex-grow: 1;
-  background: top linear-gradient(180deg, rgba(#959CB5,12%) 0px, rgba(#959CB5, 0) 30px, rgba(#959CB5, 0) 100%);
+  background: top linear-gradient(180deg, rgba(#959CB5, 12%) 0px, rgba(#959CB5, 0) 30px, rgba(#959CB5, 0) 100%);
 }
 
 .root-form-field {
   display: flex;
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 .root-form-label {
@@ -776,7 +799,7 @@ select {
   padding: 8px 10px;
   width: 100%;
   box-sizing: border-box;
-  border: solid 1px black;
+  border: solid 1px $main-blue;
   border-radius: 4px;
 }
 

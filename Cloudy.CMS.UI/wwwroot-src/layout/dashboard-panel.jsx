@@ -16,7 +16,7 @@ export default () => {
             </div>
             <div class="card-buttons">
               {entityType.links.map((link, index) => <>
-                <a class={`card-button ${index === 0 ? 'primary' : ''}`} href={`/Admin/${link.action}/${link.entityTypeName}`}>
+                <a class={`button ${index === 0 ? 'primary' : ''}`} href={`/Admin/${link.action}/${link.entityTypeName}`}>
                   {link.text}
                 </a>
               </>)}
