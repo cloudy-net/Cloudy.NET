@@ -26,6 +26,10 @@ a {
 
 label {
   display: block;
+  
+  &[for] {
+    cursor: pointer;
+  }
 }
 
 input,
@@ -600,12 +604,6 @@ select {
 
 }
 
-.list-filter .form-select {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .list-page-blank-row td {
   border-bottom-color: transparent;
 }
@@ -772,6 +770,12 @@ select {
   box-sizing: border-box;
   border: solid 1px black;
   border-radius: 4px;
+}
+
+select.form-control {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

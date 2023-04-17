@@ -42,7 +42,7 @@ export default ({ name, path, settings, validators, dependencies }) => {
                 id=${dependencies.componentContextProvider.getIdentifier(path)}
                 value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
                 onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
-                class="form-select ${ dependencies.ValidationManager.getValidationClass(state.validationResults, path) }">
+                class="form-control ${ dependencies.ValidationManager.getValidationClass(state.validationResults, path) }">
         
             ${!!placeholderItemText ? dependencies.html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 

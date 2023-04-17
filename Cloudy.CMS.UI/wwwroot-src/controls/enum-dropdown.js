@@ -19,7 +19,7 @@ export default ({ name, path, validators, dependencies }) => {
   
   return dependencies.html`<div>
   <select id=${dependencies.componentContextProvider.getIdentifier(path)}
-          class="form-select"
+          class="form-control"
           value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
           onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}>
             ${selectItems.map(o => dependencies.html`
