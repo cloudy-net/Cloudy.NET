@@ -26,7 +26,7 @@ a {
 
 label {
   display: block;
-  
+
   &[for] {
     cursor: pointer;
   }
@@ -251,6 +251,14 @@ select {
 
 
 /* DROPDOWN */
+
+.dropdown {
+  display: inline-block;
+  
+  &.fullwidth {
+    display: block;
+  }
+}
 
 .dropdown-button {
   display: flex;
