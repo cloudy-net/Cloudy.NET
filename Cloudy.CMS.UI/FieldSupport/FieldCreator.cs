@@ -77,10 +77,13 @@ namespace Cloudy.CMS.UI.FieldSupport
                 var partialName = GetPartialName(propertyDefinition, uiHints);
                 var validators = GetValidators(propertyDefinition.Attributes).ToDictionary(x => x.Key, x => x.Value);
 
+                var renderChrome = true;
+
                 if (propertyDefinition.Block)
                 {
                     partialName = "embedded-block/embedded-block";
                     settings["types"] = EntityTypeProvider.GetAll().Select(t => t.Type).Where(t => t.IsAssignableTo(propertyDefinition.Type)).Select(t => t.Name).ToList().AsReadOnly();
+                    renderChrome = false;
                 }
 
                 if (partialName == null)
@@ -99,12 +102,11 @@ namespace Cloudy.CMS.UI.FieldSupport
                     if (propertyDefinition.Block)
                     {
                         listPartial = "controls/embedded-block-list/embedded-block-list.js";
+                        renderChrome = true;
                     }
                 }
 
-                var renderChrome = true;
-
-                if (uiHints.Contains("nochrome") || propertyDefinition.Block)
+                if (uiHints.Contains("nochrome"))
                 {
                     renderChrome = false;
                 }
