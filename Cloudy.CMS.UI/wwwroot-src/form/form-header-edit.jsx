@@ -7,7 +7,7 @@ import stateManager from '../data/state-manager.js';
 import ValidationManager from '../data/validation-manager.js';
 import changeManager from '../data/change-manager.js';
 
-const EditHeader = ({ entityTypeName, keyValues }) => {
+const EditHeader = ({ entityTypeName, keyValues, fields }) => {
   const [instanceName, setInstanceName] = useState();
   const [editRoutes, setEditRoutes] = useState([]);
   const { entityReference, state } = useContext(EntityContext);
@@ -29,7 +29,7 @@ const EditHeader = ({ entityTypeName, keyValues }) => {
   }
 
   const save = async () => {
-    if (validateAll(state.entityReference)) {
+    if (ValidationManager.validateAll(fields, state.entityReference)) {
       setSaving(true);
       await stateManager.save(state);
       setSaving(false);

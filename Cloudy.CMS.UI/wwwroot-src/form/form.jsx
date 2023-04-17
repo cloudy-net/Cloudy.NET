@@ -51,7 +51,7 @@ function Form({ entityTypeName, mode, keyValues }) {
       <EntityContextProvider {...{ entityType: entityTypeName, keyValues }}>
         {mode === 'new' ?
           <NewHeader {...{ entityTypeName, keyValues }} /> :
-          <EditHeader {...{ entityTypeName, keyValues }} />}
+          <EditHeader {...{ entityTypeName, keyValues, fields }} />}
         <div className="form-body">
           <Changes />
           <FormFields {...{ fields, error, loading }} />
