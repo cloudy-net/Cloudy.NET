@@ -28,6 +28,13 @@ label {
   display: block;
 }
 
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+}
+
 
 
 /* BUTTON RESET */
@@ -741,6 +748,26 @@ label {
 .form-body {
   flex-grow: 1;
   background: top linear-gradient(180deg, rgba(#959CB5,12%) 0px, rgba(#959CB5, 0) 30px, rgba(#959CB5, 0) 100%);
+}
+
+.root-form-field {
+  display: flex;
+  padding: 20px;
+}
+
+.root-form-label {
+  flex-basis: 200px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.form-control {
+  display: block;
+  padding: 8px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border: solid 1px black;
+  border-radius: 4px;
 }
 
 
