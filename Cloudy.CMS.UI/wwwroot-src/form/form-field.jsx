@@ -22,12 +22,12 @@ const FormField = ({ name, path, label, description, renderChrome, partial, list
 
     const { state } = useContext(EntityContext);
 
-    return <div class={`mb-3 ${Object.keys(validators).length ? 'needs-validation' : ''} `}>
-        <label for={componentContextProvider.getIdentifier(path)} class="form-label">{label} {state.changes.find(change => change.path == path) ? '*' : null}</label>
+    return <div class={`${path.indexOf(".") == -1 ? "root-" : ""}form-field ${Object.keys(validators).length ? 'needs-validation' : ''} `}>
+        <label for={componentContextProvider.getIdentifier(path)} class={`${path.indexOf(".") == -1 ? "root-" : ""}form-label`}>{label} {state.changes.find(change => change.path == path) ? '*' : null}</label>
         {control}
-        {description && <small class="form-text text-muted">{description}</small>}
+        {description && <small class={`${path.indexOf(".") == -1 ? "root-" : ""}form-description`}>{description}</small>}
         {Object.keys(validators).filter(v => ValidationManager.isInvalidForPathAndValidator(state.validationResults, path, v)).map(v =>
-            <div class="invalid-feedback">{validators[v].message}</div>
+            <div class={`${path.indexOf(".") == -1 ? "root-" : ""}form-validation-error`}>{validators[v].message}</div>
         )}
     </div>;
 };
