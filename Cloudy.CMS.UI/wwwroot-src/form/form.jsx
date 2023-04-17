@@ -1,14 +1,10 @@
 import FieldComponentProvider from './contexts/field-component-provider';
 import EntityContextProvider from './contexts/entity-context-provider'
 import FormFields from './form-fields';
-import FormFooter from './form-footer';
 import Changes from './changes';
-import Card from '@src/layout/card.jsx';
 import NewHeader from './form-header-new.jsx';
 import EditHeader from './form-header-edit.jsx';
 import { useState, useEffect } from 'preact/hooks';
-
-import ValidationManager from '../data/validation-manager.js';
 
 function Form({ entityTypeName, mode, keyValues }) {
   const [error, setError] = useState();
@@ -53,11 +49,12 @@ function Form({ entityTypeName, mode, keyValues }) {
   return <div class="form">
     <FieldComponentProvider>
       <EntityContextProvider {...{ entityType: entityTypeName, keyValues }}>
-        {mode === 'new' ? <NewHeader {...{ entityTypeName, keyValues }} /> : <EditHeader {...{ entityTypeName, keyValues }} />}
+        {mode === 'new' ?
+          <NewHeader {...{ entityTypeName, keyValues }} /> :
+          <EditHeader {...{ entityTypeName, keyValues }} />}
         <div className="form-body">
           <Changes />
           <FormFields {...{ fields, error, loading }} />
-          <FormFooter validateAll={(entityReference) => ValidationManager.validateAll(fields, entityReference)} />
         </div>
       </EntityContextProvider>
     </FieldComponentProvider>
