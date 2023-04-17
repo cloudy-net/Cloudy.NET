@@ -704,6 +704,47 @@ label {
 
 
 
+/* FORM */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.form-header {
+  padding: 10px;
+}
+
+.form-breadcrumb {
+  color: #ABB0BB;
+  font-size: 13px;
+}
+
+.form-breadcrumb-item {
+  color: inherit;
+  text-decoration: none;
+
+  &.active {
+    color: $text-color;
+  }
+}
+
+.form-breadcrumb-caret {
+  stroke: #ABB0BB;
+  transform: scale(75%);
+  position: relative;
+  top: 2px;
+  margin-right: 5px;
+}
+
+.form-body {
+  flex-grow: 1;
+  background: top linear-gradient(180deg, rgba(#959CB5,12%) 0px, rgba(#959CB5, 0) 30px, rgba(#959CB5, 0) 100%);
+}
+
+
+
 /* HTML CONTROL */
 
 .ql-toolbar.ql-snow {
