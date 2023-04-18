@@ -4,7 +4,7 @@ import stateManager from '../data/state-manager.js';
 import changeManager from '../data/change-manager.js';
 import statePersister from '../data/state-persister.js';
 
-describe('state-manager.js', () => {
+describe('change-manager.js', () => {
   describe('simple scenario', () => {
     it('should merge simple change if < 5 min old', () => {
       global.localStorage.clear();

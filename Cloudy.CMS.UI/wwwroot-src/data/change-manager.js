@@ -19,7 +19,7 @@ class ChangeManager {
       }
     }
 
-    if (!change || Date.now() - change.date > FIVE_MINUTES) {
+    if (!change || ((type != "simple" && type != "blocktype") || Date.now() - change.date > FIVE_MINUTES)) {
       change = { '$type': type, 'date': Date.now(), path };
       state.history.push(change);
     }

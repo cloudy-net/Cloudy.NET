@@ -25,4 +25,18 @@ describe('embedded-block-list-handler.js', () => {
     const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
     assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }, { key: item.key, type: blockType }]);
   });
+  it('should not merge change', () => {
+    global.localStorage.clear();
+    stateManager.states = statePersister.loadStates();
+    const propertyName = 'TestProperty';
+    const blockType = 'BlockType';
+    const state = stateManager.createStateForNewEntity('page');
+    state.history = [
+      { '$type': 'embeddedblocklist.add', date: Date.now(), path: propertyName, key: 'lorem', type: blockType },
+    ];
+
+    embeddedBlockListHandler.add(state.entityReference, propertyName, blockType);
+
+    assert.equal(state.history.length, 2);
+  });
 });
