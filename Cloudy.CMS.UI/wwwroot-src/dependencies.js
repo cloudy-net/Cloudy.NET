@@ -12,6 +12,7 @@ import DropdownSeparator from './components/dropdown-separator';
 import FormField from './form/form-field';
 import closeDropdown from './components/close-dropdown.js';
 import SearchBox from './components/search-box';
+import SelectEntityMenu from './components/select-entity-menu';
 import componentContextProvider from './data/component-context-provider.js';
 
 const dependencies = { 
@@ -19,6 +20,7 @@ const dependencies = {
   Dropdown,
   DropdownItem,
   DropdownSeparator,
+  SelectEntityMenu,
   FormField,
   closeDropdown,
   SearchBox,

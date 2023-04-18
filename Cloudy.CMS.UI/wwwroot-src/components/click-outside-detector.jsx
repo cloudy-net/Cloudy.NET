@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
 
-export default ({ onClickOutside, children, className }) => {
+export default ({ onClickOutside, children, className, blockDisplay }) => {
     const ref = useRef(null);
   
     useEffect(() => {
@@ -20,5 +20,5 @@ export default ({ onClickOutside, children, className }) => {
       return () => document.removeEventListener('click', callback);
     }, []);
   
-    return <div className={className} style={className ? "" : "display: inline-block;"} ref={ref}>{children}</div>;
+    return <div className={className} style={className ? "" : blockDisplay ? "display: block;" : "display: inline-block;"} ref={ref}>{children}</div>;
   };

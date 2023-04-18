@@ -6,6 +6,9 @@ import { ReactComponent as Caret } from "../assets/caret-horizontal.svg";
 import stateManager from '../data/state-manager.js';
 import ValidationManager from '../data/validation-manager.js';
 import changeManager from '../data/change-manager.js';
+import Dropdown from '../components/dropdown';
+import DropdownItem from '../components/dropdown-item';
+import DropdownSeparator from '../components/dropdown-separator';
 
 const EditHeader = ({ entityTypeName, keyValues, fields }) => {
   const [instanceName, setInstanceName] = useState();
@@ -47,28 +50,28 @@ const EditHeader = ({ entityTypeName, keyValues, fields }) => {
   };
 
   return <div className="form-header">
-    <div className="form-breadcrumb">
-      <a className="form-breadcrumb-item" href={`/Admin`}>Dashboard <Caret className="form-breadcrumb-caret" /></a>
-      <a className="form-breadcrumb-item" href={`/Admin/List/${entityTypeName}`}>{entityTypeName} <Caret className="form-breadcrumb-caret" /></a>
-      <a className="form-breadcrumb-item">{instanceName} <Caret className="form-breadcrumb-caret" /></a>
-      <a className="form-breadcrumb-item active">Edit</a>
+    <div className="form-header-body">
+      <div className="form-breadcrumb">
+        <a className="form-breadcrumb-item" href={`/Admin`}>Dashboard <Caret className="form-breadcrumb-caret" /></a>
+        <a className="form-breadcrumb-item" href={`/Admin/List/${entityTypeName}`}>{entityTypeName} <Caret className="form-breadcrumb-caret" /></a>
+        <a className="form-breadcrumb-item">{instanceName} <Caret className="form-breadcrumb-caret" /></a>
+        <a className="form-breadcrumb-item active">Edit</a>
+      </div>
+      <div class="form-header-title-outer">
+        <div className="form-header-title">{instanceName}</div>
+        <a class="button text ml5" href={`/Admin/New/${entityTypeName}`}>New</a>&nbsp;
+      </div>
     </div>
-    {instanceName}&nbsp;
-    <a class="btn btn-sm btn-primary" href={`/Admin/New/${entityTypeName}`}>New</a>&nbsp;
-    {editRoutes.length === 1 && <a class="btn btn-beta btn-sm" href={editRoutes[0]}>View</a>}
-    {editRoutes.length > 1 && <div class="dropdown d-inline-block">
-      <button class="btn btn-beta btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        View
-      </button>
-      <ul class="dropdown-menu">
-        {editRoutes.map(url => <li><a class="dropdown-item" href={url}>🌎 {url}</a></li>)}
-      </ul>
-    </div>}
-
-    
-    <div class="d-flex">
-      <button class="btn btn-primary" type="button" disabled={saving || state.conflicts.length} onClick={save}>Save</button>
-      <button class="btn btn-beta ms-auto" type="button" disabled={!state.changes.length || saving} onClick={discard}>Discard changes</button>
+    <div className="form-header-buttons">
+      <button class="button primary" type="button" disabled={saving || state.conflicts.length} onClick={save}>Save</button>
+      <Dropdown contents="More" className={"button"}>
+        <DropdownItem text="Discard changes" onClick={discard} disabled={!state.changes.length || saving} />
+        {editRoutes.length === 1 && <DropdownItem text="🌎 View" href={editRoutes[0]} />}
+        {editRoutes.length > 1 && <>
+          <DropdownSeparator />
+          {editRoutes.map(url => <DropdownItem text={`🌎 ${url}`} href={url} />)}
+        </>}
+      </Dropdown>
     </div>
     {ValidationManager.anyIsInvalid(state.validationResults) &&
       <div class="alert alert-warning mt-3" role="alert">

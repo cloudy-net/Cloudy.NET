@@ -25,8 +25,6 @@ a {
 }
 
 label {
-  display: block;
-
   &[for] {
     cursor: pointer;
   }
@@ -67,7 +65,7 @@ select {
   padding: 8px 10px;
   border: solid 1px $main-blue;
   border-radius: 4px;
-  background: none;
+  background: rgba($main-blue, 0.1);
   line-height: 1;
   color: $text-color;
   text-decoration: none;
@@ -82,10 +80,26 @@ select {
   &.primary {
     border-color: $main-green;
     color: $main-green;
+    background: none;
 
     &:hover,
     &:focus {
       background: rgba($main-green, 0.1);
+    }
+  }
+
+  &.text {
+    padding: 8px 6px;
+    border-color: transparent;
+    color: $text-color;
+    background: none;
+
+    &:hover,
+    &:focus {
+      border-color: transparent;
+      color: $text-color;
+      background: none;
+      text-decoration: underline;
     }
   }
 }
@@ -295,11 +309,12 @@ select {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 10px 10px;
+  padding: 8px 10px;
   box-sizing: border-box;
   border: solid 1px $main-blue;
   border-radius: 5px;
   background: white;
+  line-height: 1;
   text-align: left;
   cursor: pointer;
   transition: 0.1s;
@@ -326,6 +341,7 @@ select {
   border-radius: 8px;
   background: white;
   box-shadow: rgba(#6D7696, 0.2) 0px 0px 10px 0px;
+  z-index: 10;
 }
 
 .dropdown-item {
@@ -749,7 +765,14 @@ select {
 }
 
 .form-header {
+  display: flex;
   padding: 10px;
+}
+
+.form-header-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .form-breadcrumb {
@@ -772,6 +795,21 @@ select {
   position: relative;
   top: 2px;
   margin-right: 5px;
+}
+
+.form-header-title-outer {
+}
+
+.form-header-title {
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.form-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .form-body {
@@ -968,4 +1006,8 @@ span.cloudy-ui-diff-delete {
 
 .nbsp::before {
   content: "\00a0";
+}
+
+.ml5 {
+  margin-left: 5px;
 }

@@ -50,23 +50,22 @@ export default ({ entityType, simpleKey, value, onSelect }) => {
   }
 
   if (loading) {
-    return <>Loading ...</>;
   }
 
   return <div style="width: 300px; max-width: 100%;">
     <SearchBox small={true} callback={value => setFilter(value)} />
     <div>
-      {data.items.map(item =>
+      {!loading && data.items.map(item =>
         <div><DropdownItem text={item.name} active={item.reference == value} onClick={() => onSelect(item.reference == value ? null : item)} /></div>
       )}
     </div>
     <div>
-      {[...new Array(pageSize - data.items.length)].map(() => <DropdownItem disabled={true} text={<>&nbsp;</>}/>)}
+      {[...new Array(pageSize - (loading ? 0 : data.items.length))].map(() => <DropdownItem disabled={true} text={<>&nbsp;</>}/>)}
     </div>
     <nav>
       <ul class="pagination center">
         <li class="page-item"><a class={"page-link" + (page == 1 ? " disabled" : "")} onClick={() => setPage(Math.max(1, page - 1))} title="Previous">&laquo;</a></li>
-        {pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
+        {!loading && pages.map((_, i) => <li class={"page-item" + (page == i + 1 ? " active" : "")}><a class="page-link" onClick={() => setPage(i + 1)}>{i + 1}</a></li>)}
         <li class="page-item"><a class={"page-link" + (page == pageCount ? " disabled" : "")} onClick={() => setPage(Math.min(pageCount, page + 1))} title="Next">&raquo;</a></li>
       </ul>
     </nav>

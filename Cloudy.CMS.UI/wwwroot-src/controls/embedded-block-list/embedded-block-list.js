@@ -15,7 +15,7 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
 
   return html`
     <div>${items.map(item => html`<${EmbeddedBlockFields} ...${{ type: item.type, path: `${path}.${item.key}`, dependencies }}/>`)}<//>
-    <${Dropdown} contents="Add" className="button">
+    <${Dropdown} contents="Add" className="button primary">
       ${types.map(type => dependencies.html`<${DropdownItem} className="dropdown-item" text=${type} onClick=${event => { dependencies.embeddedBlockListHandler.add(entityReference, path, type); dependencies.closeDropdown(event.target); }}><//>`)}
     <//>
   `;

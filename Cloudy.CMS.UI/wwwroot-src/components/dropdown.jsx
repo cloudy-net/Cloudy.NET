@@ -28,8 +28,8 @@ const Dropdown = ({ className, contents, children, fullWidth }) => {
     }
   }, [open]);
 
-  return <div className={"dropdown" + (fullWidth ? " full-width" : "")} ref={ref}>
-    <ClickOutsideDetector onClickOutside={() => setOpen(false)}>
+  return <div className={"dropdown" + (fullWidth ? " fullwidth" : "")} ref={ref}>
+    <ClickOutsideDetector onClickOutside={() => setOpen(false)} blockDisplay={fullWidth}>
       {<button className={className || "dropdown-button"} type="button" aria-expanded={open} ref={setReferenceElement} onClick={() => setOpen(!open)}>
         {!className ? <span className="dropdown-button-text">{contents}</span> : contents}
         {!className ? <Caret className="dropdown-button-caret" /> : ''}
