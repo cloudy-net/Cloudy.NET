@@ -865,6 +865,35 @@ select.form-control {
   text-overflow: ellipsis;
 }
 
+.form-label {
+  margin-bottom: 5px;
+
+  label {
+    display: block;
+  }
+}
+
+.form-field {
+  margin-bottom: 5px;
+}
+
+
+
+/* EMBEDDED BLOCK */
+
+.embedded-block {
+  margin: 0 0 12px;
+  border: solid 1px $main-blue;
+  border-radius: $border-radius;
+  padding: 10px 15px 18px;
+}
+
+.embedded-block-type {
+  position: relative;
+  top: -1px;
+  font-size: 13px;
+}
+
 
 
 /* HTML CONTROL */
