@@ -113,9 +113,9 @@ export default ({ provider, value, onSelect, dependencies }) => {
         ${pathSegments.map((segment, i) => html`<a class=${'breadcrumb-item' + (i == pathSegments.length - 1 ? ' active' : '')} onClick=${() => { if (i < pathSegments.length - 1) { setPathSegments(pathSegments.slice(0, i + 1)); } }}>
         ${segment} ${caret}
         </a>`)}
+        <a class=${'breadcrumb-item' + (!pathSegments.length ? ' disabled' : '')} style="float: right;" onClick=${() => popPathSegment()} title="Back up one level">Back</a>
       </div>
     </div>
-    <a class=${'button' + (!pathSegments.length ? ' disabled' : '')} onClick=${() => popPathSegment()} title="Back up one level">Back</a>
     <div>
       ${items.map(item =>
     html`<div>
