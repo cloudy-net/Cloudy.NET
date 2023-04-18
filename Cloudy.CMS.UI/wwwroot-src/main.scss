@@ -909,6 +909,23 @@ select.form-control {
   font-size: 13px;
 }
 
+.embedded-block-type-button {
+  margin: 0;
+  display: inline-block;
+  height: 13px;
+  vertical-align: middle;
+  border: none;
+  padding: 0 5px;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.embedded-block-type-kebab {
+  position: relative;
+  top: -1px;
+}
+
 
 
 /* HTML CONTROL */
