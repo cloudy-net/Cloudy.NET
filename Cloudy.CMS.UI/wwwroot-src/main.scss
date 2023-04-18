@@ -5,6 +5,8 @@ $main-blue: #B9D6F2;
 $text-color: #2B2D37;
 $light-gray: #F4F8FC;
 
+$border-radius: 4px;
+
 
 
 /* GLOBAL ELEMENTS */
@@ -64,7 +66,7 @@ select {
   display: inline-block;
   padding: 8px 10px;
   border: solid 1px $main-blue;
-  border-radius: 4px;
+  border-radius: $border-radius;
   background: rgba($main-blue, 0.1);
   line-height: 1;
   color: $text-color;
@@ -163,7 +165,7 @@ select {
 }
 
 .main-menu-cloud {
-  margin: 16px auto 16px;
+  margin: 10px auto;
   display: block;
 }
 
@@ -176,13 +178,13 @@ select {
 .main-menu-item-button {
   display: flex;
   align-items: center;
-  padding: 10px 14px 12px;
+  padding: 6px 10px 8px;
   color: inherit;
   text-decoration: none;
 
   &.active {
     background: rgba(white, 0.2);
-    border-radius: 8px;
+    border-radius: $border-radius;
     color: white;
   }
 
@@ -226,20 +228,19 @@ select {
 }
 
 .main-menu-sub-item-button {
-  margin: 5px 5px 5px 23px;
+  margin: 5px 5px 5px 22px;
   display: flex;
   align-items: center;
-  padding: 3px 14px 3px;
+  padding: 2px 10px 3px;
   text-decoration: none;
   color: inherit;
 
   &.active {
     background: rgba(white, 0.2);
-    border-radius: 8px;
     color: white;
     background: rgba(255, 255, 255, 0.2);
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 5px;
-    border-radius: 8px;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 3px;
+    border-radius: $border-radius;
   }
 
   &:hover {
@@ -312,7 +313,7 @@ select {
   padding: 8px 10px;
   box-sizing: border-box;
   border: solid 1px $main-blue;
-  border-radius: 5px;
+  border-radius: $border-radius;
   background: white;
   line-height: 1;
   text-align: left;
@@ -338,7 +339,7 @@ select {
   max-width: 300px;
   padding: 5px 0;
   border: solid 1px $main-blue;
-  border-radius: 8px;
+  border-radius: $border-radius;
   background: white;
   box-shadow: rgba(#6D7696, 0.2) 0px 0px 10px 0px;
   z-index: 10;
@@ -409,7 +410,7 @@ select {
   padding: 16px 16px;
   width: 250px;
   border: solid 1px $main-blue;
-  border-radius: 8px;
+  border-radius: $border-radius;
   background: white;
   box-shadow: rgba(#959CB5, 10%) 0 0 30px 0;
 }
@@ -465,15 +466,15 @@ select {
     &:first-child {
       padding-left: 24px;
       border-left: solid 1px $main-blue;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
+      border-top-left-radius: $border-radius;
+      border-bottom-left-radius: $border-radius;
     }
 
     &:last-child {
       padding-right: 24px;
       border-right: solid 1px $main-blue;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
+      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
     }
   }
 
@@ -518,7 +519,7 @@ select {
     padding: 6px 8px;
     background: white;
     border: solid 1px white;
-    border-radius: 4px;
+    border-radius: $border-radius;
     cursor: default;
     transition: background 0.1s;
   }
@@ -563,7 +564,7 @@ select {
   width: 100%;
   box-sizing: border-box;
   border: none;
-  border-radius: 5px;
+  border-radius: $border-radius;
   background: white;
   color: lighten($text-color, 20%);
   font-size: 14px;
@@ -599,7 +600,7 @@ select {
   display: flex;
   align-items: center;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: $border-radius;
 
   &:hover {
     background: rgba(black, 0.1);
@@ -687,7 +688,7 @@ select {
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: $border-radius;
   background: #f2f2f2;
 }
 
@@ -723,7 +724,7 @@ select {
 
   .page-item.active & {
     background: $light-gray;
-    border-radius: 5px;
+    border-radius: $border-radius;
 
     .pagination.compact & {
       background: white;
@@ -838,7 +839,7 @@ select {
   width: 100%;
   box-sizing: border-box;
   border: solid 1px $main-blue;
-  border-radius: 4px;
+  border-radius: $border-radius;
 }
 
 select.form-control {
