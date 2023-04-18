@@ -7,11 +7,12 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
     EntityContext,
     Dropdown,
     DropdownItem,
+    embeddedBlockListHandler,
   } = dependencies;
 
   const { entityReference, state } = useContext(EntityContext);
 
-  const items = dependencies.embeddedBlockListHandler.getIntermediateValue(state, path);
+  const items = embeddedBlockListHandler.getIntermediateValue(state, path);
 
   const kebab = html`<svg class="embedded-block-type-kebab" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" width="4" height="4" rx="2" fill="#ABB0BB"/><rect x="7" width="4" height="4" rx="2" fill="#ABB0BB"/><rect width="4" height="4" rx="2" fill="#ABB0BB"/></svg>`;
 
@@ -22,7 +23,7 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
           <legend class="embedded-block-type">
             ${item.type}
             <${Dropdown} contents=${kebab} className="embedded-block-type-button">
-              <${DropdownItem} text="Remove" />
+              <${DropdownItem} text="Remove" onClick=${() => embeddedBlockListHandler.remove(entityReference, path, item.key)} />
             <//>
           <//>
           <${EmbeddedBlockFields} ...${{ type: item.type, path: `${path}.${item.key}`, dependencies }}/>
@@ -30,7 +31,7 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
       `)}
     <//>
     <${Dropdown} contents="Add" className="button primary">
-      ${types.map(type => dependencies.html`<${DropdownItem} className="dropdown-item" text=${type} onClick=${event => { dependencies.embeddedBlockListHandler.add(entityReference, path, type); dependencies.closeDropdown(event.target); }}><//>`)}
+      ${types.map(type => html`<${DropdownItem} className="dropdown-item" text=${type} onClick=${() => embeddedBlockListHandler.add(entityReference, path, type)}><//>`)}
     <//>
   `;
 };

@@ -39,4 +39,16 @@ describe('embedded-block-list-handler.js', () => {
 
     assert.equal(state.history.length, 2);
   });
+  it('remove new element', () => {
+    global.localStorage.clear();
+    stateManager.states = statePersister.loadStates();
+    const { entityReference } = stateManager.createStateForNewEntity('page');
+    const propertyName = 'TestProperty';
+    const blockType = 'BlockType';
+
+    const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: item.key, type: item.type }]);
+    embeddedBlockListHandler.remove(entityReference, propertyName, item.key);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), []);
+  });
 });

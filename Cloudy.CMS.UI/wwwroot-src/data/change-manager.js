@@ -37,24 +37,44 @@ class ChangeManager {
       return [];
     }
 
-    const changes = {};
+    const changes = [];
 
     for (let change of state.history) {
       if (change.$type == 'blocktype') {
-        Object.keys(changes).filter(path => path.indexOf(`${change.path}.`) == 0).forEach(path => delete changes[path]);
+        changes
+          .filter(c => c.path.indexOf(`${change.path}.`) == 0)
+          .forEach(c => changes.splice(changes.indexOf(c), 1));
+      }
+      if (change.$type == 'embeddedblocklist.remove') {
+        changes
+          .filter(c => c.path.indexOf(`${change.path}.`) == 0)
+          .forEach(c => changes.splice(changes.indexOf(c), 1));
       }
 
-      changes[change.path] = change;
+      if(change.$type == "simple" || change.$type == "blocktype"){
+        changes
+          .filter(c => c.path == change.path)
+          .forEach(c => changes.splice(changes.indexOf(c), 1));
+      }
+
+      changes.push(change);
     }
 
-    Object.values(changes).filter(change => change.$type == 'simple').filter(change => state.source && (change.value == this.getSourceValue(state.source.value, change.path))).forEach(change => delete changes[change.path])
-    Object.values(changes).filter(change => change.$type == 'blocktype').filter(change => {
-      const sourceValue = this.getSourceValue(state.source.value, change.path);
+    changes
+      .filter(change => change.$type == 'simple')
+      .filter(change => state.source && (change.value == this.getSourceValue(state.source.value, change.path)))
+      .forEach(c => changes.splice(changes.indexOf(c), 1));
 
-      return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
-    }).forEach(change => delete changes[change.path])
+    changes
+      .filter(change => change.$type == 'blocktype')
+      .filter(change => {
+        const sourceValue = this.getSourceValue(state.source.value, change.path);
 
-    return Object.values(changes);
+        return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
+      })
+      .forEach(c => changes.splice(changes.indexOf(c), 1));
+
+    return changes;
   }
 
   getSourceValue(value, path) {

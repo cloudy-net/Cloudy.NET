@@ -128,7 +128,7 @@ describe('change-manager.js', () => {
 
       assert.deepEqual(result, history);
     });
-    it('should not take changes cleared by type change', () => {
+    it('should not return changes cleared by type change', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewEntity('page');
@@ -144,6 +144,38 @@ describe('change-manager.js', () => {
       const result = changeManager.getChanges(state);
 
       assert.deepEqual(result, [history[1], history[2]]);
+    });
+    it('should not return list element removal change if element creation is also in state', () => {
+      global.localStorage.clear();
+      stateManager.states = statePersister.loadStates();
+      const state = stateManager.createStateForNewEntity('page');
+
+      const history = [
+        { '$type': 'embeddedblocklist.add', date: Date.now(), path: 'listName', key: 'key' },
+        { '$type': 'embeddedblocklist.remove', date: Date.now(), path: 'listName', key: 'key' },
+      ]
+
+      state.history = [...history];
+
+      const result = changeManager.getChanges(state);
+
+      assert.deepEqual(result, []);
+    });
+    it('should not return changes cleared by list element removal', () => {
+      global.localStorage.clear();
+      stateManager.states = statePersister.loadStates();
+      const state = stateManager.createStateForNewEntity('page');
+
+      const history = [
+        { '$type': 'simple', date: Date.now(), path: 'listName.key.propertyName', value: 'lorem' },
+        { '$type': 'embeddedblocklist.remove', date: Date.now(), path: 'listName', key: 'key' },
+      ]
+
+      state.history = [...history];
+
+      const result = changeManager.getChanges(state);
+
+      assert.deepEqual(result, [history[1]]);
     });
     it('should merge changes on same path', () => {
       global.localStorage.clear();

@@ -33,6 +33,7 @@ const ViewChanges = () => {
       {
         change.$type == 'simple' ? <> Changed to “{getDiff()}”</> :
         change.$type == 'embeddedblocklist.add' ? <> Added “{change.type}”</> :
+        change.$type == 'embeddedblocklist.remove' ? <> Removed “{change.key}”</> :
         change.$type == 'blocktype' ? <> Changed block type to “{change.type}”</> :
           ` Unknown change type`
       }
