@@ -387,8 +387,20 @@ select {
 }
 
 .dropdown-separator {
-  margin: 5px 0;
-  border-bottom: 1px solid $main-blue;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba($main-blue, 0.5);
+  text-align: center;
+}
+
+.dropdown-separator-text {
+  margin-top: -8px;
+  background: white;
+  padding: 0 2px;
+  line-height: 1;
+  font-size: 13px;
+  color: rgba($main-blue, 1);
 }
 
 

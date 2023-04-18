@@ -1,1 +1,1 @@
-export default () => <div className="dropdown-separator"></div>;
+export default ({ text }) => <div className="dropdown-separator">{text && <span class="dropdown-separator-text">{text}</span>}</div>;

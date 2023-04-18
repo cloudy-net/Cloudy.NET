@@ -9,12 +9,14 @@ import changeManager from '../data/change-manager.js';
 import Dropdown from '../components/dropdown';
 import DropdownItem from '../components/dropdown-item';
 import DropdownSeparator from '../components/dropdown-separator';
+import ApplicationStateContext from '../application-state-context';
 
 const EditHeader = ({ entityTypeName, keyValues, fields }) => {
   const [instanceName, setInstanceName] = useState();
   const [editRoutes, setEditRoutes] = useState([]);
   const { entityReference, state } = useContext(EntityContext);
   const [saving, setSaving] = useState();
+  const { showChanges } = useContext(ApplicationStateContext);
 
   useEffect(() => setInstanceName(simpleChangeHandler.getIntermediateValue(state, 'Name')), [entityReference]);
 
@@ -62,10 +64,11 @@ const EditHeader = ({ entityTypeName, keyValues, fields }) => {
     <div className="form-header-buttons">
       <button class="button primary" type="button" disabled={saving || state.conflicts.length} onClick={save}>Save</button>
       <Dropdown contents="More" className={"button"}>
+        <DropdownItem text={showChanges.value ? "Hide changes" : "Show changes"} onClick={() => showChanges.value = !showChanges.value} disabled={!state.changes.length || saving} />
         <DropdownItem text="Discard changes" onClick={discard} disabled={!state.changes.length || saving} />
+        <DropdownSeparator text="Browse" />
         {editRoutes.length === 1 && <DropdownItem text="🌎 View" href={editRoutes[0]} />}
         {editRoutes.length > 1 && <>
-          <DropdownSeparator />
           {editRoutes.map(url => <DropdownItem text={`🌎 ${url}`} href={url} />)}
         </>}
       </Dropdown>

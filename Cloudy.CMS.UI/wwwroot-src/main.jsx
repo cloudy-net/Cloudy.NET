@@ -9,21 +9,24 @@ import DashboardView from './views/dashboard-view';
 import EditView from './views/edit-view';
 import ListView from './views/list-view';
 import EntityListContextProvider from './entity-list/entity-list-context-provider';
+import ApplicationStateContextProvider from './application-state-context-provider';
 
 window.viteIsLoaded = true;
 
 const Main = () => {
   const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
 
-  return <EntityTypesProvider>
-    <EntityListContextProvider>
-      <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
-        <DashboardView path="/Admin" />
-        <ListView path="/Admin/List/:entityTypeName" />
-        <EditView path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
-      </Router>
-    </EntityListContextProvider>
-  </EntityTypesProvider>
+  return <ApplicationStateContextProvider>
+    <EntityTypesProvider>
+      <EntityListContextProvider>
+        <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
+          <DashboardView path="/Admin" />
+          <ListView path="/Admin/List/:entityTypeName" />
+          <EditView path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
+        </Router>
+      </EntityListContextProvider>
+    </EntityTypesProvider>
+  </ApplicationStateContextProvider>
 };
 
 render(<Main />, document.getElementById('app'));

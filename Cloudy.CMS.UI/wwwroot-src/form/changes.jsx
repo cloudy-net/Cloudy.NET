@@ -2,12 +2,12 @@ import Conflicts from "../data/conflicts";
 import History from "../data/history";
 import { useContext, useState } from 'preact/hooks';
 import EntityContext from "./contexts/entity-context";
+import ApplicationStateContext from "../application-state-context";
 
 
 const Changes = () => {
   const { state } = useContext(EntityContext);
-
-  const [showHistory, setShowHistory] = useState();
+  const { showChanges } = useContext(ApplicationStateContext);
 
   if (state.conflicts.length) {
     return <>
@@ -24,8 +24,7 @@ const Changes = () => {
   }
 
   return <>
-    <div style="text-align: right;"><a tabIndex="0" onClick={() => setShowHistory(!showHistory)}>View changes</a></div>
-    {showHistory && <History />}
+    {showChanges.value && <History />}
   </>;
 };
 
