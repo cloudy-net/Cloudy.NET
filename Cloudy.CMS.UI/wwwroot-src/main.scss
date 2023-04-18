@@ -829,6 +829,7 @@ select {
 
 .root-form-label {
   flex-basis: 180px;
+  flex-shrink: 0;
   padding-top: 9px;
   font-size: 14px;
   font-weight: 500;
