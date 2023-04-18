@@ -55,17 +55,7 @@ const EmbeddedBlockFields = ({ type, path, dependencies }) => {
     return html`Loading ...`;
   }
 
-  const kebab = html`<svg class="embedded-block-type-kebab" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" width="4" height="4" rx="2" fill="#ABB0BB"/><rect x="7" width="4" height="4" rx="2" fill="#ABB0BB"/><rect width="4" height="4" rx="2" fill="#ABB0BB"/></svg>`;
-
-  return html`<fieldset class="embedded-block">
-      <legend class="embedded-block-type">
-        ${type}
-        <${Dropdown} contents=${kebab} className="embedded-block-type-button">
-          <${DropdownItem} text="Remove" />
-        <//>
-      <//>
-      ${fields.map(field => html`<${FormField} ...${field} path=${`${path}.${field.name}`} dependencies=${dependencies} />`)}
-    <//>`;
+  return fields.map(field => html`<${FormField} ...${field} path=${`${path}.${field.name}`} dependencies=${dependencies} />`);
 };
 
 export default EmbeddedBlockFields;
