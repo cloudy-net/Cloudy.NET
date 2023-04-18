@@ -53,11 +53,11 @@ const EditHeader = ({ entityTypeName, keyValues, fields }) => {
 
   return <div className="form-header">
     <div className="form-header-body">
-      <div className="form-breadcrumb">
-        <a className="form-breadcrumb-item" href={`/Admin`}>Dashboard <Caret className="form-breadcrumb-caret" /></a>
-        <a className="form-breadcrumb-item" href={`/Admin/List/${entityTypeName}`}>{entityTypeName} <Caret className="form-breadcrumb-caret" /></a>
-        <a className="form-breadcrumb-item">{instanceName} <Caret className="form-breadcrumb-caret" /></a>
-        <a className="form-breadcrumb-item active">Edit</a>
+      <div className="breadcrumb">
+        <a className="breadcrumb-item" href={`/Admin`}>Dashboard <Caret className="breadcrumb-caret" /></a>
+        <a className="breadcrumb-item" href={`/Admin/List/${entityTypeName}`}>{entityTypeName} <Caret className="breadcrumb-caret" /></a>
+        <a className="breadcrumb-item">{instanceName} <Caret className="breadcrumb-caret" /></a>
+        <a className="breadcrumb-item active">Edit</a>
       </div>
       <div className="form-header-title">{instanceName}</div>
     </div>

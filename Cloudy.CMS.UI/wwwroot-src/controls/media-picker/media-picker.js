@@ -1,3 +1,4 @@
+import dropdownItem from "../../components/dropdown-item.jsx";
 import MediaPickerMenu from "./media-picker-menu.js";
 
 export default ({ name, path, provider, dependencies }) => {
@@ -8,6 +9,7 @@ export default ({ name, path, provider, dependencies }) => {
     simpleChangeHandler,
     EntityContext,
     Dropdown,
+    DropdownItem,
     closeDropdown,
   } = dependencies;
 
@@ -31,20 +33,18 @@ export default ({ name, path, provider, dependencies }) => {
   }
 
   return html`
-    <input type="hidden" class="form-control" name=${dependencies.componentContextProvider.getIdentifier(path)} value=${value} />
-
-    ${value && html`<div class="mb-2">
+    ${value && html`<div class="mb5">
       <img class="media-picker-preview-image" src=${value} />
     </div>`}
 
-    <${Dropdown} text="Add">
+    <${Dropdown} wideContent=${true} contents=${value ? decodeURIComponent(value.split("/").slice(-1)) : "Add"}>
       <${MediaPickerMenu} provider=${provider} value=${value} onSelect=${onchange} dependencies=${dependencies} />
     <//>
 
-    <${Dropdown} text="Other" className="ms-2">
-      <a class="dropdown-item" onClick=${ event => { copy(); closeDropdown(event.target); } }>Copy</a>
-      <a class="dropdown-item" onClick=${ event => { paste(); closeDropdown(event.target); } }>Paste</a>
-      <a class="dropdown-item" onClick=${ event => { setValue(null); simpleChangeHandler.setValue(entityReference, path, null); closeDropdown(event.target); } }>Clear</a>
+    <${Dropdown} contents="Other" className="button ml5">
+      <${DropdownItem} text="Copy" onClick=${ event => { copy(); closeDropdown(event.target); } } />
+      <${DropdownItem} text="Paste" onClick=${ event => { paste(); closeDropdown(event.target); } } />
+      <${DropdownItem} text="Clear" onClick=${ event => { setValue(null); simpleChangeHandler.setValue(entityReference, path, null); closeDropdown(event.target); } } />
     <//>
   `;
 };

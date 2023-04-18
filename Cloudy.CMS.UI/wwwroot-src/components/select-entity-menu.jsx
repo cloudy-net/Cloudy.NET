@@ -56,11 +56,11 @@ export default ({ entityType, simpleKey, value, onSelect }) => {
     <SearchBox small={true} callback={value => setFilter(value)} />
     <div>
       {!loading && data.items.map(item =>
-        <div><DropdownItem text={item.name} active={item.reference == value} onClick={() => onSelect(item.reference == value ? null : item)} /></div>
+        <div><DropdownItem text={item.name} ellipsis={true} active={item.reference == value} onClick={() => onSelect(item.reference == value ? null : item)} /></div>
       )}
     </div>
     <div>
-      {[...new Array(pageSize - (loading ? 0 : data.items.length))].map(() => <DropdownItem disabled={true} text={<>&nbsp;</>}/>)}
+      {[...new Array(pageSize - (loading ? 0 : data.items.length))].map(() => <DropdownItem disabled={true} nbsp={true}/>)}
     </div>
     <nav>
       <ul class="pagination center">

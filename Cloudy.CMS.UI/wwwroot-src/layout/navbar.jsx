@@ -23,7 +23,7 @@ const Navbar = ({ title, entityTypeName }) => {
   return settings && <div class="navbar">
     <div class="navbar-title">
       {title ? <a class="no-link" href={`/Admin/List/${entityTypeName}`}>{title}</a> : "Dashboard"}
-      {entityTypeName && <a class="button" href={`/Admin/New/${entityTypeName}`}>New</a>}
+      {entityTypeName && <a class="button primary" href={`/Admin/New/${entityTypeName}`}>New</a>}
     </div>
     {!settings.isValidLicense || 1 &&
       <div class="navbar-license-nag">
