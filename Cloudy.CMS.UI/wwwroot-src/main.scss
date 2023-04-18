@@ -113,7 +113,7 @@ select {
 .layout {
   display: grid;
   grid-template-columns: 200px 250px 1fr;
-  grid-template-rows: 80px 1fr;
+  grid-template-rows: 68px 1fr;
   grid-template-areas:
     "main-menu navbar navbar"
     "main-menu main-panel main-panel";
@@ -136,11 +136,11 @@ select {
 .layout-navigation-panel {
   grid-row: navigation-panel;
   grid-column: navigation-panel;
+  background: $light-gray;
   overflow: auto;
 
   &.expanded {
     padding: 32px 32px;
-    background: transparent;
   }
 }
 
@@ -256,26 +256,33 @@ select {
   grid-row: navbar;
   grid-column: navbar;
   display: flex;
-  padding: 16px;
+  padding: 0 10px;
   align-items: center;
   border-bottom: 1px solid #B9D6F2;
 }
 
 .navbar-title {
   margin-top: -2px;
-  padding: 16px;
-  font-size: 26px;
-  font-weight: bold;
+  padding: 10px;
+  font-size: 22px;
+  font-weight: 500;
+
+  .button {
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: normal;
+  }
 }
 
 .navbar-license-nag {
   margin-top: -2px;
   flex: 1;
   text-align: center;
+  font-size: 13px;
 }
 
 .navbar-notification-button {
-  padding: 16px;
+  padding: 10px;
 }
 
 .navbar-notification-icon {
@@ -289,7 +296,7 @@ select {
 
 .navbar-profile-button {
   margin-top: -2px;
-  padding: 16px;
+  padding: 10px;
   font-size: 18px;
   font-weight: 500;
 }
@@ -501,13 +508,11 @@ select {
 /* COMPACT ENTITY LIST */
 
 .compact-entity-list-header {
-  background: $light-gray;
   padding: 10px;
   border-bottom: 2px solid rgba(black, 0.1);
 }
 
 .compact-entity-list-items {
-  background: $light-gray;
   padding: 10px;
 }
 
@@ -518,18 +523,18 @@ select {
     margin-bottom: 5px;
     padding: 6px 8px;
     background: white;
-    border: solid 1px white;
+    border: solid 1px $main-blue;
     border-radius: $border-radius;
     cursor: default;
     transition: background 0.1s;
   }
 
   &.active {
-    border-color: $main-blue;
+    border-color: black;
   }
 
   &:has(.name-link:hover) {
-    border-color: $main-blue;
+    background: rgba($main-blue, 0.3);
   }
 
   .name-link {
@@ -767,7 +772,7 @@ select {
 
 .form-header {
   display: flex;
-  padding: 10px;
+  padding: 15px;
 }
 
 .form-header-body {
@@ -798,12 +803,10 @@ select {
   margin-right: 5px;
 }
 
-.form-header-title-outer {
-}
-
 .form-header-title {
   display: inline-block;
-  font-size: 24px;
+  padding: 5px 0;
+  font-size: 22px;
   font-weight: 500;
 }
 
@@ -815,17 +818,19 @@ select {
 
 .form-body {
   flex-grow: 1;
-  background: top linear-gradient(180deg, rgba(#959CB5, 12%) 0px, rgba(#959CB5, 0) 30px, rgba(#959CB5, 0) 100%);
+  padding: 20px 0;
+  background: top linear-gradient(180deg, rgba(#959CB5, 0.1) 0px, rgba(#959CB5, 0) 15px, rgba(#959CB5, 0) 100%);
 }
 
 .root-form-field {
   display: flex;
-  padding: 10px 20px;
+  padding: 10px 15px;
 }
 
 .root-form-label {
-  flex-basis: 200px;
-  font-size: 16px;
+  flex-basis: 180px;
+  padding-top: 9px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -981,9 +986,8 @@ span.cloudy-ui-diff-delete {
 
 
 
-/* TEXT LINKS */
+/* LINK STYLES */
 
-.text-links a,
 .text-link {
   cursor: pointer;
   color: $main-green;
@@ -999,6 +1003,12 @@ span.cloudy-ui-diff-delete {
   &:visited:focus {
     color: $main-green;
   }
+}
+
+.no-link {
+  cursor: pointer;
+  color: $text-color;
+  text-decoration: none;
 }
 
 

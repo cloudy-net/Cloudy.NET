@@ -57,10 +57,7 @@ const EditHeader = ({ entityTypeName, keyValues, fields }) => {
         <a className="form-breadcrumb-item">{instanceName} <Caret className="form-breadcrumb-caret" /></a>
         <a className="form-breadcrumb-item active">Edit</a>
       </div>
-      <div class="form-header-title-outer">
-        <div className="form-header-title">{instanceName}</div>
-        <a class="button text ml5" href={`/Admin/New/${entityTypeName}`}>New</a>&nbsp;
-      </div>
+      <div className="form-header-title">{instanceName}</div>
     </div>
     <div className="form-header-buttons">
       <button class="button primary" type="button" disabled={saving || state.conflicts.length} onClick={save}>Save</button>

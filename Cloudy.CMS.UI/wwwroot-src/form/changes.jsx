@@ -20,7 +20,7 @@ const Changes = () => {
   }
 
   if (state.changes.length == 0) {
-    return <><div style="white-space: pre"> </div> </>;
+    return <></>;
   }
 
   return <>

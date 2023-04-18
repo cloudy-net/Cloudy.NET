@@ -8,7 +8,7 @@ const ListView = ({ entityTypeName }) => {
   const { entityTypes } = useContext(EntityTypesContext);
   return <div class="layout">
     <MainMenu />
-    <Navbar title={entityTypes[entityTypeName] && entityTypes[entityTypeName].pluralName} />
+    <Navbar title={entityTypes[entityTypeName] && entityTypes[entityTypeName].pluralName} entityTypeName={entityTypeName} />
     <div className="layout-main-panel">
       <Table entityType={entityTypeName} expanded={true} />
     </div>

@@ -9,7 +9,7 @@ const EditView = ({ entityTypeName, keyValues }) => {
   const { entityTypes } = useContext(EntityTypesContext);
   return <div class="layout show-navigation-panel">
     <MainMenu />
-    <Navbar title={entityTypes[entityTypeName] && entityTypes[entityTypeName].pluralName} />
+    <Navbar title={entityTypes[entityTypeName] && entityTypes[entityTypeName].pluralName} entityTypeName={entityTypeName} />
     <CompactList entityType={entityTypeName} keyValues={keyValues} />
     <div className="layout-main-panel">
       <Form key={'form-edit'} mode="edit" entityTypeName={entityTypeName} keyValues={keyValues} />
