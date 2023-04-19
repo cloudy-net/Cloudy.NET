@@ -91,13 +91,19 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 foreach (var change in changedEntity.Changes)
                 {
-                    if (change is SimpleChange simpleChange)
+                    switch (change)
                     {
-                        UpdateSimpleField(entity, change.Path, simpleChange.Value);
-                    }
-                    if (change is BlockTypeChange blockTypeChange)
-                    {
-                        UpdateBlockType(entity, change.Path, blockTypeChange.Type);
+                        case SimpleChange simpleChange:
+                            UpdateSimpleField(entity, change.Path, simpleChange.Value);
+                            break;
+                        case BlockTypeChange blockTypeChange:
+                            UpdateBlockType(entity, change.Path, blockTypeChange.Type);
+                            break;
+                        case EmbeddedBlockListAdd embeddedBlockListAdd:
+                            AddToEmbeddedBlockList(entity, change.Path, embeddedBlockListAdd.Key, embeddedBlockListAdd.Type);
+                            break;
+                        default:
+                            throw new Exception($"Unsupported change type: {change.GetType().Name}");
                     }
                 }
 
@@ -125,6 +131,11 @@ namespace Cloudy.CMS.UI.FormSupport
             }
 
             return new SaveEntityResponse(result);
+        }
+
+        private void AddToEmbeddedBlockList(object entity, string[] path, JsonElement key, string type)
+        {
+            throw new NotImplementedException();
         }
 
         public class SaveEntityResponse
@@ -192,7 +203,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
             if (!path.Any())
             {
-                property.GetSetMethod().Invoke(target, new object[] { JsonSerializer.Deserialize(value, property.PropertyType, JsonSerializerOptions)});
+                property.GetSetMethod().Invoke(target, new object[] { JsonSerializer.Deserialize(value, property.PropertyType, JsonSerializerOptions) });
 
                 return;
             }
@@ -278,6 +289,8 @@ namespace Cloudy.CMS.UI.FormSupport
 
         [JsonDerivedType(typeof(SimpleChange), typeDiscriminator: "simple")]
         [JsonDerivedType(typeof(BlockTypeChange), typeDiscriminator: "blocktype")]
+        [JsonDerivedType(typeof(EmbeddedBlockListAdd), typeDiscriminator: "embeddedblocklist.add")]
+        [JsonDerivedType(typeof(EmbeddedBlockListRemove), typeDiscriminator: "embeddedblocklist.remove")]
         public abstract class EntityChange
         {
             public DateTime Date { get; set; }
@@ -295,10 +308,16 @@ namespace Cloudy.CMS.UI.FormSupport
             public string Type { get; set; }
         }
 
-        public class PolymorphicValue
+        public class EmbeddedBlockListAdd : EntityChange
         {
+            public JsonElement Key { get; set; }
             public string Type { get; set; }
-            public string Value { get; set; }
+        }
+
+        public class EmbeddedBlockListRemove : EntityChange
+        {
+            public JsonElement Key { get; set; }
+            public string Type { get; set; }
         }
     }
 }
