@@ -11,12 +11,12 @@ import DropdownItem from '../components/dropdown-item';
 import DropdownSeparator from '../components/dropdown-separator';
 import ApplicationStateContext from '../application-state-context';
 
-const EditHeader = ({ entityTypeName, keyValues, fields }) => {
+const EditHeader = ({ entityTypeName, keyValues }) => {
   const [instanceName, setInstanceName] = useState();
   const [editRoutes, setEditRoutes] = useState([]);
   const { entityReference, state } = useContext(EntityContext);
   const [saving, setSaving] = useState();
-  const { showChanges } = useContext(ApplicationStateContext);
+  const { showChanges, fieldTypes } = useContext(ApplicationStateContext);
 
   useEffect(() => setInstanceName(simpleChangeHandler.getIntermediateValue(state, 'Name')), [entityReference]);
 
@@ -34,7 +34,7 @@ const EditHeader = ({ entityTypeName, keyValues, fields }) => {
   }
 
   const save = async () => {
-    if (ValidationManager.validateAll(fields, state.entityReference)) {
+    if (ValidationManager.validateAll(fieldTypes.value[entityTypeName], state.entityReference)) {
       setSaving(true);
       await stateManager.save(state);
       setSaving(false);
