@@ -39,6 +39,7 @@ class ChangeManager {
 
     const changes = [];
 
+    // do these operations in a for loop so that any operations only happen to previous changes
     for (let change of state.history) {
       // clear nested property changes when changing block type
       if (change.$type == 'blocktype') {
