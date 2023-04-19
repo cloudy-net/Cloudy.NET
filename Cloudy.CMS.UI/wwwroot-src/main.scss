@@ -4,6 +4,7 @@ $main-green: #18AF79;
 $main-blue: #B9D6F2;
 $text-color: #2B2D37;
 $light-gray: #F4F8FC;
+$medium-gray: #EAEAEA;
 
 $border-radius: 4px;
 
@@ -898,7 +899,7 @@ select.form-control {
 
 .embedded-block {
   margin: 0 0 12px;
-  border: solid 1px $main-blue;
+  border: solid 1px $medium-gray;
   border-radius: $border-radius;
   padding: 10px 15px 18px;
 }
