@@ -145,7 +145,7 @@ describe('change-manager.js', () => {
 
       assert.deepEqual(result, [history[1], history[2]]);
     });
-    it('should not return list element removal change if element creation is also in state', () => {
+    it('if removing block that is newly added, remove both changes', () => {
       global.localStorage.clear();
       stateManager.states = statePersister.loadStates();
       const state = stateManager.createStateForNewEntity('page');

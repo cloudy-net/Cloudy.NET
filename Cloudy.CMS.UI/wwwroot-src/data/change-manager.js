@@ -55,12 +55,22 @@ class ChangeManager {
           .filter(c => c.path.indexOf(`${change.path}.`) == 0)
           .forEach(c => changes.splice(changes.indexOf(c), 1));
       }
-      
+
       // only allow 1 change per path for simple and blocktype changes
-      if(change.$type == "simple" || change.$type == "blocktype"){
+      if (change.$type == "simple" || change.$type == "blocktype") {
         changes
           .filter(c => c.path == change.path)
           .forEach(c => changes.splice(changes.indexOf(c), 1));
+      }
+
+      // if removing block that is newly added, remove both changes
+      if (change.$type == 'embeddedblocklist.remove') {
+        const newlyAdded = changes.find(c => c.path == change.path && c.$type == "embeddedblocklist.add" && c.key == change.key);
+
+        if(newlyAdded) {
+          changes.splice(changes.indexOf(newlyAdded), 1); // remove "add" change
+          continue; // skip adding "remove" change
+        }
       }
 
       changes.push(change);
