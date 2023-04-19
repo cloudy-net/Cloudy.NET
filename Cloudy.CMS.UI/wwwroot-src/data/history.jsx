@@ -32,8 +32,8 @@ const ViewChanges = () => {
       {change.path.split('.').map((p, i) => <>{i ? ' » ' : null} <span>{p}</span></>)}:
       {
         change.$type == 'simple' ? <> Changed to “{getDiff()}”</> :
-        change.$type == 'embeddedblocklist.add' ? <> Added “{change.type}”</> :
-        change.$type == 'embeddedblocklist.remove' ? <> Removed “{change.key}”</> :
+        change.$type == 'embeddedblocklist.add' ? <> Added {change.type} block {change.key}</> :
+        change.$type == 'embeddedblocklist.remove' ? <> Removed {change.type} block {change.key}</> :
         change.$type == 'blocktype' ? <> Changed block type to “{change.type}”</> :
           ` Unknown change type`
       }

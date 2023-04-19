@@ -48,7 +48,7 @@ describe('embedded-block-list-handler.js', () => {
 
     const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
     assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: item.key, type: item.type }]);
-    embeddedBlockListHandler.remove(entityReference, propertyName, item.key);
+    embeddedBlockListHandler.remove(entityReference, propertyName, item.key, item.type);
     assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), []);
   });
 });

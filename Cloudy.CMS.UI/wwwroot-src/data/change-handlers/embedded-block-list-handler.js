@@ -18,12 +18,13 @@ class EmbeddedBlockListHandler {
 
     return change;
   }
-  remove(entityReference, path, key) {
+  remove(entityReference, path, key, type) {
     const state = stateManager.getState(entityReference);
     const change = changeManager.getOrCreateLatestChange(state, 'embeddedblocklist.remove', path);
 
     change.key = key;
     change.date = Date.now();
+    change.type = type;
 
     state.changes = changeManager.getChanges(state);
 

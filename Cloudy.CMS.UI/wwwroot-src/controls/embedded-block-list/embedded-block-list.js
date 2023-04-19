@@ -23,7 +23,7 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
           <legend class="embedded-block-type">
             ${item.type}
             <${Dropdown} contents=${kebab} className="embedded-block-type-button">
-              <${DropdownItem} text="Remove" onClick=${() => embeddedBlockListHandler.remove(entityReference, path, item.key)} />
+              <${DropdownItem} text="Remove" onClick=${() => embeddedBlockListHandler.remove(entityReference, path, item.key, item.type)} />
             <//>
           <//>
           <${EmbeddedBlockFields} ...${{ type: item.type, path: `${path}.${item.key}`, dependencies }}/>
