@@ -40,17 +40,19 @@ class ChangeManager {
     const changes = [];
 
     for (let change of state.history) {
+      // clear nested property changes when changing block type
       if (change.$type == 'blocktype') {
         changes
           .filter(c => c.path.indexOf(`${change.path}.`) == 0)
           .forEach(c => changes.splice(changes.indexOf(c), 1));
       }
+      // clear nested property changes when deleting block in list
       if (change.$type == 'embeddedblocklist.remove') {
         changes
           .filter(c => c.path.indexOf(`${change.path}.`) == 0)
           .forEach(c => changes.splice(changes.indexOf(c), 1));
       }
-
+      // only allow 1 change per path for simple and blocktype changes
       if(change.$type == "simple" || change.$type == "blocktype"){
         changes
           .filter(c => c.path == change.path)
@@ -60,11 +62,13 @@ class ChangeManager {
       changes.push(change);
     }
 
+    // clear simple changes where value matches source
     changes
       .filter(change => change.$type == 'simple')
       .filter(change => state.source && (change.value == this.getSourceValue(state.source.value, change.path)))
       .forEach(c => changes.splice(changes.indexOf(c), 1));
 
+    // clear blocktype changes where type matches source type
     changes
       .filter(change => change.$type == 'blocktype')
       .filter(change => {
