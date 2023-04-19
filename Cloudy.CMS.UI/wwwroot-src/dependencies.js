@@ -14,6 +14,7 @@ import closeDropdown from './components/close-dropdown.js';
 import SearchBox from './components/search-box';
 import SelectEntityMenu from './components/select-entity-menu';
 import componentContextProvider from './data/component-context-provider.js';
+import ApplicationStateContext from './application-state-context';
 
 const dependencies = { 
   html,
@@ -35,6 +36,7 @@ const dependencies = {
   blockTypeChangeHandler,
   embeddedBlockListHandler: EmbeddedBlockListHandler,
   componentContextProvider,
+  ApplicationStateContext,
 };
 
 export default dependencies;

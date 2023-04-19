@@ -15,21 +15,26 @@ namespace Cloudy.CMS.UI.FieldSupport
     [ResponseCache(NoStore = true)]
     public record FieldController(IFieldProvider FieldProvider, IEntityTypeProvider EntityTypeProvider, IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter)
     {
-
         [HttpGet]
         [Area("Admin")]
         [Route("/{area}/api/form/fields")]
-        public IEnumerable<FieldDescriptor> GetFields([FromQuery(Name = "type")] string typeName)
+        public IDictionary<string, IEnumerable<FieldDescriptor>> GetFields()
         {
-            var entityType = EntityTypeProvider.Get(typeName);
+            var result = new Dictionary<string, IEnumerable<FieldDescriptor>>();
 
-            if(!entityType.IsIndependent)
+            foreach(var entityType in EntityTypeProvider.GetAll())
             {
-                return FieldProvider.Get(typeName).Where(f => f.AutoGenerate ?? true);
+                if(!entityType.IsIndependent)
+                {
+                    result[entityType.Name] = FieldProvider.Get(entityType.Name).Where(f => f.AutoGenerate ?? true);
+                    continue;
+                }
+
+                var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(entityType.Type);
+                result[entityType.Name] = FieldProvider.Get(entityType.Name).Where(f => f.AutoGenerate ?? !primaryKeyProperties.Any(p => p.Name == f.Name));
             }
 
-            var primaryKeyProperties = PrimaryKeyPropertyGetter.GetFor(entityType.Type);
-            return FieldProvider.Get(typeName).Where(f => f.AutoGenerate ?? !primaryKeyProperties.Any(p => p.Name == f.Name));
+            return result;
         }
     }
 }
