@@ -12,7 +12,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Text.Json.Serialization;
 using Cloudy.CMS.UI.Serialization;
 
 namespace Cloudy.CMS.UI.FormSupport
@@ -29,8 +28,9 @@ namespace Cloudy.CMS.UI.FormSupport
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IFieldProvider FieldProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
+        IFormEntityUpdater FormEntityUpdater { get; }
 
-        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter)
+        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IFormEntityUpdater formEntityUpdater)
         {
             EntityTypeProvider = entityTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
@@ -39,6 +39,7 @@ namespace Cloudy.CMS.UI.FormSupport
             PropertyDefinitionProvider = propertyDefinitionProvider;
             FieldProvider = fieldProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
+            FormEntityUpdater = formEntityUpdater;
         }
 
         [HttpPost]
@@ -89,23 +90,7 @@ namespace Cloudy.CMS.UI.FormSupport
                     throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.Reference.EntityType}!");
                 }
 
-                foreach (var change in changedEntity.Changes)
-                {
-                    switch (change)
-                    {
-                        case SimpleChange simpleChange:
-                            UpdateSimpleField(entity, change.Path, simpleChange.Value);
-                            break;
-                        case BlockTypeChange blockTypeChange:
-                            UpdateBlockType(entity, change.Path, blockTypeChange.Type);
-                            break;
-                        case EmbeddedBlockListAdd embeddedBlockListAdd:
-                            AddToEmbeddedBlockList(entity, change.Path, embeddedBlockListAdd.Key, embeddedBlockListAdd.Type);
-                            break;
-                        default:
-                            throw new Exception($"Unsupported change type: {change.GetType().Name}");
-                    }
-                }
+                FormEntityUpdater.Update(entity, changedEntity.Changes);
 
                 if (!TryValidateModel(entity))
                 {
@@ -131,11 +116,6 @@ namespace Cloudy.CMS.UI.FormSupport
             }
 
             return new SaveEntityResponse(result);
-        }
-
-        private void AddToEmbeddedBlockList(object entity, string[] path, JsonElement key, string type)
-        {
-            throw new NotImplementedException();
         }
 
         public class SaveEntityResponse
@@ -183,141 +163,10 @@ namespace Cloudy.CMS.UI.FormSupport
             }
         }
 
-
-        private static JsonSerializerOptions JsonSerializerOptions => new JsonSerializerOptions
-        {
-            NumberHandling = JsonNumberHandling.AllowReadingFromString,
-            Converters = { new DateOnlyJsonConverter(), new TimeOnlyJsonConverter(), new JsonStringEnumConverter() }
-        };
-
-        private void UpdateSimpleField(object target, IEnumerable<string> path, string value)
-        {
-            var entityType = EntityTypeProvider.Get(target.GetType());
-
-            var name = path.First();
-
-            path = path.Skip(1);
-
-            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == name);
-            var property = entityType.Type.GetProperty(field.Name);
-
-            if (!path.Any())
-            {
-                property.GetSetMethod().Invoke(target, new object[] { JsonSerializer.Deserialize(value, property.PropertyType, JsonSerializerOptions) });
-
-                return;
-            }
-
-            if (property.GetGetMethod().Invoke(target, null) == null) // create instance implicitly
-            {
-                if (field.Type.IsInterface || field.Type.IsAbstract)
-                {
-                    throw new NotImplementedException("Updates to nested interfaces or abstract classes not implemented (yet!)");
-                }
-
-                var instance = Activator.CreateInstance(field.Type);
-                property.GetSetMethod().Invoke(target, new object[] { instance });
-            }
-
-            target = property.GetGetMethod().Invoke(target, null);
-
-            UpdateSimpleField(target, path, value);
-        }
-
-        private void UpdateBlockType(object target, IEnumerable<string> path, string type)
-        {
-            var entityType = EntityTypeProvider.Get(target.GetType());
-
-            var name = path.First();
-
-            path = path.Skip(1);
-
-            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == name);
-            var property = entityType.Type.GetProperty(field.Name);
-
-            if (!path.Any())
-            {
-                if (!field.Type.IsInterface && !field.Type.IsAbstract)
-                {
-                    throw new Exception($"Changing block type of ({field.Name}) {field.Type} is not supported");
-                }
-
-                var blockType = EntityTypeProvider.Get(type);
-                var instance = Activator.CreateInstance(blockType.Type);
-                property.GetSetMethod().Invoke(target, new object[] { instance });
-                return;
-            }
-
-            if (property.GetGetMethod().Invoke(target, null) == null) // create instance implicitly
-            {
-                if (field.Type.IsInterface || field.Type.IsAbstract)
-                {
-                    throw new NotImplementedException("Updates to nested interfaces or abstract classes not implemented (yet!)");
-                }
-
-                var instance = Activator.CreateInstance(field.Type);
-                property.GetSetMethod().Invoke(target, new object[] { instance });
-            }
-
-            target = property.GetGetMethod().Invoke(target, null);
-
-            UpdateBlockType(target, path, type);
-        }
-
         public class SaveEntityRequestBody
         {
             [Required]
             public IEnumerable<ChangedEntity> Entities { get; set; }
-        }
-
-        public class ChangedEntity
-        {
-            [Required]
-            public EntityReference Reference { get; set; }
-            public bool Remove { get; set; }
-            [Required]
-            public IEnumerable<EntityChange> Changes { get; set; }
-        }
-
-        public class EntityReference
-        {
-            public string NewContentKey { get; set; }
-            public JsonElement[] KeyValues { get; set; }
-            [Required]
-            public string EntityType { get; set; }
-        }
-
-        [JsonDerivedType(typeof(SimpleChange), typeDiscriminator: "simple")]
-        [JsonDerivedType(typeof(BlockTypeChange), typeDiscriminator: "blocktype")]
-        [JsonDerivedType(typeof(EmbeddedBlockListAdd), typeDiscriminator: "embeddedblocklist.add")]
-        [JsonDerivedType(typeof(EmbeddedBlockListRemove), typeDiscriminator: "embeddedblocklist.remove")]
-        public abstract class EntityChange
-        {
-            public DateTime Date { get; set; }
-            [Required]
-            public string[] Path { get; set; }
-        }
-
-        public class SimpleChange : EntityChange
-        {
-            public string Value { get; set; }
-        }
-
-        public class BlockTypeChange : EntityChange
-        {
-            public string Type { get; set; }
-        }
-
-        public class EmbeddedBlockListAdd : EntityChange
-        {
-            public JsonElement Key { get; set; }
-            public string Type { get; set; }
-        }
-
-        public class EmbeddedBlockListRemove : EntityChange
-        {
-            public JsonElement Key { get; set; }
-            public string Type { get; set; }
         }
     }
 }
