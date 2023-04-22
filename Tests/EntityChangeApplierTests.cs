@@ -34,9 +34,34 @@ namespace Tests
             Assert.Equal(value, entity.SimpleProperty);
         }
 
+        [Fact]
+        public void BlockTypeChange()
+        {
+            var entity = new Entity();
+            var change = new BlockTypeChange { Path = new string[] { nameof(Entity.InterfaceProperty) }, Type = nameof(Implementation) };
+
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(Entity))).Returns(new EntityTypeDescriptor(nameof(Entity), typeof(Entity)));
+            Mock.Get(entityTypeProvider).Setup(e => e.Get(nameof(Implementation))).Returns(new EntityTypeDescriptor(nameof(Implementation), typeof(Implementation)));
+
+            var fieldProvider = Mock.Of<IFieldProvider>();
+            Mock.Get(fieldProvider).Setup(f => f.Get(nameof(Entity))).Returns(new List<FieldDescriptor> {
+                new FieldDescriptor(nameof(Entity.InterfaceProperty), typeof(IInterface)),
+            });
+
+            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change);
+
+            Assert.IsType<Implementation>(entity.InterfaceProperty);
+        }
+
         public class Entity
         {
             public string SimpleProperty { get; set; }
+            public IInterface InterfaceProperty { get; set; }
         }
+
+        public interface IInterface { }
+
+        public class Implementation : IInterface { }
     }
 }
