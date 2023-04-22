@@ -42,22 +42,43 @@ namespace Cloudy.CMS.UI.FormSupport
 
         private void AddToEmbeddedBlockList(object entity, string name, JsonElement key, string type)
         {
-            throw new NotImplementedException();
-        }
-
-        private void UpdateSimpleField(object target, string name, string value)
-        {
-            var entityType = EntityTypeProvider.Get(target.GetType());
+            var entityType = EntityTypeProvider.Get(entity.GetType());
 
             var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == name);
             var property = entityType.Type.GetProperty(field.Name);
 
-            property.GetSetMethod().Invoke(target, new object[] { JsonSerializer.Deserialize(value, property.PropertyType, JsonSerializerOptions) });
+            if (!field.Type.IsInterface && !field.Type.IsAbstract)
+            {
+                throw new Exception($"Changing block type of ({field.Name}) {field.Type} is not supported");
+            }
+
+            var list = property.GetGetMethod().Invoke(entity, null);
+
+            if(list == null)
+            {
+                list = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { field.Type }));
+                property.GetSetMethod().Invoke(entity, new object[] { list });
+            }
+
+            var blockType = EntityTypeProvider.Get(type);
+            var block = Activator.CreateInstance(blockType.Type);
+
+            list.GetType().GetMethod(nameof(IList<object>.Add)).Invoke(list, new object[] { block });
         }
 
-        private void UpdateBlockType(object target, string name, string type)
+        private void UpdateSimpleField(object entity, string name, string value)
         {
-            var entityType = EntityTypeProvider.Get(target.GetType());
+            var entityType = EntityTypeProvider.Get(entity.GetType());
+
+            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == name);
+            var property = entityType.Type.GetProperty(field.Name);
+
+            property.GetSetMethod().Invoke(entity, new object[] { JsonSerializer.Deserialize(value, property.PropertyType, JsonSerializerOptions) });
+        }
+
+        private void UpdateBlockType(object entity, string name, string type)
+        {
+            var entityType = EntityTypeProvider.Get(entity.GetType());
 
             var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == name);
             var property = entityType.Type.GetProperty(field.Name);
@@ -69,7 +90,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
             var blockType = EntityTypeProvider.Get(type);
             var instance = Activator.CreateInstance(blockType.Type);
-            property.GetSetMethod().Invoke(target, new object[] { instance });
+            property.GetSetMethod().Invoke(entity, new object[] { instance });
         }
     }
 }

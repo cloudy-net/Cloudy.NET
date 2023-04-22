@@ -54,10 +54,31 @@ namespace Tests
             Assert.IsType<Implementation>(entity.InterfaceProperty);
         }
 
+        [Fact]
+        public void AddToEmbeddedBlockList()
+        {
+            var entity = new Entity();
+            var change = new EmbeddedBlockListAdd { Path = new string[] { nameof(Entity.EmbeddedBlockList) }, Type = nameof(Implementation) };
+
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(Entity))).Returns(new EntityTypeDescriptor(nameof(Entity), typeof(Entity)));
+            Mock.Get(entityTypeProvider).Setup(e => e.Get(nameof(Implementation))).Returns(new EntityTypeDescriptor(nameof(Implementation), typeof(Implementation)));
+
+            var fieldProvider = Mock.Of<IFieldProvider>();
+            Mock.Get(fieldProvider).Setup(f => f.Get(nameof(Entity))).Returns(new List<FieldDescriptor> {
+                new FieldDescriptor(nameof(Entity.EmbeddedBlockList), typeof(IInterface)),
+            });
+
+            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change);
+
+            Assert.IsType<Implementation>(entity.EmbeddedBlockList.Single());
+        }
+
         public class Entity
         {
             public string SimpleProperty { get; set; }
             public IInterface InterfaceProperty { get; set; }
+            public IList<IInterface> EmbeddedBlockList { get; set; }
         }
 
         public interface IInterface { }
