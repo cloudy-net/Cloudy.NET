@@ -29,8 +29,9 @@ namespace Cloudy.CMS.UI.FormSupport
         IFieldProvider FieldProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
         IEntityChangeApplier EntityChangeApplier { get; }
+        IEntityNavigator EntityNavigator { get; }
 
-        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IEntityChangeApplier entityChangeApplier)
+        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IEntityChangeApplier entityChangeApplier, IEntityNavigator entityNavigator)
         {
             EntityTypeProvider = entityTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
@@ -40,6 +41,7 @@ namespace Cloudy.CMS.UI.FormSupport
             FieldProvider = fieldProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
             EntityChangeApplier = entityChangeApplier;
+            EntityNavigator = entityNavigator;
         }
 
         [HttpPost]
@@ -92,7 +94,9 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 foreach (var change in changedEntity.Changes)
                 {
-                    EntityChangeApplier.Apply(entity, change);
+                    var targetEntity = EntityNavigator.Navigate(entity, change.Path);
+
+                    EntityChangeApplier.Apply(targetEntity, change);
                 }
 
                 if (!TryValidateModel(entity))

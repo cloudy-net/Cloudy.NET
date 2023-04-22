@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class EntityPathNavigatorTests
+    public class EntityNavigatorTests
     {
         [Fact]
         public void NavigatesToSelfIfSingleSegmentPath()
@@ -24,12 +24,10 @@ namespace Tests
             var path = new string[] { nameof(Entity.SimpleProperty) };
 
             object expectedEntity = entity;
-            var expectedPath = new string[] { nameof(Entity.SimpleProperty) };
 
-            new EntityPathNavigator(Mock.Of<IEntityTypeProvider>(), Mock.Of<IFieldProvider>()).Navigate(ref entity, ref path);
+            entity = new EntityNavigator(Mock.Of<IEntityTypeProvider>(), Mock.Of<IFieldProvider>()).Navigate(entity, path);
 
             Assert.Equal(expectedEntity, entity);
-            Assert.Equal(expectedPath, path);
         }
 
         [Fact]
@@ -46,7 +44,6 @@ namespace Tests
             var path = new string[] { nameof(Entity.NestedProperty), nameof(EmbeddedBlock.Property) };
 
             object expectedEntity = ((Entity)entity).NestedProperty;
-            var expectedPath = new string[] { nameof(EmbeddedBlock.Property) };
 
             var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
             Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(Entity))).Returns(new EntityTypeDescriptor(nameof(Entity), typeof(Entity)));
@@ -57,10 +54,9 @@ namespace Tests
                 new FieldDescriptor(nameof(Entity.NestedProperty), typeof(EmbeddedBlock)),
             });
 
-            new EntityPathNavigator(entityTypeProvider, fieldProvider).Navigate(ref entity, ref path);
+            entity = new EntityNavigator(entityTypeProvider, fieldProvider).Navigate(entity, path);
 
             Assert.Equal(expectedEntity, entity);
-            Assert.Equal(expectedPath, path);
         }
 
         public class Entity

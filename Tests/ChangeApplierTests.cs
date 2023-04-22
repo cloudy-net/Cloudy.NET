@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class FormEntityUpdaterTests
+    public class ChangeApplierTests
     {
         [Fact]
         public void SimpleChange()
@@ -26,10 +26,10 @@ namespace Tests
 
             var fieldProvider = Mock.Of<IFieldProvider>();
             Mock.Get(fieldProvider).Setup(f => f.Get(nameof(Entity))).Returns(new List<FieldDescriptor> {
-                new FieldDescriptor(nameof(Entity.SimpleProperty), typeof(string), null, null, null, null, null, false, null, null, null),
+                new FieldDescriptor(nameof(Entity.SimpleProperty), typeof(string)),
             });
 
-            new EntityChangeApplier(entityTypeProvider, fieldProvider, Mock.Of<IEntityPathNavigator>()).Apply(entity, change);
+            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change);
 
             Assert.Equal(value, entity.SimpleProperty);
         }

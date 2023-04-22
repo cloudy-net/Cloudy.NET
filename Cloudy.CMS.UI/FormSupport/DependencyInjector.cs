@@ -8,7 +8,7 @@ namespace Cloudy.CMS.UI.FormSupport
         public void InjectDependencies(IServiceCollection services)
         {
             services.AddSingleton<IEntityChangeApplier, EntityChangeApplier>();
-            services.AddSingleton<IEntityPathNavigator, EntityPathNavigator>();
+            services.AddSingleton<IEntityNavigator, EntityNavigator>();
         }
     }
 }

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
-    public record EntityPathNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IEntityPathNavigator
+    public record EntityNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IEntityNavigator
     {
-        public void Navigate(ref object entity, ref string[] path)
+        public object Navigate(object entity, string[] path)
         {
             while(path.Length > 1)
             {
@@ -37,6 +37,8 @@ namespace Cloudy.CMS.UI.FormSupport
             //    var instance = Activator.CreateInstance(field.Type);
             //    property.GetSetMethod().Invoke(target, new object[] { instance });
             //}
+
+            return entity;
         }
     }
 }
