@@ -28,9 +28,9 @@ namespace Cloudy.CMS.UI.FormSupport
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
         IFieldProvider FieldProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
-        IFormEntityUpdater FormEntityUpdater { get; }
+        IEntityChangeApplier EntityChangeApplier { get; }
 
-        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IFormEntityUpdater formEntityUpdater)
+        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IEntityChangeApplier entityChangeApplier)
         {
             EntityTypeProvider = entityTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
@@ -39,7 +39,7 @@ namespace Cloudy.CMS.UI.FormSupport
             PropertyDefinitionProvider = propertyDefinitionProvider;
             FieldProvider = fieldProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
-            FormEntityUpdater = formEntityUpdater;
+            EntityChangeApplier = entityChangeApplier;
         }
 
         [HttpPost]
@@ -90,7 +90,10 @@ namespace Cloudy.CMS.UI.FormSupport
                     throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.Reference.EntityType}!");
                 }
 
-                FormEntityUpdater.Update(entity, changedEntity.Changes);
+                foreach (var change in changedEntity.Changes)
+                {
+                    EntityChangeApplier.Apply(entity, change);
+                }
 
                 if (!TryValidateModel(entity))
                 {

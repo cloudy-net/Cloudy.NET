@@ -17,24 +17,24 @@ namespace Tests
         [Fact]
         public void SimpleChange()
         {
-            var entity = new MyEntity();
+            var entity = new Entity();
             var value = "Lorem";
-            var change = new SimpleChange { Path = new string[] { nameof(MyEntity.SimpleProperty) }, Value = JsonSerializer.Serialize(value) };
-            
+            var change = new SimpleChange { Path = new string[] { nameof(Entity.SimpleProperty) }, Value = JsonSerializer.Serialize(value) };
+
             var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
-            Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(MyEntity))).Returns(new EntityTypeDescriptor(nameof(MyEntity), typeof(MyEntity)));
+            Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(Entity))).Returns(new EntityTypeDescriptor(nameof(Entity), typeof(Entity)));
 
             var fieldProvider = Mock.Of<IFieldProvider>();
-            Mock.Get(fieldProvider).Setup(f => f.Get(nameof(MyEntity))).Returns(new List<FieldDescriptor> {
-                new FieldDescriptor(nameof(MyEntity.SimpleProperty), typeof(string), null, null, null, null, null, false, null, null, null),
+            Mock.Get(fieldProvider).Setup(f => f.Get(nameof(Entity))).Returns(new List<FieldDescriptor> {
+                new FieldDescriptor(nameof(Entity.SimpleProperty), typeof(string), null, null, null, null, null, false, null, null, null),
             });
 
-            new FormEntityUpdater(entityTypeProvider, fieldProvider).Update(entity, new List<EntityChange> { change });
+            new EntityChangeApplier(entityTypeProvider, fieldProvider, Mock.Of<IEntityPathNavigator>()).Apply(entity, change);
 
             Assert.Equal(value, entity.SimpleProperty);
         }
 
-        public class MyEntity
+        public class Entity
         {
             public string SimpleProperty { get; set; }
         }

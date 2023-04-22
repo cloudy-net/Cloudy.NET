@@ -10,10 +10,11 @@ using System.Text.Json.Serialization;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
-    public record FormEntityUpdater(
+    public record EntityChangeApplier(
         IEntityTypeProvider EntityTypeProvider,
-        IFieldProvider FieldProvider
-    ) : IFormEntityUpdater
+        IFieldProvider FieldProvider,
+        IEntityPathNavigator EntityPathNavigator
+    ) : IEntityChangeApplier
     {
         static JsonSerializerOptions JsonSerializerOptions => new JsonSerializerOptions
         {
@@ -21,24 +22,24 @@ namespace Cloudy.CMS.UI.FormSupport
             Converters = { new DateOnlyJsonConverter(), new TimeOnlyJsonConverter(), new JsonStringEnumConverter() }
         };
 
-        public void Update(object entity, IEnumerable<EntityChange> changes)
+        public void Apply(object entity, EntityChange change)
         {
-            foreach (var change in changes)
+            string[] path = change.Path.ToArray();
+            EntityPathNavigator.Navigate(ref entity, ref path);
+
+            switch (change)
             {
-                switch (change)
-                {
-                    case SimpleChange simpleChange:
-                        UpdateSimpleField(entity, change.Path, simpleChange.Value);
-                        break;
-                    case BlockTypeChange blockTypeChange:
-                        UpdateBlockType(entity, change.Path, blockTypeChange.Type);
-                        break;
-                    case EmbeddedBlockListAdd embeddedBlockListAdd:
-                        AddToEmbeddedBlockList(entity, change.Path, embeddedBlockListAdd.Key, embeddedBlockListAdd.Type);
-                        break;
-                    default:
-                        throw new Exception($"Unsupported change type: {change.GetType().Name}");
-                }
+                case SimpleChange simpleChange:
+                    UpdateSimpleField(entity, change.Path, simpleChange.Value);
+                    break;
+                case BlockTypeChange blockTypeChange:
+                    UpdateBlockType(entity, change.Path, blockTypeChange.Type);
+                    break;
+                case EmbeddedBlockListAdd embeddedBlockListAdd:
+                    AddToEmbeddedBlockList(entity, change.Path, embeddedBlockListAdd.Key, embeddedBlockListAdd.Type);
+                    break;
+                default:
+                    throw new Exception($"Unsupported change type: {change.GetType().Name}");
             }
         }
 

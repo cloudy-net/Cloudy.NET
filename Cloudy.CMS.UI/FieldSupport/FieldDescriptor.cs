@@ -9,14 +9,14 @@ namespace Cloudy.CMS.UI.FieldSupport
     public record FieldDescriptor(
         string Name,
         [property: JsonIgnore] Type Type,
-        string Label,
-        string Description,
-        string Partial,
-        string ListPartial,
-        bool? AutoGenerate,
-        bool RenderChrome,
-        string Tab,
-        IDictionary<string, object> Settings,
-        IDictionary<string, object> Validators
+        string Label = null,
+        string Description = null,
+        string Partial = null,
+        string ListPartial = null,
+        bool? AutoGenerate = null,
+        bool RenderChrome = false,
+        string Tab = null,
+        IDictionary<string, object> Settings = null,
+        IDictionary<string, object> Validators = null
     );
 }
