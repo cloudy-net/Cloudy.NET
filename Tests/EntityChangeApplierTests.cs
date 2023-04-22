@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class ChangeApplierTests
+    public class EntityChangeApplierTests
     {
         [Fact]
         public void SimpleChange()
