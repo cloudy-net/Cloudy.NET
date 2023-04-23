@@ -33,7 +33,7 @@ class EmbeddedBlockListHandler {
     return change;
   }
   getIntermediateValue(state, path) {
-    let value = (changeManager.getSourceValue(state.source.value, path) || []).map((value, key) => ({ key: `${key}`, type: value.type }));
+    let value = (changeManager.getSourceValue(state.source.value, path) || []).map(({ Type }, key) => ({ key: `${key}`, type: Type }));
 
     for (var change of state.history) {
       if (change.$type == 'embeddedblocklist.add' && path == change.path) {
