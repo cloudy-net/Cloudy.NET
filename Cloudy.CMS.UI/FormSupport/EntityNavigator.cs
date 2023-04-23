@@ -27,17 +27,6 @@ namespace Cloudy.CMS.UI.FormSupport
                 entity = property.GetGetMethod().Invoke(entity, null);
             }
 
-            //if (property.GetGetMethod().Invoke(target, null) == null) // create instance implicitly
-            //{
-            //    if (field.Type.IsInterface || field.Type.IsAbstract)
-            //    {
-            //        throw new NotImplementedException("Updates to nested interfaces or abstract classes not implemented (yet!)");
-            //    }
-
-            //    var instance = Activator.CreateInstance(field.Type);
-            //    property.GetSetMethod().Invoke(target, new object[] { instance });
-            //}
-
             return entity;
         }
     }
