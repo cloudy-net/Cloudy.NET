@@ -21,7 +21,7 @@ namespace Cloudy.CMS.UI.FormSupport
             Converters = { new DateOnlyJsonConverter(), new TimeOnlyJsonConverter(), new JsonStringEnumConverter() }
         };
 
-        public void Apply(object entity, EntityChange change)
+        public void Apply(object entity, EntityChange change, IListTracker listTracker)
         {
             var propertyName = change.Path.Last();
             switch (change)

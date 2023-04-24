@@ -11,7 +11,7 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public record EntityNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IEntityNavigator
     {
-        public object Navigate(object entity, string[] path)
+        public object Navigate(object entity, string[] path, IListTracker listTracker)
         {
             while(path.Length > 1)
             {
@@ -25,6 +25,15 @@ namespace Cloudy.CMS.UI.FormSupport
                 var property = entityType.Type.GetProperty(field.Name);
 
                 entity = property.GetGetMethod().Invoke(entity, null);
+
+                if (entity.GetType().GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>)))
+                {
+                    var key = path.First();
+
+                    path = path.Skip(1).ToArray();
+
+                    entity = listTracker.Navigate((IEnumerable<object>)entity, key);
+                }
             }
 
             return entity;

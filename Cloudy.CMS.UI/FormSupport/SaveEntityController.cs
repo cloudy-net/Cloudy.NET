@@ -92,11 +92,13 @@ namespace Cloudy.CMS.UI.FormSupport
                     throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.Reference.EntityType}!");
                 }
 
+                var listTracker = new ListTracker();
+
                 foreach (var change in changedEntity.Changes)
                 {
-                    var targetEntity = EntityNavigator.Navigate(entity, change.Path);
+                    var targetEntity = EntityNavigator.Navigate(entity, change.Path, listTracker);
 
-                    EntityChangeApplier.Apply(targetEntity, change);
+                    EntityChangeApplier.Apply(targetEntity, change, listTracker);
                 }
 
                 if (!TryValidateModel(entity))

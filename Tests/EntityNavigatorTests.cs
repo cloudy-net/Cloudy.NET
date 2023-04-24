@@ -25,7 +25,7 @@ namespace Tests
 
             object expectedEntity = entity;
 
-            entity = new EntityNavigator(Mock.Of<IEntityTypeProvider>(), Mock.Of<IFieldProvider>()).Navigate(entity, path);
+            entity = new EntityNavigator(Mock.Of<IEntityTypeProvider>(), Mock.Of<IFieldProvider>()).Navigate(entity, path, Mock.Of<IListTracker>());
 
             Assert.Equal(expectedEntity, entity);
         }
@@ -54,7 +54,34 @@ namespace Tests
                 new FieldDescriptor(nameof(Entity.NestedProperty), typeof(EmbeddedBlock)),
             });
 
-            entity = new EntityNavigator(entityTypeProvider, fieldProvider).Navigate(entity, path);
+            entity = new EntityNavigator(entityTypeProvider, fieldProvider).Navigate(entity, path, Mock.Of<IListTracker>());
+
+            Assert.Equal(expectedEntity, entity);
+        }
+
+        [Fact]
+        public void NavigatesList()
+        {
+            var value = "Lorem";
+            var block = new EmbeddedBlock { Property = value };
+            var list = new List<EmbeddedBlock> { block };
+            object entity = new Entity { BlockList = list };
+            var path = new string[] { nameof(Entity.BlockList), "0", nameof(EmbeddedBlock.Property) };
+
+            object expectedEntity = ((Entity)entity).BlockList[0];
+
+            var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
+            Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(Entity))).Returns(new EntityTypeDescriptor(nameof(Entity), typeof(Entity)));
+
+            var fieldProvider = Mock.Of<IFieldProvider>();
+            Mock.Get(fieldProvider).Setup(f => f.Get(nameof(Entity))).Returns(new List<FieldDescriptor> {
+                new FieldDescriptor(nameof(Entity.BlockList), typeof(EmbeddedBlock)),
+            });
+
+            var listTracker = Mock.Of<IListTracker>();
+            Mock.Get(listTracker).Setup(l => l.Navigate(list, "0")).Returns(block);
+
+            entity = new EntityNavigator(entityTypeProvider, fieldProvider).Navigate(entity, path, listTracker);
 
             Assert.Equal(expectedEntity, entity);
         }
@@ -63,6 +90,7 @@ namespace Tests
         {
             public string SimpleProperty { get; set; }
             public EmbeddedBlock NestedProperty { get; set; }
+            public IList<EmbeddedBlock> BlockList { get; set; }
         }
 
         public class EmbeddedBlock

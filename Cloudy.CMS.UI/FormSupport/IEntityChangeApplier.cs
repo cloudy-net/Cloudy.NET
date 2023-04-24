@@ -4,6 +4,6 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public interface IEntityChangeApplier
     {
-        void Apply(object entity, EntityChange change);
+        void Apply(object entity, EntityChange change, IListTracker listTracker);
     }
 }

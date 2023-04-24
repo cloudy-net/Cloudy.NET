@@ -29,7 +29,7 @@ namespace Tests
                 new FieldDescriptor(nameof(Entity.SimpleProperty), typeof(string)),
             });
 
-            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change);
+            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change, Mock.Of<IListTracker>());
 
             Assert.Equal(value, entity.SimpleProperty);
         }
@@ -49,7 +49,7 @@ namespace Tests
                 new FieldDescriptor(nameof(Entity.InterfaceProperty), typeof(IInterface)),
             });
 
-            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change);
+            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change, Mock.Of<IListTracker>());
 
             Assert.IsType<Implementation>(entity.InterfaceProperty);
         }
@@ -69,7 +69,7 @@ namespace Tests
                 new FieldDescriptor(nameof(Entity.EmbeddedBlockList), typeof(IInterface)),
             });
 
-            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change);
+            new EntityChangeApplier(entityTypeProvider, fieldProvider).Apply(entity, change, Mock.Of<IListTracker>());
 
             Assert.IsType<Implementation>(entity.EmbeddedBlockList.Single());
         }
