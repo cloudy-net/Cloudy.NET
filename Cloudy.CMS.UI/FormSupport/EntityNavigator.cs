@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
-    public record EntityNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IEntityNavigator
+    public record EntityNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider, IListTracker listTracker) : IEntityNavigator
     {
-        public object Navigate(object entity, string[] path, IListTracker listTracker)
+        public object Navigate(object entity, string[] path)
         {
             while(path.Length > 1)
             {

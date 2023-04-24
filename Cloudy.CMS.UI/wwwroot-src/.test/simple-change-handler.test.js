@@ -2,7 +2,7 @@ import assert from 'assert';
 import { } from './polyfiller.js';
 import stateManager from '../data/state-manager.js';
 import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
-import blockTypeChangeHandler from '../data/change-handlers/block-type-change-handler.js';
+import blockTypeHandler from '../data/change-handlers/block-type-handler.js';
 import statePersister from '../data/state-persister.js';
 
 describe('simple-change-handler.js', () => {
@@ -125,7 +125,7 @@ describe('simple-change-handler.js', () => {
         }
       });
 
-      blockTypeChangeHandler.setType(entityReference, blockName, newType);
+      blockTypeHandler.setType(entityReference, blockName, newType);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${propertyName}`, newValue);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${propertyName}`), newValue);
     });
@@ -159,12 +159,12 @@ describe('simple-change-handler.js', () => {
 
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
-      blockTypeChangeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
+      blockTypeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
       assert.equal(stateManager.getState(entityReference).history.length, 3);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
-      blockTypeChangeHandler.setType(entityReference, blockName, newType);
+      blockTypeHandler.setType(entityReference, blockName, newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
     });
     it('intermediate value should be cleared when changing parents parents block type', () => {
@@ -196,7 +196,7 @@ describe('simple-change-handler.js', () => {
       });
 
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      blockTypeChangeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
+      blockTypeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
     });
   });

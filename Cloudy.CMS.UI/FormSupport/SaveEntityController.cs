@@ -13,6 +13,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Cloudy.CMS.UI.Serialization;
+using Cloudy.CMS.UI.FormSupport.ChangeHandlers;
+using Cloudy.CMS.UI.FormSupport.Changes;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
@@ -26,22 +28,22 @@ namespace Cloudy.CMS.UI.FormSupport
         IContextCreator ContextCreator { get; }
         IPrimaryKeyGetter PrimaryKeyGetter { get; }
         IPropertyDefinitionProvider PropertyDefinitionProvider { get; }
-        IFieldProvider FieldProvider { get; }
         IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter { get; }
-        IEntityChangeApplier EntityChangeApplier { get; }
         IEntityNavigator EntityNavigator { get; }
+        ISimpleChangeHandler SimpleChangeHandler { get; }
+        IBlockTypeChangeHandler BlockTypeChangeHandler { get; }
 
-        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IFieldProvider fieldProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IEntityChangeApplier entityChangeApplier, IEntityNavigator entityNavigator)
+        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IEntityNavigator entityNavigator, ISimpleChangeHandler simpleChangeHandler, IBlockTypeChangeHandler blockTypeChangeHandler)
         {
             EntityTypeProvider = entityTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
             ContextCreator = contextCreator;
             PrimaryKeyGetter = primaryKeyGetter;
             PropertyDefinitionProvider = propertyDefinitionProvider;
-            FieldProvider = fieldProvider;
             PrimaryKeyPropertyGetter = primaryKeyPropertyGetter;
-            EntityChangeApplier = entityChangeApplier;
             EntityNavigator = entityNavigator;
+            SimpleChangeHandler = simpleChangeHandler;
+            BlockTypeChangeHandler = blockTypeChangeHandler;
         }
 
         [HttpPost]
@@ -92,13 +94,22 @@ namespace Cloudy.CMS.UI.FormSupport
                     throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.Reference.EntityType}!");
                 }
 
-                var listTracker = new ListTracker();
-
                 foreach (var change in changedEntity.Changes)
                 {
-                    var targetEntity = EntityNavigator.Navigate(entity, change.Path, listTracker);
-
-                    EntityChangeApplier.Apply(targetEntity, change, listTracker);
+                    switch (change)
+                    {
+                        case SimpleChange simpleChange:
+                            SimpleChangeHandler.SetValue(entity, simpleChange);
+                            break;
+                        case BlockTypeChange blockTypeChange:
+                            BlockTypeChangeHandler.SetType(entity, blockTypeChange);
+                            break;
+                        //case EmbeddedBlockListAdd embeddedBlockListAdd:
+                        //    AddToEmbeddedBlockList(entity, propertyName, embeddedBlockListAdd.Key, embeddedBlockListAdd.Type);
+                        //    break;
+                        default:
+                            throw new Exception($"Unsupported change type: {change.GetType().Name}");
+                    }
                 }
 
                 if (!TryValidateModel(entity))

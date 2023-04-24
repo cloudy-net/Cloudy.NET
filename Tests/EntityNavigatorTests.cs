@@ -25,7 +25,7 @@ namespace Tests
 
             object expectedEntity = entity;
 
-            entity = new EntityNavigator(Mock.Of<IEntityTypeProvider>(), Mock.Of<IFieldProvider>()).Navigate(entity, path, Mock.Of<IListTracker>());
+            entity = new EntityNavigator(Mock.Of<IEntityTypeProvider>(), Mock.Of<IFieldProvider>(), Mock.Of<IListTracker>()).Navigate(entity, path);
 
             Assert.Equal(expectedEntity, entity);
         }
@@ -54,7 +54,7 @@ namespace Tests
                 new FieldDescriptor(nameof(Entity.NestedProperty), typeof(EmbeddedBlock)),
             });
 
-            entity = new EntityNavigator(entityTypeProvider, fieldProvider).Navigate(entity, path, Mock.Of<IListTracker>());
+            entity = new EntityNavigator(entityTypeProvider, fieldProvider, Mock.Of<IListTracker>()).Navigate(entity, path);
 
             Assert.Equal(expectedEntity, entity);
         }
@@ -81,7 +81,7 @@ namespace Tests
             var listTracker = Mock.Of<IListTracker>();
             Mock.Get(listTracker).Setup(l => l.Navigate(list, "0")).Returns(block);
 
-            entity = new EntityNavigator(entityTypeProvider, fieldProvider).Navigate(entity, path, listTracker);
+            entity = new EntityNavigator(entityTypeProvider, fieldProvider, listTracker).Navigate(entity, path);
 
             Assert.Equal(expectedEntity, entity);
         }

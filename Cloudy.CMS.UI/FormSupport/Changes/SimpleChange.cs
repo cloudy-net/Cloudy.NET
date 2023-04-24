@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.UI.FormSupport
+﻿namespace Cloudy.CMS.UI.FormSupport.Changes
 {
     public class SimpleChange : EntityChange
     {

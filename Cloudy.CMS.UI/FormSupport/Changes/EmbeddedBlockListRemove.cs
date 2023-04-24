@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Cloudy.CMS.UI.FormSupport
+namespace Cloudy.CMS.UI.FormSupport.Changes
 {
     public class EmbeddedBlockListRemove : EntityChange
     {

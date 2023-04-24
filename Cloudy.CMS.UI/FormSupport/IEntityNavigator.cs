@@ -2,6 +2,6 @@
 {
     public interface IEntityNavigator
     {
-        object Navigate(object entity, string[] path, IListTracker listTracker);
+        object Navigate(object entity, string[] path);
     }
 }

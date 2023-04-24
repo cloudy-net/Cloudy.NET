@@ -1,10 +1,10 @@
 import assert from 'assert';
 import { } from './polyfiller.js';
 import stateManager from '../data/state-manager.js';
-import blockTypeChangeHandler from '../data/change-handlers/block-type-change-handler.js';
+import blockTypeChangeHandler from '../data/change-handlers/block-type-handler.js';
 import statePersister from '../data/state-persister.js';
 
-describe('block-type-change-handler.js', () => {
+describe('block-type-handler.js', () => {
   describe('simple scenario', () => {
     it('intermediate value', () => {
       global.localStorage.clear();

@@ -4,7 +4,7 @@ import EntityContext from './form/contexts/entity-context';
 import ValidationManager from './data/validation-manager.js';
 import urlFetcher from './util/url-fetcher.js';
 import simpleChangeHandler from './data/change-handlers/simple-change-handler.js';
-import blockTypeChangeHandler from './data/change-handlers/block-type-change-handler.js';
+import blockTypeHandler from './data/change-handlers/block-type-handler.js';
 import EmbeddedBlockListHandler from './data/change-handlers/embedded-block-list-handler.js';
 import Dropdown from './components/dropdown';
 import DropdownItem from './components/dropdown-item';
@@ -33,7 +33,7 @@ const dependencies = {
   useRef,
   urlFetcher,
   ValidationManager,
-  blockTypeChangeHandler,
+  blockTypeHandler,
   embeddedBlockListHandler: EmbeddedBlockListHandler,
   componentContextProvider,
   ApplicationStateContext,

@@ -4,7 +4,7 @@ import statePersister from "../state-persister.js";
 
 const UNCHANGED = {};
 
-class EmbeddedBlockChangeHandler {
+class BlockTypeHandler {
   setType(entityReference, path, type) {
     const state = stateManager.getState(entityReference);
     const change = changeManager.getOrCreateLatestChange(state, 'blocktype', path);
@@ -39,4 +39,4 @@ class EmbeddedBlockChangeHandler {
   }
 }
 
-export default new EmbeddedBlockChangeHandler();
+export default new BlockTypeHandler();
