@@ -16,7 +16,7 @@ describe('embedded-block-list-handler.js', () => {
       ...stateManager.getState(entityReference),
       source: {
         value: {
-          [propertyName]: [{ type: blockType }, { type: blockType }]
+          [propertyName]: [{ Type: blockType }, { Type: blockType }]
         }
       }
     });
