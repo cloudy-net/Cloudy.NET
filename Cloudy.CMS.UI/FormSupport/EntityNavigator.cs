@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
-    public record EntityNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider, IListTracker listTracker) : IEntityNavigator
+    public record EntityNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IEntityNavigator
     {
-        public object Navigate(object entity, string[] path)
+        public object Navigate(object entity, string[] path, IListTracker listTracker)
         {
             while(path.Length > 1)
             {
@@ -32,7 +32,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
                     path = path.Skip(1).ToArray();
 
-                    entity = listTracker.Navigate((IEnumerable<object>)entity, key);
+                    entity = listTracker.GetElement((IEnumerable<object>)entity, key);
                 }
             }
 

@@ -21,7 +21,7 @@ namespace Tests
         {
             var entity = new Entity();
             var value = "Lorem";
-            var change = new SimpleChange { Path = new string[] { nameof(Entity.SimpleProperty) }, Value = JsonSerializer.Serialize(value) };
+            var change = new SimpleChange { Path = new string[] { nameof(Entity.SimpleProperty) }, Value = JsonSerializer.SerializeToElement(value) };
 
             var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
             Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(Entity))).Returns(new EntityTypeDescriptor(nameof(Entity), typeof(Entity)));

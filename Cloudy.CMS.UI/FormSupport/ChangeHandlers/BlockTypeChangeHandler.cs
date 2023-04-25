@@ -14,10 +14,9 @@ namespace Cloudy.CMS.UI.FormSupport.ChangeHandlers
     {
         public void SetType(object entity, BlockTypeChange change)
         {
-            var propertyName = change.Path.Last();
             var entityType = EntityTypeProvider.Get(entity.GetType());
 
-            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == propertyName);
+            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == change.PropertyName);
             var property = entityType.Type.GetProperty(field.Name);
 
             if (!field.Type.IsInterface && !field.Type.IsAbstract)

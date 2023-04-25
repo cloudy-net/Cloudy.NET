@@ -10,6 +10,6 @@ namespace Cloudy.CMS.UI.FormSupport.ChangeHandlers
 {
     public interface IEmbeddedBlockListHandler
     {
-        void Add(object entity, EmbeddedBlockListAdd add);
+        void Add(object entity, EmbeddedBlockListAdd add, IListTracker listTracker);
     }
 }

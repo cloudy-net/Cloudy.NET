@@ -8,10 +8,9 @@ namespace Cloudy.CMS.UI.FormSupport
     {
         public void InjectDependencies(IServiceCollection services)
         {
-            services.AddScoped<IEntityNavigator, EntityNavigator>();
+            services.AddSingleton<IEntityNavigator, EntityNavigator>();
             services.AddSingleton<ISimpleChangeHandler, SimpleChangeHandler>();
             services.AddSingleton<IBlockTypeChangeHandler, BlockTypeChangeHandler>();
-            services.AddScoped<IListTracker, ListTracker>();
         }
     }
 }

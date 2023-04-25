@@ -8,13 +8,19 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public class ListTracker : IListTracker
     {
-        public object Navigate(IEnumerable<object> entity, string key)
+        IDictionary<Tuple<object, string>, object> Elements { get; } = new Dictionary<Tuple<object, string>, object>();
+
+        public object GetElement(IEnumerable<object> list, string key)
         {
             if(int.TryParse(key, out int index)) {
-                return entity.ElementAt(index);
+                return list.ElementAt(index);
             }
 
             return null;
+        }
+        public void AddElement(object list, string key, object element)
+        {
+            throw new NotImplementedException();
         }
     }
 }

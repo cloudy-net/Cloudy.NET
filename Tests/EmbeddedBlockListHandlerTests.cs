@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Cloudy.CMS.UI.FormSupport.ChangeHandlers;
+using System.Text.Json;
 
 namespace Tests
 {
@@ -19,7 +20,8 @@ namespace Tests
         public void AddToEmbeddedBlockList()
         {
             var entity = new Entity();
-            var change = new EmbeddedBlockListAdd { Path = new string[] { nameof(Entity.EmbeddedBlockList) }, Type = nameof(Implementation) };
+            var key = "lorem";
+            var change = new EmbeddedBlockListAdd { Path = new string[] { nameof(Entity.EmbeddedBlockList) }, Key = key, Type = nameof(Implementation) };
 
             var entityTypeProvider = Mock.Of<IEntityTypeProvider>();
             Mock.Get(entityTypeProvider).Setup(e => e.Get(typeof(Entity))).Returns(new EntityTypeDescriptor(nameof(Entity), typeof(Entity)));
@@ -30,7 +32,11 @@ namespace Tests
                 new FieldDescriptor(nameof(Entity.EmbeddedBlockList), typeof(IInterface)),
             });
 
-            new EmbeddedBlockListHandler(entityTypeProvider, fieldProvider).Add(entity, change);
+            var listTracker = Mock.Of<IListTracker>();
+
+            new EmbeddedBlockListHandler(entityTypeProvider, fieldProvider).Add(entity, change, listTracker);
+
+            Mock.Get(listTracker).Verify(e => e.AddElement(entity.EmbeddedBlockList, key, It.IsAny<Implementation>()));
 
             Assert.IsType<Implementation>(entity.EmbeddedBlockList.Single());
         }

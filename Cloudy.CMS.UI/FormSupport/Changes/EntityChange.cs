@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Cloudy.CMS.UI.FormSupport.Changes
@@ -13,5 +14,6 @@ namespace Cloudy.CMS.UI.FormSupport.Changes
         public DateTime Date { get; set; }
         [Required]
         public string[] Path { get; set; }
+        public string PropertyName => Path.Last();
     }
 }

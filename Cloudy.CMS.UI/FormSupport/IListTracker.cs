@@ -4,6 +4,7 @@ namespace Cloudy.CMS.UI.FormSupport
 {
     public interface IListTracker
     {
-        object Navigate(IEnumerable<object> entity, string key);
+        object GetElement(IEnumerable<object> list, string key);
+        void AddElement(object list, string key, object element);
     }
 }

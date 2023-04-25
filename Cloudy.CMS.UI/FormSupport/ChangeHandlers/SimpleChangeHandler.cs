@@ -19,15 +19,9 @@ namespace Cloudy.CMS.UI.FormSupport.ChangeHandlers
 
         public void SetValue(object entity, SimpleChange change)
         {
-            if(change.Path.Length > 1)
-            {
-                entity = EntityNavigator.Navigate(entity, change.Path);
-            }
-
-            var propertyName = change.Path.Last();
             var entityType = EntityTypeProvider.Get(entity.GetType());
 
-            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == propertyName);
+            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == change.PropertyName);
             var property = entityType.Type.GetProperty(field.Name);
 
             property.GetSetMethod().Invoke(entity, new object[] { JsonSerializer.Deserialize(change.Value, property.PropertyType, JsonSerializerOptions) });

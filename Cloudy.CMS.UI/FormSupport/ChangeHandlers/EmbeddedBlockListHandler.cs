@@ -12,13 +12,11 @@ namespace Cloudy.CMS.UI.FormSupport.ChangeHandlers
 {
     public record EmbeddedBlockListHandler(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IEmbeddedBlockListHandler
     {
-        public void Add(object entity, EmbeddedBlockListAdd add)
+        public void Add(object entity, EmbeddedBlockListAdd change, IListTracker listTracker)
         {
-            var name = add.Path.Last();
-
             var entityType = EntityTypeProvider.Get(entity.GetType());
 
-            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == name);
+            var field = FieldProvider.Get(entityType.Name).FirstOrDefault(f => f.Name == change.PropertyName);
             var property = entityType.Type.GetProperty(field.Name);
 
             if (!field.Type.IsInterface && !field.Type.IsAbstract)
@@ -34,10 +32,11 @@ namespace Cloudy.CMS.UI.FormSupport.ChangeHandlers
                 property.GetSetMethod().Invoke(entity, new object[] { list });
             }
 
-            var blockType = EntityTypeProvider.Get(add.Type);
+            var blockType = EntityTypeProvider.Get(change.Type);
             var block = Activator.CreateInstance(blockType.Type);
 
             list.GetType().GetMethod(nameof(IList<object>.Add)).Invoke(list, new object[] { block });
+            listTracker.AddElement(list, change.Key, block);
         }
     }
 }

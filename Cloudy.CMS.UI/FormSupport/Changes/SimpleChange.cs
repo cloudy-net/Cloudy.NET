@@ -1,7 +1,9 @@
-﻿namespace Cloudy.CMS.UI.FormSupport.Changes
+﻿using System.Text.Json;
+
+namespace Cloudy.CMS.UI.FormSupport.Changes
 {
     public class SimpleChange : EntityChange
     {
-        public string Value { get; set; }
+        public JsonElement Value { get; set; }
     }
 }

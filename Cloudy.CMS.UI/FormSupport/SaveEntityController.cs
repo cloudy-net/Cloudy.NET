@@ -32,8 +32,9 @@ namespace Cloudy.CMS.UI.FormSupport
         IEntityNavigator EntityNavigator { get; }
         ISimpleChangeHandler SimpleChangeHandler { get; }
         IBlockTypeChangeHandler BlockTypeChangeHandler { get; }
+        IEmbeddedBlockListHandler EmbeddedBlockListHandler { get; }
 
-        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IEntityNavigator entityNavigator, ISimpleChangeHandler simpleChangeHandler, IBlockTypeChangeHandler blockTypeChangeHandler)
+        public SaveEntityController(IEntityTypeProvider entityTypeProvider, IPrimaryKeyConverter primaryKeyConverter, IContextCreator contextCreator, IPrimaryKeyGetter primaryKeyGetter, IPropertyDefinitionProvider propertyDefinitionProvider, IPrimaryKeyPropertyGetter primaryKeyPropertyGetter, IEntityNavigator entityNavigator, ISimpleChangeHandler simpleChangeHandler, IBlockTypeChangeHandler blockTypeChangeHandler, IEmbeddedBlockListHandler embeddedBlockListHandler)
         {
             EntityTypeProvider = entityTypeProvider;
             PrimaryKeyConverter = primaryKeyConverter;
@@ -44,6 +45,7 @@ namespace Cloudy.CMS.UI.FormSupport
             EntityNavigator = entityNavigator;
             SimpleChangeHandler = simpleChangeHandler;
             BlockTypeChangeHandler = blockTypeChangeHandler;
+            EmbeddedBlockListHandler = embeddedBlockListHandler;
         }
 
         [HttpPost]
@@ -94,19 +96,23 @@ namespace Cloudy.CMS.UI.FormSupport
                     throw new Exception($"Tried to change primary key of entity {string.Join(", ", keyValues)} with type {changedEntity.Reference.EntityType}!");
                 }
 
+                var listTracker = new ListTracker();
+
                 foreach (var change in changedEntity.Changes)
                 {
+                    var targetEntity = EntityNavigator.Navigate(entity, change.Path, listTracker);
+
                     switch (change)
                     {
                         case SimpleChange simpleChange:
-                            SimpleChangeHandler.SetValue(entity, simpleChange);
+                            SimpleChangeHandler.SetValue(targetEntity, simpleChange);
                             break;
                         case BlockTypeChange blockTypeChange:
-                            BlockTypeChangeHandler.SetType(entity, blockTypeChange);
+                            BlockTypeChangeHandler.SetType(targetEntity, blockTypeChange);
                             break;
-                        //case EmbeddedBlockListAdd embeddedBlockListAdd:
-                        //    AddToEmbeddedBlockList(entity, propertyName, embeddedBlockListAdd.Key, embeddedBlockListAdd.Type);
-                        //    break;
+                        case EmbeddedBlockListAdd embeddedBlockListAdd:
+                            EmbeddedBlockListHandler.Add(targetEntity, embeddedBlockListAdd, listTracker);
+                            break;
                         default:
                             throw new Exception($"Unsupported change type: {change.GetType().Name}");
                     }

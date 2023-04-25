@@ -210,10 +210,6 @@ class StateManager {
               path: change.path.split('.'),
             };
 
-            if (change.$type == 'simple') {
-              change.value = JSON.stringify(change.value);
-            }
-
             return change;
           }),
         }))
