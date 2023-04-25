@@ -9,6 +9,8 @@ class ConflictManager {
 
     const conflicts = [];
 
+    // property deleted with pending change
+
     for (let key of Object.keys(state.source.properties)) {
       if (!state.newSource.properties[key] && state.changes.find(change => change.path == key)) {
         conflicts.push({ path: key, type: 'deleted' });
@@ -17,6 +19,8 @@ class ConflictManager {
 
     const sourceBlockTypes = this.getSourceBlockTypes(state.source.value);
     const newSourceBlockTypes = this.getSourceBlockTypes(state.newSource.value);
+
+    // changed property conflicts with pending change and whole block changed
 
     for (let path of Object.keys(sourceBlockTypes)) {
       if (!newSourceBlockTypes[path] || sourceBlockTypes[path] != newSourceBlockTypes[path]) {
@@ -27,6 +31,8 @@ class ConflictManager {
     }
 
     const newSourceProperties = this.enumerateSourceProperties(state.source.value);
+
+    // changed property conflicts with pending change
 
     for (let path of newSourceProperties) {
       const newSourceValue = changeManager.getSourceValue(state.newSource.value, path);
