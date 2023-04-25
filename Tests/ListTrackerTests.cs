@@ -20,5 +20,19 @@ namespace Tests
             Assert.Same(list1[0], listTracker.GetElement(list1, "0"));
             Assert.Same(list1[1], listTracker.GetElement(list1, "1"));
         }
+
+        [Fact]
+        public void AddElementWithKey()
+        {
+            var list = new List<object>();
+            var key = "lorem";
+            var element = new object();
+
+            var listTracker = new ListTracker();
+
+            listTracker.AddElement(list, key, element);
+
+            Assert.Same(element, listTracker.GetElement(list, key));
+        }
     }
 }
