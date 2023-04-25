@@ -26,7 +26,7 @@ namespace Cloudy.CMS.UI.FormSupport
 
                 entity = property.GetGetMethod().Invoke(entity, null);
 
-                if (entity.GetType().GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>)))
+                if (path.Length > 1 && entity.GetType().GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>)))
                 {
                     var key = path.First();
 
