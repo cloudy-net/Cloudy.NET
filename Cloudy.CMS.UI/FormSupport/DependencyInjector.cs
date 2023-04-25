@@ -11,6 +11,7 @@ namespace Cloudy.CMS.UI.FormSupport
             services.AddSingleton<IEntityNavigator, EntityNavigator>();
             services.AddSingleton<ISimpleChangeHandler, SimpleChangeHandler>();
             services.AddSingleton<IBlockTypeChangeHandler, BlockTypeChangeHandler>();
+            services.AddSingleton<IEmbeddedBlockListHandler, EmbeddedBlockListHandler>();
         }
     }
 }
