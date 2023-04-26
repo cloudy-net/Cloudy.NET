@@ -22,7 +22,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AddElementWithKey()
+        public void AddElement()
         {
             var list = new List<object>();
             var key = "lorem";
@@ -33,6 +33,24 @@ namespace Tests
             listTracker.AddElement(list, key, element);
 
             Assert.Same(element, listTracker.GetElement(list, key));
+        }
+
+        [Fact]
+        public void RemoveElement()
+        {
+            var list = new List<object>();
+            var key = "lorem";
+            var element = new object();
+
+            var listTracker = new ListTracker();
+
+            listTracker.AddElement(list, key, element);
+
+            Assert.Same(element, listTracker.GetElement(list, key));
+
+            listTracker.RemoveElement(list, key);
+
+            Assert.Null(listTracker.GetElement(list, key));
         }
     }
 }

@@ -6,5 +6,6 @@ namespace Cloudy.CMS.UI.FormSupport
     {
         object GetElement(object list, string key);
         void AddElement(object list, string key, object element);
+        void RemoveElement(object list, string key);
     }
 }

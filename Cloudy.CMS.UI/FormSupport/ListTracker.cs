@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Cloudy.CMS.UI.FormSupport
@@ -29,6 +27,11 @@ namespace Cloudy.CMS.UI.FormSupport
         public void AddElement(object list, string key, object element)
         {
             ListElements[Tuple.Create(list, key)] = element;
+        }
+
+        public void RemoveElement(object list, string key)
+        {
+            ListElements[Tuple.Create(list, key)] = null;
         }
     }
 }

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Cloudy.CMS.UI.Serialization;
 using Cloudy.CMS.UI.FormSupport.ChangeHandlers;
 using Cloudy.CMS.UI.FormSupport.Changes;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cloudy.CMS.UI.FormSupport
 {
@@ -113,6 +114,9 @@ namespace Cloudy.CMS.UI.FormSupport
                         case EmbeddedBlockListAdd embeddedBlockListAdd:
                             EmbeddedBlockListHandler.Add(targetEntity, embeddedBlockListAdd, listTracker);
                             break;
+                        case EmbeddedBlockListRemove embeddedBlockListRemove:
+                            EmbeddedBlockListHandler.Remove(targetEntity, embeddedBlockListRemove, listTracker);
+                            break;
                         default:
                             throw new Exception($"Unsupported change type: {change.GetType().Name}");
                     }
@@ -130,7 +134,7 @@ namespace Cloudy.CMS.UI.FormSupport
                 }
                 else
                 {
-                    //await EntityUpdater.UpdateAsync(Entity).ConfigureAwait(false);
+                    context.Context.Entry(entity).State = EntityState.Modified;
                 }
 
                 result.Add(SaveEntityResult.SuccessResult(entityType.Name, PrimaryKeyGetter.Get(entity), changedEntity.Reference.NewContentKey));

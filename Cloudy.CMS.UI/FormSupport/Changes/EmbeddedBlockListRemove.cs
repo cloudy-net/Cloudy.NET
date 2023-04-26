@@ -4,7 +4,7 @@ namespace Cloudy.CMS.UI.FormSupport.Changes
 {
     public class EmbeddedBlockListRemove : EntityChange
     {
-        public JsonElement Key { get; set; }
+        public string Key { get; set; }
         public string Type { get; set; }
     }
 }
