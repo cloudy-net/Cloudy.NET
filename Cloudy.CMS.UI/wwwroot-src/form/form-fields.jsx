@@ -8,7 +8,7 @@ const FormFields = ({ entityTypeName }) => {
   const { state } = useContext(EntityContext);
   const { fieldTypes } = useContext(ApplicationStateContext);
 
-  if(state.conflicts.length) {
+  if(state.newSource) {
     return;
   }
 

@@ -3,7 +3,6 @@ import notificationManager from "../notification/notification-manager.js";
 import EntityNotFound from "./entity-not-found.js";
 import statePersister from "./state-persister.js";
 import changeManager from "./change-manager.js";
-import conflictManager from "./conflict-manager.js";
 import stateEvents from "./state-events.js";
 import generateRandomString from "../util/generate-random-string.js";
 import arrayEquals from "../util/array-equals.js";
@@ -11,7 +10,7 @@ import arrayEquals from "../util/array-equals.js";
 const entityReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newEntityKey == b.newEntityKey && a.entityType == b.entityType;
 
 class StateManager {
-  states = statePersister.loadStates();
+  states = window.$states = statePersister.loadStates();
 
   getAll() {
     return this.states.filter(state => state.changes.length);
@@ -30,7 +29,6 @@ class StateManager {
         date: new Date(),
       },
       history: [],
-      conflicts: [],
       changes: [],
     };
     this.states.push(state);
@@ -54,7 +52,6 @@ class StateManager {
       nameHint,
       source: null,
       history: null,
-      conflicts: null,
       changes: null,
     };
     this.states.push(state);
@@ -97,7 +94,6 @@ class StateManager {
       state = {
         ...state,
         loadingNewSource: false,
-        conflicts: [],
       };
     } else {
       if (!state.changes.length) {
@@ -109,7 +105,7 @@ class StateManager {
             properties: response.type.properties,
             date: new Date(),
           },
-          conflicts: [],
+          s: null,
         };
       } else {
         state = {
@@ -121,7 +117,6 @@ class StateManager {
             properties: response.type.properties,
           },
         };
-        state.conflicts = conflictManager.getConflicts(state);
       }
 
       this.replace(state);
@@ -157,7 +152,6 @@ class StateManager {
         date: new Date(),
       },
       history: [],
-      conflicts: [],
     };
 
     state.changes = changeManager.getChanges(state);
@@ -170,7 +164,7 @@ class StateManager {
       await this.reloadEntityForState(state.entityReference);
     }
 
-    if(state.conflicts.length){
+    if(state.newSource){
       return;
     }
 

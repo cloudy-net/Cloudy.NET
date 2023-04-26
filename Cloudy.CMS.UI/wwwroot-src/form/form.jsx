@@ -13,8 +13,8 @@ function Form({ entityTypeName, mode, keyValues }) {
         {mode === 'new' ?
           <NewHeader {...{ entityTypeName }} /> :
           <EditHeader {...{ entityTypeName, keyValues }} />}
+        <Changes />
         <div className="form-body">
-          <Changes />
           <FormFields {...{ entityTypeName }} />
         </div>
       </EntityContextProvider>

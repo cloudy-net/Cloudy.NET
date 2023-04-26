@@ -1,22 +1,30 @@
-import Conflicts from "../data/conflicts";
 import History from "../data/history";
 import { useContext, useState } from 'preact/hooks';
 import EntityContext from "./contexts/entity-context";
 import ApplicationStateContext from "../application-state-context";
+import changeManager from "../data/change-manager";
+import stateManager from "../data/state-manager";
 
 
 const Changes = () => {
   const { state } = useContext(EntityContext);
   const { showChanges } = useContext(ApplicationStateContext);
 
-  if (state.conflicts.length) {
-    return <>
-      <div class="alert alert-info">
+  if (state.newSource) {
+    const discard = () => {
+      changeManager.discardChanges(state);
+      stateManager.replace(state);
+      stateManager.reloadEntityForState(state.entityReference);
+    }
+
+    return <div>
+      <div class="alert">
         <strong>The source and/or model has changed since you started editing.</strong><br />
-        You must review these changes before you continue.
+        <div>You will need to discard your changes.</div>
       </div>
-      <Conflicts />
-    </>;
+      <History />
+      <a className="button button-primary" onClick={discard}>Discard changes</a>
+    </div>;
   }
 
   if (state.changes.length == 0) {

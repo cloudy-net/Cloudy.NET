@@ -29,7 +29,7 @@ const EditHeader = ({ entityTypeName, keyValues }) => {
     )();
   }, []);
 
-  if (state.conflicts.length) {
+  if (state.newSource) {
     return;
   }
 
@@ -62,7 +62,7 @@ const EditHeader = ({ entityTypeName, keyValues }) => {
       <div className="form-header-title">{instanceName}</div>
     </div>
     <div className="form-header-buttons">
-      <button class="button primary" type="button" disabled={saving || state.conflicts.length} onClick={save}>Save</button>
+      <button class="button primary" type="button" disabled={saving || state.newSource} onClick={save}>Save</button>
       <Dropdown contents="More" className={"button"}>
         <DropdownItem text={showChanges.value ? "Hide changes" : "Show changes"} onClick={() => showChanges.value = !showChanges.value} disabled={!state.changes.length || saving} />
         <DropdownItem text="Discard changes" onClick={discard} disabled={!state.changes.length || saving} />

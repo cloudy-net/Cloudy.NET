@@ -1040,6 +1040,19 @@ span.cloudy-ui-diff-delete {
 }
 
 
+
+/* ALERT */
+
+.alert {
+  padding: 10px 12px;
+  border-top: solid 1px darken($main-blue, 10%);
+  border-bottom: solid 1px darken($main-blue, 10%);
+  background: darken($main-blue, 5%);
+  color: darken($main-blue, 60%);
+}
+
+
+
 /* INFORMATION MISSING */
 
 .information-missing {
