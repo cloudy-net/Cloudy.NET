@@ -20,6 +20,7 @@
   "devDependencies": {
     "@popperjs/core": "^2.11.7",
     "@preact/preset-vite": "^2.4.0",
+    "@types/node": "^18.16.1",
     "copyfiles": "^2.4.1",
     "mocha": "^10.2.0",
     "node-localstorage": "^2.2.1",
