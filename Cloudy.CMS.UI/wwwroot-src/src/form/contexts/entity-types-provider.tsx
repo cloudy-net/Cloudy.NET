@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'preact/hooks';
-import groupby from '@src/util/groupby';
+import groupby from '../../util/groupby';
 import EntityTypesContext from './entity-types-context';
+import { ComponentChildren } from 'preact';
+import EntityType from './entity-type';
 
-export default ({ children }) => {
+export default ({ children }: { children: ComponentChildren }) => {
   const [entityTypes, setEntityTypes] = useState({});
-  const [groupedEntityTypes, setGroupedEntityTypes] = useState([]);
+  const [groupedEntityTypes, setGroupedEntityTypes] = useState({} as { [key: string]: EntityType[] });
 
   useEffect(function () {
     (async () => {
@@ -13,12 +15,12 @@ export default ({ children }) => {
       if (!response.ok) {
         throw { response, body: await response.text() };
       }
+      
+      const json = (await response.json()) as [EntityType];
 
-      const json = await response.json();
+      const result: { [key: string]: EntityType } = {};
 
-      const result = {};
-
-      for(let type of json) {
+      for (let type of json) {
         result[type.name] = type;
       }
 
