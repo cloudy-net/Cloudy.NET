@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { } from './polyfiller.js';
-import stateManager from '../data/state-manager.js';
-import changeManager from '../data/change-manager.js';
-import statePersister from '../data/state-persister.js';
+import stateManager from '../src/data/state-manager.js';
+import changeManager from '../src/data/change-manager.js';
+import statePersister from '../src/data/state-persister.js';
 
 describe('change-manager.js', () => {
   describe('simple scenario', () => {

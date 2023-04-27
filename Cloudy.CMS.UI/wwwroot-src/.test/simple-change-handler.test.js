@@ -1,9 +1,9 @@
 import assert from 'assert';
 import { } from './polyfiller.js';
-import stateManager from '../data/state-manager.js';
-import simpleChangeHandler from '../data/change-handlers/simple-change-handler.js';
-import blockTypeHandler from '../data/change-handlers/block-type-handler.js';
-import statePersister from '../data/state-persister.js';
+import stateManager from '../src/data/state-manager.js';
+import simpleChangeHandler from '../src/data/change-handlers/simple-change-handler.js';
+import blockTypeHandler from '../src/data/change-handlers/block-type-handler.js';
+import statePersister from '../src/data/state-persister.js';
 
 describe('simple-change-handler.js', () => {
   describe('simple scenario', () => {

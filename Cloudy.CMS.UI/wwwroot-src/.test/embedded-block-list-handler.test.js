@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { } from './polyfiller.js';
-import stateManager from '../data/state-manager.js';
-import statePersister from '../data/state-persister.js';
-import embeddedBlockListHandler from '../data/change-handlers/embedded-block-list-handler.js';
+import stateManager from '../src/data/state-manager.js';
+import statePersister from '../src/data/state-persister.js';
+import embeddedBlockListHandler from '../src/data/change-handlers/embedded-block-list-handler.js';
 
 describe('embedded-block-list-handler.js', () => {
   it('intermediate value', () => {
