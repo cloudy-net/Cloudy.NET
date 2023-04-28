@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import './main.scss'
 
 import { render } from 'preact'
@@ -16,12 +14,12 @@ import ApplicationStateContextProvider from './application-state-context-provide
 window.viteIsLoaded = true;
 
 const Main = () => {
-  const [keyValues, setKeyValues] = useState(new URL(document.location).searchParams.getAll('keys'));
+  const [keyValues, setKeyValues] = useState(new URL(document.location.href).searchParams.getAll('keys'));
 
   return <ApplicationStateContextProvider>
     <EntityTypesProvider>
       <EntityListContextProvider>
-        <Router onChange={() => setKeyValues(new URL(document.location).searchParams.getAll('keys'))}>
+        <Router onChange={() => setKeyValues(new URL(document.location.href).searchParams.getAll('keys'))}>
           <DashboardView path="/Admin" />
           <ListView path="/Admin/List/:entityTypeName" />
           <EditView path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
@@ -38,7 +36,13 @@ document.addEventListener('keydown', event => {
     return;
   }
 
-  if (event.target.tagName == 'A' && !event.target.getAttribute('href') && event.target.getAttribute('tabindex') == '0') {
-    event.target.click();
+  const target = event.target as HTMLElement;
+
+  if (!target) {
+    return;
+  }
+
+  if (target.tagName == 'A' && !target.getAttribute('href') && target.getAttribute('tabindex') == '0') {
+    target.click();
   }
 });
