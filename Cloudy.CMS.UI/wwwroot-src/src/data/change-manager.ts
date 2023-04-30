@@ -1,8 +1,11 @@
+import Change from "./change";
+import State from "./state";
+
 const FIVE_MINUTES = 5 * 60 * 1000;
 
 class ChangeManager {
-  getOrCreateLatestChange(state, type, path) {
-    let change = null;
+  getOrCreateLatestChange(state: State, type: string, path: string) {
+    let change: Change | null = null;
 
     for (let c of state.history) {
       if (c.$type == type && path == c.path) {
@@ -21,23 +24,23 @@ class ChangeManager {
 
     if (!change || ((type != "simple" && type != "blocktype") || Date.now() - change.date > FIVE_MINUTES)) {
       change = { '$type': type, 'date': Date.now(), path };
-      state.history.push(change);
+      state.history.push(change!);
     }
 
     return change;
   }
 
-  discardChanges(state) {
+  discardChanges(state: State) {
     state.history = [];
     state.changes = [];
   }
 
-  getChanges(state) {
+  getChanges(state: State) {
     if (state.history == null) {
       return [];
     }
 
-    const changes = [];
+    const changes: Change[] = [];
 
     // do these operations in a for loop so that any operations only happen to previous changes
     for (let change of state.history) {
@@ -67,7 +70,7 @@ class ChangeManager {
       if (change.$type == 'embeddedblocklist.remove') {
         const newlyAdded = changes.find(c => c.path == change.path && c.$type == "embeddedblocklist.add" && c.key == change.key);
 
-        if(newlyAdded) {
+        if (newlyAdded) {
           changes.splice(changes.indexOf(newlyAdded), 1); // remove "add" change
           continue; // skip adding "remove" change
         }
@@ -95,7 +98,7 @@ class ChangeManager {
     return changes;
   }
 
-  getSourceValue(value, path) {
+  getSourceValue(value: any, path: string) {
     let pathSegments = path.split('.');
 
     while (pathSegments.length) {

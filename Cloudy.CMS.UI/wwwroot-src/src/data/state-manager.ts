@@ -1,13 +1,12 @@
-import urlFetcher from "../util/url-fetcher.js";
-import notificationManager from "../notification/notification-manager.js";
-import EntityNotFound from "./entity-not-found.js";
-import statePersister from "./state-persister.js";
-import changeManager from "./change-manager.js";
-import stateEvents from "./state-events.js";
-import generateRandomString from "../util/generate-random-string.js";
-import arrayEquals from "../util/array-equals.js";
-
-const entityReferenceEquals = (a, b) => arrayEquals(a.keyValues, b.keyValues) && a.newEntityKey == b.newEntityKey && a.entityType == b.entityType;
+import urlFetcher from "../util/url-fetcher";
+import notificationManager from "../notification/notification-manager";
+import EntityNotFound from "./entity-not-found";
+import statePersister from "./state-persister";
+import changeManager from "./change-manager";
+import stateEvents from "./state-events";
+import generateRandomString from "../util/generate-random-string";
+import State from "./state";
+import EntityReference from "./entity-reference";
 
 class StateManager {
   states = window.$states = statePersister.loadStates();
@@ -16,10 +15,10 @@ class StateManager {
     return this.states.filter(state => state.changes.length);
   }
 
-  createStateForNewEntity(entityType) {
+  createStateForNewEntity(entityType: string): State {
     const entityReference = { newEntityKey: generateRandomString(), keyValues: null, entityType };
 
-    const state = {
+    const state: State = {
       new: true,
       validationResults: [],
       entityReference,
@@ -37,14 +36,14 @@ class StateManager {
     return state;
   };
 
-  createOrUpdateStateForExistingEntity(entityReference, nameHint) {
+  createOrUpdateStateForExistingEntity(entityReference: EntityReference, nameHint: string) {
     const existingState = this.getState(entityReference);
     if (existingState) {
       this.reloadEntityForState(entityReference);
       return existingState;
     }
 
-    const state = {
+    const state: State = {
       new: false,
       validationResults: [],
       entityReference,

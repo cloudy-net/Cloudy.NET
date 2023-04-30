@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'preact/hooks';
 import EntityContext from "./entity-context";
-import stateManager from '../../data/state-manager.js';
+import stateManager from '../../data/state-manager';
 import stateEvents from '../../data/state-events';
 import State from "../../data/state"
 import EntityReference from '../../data/entity-reference';
 import { ComponentChildren } from 'preact';
+import StateChangeCallback from '../../data/state-change-callback';
 
 export default ({ entityType, keyValues, children }: { entityType: string, keyValues: string[], children: ComponentChildren }) => {
-  const [entityReference, setEntityReference] = useState<EntityReference>();
-  const [state, setState] = useState<State>();
+  const [entityReference, setEntityReference] = useState<EntityReference | null>(null);
+  const [state, setState] = useState<State | null>(null);
 
   useEffect(() => {
     let entityReference;
@@ -43,7 +44,7 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
       setState(state);
     }
 
-    const stateChange = (state: State) => setState({ ...state });
+    const stateChange: StateChangeCallback = state => setState({ ...state });
     stateEvents.onStateChange(stateChange);
     const entityReferenceChange = (entityReference: EntityReference) => {
       const searchParams = new URLSearchParams(window.location.search);

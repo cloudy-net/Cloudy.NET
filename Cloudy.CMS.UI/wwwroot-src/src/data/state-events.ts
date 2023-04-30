@@ -1,8 +1,7 @@
 import EntityReference from "./entity-reference";
+import EntityReferenceCallback from "./entity-reference-callback";
 import State from "./state";
-
-type EntityReferenceCallback = (entityReference: EntityReference) => void;
-type StateChangeCallback = (state: State) => void;
+import StateChangeCallback from "./state-change-callback";
 
 class StateEvents {
   _onEntityReferenceChangeCallbacks: EntityReferenceCallback[] = [];
@@ -29,7 +28,7 @@ class StateEvents {
     this._onStateChangeCallbacks.splice(this._onStateChangeCallbacks.indexOf(callback), 1);
   }
 
-  triggerStateChange(state: State) {
+  triggerStateChange(state: State | null) {
     this._onStateChangeCallbacks.forEach(callback => callback(state));
   }
 }

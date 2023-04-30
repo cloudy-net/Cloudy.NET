@@ -1,7 +1,7 @@
 ﻿import notificationManager from "../notification/notification-manager.js";
 
 class UrlFetcher {
-    async fetch(url, parameters, errorMessage, errorCodes) {
+    async fetch(url: string, parameters: any, errorMessage: string, errorCodes: { [key: number]: (response: Response) => any }) {
         let shouldDisplay = true;
 
         try {
@@ -38,9 +38,9 @@ class UrlFetcher {
             }
 
             return await response.json();
-        } catch (error) {
+        } catch (error: any) {
             if (shouldDisplay) {
-                notificationManager.addNotification(item => item.setText(`${errorMessage} --- ${error.message}`));
+                notificationManager.addNotification((item: any) => item.setText(`${errorMessage} --- ${error.message}`));
             }
             throw error;
         }
