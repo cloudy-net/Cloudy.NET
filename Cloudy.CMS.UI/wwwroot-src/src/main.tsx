@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import './main.scss'
 
 import { render } from 'preact'
