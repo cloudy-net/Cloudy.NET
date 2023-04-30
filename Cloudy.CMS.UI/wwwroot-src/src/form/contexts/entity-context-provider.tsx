@@ -2,10 +2,13 @@ import { useState, useEffect } from 'preact/hooks';
 import EntityContext from "./entity-context.js";
 import stateManager from '../../data/state-manager.js';
 import stateEvents from '../../data/state-events.js';
+import State from "../../data/state"
+import EntityReference from '../../data/entity-reference';
+import { ComponentChildren } from 'preact';
 
-export default ({ entityType, keyValues, children }) => {
-  const [entityReference, setEntityReference] = useState();
-  const [state, setState] = useState();
+export default ({ entityType, keyValues, children }: { entityType: string, keyValues: string[], children: ComponentChildren }) => {
+  const [entityReference, setEntityReference] = useState<EntityReference>();
+  const [state, setState] = useState<State>();
 
   useEffect(() => {
     let entityReference;
@@ -32,7 +35,7 @@ export default ({ entityType, keyValues, children }) => {
         state = stateManager.createStateForNewEntity(entityType);
 
         searchParams.set("newEntityKey", state.entityReference.newEntityKey);
-        history.replaceState({}, null, `${location.pathname}?${searchParams}`);
+        history.replaceState({}, "", `${location.pathname}?${searchParams}`);
       }
 
       entityReference = state.entityReference;
@@ -40,16 +43,16 @@ export default ({ entityType, keyValues, children }) => {
       setState(state);
     }
 
-    const stateChange = state => setState({ ...state });
+    const stateChange = (state: State) => setState({ ...state });
     stateEvents.onStateChange(stateChange);
-    const entityReferenceChange = entityReference => {
+    const entityReferenceChange = (entityReference: EntityReference) => {
       const searchParams = new URLSearchParams(window.location.search);
       searchParams.delete("newEntityKey");
       searchParams.delete("keys");
-      for(let key of entityReference.keyValues){
+      for (let key of entityReference.keyValues) {
         searchParams.append("keys", key);
       }
-      history.replaceState({}, null, `${window.location.pathname}?${searchParams}`);
+      history.replaceState({}, "", `${window.location.pathname}?${searchParams}`);
       setEntityReference(entityReference);
     };
     stateEvents.onEntityReferenceChange(entityReferenceChange);
