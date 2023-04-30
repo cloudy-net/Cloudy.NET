@@ -1,19 +1,19 @@
-import html from '@src/util/html.js';
+import html from '@src/util/html';
 import { useContext, useEffect, useState, useRef } from 'preact/hooks';
 import EntityContext from './form/contexts/entity-context';
-import ValidationManager from './data/validation-manager.js';
-import urlFetcher from './util/url-fetcher.js';
-import simpleChangeHandler from './data/change-handlers/simple-change-handler.js';
-import blockTypeHandler from './data/change-handlers/block-type-handler.js';
-import EmbeddedBlockListHandler from './data/change-handlers/embedded-block-list-handler.js';
+import ValidationManager from './data/validation-manager';
+import urlFetcher from './util/url-fetcher';
+import simpleChangeHandler from './data/change-handlers/simple-change-handler';
+import blockTypeHandler from './data/change-handlers/block-type-handler';
+import EmbeddedBlockListHandler from './data/change-handlers/embedded-block-list-handler';
 import Dropdown from './components/dropdown';
 import DropdownItem from './components/dropdown-item';
 import DropdownSeparator from './components/dropdown-separator';
 import FormField from './form/form-field';
-import closeDropdown from './components/close-dropdown.js';
+import closeDropdown from './components/close-dropdown';
 import SearchBox from './components/search-box';
 import SelectEntityMenu from './components/select-entity-menu';
-import componentContextProvider from './data/component-context-provider.js';
+import componentContextProvider from './data/component-context-provider';
 import ApplicationStateContext from './application-state-context';
 
 const dependencies = { 

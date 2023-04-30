@@ -1,4 +1,4 @@
-export default (a: any[] | null, b: any[] | null) => {
+export default (a: any[] | null | undefined, b: any[] | null | undefined) => {
   if (a == null && b == null) {
     return true;
   }

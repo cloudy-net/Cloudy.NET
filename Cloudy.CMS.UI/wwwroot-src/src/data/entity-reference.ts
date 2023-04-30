@@ -1,7 +1,7 @@
 type EntityReference = {
-  newEntityKey: string | null;
+  newEntityKey?: string;
   entityType: string,
-  keyValues: string[] | null;
+  keyValues?: string[];
 };
 
 export default EntityReference;

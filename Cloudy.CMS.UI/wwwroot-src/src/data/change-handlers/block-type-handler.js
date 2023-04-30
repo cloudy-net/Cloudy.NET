@@ -1,6 +1,6 @@
-import changeManager from "../change-manager.js";
-import stateManager from "../state-manager.js";
-import statePersister from "../state-persister.js";
+import changeManager from "../change-manager";
+import stateManager from "../state-manager";
+import statePersister from "../state-persister";
 
 const UNCHANGED = {};
 

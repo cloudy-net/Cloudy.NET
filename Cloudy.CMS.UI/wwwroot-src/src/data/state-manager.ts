@@ -7,6 +7,11 @@ import stateEvents from "./state-events";
 import generateRandomString from "../util/generate-random-string";
 import State from "./state";
 import EntityReference from "./entity-reference";
+import entityReferenceEquals from "../util/entity-reference-equals";
+
+declare global {
+  interface Window { $states: State[]; }
+}
 
 class StateManager {
   states = window.$states = statePersister.loadStates();
@@ -16,7 +21,7 @@ class StateManager {
   }
 
   createStateForNewEntity(entityType: string): State {
-    const entityReference = { newEntityKey: generateRandomString(), keyValues: null, entityType };
+    const entityReference: EntityReference = { newEntityKey: generateRandomString(), entityType };
 
     const state: State = {
       new: true,
@@ -36,7 +41,7 @@ class StateManager {
     return state;
   };
 
-  createOrUpdateStateForExistingEntity(entityReference: EntityReference, nameHint: string) {
+  createOrUpdateStateForExistingEntity(entityReference: EntityReference, nameHint?: string) {
     const existingState = this.getState(entityReference);
     if (existingState) {
       this.reloadEntityForState(entityReference);
@@ -50,8 +55,8 @@ class StateManager {
       loading: true,
       nameHint,
       source: null,
-      history: null,
-      changes: null,
+      history: [],
+      changes: [],
     };
     this.states.push(state);
     statePersister.persist(state);
@@ -61,11 +66,11 @@ class StateManager {
     return state;
   };
 
-  async reloadEntityForState(entityReference) {
+  async reloadEntityForState(entityReference: EntityReference) {
     let state = this.getState(entityReference);
 
     state = {
-      ...state,
+      ...state!,
       loadingNewSource: true,
       newSource: null,
     };
@@ -89,26 +94,26 @@ class StateManager {
 
     state = this.getState(entityReference);
 
-    if (JSON.stringify(state.source.value) == JSON.stringify(entity)) {
+    if (JSON.stringify(state!.source!.value) == JSON.stringify(entity)) {
       state = {
-        ...state,
+        ...state!,
         loadingNewSource: false,
       };
     } else {
-      if (!state.changes.length) {
+      if (!state!.changes.length) {
         state = {
-          ...state,
+          ...state!,
           loadingNewSource: false,
           source: {
             value: entity,
             properties: response.type.properties,
             date: new Date(),
           },
-          s: null,
+          newSource: null,
         };
       } else {
         state = {
-          ...state,
+          ...state!,
           loadingNewSource: false,
           newSource: {
             value: entity,
@@ -122,7 +127,7 @@ class StateManager {
     }
   }
 
-  async loadEntityForState(entityReference) {
+  async loadEntityForState(entityReference: EntityReference) {
     const response = await urlFetcher.fetch(
       `/Admin/api/form/entity/get`,
       {
@@ -142,7 +147,7 @@ class StateManager {
     let state = this.getState(entityReference);
 
     state = {
-      ...state,
+      ...state!,
       loading: false,
       nameHint: null,
       source: {
@@ -154,39 +159,39 @@ class StateManager {
     };
 
     state.changes = changeManager.getChanges(state);
-    
+
     this.replace(state);
   }
 
-  async save(state) {
-    if(!state.new) {
+  async save(state: State) {
+    if (!state.new) {
       await this.reloadEntityForState(state.entityReference);
     }
 
-    if(state.newSource){
+    if (state.newSource) {
       return;
     }
 
     const result = (await this.saveInternal([state.entityReference]))[0];
 
     if (result.success) {
-      notificationManager.addNotification((item) => item.setText('Entity has been saved.'));
+      notificationManager.addNotification((item: any) => item.setText('Entity has been saved.'));
 
       this.remove(state.entityReference);
 
-      const entityReference = result.entityReference;
+      const entityReference: EntityReference = result.entityReference;
 
-      entityReference.keyValues = entityReference.keyValues.map(v => `${v}`);
+      entityReference.keyValues = entityReference.keyValues!.map(v => `${v}`);
 
       this.createOrUpdateStateForExistingEntity(entityReference);
       stateEvents.triggerEntityReferenceChange(entityReference);
-      stateEvents.triggerStateChange(this.getState(entityReference));
+      stateEvents.triggerStateChange(this.getState(entityReference)!);
     }
 
     return result;
   }
 
-  async saveInternal(entityReferences) {
+  async saveInternal(entityReferences: EntityReference[]) {
     const states = entityReferences.map(c => this.getState(c));
 
     const response = await urlFetcher.fetch("/Admin/api/form/entity/save", {
@@ -195,15 +200,13 @@ class StateManager {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         entities: states.map(state => ({
-          reference: state.entityReference,
-          changes: state.history.map(change => {
-            change = {
+          reference: state!.entityReference,
+          changes: state!.history.map(change => {
+            return {
               ...change,
               date: new Date(change.date),
               path: change.path.split('.'),
             };
-
-            return change;
           }),
         }))
       }),
@@ -212,19 +215,19 @@ class StateManager {
     return response.results;
   }
 
-  replace(state) {
+  replace(state: State) {
     this.states[this.states.findIndex(s => entityReferenceEquals(s.entityReference, state.entityReference))] = state;
     statePersister.persist(state);
   }
 
-  remove(entityReference) {
+  remove(entityReference: EntityReference) {
     this.states.splice(this.states.findIndex(s => entityReferenceEquals(s.entityReference, entityReference)), 1);
     statePersister.unpersist(entityReference);
 
     return entityReference;
   };
 
-  getState(entityReference) {
+  getState(entityReference: EntityReference) {
     return this.states.find(s => entityReferenceEquals(s.entityReference, entityReference));
   }
 }

@@ -1,11 +1,11 @@
 
 import { useState, useEffect, useContext } from 'preact/hooks';
 import EntityContext from '@src/form/contexts/entity-context';
-import simpleChangeHandler from '@src/data/change-handlers/simple-change-handler.js';
+import simpleChangeHandler from '@src/data/change-handlers/simple-change-handler';
 import { ReactComponent as Caret } from "../assets/caret-horizontal.svg";
-import stateManager from '../data/state-manager.js';
-import ValidationManager from '../data/validation-manager.js';
-import changeManager from '../data/change-manager.js';
+import stateManager from '../data/state-manager';
+import ValidationManager from '../data/validation-manager';
+import changeManager from '../data/change-manager';
 import Dropdown from '../components/dropdown';
 import DropdownItem from '../components/dropdown-item';
 import DropdownSeparator from '../components/dropdown-separator';

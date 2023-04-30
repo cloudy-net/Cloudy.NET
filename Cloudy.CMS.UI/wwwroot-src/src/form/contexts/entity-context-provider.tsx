@@ -12,7 +12,7 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
   const [state, setState] = useState<State | null>(null);
 
   useEffect(() => {
-    let entityReference;
+    let entityReference: EntityReference;
 
     if (keyValues && keyValues.length) {
       entityReference = { entityType, keyValues };
@@ -22,9 +22,17 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
     } else {
       const searchParams = new URLSearchParams(window.location.search);
       const newEntityKey = searchParams.get('newEntityKey');
+      const newEntityType = searchParams.get('EntityType')
+      
+      if(!newEntityType){
+        return;
+      }
+      if(!newEntityKey){
+        return;
+      }
 
       let state = stateManager.getState({
-        entityType: searchParams.get('EntityType'),
+        entityType: newEntityType,
         newEntityKey, // may be null, resulting in null state
       });
 
@@ -35,7 +43,7 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
       if (!state) {
         state = stateManager.createStateForNewEntity(entityType);
 
-        searchParams.set("newEntityKey", state.entityReference.newEntityKey);
+        searchParams.set("newEntityKey", state.entityReference.newEntityKey!);
         history.replaceState({}, "", `${location.pathname}?${searchParams}`);
       }
 
@@ -44,14 +52,16 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
       setState(state);
     }
 
-    const stateChange: StateChangeCallback = state => setState({ ...state });
+    const stateChange: StateChangeCallback = state => setState(state ? { ...state } : null);
     stateEvents.onStateChange(stateChange);
     const entityReferenceChange = (entityReference: EntityReference) => {
       const searchParams = new URLSearchParams(window.location.search);
       searchParams.delete("newEntityKey");
       searchParams.delete("keys");
-      for (let key of entityReference.keyValues) {
-        searchParams.append("keys", key);
+      if (entityReference.keyValues) {
+        for (let key of entityReference.keyValues) {
+          searchParams.append("keys", key);
+        }
       }
       history.replaceState({}, "", `${window.location.pathname}?${searchParams}`);
       setEntityReference(entityReference);

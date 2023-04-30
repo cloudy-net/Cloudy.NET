@@ -1,7 +1,7 @@
-import changeManager from "../change-manager.js";
-import stateManager from "../state-manager.js";
-import statePersister from "../state-persister.js";
-import ValidationManager from "../validation-manager.js";
+import changeManager from "../change-manager";
+import stateManager from "../state-manager";
+import statePersister from "../state-persister";
+import ValidationManager from "../validation-manager";
 
 const UNCHANGED = {};
 

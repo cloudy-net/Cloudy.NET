@@ -3,12 +3,14 @@ import EntityReference from "./entity-reference";
 import Source from "./source";
 
 type State = {
-  new: boolean,
-  history: Change[] | null;
+  new?: boolean,
+  nameHint?: string | null,
+  history: Change[];
   entityReference: EntityReference,
-  changes: Change[] | null,
+  changes: Change[],
   loading?: boolean,
   source: Source | null,
+  loadingNewSource?: boolean,
   newSource?: Source | null,
   validationResults: any[],
 };

@@ -49,7 +49,7 @@ class StatePersister {
     if (state.changes && state.changes.length) {
       const persistingState = { ...state };
 
-      persistingState['changes'] = null;
+      persistingState.changes = [];
 
       localStorage.setItem(`cloudy:${JSON.stringify(persistingState.entityReference)}`, JSON.stringify(persistingState));
     } else {

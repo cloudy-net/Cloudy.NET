@@ -1,6 +1,6 @@
-import stateManager from "./state-manager.js";
-import simpleChangeHandler from "./change-handlers/simple-change-handler.js";
-import statePersister from "./state-persister.js";
+import stateManager from "./state-manager";
+import simpleChangeHandler from "./change-handlers/simple-change-handler";
+import statePersister from "./state-persister";
 
 class ValidationManager {
   validateAll(fields, entityReference)  {

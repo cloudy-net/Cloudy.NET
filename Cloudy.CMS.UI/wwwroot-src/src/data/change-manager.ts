@@ -89,7 +89,7 @@ class ChangeManager {
     changes
       .filter(change => change.$type == 'blocktype')
       .filter(change => {
-        const sourceValue = this.getSourceValue(state.source.value, change.path);
+        const sourceValue = this.getSourceValue(state.source!.value, change.path);
 
         return (change.type == null && sourceValue == null) || (sourceValue != null && change.type == sourceValue.Type);
       })

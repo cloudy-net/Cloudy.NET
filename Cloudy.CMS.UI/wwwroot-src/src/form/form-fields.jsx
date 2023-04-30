@@ -1,6 +1,6 @@
 import { useContext } from 'preact/hooks';
 import dependencies from '../dependencies.js';
-import EntityContext from './contexts/entity-context.js';
+import EntityContext from './contexts/entity-context';
 import FormField from './form-field';
 import ApplicationStateContext from '../application-state-context.js';
 

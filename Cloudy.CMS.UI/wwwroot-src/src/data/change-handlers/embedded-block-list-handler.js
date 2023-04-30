@@ -1,7 +1,7 @@
-import generateRandomString from "../../util/generate-random-string.js";
-import changeManager from "../change-manager.js";
-import stateManager from "../state-manager.js";
-import statePersister from "../state-persister.js";
+import generateRandomString from "../../util/generate-random-string";
+import changeManager from "../change-manager";
+import stateManager from "../state-manager";
+import statePersister from "../state-persister";
 
 class EmbeddedBlockListHandler {
   add(entityReference, path, type) {

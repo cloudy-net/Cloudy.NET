@@ -1,6 +1,7 @@
 ﻿
 class NotificationManager {
     addNotification(callback: any) {
+        callback();
         // var notification = new Notification();
 
         // callback(notification);

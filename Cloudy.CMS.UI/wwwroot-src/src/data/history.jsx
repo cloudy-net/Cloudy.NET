@@ -1,7 +1,7 @@
 import EntityContext from "../form/contexts/entity-context";
 import { useContext } from 'preact/hooks';
-import changeManager from "./change-manager.js";
-import diff from "./diff.js";
+import changeManager from "./change-manager";
+import diff from "./diff";
 
 const ViewChanges = () => {
   const { state } = useContext(EntityContext);

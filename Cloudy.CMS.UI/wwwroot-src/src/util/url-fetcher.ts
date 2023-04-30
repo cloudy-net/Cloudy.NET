@@ -1,7 +1,7 @@
 ﻿import notificationManager from "../notification/notification-manager.js";
 
 class UrlFetcher {
-    async fetch(url: string, parameters: any, errorMessage: string, errorCodes: { [key: number]: (response: Response) => any }) {
+    async fetch(url: string, parameters: any, errorMessage: string, errorCodes?: { [key: number]: (response: Response) => any }) {
         let shouldDisplay = true;
 
         try {
