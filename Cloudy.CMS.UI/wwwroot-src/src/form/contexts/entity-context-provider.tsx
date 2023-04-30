@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'preact/hooks';
-import EntityContext from "./entity-context.js";
+import EntityContext from "./entity-context";
 import stateManager from '../../data/state-manager.js';
-import stateEvents from '../../data/state-events.js';
+import stateEvents from '../../data/state-events';
 import State from "../../data/state"
 import EntityReference from '../../data/entity-reference';
 import { ComponentChildren } from 'preact';
