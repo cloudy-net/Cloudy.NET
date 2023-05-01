@@ -1,11 +1,11 @@
 import assert from 'assert';
-import { } from './polyfiller.js';
-import stateManager from '../src/data/state-manager.js';
-import simpleChangeHandler from '../src/data/change-handlers/simple-change-handler.js';
-import blockTypeHandler from '../src/data/change-handlers/block-type-handler.js';
-import statePersister from '../src/data/state-persister.js';
+import { } from './polyfiller';
+import stateManager from '../src/data/state-manager';
+import simpleChangeHandler from '../src/data/change-handlers/simple-change-handler';
+import blockTypeHandler from '../src/data/change-handlers/block-type-handler';
+import statePersister from '../src/data/state-persister';
 
-describe('simple-change-handler.js', () => {
+describe('simple-change-handler', () => {
   describe('simple scenario', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
@@ -16,7 +16,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [propertyName]: initialValue
@@ -36,7 +36,7 @@ describe('simple-change-handler.js', () => {
       const initialValue = 'lorem';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [propertyName]: initialValue
@@ -45,7 +45,7 @@ describe('simple-change-handler.js', () => {
       });
 
       simpleChangeHandler.setValue(entityReference, propertyName, initialValue);
-      assert.equal(stateManager.getState(entityReference).history.length, 0);
+      assert.equal(stateManager.getState(entityReference)!.history.length, 0);
     });
     it('change should not be deleted if it equals source but previous changes exist', () => {
       global.localStorage.clear();
@@ -55,7 +55,7 @@ describe('simple-change-handler.js', () => {
       const initialValue = 'lorem';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [propertyName]: initialValue
@@ -67,7 +67,7 @@ describe('simple-change-handler.js', () => {
       });
 
       simpleChangeHandler.setValue(entityReference, propertyName, initialValue);
-      assert.equal(stateManager.getState(entityReference).history.length, 2);
+      assert.equal(stateManager.getState(entityReference)!.history.length, 2);
     });
     it('intermediate value, deep path', () => {
       global.localStorage.clear();
@@ -80,7 +80,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [blockName]: {
@@ -113,7 +113,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [blockName]: {
@@ -141,7 +141,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [blockName]: {
@@ -162,7 +162,7 @@ describe('simple-change-handler.js', () => {
       blockTypeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(stateManager.getState(entityReference).history.length, 3);
+      assert.equal(stateManager.getState(entityReference)!.history.length, 3);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
       blockTypeHandler.setType(entityReference, blockName, newType);
       assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
@@ -179,7 +179,7 @@ describe('simple-change-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [blockName]: {

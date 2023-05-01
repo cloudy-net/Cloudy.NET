@@ -1,10 +1,10 @@
 import assert from 'assert';
-import { } from './polyfiller.js';
-import stateManager from '../src/data/state-manager.js';
-import statePersister from '../src/data/state-persister.js';
-import embeddedBlockListHandler from '../src/data/change-handlers/embedded-block-list-handler.js';
+import { } from './polyfiller';
+import stateManager from '../src/data/state-manager';
+import statePersister from '../src/data/state-persister';
+import embeddedBlockListHandler from '../src/data/change-handlers/embedded-block-list-handler';
 
-describe('embedded-block-list-handler.js', () => {
+describe('embedded-block-list-handler', () => {
   it('intermediate value', () => {
     global.localStorage.clear();
     stateManager.states = statePersister.loadStates();
@@ -13,7 +13,7 @@ describe('embedded-block-list-handler.js', () => {
     const blockType = 'BlockType';
 
     stateManager.replace({
-      ...stateManager.getState(entityReference),
+      ...stateManager.getState(entityReference)!,
       source: {
         value: {
           [propertyName]: [{ Type: blockType }, { Type: blockType }]

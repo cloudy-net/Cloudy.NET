@@ -1,10 +1,10 @@
 import assert from 'assert';
-import { } from './polyfiller.js';
-import stateManager from '../src/data/state-manager.js';
-import changeManager from '../src/data/change-manager.js';
-import statePersister from '../src/data/state-persister.js';
+import { } from './polyfiller';
+import stateManager from '../src/data/state-manager';
+import changeManager from '../src/data/change-manager';
+import statePersister from '../src/data/state-persister';
 
-describe('change-manager.js', () => {
+describe('change-manager', () => {
   describe('simple scenario', () => {
     it('should merge simple change if < 5 min old', () => {
       global.localStorage.clear();

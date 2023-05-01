@@ -1,10 +1,10 @@
 import assert from 'assert';
-import { } from './polyfiller.js';
-import stateManager from '../src/data/state-manager.js';
-import blockTypeChangeHandler from '../src/data/change-handlers/block-type-handler.js';
-import statePersister from '../src/data/state-persister.js';
+import { } from './polyfiller';
+import stateManager from '../src/data/state-manager';
+import blockTypeChangeHandler from '../src/data/change-handlers/block-type-handler';
+import statePersister from '../src/data/state-persister';
 
-describe('block-type-handler.js', () => {
+describe('block-type-handler', () => {
   describe('simple scenario', () => {
     it('intermediate value', () => {
       global.localStorage.clear();
@@ -15,7 +15,7 @@ describe('block-type-handler.js', () => {
       const newValue = 'ipsum';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [propertyName]: {
@@ -38,7 +38,7 @@ describe('block-type-handler.js', () => {
       const newValue = null;
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [propertyName]: {
@@ -65,7 +65,7 @@ describe('block-type-handler.js', () => {
       const nestedBlockType = 'NestedBlockType';
 
       stateManager.replace({
-        ...stateManager.getState(entityReference),
+        ...stateManager.getState(entityReference)!,
         source: {
           value: {
             [blockName]: {

@@ -16,7 +16,7 @@ declare global {
 class StateManager {
   states = window.$states = statePersister.loadStates();
 
-  getAll() {
+  getAll(): State[] {
     return this.states.filter(state => state.changes.length);
   }
 
@@ -41,7 +41,7 @@ class StateManager {
     return state;
   };
 
-  createOrUpdateStateForExistingEntity(entityReference: EntityReference, nameHint?: string) {
+  createOrUpdateStateForExistingEntity(entityReference: EntityReference, nameHint?: string): State {
     const existingState = this.getState(entityReference);
     if (existingState) {
       this.reloadEntityForState(entityReference);
@@ -66,7 +66,7 @@ class StateManager {
     return state;
   };
 
-  async reloadEntityForState(entityReference: EntityReference) {
+  async reloadEntityForState(entityReference: EntityReference): Promise<void> {
     let state = this.getState(entityReference);
 
     state = {
@@ -127,7 +127,7 @@ class StateManager {
     }
   }
 
-  async loadEntityForState(entityReference: EntityReference) {
+  async loadEntityForState(entityReference: EntityReference): Promise<void> {
     const response = await urlFetcher.fetch(
       `/Admin/api/form/entity/get`,
       {
@@ -163,7 +163,7 @@ class StateManager {
     this.replace(state);
   }
 
-  async save(state: State) {
+  async save(state: State): Promise<any> {
     if (!state.new) {
       await this.reloadEntityForState(state.entityReference);
     }
@@ -191,7 +191,7 @@ class StateManager {
     return result;
   }
 
-  async saveInternal(entityReferences: EntityReference[]) {
+  async saveInternal(entityReferences: EntityReference[]): Promise<any> {
     const states = entityReferences.map(c => this.getState(c));
 
     const response = await urlFetcher.fetch("/Admin/api/form/entity/save", {
@@ -215,19 +215,19 @@ class StateManager {
     return response.results;
   }
 
-  replace(state: State) {
+  replace(state: State): void {
     this.states[this.states.findIndex(s => entityReferenceEquals(s.entityReference, state.entityReference))] = state;
     statePersister.persist(state);
   }
 
-  remove(entityReference: EntityReference) {
+  remove(entityReference: EntityReference): void {
     this.states.splice(this.states.findIndex(s => entityReferenceEquals(s.entityReference, entityReference)), 1);
     statePersister.unpersist(entityReference);
 
-    return entityReference;
+    // return entityReference;
   };
 
-  getState(entityReference: EntityReference) {
+  getState(entityReference: EntityReference): State | undefined {
     return this.states.find(s => entityReferenceEquals(s.entityReference, entityReference));
   }
 }
