@@ -1,11 +1,11 @@
 import stateManager from "./state-manager";
 import simpleChangeHandler from "./change-handlers/simple-change-handler";
 import statePersister from "./state-persister";
+import EntityReference from "./entity-reference";
 
 class ValidationManager {
-  validateAll(fields, entityReference)  {
-
-    const state = stateManager.getState(entityReference);
+  validateAll(fields: any[], entityReference: EntityReference)  {
+    const state = stateManager.getState(entityReference)!;
     let validationResults = state.validationResults.slice();
 
     fields.forEach(field => {
@@ -19,11 +19,10 @@ class ValidationManager {
     return validationResults.every(vr => vr.isValid);
   }
 
-  getValidationResults(validators, path, validationResults, value) {
+  getValidationResults(validators: { [key:string]: any }, path: string, validationResults: any[], value: any) {
+    validators && Object.keys(validators).map((validatorName: string) => {
 
-    validators && Object.keys(validators).map(validatorName => {
-
-      const validator = validators[validatorName];
+      const validator: any = validators[validatorName];
 
       let inValid = false;
       if (validatorName == 'required' && !value) inValid = true;
@@ -39,17 +38,17 @@ class ValidationManager {
     return validationResults;
   }
 
-  isInvalidForPath(validationResults, path) {
+  isInvalidForPath(validationResults: any[], path: string) {
     return validationResults.some(vr => !vr.isValid && vr.path == path);
   }
 
-  isInvalidForPathAndValidator(validationResults, path, validatorName) {
+  isInvalidForPathAndValidator(validationResults: any[], path: string, validatorName: string) {
     return validationResults.some(vr => !vr.isValid && vr.path == path && vr.validatorName == validatorName);
   }
 
-  anyIsInvalid(validationResults) { return validationResults.some(vr => !vr.isValid) }
+  anyIsInvalid(validationResults: any[]) { return validationResults.some(vr => !vr.isValid) }
 
-  getValidationClass(validationResults, path) { return this.isInvalidForPath(validationResults || [], path) ? 'is-invalid' : '' }
+  getValidationClass(validationResults: any[], path: string) { return this.isInvalidForPath(validationResults || [], path) ? 'is-invalid' : '' }
 }
 
 export default new ValidationManager();

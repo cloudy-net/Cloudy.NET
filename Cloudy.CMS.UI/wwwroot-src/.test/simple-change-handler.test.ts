@@ -24,9 +24,9 @@ describe('simple-change-handler', () => {
         }
       });
 
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), initialValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), initialValue);
       simpleChangeHandler.setValue(entityReference, propertyName, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), newValue);
     });
     it('change should be deleted if it equals source', () => {
       global.localStorage.clear();
@@ -96,9 +96,9 @@ describe('simple-change-handler', () => {
         }
       });
 
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), initialValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${block2Name}.${propertyName}`), initialValue);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${block2Name}.${propertyName}`), newValue);
     });
   });
   describe('complex scenario', () => {
@@ -127,7 +127,7 @@ describe('simple-change-handler', () => {
 
       blockTypeHandler.setType(entityReference, blockName, newType);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${propertyName}`, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${propertyName}`), newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${propertyName}`), newValue);
     });
     it('changing block type after simple change', () => {
       global.localStorage.clear();
@@ -158,14 +158,14 @@ describe('simple-change-handler', () => {
       });
 
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${block2Name}.${propertyName}`), newValue);
       blockTypeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${block2Name}.${propertyName}`), null);
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
       assert.equal(stateManager.getState(entityReference)!.history.length, 3);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), newValue);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${block2Name}.${propertyName}`), newValue);
       blockTypeHandler.setType(entityReference, blockName, newType);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${block2Name}.${propertyName}`), null);
     });
     it('intermediate value should be cleared when changing parents parents block type', () => {
       global.localStorage.clear();
@@ -197,7 +197,7 @@ describe('simple-change-handler', () => {
 
       simpleChangeHandler.setValue(entityReference, `${blockName}.${block2Name}.${propertyName}`, newValue);
       blockTypeHandler.setType(entityReference, `${blockName}.${block2Name}`, newType);
-      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference), `${blockName}.${block2Name}.${propertyName}`), null);
+      assert.equal(simpleChangeHandler.getIntermediateValue(stateManager.getState(entityReference)!, `${blockName}.${block2Name}.${propertyName}`), null);
     });
   });
 });

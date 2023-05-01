@@ -1,11 +1,13 @@
 import generateRandomString from "../../util/generate-random-string";
 import changeManager from "../change-manager";
+import EntityReference from "../entity-reference";
+import State from "../state";
 import stateManager from "../state-manager";
 import statePersister from "../state-persister";
 
 class EmbeddedBlockListHandler {
-  add(entityReference, path, type) {
-    const state = stateManager.getState(entityReference);
+  add(entityReference: EntityReference, path: string, type: string) {
+    const state = stateManager.getState(entityReference)!;
     const change = changeManager.getOrCreateLatestChange(state, 'embeddedblocklist.add', path);
 
     change.key = generateRandomString();
@@ -18,8 +20,8 @@ class EmbeddedBlockListHandler {
 
     return change;
   }
-  remove(entityReference, path, key, type) {
-    const state = stateManager.getState(entityReference);
+  remove(entityReference: EntityReference, path: string, key: string, type: string | null | undefined) {
+    const state = stateManager.getState(entityReference)!;
     const change = changeManager.getOrCreateLatestChange(state, 'embeddedblocklist.remove', path);
 
     change.key = key;
@@ -32,8 +34,8 @@ class EmbeddedBlockListHandler {
 
     return change;
   }
-  getIntermediateValue(state, path) {
-    let value = (changeManager.getSourceValue(state.source.value, path) || []).map(({ Type }, key) => ({ key: `${key}`, type: Type }));
+  getIntermediateValue(state: State, path: string) {
+    let value = (changeManager.getSourceValue(state.source!.value, path) || []).map(({ Type }: { Type: string }, key: string) => ({ key: `${key}`, type: Type }));
 
     for (var change of state.history) {
       if (change.$type == 'embeddedblocklist.add' && path == change.path) {
@@ -41,7 +43,7 @@ class EmbeddedBlockListHandler {
         continue;
       }
       if (change.$type == 'embeddedblocklist.remove' && path == change.path) {
-        value.splice(value.findIndex(element => element.key == change.key), 1);
+        value.splice(value.findIndex((element: { key: string }) => element.key == change.key), 1);
         continue;
       }
       if (change.$type == 'blocktype' && path.indexOf(`${change.path}.`) == 0) {

@@ -1,8 +1,10 @@
 import assert from 'assert';
-import { } from './polyfiller';
+import polyfiller from './polyfiller';
 import stateManager from '../src/data/state-manager';
 import blockTypeChangeHandler from '../src/data/change-handlers/block-type-handler';
 import statePersister from '../src/data/state-persister';
+
+polyfiller();
 
 describe('block-type-handler', () => {
   describe('simple scenario', () => {
@@ -25,9 +27,9 @@ describe('block-type-handler', () => {
         }
       });
 
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), propertyName), initialValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, propertyName), initialValue);
       blockTypeChangeHandler.setType(entityReference, propertyName, newValue);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), propertyName), newValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, propertyName), newValue);
     });
     it('clearing value', () => {
       global.localStorage.clear();
@@ -35,7 +37,7 @@ describe('block-type-handler', () => {
       const { entityReference } = stateManager.createStateForNewEntity('page');
       const propertyName = 'TestProperty';
       const initialValue = 'lorem';
-      const newValue = null;
+      const newValue: string | null = null;
 
       stateManager.replace({
         ...stateManager.getState(entityReference)!,
@@ -48,9 +50,9 @@ describe('block-type-handler', () => {
         }
       });
 
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), propertyName), initialValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, propertyName), initialValue);
       blockTypeChangeHandler.setType(entityReference, propertyName, newValue);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), propertyName), newValue);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, propertyName), newValue);
     });
   });
   describe('complex scenario', () => {
@@ -80,11 +82,11 @@ describe('block-type-handler', () => {
         }
       });
 
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), blockName), initialType);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), `${blockName}.${nestedBlockName}`), nestedBlockType);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, blockName), initialType);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, `${blockName}.${nestedBlockName}`), nestedBlockType);
       blockTypeChangeHandler.setType(entityReference, blockName, newType);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), blockName), newType);
-      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference), `${blockName}.${nestedBlockName}`), null);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, blockName), newType);
+      assert.equal(blockTypeChangeHandler.getIntermediateType(stateManager.getState(entityReference)!, `${blockName}.${nestedBlockName}`), null);
     });
   });
 });

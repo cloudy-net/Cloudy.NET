@@ -1,4 +1,6 @@
 import changeManager from "../change-manager";
+import EntityReference from "../entity-reference";
+import State from "../state";
 import stateManager from "../state-manager";
 import statePersister from "../state-persister";
 import ValidationManager from "../validation-manager";
@@ -6,14 +8,14 @@ import ValidationManager from "../validation-manager";
 const UNCHANGED = {};
 
 class SimpleChangeHandler {
-  setValue(entityReference, path, value, validators) {
-    const state = stateManager.getState(entityReference);
+  setValue(entityReference: EntityReference, path: string, value: any, validators?: any[]) {
+    const state = stateManager.getState(entityReference)!;
     const change = changeManager.getOrCreateLatestChange(state, 'simple', path);
 
     change.date = Date.now();
     change.value = value;
 
-    if (change.value == changeManager.getSourceValue(state.source.value, path) && state.history.filter(change => change.path == path).length == 1) {
+    if (change.value == changeManager.getSourceValue(state.source!.value, path) && state.history.filter(change => change.path == path).length == 1) {
       state.history.splice(state.history.indexOf(change), 1);
     }
 
@@ -25,7 +27,7 @@ class SimpleChangeHandler {
 
     statePersister.persist(state);
   }
-  getIntermediateValue(state, path) {
+  getIntermediateValue(state: State, path: string) {
     let value = UNCHANGED;
 
     for (var change of state.history) {
@@ -40,7 +42,7 @@ class SimpleChangeHandler {
     }
 
     if (value == UNCHANGED) {
-      return changeManager.getSourceValue(state.source.value, path);
+      return changeManager.getSourceValue(state.source!.value, path);
     }
 
     return value;

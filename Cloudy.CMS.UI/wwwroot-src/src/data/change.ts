@@ -3,7 +3,7 @@ type Change = {
   path: string,
   date: number,
   key?: string, // lists
-  type?: string, // block type changes
+  type?: string | null, // block type changes
   value?: any, // simple changes
 };
 

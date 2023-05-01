@@ -21,9 +21,9 @@ describe('embedded-block-list-handler', () => {
       }
     });
 
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }]);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }]);
     const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }, { key: item.key, type: blockType }]);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }, { key: item.key, type: blockType }]);
   });
   it('should not merge change', () => {
     global.localStorage.clear();
@@ -47,8 +47,8 @@ describe('embedded-block-list-handler', () => {
     const blockType = 'BlockType';
 
     const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), [{ key: item.key, type: item.type }]);
-    embeddedBlockListHandler.remove(entityReference, propertyName, item.key, item.type);
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference), propertyName), []);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), [{ key: item.key, type: item.type }]);
+    embeddedBlockListHandler.remove(entityReference, propertyName, item.key!, item.type);
+    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), []);
   });
 });
