@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { } from './polyfiller';
 import stateManager from '../src/data/state-manager';
 import changeManager from '../src/data/change-manager';
 import statePersister from '../src/data/state-persister';

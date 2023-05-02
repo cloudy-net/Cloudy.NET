@@ -1,10 +1,7 @@
 import assert from 'assert';
-import polyfiller from './polyfiller';
 import stateManager from '../src/data/state-manager';
 import blockTypeChangeHandler from '../src/data/change-handlers/block-type-handler';
 import statePersister from '../src/data/state-persister';
-
-polyfiller();
 
 describe('block-type-handler', () => {
   describe('simple scenario', () => {

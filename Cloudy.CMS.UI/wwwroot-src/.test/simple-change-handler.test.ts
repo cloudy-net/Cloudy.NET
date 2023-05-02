@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { } from './polyfiller';
 import stateManager from '../src/data/state-manager';
 import simpleChangeHandler from '../src/data/change-handlers/simple-change-handler';
 import blockTypeHandler from '../src/data/change-handlers/block-type-handler';
