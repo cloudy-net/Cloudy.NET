@@ -1,301 +1,294 @@
-import assert from 'assert';
 import stateManager from '../src/data/state-manager';
 import changeManager from '../src/data/change-manager';
 import statePersister from '../src/data/state-persister';
 
-describe('change-manager', () => {
-  describe('simple scenario', () => {
-    it('should merge simple change if < 5 min old', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
-      ];
 
-      changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
 
-      assert.equal(state.history.length, 1);
-    });
-    it('should not merge simple change if > 5 min old', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'simple', date: Date.now() - 1000000, path: 'propertyName', value: 'lorem' },
-      ];
+test('should merge simple change if < 5 min old', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
+  ];
 
-      changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
+  changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
 
-      assert.equal(state.history.length, 2);
-    });
-    it('should merge block type change if < 5 min old', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', value: 'lorem' },
-      ];
+  expect(state.history.length).toBe(1);
+});
+test('should not merge simple change if > 5 min old', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'simple', date: Date.now() - 1000000, path: 'propertyName', value: 'lorem' },
+  ];
 
-      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+  changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
 
-      assert.equal(state.history.length, 1);
-    });
-    it('should not merge block type change if > 5 min old', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'blocktype', date: Date.now() - 1000000, path: 'blockName', value: 'lorem' },
-      ];
+  expect(state.history.length).toBe(2);
+});
+test('should merge block type change if < 5 min old', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', value: 'lorem' },
+  ];
 
-      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+  changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
-      assert.equal(state.history.length, 2);
-    });
-  });
-  describe('complex scenario', () => {
-    it('should not merge simple change if separated by block change', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
-      ];
+  expect(state.history.length).toBe(1);
+});
+test('should not merge block type change if > 5 min old', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'blocktype', date: Date.now() - 1000000, path: 'blockName', value: 'lorem' },
+  ];
 
-      changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
+  changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
-      assert.equal(state.history.length, 3);
-    });
-    it('should not merge simple change if separated by nested block change', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'simple', date: Date.now(), path: 'blockName.nestedBlockName.propertyName', value: 'lorem' },
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
-      ];
+  expect(state.history.length).toBe(2);
+});
 
-      changeManager.getOrCreateLatestChange(state, 'simple', 'blockName.nestedBlockName.propertyName');
+test('should not merge simple change if separated by block change', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
+  ];
 
-      assert.equal(state.history.length, 3);
-    });
-    it('should merge block type change if separated by irrelevant simple change', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
-        { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
-      ];
+  changeManager.getOrCreateLatestChange(state, 'simple', 'propertyName');
 
-      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+  expect(state.history.length).toBe(3);
+});
+test('should not merge simple change if separated by nested block change', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'simple', date: Date.now(), path: 'blockName.nestedBlockName.propertyName', value: 'lorem' },
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
+  ];
 
-      assert.equal(state.history.length, 2);
-    });
-    it('should not merge block type change if separated by nested simple change', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
-      state.history = [
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
-        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
-      ];
+  changeManager.getOrCreateLatestChange(state, 'simple', 'blockName.nestedBlockName.propertyName');
 
-      changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
+  expect(state.history.length).toBe(3);
+});
+test('should merge block type change if separated by irrelevant simple change', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
+    { '$type': 'simple', date: Date.now(), path: 'propertyName', value: 'lorem' },
+  ];
 
-      assert.equal(state.history.length, 3);
-    });
-  });
+  changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
-  describe('getChanges', () => {
-    it('should return changes', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
+  expect(state.history.length).toBe(2);
+});
+test('should not merge block type change if separated by nested simple change', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+  state.history = [
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
+    { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
+  ];
 
-      const history = [
-        { '$type': 'simple', date: Date.now(), path: 'property1Name', value: 'lorem' },
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
-        { '$type': 'simple', date: Date.now(), path: 'blockName.property2Name', value: 'dolor' },
-      ]
+  changeManager.getOrCreateLatestChange(state, 'blocktype', 'blockName');
 
-      state.history = [...history];
+  expect(state.history.length).toBe(3);
+});
 
-      const result = changeManager.getChanges(state);
+test('should return changes', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
 
-      assert.deepEqual(result, history);
-    });
-    it('should not return changes cleared by type change', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
+  const history = [
+    { '$type': 'simple', date: Date.now(), path: 'property1Name', value: 'lorem' },
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
+    { '$type': 'simple', date: Date.now(), path: 'blockName.property2Name', value: 'dolor' },
+  ]
 
-      const history = [
-        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
-        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'dolor' },
-      ]
+  state.history = [...history];
 
-      state.history = [...history];
+  const result = changeManager.getChanges(state);
 
-      const result = changeManager.getChanges(state);
+  expect(result).toStrictEqual(history);
+});
+test('should not return changes cleared by type change', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
 
-      assert.deepEqual(result, [history[1], history[2]]);
-    });
-    it('if removing block that is newly added, remove both changes', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
+  const history = [
+    { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'ipsum' },
+    { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'dolor' },
+  ]
 
-      const history = [
-        { '$type': 'embeddedblocklist.add', date: Date.now(), path: 'listName', key: 'key' },
-        { '$type': 'embeddedblocklist.remove', date: Date.now(), path: 'listName', key: 'key' },
-      ]
+  state.history = [...history];
 
-      state.history = [...history];
+  const result = changeManager.getChanges(state);
 
-      const result = changeManager.getChanges(state);
+  expect(result).toStrictEqual([history[1], history[2]]);
+});
+test('if removing block that is newly added, remove both changes', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
 
-      assert.deepEqual(result, []);
-    });
-    it('should not return changes cleared by list element removal', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
+  const history = [
+    { '$type': 'embeddedblocklist.add', date: Date.now(), path: 'listName', key: 'key' },
+    { '$type': 'embeddedblocklist.remove', date: Date.now(), path: 'listName', key: 'key' },
+  ]
 
-      const history = [
-        { '$type': 'simple', date: Date.now(), path: 'listName.key.propertyName', value: 'lorem' },
-        { '$type': 'embeddedblocklist.remove', date: Date.now(), path: 'listName', key: 'key' },
-      ]
+  state.history = [...history];
 
-      state.history = [...history];
+  const result = changeManager.getChanges(state);
 
-      const result = changeManager.getChanges(state);
+  expect(result).toStrictEqual([]);
+});
+test('should not return changes cleared by list element removal', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
 
-      assert.deepEqual(result, [history[1]]);
-    });
-    it('should merge changes on same path', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
+  const history = [
+    { '$type': 'simple', date: Date.now(), path: 'listName.key.propertyName', value: 'lorem' },
+    { '$type': 'embeddedblocklist.remove', date: Date.now(), path: 'listName', key: 'key' },
+  ]
 
-      const history = [
-        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
-        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'dolor' },
-      ]
+  state.history = [...history];
 
-      state.history = [...history];
+  const result = changeManager.getChanges(state);
 
-      const result = changeManager.getChanges(state);
+  expect(result).toStrictEqual([history[1]]);
+});
+test('should merge changes on same path', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
 
-      assert.deepEqual(result, [history[1]]);
-    });
-    it('should not return simple changes matching source', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
+  const history = [
+    { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
+    { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'dolor' },
+  ]
 
-      state.source = {
-        value: {
-          blockName: {
-            Value: {
-              propertyName: 'lorem'
-            }
-          }
+  state.history = [...history];
+
+  const result = changeManager.getChanges(state);
+
+  expect(result).toStrictEqual([history[1]]);
+});
+test('should not return simple changes matching source', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
+
+  state.source = {
+    value: {
+      blockName: {
+        Value: {
+          propertyName: 'lorem'
         }
-      };
+      }
+    }
+  };
 
-      const history = [
-        { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
-      ]
+  const history = [
+    { '$type': 'simple', date: Date.now(), path: 'blockName.propertyName', value: 'lorem' },
+  ]
 
-      state.history = [...history];
+  state.history = [...history];
 
-      const result = changeManager.getChanges(state);
+  const result = changeManager.getChanges(state);
 
-      assert.deepEqual(result, []);
-    });
-    it('should not return block type changes matching source', () => {
-      global.localStorage.clear();
-      stateManager.states = statePersister.loadStates();
-      const state = stateManager.createStateForNewEntity('page');
+  expect(result).toStrictEqual([]);
+});
+test('should not return block type changes matching source', () => {
+  global.localStorage.clear();
+  stateManager.states = statePersister.loadStates();
+  const state = stateManager.createStateForNewEntity('page');
 
-      state.source = {
-        value: {
-          blockName: {
-            Type: 'lorem'
-          }
-        }
-      };
+  state.source = {
+    value: {
+      blockName: {
+        Type: 'lorem'
+      }
+    }
+  };
 
-      const history = [
-        { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'lorem' },
-      ]
+  const history = [
+    { '$type': 'blocktype', date: Date.now(), path: 'blockName', type: 'lorem' },
+  ]
 
-      state.history = [...history];
+  state.history = [...history];
 
-      const result = changeManager.getChanges(state);
+  const result = changeManager.getChanges(state);
 
-      assert.deepEqual(result, []);
-    });
-  });
-  describe('getSourceValue', () => {
-    it('simple property', async () => {
-      const propertyName = 'lorem';
-      const propertyValue = 'ipsum';
+  expect(result).toStrictEqual([]);
+});
 
-      const state = {
-        source: {
-          value: {
-            [propertyName]: propertyValue
-          }
-        }
-      };
-      assert.equal(changeManager.getSourceValue(state.source.value, propertyName), propertyValue);
-    });
-    it('nested property', async () => {
-      const blockName = 'dolor';
-      const nestedBlockName = 'dolor';
-      const propertyName = 'lorem';
-      const propertyValue = 'ipsum';
+test('simple property', async () => {
+  const propertyName = 'lorem';
+  const propertyValue = 'ipsum';
 
-      const state = {
-        source: {
-          value: {
-            [blockName]: {
+  const state = {
+    source: {
+      value: {
+        [propertyName]: propertyValue
+      }
+    }
+  };
+  expect(changeManager.getSourceValue(state.source.value, propertyName)).toBe(propertyValue);
+});
+test('nested property', async () => {
+  const blockName = 'dolor';
+  const nestedBlockName = 'dolor';
+  const propertyName = 'lorem';
+  const propertyValue = 'ipsum';
+
+  const state = {
+    source: {
+      value: {
+        [blockName]: {
+          Value: {
+            [nestedBlockName]: {
               Value: {
-                [nestedBlockName]: {
-                  Value: {
-                    [propertyName]: propertyValue
-                  }
-                }
+                [propertyName]: propertyValue
               }
             }
           }
         }
-      };
-      assert.equal(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
-    });
-    it('nested property in null block', async () => {
-      const blockName = 'dolor';
-      const nestedBlockName = 'dolor';
-      const propertyName = 'lorem';
-      const propertyValue = null;
+      }
+    }
+  };
+  expect(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`)).toBe(propertyValue);
+});
+test('nested property in null block', async () => {
+  const blockName = 'dolor';
+  const nestedBlockName = 'dolor';
+  const propertyName = 'lorem';
+  const propertyValue = null;
 
-      const state = {
-        source: {
-          value: {
-            [blockName]: {
-              Value: {
-                [nestedBlockName]: null
-              }
-            }
+  const state = {
+    source: {
+      value: {
+        [blockName]: {
+          Value: {
+            [nestedBlockName]: null
           }
         }
-      };
-      assert.equal(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`), propertyValue);
-    });
-  });
+      }
+    }
+  };
+  expect(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`)).toBe(propertyValue);
 });

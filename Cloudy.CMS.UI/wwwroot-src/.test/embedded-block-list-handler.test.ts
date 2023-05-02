@@ -1,10 +1,8 @@
-import assert from 'assert';
 import stateManager from '../src/data/state-manager';
 import statePersister from '../src/data/state-persister';
 import embeddedBlockListHandler from '../src/data/change-handlers/embedded-block-list-handler';
 
-describe('embedded-block-list-handler', () => {
-  it('intermediate value', () => {
+  test('intermediate value', () => {
     global.localStorage.clear();
     stateManager.states = statePersister.loadStates();
     const { entityReference } = stateManager.createStateForNewEntity('page');
@@ -20,11 +18,11 @@ describe('embedded-block-list-handler', () => {
       }
     });
 
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }]);
+    expect(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName)).toStrictEqual([{ key: '0', type: blockType }, { key: '1', type: blockType }]);
     const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), [{ key: '0', type: blockType }, { key: '1', type: blockType }, { key: item.key, type: blockType }]);
+    expect(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName)).toStrictEqual([{ key: '0', type: blockType }, { key: '1', type: blockType }, { key: item.key, type: blockType }]);
   });
-  it('should not merge change', () => {
+  test('should not merge change', () => {
     global.localStorage.clear();
     stateManager.states = statePersister.loadStates();
     const propertyName = 'TestProperty';
@@ -36,9 +34,9 @@ describe('embedded-block-list-handler', () => {
 
     embeddedBlockListHandler.add(state.entityReference, propertyName, blockType);
 
-    assert.equal(state.history.length, 2);
+    expect(state.history.length).toBe(2);
   });
-  it('remove new element', () => {
+  test('remove new element', () => {
     global.localStorage.clear();
     stateManager.states = statePersister.loadStates();
     const { entityReference } = stateManager.createStateForNewEntity('page');
@@ -46,8 +44,7 @@ describe('embedded-block-list-handler', () => {
     const blockType = 'BlockType';
 
     const item = embeddedBlockListHandler.add(entityReference, propertyName, blockType);
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), [{ key: item.key, type: item.type }]);
+    expect(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName)).toStrictEqual([{ key: item.key, type: item.type }]);
     embeddedBlockListHandler.remove(entityReference, propertyName, item.key!, item.type);
-    assert.deepEqual(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName), []);
+    expect(embeddedBlockListHandler.getIntermediateValue(stateManager.getState(entityReference)!, propertyName)).toStrictEqual([]);
   });
-});
