@@ -2,7 +2,7 @@ import html from '@src/util/html.js';
 import { useContext } from 'preact/hooks';
 import EntityContext from './contexts/entity-context';
 import FieldComponentContext from "./contexts/field-component-context";
-import ValidationManager from '../data/validation-manager.js';
+import ValidationManager from '../data/validation-manager';
 
 const FormField = ({ name, path, label, description, renderChrome, partial, listPartial, settings, validators, dependencies }) => {
     const { componentContextProvider } = dependencies;
