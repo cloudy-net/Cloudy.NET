@@ -2,23 +2,24 @@ import EntityContext from "../form/contexts/entity-context";
 import { useContext } from 'preact/hooks';
 import changeManager from "./change-manager";
 import diff from "./diff";
+import Change from "./change";
 
 const ViewChanges = () => {
   const { state } = useContext(EntityContext);
 
-  const buildDiff = ([state, segment]) => {
-    if (state == diff.INSERT) {
+  const buildDiff = ([diffState, segment]: [diffState: number, segment: string]) => {
+    if (diffState == diff.INSERT) {
       return <span class="cloudy-ui-diff-insert">{segment}</span>;
     }
 
-    if (state == diff.DELETE) {
+    if (diffState == diff.DELETE) {
       return <span class="cloudy-ui-diff-delete">{segment}</span>;
     }
 
     return segment;
   };
 
-  const showChange = change => {
+  const showChange = (change: Change) => {
     const getDiff = () => {
       const initialValue = changeManager.getSourceValue(state.source.value, change.path);
       const result = (typeof initialValue == 'string' || initialValue == null) &&

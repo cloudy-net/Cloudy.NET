@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import EntityContext from "./entity-context";
 import stateManager from '../../data/state-manager';
 import stateEvents from '../../data/state-events';
@@ -6,19 +6,20 @@ import State from "../../data/state"
 import EntityReference from '../../data/entity-reference';
 import { ComponentChildren } from 'preact';
 import StateChangeCallback from '../../data/state-change-callback';
+import { useSignal } from '@preact/signals';
 
 export default ({ entityType, keyValues, children }: { entityType: string, keyValues: string[], children: ComponentChildren }) => {
-  const [entityReference, setEntityReference] = useState<EntityReference | null>(null);
-  const [state, setState] = useState<State | null>(null);
-
+  const entityReference = useSignal<EntityReference | null>(null);
+  const state = useSignal<State | null>(null);
+  
   useEffect(() => {
-    let entityReference: EntityReference;
+    let newEntityReference: EntityReference;
 
     if (keyValues && keyValues.length) {
-      entityReference = { entityType, keyValues };
-      setEntityReference(entityReference);
-      const state = stateManager.createOrUpdateStateForExistingEntity(entityReference);
-      setState(state);
+      newEntityReference = { entityType, keyValues };
+      entityReference.value = newEntityReference;
+      const newState = stateManager.createOrUpdateStateForExistingEntity(newEntityReference);
+      state.value = newState;
     } else {
       const searchParams = new URLSearchParams(window.location.search);
       const newEntityKey = searchParams.get('newEntityKey');
@@ -31,7 +32,7 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
         return;
       }
 
-      let state = stateManager.getState({
+      let newState = stateManager.getState({
         entityType: newEntityType,
         newEntityKey, // may be null, resulting in null state
       });
@@ -40,31 +41,31 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
       // saved into a real, existing entity, or that the key is missing from the query
       // string, we create a new state with accompanying new entity key
 
-      if (!state) {
-        state = stateManager.createStateForNewEntity(entityType);
+      if (!newState) {
+        newState = stateManager.createStateForNewEntity(entityType);
 
-        searchParams.set("newEntityKey", state.entityReference.newEntityKey!);
+        searchParams.set("newEntityKey", newState.entityReference.newEntityKey!);
         history.replaceState({}, "", `${location.pathname}?${searchParams}`);
       }
 
-      entityReference = state.entityReference;
-      setEntityReference(entityReference);
-      setState(state);
+      newEntityReference = newState.entityReference;
+      entityReference.value = newEntityReference;
+      state.value = newState;
     }
 
-    const stateChange: StateChangeCallback = state => setState(state ? { ...state } : null);
+    const stateChange: StateChangeCallback = newState => state.value = newState ? { ...newState } : null;
     stateEvents.onStateChange(stateChange);
-    const entityReferenceChange = (entityReference: EntityReference) => {
+    const entityReferenceChange = (newEntityReference: EntityReference) => {
       const searchParams = new URLSearchParams(window.location.search);
       searchParams.delete("newEntityKey");
       searchParams.delete("keys");
-      if (entityReference.keyValues) {
-        for (let key of entityReference.keyValues) {
+      if (newEntityReference.keyValues) {
+        for (let key of newEntityReference.keyValues) {
           searchParams.append("keys", key);
         }
       }
       history.replaceState({}, "", `${window.location.pathname}?${searchParams}`);
-      setEntityReference(entityReference);
+      entityReference.value = newEntityReference;
     };
     stateEvents.onEntityReferenceChange(entityReferenceChange);
     return () => {
@@ -74,6 +75,6 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
   }, [keyValues]);
 
   return <EntityContext.Provider value={{ entityReference, state }}>
-    {entityReference && state && !state.loading && children}
+    {entityReference.value && state.value && !state.value.loading && children}
   </EntityContext.Provider>;
 };
