@@ -1,4 +1,4 @@
-import html from '@src/util/html';
+import html from './util/html';
 import { useContext, useEffect, useState, useRef } from 'preact/hooks';
 import EntityContext from './form/contexts/entity-context';
 import ValidationManager from './data/validation-manager';
