@@ -1,10 +1,12 @@
-import ApplicationStateContext from './application-state-context.js';
+import ApplicationStateContext from './application-state-context';
 import { useSignal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
+import { ComponentChildren } from 'preact';
+import FieldType from './data/fieldtype';
 
-export default ({ children }) => {
+export default ({ children }: { children: ComponentChildren }) => {
   const showChanges = useSignal(false);
-  const fieldTypes = useSignal({ $loading: true });
+  const fieldTypes = useSignal<{ [key:string]: FieldType[] } | null>(null);
 
   useEffect(function () {
     (async () => {

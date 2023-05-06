@@ -21,7 +21,7 @@ const ViewChanges = () => {
 
   const showChange = (change: Change) => {
     const getDiff = () => {
-      const initialValue = changeManager.getSourceValue(state.source.value, change.path);
+      const initialValue = changeManager.getSourceValue(state.value!.source!.value, change.path);
       const result = (typeof initialValue == 'string' || initialValue == null) &&
         (typeof change.value == 'string' || change.value == null) ?
         diff(initialValue || '', change.value || '', 0).map(buildDiff) :
@@ -44,7 +44,7 @@ const ViewChanges = () => {
   return <>
     <p><strong>Your changes:</strong></p>
     <ul>
-      {state.changes.map(change => <li>{showChange(change)}</li>)}
+      {state.value!.changes.map(change => <li>{showChange(change)}</li>)}
     </ul>
   </>;
 };

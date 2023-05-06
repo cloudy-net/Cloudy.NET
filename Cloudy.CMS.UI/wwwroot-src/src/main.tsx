@@ -13,6 +13,13 @@ import ListView from './views/list-view';
 import EntityListContextProvider from './entity-list/entity-list-context-provider';
 import ApplicationStateContextProvider from './application-state-context-provider';
 
+declare global {
+  interface Window { 
+    viteIsLoaded: boolean;
+    viteDevServerIsRunning: boolean;
+  }
+}
+
 window.viteIsLoaded = true;
 
 const Main = () => {

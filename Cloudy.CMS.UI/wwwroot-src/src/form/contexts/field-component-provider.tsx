@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'preact/hooks';
 import FieldComponentContext from "./field-component-context.js";
+import { ComponentChildren } from 'preact';
 
-export default ({ children }) => {
-  const [components, setComponents] = useState();
+export default ({ children }: { children: ComponentChildren }) => {
+  const [components, setComponents] = useState<{ [key: string]: any } | null>(null);
 
   useEffect(function () {
     (async () => {
@@ -18,17 +19,17 @@ export default ({ children }) => {
       }
 
       var urls = await response.json();
-      const getUrlPrefix = (url) => /* @vite-ignore */ window.viteDevServerIsRunning 
-        ? url.startsWith('/') ? window.location.origin : '../../' 
+      const getUrlPrefix = (url: string) => /* @vite-ignore */ window.viteDevServerIsRunning
+        ? url.startsWith('/') ? window.location.origin : '../../'
         : url.startsWith('/') ? '' : './';
 
-      const componentPromises = urls.map(url => ({url, promise: import(/* @vite-ignore */ `${getUrlPrefix(url)}${url}`)}));
+      const componentPromises = urls.map((url: string) => ({ url, promise: import(/* @vite-ignore */ `${getUrlPrefix(url)}${url}`) }));
 
-      await Promise.allSettled(componentPromises.map(c => c.promise));
+      await Promise.allSettled(componentPromises.map((c: any) => c.promise));
 
-      const result = {};
+      const result: { [key: string]: any } = {};
 
-      for(let c of componentPromises){
+      for (let c of componentPromises) {
         result[c.url] = (await c.promise).default;
       }
 

@@ -8,7 +8,7 @@ const EmbeddedBlockFields = ({ type, path, dependencies }) => {
 
   const { fieldTypes } = useContext(ApplicationStateContext);
 
-  return fieldTypes.value[type].map(field => html`<${FormField} ...${field} path=${`${path}.${field.name}`} dependencies=${dependencies} />`);
+  return fieldTypes.value[type].map(field => html`<${FormField} fieldType=${field} path=${`${path}.${field.name}`} dependencies=${dependencies} />`);
 };
 
 export default EmbeddedBlockFields;

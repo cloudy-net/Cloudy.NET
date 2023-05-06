@@ -1,5 +1,5 @@
 import History from "../data/history";
-import { useContext, useState } from 'preact/hooks';
+import { useContext } from 'preact/hooks';
 import EntityContext from "./contexts/entity-context";
 import ApplicationStateContext from "../application-state-context";
 import changeManager from "../data/change-manager";
@@ -7,14 +7,14 @@ import stateManager from "../data/state-manager";
 
 
 const Changes = () => {
-  const { state } = useContext(EntityContext);
+  const { entityReference, state } = useContext(EntityContext);
   const { showChanges } = useContext(ApplicationStateContext);
 
-  if (state.newSource) {
+  if (state.value!.newSource) {
     const discard = () => {
-      changeManager.discardChanges(state);
-      stateManager.replace(state);
-      stateManager.reloadEntityForState(state.entityReference);
+      changeManager.discardChanges(state.value!);
+      stateManager.replace(state.value!);
+      stateManager.reloadEntityForState(entityReference.value!);
     }
 
     return <div>
@@ -27,7 +27,7 @@ const Changes = () => {
     </div>;
   }
 
-  if (state.changes.length == 0) {
+  if (state.value!.changes.length == 0) {
     return <></>;
   }
 

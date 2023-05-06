@@ -2,11 +2,10 @@ import FieldComponentProvider from './contexts/field-component-provider';
 import EntityContextProvider from './contexts/entity-context-provider'
 import FormFields from './form-fields';
 import Changes from './changes';
-import NewHeader from './form-header-new.jsx';
-import EditHeader from './form-header-edit.jsx';
-import { useState, useEffect } from 'preact/hooks';
+import NewHeader from './form-header-new';
+import EditHeader from './form-header-edit';
 
-function Form({ entityTypeName, mode, keyValues }) {
+function Form({ entityTypeName, mode, keyValues }: { entityTypeName: string, mode: string, keyValues: string[] }) {
   return <div class="form">
     <FieldComponentProvider>
       <EntityContextProvider {...{ entityType: entityTypeName, keyValues }}>
