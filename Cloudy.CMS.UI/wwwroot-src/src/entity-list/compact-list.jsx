@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'preact/hooks';
 import SearchBox from '../components/search-box';
 import ListFilter from './list-filter';
 import EntityListContext from './entity-list-context';
-import html from '@src/util/html.js';
+import html from '../util/html';
 import { ReactComponent as Caret } from "../assets/caret-horizontal.svg";
 import { ReactComponent as VerticalCaret } from "../assets/caret-vertical.svg";
 import { ReactComponent as Kebab } from "../assets/kebab.svg";
