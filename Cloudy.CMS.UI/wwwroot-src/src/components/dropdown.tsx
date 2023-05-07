@@ -5,7 +5,7 @@ import ClickOutsideDetector from "./click-outside-detector"
 import { createRef } from "preact";
 import Caret from "../assets/caret-vertical.svg";
 
-const Dropdown = ({ className, contents, children, fullWidth, wideContent }: { className: string, contents: string, children: ComponentChildren, fullWidth: boolean, wideContent: boolean }) => {
+const Dropdown = ({ className, contents, children, fullWidth, wideContent }: { className?: string, contents: string, children: ComponentChildren, fullWidth?: boolean, wideContent?: boolean }) => {
   const ref = createRef();
   const [open, setOpen] = useState(false);
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
@@ -30,7 +30,7 @@ const Dropdown = ({ className, contents, children, fullWidth, wideContent }: { c
   }, [open]);
 
   return <div className={"dropdown" + (fullWidth ? " fullwidth" : "")} ref={ref}>
-    <ClickOutsideDetector onClickOutside={() => setOpen(false)} blockDisplay={fullWidth}>
+    <ClickOutsideDetector onClickOutside={() => setOpen(false)} blockDisplay={!!fullWidth}>
       {<button className={className || "dropdown-button"} type="button" aria-expanded={open} ref={setReferenceElement} onClick={() => setOpen(!open)}>
         {!className ? <span className="dropdown-button-text">{contents}</span> : contents}
         {!className ? <Caret className="dropdown-button-caret" /> : ''}

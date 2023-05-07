@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'preact/hooks';
 import SearchBox from "./search-box";
-import closeDropdown from './close-dropdown';
 import DropdownItem from './dropdown-item';
 
-export default ({ entityType, simpleKey, value, onSelect }) => {
+export default ({ entityType, simpleKey, value, onSelect }: { entityType: string, simpleKey: boolean, value: string, onSelect: (value: any) => void }) => {
   const [pageSize] = useState(10);
   const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState();
-  const [pages, setPages] = useState();
+  const [pageCount, setPageCount] = useState(0);
+  const [pages, setPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState();
+  const [data, setData] = useState<any>();
   const [filter, setFilter] = useState('');
-  const [error, setError] = useState();
-  const [retryError, setRetryError] = useState(0);
 
   useEffect(function () {
     (async () => {
@@ -24,7 +21,6 @@ export default ({ entityType, simpleKey, value, onSelect }) => {
       );
 
       if (!response.ok) {
-        setError({ response, body: await response.text() });
         return;
       }
 
@@ -37,30 +33,21 @@ export default ({ entityType, simpleKey, value, onSelect }) => {
       setPages([...Array(pageCount)]);
       setPage(Math.min(pageCount, page)); // if filtered results have less pages than what is on the current page
     })();
-  }, [page, pageSize, filter, retryError]);
+  }, [page, pageSize, filter]);
 
-  if (error) {
-    return <>
-      <div class="alert alert-primary mx-2">
-        <p>There was an error (<code>{error.response.status}{error.response.statusText ? " " + error.response.statusText : ""}</code>) loading your list{error.body ? ":" : "."}</p>
-        {error.body ? <small><pre>{error.body}</pre></small> : ""}
-        <p class="mb-0"><button class="btn btn-primary" onClick={() => { setError(null); setTimeout(() => setRetryError(retryError + 1), 500); }}>Reload</button></p>
-      </div>
-    </>;
-  }
-
-  if (loading) {
+  if (!data) {
+    return;
   }
 
   return <div style="width: 300px; max-width: 100%;">
-    <SearchBox small={true} callback={value => setFilter(value)} />
+    <SearchBox callback={value => setFilter(value)} />
     <div>
-      {!loading && data.items.map(item =>
+      {!loading && data.items.map((item: any) =>
         <div><DropdownItem text={item.name} ellipsis={true} active={item.reference == value} onClick={() => onSelect(item.reference == value ? null : item)} /></div>
       )}
     </div>
     <div>
-      {[...new Array(pageSize - (loading ? 0 : data.items.length))].map(() => <DropdownItem disabled={true} nbsp={true}/>)}
+      {[...new Array(pageSize - (loading ? 0 : data.items.length))].map(() => <DropdownItem disabled={true} nbsp={true} />)}
     </div>
     <nav>
       <ul class="pagination center">
