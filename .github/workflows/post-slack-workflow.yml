@@ -21,11 +21,20 @@ jobs:
     runs-on: ubuntu-latest
     name: "Post to slack"
     steps:
+    - name: "Set FAILURE_TEXT without group ping"
+      run: |
+        echo "FAILURE_TEXT=:doh:" >> $GITHUB_ENV
+      if: eq(inputs.group-ping-id, '')
+
+    - name: "Set FAILURE_TEXT with group ping"
+      run: |
+        echo "FAILURE_TEXT=:doh: <!subteam^${{ inputs.group-ping-id }}>" >> $GITHUB_ENV
+      if: ne(inputs.group-ping-id, '')
+
     - name: "Post to slack"
       uses: slackapi/slack-github-action@v1.23.0
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        FAILURE_TEXT: ":doh: <!subteam^${{ inputs.group-ping-id }}>"
       with:
         channel-id: ${{ inputs.channel-id }}
         payload: |
