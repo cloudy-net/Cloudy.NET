@@ -1,18 +1,19 @@
+import { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { usePopper } from "react-popper";
 import ClickOutsideDetector from "./click-outside-detector"
 import { createRef } from "preact";
-import { ReactComponent as Caret } from "../assets/caret-vertical.svg";
+import Caret from "../assets/caret-vertical.svg";
 
-const Dropdown = ({ className, contents, children, fullWidth, wideContent }) => {
+const Dropdown = ({ className, contents, children, fullWidth, wideContent }: { className: string, contents: string, children: ComponentChildren, fullWidth: boolean, wideContent: boolean }) => {
   const ref = createRef();
-  const [open, setOpen] = useState();
-  const [referenceElement, setReferenceElement] = useState(null);
-  const [popperElement, setPopperElement] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {});
 
   useEffect(() => {
-    const callback = event => {
+    const callback = (event: MouseEvent) => {
       setOpen(false);
       event.stopPropagation();
     };

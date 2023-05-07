@@ -1,10 +1,10 @@
 import debounce from "../util/debounce.js";
 import { useEffect, useMemo, useRef } from 'preact/hooks';
-import { ReactComponent as Search } from "../assets/icon-search.svg";
+import Search from "../assets/icon-search.svg";
 
-export default ({ callback, className, autoFocus }) => {
+export default ({ callback, autoFocus }: { callback: (search:string) => void, autoFocus?: true }) => {
   const debouncedResults = useMemo(() => {
-    return debounce(event => callback(event.target.value), 250);
+    return debounce((event:InputEvent) => callback((event.target as HTMLInputElement)?.value), 250);
   }, []);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export default ({ callback, className, autoFocus }) => {
     };
   });
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!ref.current) {

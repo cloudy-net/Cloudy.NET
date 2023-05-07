@@ -1,9 +1,10 @@
+import { VNode } from "preact";
 import closeDropdown from "./close-dropdown";
 
-export default ({ href, target, onClick, icon, text, active, nbsp, keepOpen, ellipsis }) => <a
+export default ({ href, target, onClick, icon, text, active, nbsp, keepOpen, ellipsis }: { href: string, target: string, onClick: (event: MouseEvent) => void, icon: VNode<any>, text: string, active: boolean, nbsp: boolean, keepOpen: boolean, ellipsis: boolean }) => <a
   className={"dropdown-item" + (active ? " active" : "")}
   href={href}
-  onClick={event => {
+  onClick={(event: MouseEvent) => {
     if (onClick) {
       onClick(event);
     }
@@ -13,7 +14,7 @@ export default ({ href, target, onClick, icon, text, active, nbsp, keepOpen, ell
     }
   }}
   target={target}
-  tabIndex="0"
+  tabIndex={0}
 >
   {icon && <div className="dropdown-item-icon">{icon}</div>}
   <div className={"dropdown-item-text" + (ellipsis ? " ellipsis" : "") + (nbsp ? ` nbsp` : "")}>{text}</div>
