@@ -16,13 +16,6 @@ on:
       SLACK_BOT_TOKEN:
         required: true
 
-    variables:
-      - name: FAILURE_TEXT
-        ${{ if eq( inputs.group-ping-id, '') }}:
-          value: ":doh:"
-        ${{ else }}:
-          value: ":doh: <!subteam^${{ inputs.group-ping-id }}>"
-
 jobs:
   message:
     runs-on: ubuntu-latest
@@ -32,6 +25,7 @@ jobs:
       uses: slackapi/slack-github-action@v1.23.0
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        FAILURE_TEXT: ":doh: <!subteam^${{ inputs.group-ping-id }}>"
       with:
         channel-id: ${{ inputs.channel-id }}
         payload: |
@@ -41,7 +35,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*${{ github.event.repository.name }}* - ${{ (inputs.run-success && 'Success') || 'Failure' }} ${{ (inputs.run-success && ':cat-smug:') || variables.FAILURE_TEXT }}"
+                  "text": "*${{ github.event.repository.name }}* - ${{ (inputs.run-success && 'Success') || 'Failure' }} ${{ (inputs.run-success && ':cat-smug:') || env.FAILURE_TEXT }}"
                 },
                 "accessory": {
                   "type": "button",
