@@ -12,7 +12,7 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
 
   const { entityReference, state } = useContext(EntityContext);
 
-  const items = embeddedBlockListHandler.getIntermediateValue(state, path);
+  const items = embeddedBlockListHandler.getIntermediateValue(state.value, path);
 
   const kebab = html`<svg class="embedded-block-type-kebab" width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" width="4" height="4" rx="2" fill="#ABB0BB"/><rect x="7" width="4" height="4" rx="2" fill="#ABB0BB"/><rect width="4" height="4" rx="2" fill="#ABB0BB"/></svg>`;
 
@@ -23,7 +23,7 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
           <legend class="embedded-block-type">
             ${item.type}
             <${Dropdown} contents=${kebab} className="embedded-block-type-button">
-              <${DropdownItem} text="Remove" onClick=${() => embeddedBlockListHandler.remove(entityReference, path, item.key, item.type)} />
+              <${DropdownItem} text="Remove" onClick=${() => embeddedBlockListHandler.remove(entityReference.value, path, item.key, item.type)} />
             <//>
           <//>
           <${EmbeddedBlockFields} ...${{ type: item.type, path: `${path}.${item.key}`, dependencies }}/>

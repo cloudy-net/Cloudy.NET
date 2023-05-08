@@ -1,22 +1,26 @@
 export default ({ name, path, settings, validators, dependencies }) => {
   const {
     useState,
+    useEffect,
+    useContext,
+    EntityContext,
     Dropdown,
     SelectEntityMenu,
     html,
+    simpleChangeHandler,
   } = dependencies;
 
   const [value, setValue] = useState();
   const [preview, setPreview] = useState(null);
-  const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
+  const { entityReference, state } = useContext(EntityContext);
 
   const onChange = (newValue) => {
     setValue(newValue);
-    dependencies.simpleChangeHandler.setValue(entityReference, path, newValue, validators)
+    simpleChangeHandler.setValue(entityReference.value, path, newValue, validators)
   };
 
-  dependencies.useEffect(() => {
-    const value = dependencies.simpleChangeHandler.getIntermediateValue(state, path);
+  useEffect(() => {
+    const value = simpleChangeHandler.getIntermediateValue(state.value, path);
     setValue(value);
 
     (async () => {

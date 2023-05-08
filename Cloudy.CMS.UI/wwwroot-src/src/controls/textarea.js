@@ -1,16 +1,23 @@
 
 const Control = ({ name, path, dependencies }) => {
-  const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
+  const {
+    useContext,
+    EntityContext,
+    simpleChangeHandler,
+    componentContextProvider,
+  } = dependencies;
+
+  const { entityReference, state } = useContext(EntityContext);
 
   const onchange = event => {
-    dependencies.simpleChangeHandler.setValue(entityReference, path, event.target.value)
+    simpleChangeHandler.setValue(entityReference.value, path, event.target.value)
   };
   return dependencies.html`<div>
       <textarea
         type="text"
         class="form-control"
-        id=${dependencies.componentContextProvider.getIdentifier(path)}
-        value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
+        id=${componentContextProvider.getIdentifier(path)}
+        value=${simpleChangeHandler.getIntermediateValue(state.value, path)}
         onInput=${onchange}
       />
     </div>`;

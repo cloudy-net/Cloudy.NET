@@ -1,12 +1,23 @@
 
 export default ({ name, path, validators, dependencies }) => {
-  const [selectItems, setSelectItems] = dependencies.useState([]);
-  const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
+  const {
+    useState,
+    useContext,
+    EntityContext,
+    urlFetcher,
+    simpleChangeHandler,
+    componentContextProvider,
+    useEffect,
+    html,
+  } = dependencies;
 
-  dependencies.useEffect(function () {
+  const [selectItems, setSelectItems] = useState([]);
+  const { entityReference, state } = useContext(EntityContext);
+
+  useEffect(function () {
     (async () => {
-      const responseData = await dependencies.urlFetcher.fetch(
-        `/Admin/api/controls/select/enum/?entityType=${entityReference.entityType}&propertyName=${name}`,
+      const responseData = await urlFetcher.fetch(
+        `/Admin/api/controls/select/enum/?entityType=${entityReference.value.entityType}&propertyName=${name}`,
         {
           credentials: 'include'
         },
@@ -17,12 +28,12 @@ export default ({ name, path, validators, dependencies }) => {
     })();
   }, []);
   
-  return dependencies.html`<div>
-  <select id=${dependencies.componentContextProvider.getIdentifier(path)}
+  return html`<div>
+      <select id=${componentContextProvider.getIdentifier(path)}
           class="form-control"
-          value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
-          onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}>
-            ${selectItems.map(o => dependencies.html`
+          value=${simpleChangeHandler.getIntermediateValue(state.value, path)}
+          onChange=${e => simpleChangeHandler.setValue(entityReference.value, path, e.target.value, validators)}>
+            ${selectItems.map(o => html`
               <option value=${o.value}>${o.text}</option>
             `)}
       </select>

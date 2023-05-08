@@ -9,11 +9,20 @@ document.addEventListener('click', function ({ target }) {
 });
 
 const Control = function ({ name, path, dependencies }) {
-  const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
+  const {
+    useContext,
+    EntityContext,
+    useRef,
+    useEffect,
+    simpleChangeHandler,
+    html,
+  } = dependencies;
 
-  const ref = dependencies.useRef(null);
+  const { entityReference, state } = useContext(EntityContext);
 
-  dependencies.useEffect(() => {
+  const ref = useRef(null);
+
+  useEffect(() => {
     const instance = ref.current;
 
     if (!this.quill) {
@@ -35,7 +44,7 @@ const Control = function ({ name, path, dependencies }) {
     const callback = () => {
       const value = this.quill.root.innerHTML.replace(/^\s*<p\s*>\s*<br\s*\/?>\s*<\/p\s*>\s*$/ig, '');
       this.quill.root.innerHTMLValue = value;
-      dependencies.simpleChangeHandler.setValue(entityReference, path, value);
+      simpleChangeHandler.setValue(entityReference.value, path, value);
     };
 
     this.quill.on('text-change', callback);
@@ -45,15 +54,15 @@ const Control = function ({ name, path, dependencies }) {
     }
   }, [entityReference]);
 
-  dependencies.useEffect(() => {
-    const value = dependencies.simpleChangeHandler.getIntermediateValue(state, path) || null;
+  useEffect(() => {
+    const value = simpleChangeHandler.getIntermediateValue(state.value, path) || null;
 
     if (this.quill.root.innerHTMLValue != value) {
       this.quill.root.innerHTML = this.quill.root.innerHTMLValue = value;
     }
   }, [state]);
 
-  return dependencies.html`
+  return html`
       <div class="quill-wrapper">
           <div ref=${ref}>
           <//>
