@@ -1,14 +1,23 @@
 
 const Control = ({ name, path, validators, dependencies }) => {
-  const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
+  const {
+    html,
+    useContext,
+    EntityContext,
+    ValidationManager,
+    componentContextProvider,
+    simpleChangeHandler,
+  } = dependencies;
 
-  return dependencies.html`
+  const { entityReference, state } = useContext(EntityContext);
+
+  return html`
       <input
         type="text"
-        class=${`form-control ${ dependencies.ValidationManager.getValidationClass(state.validationResults, path) } `}
-        id=${dependencies.componentContextProvider.getIdentifier(path)}
-        value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
-        onInput=${(e) => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
+        class=${`form-control ${ ValidationManager.getValidationClass(state.value.validationResults, path) } `}
+        id=${componentContextProvider.getIdentifier(path)}
+        value=${simpleChangeHandler.getIntermediateValue(state.value, path)}
+        onInput=${(e) => simpleChangeHandler.setValue(entityReference.value, path, e.target.value, validators)}
       />`;
 }
 
