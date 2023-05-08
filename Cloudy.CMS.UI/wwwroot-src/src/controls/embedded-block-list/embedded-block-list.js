@@ -31,7 +31,7 @@ export default ({ name, path, provider, dependencies, settings: { types } }) => 
       `)}
     <//>
     <${Dropdown} contents="Add" className="button primary">
-      ${types.map(type => html`<${DropdownItem} className="dropdown-item" text=${type} onClick=${() => embeddedBlockListHandler.add(entityReference, path, type)}><//>`)}
+      ${types.map(type => html`<${DropdownItem} className="dropdown-item" text=${type} onClick=${() => embeddedBlockListHandler.add(entityReference.value, path, type)}><//>`)}
     <//>
   `;
 };
