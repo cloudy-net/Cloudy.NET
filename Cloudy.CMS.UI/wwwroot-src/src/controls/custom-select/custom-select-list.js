@@ -7,11 +7,11 @@ export default ({ name, path, dependencies }) => {
     const { entityReference, state } = dependencies.useContext(dependencies.EntityContext);
 
     dependencies.useEffect(function () {
-        setCurrentValues(dependencies.simpleChangeHandler.getIntermediateValue(state, path) || []);
+        setCurrentValues(dependencies.simpleChangeHandler.getIntermediateValue(state.value, path) || []);
 
         (async () => {
             const responseData = await dependencies.urlFetcher.fetch(
-                `/Admin/api/controls/customselect/list/?entityType=${entityReference.entityType}&propertyName=${name}`,
+                `/Admin/api/controls/customselect/list/?entityType=${entityReference.value.entityType}&propertyName=${name}`,
                 {
                     credentials: 'include'
                 },
@@ -41,7 +41,7 @@ export default ({ name, path, dependencies }) => {
             : currentValues.filter(x => x !== e.target.value);
             
         setCurrentValues(newValues);
-        dependencies.simpleChangeHandler.setValue(entityReference, path, newValues)
+        dependencies.simpleChangeHandler.setValue(entityReference.value, path, newValues)
     };
 
     return dependencies.html`

@@ -13,7 +13,7 @@ export default ({ name, path, provider, dependencies }) => {
   } = dependencies;
 
   const { entityReference, state } = useContext(EntityContext);
-  const [value, setValue] = useState(simpleChangeHandler.getIntermediateValue(state, path));
+  const [value, setValue] = useState(simpleChangeHandler.getIntermediateValue(state.value, path));
 
   const copy = async () => {
     await navigator.clipboard.writeText(value);
@@ -23,12 +23,12 @@ export default ({ name, path, provider, dependencies }) => {
     const text = await navigator.clipboard.readText();
 
     setValue(text);
-    simpleChangeHandler.setValue(entityReference, path, text);
+    simpleChangeHandler.setValue(entityReference.value, path, text);
   };
 
   const onchange = newValue => {
     setValue(newValue != value ? newValue : null);
-    simpleChangeHandler.setValue(entityReference, path, newValue);
+    simpleChangeHandler.setValue(entityReference.value, path, newValue);
   }
 
   return html`
@@ -43,7 +43,7 @@ export default ({ name, path, provider, dependencies }) => {
     <${Dropdown} contents="Other" className="button ml5">
       <${DropdownItem} text="Copy" onClick=${ event => { copy(); closeDropdown(event.target); } } />
       <${DropdownItem} text="Paste" onClick=${ event => { paste(); closeDropdown(event.target); } } />
-      <${DropdownItem} text="Clear" onClick=${ event => { setValue(null); simpleChangeHandler.setValue(entityReference, path, null); closeDropdown(event.target); } } />
+      <${DropdownItem} text="Clear" onClick=${ event => { setValue(null); simpleChangeHandler.setValue(entityReference.value, path, null); closeDropdown(event.target); } } />
     <//>
   `;
 };

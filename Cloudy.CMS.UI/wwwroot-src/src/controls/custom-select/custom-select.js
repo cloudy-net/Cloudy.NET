@@ -9,11 +9,11 @@ export default ({ name, path, settings, validators, dependencies }) => {
 
     dependencies.useEffect(function () {
         
-        setHasInitialValue(!!dependencies.simpleChangeHandler.getIntermediateValue(state, path));
+        setHasInitialValue(!!dependencies.simpleChangeHandler.getIntermediateValue(state.value, path));
 
         (async () => {
             const responseData = await dependencies.urlFetcher.fetch(
-                `/Admin/api/controls/customselect/list/?entityType=${entityReference.entityType}&propertyName=${name}`,
+                `/Admin/api/controls/customselect/list/?entityType=${entityReference.value.entityType}&propertyName=${name}`,
                 {
                     credentials: 'include'
                 },
@@ -40,9 +40,9 @@ export default ({ name, path, settings, validators, dependencies }) => {
     return dependencies.html`
         <select required=${settings.isRequired}
                 id=${dependencies.componentContextProvider.getIdentifier(path)}
-                value=${dependencies.simpleChangeHandler.getIntermediateValue(state, path)}
-                onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference, path, e.target.value, validators)}
-                class="form-control ${ dependencies.ValidationManager.getValidationClass(state.validationResults, path) }">
+                value=${dependencies.simpleChangeHandler.getIntermediateValue(state.value, path)}
+                onChange=${e => dependencies.simpleChangeHandler.setValue(entityReference.value, path, e.target.value, validators)}
+                class="form-control ${ dependencies.ValidationManager.getValidationClass(state.value.validationResults, path) }">
         
             ${!!placeholderItemText ? dependencies.html`<option selected=${!hasInitialValue} value="">${placeholderItemText}</option>` : null}
 
