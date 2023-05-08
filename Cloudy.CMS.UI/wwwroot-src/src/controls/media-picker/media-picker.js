@@ -1,4 +1,3 @@
-import dropdownItem from "../../components/dropdown-item.jsx";
 import MediaPickerMenu from "./media-picker-menu.js";
 
 export default ({ name, path, provider, dependencies }) => {
