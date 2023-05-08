@@ -1,11 +1,11 @@
 import { useEffect, useState } from "preact/hooks";
-import { ReactComponent as NotificationIcon } from "../assets/icon-notification.svg";
+import NotificationIcon from "../assets/icon-notification.svg";
 import Dropdown from "../components/dropdown";
 import DropdownItem from "../components/dropdown-item";
 import DropdownSeparator from "../components/dropdown-separator";
-import { ReactComponent as HelpIcon } from "../assets/icon-help.svg";
-import { ReactComponent as ChatIcon } from "../assets/icon-chat.svg";
-import { ReactComponent as LogoutIcon } from "../assets/icon-logout.svg";
+import HelpIcon from "../assets/icon-help.svg";
+import ChatIcon from "../assets/icon-chat.svg";
+import LogoutIcon from "../assets/icon-logout.svg";
 
 
 
