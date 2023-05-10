@@ -1,5 +1,5 @@
 import urlFetcher from "../util/url-fetcher";
-import notificationManager from "../notification/notification-manager";
+// import notificationManager from "../notification/notification-manager";
 import EntityNotFound from "./entity-not-found";
 import statePersister from "./state-persister";
 import changeManager from "./change-manager";
@@ -175,7 +175,7 @@ class StateManager {
     const result = (await this.saveInternal([state.entityReference]))[0];
 
     if (result.success) {
-      notificationManager.addNotification((item: any) => item.setText('Entity has been saved.'));
+      // notificationManager.addNotification((item: any) => item.setText('Entity has been saved.'));
 
       this.remove(state.entityReference);
 
