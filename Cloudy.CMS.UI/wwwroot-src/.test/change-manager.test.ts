@@ -237,7 +237,7 @@ test('should not return block type changes matching source', () => {
   expect(result).toStrictEqual([]);
 });
 
-test('simple property', async () => {
+test('getSourceValue: simple property', async () => {
   const propertyName = 'lorem';
   const propertyValue = 'ipsum';
 
@@ -250,7 +250,7 @@ test('simple property', async () => {
   };
   expect(changeManager.getSourceValue(state.source.value, propertyName)).toBe(propertyValue);
 });
-test('nested property', async () => {
+test('getSourceValue: nested property', async () => {
   const blockName = 'dolor';
   const nestedBlockName = 'dolor';
   const propertyName = 'lorem';
@@ -273,7 +273,7 @@ test('nested property', async () => {
   };
   expect(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`)).toBe(propertyValue);
 });
-test('nested property in null block', async () => {
+test('getSourceValue: nested property in null block', async () => {
   const blockName = 'dolor';
   const nestedBlockName = 'dolor';
   const propertyName = 'lorem';
