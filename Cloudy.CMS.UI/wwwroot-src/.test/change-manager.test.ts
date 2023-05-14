@@ -292,3 +292,23 @@ test('getSourceValue: nested property in null block', async () => {
   };
   expect(changeManager.getSourceValue(state.source.value, `${blockName}.${nestedBlockName}.${propertyName}`)).toBe(propertyValue);
 });
+test('getSourceValue: embedded block list', async () => {
+  const blockListName = 'dolor';
+  const propertyName = 'lorem';
+  const propertyValue = 'ipsum';
+
+  const state = {
+    source: {
+      value: {
+        [blockListName]: [
+          {
+            Value: {
+              [propertyName]: propertyValue
+            }
+          }
+        ]
+      }
+    }
+  };
+  expect(changeManager.getSourceValue(state.source.value, `${blockListName}.0.${propertyName}`)).toBe(propertyValue);
+});

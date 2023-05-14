@@ -107,7 +107,17 @@ class ChangeManager {
       }
 
       if (pathSegments.length > 1) {
-        value = value[pathSegments[0]] ? value[pathSegments[0]].Value : null;
+        const intermediate = value[pathSegments[0]];
+
+        if (!intermediate) {
+          return null;
+        }
+
+        if (Array.isArray(intermediate)) {
+          value = intermediate;
+        } else {
+          value = intermediate.Value;
+        }
       } else {
         value = value[pathSegments[0]];
       }
