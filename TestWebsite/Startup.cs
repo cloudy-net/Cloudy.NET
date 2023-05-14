@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using TestWebsite.Factories;
 using TestWebsite.Models;
 
@@ -54,7 +55,19 @@ namespace TestWebsite
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), SecondPrimaryKey = 1 });
                 context.CompositeKeyTests.Add(new CompositeKeyTest { FirstPrimaryKey = new Guid("3fdb600b-e801-4588-9f6d-cf03df8180d8"), SecondPrimaryKey = 2, RelatedObject = new Tuple<Guid, int>(new Guid("69379a33-7a76-4309-b73f-2ff1ac83da25"), 1) });
 
-                var page1 = new Page { Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"), Name = "occaecat ullamco minim", RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"), UrlSegment = "lorem" };
+                var page1 = new Page { 
+                    Id = new Guid("e6fd53d8-c7de-4355-ae21-c588b2673c5c"),
+                    Name = "occaecat ullamco minim",
+                    RelatedPageId = new Guid("66e44063-a69f-41ac-82bf-220d70709801"),
+                    UrlSegment = "lorem",
+                    Blocks = new List<IFrontpageBlock>
+                    {
+                        new HeroBlock
+                        {
+                            Heading = "Lorem ipsum dolor"
+                        }
+                    }
+                };
 
                 context.Pages.Add(page1);
 
