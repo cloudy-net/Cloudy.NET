@@ -1,9 +1,9 @@
-# Cloudy creates a CMS out of your EF Core context.
+# Cloudy creates a backoffice out of your EF Core context.
 
 Just create your DbContext, Models, and hook up Cloudy. Configure behavior with UI hints.
 
 ```C#
-[Display(Description = "This is a sample class to show off most bells and whistles of the CMS toolkit.")]
+[Display(Description = "This is a sample class to show off most bells and whistles of the toolkit.")]
 public class Page : INameable, IRoutable
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -32,7 +32,7 @@ endpoints.MapGet("/pages/{route:contentroute}", async c =>
 
 Create a new, empty ASP.NET Core web application.
 
-Install Cloudy.CMS and Cloudy.CMS.UI from NuGet.
+Install Cloudy.NET and Cloudy.NET.UI from NuGet.
 
 ```C#
 var builder = WebApplication.CreateBuilder(args);
@@ -72,12 +72,19 @@ configurator.Services.Configure<AuthorizationOptions>(o => o.AddPolicy("adminare
 
 # Database
 
-Cloudy.CMS supports any database supported by EF Core: Inmemory, SQLite, SQL Server, CosmosDB ...
+Cloudy.NET supports any database supported by EF Core: Inmemory, SQLite, SQL Server, CosmosDB ...
 
 # Building the repository
 
 Clone the repo and run. To get the frontend code of the Admin section running, run `npm ci` and `npm run build` from the `wwwroot-src/` folder. Alternatively, you can run `npm ci` and then `npm run dev` and set the Configuration value (right click the sample project in Visual Studio and choose "Edit user secrets") `ViteBaseUri` to the running Vite URL, something like `http://localhost:5173/`.
 
+# Licensing
+
+Free for non-commercial projects
+25 USD per month ex VAT for a Beta license
+
+Check out https://www.cloudy.net/product/pricing
+
 # Usage for large corporations
 
-This CMS is under active development, and is not guaranteed to keep API compatibility between releases.
+Cloudy.NET is in Beta and is not guaranteed to keep API compatibility between releases.
