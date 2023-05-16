@@ -80,8 +80,7 @@ Clone the repo and run. To get the frontend code of the Admin section running, r
 
 # Licensing
 
-Free for non-commercial projects
-25 USD per month ex VAT for a Beta license
+Free for non-commercial projects and 25 USD per month ex VAT for a Beta license
 
 Check out https://www.cloudy.net/product/pricing
 
