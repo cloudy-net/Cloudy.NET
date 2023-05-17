@@ -1,10 +1,10 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cloudy.CMS.UI.FieldSupport
+namespace Cloudy.NET.UI.FieldSupport
 {
     public class FieldProvider : IFieldProvider
     {

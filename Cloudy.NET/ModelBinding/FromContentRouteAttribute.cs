@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ModelBinding
+namespace Cloudy.NET.ModelBinding
 {
     [AttributeUsage(AttributeTargets.Parameter)]
     public class FromContentRouteAttribute : Attribute, IBinderTypeProviderMetadata

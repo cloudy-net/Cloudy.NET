@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.ContextSupport;
+﻿using Cloudy.NET.ContextSupport;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.EntitySupport.PrimaryKey
+namespace Cloudy.NET.EntitySupport.PrimaryKey
 {
     public class PrimaryKeyPropertyGetter : IPrimaryKeyPropertyGetter
     {

@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Cloudy.CMS.SingletonSupport;
-using Cloudy.CMS.UI.FieldSupport.CustomSelect;
-using Cloudy.CMS.UI.List;
+using Cloudy.NET.SingletonSupport;
+using Cloudy.NET.UI.FieldSupport.CustomSelect;
+using Cloudy.NET.UI.List;
 using System.Collections.Generic;
 using TestWebsite.Factories;
 using TestWebsite.Constants;

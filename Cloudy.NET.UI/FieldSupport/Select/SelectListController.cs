@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.Naming;
+﻿using Cloudy.NET.EntitySupport;
+using Cloudy.NET.ContextSupport;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.Naming;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
@@ -14,10 +14,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
-using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
+using Cloudy.NET.PropertyDefinitionSupport;
+using Cloudy.NET.EntitySupport.PrimaryKey;
 
-namespace Cloudy.CMS.UI.FieldSupport.Select
+namespace Cloudy.NET.UI.FieldSupport.Select
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

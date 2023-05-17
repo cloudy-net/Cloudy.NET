@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.Naming
+﻿namespace Cloudy.NET.Naming
 {
     public interface IPluralizer
     {

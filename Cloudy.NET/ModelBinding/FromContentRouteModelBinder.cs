@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.ModelBinding
+namespace Cloudy.NET.ModelBinding
 {
     public class FromContentRouteModelBinder : IModelBinder
     {

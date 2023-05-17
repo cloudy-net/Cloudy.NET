@@ -1,6 +1,6 @@
-﻿using Cloudy.CMS.UI.FormSupport.Changes;
+﻿using Cloudy.NET.UI.FormSupport.Changes;
 
-namespace Cloudy.CMS.UI.FormSupport.ChangeHandlers
+namespace Cloudy.NET.UI.FormSupport.ChangeHandlers
 {
     public interface IBlockTypeChangeHandler
     {

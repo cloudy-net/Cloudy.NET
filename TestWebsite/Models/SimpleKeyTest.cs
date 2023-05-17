@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.UI.FieldSupport.Select;
+﻿using Cloudy.NET.UI.FieldSupport.Select;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

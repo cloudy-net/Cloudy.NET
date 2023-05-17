@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.ContextSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.ContextSupport;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.NET.AssemblySupport;
+using Cloudy.NET.PropertyDefinitionSupport;
 
 namespace Tests
 {

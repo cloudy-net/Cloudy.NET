@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.UI.FormSupport
+﻿namespace Cloudy.NET.UI.FormSupport
 {
     public interface IEntityNavigator
     {

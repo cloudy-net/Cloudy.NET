@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Cloudy.CMS.DependencyInjectionSupport;
+using Cloudy.NET.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.DependencyInjectionSupport
+namespace Cloudy.NET.DependencyInjectionSupport
 {
     public class Instantiator : IInstantiator
     {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.UI.FormSupport.Changes
+namespace Cloudy.NET.UI.FormSupport.Changes
 {
     [JsonDerivedType(typeof(SimpleChange), typeDiscriminator: "simple")]
     [JsonDerivedType(typeof(BlockTypeChange), typeDiscriminator: "blocktype")]

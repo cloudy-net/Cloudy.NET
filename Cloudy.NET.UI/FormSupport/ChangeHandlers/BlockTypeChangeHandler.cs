@@ -1,6 +1,6 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.UI.FieldSupport;
-using Cloudy.CMS.UI.FormSupport.Changes;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.UI.FieldSupport;
+using Cloudy.NET.UI.FormSupport.Changes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Cloudy.CMS.UI.FormSupport.ChangeHandlers
+namespace Cloudy.NET.UI.FormSupport.ChangeHandlers
 {
     public record BlockTypeChangeHandler(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IBlockTypeChangeHandler
     {

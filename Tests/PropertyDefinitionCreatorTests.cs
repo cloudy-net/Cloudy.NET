@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.PropertyDefinitionSupport;
+﻿using Cloudy.NET.PropertyDefinitionSupport;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

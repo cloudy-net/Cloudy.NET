@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.Licensing
+namespace Cloudy.NET.Licensing
 {
     internal class LicenseValidator : ILicenseValidator
     {

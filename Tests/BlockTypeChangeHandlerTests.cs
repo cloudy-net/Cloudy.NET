@@ -1,8 +1,8 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.UI.FieldSupport;
-using Cloudy.CMS.UI.FormSupport;
-using Cloudy.CMS.UI.FormSupport.ChangeHandlers;
-using Cloudy.CMS.UI.FormSupport.Changes;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.UI.FieldSupport;
+using Cloudy.NET.UI.FormSupport;
+using Cloudy.NET.UI.FormSupport.ChangeHandlers;
+using Cloudy.NET.UI.FormSupport.Changes;
 using Moq;
 using System;
 using System.Collections.Generic;

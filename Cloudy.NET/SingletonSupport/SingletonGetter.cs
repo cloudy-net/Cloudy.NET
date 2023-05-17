@@ -1,11 +1,11 @@
-﻿using Cloudy.CMS.ContextSupport;
+﻿using Cloudy.NET.ContextSupport;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.SingletonSupport
+namespace Cloudy.NET.SingletonSupport
 {
     public record SingletonGetter(IContextCreator ContextCreator) : ISingletonGetter
     {

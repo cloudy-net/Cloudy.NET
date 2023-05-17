@@ -1,11 +1,11 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
-using Cloudy.CMS.Mvc.Routing;
+﻿using Cloudy.NET.DependencyInjectionSupport;
+using Cloudy.NET.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public class DependencyInjector : IDependencyInjector
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cloudy.CMS.InitializerSupport
+namespace Cloudy.NET.InitializerSupport
 {
     public class InitializerProvider : IInitializerProvider
     {

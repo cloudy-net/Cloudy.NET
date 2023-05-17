@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntitySupport.HierarchySupport;
-using Cloudy.CMS.SingletonSupport;
-using Cloudy.CMS.UI.FieldSupport.Select;
+﻿using Cloudy.NET.EntitySupport;
+using Cloudy.NET.EntitySupport.HierarchySupport;
+using Cloudy.NET.SingletonSupport;
+using Cloudy.NET.UI.FieldSupport.Select;
 using System;
 using System.ComponentModel.DataAnnotations;
 using TestWebsite.Constants;

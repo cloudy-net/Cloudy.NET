@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.UI.FieldSupport.CustomSelect
+﻿namespace Cloudy.NET.UI.FieldSupport.CustomSelect
 {
     internal interface ICustomSelectAttribute 
     {

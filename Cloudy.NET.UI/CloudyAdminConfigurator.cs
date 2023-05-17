@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using System;
 
-namespace Cloudy.CMS.UI
+namespace Cloudy.NET.UI
 {
     public class CloudyAdminConfigurator
     {

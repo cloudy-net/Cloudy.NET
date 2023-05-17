@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.RepositorySupport
+namespace Cloudy.NET.RepositorySupport
 {
     public class AncestorProvider : IAncestorProvider
     {

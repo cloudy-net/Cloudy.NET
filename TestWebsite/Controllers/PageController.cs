@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Cloudy.CMS;
-using Cloudy.CMS.ModelBinding;
+using Cloudy.NET;
+using Cloudy.NET.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;

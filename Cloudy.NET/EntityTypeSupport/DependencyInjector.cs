@@ -1,10 +1,10 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.NET.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.EntityTypeSupport
+namespace Cloudy.NET.EntityTypeSupport
 {
     public class DependencyInjector : IDependencyInjector
     {

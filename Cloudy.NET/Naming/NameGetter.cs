@@ -1,14 +1,14 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntityTypeSupport.Naming;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.SingletonSupport;
+﻿using Cloudy.NET.EntitySupport;
+using Cloudy.NET.EntityTypeSupport.Naming;
+using Cloudy.NET.EntitySupport.PrimaryKey;
+using Cloudy.NET.SingletonSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.Naming
+namespace Cloudy.NET.Naming
 {
     public record NameGetter(IEntityTypeNameProvider EntityTypeNameProvider, IPrimaryKeyGetter PrimaryKeyGetter) : INameGetter
     {

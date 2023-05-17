@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.List.Filter
+namespace Cloudy.NET.UI.List.Filter
 {
     public class ListFilterProvider : IListFilterProvider
     {

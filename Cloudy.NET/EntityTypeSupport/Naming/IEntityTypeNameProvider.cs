@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cloudy.CMS.EntityTypeSupport.Naming
+namespace Cloudy.NET.EntityTypeSupport.Naming
 {
     public interface IEntityTypeNameProvider
     {

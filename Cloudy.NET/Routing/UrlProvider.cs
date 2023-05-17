@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntitySupport.HierarchySupport.Internal;
-using Cloudy.CMS.RepositorySupport;
+using Cloudy.NET.EntitySupport;
+using Cloudy.NET.EntitySupport.HierarchySupport.Internal;
+using Cloudy.NET.RepositorySupport;
 
-namespace Cloudy.CMS.Mvc.Routing
+namespace Cloudy.NET.Mvc.Routing
 {
     public class UrlProvider : IUrlProvider
     {

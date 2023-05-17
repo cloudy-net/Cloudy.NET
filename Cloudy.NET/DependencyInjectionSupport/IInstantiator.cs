@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cloudy.CMS.DependencyInjectionSupport
+namespace Cloudy.NET.DependencyInjectionSupport
 {
     public interface IInstantiator
     {

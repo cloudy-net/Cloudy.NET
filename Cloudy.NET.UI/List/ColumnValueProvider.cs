@@ -1,16 +1,16 @@
-﻿using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.Naming;
-using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FieldSupport.CustomSelect;
-using Cloudy.CMS.UI.FieldSupport.Select;
+﻿using Cloudy.NET.ContextSupport;
+using Cloudy.NET.EntitySupport;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.Naming;
+using Cloudy.NET.PropertyDefinitionSupport;
+using Cloudy.NET.UI.FieldSupport.CustomSelect;
+using Cloudy.NET.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
 
     public record ColumnValueProvider(IContextCreator ContextCreator, IEntityTypeProvider EntityTypeProvider, INameGetter NameGetter, IServiceProvider ServiceProvider) : IColumnValueProvider

@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.UI.FieldSupport;
-using Cloudy.CMS.UI.FormSupport.Changes;
-using Cloudy.CMS.UI.FormSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.UI.FieldSupport;
+using Cloudy.NET.UI.FormSupport.Changes;
+using Cloudy.NET.UI.FormSupport;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using Cloudy.CMS.UI.FormSupport.ChangeHandlers;
+using Cloudy.NET.UI.FormSupport.ChangeHandlers;
 using System.Text.Json;
 
 namespace Tests

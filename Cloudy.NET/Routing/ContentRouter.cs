@@ -1,12 +1,12 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.EntitySupport;
+using Cloudy.NET.ContextSupport;
+using Cloudy.NET.EntitySupport;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public class ContentRouter : IContentRouter
     {

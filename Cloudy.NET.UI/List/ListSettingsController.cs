@@ -1,9 +1,9 @@
-﻿using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.EntityTypeSupport.Naming;
-using Cloudy.CMS.UI.Layout;
-using Cloudy.CMS.UI.List.Filter;
+﻿using Cloudy.NET.ContextSupport;
+using Cloudy.NET.EntitySupport.PrimaryKey;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.EntityTypeSupport.Naming;
+using Cloudy.NET.UI.Layout;
+using Cloudy.NET.UI.List.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

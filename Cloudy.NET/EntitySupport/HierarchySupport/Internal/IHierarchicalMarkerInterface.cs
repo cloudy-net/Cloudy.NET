@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.EntitySupport.HierarchySupport.Internal
+﻿namespace Cloudy.NET.EntitySupport.HierarchySupport.Internal
 {
     public interface IHierarchicalMarkerInterface
     {

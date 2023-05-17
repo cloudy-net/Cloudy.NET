@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.Naming
+namespace Cloudy.NET.Naming
 {
     public interface INameGetter
     {

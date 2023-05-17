@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.EntityTypeSupport.Naming;
-using Cloudy.CMS.Naming;
-using Cloudy.CMS.SingletonSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.EntityTypeSupport.Naming;
+using Cloudy.NET.Naming;
+using Cloudy.NET.SingletonSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.EntityTypeList
+namespace Cloudy.NET.UI.EntityTypeList
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

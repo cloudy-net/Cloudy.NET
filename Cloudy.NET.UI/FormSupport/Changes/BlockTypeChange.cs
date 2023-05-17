@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.UI.FormSupport.Changes
+﻿namespace Cloudy.NET.UI.FormSupport.Changes
 {
     public class BlockTypeChange : EntityChange
     {

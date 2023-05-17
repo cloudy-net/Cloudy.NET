@@ -1,15 +1,15 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.Naming;
-using Cloudy.CMS.UI.FieldSupport.Select;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.Naming;
+using Cloudy.NET.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
-using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.NET.PropertyDefinitionSupport;
 
-namespace Cloudy.CMS.UI.List.Filter
+namespace Cloudy.NET.UI.List.Filter
 {
     public record ListFilterCreator(IEntityTypeProvider EntityTypeProvider, IPropertyDefinitionProvider PropertyDefinitionProvider, IHumanizer Humanizer) : IListFilterCreator
     {

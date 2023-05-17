@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Cloudy.CMS.Licensing
+namespace Cloudy.NET.Licensing
 {
     public interface ILicenseProvider
     {

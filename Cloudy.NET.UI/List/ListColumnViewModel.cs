@@ -1,12 +1,12 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.PropertyDefinitionSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.PropertyDefinitionSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
     public record ListColumnViewModel(
         EntityTypeDescriptor EntityType,

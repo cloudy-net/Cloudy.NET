@@ -11,7 +11,7 @@ RUN dotnet publish -c Release -o out
 
 FROM node:18 as buildjs
 WORKDIR /App
-COPY ./Cloudy.CMS.UI ./
+COPY ./Cloudy.NET.UI ./
 WORKDIR /App/wwwroot-src
 RUN npm ci
 RUN npm install
@@ -19,5 +19,5 @@ RUN npm install
 FROM base AS final
 WORKDIR /App
 COPY --from=build /App/TestWebsite/out .
-COPY --from=buildjs /App/wwwroot ./wwwroot/_content/Cloudy.CMS.UI/
+COPY --from=buildjs /App/wwwroot ./wwwroot/_content/Cloudy.NET.UI/
 ENTRYPOINT ["dotnet", "TestWebsite.dll"]

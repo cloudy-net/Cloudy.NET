@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Cloudy.CMS.EntityTypeSupport.Naming
+namespace Cloudy.NET.EntityTypeSupport.Naming
 {
     public class EntityTypeNameProvider : IEntityTypeNameProvider
     {

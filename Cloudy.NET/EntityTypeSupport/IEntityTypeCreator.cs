@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cloudy.CMS.EntityTypeSupport
+namespace Cloudy.NET.EntityTypeSupport
 {
     public interface IEntityTypeCreator
     {

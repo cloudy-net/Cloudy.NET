@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.PropertyDefinitionSupport;
+﻿using Cloudy.NET.PropertyDefinitionSupport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FieldSupport.CustomSelect
+namespace Cloudy.NET.UI.FieldSupport.CustomSelect
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

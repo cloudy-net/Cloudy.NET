@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.EntityTypeSupport.Naming
+namespace Cloudy.NET.EntityTypeSupport.Naming
 {
     public interface IEntityTypeNameCreator
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
     public interface IListColumnCreator
     {

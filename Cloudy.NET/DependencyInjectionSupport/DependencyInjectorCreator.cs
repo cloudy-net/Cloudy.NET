@@ -1,12 +1,12 @@
-﻿using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.ContextSupport;
+﻿using Cloudy.NET.AssemblySupport;
+using Cloudy.NET.ContextSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.DependencyInjectionSupport
+namespace Cloudy.NET.DependencyInjectionSupport
 {
     public record DependencyInjectorCreator(IAssemblyProvider AssemblyProvider, IContextDescriptorProvider ContextDescriptorProvider) : IDependencyInjectorCreator
     {

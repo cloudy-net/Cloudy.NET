@@ -1,18 +1,18 @@
-﻿using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.EntitySupport.Reference;
-using Cloudy.CMS.Naming;
+﻿using Cloudy.NET.ContextSupport;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.EntitySupport.Reference;
+using Cloudy.NET.Naming;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cloudy.CMS.EntitySupport;
+using Cloudy.NET.EntitySupport;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Cloudy.CMS.UI.FieldSupport.Select
+namespace Cloudy.NET.UI.FieldSupport.Select
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

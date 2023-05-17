@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Cloudy.CMS.UI.FormSupport.Changes
+namespace Cloudy.NET.UI.FormSupport.Changes
 {
     public class SimpleChange : EntityChange
     {

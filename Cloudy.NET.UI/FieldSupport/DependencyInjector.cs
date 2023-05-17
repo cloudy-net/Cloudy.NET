@@ -1,8 +1,8 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
-using Cloudy.CMS.UI.List;
+﻿using Cloudy.NET.DependencyInjectionSupport;
+using Cloudy.NET.UI.List;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cloudy.CMS.UI.FieldSupport
+namespace Cloudy.NET.UI.FieldSupport
 {
     public class DependencyInjector : IDependencyInjector
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.UI.List.Filter
+namespace Cloudy.NET.UI.List.Filter
 {
     public interface IListFilterCreator
     {

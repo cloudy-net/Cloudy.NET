@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.EntitySupport.Reference;
+﻿using Cloudy.NET.EntitySupport.PrimaryKey;
+using Cloudy.NET.EntitySupport.Reference;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;

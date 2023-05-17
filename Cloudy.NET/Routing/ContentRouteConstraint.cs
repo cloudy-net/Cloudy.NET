@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public class ContentRouteConstraint : IRouteConstraint
     {

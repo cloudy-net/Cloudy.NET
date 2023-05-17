@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Cloudy.CMS.UI.FieldSupport.MediaPicker;
+using Cloudy.NET.UI.FieldSupport.MediaPicker;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.AzureMediaPicker
+namespace Cloudy.NET.UI.AzureMediaPicker
 {
     public class AzureMediaProvider : IMediaProvider
     {

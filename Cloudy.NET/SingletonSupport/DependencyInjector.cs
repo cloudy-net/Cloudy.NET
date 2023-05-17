@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.NET.AssemblySupport;
+using Cloudy.NET.ContextSupport;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.DependencyInjectionSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.SingletonSupport
+namespace Cloudy.NET.SingletonSupport
 {
     public record DependencyInjector(IAssemblyProvider AssemblyProvider, IContextDescriptorProvider ContextDescriptorProvider) : IDependencyInjector
     {

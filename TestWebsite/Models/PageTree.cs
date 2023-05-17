@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.EntitySupport.HierarchySupport;
+﻿using Cloudy.NET.EntitySupport.HierarchySupport;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

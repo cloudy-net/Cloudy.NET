@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cloudy.CMS.AssemblySupport
+namespace Cloudy.NET.AssemblySupport
 {
     public interface IAssemblyProvider
     {

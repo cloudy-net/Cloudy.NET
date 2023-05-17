@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.EntitySupport.PrimaryKey;
+﻿using Cloudy.NET.EntitySupport.PrimaryKey;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.EntitySupport.Reference
+namespace Cloudy.NET.EntitySupport.Reference
 {
     public record ReferenceDeserializer(IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter, ILogger<ReferenceDeserializer> Logger) : IReferenceDeserializer
     {

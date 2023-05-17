@@ -1,10 +1,10 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.Naming;
-using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FieldSupport.CustomSelect;
-using Cloudy.CMS.UI.FieldSupport.MediaPicker;
-using Cloudy.CMS.UI.FieldSupport.Select;
+﻿using Cloudy.NET.EntitySupport;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.Naming;
+using Cloudy.NET.PropertyDefinitionSupport;
+using Cloudy.NET.UI.FieldSupport.CustomSelect;
+using Cloudy.NET.UI.FieldSupport.MediaPicker;
+using Cloudy.NET.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Cloudy.CMS.UI.FieldSupport
+namespace Cloudy.NET.UI.FieldSupport
 {
     public record FieldCreator(IPropertyDefinitionProvider PropertyDefinitionProvider, IHumanizer Humanizer, IEntityTypeProvider EntityTypeProvider) : IFieldCreator
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.RepositorySupport;
+using Cloudy.NET.EntitySupport;
+using Cloudy.NET.RepositorySupport;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public class RoutableRootContentProvider : IRoutableRootContentProvider
     {

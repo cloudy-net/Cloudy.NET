@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.EntitySupport.Serialization
+namespace Cloudy.NET.EntitySupport.Serialization
 {
     public interface IContentJsonConverterTypeProvider
     {

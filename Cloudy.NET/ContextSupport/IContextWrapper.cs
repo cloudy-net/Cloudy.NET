@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Cloudy.CMS.ContextSupport
+namespace Cloudy.NET.ContextSupport
 {
     public interface IContextWrapper
     {

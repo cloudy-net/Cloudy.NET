@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.Routing;
+﻿using Cloudy.NET.EntitySupport;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.EntitySupport.PrimaryKey;
+using Cloudy.NET.Routing;
 using Moq;
 using System;
 using System.Collections.Generic;

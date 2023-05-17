@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.UI.FieldSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.UI.FieldSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FormSupport
+namespace Cloudy.NET.UI.FormSupport
 {
     public record EntityNavigator(IEntityTypeProvider EntityTypeProvider, IFieldProvider FieldProvider) : IEntityNavigator
     {

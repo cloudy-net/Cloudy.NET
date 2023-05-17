@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.EntitySupport.Serialization;
+﻿using Cloudy.NET.EntitySupport.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;

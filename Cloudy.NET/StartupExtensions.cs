@@ -1,18 +1,18 @@
-﻿using Cloudy.CMS.Routing;
+﻿using Cloudy.NET.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Cloudy.CMS;
-using Cloudy.CMS.DependencyInjectionSupport;
-using Cloudy.CMS.InitializerSupport;
+using Cloudy.NET;
+using Cloudy.NET.DependencyInjectionSupport;
+using Cloudy.NET.InitializerSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
-using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.Licensing;
+using Cloudy.NET.ContextSupport;
+using Cloudy.NET.AssemblySupport;
+using Cloudy.NET.Licensing;
 using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.AspNetCore.Builder

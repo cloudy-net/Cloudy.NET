@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.UI.FieldSupport.Select;
-using Cloudy.CMS.UI.List.Filter;
+﻿using Cloudy.NET.UI.FieldSupport.Select;
+using Cloudy.NET.UI.List.Filter;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

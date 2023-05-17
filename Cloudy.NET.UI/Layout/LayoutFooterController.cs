@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.Licensing;
-using Cloudy.CMS.Naming;
+﻿using Cloudy.NET.Licensing;
+using Cloudy.NET.Naming;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -7,7 +7,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

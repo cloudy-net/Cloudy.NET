@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Cloudy.CMS.AssemblySupport
+namespace Cloudy.NET.AssemblySupport
 {
     [DebuggerDisplay("{Assembly != null ? Assembly.GetName().Name : \"{\" + string.Join(\", \", Types) + \"}\"}")]
     public class AssemblyWrapper

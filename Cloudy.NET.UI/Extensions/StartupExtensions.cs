@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Cloudy.CMS;
+using Cloudy.NET;
 using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.FileProviders;
-using Cloudy.CMS.UI;
+using Cloudy.NET.UI;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;

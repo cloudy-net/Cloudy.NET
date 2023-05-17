@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.EntitySupport.Serialization;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.ContextSupport;
+using Cloudy.NET.EntitySupport.PrimaryKey;
+using Cloudy.NET.EntitySupport.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Cloudy.CMS.PropertyDefinitionSupport;
+using Cloudy.NET.PropertyDefinitionSupport;
 
-namespace Cloudy.CMS.UI.FormSupport
+namespace Cloudy.NET.UI.FormSupport
 {
     [Authorize("adminarea")]
     [Area("Admin")]

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public static class HttpContextExtensions
     {

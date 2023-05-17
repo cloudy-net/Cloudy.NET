@@ -1,10 +1,10 @@
-﻿using Cloudy.CMS.EntitySupport;
+﻿using Cloudy.NET.EntitySupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public record ContentRouteMatcher(IContentRouteProvider ContentRouteProvider) : IContentRouteMatcher
     {

@@ -1,10 +1,10 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-namespace Cloudy.CMS.EntitySupport.PrimaryKey
+namespace Cloudy.NET.EntitySupport.PrimaryKey
 {
     public class PrimaryKeyConverter : IPrimaryKeyConverter
     {

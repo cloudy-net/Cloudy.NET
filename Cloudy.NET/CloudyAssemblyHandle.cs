@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS
+namespace Cloudy.NET
 {
     public class CloudyAssemblyHandle
     {

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.UI.Serialization
+namespace Cloudy.NET.UI.Serialization
 {
     internal class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {

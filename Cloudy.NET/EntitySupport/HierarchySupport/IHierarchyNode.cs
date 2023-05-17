@@ -1,11 +1,11 @@
-﻿using Cloudy.CMS.EntitySupport.HierarchySupport.Internal;
+﻿using Cloudy.NET.EntitySupport.HierarchySupport.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.EntitySupport.HierarchySupport
+namespace Cloudy.NET.EntitySupport.HierarchySupport
 {
     public interface IHierarchyNode<TKeyType> : IHierarchyNodeMarkerInterface
     {

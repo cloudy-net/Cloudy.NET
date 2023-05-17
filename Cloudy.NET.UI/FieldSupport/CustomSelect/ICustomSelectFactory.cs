@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FieldSupport.CustomSelect
+namespace Cloudy.NET.UI.FieldSupport.CustomSelect
 {
     public interface ICustomSelectFactory
     {

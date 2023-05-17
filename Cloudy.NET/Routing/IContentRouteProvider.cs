@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public interface IContentRouteProvider
     {

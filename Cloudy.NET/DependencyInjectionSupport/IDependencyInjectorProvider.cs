@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.DependencyInjectionSupport
+namespace Cloudy.NET.DependencyInjectionSupport
 {
     public interface IDependencyInjectorProvider
     {

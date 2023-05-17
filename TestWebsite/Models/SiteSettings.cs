@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.SingletonSupport;
+﻿using Cloudy.NET.SingletonSupport;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TestWebsite.Constants;

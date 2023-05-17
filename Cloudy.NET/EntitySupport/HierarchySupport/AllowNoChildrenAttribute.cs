@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.EntitySupport.HierarchySupport
+namespace Cloudy.NET.EntitySupport.HierarchySupport
 {
     public class AllowNoChildrenAttribute : Attribute
     {

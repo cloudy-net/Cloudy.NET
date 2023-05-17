@@ -1,4 +1,4 @@
-using Cloudy.CMS.Naming;
+using Cloudy.NET.Naming;
 using System;
 using Xunit;
 

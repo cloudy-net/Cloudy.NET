@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS;
-using Cloudy.CMS.AssemblySupport;
+﻿using Cloudy.NET;
+using Cloudy.NET.AssemblySupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

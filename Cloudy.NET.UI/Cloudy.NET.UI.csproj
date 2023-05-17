@@ -7,7 +7,7 @@
 		<Version>1.63.4</Version>
 		<Copyright>2018 Björn Ali Göransson</Copyright>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-		<RepositoryUrl>https://github.com/cloudy-net/Cloudy.CMS.git</RepositoryUrl>
+		<RepositoryUrl>https://github.com/cloudy-net/Cloudy.NET.git</RepositoryUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<NoWarn>CS1998</NoWarn>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -32,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
+		<ProjectReference Include="..\Cloudy.NET\Cloudy.NET.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

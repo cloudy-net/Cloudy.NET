@@ -1,9 +1,9 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Cloudy.CMS
+namespace Cloudy.NET
 {
     public class CloudyOptions
     {

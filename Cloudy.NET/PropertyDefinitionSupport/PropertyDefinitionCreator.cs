@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Cloudy.CMS.PropertyDefinitionSupport
+namespace Cloudy.NET.PropertyDefinitionSupport
 {
     public class PropertyDefinitionCreator : IPropertyDefinitionCreator
     {

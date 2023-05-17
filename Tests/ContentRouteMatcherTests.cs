@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.Routing;
+﻿using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.Routing;
 using Moq;
 using System;
 using System.Collections.Generic;

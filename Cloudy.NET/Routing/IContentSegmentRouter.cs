@@ -1,9 +1,9 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public interface IContentSegmentRouter
     {

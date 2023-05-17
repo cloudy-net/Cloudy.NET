@@ -1,11 +1,11 @@
-﻿using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.NET.AssemblySupport;
+using Cloudy.NET.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Cloudy.CMS.InitializerSupport
+namespace Cloudy.NET.InitializerSupport
 {
     public class InitializerCreator : IInitializerCreator
     {

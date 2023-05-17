@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Cloudy.CMS.UI.FormSupport.Changes;
+using Cloudy.NET.UI.FormSupport.Changes;
 
-namespace Cloudy.CMS.UI.FormSupport
+namespace Cloudy.NET.UI.FormSupport
 {
     public class ChangedEntity
     {

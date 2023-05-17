@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.Naming
+namespace Cloudy.NET.Naming
 {
     public interface ISingularizer
     {

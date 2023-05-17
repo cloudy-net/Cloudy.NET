@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Cloudy.CMS.UI.Layout
+namespace Cloudy.NET.UI.Layout
 {
     public static class UrlBuilder
     {

@@ -1,7 +1,7 @@
-﻿using Cloudy.CMS.PropertyDefinitionSupport;
+﻿using Cloudy.NET.PropertyDefinitionSupport;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
     public interface IColumnValueProvider
     {

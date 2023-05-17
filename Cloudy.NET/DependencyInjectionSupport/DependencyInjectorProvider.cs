@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cloudy.CMS.DependencyInjectionSupport
+namespace Cloudy.NET.DependencyInjectionSupport
 {
     public class DependencyInjectorProvider : IDependencyInjectorProvider
     {

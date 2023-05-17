@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public interface IRoutableRootContentProvider
     {

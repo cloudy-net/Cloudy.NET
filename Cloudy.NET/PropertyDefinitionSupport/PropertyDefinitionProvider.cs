@@ -1,11 +1,11 @@
-﻿using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.AssemblySupport;
+using Cloudy.NET.EntityTypeSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cloudy.CMS.PropertyDefinitionSupport
+namespace Cloudy.NET.PropertyDefinitionSupport
 {
     public class PropertyDefinitionProvider : IPropertyDefinitionProvider
     {

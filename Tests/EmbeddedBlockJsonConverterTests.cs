@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.EntitySupport.Serialization;
-using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntitySupport.Serialization;
+using Cloudy.NET.EntityTypeSupport;
 using Moq;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
-﻿using Cloudy.CMS;
-using Cloudy.CMS.UI.AzureMediaPicker;
-using Cloudy.CMS.UI.FieldSupport.MediaPicker;
+﻿using Cloudy.NET;
+using Cloudy.NET.UI.AzureMediaPicker;
+using Cloudy.NET.UI.FieldSupport.MediaPicker;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

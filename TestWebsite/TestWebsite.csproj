@@ -8,7 +8,7 @@
 
 	<!-- Can be used for publishing on local and run on IIS -->
 	<!--<PropertyGroup>
-		<SpaRoot>..\Cloudy.CMS.UI\wwwroot-src\</SpaRoot>
+		<SpaRoot>..\Cloudy.NET.UI\wwwroot-src\</SpaRoot>
 	</PropertyGroup>
 
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
@@ -34,9 +34,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Cloudy.CMS.UI.AzureMediaPicker\Cloudy.CMS.UI.AzureMediaPicker.csproj" />
-		<ProjectReference Include="..\Cloudy.CMS.UI\Cloudy.CMS.UI.csproj" />
-		<ProjectReference Include="..\Cloudy.CMS\Cloudy.CMS.csproj" />
+		<ProjectReference Include="..\Cloudy.NET.UI.AzureMediaPicker\Cloudy.NET.UI.AzureMediaPicker.csproj" />
+		<ProjectReference Include="..\Cloudy.NET.UI\Cloudy.NET.UI.csproj" />
+		<ProjectReference Include="..\Cloudy.NET\Cloudy.NET.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

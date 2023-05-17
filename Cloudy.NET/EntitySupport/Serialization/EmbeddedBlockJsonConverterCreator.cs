@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.EntitySupport.Serialization
+namespace Cloudy.NET.EntitySupport.Serialization
 {
     public class EmbeddedBlockJsonConverterCreator : IEmbeddedBlockJsonConverterCreator
     {

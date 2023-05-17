@@ -1,9 +1,9 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
+﻿using Cloudy.NET.DependencyInjectionSupport;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.AspNetCore.DependencyInjectionSupport
+namespace Cloudy.NET.AspNetCore.DependencyInjectionSupport
 {
     public class Resolver : IResolver
     {

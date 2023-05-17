@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace Cloudy.CMS.EntitySupport.PrimaryKey
+namespace Cloudy.NET.EntitySupport.PrimaryKey
 {
     public interface IPrimaryKeyConverter
     {

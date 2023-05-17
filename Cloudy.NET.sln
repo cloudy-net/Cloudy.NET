@@ -10,15 +10,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.CMS", "Cloudy.CMS\Cloudy.CMS.csproj", "{E7574FCD-9AC1-4901-BC24-9A8E1CAC7D20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.NET", "Cloudy.NET\Cloudy.NET.csproj", "{E7574FCD-9AC1-4901-BC24-9A8E1CAC7D20}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebsite", "TestWebsite\TestWebsite.csproj", "{B19EABD8-A971-4434-A71A-C9A6E4EC70E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.CMS.UI", "Cloudy.CMS.UI\Cloudy.CMS.UI.csproj", "{EBD68178-85E0-4734-9D29-450639C6254C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.NET.UI", "Cloudy.NET.UI\Cloudy.NET.UI.csproj", "{EBD68178-85E0-4734-9D29-450639C6254C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{058E1ED7-8528-4FB0-8044-84CDCB344518}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.CMS.UI.AzureMediaPicker", "Cloudy.CMS.UI.AzureMediaPicker\Cloudy.CMS.UI.AzureMediaPicker.csproj", "{D8841E4F-DDF7-46C2-A045-DC9520CB1412}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudy.NET.UI.AzureMediaPicker", "Cloudy.NET.UI.AzureMediaPicker\Cloudy.NET.UI.AzureMediaPicker.csproj", "{D8841E4F-DDF7-46C2-A045-DC9520CB1412}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

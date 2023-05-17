@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.InitializerSupport
+namespace Cloudy.NET.InitializerSupport
 {
     public interface IInitializerCreator
     {

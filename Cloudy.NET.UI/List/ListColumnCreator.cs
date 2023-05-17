@@ -1,15 +1,15 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.EntityTypeSupport;
-using Cloudy.CMS.EntitySupport.PrimaryKey;
-using Cloudy.CMS.Naming;
-using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.UI.FieldSupport.Select;
+﻿using Cloudy.NET.EntitySupport;
+using Cloudy.NET.EntityTypeSupport;
+using Cloudy.NET.EntitySupport.PrimaryKey;
+using Cloudy.NET.Naming;
+using Cloudy.NET.PropertyDefinitionSupport;
+using Cloudy.NET.UI.FieldSupport.Select;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cloudy.CMS.UI.FieldSupport.CustomSelect;
+using Cloudy.NET.UI.FieldSupport.CustomSelect;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
     public record ListColumnCreator(IEntityTypeProvider EntityTypeProvider, IPropertyDefinitionProvider PropertyDefinitionProvider, IPrimaryKeyPropertyGetter PrimaryKeyPropertyGetter, IHumanizer Humanizer) : IListColumnCreator
     {

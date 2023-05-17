@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cloudy.CMS.ContextSupport
+namespace Cloudy.NET.ContextSupport
 {
     public interface IContextDescriptorCreator
     {

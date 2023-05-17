@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cloudy.CMS.EntitySupport.HierarchySupport.Internal;
+using Cloudy.NET.EntitySupport.HierarchySupport.Internal;
 
-namespace Cloudy.CMS.EntitySupport.HierarchySupport
+namespace Cloudy.NET.EntitySupport.HierarchySupport
 {
     public interface IHierarchical<T> : IHierarchicalMarkerInterface
     {

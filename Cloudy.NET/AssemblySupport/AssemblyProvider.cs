@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.AssemblySupport
+namespace Cloudy.NET.AssemblySupport
 {
     public class AssemblyProvider : IAssemblyProvider
     {

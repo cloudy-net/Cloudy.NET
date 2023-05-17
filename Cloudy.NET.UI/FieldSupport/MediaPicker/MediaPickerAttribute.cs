@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FieldSupport.MediaPicker
+namespace Cloudy.NET.UI.FieldSupport.MediaPicker
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class MediaPickerAttribute : Attribute

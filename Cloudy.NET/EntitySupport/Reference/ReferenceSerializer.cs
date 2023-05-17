@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.EntitySupport.Reference
+namespace Cloudy.NET.EntitySupport.Reference
 {
     public class ReferenceSerializer : IReferenceSerializer
     {

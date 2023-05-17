@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Cloudy.CMS.EntityTypeSupport
+namespace Cloudy.NET.EntityTypeSupport
 {
     [DebuggerDisplay("{Name}")]
     public record EntityTypeDescriptor(

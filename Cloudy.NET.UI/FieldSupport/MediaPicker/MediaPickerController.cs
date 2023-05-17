@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FieldSupport.MediaPicker
+namespace Cloudy.NET.UI.FieldSupport.MediaPicker
 {
     [Authorize("adminarea")]
     [ResponseCache(NoStore = true)]

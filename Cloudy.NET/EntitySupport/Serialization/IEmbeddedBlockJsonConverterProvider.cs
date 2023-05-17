@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.EntitySupport.Serialization
+namespace Cloudy.NET.EntitySupport.Serialization
 {
     public interface IEmbeddedBlockJsonConverterProvider
     {

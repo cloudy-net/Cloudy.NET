@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.FieldSupport.Select
+namespace Cloudy.NET.UI.FieldSupport.Select
 {
     public interface ISelectAttribute
     { 

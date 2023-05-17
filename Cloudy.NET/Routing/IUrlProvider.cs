@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.Mvc.Routing
+namespace Cloudy.NET.Mvc.Routing
 {
     public interface IUrlProvider
     {

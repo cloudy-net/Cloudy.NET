@@ -1,5 +1,5 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
-using Cloudy.CMS.UI.List.Filter;
+﻿using Cloudy.NET.DependencyInjectionSupport;
+using Cloudy.NET.UI.List.Filter;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cloudy.CMS.UI.List
+namespace Cloudy.NET.UI.List
 {
     public class DependencyInjector : IDependencyInjector
     {

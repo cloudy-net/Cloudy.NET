@@ -1,16 +1,16 @@
-﻿using Cloudy.CMS.EntitySupport;
-using Cloudy.CMS.ContextSupport;
-using Cloudy.CMS.SingletonSupport;
+﻿using Cloudy.NET.EntitySupport;
+using Cloudy.NET.ContextSupport;
+using Cloudy.NET.SingletonSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Cloudy.CMS.AssemblySupport;
-using Cloudy.CMS.PropertyDefinitionSupport;
-using Cloudy.CMS.EntitySupport.HierarchySupport.Internal;
+using Cloudy.NET.AssemblySupport;
+using Cloudy.NET.PropertyDefinitionSupport;
+using Cloudy.NET.EntitySupport.HierarchySupport.Internal;
 using System.Runtime.CompilerServices;
 
-namespace Cloudy.CMS.EntityTypeSupport
+namespace Cloudy.NET.EntityTypeSupport
 {
     public record EntityTypeCreator(IContextDescriptorProvider ContextDescriptorProvider, IAssemblyProvider AssemblyProvider) : IEntityTypeCreator
     {

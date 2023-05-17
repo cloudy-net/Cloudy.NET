@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.Routing;
+﻿using Cloudy.NET.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Cloudy.CMS
+namespace Cloudy.NET
 {
     public class CloudyConfigurator
     {

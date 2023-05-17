@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Cloudy.CMS.UI.FormSupport
+namespace Cloudy.NET.UI.FormSupport
 {
     public static class FormTagRenderer
     {

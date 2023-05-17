@@ -1,4 +1,4 @@
-﻿using Cloudy.CMS.EntityTypeSupport;
+﻿using Cloudy.NET.EntityTypeSupport;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.AspNetCore.StaticFiles;
@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IEntityTypeProvider = Cloudy.CMS.EntityTypeSupport.IEntityTypeProvider;
+using IEntityTypeProvider = Cloudy.NET.EntityTypeSupport.IEntityTypeProvider;
 
-namespace Cloudy.CMS.Routing
+namespace Cloudy.NET.Routing
 {
     public class ContentRouteCreator : IContentRouteCreator
     {

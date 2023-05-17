@@ -35,7 +35,7 @@ const Navbar = ({ title, entityTypeName }) => {
     </Dropdown>
     <Dropdown className="button-reset navbar-profile-button" contents={<>Alfred Pennyworth <span className="navbar-profile-picture"></span></>}>
       <DropdownItem href="https://www.cloudy.net/resources/docs" target="_blank" icon={<HelpIcon />} text="Tutorials and FAQ" />
-      <DropdownItem href="https://github.com/cloudy-net/Cloudy.CMS/issues/new/choose" target="_blank" icon={<ChatIcon />} text="Support" />
+      <DropdownItem href="https://github.com/cloudy-net/Cloudy.NET/issues/new/choose" target="_blank" icon={<ChatIcon />} text="Support" />
       <DropdownSeparator />
       <DropdownItem href="/Admin/Logout" icon={<LogoutIcon />} text="Logout" />
     </Dropdown>

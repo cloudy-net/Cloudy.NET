@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cloudy.CMS.EntitySupport.Reference
+namespace Cloudy.NET.EntitySupport.Reference
 {
     public interface IReferenceDeserializer
     {

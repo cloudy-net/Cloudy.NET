@@ -25,11 +25,11 @@ jobs:
     - name: dotnet restore
       run: dotnet restore
     - name: npm install
-      run: cd Cloudy.CMS.UI/wwwroot-src && npm ci
+      run: cd Cloudy.NET.UI/wwwroot-src && npm ci
     - name: npm test
-      run: cd Cloudy.CMS.UI/wwwroot-src && npm run test
+      run: cd Cloudy.NET.UI/wwwroot-src && npm run test
     - name: npm cleanup
-      run: cd Cloudy.CMS.UI/wwwroot-src && rm -rf .test
+      run: cd Cloudy.NET.UI/wwwroot-src && rm -rf .test
     - name: dotnet build
       run: dotnet build --no-restore
     - name: dotnet test
@@ -43,7 +43,7 @@ jobs:
   message:
     needs: [build]
     if: always() && !cancelled()
-    uses: cloudy-net/Cloudy.CMS/.github/workflows/post-slack-workflow.yml@master
+    uses: cloudy-net/Cloudy.NET/.github/workflows/post-slack-workflow.yml@master
     with:
       #group-ping-id: 'S04MMQ5VABX|devs'
       group-ping-id: ''

@@ -1,4 +1,4 @@
-﻿namespace Cloudy.CMS.UI.FieldSupport.MediaPicker
+﻿namespace Cloudy.NET.UI.FieldSupport.MediaPicker
 {
     public record MediaProviderUploadResult(
         string Path

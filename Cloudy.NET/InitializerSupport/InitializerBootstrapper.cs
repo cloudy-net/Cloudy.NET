@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.InitializerSupport
+namespace Cloudy.NET.InitializerSupport
 {
     public class InitializerBootstrapper : IStartupFilter
     {

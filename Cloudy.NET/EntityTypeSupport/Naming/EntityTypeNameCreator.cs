@@ -1,11 +1,11 @@
-﻿using Cloudy.CMS.Naming;
+﻿using Cloudy.NET.Naming;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Cloudy.CMS.EntityTypeSupport.Naming
+namespace Cloudy.NET.EntityTypeSupport.Naming
 {
     public record EntityTypeNameCreator(IEntityTypeProvider EntityTypeProvider, IHumanizer Humanizer, IPluralizer Pluralizer) : IEntityTypeNameCreator
     {

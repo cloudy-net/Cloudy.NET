@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.RepositorySupport
+namespace Cloudy.NET.RepositorySupport
 {
     public class ChildrenGetter : IChildrenGetter
     {

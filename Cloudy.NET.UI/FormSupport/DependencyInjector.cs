@@ -1,8 +1,8 @@
-﻿using Cloudy.CMS.DependencyInjectionSupport;
-using Cloudy.CMS.UI.FormSupport.ChangeHandlers;
+﻿using Cloudy.NET.DependencyInjectionSupport;
+using Cloudy.NET.UI.FormSupport.ChangeHandlers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cloudy.CMS.UI.FormSupport
+namespace Cloudy.NET.UI.FormSupport
 {
     public class DependencyInjector : IDependencyInjector
     {

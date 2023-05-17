@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Cloudy.CMS.EntitySupport.Serialization
+namespace Cloudy.NET.EntitySupport.Serialization
 {
     public class EmbeddedBlockJsonConverterProvider : IEmbeddedBlockJsonConverterProvider
     {

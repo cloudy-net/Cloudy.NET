@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cloudy.CMS.EntitySupport.PrimaryKey
+namespace Cloudy.NET.EntitySupport.PrimaryKey
 {
     public interface IPrimaryKeyGetter
     {
