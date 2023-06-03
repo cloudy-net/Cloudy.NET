@@ -5,14 +5,14 @@ import CompactList from "../entity-list/compact-list";
 import { useContext } from "preact/hooks";
 import EntityTypesContext from "../form/contexts/entity-types-context";
 
-const EditView = ({ entityTypeName, keyValues }) => {
+const EditView = ({ entityTypeName, mode, keyValues }) => {
   const { entityTypes } = useContext(EntityTypesContext);
   return <div class="layout show-navigation-panel">
     <MainMenu />
     <Navbar title={entityTypes[entityTypeName] && entityTypes[entityTypeName].pluralName} entityTypeName={entityTypeName} />
     <CompactList entityType={entityTypeName} keyValues={keyValues} />
     <div className="layout-main-panel">
-      <Form key={'form-edit'} mode="edit" entityTypeName={entityTypeName} keyValues={keyValues} />
+      <Form key={'form-edit'} mode={mode} entityTypeName={entityTypeName} keyValues={keyValues} />
     </div>
   </div>;
 }

@@ -75,6 +75,6 @@ export default ({ entityType, keyValues, children }: { entityType: string, keyVa
   }, [keyValues]);
 
   return <EntityContext.Provider value={{ entityReference, state }}>
-    {entityReference.value && state.value && !state.value.loading && children}
+    {entityReference.value ? state.value && !state.value.loading && children : children}
   </EntityContext.Provider>;
 };

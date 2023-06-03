@@ -10,7 +10,7 @@ const Changes = () => {
   const { entityReference, state } = useContext(EntityContext);
   const { showChanges } = useContext(ApplicationStateContext);
 
-  if (state.value!.newSource) {
+  if (state.value?.newSource) {
     const discard = () => {
       changeManager.discardChanges(state.value!);
       stateManager.replace(state.value!);
@@ -27,7 +27,7 @@ const Changes = () => {
     </div>;
   }
 
-  if (state.value!.changes.length == 0) {
+  if (!state.value?.changes.length) {
     return <></>;
   }
 

@@ -32,6 +32,7 @@ const Main = () => {
           <DashboardView path="/Admin" />
           <ListView path="/Admin/List/:entityTypeName" />
           <EditView path="/Admin/Edit/:entityTypeName" mode="edit" keyValues={keyValues} />
+          <EditView path="/Admin/New/:entityTypeName" mode="new" />
         </Router>
       </EntityListContextProvider>
     </EntityTypesProvider>
